@@ -96,6 +96,7 @@ mynotes/
   ```
 - **자동으로**: Obsidian의 **Git 플러그인**(Community plugin, 이름: "Obsidian Git")을 설치하면 일정 주기로 자동 commit/push/pull이 가능합니다. 여러 기기에서 쓸 때 특히 유용합니다.
 - 이미 `.gitignore`에 Obsidian의 로컬 전용 설정(테마 캐시, 워크스페이스 상태 등)은 제외해뒀습니다. 플러그인 설치 목록(`.obsidian/community-plugins.json`) 같은 건 원하면 직접 커밋해서 기기 간 동기화할 수 있습니다.
+- **완전 자동화 설정(추천)**: 인증 설정부터 자동 백업 주기까지 단계별로 정리한 [AUTOMATION.md](./AUTOMATION.md) 문서를 참고하세요. 한 번 설정해두면 노트를 쓰고 저장만 해도 알아서 GitHub에 백업됩니다.
 
 ## 8. 시작할 때 팁
 
