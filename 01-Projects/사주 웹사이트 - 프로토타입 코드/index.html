@@ -153,6 +153,17 @@
     font-size: 0.75rem;
     margin-top: 32px;
   }
+  footer a {
+    color: var(--muted);
+    text-decoration: underline;
+  }
+  footer a:hover { color: var(--text); }
+  .footer-links {
+    margin-bottom: 6px;
+  }
+  .footer-links a {
+    margin: 0 6px;
+  }
   .share-row {
     display: flex;
     gap: 8px;
@@ -242,7 +253,12 @@
     <button class="retry-btn" id="retryBtn">다른 날짜로 다시 보기</button>
   </div>
 
-  <footer>사주 웹사이트 프로토타입 · 부수입 프로젝트 · 2026-08-04</footer>
+  <footer>
+    <div class="footer-links">
+      <a href="privacy-policy.html">개인정보처리방침</a>·<a href="terms.html">이용약관</a>
+    </div>
+    사주 웹사이트 프로토타입 · 부수입 프로젝트 · 2026-08-04
+  </footer>
 </div>
 
 <div id="cardModal" class="card-modal">
