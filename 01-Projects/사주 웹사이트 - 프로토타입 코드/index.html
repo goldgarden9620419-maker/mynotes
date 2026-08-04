@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나와 닮은 사주의 유명인 찾기 (프로토타입)</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --card-bg: #1a1d24;
+    --text: #f0f0f2;
+    --muted: #9a9fab;
+    --accent: #e0a458;
+    --border: #2a2e38;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px 80px;
+  }
+  .container { width: 100%; max-width: 560px; }
+  h1 {
+    font-size: 1.6rem;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+  }
+  .form-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .date-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  select, input[type="date"] {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #12141a;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #1a1108;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  button:hover { opacity: 0.9; }
+  #result { display: none; }
+  .ohang-banner {
+    background: linear-gradient(135deg, #2a2e38, #1a1d24);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .ohang-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #1a1108;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+  }
+  .ohang-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+  .ohang-tagline { color: var(--muted); font-size: 0.9rem; margin-bottom: 12px; }
+  .keywords { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
+  .keyword {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .card-line {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--text);
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+  .match-type {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .celeb-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .celeb-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+  .celeb-ilju { font-size: 0.78rem; color: var(--accent); margin-bottom: 10px; }
+  .celeb-field { margin-bottom: 8px; font-size: 0.88rem; line-height: 1.5; }
+  .celeb-field .label { color: var(--muted); font-size: 0.78rem; display: block; margin-bottom: 2px; }
+  .celeb-motto {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: #12141a;
+    border-radius: 8px;
+    font-style: italic;
+    font-size: 0.88rem;
+  }
+  .retry-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.75rem;
+    margin-top: 32px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>나와 닮은 사주의 유명인은?</h1>
+  <p class="subtitle">생년월일을 입력하면 비슷한 사주를 가진 유명인과<br>그들의 성공 습관·모토를 카드로 보여드려요</p>
+
+  <div class="form-card">
+    <label for="birthdate">생년월일 (양력)</label>
+    <div class="date-row">
+      <input type="date" id="birthdate" value="1990-01-01" min="1900-01-01" max="2026-12-31">
+    </div>
+    <button id="submitBtn">내 사주 유형 보기</button>
+  </div>
+
+  <div id="result">
+    <div class="ohang-banner">
+      <div class="ohang-badge" id="iljuBadge"></div>
+      <div class="ohang-title" id="ohangTitle"></div>
+      <div class="ohang-tagline" id="ohangTagline"></div>
+      <div class="keywords" id="keywords"></div>
+      <div class="card-line" id="cardLine"></div>
+    </div>
+    <div class="match-type" id="matchType"></div>
+    <div id="celebList"></div>
+    <button class="retry-btn" id="retryBtn">다른 날짜로 다시 보기</button>
+  </div>
+
+  <footer>사주 웹사이트 프로토타입 · 부수입 프로젝트 · 2026-08-04</footer>
+</div>
+
+<script>
+const CELEBRITY_DB = [
+  {
+    "name": "스티브 잡스",
+    "ilju": "丙辰",
+    "story": "애플에서 쫓겨났다가 복귀해 아이폰으로 재기",
+    "habit": "극단적 단순화, 완벽주의, 직관 신뢰",
+    "motto": "Stay hungry, stay foolish"
+  },
+  {
+    "name": "일론 머스크",
+    "ilju": "甲申",
+    "story": "파산 위기 여러 번 넘기고 전기차·우주산업 혁신",
+    "habit": "1주 100시간 몰입, 실패를 데이터로 취급",
+    "motto": "실패는 옵션이다. 실패하지 않으면 충분히 혁신하고 있지 않은 것"
+  },
+  {
+    "name": "워런 버핏",
+    "ilju": "壬子",
+    "story": "11세부터 투자 시작, 세계적 투자자로 성장",
+    "habit": "장기적 관점, 검소한 생활, 꾸준한 독서",
+    "motto": "가격은 당신이 지불하는 것, 가치는 당신이 얻는 것"
+  },
+  {
+    "name": "손정의",
+    "ilju": "乙卯",
+    "story": "재일교포 출신, 통역기 발명 특허로 창업자금 마련",
+    "habit": "역발상, 큰 그림(300년 비전)",
+    "motto": "뜻이 있는 곳에 길이 있다"
+  },
+  {
+    "name": "마윈",
+    "ilju": "壬戌",
+    "story": "30번 이상 취업/입시 실패 후 창업",
+    "habit": "끈질긴 회복력, 사람 중심 경영",
+    "motto": "오늘은 잔인하고 내일은 더 잔인하다, 그러나 모레는 아름답다"
+  },
+  {
+    "name": "제프 베이조스",
+    "ilju": "庚申",
+    "story": "차고에서 온라인 서점으로 시작해 세계 최대 커머스",
+    "habit": "고객 집착, 장기 투자",
+    "motto": "Day 1 정신을 유지하라"
+  },
+  {
+    "name": "빌 게이츠",
+    "ilju": "壬戌",
+    "story": "하버드 중퇴 후 MS 창업, 세계 최대 소프트웨어 기업 성장",
+    "habit": "몰입형 독서, 자기 회의(Think Week)",
+    "motto": "성공을 자축하되 실패의 교훈에 더 집중하라"
+  },
+  {
+    "name": "마크 저커버그",
+    "ilju": "戊申",
+    "story": "대학 기숙사에서 시작한 서비스가 세계 최대 SNS로 성장",
+    "habit": "빠른 실행 후 개선",
+    "motto": "완벽보다 완성이 낫다"
+  },
+  {
+    "name": "이건희",
+    "ilju": "壬戌",
+    "story": "반도체 등 미래산업에 조기 투자해 글로벌 삼성으로 성장",
+    "habit": "위기의식 강조",
+    "motto": "변화하지 않으면 살아남을 수 없다"
+  },
+  {
+    "name": "정주영",
+    "ilju": "庚申",
+    "story": "쌀가게 점원에서 시작해 현대그룹 창업",
+    "habit": "실행력, 맨손 도전정신",
+    "motto": "시련은 있어도 실패는 없다"
+  },
+  {
+    "name": "백종원",
+    "ilju": "丙寅",
+    "story": "사업 부도 후 재기, 외식 프랜차이즈 신화",
+    "habit": "현장 중심, 대중 눈높이 소통",
+    "motto": "장사는 손님이 남는 게 남는 거다"
+  },
+  {
+    "name": "김연아",
+    "ilju": "癸酉",
+    "story": "불모지였던 한국 피겨에서 올림픽 금메달",
+    "habit": "반복 훈련의 힘",
+    "motto": "연습은 배신하지 않는다"
+  },
+  {
+    "name": "손흥민",
+    "ilju": "乙酉",
+    "story": "유럽 무명 시절 딛고 EPL 득점왕",
+    "habit": "기본기 훈련, 겸손함 유지",
+    "motto": "노력은 배신하지 않는다"
+  },
+  {
+    "name": "박지성",
+    "ilju": "甲戌",
+    "story": "평발 등 신체적 약점 극복하고 맨유 주전 성장",
+    "habit": "지구력 훈련, 강한 자기관리",
+    "motto": "멈추지 않는 한 늦은 것은 없다"
+  },
+  {
+    "name": "마이클 조던",
+    "ilju": "辛卯",
+    "story": "고교 대표팀 탈락 경험 딛고 NBA 전설 등극",
+    "habit": "실패를 동력으로 전환, 승부욕",
+    "motto": "나는 실패를 계속 받아들였고, 그것이 성공의 이유다"
+  },
+  {
+    "name": "아놀드 슈워제네거",
+    "ilju": "庚戌",
+    "story": "오스트리아 이민자에서 헐리우드 스타·주지사까지",
+    "habit": "명확한 목표 설정, 강한 자기암시",
+    "motto": "No pain, no gain"
+  },
+  {
+    "name": "유재석",
+    "ilju": "丁丑",
+    "story": "10년 무명 생활 딛고 국민 MC로 성장",
+    "habit": "겸손과 배려, 꾸준한 자기관리",
+    "motto": "무명 시절이 있었기에 지금이 있다"
+  },
+  {
+    "name": "아이유(이지은)",
+    "ilju": "丁酉",
+    "story": "데뷔 초 위기 딛고 톱스타로 성장",
+    "habit": "자기 페이스 유지, 꾸준한 자작곡 작업",
+    "motto": "나는 나로 살기로 했다"
+  },
+  {
+    "name": "방시혁",
+    "ilju": "壬申",
+    "story": "무명 기획사에서 BTS로 K팝을 세계화",
+    "habit": "본질 집중, 장기적 세계관 기획",
+    "motto": "시대의 마음을 위로하는 콘텐츠를 만든다"
+  },
+  {
+    "name": "오프라 윈프리",
+    "ilju": "乙酉",
+    "story": "불우한 유년기 극복하고 미국 대표 토크쇼 진행자로 성장",
+    "habit": "자기 성찰, 감사 습관",
+    "motto": "가장 큰 모험은 당신이 꿈꾸는 삶을 사는 것"
+  },
+  {
+    "name": "J.K. 롤링",
+    "ilju": "丙戌",
+    "story": "12번 출판 거절 후 해리포터로 성공",
+    "habit": "매일 글쓰기 루틴, 실패를 재료로 활용",
+    "motto": "실패는 삶에서 불필요한 것들을 제거해준다"
+  },
+  {
+    "name": "월트 디즈니",
+    "ilju": "丁巳",
+    "story": "여러 번 사업 실패 후 디즈니 제국 건설",
+    "habit": "상상력을 사업화, 끝없는 재도전",
+    "motto": "꿈꿀 수 있다면 이룰 수 있다"
+  },
+  {
+    "name": "코코 샤넬",
+    "ilju": "乙未",
+    "story": "고아원 출신, 여성 패션의 틀을 깬 브랜드 설립",
+    "habit": "관습에 얽매이지 않는 태도",
+    "motto": "대체될 수 없는 사람이 되려면 항상 남달라야 한다"
+  },
+  {
+    "name": "반기문",
+    "ilju": "戊申",
+    "story": "지방 소년에서 외교관을 거쳐 UN 사무총장까지 성장",
+    "habit": "철저한 준비와 겸손, 꾸준한 자기계발",
+    "motto": "성실과 겸손이 최고의 무기다"
+  },
+  {
+    "name": "박세리",
+    "ilju": "戊子",
+    "story": "IMF 위기 속 US오픈 맨발 투혼 우승",
+    "habit": "극한 상황에서도 침착함 유지",
+    "motto": "포기하지 않으면 길은 반드시 있다"
+  },
+  {
+    "name": "에이브러햄 링컨",
+    "ilju": "己未",
+    "story": "여러 낙선·사업 실패를 딛고 미국 대통령이 된 정치인",
+    "habit": "꾸준한 독학, 실패해도 다시 도전하는 인내",
+    "motto": "나는 천천히 걷지만 절대 뒤로 걷지 않는다"
+  },
+  {
+    "name": "마이클 잭슨",
+    "ilju": "戊寅",
+    "story": "아역 그룹 출신에서 세계적인 팝의 황제로 성장",
+    "habit": "완벽을 추구하는 연습벌레",
+    "motto": "세상이 미움으로 가득해도 우리는 감히 희망을 품어야 한다"
+  }
+];
+const OHANG_COPY = {
+  "木": {
+    "title": "성장하는 개척자",
+    "tagline": "멈추지 않고 뻗어나가는, 타고난 개척자",
+    "keywords": [
+      "성장",
+      "확장",
+      "추진력",
+      "이상주의",
+      "유연함"
+    ],
+    "card_line": "당신은 뿌리를 내리는 동시에 하늘을 향해 자라는 사람입니다."
+  },
+  "火": {
+    "title": "세상을 밝히는 열정가",
+    "tagline": "보는 사람까지 뜨겁게 만드는 타고난 표현가",
+    "keywords": [
+      "열정",
+      "카리스마",
+      "창의성",
+      "사교성",
+      "무대체질"
+    ],
+    "card_line": "당신의 열정은 꺼지지 않고, 주변까지 밝힙니다."
+  },
+  "土": {
+    "title": "모두를 품는 중심축",
+    "tagline": "흔들리는 사람들도 믿고 기댈 수 있는 든든한 중심",
+    "keywords": [
+      "신뢰",
+      "포용",
+      "인내",
+      "중재력",
+      "안정감"
+    ],
+    "card_line": "당신은 모두가 마음 놓고 기댈 수 있는 단단한 땅입니다."
+  },
+  "金": {
+    "title": "원칙을 지키는 결단가",
+    "tagline": "타협하지 않는 원칙으로 끝내 승부를 내는 사람",
+    "keywords": [
+      "결단력",
+      "완벽주의",
+      "정의감",
+      "실행력",
+      "목표지향"
+    ],
+    "card_line": "당신의 결단은 무디지 않고, 반드시 결과를 벱니다."
+  },
+  "水": {
+    "title": "흐름을 읽는 전략가",
+    "tagline": "어떤 상황에도 길을 찾아내는 타고난 전략가",
+    "keywords": [
+      "지혜",
+      "통찰력",
+      "유연성",
+      "적응력",
+      "장기적 시야"
+    ],
+    "card_line": "당신은 막히면 돌아가고, 결국엔 흐르고야 마는 사람입니다."
+  }
+};
+
+const STEM_TO_OHANG = {
+  "甲": "木", "乙": "木", "丙": "火", "丁": "火", "戊": "土",
+  "己": "土", "庚": "金", "辛": "金", "壬": "水", "癸": "水",
+};
+const STEMS = "甲乙丙丁戊己庚辛壬癸";
+const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+
+// Julian Day Number (proleptic Gregorian) - lunar_python 계산 결과와 offset=49로 검증 완료
+function jdn(y, m, d) {
+  const a = Math.floor((14 - m) / 12);
+  const yy = y + 4800 - a;
+  const mm = m + 12 * a - 3;
+  return d + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4)
+    - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+}
+
+function getIlju(y, m, d) {
+  const j = jdn(y, m, d);
+  const k = ((j + 49) % 60 + 60) % 60;
+  const stem = STEMS[k % 10];
+  const branch = BRANCHES[k % 12];
+  return stem + branch;
+}
+
+// 문자열 -> 32bit 해시 (FNV-1a)
+function hashStr(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+// seed 고정 PRNG (mulberry32)
+function mulberry32(seed) {
+  return function() {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function seededSample(pool, seedStr, k) {
+  const rng = mulberry32(hashStr(seedStr));
+  const arr = pool.slice();
+  // Fisher-Yates (시드 고정)
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, Math.min(k, arr.length));
+}
+
+const ILJU_INDEX = {};
+const OHANG_INDEX = {};
+for (const c of CELEBRITY_DB) {
+  c.ohang = STEM_TO_OHANG[c.ilju[0]];
+  (ILJU_INDEX[c.ilju] = ILJU_INDEX[c.ilju] || []).push(c);
+  (OHANG_INDEX[c.ohang] = OHANG_INDEX[c.ohang] || []).push(c);
+}
+
+function match(y, m, d, maxResults = 3) {
+  const ilju = getIlju(y, m, d);
+  const ohang = STEM_TO_OHANG[ilju[0]];
+  const exact = ILJU_INDEX[ilju] || [];
+
+  if (exact.length > 0) {
+    return {
+      matchType: "exact",
+      ilju, ohang,
+      celebrities: exact.slice(0, maxResults),
+      ohangCopy: OHANG_COPY[ohang],
+    };
+  }
+
+  const pool = OHANG_INDEX[ohang] || [];
+  const seedStr = `${String(y).padStart(4,'0')}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const picks = seededSample(pool, seedStr, maxResults);
+  return {
+    matchType: "fallback_ohang",
+    ilju, ohang,
+    celebrities: picks,
+    ohangCopy: OHANG_COPY[ohang],
+  };
+}
+
+function render(r) {
+  document.getElementById("iljuBadge").textContent = `일주 ${r.ilju} · 오행 ${r.ohang}`;
+  document.getElementById("ohangTitle").textContent = r.ohangCopy.title;
+  document.getElementById("ohangTagline").textContent = r.ohangCopy.tagline;
+  document.getElementById("cardLine").textContent = `"${r.ohangCopy.card_line}"`;
+
+  const kwWrap = document.getElementById("keywords");
+  kwWrap.innerHTML = "";
+  r.ohangCopy.keywords.forEach(k => {
+    const span = document.createElement("span");
+    span.className = "keyword";
+    span.textContent = "#" + k;
+    kwWrap.appendChild(span);
+  });
+
+  document.getElementById("matchType").textContent =
+    r.matchType === "exact"
+      ? "✨ 일주가 정확히 일치하는 유명인을 찾았어요"
+      : "🔎 정확히 일치하는 인물은 없어서, 같은 오행 유형의 유명인을 보여드려요";
+
+  const list = document.getElementById("celebList");
+  list.innerHTML = "";
+  r.celebrities.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "celeb-card";
+    card.innerHTML = `
+      <div class="celeb-name">${c.name}</div>
+      <div class="celeb-ilju">일주 ${c.ilju}</div>
+      <div class="celeb-field"><span class="label">성공 스토리</span>${c.story}</div>
+      <div class="celeb-field"><span class="label">핵심 습관·마인드셋</span>${c.habit}</div>
+      <div class="celeb-motto">"${c.motto}"</div>
+    `;
+    list.appendChild(card);
+  });
+
+  document.getElementById("result").style.display = "block";
+}
+
+document.getElementById("submitBtn").addEventListener("click", () => {
+  const val = document.getElementById("birthdate").value;
+  if (!val) { alert("생년월일을 선택해주세요"); return; }
+  const [y, m, d] = val.split("-").map(Number);
+  const r = match(y, m, d);
+  render(r);
+  document.getElementById("result").scrollIntoView({behavior: "smooth"});
+});
+
+document.getElementById("retryBtn").addEventListener("click", () => {
+  document.getElementById("result").style.display = "none";
+  window.scrollTo({top: 0, behavior: "smooth"});
+});
+</script>
+</body>
+</html>
