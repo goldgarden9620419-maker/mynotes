@@ -1,0 +1,10 @@
+# Obsidian local-only files
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/app.json
+.trash/
+
+# OS files
+.DS_Store
+Thumbs.db
