@@ -153,6 +153,64 @@
     font-size: 0.75rem;
     margin-top: 32px;
   }
+  .share-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+  .share-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #1a1108;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .share-btn.secondary {
+    background: #1e2128;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .card-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+  .card-modal.open { display: flex; }
+  .card-modal-inner {
+    max-width: 420px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .card-modal-inner img {
+    width: 100%;
+    border-radius: 16px;
+    display: block;
+    max-height: 65vh;
+    object-fit: contain;
+    background: #000;
+  }
+  .card-modal-actions {
+    display: flex;
+    gap: 8px;
+  }
 </style>
 </head>
 <body>
@@ -178,10 +236,24 @@
     </div>
     <div class="match-type" id="matchType"></div>
     <div id="celebList"></div>
+    <div class="share-row">
+      <button class="share-btn" id="saveCardBtn">🖼️ 카드 이미지로 저장/공유</button>
+    </div>
     <button class="retry-btn" id="retryBtn">다른 날짜로 다시 보기</button>
   </div>
 
   <footer>사주 웹사이트 프로토타입 · 부수입 프로젝트 · 2026-08-04</footer>
+</div>
+
+<div id="cardModal" class="card-modal">
+  <div class="card-modal-inner">
+    <img id="cardPreviewImg" alt="사주 결과 카드">
+    <div class="card-modal-actions">
+      <a id="cardDownloadLink" class="share-btn" download="my-saju-card.png">⬇️ 다운로드</a>
+      <button class="share-btn" id="cardShareBtn" style="display:none;">📤 공유하기</button>
+      <button class="share-btn secondary" id="cardCloseBtn">닫기</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1069,6 +1141,15 @@ const STEM_TO_OHANG = {
 const STEMS = "甲乙丙丁戊己庚辛壬癸";
 const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
 
+// 카드 이미지용 오행별 포인트 컬러
+const OHANG_COLORS = {
+  "木": { accent: "#4ade80", accentDark: "#166534" },
+  "火": { accent: "#fb7185", accentDark: "#9f1239" },
+  "土": { accent: "#e0a458", accentDark: "#92400e" },
+  "金": { accent: "#facc15", accentDark: "#854d0e" },
+  "水": { accent: "#60a5fa", accentDark: "#1e3a8a" },
+};
+
 // Julian Day Number (proleptic Gregorian) - lunar_python 계산 결과와 offset=49로 검증 완료
 function jdn(y, m, d) {
   const a = Math.floor((14 - m) / 12);
@@ -1188,11 +1269,14 @@ function render(r) {
   document.getElementById("result").style.display = "block";
 }
 
+let lastResult = null;
+
 document.getElementById("submitBtn").addEventListener("click", () => {
   const val = document.getElementById("birthdate").value;
   if (!val) { alert("생년월일을 선택해주세요"); return; }
   const [y, m, d] = val.split("-").map(Number);
   const r = match(y, m, d);
+  lastResult = r;
   render(r);
   document.getElementById("result").scrollIntoView({behavior: "smooth"});
 });
@@ -1200,6 +1284,215 @@ document.getElementById("submitBtn").addEventListener("click", () => {
 document.getElementById("retryBtn").addEventListener("click", () => {
   document.getElementById("result").style.display = "none";
   window.scrollTo({top: 0, behavior: "smooth"});
+});
+
+// ---- 결과 카드 이미지 생성 (Canvas API, 외부 라이브러리 없음) ----
+
+// 캔버스에 한글 텍스트를 폭에 맞게 줄바꿈하며 그리고, 그린 줄 수를 반환
+// 폭에 맞게 줄바꿈된 라인 배열만 반환 (그리지 않음) - 높이를 미리 계산하기 위한 순수 함수
+function getWrappedLines(ctx, text, maxWidth) {
+  const words = text.split(" ");
+  let line = "";
+  let lines = [];
+  for (const word of words) {
+    const test = line ? line + " " + word : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+    // 단어 자체가 maxWidth보다 길면(공백 없는 긴 한글 문장) 글자 단위로 강제 줄바꿈
+    while (ctx.measureText(line).width > maxWidth && line.length > 1) {
+      let cut = line.length - 1;
+      while (cut > 1 && ctx.measureText(line.slice(0, cut)).width > maxWidth) cut--;
+      lines.push(line.slice(0, cut));
+      line = line.slice(cut);
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function drawLines(ctx, lines, x, y, lineHeight) {
+  lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
+  return lines.length * lineHeight;
+}
+
+// 2-패스 렌더링: 1) 임시 캔버스로 텍스트를 측정해 전체 카드 높이를 먼저 계산 2) 정확한 높이의 실제 캔버스에 그림
+// (고정 높이를 쓰면 유명인 모토 길이에 따라 하단 텍스트가 겹치는 문제가 있어 이 방식으로 해결)
+function drawResultCard(r) {
+  const W = 1080;
+  const colors = OHANG_COLORS[r.ohang];
+  const celebs = r.celebrities.slice(0, 2);
+
+  const mctx = document.createElement("canvas").getContext("2d");
+  mctx.font = "800 62px 'Apple SD Gothic Neo', sans-serif";
+  const titleLines = getWrappedLines(mctx, r.ohangCopy.title, W - 160);
+  mctx.font = "400 34px 'Apple SD Gothic Neo', sans-serif";
+  const taglineLines = getWrappedLines(mctx, r.ohangCopy.tagline, W - 200);
+  mctx.font = "italic 500 32px 'Apple SD Gothic Neo', sans-serif";
+  const quoteLines = getWrappedLines(mctx, `"${r.ohangCopy.card_line}"`, W - 180);
+  mctx.font = "italic 400 30px 'Apple SD Gothic Neo', sans-serif";
+  const celebMottoLines = celebs.map(c => getWrappedLines(mctx, `"${c.motto}"`, W - 260));
+
+  // ---- 높이 계산 (아래 실제 그리기 단계와 동일한 증분 값을 사용해야 함) ----
+  let y = 130;
+  y += 80;                                  // 상단 사이트 타이틀
+  y += 130;                                 // 배지
+  y += titleLines.length * 74 + 20;         // 오행 타이틀
+  y += taglineLines.length * 46 + 50;       // 태그라인
+  y += 100;                                 // 키워드
+  y += 50;                                  // 구분선
+  y += quoteLines.length * 44 + 70;         // 명언
+
+  const boxTop = y;
+  let boxH = 70;
+  celebs.forEach((c, i) => { boxH += 54 + celebMottoLines[i].length * 40 + 70; });
+  y = boxTop + boxH + 70;                   // 매칭 유형 안내 위치
+  const H = y + 120;                        // 안내 + 여백 + 푸터
+
+  // ---- 실제 캔버스에 그리기 ----
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext("2d");
+
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, "#15171c");
+  bg.addColorStop(0.55, "#101216");
+  bg.addColorStop(1, colors.accentDark);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  const cx = W / 2;
+  ctx.textAlign = "center";
+  y = 130;
+
+  ctx.fillStyle = "rgba(255,255,255,0.55)";
+  ctx.font = "500 30px 'Apple SD Gothic Neo', sans-serif";
+  ctx.fillText("나와 닮은 사주의 유명인은?", cx, y);
+  y += 80;
+
+  const badgeText = `일주 ${r.ilju} · 오행 ${r.ohang}`;
+  ctx.font = "700 30px 'Apple SD Gothic Neo', sans-serif";
+  const badgeW = ctx.measureText(badgeText).width + 64;
+  ctx.fillStyle = colors.accent;
+  ctx.beginPath();
+  ctx.roundRect(cx - badgeW / 2, y, badgeW, 64, 32);
+  ctx.fill();
+  ctx.fillStyle = "#14110a";
+  ctx.fillText(badgeText, cx, y + 42);
+  y += 130;
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "800 62px 'Apple SD Gothic Neo', sans-serif";
+  y += drawLines(ctx, titleLines, cx, y, 74) + 20;
+
+  ctx.fillStyle = "rgba(255,255,255,0.65)";
+  ctx.font = "400 34px 'Apple SD Gothic Neo', sans-serif";
+  y += drawLines(ctx, taglineLines, cx, y, 46) + 50;
+
+  ctx.font = "500 28px 'Apple SD Gothic Neo', sans-serif";
+  const kwTexts = r.ohangCopy.keywords.map(k => "#" + k);
+  const gap = 16;
+  const kwWidths = kwTexts.map(t => ctx.measureText(t).width + 32);
+  const totalKwW = kwWidths.reduce((a, b) => a + b, 0) + gap * (kwTexts.length - 1);
+  let kx = cx - totalKwW / 2;
+  kwTexts.forEach((t, i) => {
+    const w = kwWidths[i];
+    ctx.strokeStyle = "rgba(255,255,255,0.35)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(kx, y, w, 48, 24);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,0.8)";
+    ctx.fillText(t, kx + w / 2, y + 33);
+    kx += w + gap;
+  });
+  y += 100;
+
+  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  ctx.font = "600 22px 'Apple SD Gothic Neo', sans-serif";
+  ctx.fillText("─────────", cx, y);
+  y += 50;
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "italic 500 32px 'Apple SD Gothic Neo', sans-serif";
+  y += drawLines(ctx, quoteLines, cx, y, 44) + 70;
+
+  ctx.fillStyle = "rgba(255,255,255,0.06)";
+  ctx.beginPath();
+  ctx.roundRect(90, boxTop, W - 180, boxH, 28);
+  ctx.fill();
+
+  let cy = boxTop + 70;
+  celebs.forEach((c, i) => {
+    ctx.fillStyle = colors.accent;
+    ctx.font = "700 40px 'Apple SD Gothic Neo', sans-serif";
+    ctx.fillText(c.name, cx, cy);
+    cy += 54;
+
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.font = "italic 400 30px 'Apple SD Gothic Neo', sans-serif";
+    cy += drawLines(ctx, celebMottoLines[i], cx, cy, 40) + 70;
+  });
+
+  y = boxTop + boxH + 70;
+  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  ctx.font = "400 26px 'Apple SD Gothic Neo', sans-serif";
+  const matchLabel = r.matchType === "exact" ? "✨ 일주가 정확히 일치하는 유명인" : "🔎 같은 오행 유형의 유명인";
+  ctx.fillText(matchLabel, cx, y);
+
+  ctx.fillStyle = "rgba(255,255,255,0.35)";
+  ctx.font = "400 24px 'Apple SD Gothic Neo', sans-serif";
+  ctx.fillText("사주 웹사이트 프로토타입 · 부수입 프로젝트", cx, H - 50);
+
+  return canvas;
+}
+
+function openCardModal(canvas) {
+  const dataUrl = canvas.toDataURL("image/png");
+  const img = document.getElementById("cardPreviewImg");
+  img.src = dataUrl;
+
+  const dlLink = document.getElementById("cardDownloadLink");
+  dlLink.href = dataUrl;
+
+  const shareBtn = document.getElementById("cardShareBtn");
+  if (navigator.canShare && navigator.share) {
+    shareBtn.style.display = "inline-flex";
+    shareBtn.onclick = async () => {
+      try {
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], "my-saju-card.png", { type: "image/png" });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "나와 닮은 사주의 유명인",
+            text: "내 사주 유형을 확인해보세요!",
+          });
+        } else {
+          alert("이 기기/브라우저에서는 이미지 공유가 지원되지 않아요. 다운로드 후 직접 공유해주세요.");
+        }
+      } catch (e) {
+        // 사용자가 공유를 취소한 경우 등은 조용히 무시
+      }
+    };
+  } else {
+    shareBtn.style.display = "none";
+  }
+
+  document.getElementById("cardModal").classList.add("open");
+}
+
+document.getElementById("saveCardBtn").addEventListener("click", () => {
+  if (!lastResult) return;
+  const canvas = drawResultCard(lastResult);
+  openCardModal(canvas);
+});
+
+document.getElementById("cardCloseBtn").addEventListener("click", () => {
+  document.getElementById("cardModal").classList.remove("open");
 });
 </script>
 </body>
