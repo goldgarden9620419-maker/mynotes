@@ -266,6 +266,10 @@
   .card-modal-actions {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
+  }
+  .card-modal-actions .share-btn {
+    min-width: 0;
   }
   .card-modal-hint {
     text-align: center;
@@ -318,11 +322,14 @@
   <div class="card-modal-inner">
     <img id="cardPreviewImg" alt="사주 결과 카드">
     <div class="card-modal-actions">
+      <button class="share-btn" id="cardCopyBtn">📋 이미지 복사</button>
       <a id="cardDownloadLink" class="share-btn" download="my-saju-card.png">⬇️ 다운로드</a>
       <button class="share-btn" id="cardShareBtn" style="display:none;">📤 공유하기</button>
+    </div>
+    <div class="card-modal-actions">
       <button class="share-btn secondary" id="cardCloseBtn">닫기</button>
     </div>
-    <p class="card-modal-hint">다운로드가 바로 안 되면, 위 이미지를 <strong>길게 눌러 저장</strong>해주세요.</p>
+    <p class="card-modal-hint" id="cardCopyHint">PC에서는 <strong>"이미지 복사"</strong> 후 카톡 채팅창에 <strong>Ctrl+V</strong>로 바로 붙여넣을 수 있어요. 모바일에서 다운로드가 바로 안 되면, 위 이미지를 <strong>길게 눌러 저장</strong>해주세요.</p>
   </div>
 </div>
 
@@ -657,6 +664,27 @@ function openCardModal(canvas) {
 
   const dlLink = document.getElementById("cardDownloadLink");
   dlLink.href = dataUrl;
+
+  // 이미지 클립보드 복사 (PC에서 카톡/디스코드 등에 Ctrl+V로 바로 붙여넣기 위함)
+  const copyBtn = document.getElementById("cardCopyBtn");
+  const copyHint = document.getElementById("cardCopyHint");
+  const originalCopyLabel = "📋 이미지 복사";
+  if (navigator.clipboard && window.ClipboardItem) {
+    copyBtn.style.display = "inline-flex";
+    copyBtn.textContent = originalCopyLabel;
+    copyBtn.onclick = async () => {
+      try {
+        const blob = await (await fetch(dataUrl)).blob();
+        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        copyBtn.textContent = "✅ 복사됨! 카톡에 Ctrl+V";
+        setTimeout(() => { copyBtn.textContent = originalCopyLabel; }, 2500);
+      } catch (e) {
+        copyHint.textContent = "이미지 복사가 지원되지 않는 브라우저예요. 다운로드 후 파일로 첨부해주세요.";
+      }
+    };
+  } else {
+    copyBtn.style.display = "none";
+  }
 
   const shareBtn = document.getElementById("cardShareBtn");
   if (navigator.canShare && navigator.share) {
