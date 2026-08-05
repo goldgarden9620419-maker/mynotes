@@ -34,6 +34,8 @@ PAGE_TMPL = """<!doctype html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636318203503169"
+     crossorigin="anonymous"></script>
 <title>{name} 사주 · 일주 {ilju} | 나와 닮은 사주의 유명인은?</title>
 <meta name="description" content="{name}({ilju}, 오행 {ohang}) - {story}">
 <meta property="og:type" content="profile">
@@ -163,6 +165,8 @@ INDEX_TMPL = """<!doctype html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6636318203503169"
+     crossorigin="anonymous"></script>
 <title>전체 유명인 목록 | 나와 닮은 사주의 유명인은?</title>
 <meta name="description" content="사주 매칭에 사용되는 전체 {total}명의 유명인 목록 - 오행(木火土金水)별로 정리">
 <style>
