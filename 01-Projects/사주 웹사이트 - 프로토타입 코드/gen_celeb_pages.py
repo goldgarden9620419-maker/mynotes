@@ -78,6 +78,9 @@ PAGE_TMPL = """<!doctype html>
     border: 1px solid var(--border); border-radius: 12px;
     font-style: italic; font-size: 1.05rem;
   }}
+  .motto-note {{
+    margin-top: 8px; font-size: 0.72rem; color: var(--muted); font-style: normal;
+  }}
   .cta {{
     display: block; text-align: center; margin-top: 36px; padding: 14px;
     background: var(--accent); color: #14110a; border-radius: 10px;
@@ -106,7 +109,10 @@ PAGE_TMPL = """<!doctype html>
     <span class="value">{habit}</span>
   </div>
 
-  <div class="motto">&ldquo;{motto}&rdquo;</div>
+  <div class="motto">
+    &ldquo;{motto}&rdquo;
+    <p class="motto-note">※ 실제 어록이거나, 공개된 자료를 바탕으로 요약·재구성한 대표 문구입니다.</p>
+  </div>
 
   <a class="cta" href="../index.html">내 생년월일로 나의 사주 유형 확인하기 →</a>
 
