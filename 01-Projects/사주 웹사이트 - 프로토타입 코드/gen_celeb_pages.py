@@ -224,8 +224,8 @@ print("celebs/index.html 생성 완료")
 urls = ["index.html", "celebs/index.html"] + [f"celebs/{slug}.html" for _, slug, _, _ in generated]
 sitemap = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for u in urls:
-    sitemap.append(f"  <url><loc>https://YOUR-DOMAIN.example/{u}</loc></url>")
+    sitemap.append(f"  <url><loc>https://sajutwin.com/{u}</loc></url>")
 sitemap.append("</urlset>")
 with open(f"{BASE}/sitemap.xml", "w", encoding="utf-8") as f:
     f.write("\n".join(sitemap))
-print("sitemap.xml 생성 완료 (도메인 확정 후 YOUR-DOMAIN.example 교체 필요)")
+print("sitemap.xml 생성 완료 (도메인: sajutwin.com)")
