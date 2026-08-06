@@ -751,6 +751,15 @@ function drawLines(ctx, lines, x, y, lineHeight) {
   return lines.length * lineHeight;
 }
 
+// 오행별 밝은 배경 톤 (카드 이미지 전용 - 사이트 자체는 다크 테마 유지, 공유용 카드만 밝게)
+const LIGHT_TINT = {
+  "木": "#eaf8ef", "火": "#fdecef", "土": "#faf1e2", "金": "#fdf7df", "水": "#e9f2fd",
+};
+const CARD_TEXT = "#23252b";
+const CARD_MUTED = "#7a7f8c";
+const CARD_BOX_BG = "#ffffff";
+const CARD_BOX_BORDER = "#e7e2d8";
+
 // 2-패스 렌더링: 1) 임시 캔버스로 텍스트를 측정해 전체 카드 높이를 먼저 계산 2) 정확한 높이의 실제 캔버스에 그림
 // (고정 높이를 쓰면 유명인 모토 길이에 따라 하단 텍스트가 겹치는 문제가 있어 이 방식으로 해결)
 function drawResultCard(r) {
@@ -758,7 +767,21 @@ function drawResultCard(r) {
   const colors = OHANG_COLORS[r.ohang];
   const celebs = r.celebrities.slice(0, 2);
 
+  const stemChar = r.ilju[0];
+  const branchChar = r.ilju[1];
+  const stemData = SAJU_READING.stems[stemChar];
+  const branchData = SAJU_READING.branches[branchChar];
+  const readingHeadline = `일주 ${r.ilju} · ${stemData.symbol}, ${branchData.symbol}의 기운`;
+  const readingParagraph = `${stemData.personality} ${branchData.personality}`;
+
+  const bookPool = BOOK_RECS[r.ohang] || [];
+  const book = bookPool.find(b => b.authorIlju === r.ilju) || bookPool[0] || null;
+
   const mctx = document.createElement("canvas").getContext("2d");
+  mctx.font = "700 34px 'Apple SD Gothic Neo', sans-serif";
+  const readingHeadlineLines = getWrappedLines(mctx, readingHeadline, W - 160);
+  mctx.font = "400 30px 'Apple SD Gothic Neo', sans-serif";
+  const readingParagraphLines = getWrappedLines(mctx, readingParagraph, W - 200);
   mctx.font = "800 62px 'Apple SD Gothic Neo', sans-serif";
   const titleLines = getWrappedLines(mctx, r.ohangCopy.title, W - 160);
   mctx.font = "400 34px 'Apple SD Gothic Neo', sans-serif";
@@ -767,22 +790,36 @@ function drawResultCard(r) {
   const quoteLines = getWrappedLines(mctx, `"${r.ohangCopy.card_line}"`, W - 180);
   mctx.font = "italic 400 30px 'Apple SD Gothic Neo', sans-serif";
   const celebMottoLines = celebs.map(c => getWrappedLines(mctx, `"${c.motto}"`, W - 260));
+  mctx.font = "400 28px 'Apple SD Gothic Neo', sans-serif";
+  const bookReasonLines = book ? getWrappedLines(mctx, book.oneLiner, W - 260) : [];
 
   // ---- 높이 계산 (아래 실제 그리기 단계와 동일한 증분 값을 사용해야 함) ----
-  let y = 130;
-  y += 80;                                  // 상단 사이트 타이틀
-  y += 130;                                 // 배지
-  y += titleLines.length * 74 + 20;         // 오행 타이틀
-  y += taglineLines.length * 46 + 50;       // 태그라인
-  y += 100;                                 // 키워드
-  y += 50;                                  // 구분선
-  y += quoteLines.length * 44 + 70;         // 명언
+  let y = 110;
+  y += 60;                                        // 상단 사이트 타이틀
+  y += 118;                                       // 배지
+  y += 44;                                        // "🔮 내 사주풀이" 라벨
+  y += readingHeadlineLines.length * 44 + 18;     // 사주풀이 헤드라인
+  y += readingParagraphLines.length * 42 + 56;    // 사주풀이 문단
+  y += 72;                                        // "🌿 오행 유형" 라벨 (아래 62px 제목과 간격 확보)
+  y += titleLines.length * 74 + 20;               // 오행 타이틀
+  y += taglineLines.length * 46 + 50;             // 태그라인
+  y += 100;                                       // 키워드
+  y += 50;                                        // 구분선
+  y += quoteLines.length * 44 + 70;               // 명언
 
   const boxTop = y;
   let boxH = 70;
   celebs.forEach((c, i) => { boxH += 54 + celebMottoLines[i].length * 40 + 70; });
-  y = boxTop + boxH + 70;                   // 매칭 유형 안내 위치
-  const H = y + 120;                        // 안내 + 여백 + 푸터
+  y = boxTop + boxH + 64;                         // 매칭 유형 안내 위치
+  y += 60;                                        // 안내 아래 여백
+
+  const bookBoxTop = y;
+  let bookBoxH = 0;
+  if (book) {
+    bookBoxH = 56 + 46 + 36 + bookReasonLines.length * 38 + 44;
+    y = bookBoxTop + bookBoxH + 60;
+  }
+  const H = y + 100;                              // 푸터 + 여백
 
   // ---- 실제 캔버스에 그리기 ----
   const canvas = document.createElement("canvas");
@@ -791,20 +828,20 @@ function drawResultCard(r) {
   const ctx = canvas.getContext("2d");
 
   const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, "#15171c");
-  bg.addColorStop(0.55, "#101216");
-  bg.addColorStop(1, colors.accentDark);
+  bg.addColorStop(0, "#ffffff");
+  bg.addColorStop(0.5, "#fffdf9");
+  bg.addColorStop(1, LIGHT_TINT[r.ohang]);
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
   const cx = W / 2;
   ctx.textAlign = "center";
-  y = 130;
+  y = 110;
 
-  ctx.fillStyle = "rgba(255,255,255,0.55)";
+  ctx.fillStyle = CARD_MUTED;
   ctx.font = "500 30px 'Apple SD Gothic Neo', sans-serif";
   ctx.fillText("나와 닮은 사주의 유명인은?", cx, y);
-  y += 80;
+  y += 60;
 
   const badgeText = `일주 ${r.ilju} · 오행 ${r.ohang}`;
   ctx.font = "700 30px 'Apple SD Gothic Neo', sans-serif";
@@ -813,15 +850,33 @@ function drawResultCard(r) {
   ctx.beginPath();
   ctx.roundRect(cx - badgeW / 2, y, badgeW, 64, 32);
   ctx.fill();
-  ctx.fillStyle = "#14110a";
+  ctx.fillStyle = "#1a1108";
   ctx.fillText(badgeText, cx, y + 42);
-  y += 130;
+  y += 118;
 
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = colors.accentDark;
+  ctx.font = "700 26px 'Apple SD Gothic Neo', sans-serif";
+  ctx.fillText("🔮 내 사주풀이", cx, y);
+  y += 44;
+
+  ctx.fillStyle = CARD_TEXT;
+  ctx.font = "700 34px 'Apple SD Gothic Neo', sans-serif";
+  y += drawLines(ctx, readingHeadlineLines, cx, y, 44) + 18;
+
+  ctx.fillStyle = "#4a4d57";
+  ctx.font = "400 30px 'Apple SD Gothic Neo', sans-serif";
+  y += drawLines(ctx, readingParagraphLines, cx, y, 42) + 56;
+
+  ctx.fillStyle = colors.accentDark;
+  ctx.font = "700 26px 'Apple SD Gothic Neo', sans-serif";
+  ctx.fillText("🌿 오행 유형", cx, y);
+  y += 72;
+
+  ctx.fillStyle = CARD_TEXT;
   ctx.font = "800 62px 'Apple SD Gothic Neo', sans-serif";
   y += drawLines(ctx, titleLines, cx, y, 74) + 20;
 
-  ctx.fillStyle = "rgba(255,255,255,0.65)";
+  ctx.fillStyle = CARD_MUTED;
   ctx.font = "400 34px 'Apple SD Gothic Neo', sans-serif";
   y += drawLines(ctx, taglineLines, cx, y, 46) + 50;
 
@@ -833,51 +888,80 @@ function drawResultCard(r) {
   let kx = cx - totalKwW / 2;
   kwTexts.forEach((t, i) => {
     const w = kwWidths[i];
-    ctx.strokeStyle = "rgba(255,255,255,0.35)";
+    ctx.strokeStyle = colors.accent;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.roundRect(kx, y, w, 48, 24);
     ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,0.8)";
+    ctx.fillStyle = colors.accentDark;
     ctx.fillText(t, kx + w / 2, y + 33);
     kx += w + gap;
   });
   y += 100;
 
-  ctx.fillStyle = "rgba(255,255,255,0.5)";
+  ctx.fillStyle = "#d8d2c4";
   ctx.font = "600 22px 'Apple SD Gothic Neo', sans-serif";
   ctx.fillText("─────────", cx, y);
   y += 50;
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = CARD_TEXT;
   ctx.font = "italic 500 32px 'Apple SD Gothic Neo', sans-serif";
   y += drawLines(ctx, quoteLines, cx, y, 44) + 70;
 
-  ctx.fillStyle = "rgba(255,255,255,0.06)";
+  ctx.fillStyle = CARD_BOX_BG;
+  ctx.strokeStyle = CARD_BOX_BORDER;
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.roundRect(90, boxTop, W - 180, boxH, 28);
   ctx.fill();
+  ctx.stroke();
 
   let cy = boxTop + 70;
   celebs.forEach((c, i) => {
-    ctx.fillStyle = colors.accent;
+    ctx.fillStyle = colors.accentDark;
     ctx.font = "700 40px 'Apple SD Gothic Neo', sans-serif";
     ctx.fillText(c.name, cx, cy);
     cy += 54;
 
-    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.fillStyle = "#4a4d57";
     ctx.font = "italic 400 30px 'Apple SD Gothic Neo', sans-serif";
     cy += drawLines(ctx, celebMottoLines[i], cx, cy, 40) + 70;
   });
 
-  y = boxTop + boxH + 70;
-  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  y = boxTop + boxH + 64;
+  ctx.fillStyle = CARD_MUTED;
   ctx.font = "400 26px 'Apple SD Gothic Neo', sans-serif";
   const matchLabel = r.matchType === "exact" ? "✨ 일주가 정확히 일치하는 유명인" : "🔎 같은 오행 유형의 유명인";
   ctx.fillText(matchLabel, cx, y);
+  y += 60;
 
-  ctx.fillStyle = "rgba(255,255,255,0.35)";
+  if (book) {
+    ctx.fillStyle = CARD_BOX_BG;
+    ctx.strokeStyle = CARD_BOX_BORDER;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.roundRect(90, bookBoxTop, W - 180, bookBoxH, 28);
+    ctx.fill();
+    ctx.stroke();
+
+    let by = bookBoxTop + 54;
+    ctx.fillStyle = colors.accentDark;
+    ctx.font = "700 26px 'Apple SD Gothic Neo', sans-serif";
+    ctx.fillText("📚 같은 기운의 작가가 쓴 책", cx, by);
+    by += 46;
+
+    ctx.fillStyle = CARD_TEXT;
+    ctx.font = "700 34px 'Apple SD Gothic Neo', sans-serif";
+    ctx.fillText(`${book.title} · ${book.author}`, cx, by);
+    by += 36;
+
+    ctx.fillStyle = "#4a4d57";
+    ctx.font = "400 28px 'Apple SD Gothic Neo', sans-serif";
+    drawLines(ctx, bookReasonLines, cx, by, 38);
+  }
+
+  ctx.fillStyle = "#a8a296";
   ctx.font = "400 24px 'Apple SD Gothic Neo', sans-serif";
-  ctx.fillText("사주 웹사이트 프로토타입 · 부수입 프로젝트", cx, H - 50);
+  ctx.fillText("sajutwin.com · 나와 닮은 사주의 유명인은?", cx, H - 50);
 
   return canvas;
 }
