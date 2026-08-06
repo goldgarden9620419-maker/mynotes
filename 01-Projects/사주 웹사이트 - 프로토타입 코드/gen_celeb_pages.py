@@ -101,13 +101,13 @@ PAGE_TMPL = """<!doctype html>
     background: color-mix(in srgb, var(--accent) 16%, #12141a);
     border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
     margin-bottom: 14px;
-    animation: avatarFloat 3.2s ease-in-out infinite;
+    animation: avatarFloat 2.2s ease-in-out infinite;
   }}
   .avatar svg {{ width: 36px; height: 36px; color: var(--accent); }}
   .field-label {{ font-size: 0.72rem; color: var(--muted); margin: -10px 0 14px; }}
   @keyframes avatarFloat {{
-    0%, 100% {{ transform: translateY(0) rotate(0deg); }}
-    50% {{ transform: translateY(-5px) rotate(-3deg); }}
+    0%, 100% {{ transform: translateY(0) scale(1) rotate(0deg); }}
+    50% {{ transform: translateY(-10px) scale(1.08) rotate(-6deg); }}
   }}
   @media (prefers-reduced-motion: reduce) {{ .avatar {{ animation: none; }} }}
   h1 {{ font-size: 1.7rem; margin: 0 0 6px; }}
