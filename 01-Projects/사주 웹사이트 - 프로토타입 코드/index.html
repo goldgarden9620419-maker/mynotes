@@ -265,6 +265,36 @@
     font-style: italic;
     font-size: 0.88rem;
   }
+  .book-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .book-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--accent) 18%, #12141a);
+  }
+  .book-icon svg { width: 24px; height: 24px; color: var(--accent); }
+  .book-title { font-weight: 700; font-size: 0.98rem; margin-bottom: 2px; }
+  .book-author { font-size: 0.78rem; color: var(--accent); margin-bottom: 6px; }
+  .book-reason { font-size: 0.85rem; line-height: 1.55; color: var(--text); }
+  .book-disclaimer {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin: 4px 0 16px;
+    line-height: 1.5;
+  }
   .motto-disclaimer {
     font-size: 0.72rem;
     color: var(--muted);
@@ -415,6 +445,10 @@
     <div class="match-type" id="matchType"></div>
     <div id="celebList"></div>
     <p class="motto-disclaimer">※ 모토는 실제 어록이거나, 공개된 자료를 바탕으로 요약·재구성한 대표 문구입니다. 자세한 내용은 <a href="terms.html">이용약관</a> 참고.</p>
+
+    <h2 class="section-heading">📚 같은 기운의 작가가 쓴 책</h2>
+    <div id="bookList"></div>
+    <p class="book-disclaimer">※ 작가의 일주는 공개된 생년월일을 바탕으로 이 사이트와 동일한 방식으로 계산한 값이며, 작가 본인이 밝힌 사주가 아닙니다. 책 자체는 실제 출간된 작품입니다.</p>
     <div class="share-row">
       <button class="share-btn" id="saveCardBtn">🖼️ 카드 이미지로 저장/공유</button>
     </div>
@@ -448,6 +482,7 @@
 let CELEBRITY_DB = [];
 let OHANG_COPY = {};
 let SAJU_READING = { stems: {}, branches: {} };
+let BOOK_RECS = {};
 
 const STEM_TO_OHANG = {
   "甲": "木", "乙": "木", "丙": "火", "丁": "火", "戊": "土",
@@ -470,6 +505,7 @@ const FIELD_ICONS = {
   dance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v6"/><path d="M12 12l-5 6"/><path d="M12 12l5 3"/><path d="M9 9l-3-2"/><path d="M15 9l3-1"/></svg>',
   esports: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="10" rx="5"/><line x1="7" y1="11" x2="7" y2="15"/><line x1="5" y1="13" x2="9" y2="13"/><circle cx="16" cy="11" r="1"/><circle cx="18" cy="14" r="1"/></svg>',
 };
+const BOOK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6 4.5 9 4.5 12 5.5V19c-3-1-6-1-8 0V5.5z"/><path d="M20 5.5c-2-1-5-1-8 0V19c3-1 6-1 8 0V5.5z"/></svg>';
 const FIELD_LABELS = {
   biz: "경영자", sports: "운동선수", music: "음악가", film: "배우·감독",
   writer: "작가", science: "과학자", fashion: "디자이너", art: "예술가",
@@ -639,6 +675,27 @@ function render(r) {
       <div class="celeb-motto">"${c.motto}"</div>
     `;
     list.appendChild(card);
+  });
+
+  const bookList = document.getElementById("bookList");
+  bookList.innerHTML = "";
+  const books = BOOK_RECS[r.ohang] || [];
+  books.forEach(b => {
+    const card = document.createElement("div");
+    card.className = "book-card";
+    const isExact = b.authorIlju === r.ilju;
+    const tag = isExact
+      ? `${b.author}(일주 ${b.authorIlju})와 정확히 같은 일주예요`
+      : `${b.author}(일주 ${b.authorIlju})와 같은 오행 · ${r.ohang}의 기운`;
+    card.innerHTML = `
+      <div class="book-icon">${BOOK_ICON}</div>
+      <div>
+        <div class="book-title">${b.title}</div>
+        <div class="book-author">${tag}</div>
+        <div class="book-reason">${b.oneLiner}</div>
+      </div>
+    `;
+    bookList.appendChild(card);
   });
 
   document.getElementById("result").style.display = "block";
@@ -898,7 +955,7 @@ async function loadData() {
   const submitBtn = document.getElementById("submitBtn");
   const errorBox = document.getElementById("loadError");
   try {
-    const [celebs, ohang, reading] = await Promise.all([
+    const [celebs, ohang, reading, books] = await Promise.all([
       fetch("celebrities.json").then(r => {
         if (!r.ok) throw new Error(`celebrities.json 응답 오류 (${r.status})`);
         return r.json();
@@ -911,10 +968,15 @@ async function loadData() {
         if (!r.ok) throw new Error(`saju_reading.json 응답 오류 (${r.status})`);
         return r.json();
       }),
+      fetch("book_recommendations.json").then(r => {
+        if (!r.ok) throw new Error(`book_recommendations.json 응답 오류 (${r.status})`);
+        return r.json();
+      }),
     ]);
     CELEBRITY_DB = celebs;
     OHANG_COPY = ohang;
     SAJU_READING = reading;
+    BOOK_RECS = books;
     buildIndexes();
     submitBtn.disabled = false;
     submitBtn.textContent = "내 사주 유형 보기";
