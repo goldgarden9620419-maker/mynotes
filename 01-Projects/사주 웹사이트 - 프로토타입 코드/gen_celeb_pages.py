@@ -21,6 +21,26 @@ STEM_TO_OHANG = {
     "甲":"木","乙":"木","丙":"火","丁":"火","戊":"土","己":"土","庚":"金","辛":"金","壬":"水","癸":"水",
 }
 
+# 직업군별 실루엣 아이콘 (실존 인물의 얼굴을 그리지 않고, 분야를 상징하는 아이콘으로 대체 - 초상권 이슈 회피)
+FIELD_ICONS = {
+    "biz": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="3" y1="13" x2="21" y2="13"/></svg>',
+    "sports": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 5H5a3 3 0 0 0 3 5"/><path d="M16 5h3a3 3 0 0 1-3 5"/><line x1="12" y1="13" x2="12" y2="17"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="17" x2="12" y2="20"/></svg>',
+    "music": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="8" y1="21" x2="16" y2="21"/></svg>',
+    "film": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="12" rx="1.5"/><path d="M3 9l2-5h4l-2 5"/><path d="M9 9l2-5h4l-2 5"/><path d="M15 9l2-5h3l-1.5 5"/></svg>',
+    "writer": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6 4.5 9 4.5 12 5.5V19c-3-1-6-1-8 0V5.5z"/><path d="M20 5.5c-2-1-5-1-8 0V19c3-1 6-1 8 0V5.5z"/></svg>',
+    "science": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.4 1 2.5h6c0-1.1.4-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>',
+    "fashion": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l-2 2-4 1 1 4 2-1v11h6V9l2 1 1-4-4-1-2-2z"/></svg>',
+    "art": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 8 0 0 0 0 16c1.5 0 2-1 2-2s-1-1.5-1-2.5a1.5 1.5 0 0 1 1.5-1.5H17a4 4 0 0 0 4-4c0-3.3-4-6-9-6z"/><circle cx="8" cy="10" r="1"/><circle cx="12" cy="8" r="1"/><circle cx="16" cy="10" r="1"/></svg>',
+    "humanitarian": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5c-2.5 4.6-9.5 9-9.5 9z"/></svg>',
+    "dance": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v6"/><path d="M12 12l-5 6"/><path d="M12 12l5 3"/><path d="M9 9l-3-2"/><path d="M15 9l3-1"/></svg>',
+    "esports": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="10" rx="5"/><line x1="7" y1="11" x2="7" y2="15"/><line x1="5" y1="13" x2="9" y2="13"/><circle cx="16" cy="11" r="1"/><circle cx="18" cy="14" r="1"/></svg>',
+}
+FIELD_LABELS = {
+    "biz": "경영자", "sports": "운동선수", "music": "음악가", "film": "배우·감독",
+    "writer": "작가", "science": "과학자", "fashion": "디자이너", "art": "예술가",
+    "humanitarian": "사회공헌가", "dance": "무용수", "esports": "프로게이머",
+}
+
 def slugify(name):
     # 괄호/점/쉼표 등 파일명에 부적절한 문자 제거, 공백은 하이픈으로
     s = re.sub(r"[()·./,]", "", name)
@@ -75,6 +95,21 @@ PAGE_TMPL = """<!doctype html>
     background: var(--accent); color: #14110a; font-weight: 700;
     font-size: 0.85rem; margin-bottom: 16px;
   }}
+  .avatar {{
+    width: 72px; height: 72px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: color-mix(in srgb, var(--accent) 16%, #12141a);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    margin-bottom: 14px;
+    animation: avatarFloat 3.2s ease-in-out infinite;
+  }}
+  .avatar svg {{ width: 36px; height: 36px; color: var(--accent); }}
+  .field-label {{ font-size: 0.72rem; color: var(--muted); margin: -10px 0 14px; }}
+  @keyframes avatarFloat {{
+    0%, 100% {{ transform: translateY(0) rotate(0deg); }}
+    50% {{ transform: translateY(-5px) rotate(-3deg); }}
+  }}
+  @media (prefers-reduced-motion: reduce) {{ .avatar {{ animation: none; }} }}
   h1 {{ font-size: 1.7rem; margin: 0 0 6px; }}
   .sub {{ color: var(--muted); font-size: 0.9rem; margin-bottom: 28px; }}
   .field {{ margin-bottom: 20px; }}
@@ -106,6 +141,8 @@ PAGE_TMPL = """<!doctype html>
 <body>
 <div class="container">
   <a class="back-link" href="../index.html">← 나와 닮은 사주 확인하기</a>
+  <div class="avatar">{field_icon}</div>
+  <div class="field-label">{field_label}</div>
   <span class="badge">일주 {ilju} · 오행 {ohang}</span>
   <h1>{name}</h1>
   <p class="sub">{name}의 사주(일주 {ilju})와 성공 스토리</p>
@@ -138,10 +175,13 @@ generated = []
 for c in celebs:
     ohang = STEM_TO_OHANG[c["ilju"][0]]
     slug = slugify(c["name"])
+    field = c.get("field", "biz")
     html = PAGE_TMPL.format(
         name=c["name"], ilju=c["ilju"], ohang=ohang,
         story=c["story"], habit=c["habit"], motto=c["motto"],
         color=OHANG_COLORS[ohang],
+        field_icon=FIELD_ICONS.get(field, FIELD_ICONS["biz"]),
+        field_label=FIELD_LABELS.get(field, ""),
     )
     path = f"{BASE}/celebs/{slug}.html"
     with open(path, "w", encoding="utf-8") as f:
