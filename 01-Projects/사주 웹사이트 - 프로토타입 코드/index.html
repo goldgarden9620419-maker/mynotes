@@ -124,6 +124,61 @@
     border-radius: 4px;
   }
   #result { display: none; }
+  .section-heading {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .saju-reading-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 20px;
+  }
+  .reading-headline {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: var(--accent);
+  }
+  .reading-paragraph {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    margin: 0 0 18px;
+  }
+  .reading-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .reading-col {
+    background: #12141a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .reading-col .col-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .reading-col.strength .col-title { color: #4ade80; }
+  .reading-col.caution .col-title { color: #fbbf24; }
+  .reading-col ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .reading-col li { margin-bottom: 4px; }
+  @media (max-width: 480px) {
+    .reading-columns { grid-template-columns: 1fr; }
+  }
   .ohang-banner {
     background: linear-gradient(135deg, #2a2e38, #1a1d24);
     border: 1px solid var(--border);
@@ -305,6 +360,23 @@
   </div>
 
   <div id="result">
+    <h2 class="section-heading">🔮 내 사주풀이</h2>
+    <div class="saju-reading-section">
+      <div class="reading-headline" id="readingHeadline"></div>
+      <p class="reading-paragraph" id="readingParagraph"></p>
+      <div class="reading-columns">
+        <div class="reading-col strength">
+          <div class="col-title">✅ 강점</div>
+          <ul id="strengthList"></ul>
+        </div>
+        <div class="reading-col caution">
+          <div class="col-title">⚠️ 주의할 점</div>
+          <ul id="cautionList"></ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-heading">🌿 오행 유형</h2>
     <div class="ohang-banner">
       <div class="ohang-badge" id="iljuBadge"></div>
       <div class="ohang-title" id="ohangTitle"></div>
@@ -312,6 +384,8 @@
       <div class="keywords" id="keywords"></div>
       <div class="card-line" id="cardLine"></div>
     </div>
+
+    <h2 class="section-heading">✨ 닮은 사주의 유명인</h2>
     <div class="match-type" id="matchType"></div>
     <div id="celebList"></div>
     <p class="motto-disclaimer">※ 모토는 실제 어록이거나, 공개된 자료를 바탕으로 요약·재구성한 대표 문구입니다. 자세한 내용은 <a href="terms.html">이용약관</a> 참고.</p>
@@ -347,6 +421,7 @@
 <script>
 let CELEBRITY_DB = [];
 let OHANG_COPY = {};
+let SAJU_READING = { stems: {}, branches: {} };
 
 const STEM_TO_OHANG = {
   "甲": "木", "乙": "木", "丙": "火", "丁": "火", "戊": "土",
@@ -450,6 +525,32 @@ function match(y, m, d, maxResults = 3) {
 }
 
 function render(r) {
+  const stemChar = r.ilju[0];
+  const branchChar = r.ilju[1];
+  const stemData = SAJU_READING.stems[stemChar];
+  const branchData = SAJU_READING.branches[branchChar];
+
+  document.getElementById("readingHeadline").textContent =
+    `일주 ${r.ilju} · ${stemData.symbol}, ${branchData.symbol}의 기운을 타고났어요`;
+  document.getElementById("readingParagraph").textContent =
+    `${stemData.personality} ${branchData.personality}`;
+
+  const strengthList = document.getElementById("strengthList");
+  strengthList.innerHTML = "";
+  [stemData.strength, branchData.strength].forEach(s => {
+    const li = document.createElement("li");
+    li.textContent = s;
+    strengthList.appendChild(li);
+  });
+
+  const cautionList = document.getElementById("cautionList");
+  cautionList.innerHTML = "";
+  [stemData.caution, branchData.caution].forEach(c => {
+    const li = document.createElement("li");
+    li.textContent = c;
+    cautionList.appendChild(li);
+  });
+
   document.getElementById("iljuBadge").textContent = `일주 ${r.ilju} · 오행 ${r.ohang}`;
   document.getElementById("ohangTitle").textContent = r.ohangCopy.title;
   document.getElementById("ohangTagline").textContent = r.ohangCopy.tagline;
@@ -741,7 +842,7 @@ async function loadData() {
   const submitBtn = document.getElementById("submitBtn");
   const errorBox = document.getElementById("loadError");
   try {
-    const [celebs, ohang] = await Promise.all([
+    const [celebs, ohang, reading] = await Promise.all([
       fetch("celebrities.json").then(r => {
         if (!r.ok) throw new Error(`celebrities.json 응답 오류 (${r.status})`);
         return r.json();
@@ -750,9 +851,14 @@ async function loadData() {
         if (!r.ok) throw new Error(`ohang_copy.json 응답 오류 (${r.status})`);
         return r.json();
       }),
+      fetch("saju_reading.json").then(r => {
+        if (!r.ok) throw new Error(`saju_reading.json 응답 오류 (${r.status})`);
+        return r.json();
+      }),
     ]);
     CELEBRITY_DB = celebs;
     OHANG_COPY = ohang;
+    SAJU_READING = reading;
     buildIndexes();
     submitBtn.disabled = false;
     submitBtn.textContent = "내 사주 유형 보기";
