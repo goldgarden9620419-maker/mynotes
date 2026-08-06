@@ -325,6 +325,15 @@
     text-decoration: underline;
   }
   footer a:hover { color: var(--text); }
+  .visitor-counter {
+    font-size: 0.82rem;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .visitor-counter strong {
+    color: var(--accent);
+    font-size: 0.95rem;
+  }
   .footer-links {
     margin-bottom: 6px;
   }
@@ -456,6 +465,9 @@
   </div>
 
   <footer>
+    <div class="visitor-counter" id="visitorCounter" style="display:none;">
+      지금까지 <strong id="visitorCount">-</strong>명이 나와 닮은 사주를 확인했어요
+    </div>
     <div class="footer-links">
       <a href="celebs/index.html">전체 유명인 목록</a>·<a href="privacy-policy.html">개인정보처리방침</a>·<a href="terms.html">이용약관</a>
     </div>
@@ -711,7 +723,43 @@ document.getElementById("submitBtn").addEventListener("click", () => {
   lastResult = r;
   render(r);
   document.getElementById("result").scrollIntoView({behavior: "smooth"});
+  incrementVisitorCount();
 });
+
+// ---- 누적 이용자 수 카운터 (무료 카운터 API 사용, 별도 서버/DB 없이 구현) ----
+// abacus.jasoncameron.dev: 회원가입 없이 쓸 수 있는 무료 히트 카운터 API
+const VISITOR_COUNTER_NS = "sajutwin-com";
+const VISITOR_COUNTER_KEY = "usage-count";
+
+function formatVisitorCount(n) {
+  return Number(n).toLocaleString("ko-KR");
+}
+
+async function loadVisitorCount() {
+  try {
+    const res = await fetch(`https://abacus.jasoncameron.dev/get/${VISITOR_COUNTER_NS}/${VISITOR_COUNTER_KEY}`);
+    if (!res.ok) throw new Error("counter get failed");
+    const data = await res.json();
+    document.getElementById("visitorCount").textContent = formatVisitorCount(data.value);
+    document.getElementById("visitorCounter").style.display = "block";
+  } catch (e) {
+    // 카운터 서비스가 응답하지 않으면 조용히 숨김 처리 (사이트 핵심 기능에는 영향 없음)
+  }
+}
+
+async function incrementVisitorCount() {
+  try {
+    const res = await fetch(`https://abacus.jasoncameron.dev/hit/${VISITOR_COUNTER_NS}/${VISITOR_COUNTER_KEY}`);
+    if (!res.ok) throw new Error("counter hit failed");
+    const data = await res.json();
+    document.getElementById("visitorCount").textContent = formatVisitorCount(data.value);
+    document.getElementById("visitorCounter").style.display = "block";
+  } catch (e) {
+    // 실패해도 매칭 결과 표시에는 영향 없음
+  }
+}
+
+loadVisitorCount();
 
 document.getElementById("retryBtn").addEventListener("click", () => {
   document.getElementById("result").style.display = "none";
