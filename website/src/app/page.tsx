@@ -6,8 +6,7 @@ import { Roadmap } from "@/components/Roadmap";
 import { PostPreview } from "@/components/PostPreview";
 import { CTAFooter } from "@/components/CTAFooter";
 
-// TODO: 실제 블로그가 개설되면 이 주소를 교체하세요.
-const BLOG_URL = "#";
+const BLOG_URL = "https://goldjade0419.com/";
 
 export default function Home() {
   return (
