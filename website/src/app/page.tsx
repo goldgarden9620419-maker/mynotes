@@ -2,7 +2,7 @@ import { AmbientBackground } from "@/components/AmbientBackground";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { Pillars } from "@/components/Pillars";
-import { Roadmap } from "@/components/Roadmap";
+import { WhyIWrite } from "@/components/WhyIWrite";
 import { PostPreview } from "@/components/PostPreview";
 import { CTAFooter } from "@/components/CTAFooter";
 
@@ -16,7 +16,7 @@ export default function Home() {
       <main>
         <Hero blogUrl={BLOG_URL} />
         <Pillars />
-        <Roadmap />
+        <WhyIWrite />
         <PostPreview />
       </main>
       <CTAFooter blogUrl={BLOG_URL} />

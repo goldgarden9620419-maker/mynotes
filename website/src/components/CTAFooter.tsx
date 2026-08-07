@@ -10,10 +10,11 @@ export function CTAFooter({ blogUrl }: { blogUrl: string }) {
       <Mascot pose="heart" size={100} delay={0.2} className="top-6 right-4 lg:top-10 lg:right-24" />
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-white/12 bg-white/[0.07] px-8 py-16 text-center backdrop-blur-xl">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
-          지금부터 함께 지켜봐 주세요
+          공감했다면, 함께 나눠주세요
         </h2>
         <p className="mt-4 max-w-md text-foreground-muted">
-          12주 후 결과가 어떻게 될지, 블로그에서 실시간으로 확인할 수 있어요.
+          내 이야기가 필요한 누군가에게 닿았으면 해요. 블로그에서 확인하고,
+          마음에 닿으면 편하게 공유해주세요.
         </p>
         <motion.a
           href={blogUrl}

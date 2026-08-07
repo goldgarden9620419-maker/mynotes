@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 
-type MascotPose = "leaf" | "wave" | "flag" | "heart";
+type MascotPose = "leaf" | "wave" | "flag" | "heart" | "note";
 
 export function Mascot({
   className = "top-28 right-4 lg:top-32 lg:right-16",
@@ -65,6 +65,17 @@ export function Mascot({
             >
               <line x1="70" y1="30" x2="70" y2="4" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
               <path d="M70 5 L70 19 L92 12 Z" fill="#7c3aed" />
+            </motion.g>
+          )}
+
+          {pose === "note" && (
+            <motion.g
+              animate={{ y: [0, -3, 0], rotate: [-3, 3, -3] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transformOrigin: "75px 15px" }}
+            >
+              <rect x="56" y="11" width="36" height="7" rx="3.5" fill="#94a3b8" transform="rotate(-28 75 15)" />
+              <path d="M90 8 L98 11 L90 15 Z" fill="#7c3aed" transform="rotate(-28 75 15)" />
             </motion.g>
           )}
 

@@ -13,7 +13,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="mb-6 rounded-full border border-white/12 bg-white/[0.07] px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted"
       >
-        평일 저녁 3시간 + 주말 4시간, 12주 챌린지
+        직접 겪고 쓴, 진짜 이야기
       </motion.span>
 
       <motion.h1
@@ -22,11 +22,10 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         className="max-w-3xl font-serif text-4xl leading-tight font-semibold text-foreground sm:text-6xl lg:text-7xl"
       >
-        <span className="block">퇴근 후 3시간,</span>
+        <span className="block">그때 알았더라면</span>
         <span className="block bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent">
-          12주 만에 애드센스
+          좋았을 이야기들
         </span>
-        <span className="block">받을 수 있을까</span>
       </motion.h1>
 
       <motion.p
@@ -35,8 +34,8 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className="mt-6 max-w-xl text-lg leading-relaxed text-foreground-muted"
       >
-        건강·생활정보 블로그 <span className="text-foreground">WellLog</span>가
-        그 도전을 시작합니다. 성공도 실패도 전부, 있는 그대로 기록해요.
+        겪어본 사람만 아는 것들을, 있는 그대로 적어요. 당신에게도 낯익은
+        이야기라면, 그걸로 충분해요.
       </motion.p>
 
       <motion.div
@@ -56,10 +55,10 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
           블로그 방문하기
         </motion.a>
         <a
-          href="#roadmap"
+          href="#pillars"
           className="cursor-pointer rounded-full border border-white/18 px-8 py-3.5 text-base font-medium text-foreground transition-colors hover:bg-white/[0.07]"
         >
-          지금까지의 기록 보기
+          어떤 이야기인지 보기
         </a>
       </motion.div>
 
