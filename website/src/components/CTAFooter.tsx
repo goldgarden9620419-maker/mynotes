@@ -27,7 +27,7 @@ export function CTAFooter({ blogUrl }: { blogUrl: string }) {
           블로그 방문하기
         </motion.a>
         <p className="mt-10 text-xs text-foreground-muted">
-          © 2026 WellLog. 건강·생활정보를 기록합니다.
+          © 2026 황금정원. 새벽 기상과 확언으로 만든 습관을 기록합니다.
         </p>
       </Reveal>
     </footer>

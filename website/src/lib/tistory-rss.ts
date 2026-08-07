@@ -65,7 +65,7 @@ export async function getLatestPosts(limit = 2): Promise<BlogPost[]> {
   try {
     const res = await fetch(RSS_URL, {
       next: { revalidate: 3600 },
-      headers: { "User-Agent": "WellLog-Landing/1.0" },
+      headers: { "User-Agent": "GoldGarden-Landing/1.0" },
     });
 
     if (!res.ok) return [];

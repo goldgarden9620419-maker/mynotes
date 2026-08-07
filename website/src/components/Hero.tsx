@@ -13,7 +13,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="mb-6 rounded-full border border-white/12 bg-white/[0.07] px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted"
       >
-        직접 겪고 쓴, 진짜 이야기
+        새벽 기상 · 확언 · 자기암시로 바꾼 삶
       </motion.span>
 
       <motion.h1
@@ -22,9 +22,9 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         className="max-w-3xl font-serif text-4xl leading-tight font-semibold text-foreground sm:text-6xl lg:text-7xl"
       >
-        <span className="block">그때 알았더라면</span>
+        <span className="block">확언 한 줄로,</span>
         <span className="block bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent">
-          좋았을 이야기들
+          정말 인생이 바뀔까
         </span>
       </motion.h1>
 
@@ -34,8 +34,8 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className="mt-6 max-w-xl text-lg leading-relaxed text-foreground-muted"
       >
-        겪어본 사람만 아는 것들을, 있는 그대로 적어요. 당신에게도 낯익은
-        이야기라면, 그걸로 충분해요.
+        새벽 기상과 확언으로 삶을 바꾼 실제 경험을 기록합니다. 부자의 습관과
+        마인드셋을 함께 나눠요.
       </motion.p>
 
       <motion.div

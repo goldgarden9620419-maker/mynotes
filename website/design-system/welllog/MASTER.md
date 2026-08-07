@@ -6,10 +6,10 @@
 
 ---
 
-**Project:** WellLog
+**Project:** 황금정원 (folder/brand name kept as `welllog` internally — cosmetic only, no functional dependency)
 **Generated:** 2026-08-07 (manually curated — overrides the auto-generated default)
-**Category:** Personal blog landing page (건강·생활정보, AdSense project)
-**Brief:** 다크 무드, 글래스모피즘, 시네마틱 스크롤 애니메이션
+**Category:** Personal blog landing page (새벽 기상·확언·자기암시·부자의 습관, blog: goldjade0419.com "황금 정원 다이어리")
+**Brief:** 다크 무드, 글래스모피즘, 시네마틱 스크롤 애니메이션 — visual system unchanged by the 2026-08-07 content pivot from the original health/lifestyle concept ("WellLog") to match the blog's actual content
 
 ---
 

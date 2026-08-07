@@ -12,7 +12,7 @@ export function Nav({ blogUrl }: { blogUrl: string }) {
     >
       <div className="flex w-full max-w-5xl items-center justify-between rounded-full border border-white/12 bg-bg-base/80 px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl">
         <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
-          WellLog
+          황금정원
         </span>
         <a
           href={blogUrl}

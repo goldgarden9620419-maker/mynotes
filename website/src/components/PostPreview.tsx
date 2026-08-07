@@ -3,16 +3,16 @@ import { getLatestPosts, type BlogPost } from "@/lib/tistory-rss";
 
 const fallbackPosts: BlogPost[] = [
   {
-    tag: "건강",
-    title: "여름철 식중독 예방법과 증상별 대처법",
-    excerpt: "무더운 여름, 식중독을 예방하는 방법과 증상별 대처법을 정리했습니다.",
+    tag: "새벽 루틴",
+    title: "새벽 기상 한 달, 무엇이 달라졌을까",
+    excerpt: "매일 새벽 5시 기상을 한 달간 이어가며 실제로 느낀 변화를 정리했습니다.",
     link: "https://goldjade0419.com/",
     pubDate: "",
   },
   {
-    tag: "생활 경제",
-    title: "영수증 환급 기간·조건 총정리",
-    excerpt: "몰라서 손해 보는 영수증 환급 관련 정보를 한눈에 정리했습니다.",
+    tag: "부자의 습관",
+    title: "스텔스 웰스, 조용한 부자들의 절제 습관",
+    excerpt: "드러내지 않는 부자들이 공통적으로 지키는 절제와 자산관리 습관을 살펴봤습니다.",
     link: "https://goldjade0419.com/",
     pubDate: "",
   },
