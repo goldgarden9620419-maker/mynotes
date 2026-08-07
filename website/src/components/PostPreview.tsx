@@ -15,13 +15,13 @@ const posts = [
 
 export function PostPreview() {
   return (
-    <section className="relative mx-auto max-w-5xl px-6 py-32">
+    <section id="posts" className="relative mx-auto max-w-5xl px-6 py-32">
       <Reveal className="mb-16 text-center">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
-          준비 중인 글
+          먼저 살짝 보여드릴게요
         </h2>
         <p className="mt-4 text-foreground-muted">
-          지금 이 순간에도 글감을 쌓고, 한 편씩 완성해가고 있습니다.
+          지금 이 순간에도 글감을 쌓고, 한 편씩 완성해가고 있어요.
         </p>
       </Reveal>
       <div className="grid gap-5 sm:grid-cols-2">

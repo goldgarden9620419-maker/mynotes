@@ -24,10 +24,10 @@ export function Pillars() {
     <section id="pillars" className="relative mx-auto max-w-5xl px-6 py-32">
       <Reveal className="mb-16 text-center">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
-          어떤 이야기를 다루나요
+          몰라서 손해 보지 않게
         </h2>
         <p className="mt-4 text-foreground-muted">
-          건강·생활정보 한 축을 꾸준히 유지하며 콘텐츠를 쌓고 있습니다.
+          건강·생활정보 한 축을 꾸준히 유지하며, 검증한 정보만 정리해서 올립니다.
         </p>
       </Reveal>
       <div className="grid gap-5 sm:grid-cols-2">

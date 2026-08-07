@@ -11,19 +11,20 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="mb-6 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted"
       >
-        매일 밤 3시간, 12주의 기록
+        평일 저녁 3시간 + 주말 4시간, 12주 챌린지
       </motion.span>
 
       <motion.h1
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-3xl font-serif text-5xl leading-tight font-semibold text-foreground sm:text-6xl lg:text-7xl"
+        className="max-w-3xl font-serif text-4xl leading-tight font-semibold text-foreground sm:text-6xl lg:text-7xl"
       >
-        건강한 하루를 기록하는 곳,{" "}
-        <span className="bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent">
-          WellLog
+        <span className="block">퇴근 후 3시간,</span>
+        <span className="block bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent">
+          12주 만에 애드센스
         </span>
+        <span className="block">받을 수 있을까</span>
       </motion.h1>
 
       <motion.p
@@ -32,8 +33,8 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className="mt-6 max-w-xl text-lg leading-relaxed text-foreground-muted"
       >
-        건강·생활정보를 다루는 1인 블로그 프로젝트입니다. 검증된 정보를
-        하나씩, 꾸준히 쌓아가고 있어요.
+        건강·생활정보 블로그 <span className="text-foreground">WellLog</span>가
+        그 도전을 시작합니다. 성공도 실패도 전부, 있는 그대로 기록해요.
       </motion.p>
 
       <motion.div
@@ -53,10 +54,10 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
           블로그 방문하기
         </motion.a>
         <a
-          href="#pillars"
+          href="#roadmap"
           className="cursor-pointer rounded-full border border-white/15 px-8 py-3.5 text-base font-medium text-foreground transition-colors hover:bg-white/5"
         >
-          어떤 이야기인지 보기
+          지금까지의 기록 보기
         </a>
       </motion.div>
 

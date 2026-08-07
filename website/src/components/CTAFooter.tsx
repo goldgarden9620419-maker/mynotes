@@ -8,10 +8,10 @@ export function CTAFooter({ blogUrl }: { blogUrl: string }) {
     <footer className="relative px-6 py-32">
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-white/10 bg-white/5 px-8 py-16 text-center backdrop-blur-xl">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
-          지금 WellLog를 만나보세요
+          지금부터 함께 지켜봐 주세요
         </h2>
         <p className="mt-4 max-w-md text-foreground-muted">
-          하나씩 쌓아가는 기록이 궁금하다면, 블로그에서 직접 확인해보세요.
+          12주 후 결과가 어떻게 될지, 블로그에서 실시간으로 확인할 수 있어요.
         </p>
         <motion.a
           href={blogUrl}

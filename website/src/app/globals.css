@@ -25,6 +25,13 @@
 
 html {
   color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+/* Fixed nav floats above content — keep anchor targets from surfacing under it. */
+section[id],
+main > section {
+  scroll-margin-top: 6.5rem;
 }
 
 body {

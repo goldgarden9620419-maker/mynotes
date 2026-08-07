@@ -23,13 +23,13 @@ const steps = [
 
 export function Roadmap() {
   return (
-    <section className="relative mx-auto max-w-4xl px-6 py-32">
+    <section id="roadmap" className="relative mx-auto max-w-4xl px-6 py-32">
       <Reveal className="mb-16 text-center">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
-          12주의 여정
+          12주, 목표는 단 하나
         </h2>
         <p className="mt-4 text-foreground-muted">
-          애드센스 승인을 목표로, 하루하루의 기록을 공개적으로 쌓아갑니다.
+          애드센스 승인을 향해 가는 과정을 숨김없이 공개합니다. 성공도 실패도 이곳에 남깁니다.
         </p>
       </Reveal>
       <div className="relative space-y-6 border-l border-white/10 pl-8">
