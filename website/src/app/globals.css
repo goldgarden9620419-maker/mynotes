@@ -1,26 +1,44 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-deep: #020203;
+  --bg-base: #050506;
+  --bg-elevated: #0a0a0c;
+  --foreground: #ededef;
+  --foreground-muted: #8a8f98;
+  --accent: #5e6ad2;
+  --accent-secondary: #7c3aed;
+  --accent-glow: rgba(94, 106, 210, 0.25);
 }
 
 @theme inline {
-  --color-background: var(--background);
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-base: var(--bg-base);
+  --color-bg-elevated: var(--bg-elevated);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-lora);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      rgba(94, 106, 210, 0.14),
+      transparent
+    ),
+    linear-gradient(to bottom, var(--bg-deep), var(--bg-base));
+  min-height: 100%;
+}
+
+::selection {
+  background: var(--accent-glow);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
