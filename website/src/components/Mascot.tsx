@@ -2,22 +2,36 @@
 
 import { motion } from "motion/react";
 
-export function Mascot() {
+type MascotPose = "leaf" | "wave" | "flag" | "heart";
+
+export function Mascot({
+  className = "top-28 right-4 lg:top-32 lg:right-16",
+  size = 130,
+  pose = "leaf",
+  delay = 0.6,
+}: {
+  className?: string;
+  size?: number;
+  pose?: MascotPose;
+  delay?: number;
+}) {
+  const gradientId = `mascotGradient-${pose}`;
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8, y: 10 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="pointer-events-none absolute top-28 right-4 hidden select-none sm:block lg:top-32 lg:right-16"
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={`pointer-events-none absolute hidden select-none sm:block ${className}`}
       aria-hidden="true"
     >
       <motion.div
         animate={{ y: [0, -12, 0] }}
         transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
       >
-        <svg width="130" height="150" viewBox="0 0 140 150" fill="none">
+        <svg width={size} height={size} viewBox="0 0 140 150" fill="none">
           <defs>
-            <linearGradient id="mascotGradient" x1="20" y1="34" x2="120" y2="124" gradientUnits="userSpaceOnUse">
+            <linearGradient id={gradientId} x1="20" y1="34" x2="120" y2="124" gradientUnits="userSpaceOnUse">
               <stop stopColor="#6366f1" />
               <stop offset="1" stopColor="#7c3aed" />
             </linearGradient>
@@ -33,15 +47,51 @@ export function Mascot() {
             transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <motion.path
-            d="M70 20 C 78 4, 96 4, 100 18 C 88 22, 76 24, 70 20 Z"
-            fill="#7c3aed"
-            animate={{ rotate: [-6, 6, -6] }}
-            transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
-            style={{ transformOrigin: "70px 20px" }}
-          />
+          {pose === "leaf" && (
+            <motion.path
+              d="M70 20 C 78 4, 96 4, 100 18 C 88 22, 76 24, 70 20 Z"
+              fill="#7c3aed"
+              animate={{ rotate: [-6, 6, -6] }}
+              transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transformOrigin: "70px 20px" }}
+            />
+          )}
 
-          <rect x="20" y="34" width="100" height="90" rx="45" fill="url(#mascotGradient)" />
+          {pose === "flag" && (
+            <motion.g
+              animate={{ rotate: [-5, 5, -5] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transformOrigin: "70px 30px" }}
+            >
+              <line x1="70" y1="30" x2="70" y2="4" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" />
+              <path d="M70 5 L70 19 L92 12 Z" fill="#7c3aed" />
+            </motion.g>
+          )}
+
+          {pose === "heart" && (
+            <motion.path
+              d="M100 6 C97 0 88 0 87 8 C86 0 77 0 74 6 C71 14 87 26 87 26 C87 26 103 14 100 6 Z"
+              fill="#f472b6"
+              animate={{ scale: [1, 1.15, 1], y: [0, -4, 0] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transformOrigin: "87px 13px" }}
+            />
+          )}
+
+          <rect x="20" y="34" width="100" height="90" rx="45" fill={`url(#${gradientId})`} />
+
+          {pose === "wave" && (
+            <motion.ellipse
+              cx="128"
+              cy="42"
+              rx="9"
+              ry="15"
+              fill={`url(#${gradientId})`}
+              animate={{ rotate: [0, -25, 5, -25, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 0.6, ease: "easeInOut" }}
+              style={{ transformOrigin: "118px 55px" }}
+            />
+          )}
 
           <circle cx="46" cy="90" r="7" fill="#ffffff" opacity="0.18" />
           <circle cx="94" cy="90" r="7" fill="#ffffff" opacity="0.18" />
