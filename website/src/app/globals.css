@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --bg-deep: #020203;
-  --bg-base: #050506;
-  --bg-elevated: #0a0a0c;
-  --foreground: #ededef;
-  --foreground-muted: #8a8f98;
-  --accent: #5e6ad2;
+  --bg-deep: #0f172a;
+  --bg-base: #131a30;
+  --bg-elevated: #192134;
+  --foreground: #ffffff;
+  --foreground-muted: #94a3b8;
+  --accent: #6366f1;
   --accent-secondary: #7c3aed;
-  --accent-glow: rgba(94, 106, 210, 0.25);
+  --accent-glow: rgba(99, 102, 241, 0.32);
 }
 
 @theme inline {
@@ -38,7 +38,7 @@ body {
   background:
     radial-gradient(
       ellipse 80% 60% at 50% -10%,
-      rgba(94, 106, 210, 0.14),
+      rgba(99, 102, 241, 0.22),
       transparent
     ),
     linear-gradient(to bottom, var(--bg-deep), var(--bg-base));

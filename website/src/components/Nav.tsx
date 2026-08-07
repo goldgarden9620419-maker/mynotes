@@ -10,7 +10,7 @@ export function Nav({ blogUrl }: { blogUrl: string }) {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4"
     >
-      <div className="flex w-full max-w-5xl items-center justify-between rounded-full border border-white/10 bg-bg-base/80 px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+      <div className="flex w-full max-w-5xl items-center justify-between rounded-full border border-white/12 bg-bg-base/80 px-5 py-3 shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl">
         <span className="font-serif text-lg font-semibold tracking-tight text-foreground">
           WellLog
         </span>

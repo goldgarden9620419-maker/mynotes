@@ -32,16 +32,16 @@ export function Roadmap() {
           애드센스 승인을 향해 가는 과정을 숨김없이 공개합니다. 성공도 실패도 이곳에 남깁니다.
         </p>
       </Reveal>
-      <div className="relative space-y-6 border-l border-white/10 pl-8">
+      <div className="relative space-y-6 border-l border-white/12 pl-8">
         {steps.map((step, i) => (
           <Reveal key={step.phase} delay={i * 0.1}>
-            <div className="relative rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+            <div className="relative rounded-2xl border border-white/12 bg-white/[0.07] p-6 backdrop-blur-xl">
               <span className="absolute top-7 -left-[41px] h-3 w-3 rounded-full bg-accent shadow-[0_0_12px_2px_var(--accent-glow)]" />
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="font-serif text-lg font-semibold text-foreground">
                   {step.phase}
                 </h3>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-xs font-medium tracking-wide text-foreground-muted uppercase">
+                <span className="rounded-full border border-white/12 px-3 py-1 text-xs font-medium tracking-wide text-foreground-muted uppercase">
                   {step.week}
                 </span>
               </div>

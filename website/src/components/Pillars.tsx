@@ -33,7 +33,7 @@ export function Pillars() {
       <div className="grid gap-5 sm:grid-cols-2">
         {pillars.map((pillar, i) => (
           <Reveal key={pillar.title} delay={i * 0.08}>
-            <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-xl transition-colors hover:bg-white/[0.07]">
+            <div className="h-full rounded-2xl border border-white/12 bg-white/5 p-7 backdrop-blur-xl transition-colors hover:bg-white/[0.07]">
               <h3 className="font-serif text-xl font-semibold text-foreground">
                 {pillar.title}
               </h3>

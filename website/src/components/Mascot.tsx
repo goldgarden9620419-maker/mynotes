@@ -18,7 +18,7 @@ export function Mascot() {
         <svg width="130" height="150" viewBox="0 0 140 150" fill="none">
           <defs>
             <linearGradient id="mascotGradient" x1="20" y1="34" x2="120" y2="124" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#5e6ad2" />
+              <stop stopColor="#6366f1" />
               <stop offset="1" stopColor="#7c3aed" />
             </linearGradient>
           </defs>
@@ -28,7 +28,7 @@ export function Mascot() {
             cy="132"
             rx="30"
             ry="7"
-            fill="#5e6ad2"
+            fill="#6366f1"
             animate={{ opacity: [0.22, 0.1, 0.22], scaleX: [1, 0.85, 1] }}
             transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
           />

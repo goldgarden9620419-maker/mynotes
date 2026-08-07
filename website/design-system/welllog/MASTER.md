@@ -25,19 +25,19 @@ Blend of two ui-ux-pro-max styles:
 
 | Role | Value | CSS Variable |
 |------|-------|--------------|
-| Background Deep | `#020203` | `--bg-deep` |
-| Background Base | `#050506` | `--bg-base` |
-| Background Elevated | `#0a0a0c` | `--bg-elevated` |
-| Glass Surface | `rgba(255,255,255,0.05)` | `--surface` |
-| Foreground | `#EDEDEF` | `--foreground` |
-| Foreground Muted | `#8A8F98` | `--foreground-muted` |
-| Accent Primary (Indigo) | `#5E6AD2` | `--accent` |
+| Background Deep | `#0F172A` | `--bg-deep` |
+| Background Base | `#131A30` | `--bg-base` |
+| Background Elevated | `#192134` | `--bg-elevated` |
+| Glass Surface | `rgba(255,255,255,0.07)` | `--surface` |
+| Foreground | `#FFFFFF` | `--foreground` |
+| Foreground Muted | `#94A3B8` | `--foreground-muted` |
+| Accent Primary (Indigo) | `#6366F1` | `--accent` |
 | Accent Secondary (Violet) | `#7C3AED` | `--accent-secondary` |
-| Accent Glow | `rgba(94,106,210,0.25)` | `--accent-glow` |
-| Border | `rgba(255,255,255,0.08)` | `--border` |
+| Accent Glow | `rgba(99,102,241,0.32)` | `--accent-glow` |
+| Border | `rgba(255,255,255,0.12)` | `--border` |
 | Destructive | `#DC2626` | `--destructive` |
 
-**Notes:** Avoid pure `#000000` (OLED smear) — always use the deep/base/elevated gradient scale. Glass cards: `background: var(--surface)`, `backdrop-filter: blur(20px)`, `border: 1px solid var(--border)`, `border-radius: 16px`.
+**Notes (updated — brighter revision):** Moved off near-black onto a lighter slate-navy scale (`#0F172A → #131A30 → #192134`, Tailwind slate-900-ish) so the dark mode reads brighter while staying dark. Glass cards: `background: var(--surface)`, `backdrop-filter: blur(20px)`, `border: 1px solid var(--border)`, `border-radius: 16px`.
 
 ### Typography
 

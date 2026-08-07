@@ -27,7 +27,7 @@ export function PostPreview() {
       <div className="grid gap-5 sm:grid-cols-2">
         {posts.map((post, i) => (
           <Reveal key={post.title} delay={i * 0.1}>
-            <div className="h-full rounded-2xl border border-white/10 bg-white/5 p-7 backdrop-blur-xl">
+            <div className="h-full rounded-2xl border border-white/12 bg-white/[0.07] p-7 backdrop-blur-xl">
               <span className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
                 {post.tag}
               </span>

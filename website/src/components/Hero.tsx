@@ -11,7 +11,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="mb-6 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted"
+        className="mb-6 rounded-full border border-white/12 bg-white/[0.07] px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted"
       >
         평일 저녁 3시간 + 주말 4시간, 12주 챌린지
       </motion.span>
@@ -57,7 +57,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         </motion.a>
         <a
           href="#roadmap"
-          className="cursor-pointer rounded-full border border-white/15 px-8 py-3.5 text-base font-medium text-foreground transition-colors hover:bg-white/5"
+          className="cursor-pointer rounded-full border border-white/18 px-8 py-3.5 text-base font-medium text-foreground transition-colors hover:bg-white/[0.07]"
         >
           지금까지의 기록 보기
         </a>

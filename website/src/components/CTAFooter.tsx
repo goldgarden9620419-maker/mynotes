@@ -6,7 +6,7 @@ import { Reveal } from "./Reveal";
 export function CTAFooter({ blogUrl }: { blogUrl: string }) {
   return (
     <footer className="relative px-6 py-32">
-      <Reveal className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-white/10 bg-white/5 px-8 py-16 text-center backdrop-blur-xl">
+      <Reveal className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-white/12 bg-white/[0.07] px-8 py-16 text-center backdrop-blur-xl">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
           지금부터 함께 지켜봐 주세요
         </h2>
