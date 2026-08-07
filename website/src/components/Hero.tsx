@@ -1,10 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
+import { Mascot } from "./Mascot";
 
 export function Hero({ blogUrl }: { blogUrl: string }) {
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
+      <Mascot />
       <motion.span
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
