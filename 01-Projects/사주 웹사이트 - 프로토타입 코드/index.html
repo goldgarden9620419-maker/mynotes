@@ -213,6 +213,16 @@
   @media (max-width: 480px) {
     .reading-columns { grid-template-columns: 1fr; }
   }
+  .growth-pivot {
+    margin-top: 16px;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, rgba(224,164,88,0.16), rgba(74,222,128,0.10));
+    border: 1px solid rgba(224,164,88,0.35);
+    border-radius: 12px;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    color: var(--text);
+  }
   .ohang-banner {
     background: linear-gradient(135deg, #2a2e38, #1a1d24);
     border: 1px solid var(--border);
@@ -401,6 +411,78 @@
     border: 1px solid var(--border);
     color: var(--text);
   }
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+  }
+  .loading-book {
+    position: relative;
+    width: 130px;
+    height: 96px;
+    perspective: 700px;
+  }
+  .loading-book-spine {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 8px;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px 0 0 3px;
+    z-index: 4;
+  }
+  .loading-book-cover {
+    position: absolute;
+    left: 6px;
+    top: 0;
+    width: 118px;
+    height: 100%;
+    background: #1a1d24;
+    border: 1px solid var(--border);
+    border-radius: 0 8px 8px 0;
+  }
+  .loading-page {
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    width: 112px;
+    height: calc(100% - 8px);
+    background: linear-gradient(120deg, #f5f0e6, #e8ded0);
+    border-radius: 0 6px 6px 0;
+    transform-origin: left center;
+    box-shadow: 1px 0 4px rgba(0,0,0,0.25);
+    animation: loadingPageFlip 1.8s ease-in-out infinite;
+  }
+  .loading-page.p1 { animation-delay: 0s; z-index: 3; }
+  .loading-page.p2 { animation-delay: 0.5s; z-index: 2; }
+  .loading-page.p3 { animation-delay: 1s; z-index: 1; }
+  @keyframes loadingPageFlip {
+    0%, 8% { transform: rotateY(0deg); }
+    45% { transform: rotateY(-170deg); }
+    55% { transform: rotateY(-170deg); }
+    92%, 100% { transform: rotateY(0deg); }
+  }
+  .loading-text {
+    color: var(--text);
+    font-size: 0.95rem;
+    text-align: center;
+    min-height: 1.4em;
+  }
+  .loading-dots {
+    color: var(--accent);
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .loading-page { animation: none; }
+  }
   .card-modal {
     display: none;
     position: fixed;
@@ -465,6 +547,18 @@
     <p id="loadError" class="load-error" style="display:none;"></p>
   </div>
 
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-book">
+      <div class="loading-book-cover"></div>
+      <div class="loading-page p1"></div>
+      <div class="loading-page p2"></div>
+      <div class="loading-page p3"></div>
+      <div class="loading-book-spine"></div>
+    </div>
+    <p class="loading-text" id="loadingText">사주책을 펼치는 중</p>
+    <div class="loading-dots">· · ·</div>
+  </div>
+
   <div id="result">
     <h2 class="section-heading">🔮 내 사주풀이</h2>
     <div class="saju-reading-section">
@@ -480,6 +574,7 @@
           <ul id="cautionList"></ul>
         </div>
       </div>
+      <div class="growth-pivot" id="growthPivot"></div>
     </div>
 
     <h2 class="section-heading">🌿 오행 유형</h2>
@@ -686,6 +781,8 @@ function render(r) {
     cautionList.appendChild(li);
   });
 
+  document.getElementById("growthPivot").textContent = `💡 ${stemData.growthPivot}`;
+
   document.getElementById("iljuBadge").textContent = `일주 ${r.ilju} · 오행 ${r.ohang}`;
   document.getElementById("ohangTitle").textContent = r.ohangCopy.title;
   document.getElementById("ohangTagline").textContent = r.ohangCopy.tagline;
@@ -756,15 +853,45 @@ function render(r) {
 
 let lastResult = null;
 
+const LOADING_MESSAGES = [
+  "사주책을 펼치는 중",
+  "생년월일로 일주를 계산하는 중",
+  "오행 기운을 살펴보는 중",
+  "닮은 유명인을 찾는 중",
+  "사주풀이를 정리하는 중",
+];
+
+function playLoadingThenRender(r) {
+  const overlay = document.getElementById("loadingOverlay");
+  const textEl = document.getElementById("loadingText");
+  const submitBtn = document.getElementById("submitBtn");
+
+  submitBtn.disabled = true;
+  overlay.style.display = "flex";
+  let i = 0;
+  textEl.textContent = LOADING_MESSAGES[0];
+  const msgInterval = setInterval(() => {
+    i = (i + 1) % LOADING_MESSAGES.length;
+    textEl.textContent = LOADING_MESSAGES[i];
+  }, 1000);
+
+  setTimeout(() => {
+    clearInterval(msgInterval);
+    overlay.style.display = "none";
+    submitBtn.disabled = false;
+    render(r);
+    document.getElementById("result").scrollIntoView({behavior: "smooth"});
+    incrementVisitorCount();
+  }, 5000);
+}
+
 document.getElementById("submitBtn").addEventListener("click", () => {
   const val = document.getElementById("birthdate").value;
   if (!val) { alert("생년월일을 선택해주세요"); return; }
   const [y, m, d] = val.split("-").map(Number);
   const r = match(y, m, d);
   lastResult = r;
-  render(r);
-  document.getElementById("result").scrollIntoView({behavior: "smooth"});
-  incrementVisitorCount();
+  playLoadingThenRender(r);
 });
 
 // ---- 누적 이용자 수 카운터 (무료 카운터 API 사용, 별도 서버/DB 없이 구현) ----
