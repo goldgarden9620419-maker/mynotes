@@ -424,69 +424,17 @@
   }
   .loading-book {
     position: relative;
-    width: 140px;
-    height: 100px;
-    perspective: 800px;
+    width: min(320px, 80vw);
+    aspect-ratio: 16/9;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
   }
-  .loading-book-spine {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 8px;
+  .loading-book-video {
+    width: 100%;
     height: 100%;
-    background: var(--accent);
-    border-radius: 3px 0 0 3px;
-    z-index: 5;
-  }
-  .loading-book-stack {
-    position: absolute;
-    left: 5px;
-    top: 3px;
-    width: 126px;
-    height: calc(100% - 6px);
-    background: #cbbfa8;
-    border-radius: 0 6px 6px 0;
-    box-shadow: 2px 2px 0 #b8ab90, 4px 4px 0 #a89b80;
-  }
-  .loading-flip {
-    position: absolute;
-    left: 8px;
-    top: 4px;
-    width: 118px;
-    height: calc(100% - 8px);
-    transform-style: preserve-3d;
-    transform-origin: left center;
-    animation: flipPage 1.4s ease-in-out infinite alternate;
-  }
-  .loading-flip .face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border-radius: 0 6px 6px 0;
-    box-shadow: 1px 0 4px rgba(0,0,0,0.3);
-  }
-  .loading-flip .face.front { background: linear-gradient(120deg, #faf6ec, #efe6d6); }
-  .loading-flip .face.back {
-    background: linear-gradient(120deg, #ddcfae, #cbba93);
-    transform: rotateY(180deg);
-  }
-  .loading-flip .face::before {
-    content: '';
-    position: absolute;
-    left: 14px;
-    right: 10px;
-    top: 18px;
-    height: 2px;
-    background: rgba(110,95,70,0.35);
-    box-shadow:
-      0 9px 0 rgba(110,95,70,0.3),
-      0 18px 0 rgba(110,95,70,0.24),
-      0 27px 0 rgba(110,95,70,0.18),
-      0 36px 0 rgba(110,95,70,0.12);
-  }
-  @keyframes flipPage {
-    0% { transform: rotateY(0deg); }
-    100% { transform: rotateY(-175deg); }
+    object-fit: cover;
+    display: block;
   }
   .loading-text {
     color: var(--text);
@@ -498,9 +446,6 @@
     color: var(--accent);
     font-size: 0.8rem;
     letter-spacing: 2px;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .loading-flip { animation: none; }
   }
   .card-modal {
     display: none;
@@ -568,12 +513,9 @@
 
   <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-book">
-      <div class="loading-book-stack"></div>
-      <div class="loading-flip">
-        <div class="face front"></div>
-        <div class="face back"></div>
-      </div>
-      <div class="loading-book-spine"></div>
+      <video class="loading-book-video" autoplay muted loop playsinline poster="loading-book-poster.jpg">
+        <source src="loading-book.mp4" type="video/mp4">
+      </video>
     </div>
     <p class="loading-text" id="loadingText">사주책을 펼치는 중</p>
     <div class="loading-dots">· · ·</div>
