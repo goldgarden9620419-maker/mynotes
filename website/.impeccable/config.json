@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/components/Hero.tsx"
+        ],
+        "createdAt": "2026-08-07T13:24:46.612Z",
+        "reason": "히어로 헤드라인 그라디언트 텍스트는 DESIGN.md에 문서화된 의도된 브랜드 액센트 표현"
+      }
+    ]
+  }
+}
