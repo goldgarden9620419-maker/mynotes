@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-07T00:00:00.000Z",
+  "title": "Design System: 황금정원",
+  "extensions": {
+    "colorMeta": {
+      "midnight-indigo": {
+        "role": "primary",
+        "displayName": "깊은 밤의 인디고 (Midnight Indigo)",
+        "canonical": "#6366f1",
+        "tonalRamp": ["#14153a", "#22226b", "#34349a", "#4d4fc4", "#6366f1", "#8688f5", "#adaff9", "#eceffe"]
+      },
+      "twilight-violet": {
+        "role": "secondary",
+        "displayName": "황혼의 바이올릿 (Twilight Violet)",
+        "canonical": "#7c3aed",
+        "tonalRamp": ["#1f0f47", "#3c1c86", "#5b2ac0", "#6c31d6", "#7c3aed", "#9761f1", "#b795f5", "#efe4fd"]
+      },
+      "indigo-glow": {
+        "role": "primary",
+        "displayName": "인디고 글로우 (Indigo Glow)",
+        "canonical": "rgba(99, 102, 241, 0.32)"
+      },
+      "abyss-navy": {
+        "role": "neutral",
+        "displayName": "심연 네이비 (Abyss Navy)",
+        "canonical": "#0f172a"
+      },
+      "night-navy": {
+        "role": "neutral",
+        "displayName": "베이스 네이비 (Base Navy)",
+        "canonical": "#131a30"
+      },
+      "elevated-navy": {
+        "role": "neutral",
+        "displayName": "엘리베이티드 네이비 (Elevated Navy)",
+        "canonical": "#192134"
+      },
+      "paper-white": {
+        "role": "neutral",
+        "displayName": "페이퍼 화이트 (Paper White)",
+        "canonical": "#ffffff"
+      },
+      "slate-muted": {
+        "role": "neutral",
+        "displayName": "슬레이트 뮤트 (Slate Muted)",
+        "canonical": "#94a3b8"
+      },
+      "glass-surface": {
+        "role": "neutral",
+        "displayName": "글래스 서피스 5% (Glass Surface)",
+        "canonical": "rgba(255, 255, 255, 0.05)"
+      },
+      "glass-surface-strong": {
+        "role": "neutral",
+        "displayName": "글래스 서피스 7% (Glass Surface Strong)",
+        "canonical": "rgba(255, 255, 255, 0.07)"
+      },
+      "glass-surface-hover": {
+        "role": "neutral",
+        "displayName": "글래스 서피스 10% (Glass Surface Hover)",
+        "canonical": "rgba(255, 255, 255, 0.10)"
+      },
+      "hairline-border": {
+        "role": "neutral",
+        "displayName": "헤어라인 보더 12% (Hairline Border)",
+        "canonical": "rgba(255, 255, 255, 0.12)"
+      },
+      "hairline-border-strong": {
+        "role": "neutral",
+        "displayName": "헤어라인 보더 18% (Hairline Border Strong)",
+        "canonical": "rgba(255, 255, 255, 0.18)"
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "히어로 h1 전용." },
+      "headline": { "displayName": "Headline", "purpose": "섹션 h2 제목." },
+      "title": { "displayName": "Title", "purpose": "카드·타임라인 h3 소제목." },
+      "body": { "displayName": "Body", "purpose": "문단형 설명 텍스트, 1rem/1.125rem/0.875rem 변형." },
+      "label": { "displayName": "Label", "purpose": "짧은 대문자 라벨(배지, 스크롤 인디케이터)." }
+    },
+    "shadows": [
+      { "name": "button-glow", "value": "0 0 40px -8px rgba(99, 102, 241, 0.32)", "purpose": "주요 CTA 버튼 아래 인디고 글로우." },
+      { "name": "timeline-dot-glow", "value": "0 0 12px 2px rgba(99, 102, 241, 0.32)", "purpose": "WhyIWrite 타임라인 점의 작은 빛." },
+      { "name": "nav-lift", "value": "0 8px 32px rgba(0, 0, 0, 0.35)", "purpose": "고정 내비게이션을 콘텐츠 위로 들어올리는 유일한 중립색 섀도우." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "모든 진입/등장 모션이 공유하는 단일 이징 곡선." },
+      { "name": "duration-entrance", "value": "0.6s-0.8s", "purpose": "히어로/내비게이션 진입 애니메이션 길이, 0.1s 간격 스태거." },
+      { "name": "duration-reveal", "value": "0.7s", "purpose": "Reveal 스크롤 등장 패턴의 기본 길이." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "메인 CTA — '블로그 방문하기'. 인디고 배경, 필 형태, 글로우 섀도우.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">블로그 방문하기</a>",
+      "css": ".ds-btn-primary { display: inline-block; background: #6366f1; color: #ffffff; font-family: Inter, system-ui, sans-serif; font-size: 1rem; font-weight: 500; padding: 14px 32px; border-radius: 9999px; box-shadow: 0 0 40px -8px rgba(99, 102, 241, 0.32); cursor: pointer; transition: background-color 0.2s, transform 0.15s; } .ds-btn-primary:hover { background: color-mix(in srgb, #6366f1 90%, black); transform: scale(1.02); } .ds-btn-primary:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; } .ds-btn-primary:active { transform: scale(0.98); }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "보조 CTA — 투명 배경에 헤어라인 보더.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">어떤 이야기인지 보기</a>",
+      "css": ".ds-btn-ghost { display: inline-block; background: transparent; color: #ffffff; font-family: Inter, system-ui, sans-serif; font-size: 1rem; font-weight: 500; padding: 14px 32px; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.18); cursor: pointer; transition: background-color 0.2s; } .ds-btn-ghost:hover { background: rgba(255, 255, 255, 0.07); } .ds-btn-ghost:focus-visible { outline: 2px solid #ffffff; outline-offset: 2px; }"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Pillars/PostPreview 그리드에 쓰이는 글래스 카드.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">새벽 루틴</h3><p class=\"ds-card-body\">새벽 기상 하나로 하루가 어떻게 달라지는지, 직접 겪은 변화를 기록합니다.</p></div>",
+      "css": ".ds-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 1rem; padding: 1.75rem; backdrop-filter: blur(24px); transition: background-color 0.2s; } .ds-card:hover { background: rgba(255, 255, 255, 0.07); } .ds-card-title { font-family: Lora, Georgia, serif; font-size: 1.25rem; font-weight: 600; color: #ffffff; margin: 0 0 0.75rem; } .ds-card-body { font-family: Inter, system-ui, sans-serif; font-size: 0.875rem; line-height: 1.6; color: #94a3b8; margin: 0; }"
+    },
+    {
+      "name": "Accent Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "카드/포스트 미리보기 위에 붙는 액센트색 태그.",
+      "html": "<span class=\"ds-chip\">새벽 루틴</span>",
+      "css": ".ds-chip { display: inline-block; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); color: #6366f1; font-family: Inter, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; padding: 4px 12px; border-radius: 9999px; }"
+    },
+    {
+      "name": "Neutral Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "히어로 상단의 중립색 배지 — 대문자 라벨.",
+      "html": "<span class=\"ds-badge\">새벽 기상 · 확언 · 자기암시로 바꾼 삶</span>",
+      "css": ".ds-badge { display: inline-block; background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.12); color: #94a3b8; font-family: Inter, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; padding: 6px 16px; border-radius: 9999px; }"
+    },
+    {
+      "name": "Floating Nav",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "화면 상단 중앙에 고정된 필 형태 내비게이션.",
+      "html": "<header class=\"ds-nav\"><span class=\"ds-nav-logo\">황금정원</span><a class=\"ds-btn-primary\" href=\"#\" style=\"padding:8px 16px;font-size:0.875rem;\">블로그 방문하기</a></header>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; max-width: 64rem; margin: 0 auto; padding: 12px 20px; background: rgba(19, 26, 48, 0.8); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 9999px; backdrop-filter: blur(24px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35); } .ds-nav-logo { font-family: Lora, Georgia, serif; font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; color: #ffffff; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "고요한 밤의 정원 (The Quiet Night Garden)",
+    "overview": "어두운 네이비 밤하늘 그라디언트 위로 인디고와 바이올릿 빛 덩어리가 반딧불처럼 천천히 떠다니고, 그 사이사이 서리 낀 유리처럼 반투명한 카드들이 이야기 조각을 하나씩 담고 있다. 그 정원을 작은 캡슐형 마스코트가 손을 흔들고, 메모를 들고, 하트를 띄우며 섹션마다 다른 포즈로 함께 걸어 다닌다. 이 시스템의 성격은 기업형 SaaS의 매끈함이 아니라 사적인 다이어리에 가깝다. 깊이는 딱딱한 중립 드롭섀도우가 아니라 컬러 글로우와 블러가 만드는 유리질감으로 표현되고, 모서리는 예외 없이 둥글며, 보더는 항상 화이트 헤어라인이다. 액센트인 인디고/바이올릿은 팔레트의 극히 일부에서만 등장해 그 희소성 자체가 존재감을 만든다. 이 문서는 코드에 이미 구현된 현재 상태를 있는 그대로 기록한 것이다.",
+    "keyCharacteristics": [
+      "어두운 네이비 그라디언트 배경 위에 떠다니는 인디고/바이올릿 빛 덩어리",
+      "backdrop-blur 글래스 카드 + 화이트 헤어라인 보더",
+      "완전히 둥근 형태 언어 — 버튼·배지·카드 전부 rounded-full/2xl/3xl",
+      "액센트는 드물게, 깊이는 컬러 글로우로",
+      "Lora 세리프 헤드라인 + Inter 산세리프 본문의 에디토리얼 페어링",
+      "모든 진입 모션이 하나의 이징 곡선을 공유"
+    ],
+    "rules": [
+      { "name": "The Rare Accent Rule", "body": "인디고/바이올릿은 버튼, 태그 칩, 헤드라인 속 한 구절, 마스코트처럼 화면의 아주 작은 부분에만 등장한다. 나머지는 네이비/화이트/슬레이트로 남겨 액센트의 희소성 자체가 눈에 띄게 만든다.", "section": "colors" },
+      { "name": "The Serif-Signals-Voice Rule", "body": "Lora는 오직 제목 레벨(h1/h2/h3)에만 등장하고, 본문·라벨·버튼 텍스트는 항상 Inter다.", "section": "typography" },
+      { "name": "The Glow-Not-Shadow Rule", "body": "깊이는 거의 항상 컬러 글로우나 블러 기반 유리질감으로 표현되고, 중립 드롭섀도우는 내비게이션 한 곳에만 예외적으로 허용된다.", "section": "elevation" },
+      { "name": "The No-Sharp-Corners Rule", "body": "시스템 안에 반경 0인 모서리는 존재하지 않는다 — 가장 작은 요소부터 가장 큰 컨테이너까지 전부 둥글다.", "section": "shapes" },
+      { "name": "The One Ease Rule", "body": "시스템의 모든 진입 모션이 동일한 커스텀 이징 곡선(cubic-bezier(0.16, 1, 0.3, 1))을 공유한다.", "section": "typography" }
+    ],
+    "dos": [
+      "Do 인터랙티브 요소와 컨테이너 모두 rounded-full 또는 rounded-2xl/3xl만 쓴다.",
+      "Do 깊이가 필요할 때는 backdrop-blur-xl + 화이트 오버레이 + 헤어라인 보더 조합을 먼저 쓰고, 액센트 요소에만 컬러 글로우 섀도우를 더한다.",
+      "Do 진입/등장 모션에는 cubic-bezier(0.16, 1, 0.3, 1) 이징을 쓴다.",
+      "Do 인디고/바이올릿 액센트는 CTA, 태그, 그라디언트 텍스트, 마스코트처럼 화면의 작은 부분에만 쓴다.",
+      "Do 헤드라인 레벨(h1/h2/h3)에는 항상 Lora, 본문/라벨/버튼에는 항상 Inter를 쓴다."
+    ],
+    "donts": [
+      "Don't 직각 모서리나 진한 실선 보더를 쓰지 않는다 — 헤어라인 화이트 보더만 쓴다.",
+      "Don't 중립색 드롭섀도우를 카드나 버튼에 쓰지 않는다(내비게이션 리프트 섀도우가 유일한 예외).",
+      "Don't 배경 전체를 액센트 색으로 채우지 않는다 — 액센트는 항상 텍스트, 좁은 배경(10% 이하), 또는 글로우로만 등장한다.",
+      "Don't '황금정원'이라는 이름 때문에 임의로 골드/옐로 톤을 넣지 않는다 — 현재 구현된 팔레트는 인디고/바이올릿 기반이며, 이 문서는 그 실제 구현을 기록한 것이다."
+    ]
+  }
+}
