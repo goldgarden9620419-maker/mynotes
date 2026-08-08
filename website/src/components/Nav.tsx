@@ -20,7 +20,7 @@ export function Nav({ blogUrl }: { blogUrl: string }) {
           rel="noopener noreferrer"
           className="cursor-pointer rounded-full bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent/90"
         >
-          블로그 방문하기
+          이야기 읽으러 가기
         </a>
       </div>
     </motion.header>

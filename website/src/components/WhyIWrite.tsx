@@ -34,6 +34,9 @@ export function WhyIWrite() {
           <p className="mt-4 text-foreground-muted">
             대단한 목표보다, 그냥 나누고 싶어서 씁니다.
           </p>
+          <p className="mt-2 text-sm text-foreground-muted/80">
+            과장 없이, 딱 겪은 만큼만 씁니다.
+          </p>
         </Reveal>
         <div className="relative space-y-6 border-l border-white/12 pl-8">
           {steps.map((step, i) => (
