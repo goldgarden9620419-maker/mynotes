@@ -79,6 +79,8 @@ const C = {
   ok: "#84A86D",
 };
 
+const MAX_PRODUCT_IMAGES = 5;
+
 /* 씬 식별 컬러 — 컬러바 순서. 씬 번호·타임라인·카드 레일이 같은 색을 공유한다 */
 const BARS = ["#C9C24F", "#4FA9B8", "#63A96A", "#B36FA8", "#CB6B4A", "#7E8CC9"];
 const barOf = (i) => BARS[i % BARS.length];
@@ -280,8 +282,13 @@ function fileToResizedBase64(file, maxDim = 1024) {
   });
 }
 
-async function analyzeProductImage(image) {
-  const prompt = `이 제품 이미지를 광고 제작 관점에서 분석하세요. JSON 객체 하나로만 응답. 코드펜스·설명 문장 금지, 문자열 값 안에 줄바꿈 금지.
+async function analyzeProductImage(images) {
+  const list = Array.isArray(images) ? images : [images];
+  const multiNote =
+    list.length > 1
+      ? `아래는 같은 제품을 여러 각도/상태로 찍은 사진 ${list.length}장입니다. 모두 참고하여 하나의 제품으로 종합 분석하세요.\n\n`
+      : "";
+  const prompt = `${multiNote}이 제품 이미지를 광고 제작 관점에서 분석하세요. JSON 객체 하나로만 응답. 코드펜스·설명 문장 금지, 문자열 값 안에 줄바꿈 금지.
 
 {"product_desc":"제품 외형·용기·라벨·컬러를 AI 생성 프롬프트에 쓸 수 있게 구체적으로 묘사 (한국어 2~3문장)","palette":"주요 컬러 3~4개 (쉼표 구분)","category":"제품 카테고리 (예: 건강기능식품, 화장품)","style":"이 제품에 가장 어울리는 광고 비주얼 스타일 제안 — 배경·조명·무드 중심 (한국어 1~2문장)","mood_keywords":["어울리는 무드 키워드 3~4개, 각 2~5자"]}`;
 
@@ -292,10 +299,10 @@ async function analyzeProductImage(image) {
       {
         role: "user",
         content: [
-          {
+          ...list.map((image) => ({
             type: "image",
             source: { type: "base64", media_type: image.mediaType, data: image.base64 },
-          },
+          })),
           { type: "text", text: prompt },
         ],
       },
@@ -831,8 +838,8 @@ function BarMark({ h = 20, w = 3, gap = 2, count = 6 }) {
   );
 }
 
-/* 이미지 드롭존 */
-function DropZone({ onFile, drag, setDrag, title, hint, inputId }) {
+/* 이미지 드롭존 (여러 장 선택 가능) */
+function DropZone({ onFiles, drag, setDrag, title, hint, inputId }) {
   return (
     <label
       onDragOver={(e) => {
@@ -843,7 +850,7 @@ function DropZone({ onFile, drag, setDrag, title, hint, inputId }) {
       onDrop={(e) => {
         e.preventDefault();
         setDrag(false);
-        onFile(e.dataTransfer.files?.[0]);
+        onFiles(e.dataTransfer.files);
       }}
       style={{
         display: "block",
@@ -861,11 +868,12 @@ function DropZone({ onFile, drag, setDrag, title, hint, inputId }) {
         id={inputId}
         type="file"
         accept="image/*"
+        multiple
         style={{ display: "none" }}
         onChange={(e) => {
-          const f = e.target.files?.[0];
+          const files = Array.from(e.target.files || []);
           e.target.value = "";
-          onFile(f);
+          onFiles(files);
         }}
       />
       <ImageIcon size={17} style={{ opacity: 0.55, marginBottom: 7 }} />
@@ -890,7 +898,7 @@ export default function AdStudio() {
   const [scenes, setScenes] = useState([]); // {status:'loading'|'done'|'error', data, range}
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState("");
-  const [productImage, setProductImage] = useState(null); // {base64, mediaType, preview, name}
+  const [productImages, setProductImages] = useState([]); // [{base64, mediaType, preview, name}] (최대 5장)
   const [analysis, setAnalysis] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzeErr, setAnalyzeErr] = useState("");
@@ -916,7 +924,11 @@ export default function AdStudio() {
         if (r?.value) {
           const s = JSON.parse(r.value);
           if (s.form) setForm((f) => ({ ...f, ...s.form }));
-          if (s.productImage) setProductImage(s.productImage);
+          if (Array.isArray(s.productImages) && s.productImages.length) {
+            setProductImages(s.productImages);
+          } else if (s.productImage) {
+            setProductImages([s.productImage]); // 이전 버전(단일 이미지) 저장분 호환
+          }
           if (s.analysis) setAnalysis(s.analysis);
           if (s.arc) setArc(s.arc);
           if (Array.isArray(s.scenes) && s.scenes.length) {
@@ -949,65 +961,75 @@ export default function AdStudio() {
       store
         .set(
           STORAGE_KEY,
-          JSON.stringify({ form, productImage, analysis, arc, scenes, selected, multi, multiPicked, multiVid, multiImg })
+          JSON.stringify({ form, productImages, analysis, arc, scenes, selected, multi, multiPicked, multiVid, multiImg })
         )
         .catch((e) => console.error("자동 저장 실패:", e));
     }, 600);
     return () => clearTimeout(t);
-  }, [form, productImage, analysis, arc, scenes, selected, multi, multiPicked, multiVid, multiImg, running]);
+  }, [form, productImages, analysis, arc, scenes, selected, multi, multiPicked, multiVid, multiImg, running]);
 
   const resetAll = async () => {
     setForm({ product: "", usp: "", format: "float", mood: "", duration: 6, ratio: "9:16", hasProductImage: false });
     setScenes([]); setArc(null); setSelected([]);
     setMulti(null); setMultiPicked(null); setMultiVid(null); setMultiImg(null);
-    setProductImage(null); setAnalysis(null); setAnalyzeErr(""); setRestored(false);
+    setProductImages([]); setAnalysis(null); setAnalyzeErr(""); setRestored(false);
     try { await store.delete(STORAGE_KEY); } catch {}
   };
 
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
-  const handleImageFile = async (file) => {
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
+  const analyzeAll = async (images) => {
+    if (!images.length) { setAnalysis(null); return; }
+    setAnalyzing(true);
+    try {
+      setAnalysis(await analyzeProductImage(images));
+    } catch (e) {
+      setAnalyzeErr(e?.message || "이미지 분석에 실패했습니다");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
+  const handleImageFiles = async (fileList) => {
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+    if (files.some((f) => !f.type.startsWith("image/"))) {
       setAnalyzeErr("이미지 파일만 업로드할 수 있습니다");
+      return;
+    }
+    const room = MAX_PRODUCT_IMAGES - productImages.length;
+    if (room <= 0) {
+      setAnalyzeErr(`제품 사진은 최대 ${MAX_PRODUCT_IMAGES}장까지 올릴 수 있습니다`);
       return;
     }
     setAnalyzeErr("");
     setAnalysis(null);
     try {
-      const img = await fileToResizedBase64(file);
-      setProductImage(img);
-      setAnalyzing(true);
-      const result = await analyzeProductImage(img);
-      setAnalysis(result);
+      const newImgs = await Promise.all(files.slice(0, room).map(fileToResizedBase64));
+      const merged = [...productImages, ...newImgs];
+      setProductImages(merged);
+      await analyzeAll(merged);
     } catch (e) {
       setAnalyzeErr(e?.message || "이미지 분석에 실패했습니다");
-    } finally {
-      setAnalyzing(false);
     }
   };
 
-  const onFileInput = (e) => {
-    const file = e.target.files?.[0];
-    e.target.value = ""; // 같은 파일 재선택 허용
-    handleImageFile(file);
+  const removeImage = (idx) => {
+    const merged = productImages.filter((_, i) => i !== idx);
+    setProductImages(merged);
+    setAnalyzeErr("");
+    if (merged.length) analyzeAll(merged);
+    else setAnalysis(null);
   };
 
   const reAnalyze = async () => {
-    if (!productImage || analyzing) return;
+    if (!productImages.length || analyzing) return;
     setAnalyzeErr("");
-    setAnalyzing(true);
-    try {
-      setAnalysis(await analyzeProductImage(productImage));
-    } catch (e) {
-      setAnalyzeErr(e?.message || "이미지 분석에 실패했습니다");
-    } finally {
-      setAnalyzing(false);
-    }
+    await analyzeAll(productImages);
   };
 
-  const clearImage = () => {
-    setProductImage(null);
+  const clearImages = () => {
+    setProductImages([]);
     setAnalysis(null);
     setAnalyzeErr("");
   };
@@ -1166,7 +1188,7 @@ ${multiVid.data.video_prompt_en}
 
   const fullText = () => {
     const fmt = FORMATS.find((f) => f.id === form.format);
-    let out = `■ AD STUDIO 제작안\n제품: ${form.product}\n포맷: ${fmt.label} / 무드: ${form.mood || "-"} / 길이: ${form.duration}초 / 비율: ${form.ratio} / 제품 이미지: ${form.hasProductImage ? "포함(참조 업로드)" : "미포함"}\n${arc ? `광고 컨셉: ${arc.concept}\n` : ""}${activeAnalysis ? `제품 분석: ${activeAnalysis.product_desc}\n추천 스타일: ${activeAnalysis.style}\n` : ""}`;
+    let out = `■ AD STUDIO 제작안\n제품: ${form.product}\n포맷: ${fmt.label} / 무드: ${form.mood || "-"} / 길이: ${form.duration}초 / 비율: ${form.ratio} / 제품 이미지: ${form.hasProductImage && productImages.length ? `포함(참조 업로드 ${productImages.length}장)` : "미포함"}\n${arc ? `광고 컨셉: ${arc.concept}\n` : ""}${activeAnalysis ? `제품 분석: ${activeAnalysis.product_desc}\n추천 스타일: ${activeAnalysis.style}\n` : ""}`;
     scenes.forEach((s, i) => {
       if (s.status !== "done") return;
       const d = s.data;
@@ -1615,14 +1637,14 @@ ${multiVid.data.video_prompt_en}
 
           {form.hasProductImage && (
             <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: -8 }}>
-              {!productImage ? (
+              {!productImages.length ? (
                 <>
                   <DropZone
-                    onFile={handleImageFile}
+                    onFiles={handleImageFiles}
                     drag={dragOver}
                     setDrag={setDragOver}
                     title="제품 사진 올리기"
-                    hint="클릭해서 고르거나 여기로 끌어다 놓으세요"
+                    hint={`클릭해서 고르거나 여기로 끌어다 놓으세요 (최대 ${MAX_PRODUCT_IMAGES}장, 여러 장 선택 가능)`}
                   />
                   {analyzeErr && (
                     <div
@@ -1650,65 +1672,109 @@ ${multiVid.data.video_prompt_en}
                     gap: 10,
                   }}
                 >
-                  <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                    <img
-                      src={productImage.preview}
-                      alt="올린 제품 사진"
-                      style={{
-                        width: 50,
-                        height: 50,
-                        objectFit: "cover",
-                        borderRadius: 4,
-                        border: `1px solid ${C.line}`,
-                        flexShrink: 0,
-                      }}
-                    />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div
-                        style={{
-                          fontSize: 11.5,
-                          color: C.text,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {productImage.name}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {productImages.map((img, idx) => (
+                      <div key={idx} style={{ position: "relative", flexShrink: 0 }}>
+                        <img
+                          src={img.preview}
+                          alt={`올린 제품 사진 ${idx + 1}`}
+                          style={{
+                            width: 50,
+                            height: 50,
+                            objectFit: "cover",
+                            borderRadius: 4,
+                            border: `1px solid ${C.line}`,
+                            display: "block",
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeImage(idx)}
+                          title="이 사진 빼기"
+                          style={{
+                            position: "absolute",
+                            top: -6,
+                            right: -6,
+                            width: 16,
+                            height: 16,
+                            borderRadius: "50%",
+                            border: `1px solid ${C.line}`,
+                            background: C.base,
+                            color: C.sub,
+                            fontSize: 9,
+                            lineHeight: 1,
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          ✕
+                        </button>
                       </div>
-                      <div
+                    ))}
+                    {productImages.length < MAX_PRODUCT_IMAGES && (
+                      <label
+                        className="ad-tap"
                         style={{
-                          fontFamily: mono,
-                          fontSize: 10,
-                          color: analyzing ? C.text : analysis ? C.ok : C.dim,
-                          marginTop: 3,
+                          width: 50,
+                          height: 50,
+                          borderRadius: 4,
+                          border: `1px dashed ${C.line}`,
                           display: "flex",
                           alignItems: "center",
-                          gap: 5,
+                          justifyContent: "center",
+                          cursor: "pointer",
+                          color: C.dim,
+                          fontSize: 18,
+                          flexShrink: 0,
                         }}
+                        title="사진 추가"
                       >
-                        {analyzing && (
-                          <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} />
-                        )}
-                        {analyzing ? "분석 중" : analysis ? "분석 완료" : "분석 대기"}
-                      </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          style={{ display: "none" }}
+                          onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            e.target.value = "";
+                            handleImageFiles(files);
+                          }}
+                        />
+                        +
+                      </label>
+                    )}
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div
+                      style={{
+                        fontFamily: mono,
+                        fontSize: 10,
+                        color: analyzing ? C.text : analysis ? C.ok : C.dim,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 5,
+                      }}
+                    >
+                      {analyzing && (
+                        <Loader2 size={10} style={{ animation: "spin 1s linear infinite" }} />
+                      )}
+                      {analyzing
+                        ? "분석 중"
+                        : analysis
+                        ? `분석 완료 · 사진 ${productImages.length}장`
+                        : "분석 대기"}
                     </div>
-                    <label className="ad-ghost" style={{ ...S.ghostBtn, padding: "4px 8px" }}>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        onChange={onFileInput}
-                      />
-                      교체
-                    </label>
                     <button
                       type="button"
                       className="ad-ghost"
-                      onClick={clearImage}
-                      title="사진 지우기"
-                      style={{ ...S.ghostBtn, padding: "4px 8px", color: C.dim }}
+                      onClick={clearImages}
+                      title="전체 사진 지우기"
+                      style={{ ...S.ghostBtn, padding: "4px 8px", color: C.dim, marginLeft: "auto" }}
                     >
-                      ✕
+                      전체 지우기
                     </button>
                   </div>
 
@@ -2447,7 +2513,7 @@ ${multiVid.data.video_prompt_en}
 
                         {!multiImg ? (
                           <DropZone
-                            onFile={handleMultiImageFile}
+                            onFiles={(files) => handleMultiImageFile(files?.[0])}
                             drag={multiDrag}
                             setDrag={setMultiDrag}
                             title="합성 이미지 올리기"
