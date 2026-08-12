@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """쿠팡 상품 URL → 제품 정보 자동 추출.
 
-상품 페이지 HTML에서 제품명 / 카테고리 / 가격 / 할인율 / 대표 이미지를
-best-effort로 파싱한다. 쿠팡은 봇 차단이 강해서 실패할 수 있으며,
-실패 시 ok=False와 안내 메시지를 반환한다 (수동 입력으로 진행).
+1차: requests로 빠르게 시도
+2차: 차단(403 등)되면 PC에 설치된 Edge/Chrome을 Playwright로 잠깐 띄워
+     실제 브라우저로 페이지를 읽는다 (쿠팡 봇 차단 우회에 효과적).
 
-추출된 정보만 사용하고, 페이지에 없는 정보를 만들어내지 않는다.
+실패 시 ok=False와 안내 메시지를 반환한다 (수동 입력으로 진행).
+페이지에 없는 정보를 만들어내지 않는다.
 """
 import html as html_lib
 import os
@@ -25,6 +26,13 @@ _HEADERS = {
 }
 
 _TITLE_SUFFIXES = [" - 쿠팡!", " | 쿠팡", " - 쿠팡", "쿠팡!", "- Coupang"]
+
+_PLAYWRIGHT_HINT = (
+    "브라우저 자동 조회 기능이 설치되어 있지 않습니다. "
+    "검은 창(cmd)에서 프로그램 폴더로 이동 후 "
+    "`venv\\Scripts\\python -m pip install playwright` 를 실행하면 "
+    "차단 우회 조회를 사용할 수 있어요. 지금은 직접 입력해주세요."
+)
 
 
 def _clean_title(title: str) -> str:
@@ -50,37 +58,71 @@ def _format_price(raw: str) -> str:
         return ""
 
 
-def fetch_product_info(url: str, image_dir: str = None,
-                       timeout: int = 15) -> dict:
-    """쿠팡 상품 페이지에서 제품 정보를 가져온다.
+def _looks_blocked(status_code: int, text: str) -> bool:
+    low = (text or "").lower()
+    return (status_code in (403, 429, 503) or
+            "captcha" in low or "access denied" in low or
+            "잠시 후 다시" in (text or ""))
 
-    반환: {"ok", "name", "category", "price", "discount",
-           "image_path", "message"}
-    """
-    result = {"ok": False, "name": "", "category": "", "price": "",
-              "discount": "", "image_path": None, "message": ""}
 
-    url = (url or "").strip()
-    if not url.startswith("http"):
-        result["message"] = "올바른 URL 형식이 아닙니다. https:// 로 시작하는 쿠팡 상품 주소를 붙여넣어주세요."
-        return result
-
+def _fetch_html_requests(url: str, timeout: int):
+    """(html, error_message) — 성공 시 error_message는 None."""
     try:
         session = requests.Session()
         resp = session.get(url, headers=_HEADERS, timeout=timeout,
                            allow_redirects=True)
     except requests.RequestException as exc:
-        result["message"] = f"쿠팡 접속에 실패했습니다({type(exc).__name__}). 인터넷 연결을 확인하거나 수동으로 입력해주세요."
-        return result
+        return None, f"쿠팡 접속 실패({type(exc).__name__})"
+    if _looks_blocked(resp.status_code, resp.text) or resp.status_code != 200:
+        return None, f"차단됨(상태 {resp.status_code})"
+    return resp.text, None
 
-    text = resp.text or ""
-    blocked = (resp.status_code in (403, 429) or
-               "captcha" in text.lower() or
-               "access denied" in text.lower())
-    if blocked or resp.status_code != 200:
-        result["message"] = (f"쿠팡이 자동 조회를 차단했습니다(상태 {resp.status_code}). "
-                             "잠시 후 다시 시도하거나, 제품 정보를 직접 입력해주세요.")
-        return result
+
+def _fetch_html_browser(url: str, timeout: int = 30):
+    """설치된 Edge/Chrome을 잠깐 띄워 실제 브라우저로 HTML을 가져온다.
+
+    (html, error) — error: None | "browser-missing" | 상세 메시지
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        return None, "browser-missing"
+
+    last_error = "unknown"
+    for channel in ("msedge", "chrome", None):
+        try:
+            with sync_playwright() as p:
+                kwargs = {
+                    "headless": False,  # 헤드리스는 차단되기 쉬움
+                    "args": ["--window-size=480,640",
+                             "--window-position=40,40"],
+                }
+                if channel:
+                    kwargs["channel"] = channel
+                browser = p.chromium.launch(**kwargs)
+                try:
+                    context = browser.new_context(
+                        locale="ko-KR",
+                        viewport={"width": 480, "height": 640})
+                    page = context.new_page()
+                    page.goto(url, wait_until="domcontentloaded",
+                              timeout=timeout * 1000)
+                    page.wait_for_timeout(2500)  # 스크립트 렌더 대기
+                    html = page.content()
+                finally:
+                    browser.close()
+                if html and ("og:title" in html or "<title>" in html):
+                    return html, None
+                last_error = "페이지 내용을 읽지 못함"
+        except Exception as exc:  # noqa: BLE001
+            last_error = str(exc)[:120]
+            continue
+    return None, last_error
+
+
+def _parse(text: str, image_dir: str, timeout: int) -> dict:
+    result = {"ok": False, "name": "", "category": "", "price": "",
+              "discount": "", "image_path": None, "message": ""}
 
     # 제품명: og:title → <title>
     name = _first_match(text, [
@@ -120,7 +162,7 @@ def fetch_product_info(url: str, image_dir: str = None,
             break
     result["category"] = "/".join(picked)
 
-    # 대표 이미지 다운로드 (엔드카드용)
+    # 대표 이미지 다운로드 (엔드카드용) — CDN은 보통 차단하지 않음
     if image_dir:
         img_url = _first_match(text, [
             r'<meta[^>]+property="og:image"[^>]+content="([^"]+)"',
@@ -131,8 +173,8 @@ def fetch_product_info(url: str, image_dir: str = None,
             if img_url.startswith("//"):
                 img_url = "https:" + img_url
             try:
-                img_resp = session.get(img_url, headers=_HEADERS,
-                                       timeout=timeout)
+                img_resp = requests.get(img_url, headers=_HEADERS,
+                                        timeout=timeout)
                 if img_resp.status_code == 200 and len(img_resp.content) > 2000:
                     os.makedirs(image_dir, exist_ok=True)
                     ext = ".png" if ".png" in img_url.lower() else ".jpg"
@@ -145,7 +187,6 @@ def fetch_product_info(url: str, image_dir: str = None,
 
     if result["name"]:
         result["ok"] = True
-        filled = [k for k in ("name", "category", "price", "discount") if result[k]]
         missing = [k for k in ("category", "price", "discount") if not result[k]]
         msg = "상품 정보를 가져왔습니다."
         if missing:
@@ -156,3 +197,34 @@ def fetch_product_info(url: str, image_dir: str = None,
         result["message"] = ("페이지는 열렸지만 상품 정보를 읽지 못했습니다. "
                              "쿠팡 상품 상세 페이지 URL인지 확인하거나 직접 입력해주세요.")
     return result
+
+
+def fetch_product_info(url: str, image_dir: str = None,
+                       timeout: int = 15) -> dict:
+    """쿠팡 상품 페이지에서 제품 정보를 가져온다.
+
+    반환: {"ok", "name", "category", "price", "discount",
+           "image_path", "message"}
+    """
+    url = (url or "").strip()
+    if not url.startswith("http"):
+        return {"ok": False, "name": "", "category": "", "price": "",
+                "discount": "", "image_path": None,
+                "message": "올바른 URL 형식이 아닙니다. https:// 로 시작하는 쿠팡 상품 주소를 붙여넣어주세요."}
+
+    # 1차: requests
+    text, err = _fetch_html_requests(url, timeout)
+
+    # 2차: 실제 브라우저 (Edge/Chrome)
+    if text is None:
+        text, browser_err = _fetch_html_browser(url)
+        if text is None:
+            if browser_err == "browser-missing":
+                message = f"쿠팡이 자동 조회를 차단했습니다({err}). {_PLAYWRIGHT_HINT}"
+            else:
+                message = (f"쿠팡이 자동 조회를 차단했고({err}), 브라우저 조회도 "
+                           f"실패했습니다({browser_err}). 제품 정보를 직접 입력해주세요.")
+            return {"ok": False, "name": "", "category": "", "price": "",
+                    "discount": "", "image_path": None, "message": message}
+
+    return _parse(text, image_dir, timeout)
