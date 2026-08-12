@@ -40,7 +40,7 @@ const STORAGE_KEY = "aiadstudio:v1";
 
 // 제습기 프로젝트 시드 — 최초 1회 자동 등록 (Claude 채팅에서 만든 결과물)
 const SEED = {
-  version: "dehumidifier-v3",
+  version: "dehumidifier-v4",
   places: ["프리미엄 주방", "럭셔리 욕실"],
   productRef: "6f63e2aa-9c8f-45f6-b394-59344e66082d",
   modelRef: "fee509dd-1e87-4178-b11c-81d14e9b95fb",
@@ -49,7 +49,9 @@ const SEED = {
     { id: "d55bd41a-25dd-40cb-926a-438408d33093", name: "씬1 습기 고민 훅" },
     { id: "0c54d120-7dba-4ce8-b579-77263cca8460", name: "씬2 제품 소개" },
     { id: "8d433c56-5a7f-41f1-a9aa-37fa994b7222", name: "씬3 욕실 거울" },
-    { id: "8d80a06e-4718-466a-8a41-a557b94484f4", name: "씬4 히어로 마무리" }
+    { id: "8d80a06e-4718-466a-8a41-a557b94484f4", name: "씬4 히어로 마무리" },
+    { id: "a8174c3a-4909-4991-b70c-e9e8cd7493ec", name: "주방 사용 컷" },
+    { id: "00d304aa-b597-4bef-9a7c-731554350d4f", name: "뽀송한 일상" }
   ]
 };
 const SEED_UUID_RE = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
@@ -86,6 +88,22 @@ const STEPS = ["프로젝트 설정", "제품", "AI 모델", "장소", "개별 S
 const STEP_KEYS = ["PROJECT", "PRODUCT", "MODEL", "LOCATION", "SCENES", "STORY", "COMPOSER", "EXPORT", "POST"];
 
 /* ───────────────────────── 공용 컴포넌트 ───────────────────────── */
+/* confirm() 팝업이 차단되는 환경이 있어, 위험 동작은 두 번 클릭 방식으로 확인한다 */
+function ArmedButton({ label, armedLabel, className, onRun, disabled }) {
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    if (!armed) return;
+    const t = setTimeout(() => setArmed(false), 5000);
+    return () => clearTimeout(t);
+  }, [armed]);
+  return (
+    <button className={(className || "") + (armed ? " armed" : "")} disabled={disabled}
+      onClick={() => { if (armed) { setArmed(false); onRun(); } else setArmed(true); }}>
+      {armed ? (armedLabel || "⚠ 한 번 더 클릭하면 실행됩니다") : label}
+    </button>
+  );
+}
+
 function CopyBtn({ text, label = "복사", small }) {
   const [done, setDone] = useState(false);
   return (
@@ -247,10 +265,9 @@ function NavButtons({ S, set, onSave, onReset }) {
   return (
     <div className="nav-buttons">
       <button className="ghost" disabled={S.step === 0} onClick={() => set({ step: S.step - 1 })}>← 이전</button>
-      <button className="ghost" onClick={onReset}>이 단계 초기화</button>
+      <ArmedButton className="ghost" label="이 단계 초기화" armedLabel="⚠ 한 번 더 클릭하면 초기화" onRun={onReset} />
       <div className="spacer" />
-      <button className="ghost" onClick={onSave}>저장</button>
-      <button className="primary" disabled={S.step === STEPS.length - 1} onClick={() => { onSave(); set({ step: S.step + 1 }); }}>다음 →</button>
+      {S.step < STEPS.length - 1 && <button className="primary" onClick={() => { onSave(); set({ step: S.step + 1 }); }}>다음 →</button>}
     </div>
   );
 }
@@ -633,9 +650,9 @@ function LibraryManager({ S, set }) {
 const PRESET_6 = [
   { name: "습기 고민 훅", role: "Hook", assets: ["MODEL"], duration: 2.5, cameraMotion: "Slow Push-In", place: "프리미엄 주방", imgJobId: "d55bd41a-25dd-40cb-926a-438408d33093" },
   { name: "제품 소개", role: "Product Reveal", assets: ["MODEL", "PRODUCT"], duration: 2.5, cameraMotion: "Slow Push-In", place: "프리미엄 주방", imgJobId: "0c54d120-7dba-4ce8-b579-77263cca8460" },
-  { name: "주방 사용 컷", role: "Usage", assets: ["PRODUCT", "LOCATION"], duration: 2, cameraMotion: "Macro Tracking", place: "프리미엄 주방", imgJobId: "" },
+  { name: "주방 사용 컷", role: "Usage", assets: ["PRODUCT", "LOCATION"], duration: 2, cameraMotion: "Macro Tracking", place: "프리미엄 주방", imgJobId: "a8174c3a-4909-4991-b70c-e9e8cd7493ec" },
   { name: "욕실 거울 김서림", role: "Benefit", assets: ["MODEL", "PRODUCT", "LOCATION"], duration: 3, cameraMotion: "Pan Right", place: "럭셔리 욕실", imgJobId: "8d433c56-5a7f-41f1-a9aa-37fa994b7222" },
-  { name: "뽀송한 일상", role: "Emotional Moment", assets: ["MODEL"], duration: 2.5, cameraMotion: "Slow Pull-Out", place: "프리미엄 주방", imgJobId: "" },
+  { name: "뽀송한 일상", role: "Emotional Moment", assets: ["MODEL"], duration: 2.5, cameraMotion: "Slow Pull-Out", place: "프리미엄 주방", imgJobId: "00d304aa-b597-4bef-9a7c-731554350d4f" },
   { name: "히어로 마무리", role: "Hero Shot", assets: ["MODEL", "PRODUCT"], duration: 2.5, cameraMotion: "Slow Pull-Out", place: "프리미엄 주방", imgJobId: "8d80a06e-4718-466a-8a41-a557b94484f4" }
 ];
 // 역할별 권장 가중치(초) — 효과를 보여주는 Benefit 씬에 가장 큰 비중
@@ -658,7 +675,9 @@ function recommendDurations(scenes) {
   return durs;
 }
 function analyzeComposition(S) {
-  const scenes = S.scenes;
+  // 실제 영상에 들어가는 순서(6단계 타임라인) 기준으로 판정
+  const rows0 = P.timelineRows(S);
+  const scenes = rows0.length ? rows0.map((r) => r.scene) : S.scenes;
   const total = scenes.reduce((a, sc) => a + (parseFloat(sc.duration) || 0), 0);
   const rows = [];
   rows.push([total <= 15.01, `총 길이 ${total.toFixed(1)}초 / 최대 15초` + (total > 15.01 ? " — 초과분은 영상에서 잘립니다" : " ✓")]);
@@ -696,7 +715,6 @@ function StepScenes({ S, set }) {
     set({ scenes: [...S.scenes, sc], sceneSeq: id + 1, composer: { ...S.composer, timeline: [...S.composer.timeline, id] } });
   };
   const applyPreset6 = () => {
-    if (S.scenes.length && !confirm("현재 씬 " + S.scenes.length + "개를 추천 6씬 구성(합계 15초)으로 교체할까요? 기존 씬 설정은 사라집니다 (이미지 라이브러리는 유지).")) return;
     const scenes = PRESET_6.map((p, i) => ({
       id: i + 1, name: p.name, role: p.role, assets: p.assets,
       presentStyle: "친구에게 추천하듯", gaze: "카메라 정면 응시", gesture: "제품 들어 보여주기", productMotion: "Static",
@@ -715,7 +733,9 @@ function StepScenes({ S, set }) {
       <LibraryManager S={S} set={set} />
       <div className="gen-row" style={{ margin: "10px 0" }}>
         <button className="primary" onClick={addScene}>+ Scene 추가</button>
-        <button className="primary small" onClick={applyPreset6}>🎬 추천 6씬 구성 불러오기 (15초)</button>
+        <ArmedButton className="primary small" label="🎬 추천 6씬 구성 불러오기 (15초)"
+          armedLabel={S.scenes.length ? "⚠ 현재 씬 " + S.scenes.length + "개가 교체됩니다 — 한 번 더 클릭" : "한 번 더 클릭하면 6씬이 만들어집니다"}
+          onRun={applyPreset6} />
         <button className="primary small" disabled={!S.scenes.length} onClick={() => setCheck(analyzeComposition(S))}>⏱ 구성 길이 확인</button>
       </div>
       {check && check !== "done" && (
@@ -787,12 +807,15 @@ function StepStoryboard({ S, set }) {
         </div>
       ))}
     </div>
+    {sb.refs.length > 0
+      ? <div className="gen-note ok">씬 이미지 {sb.refs.length}장이 모두 연결되어 있어 — 스토리보드는 씬 이미지들을 순서대로 참조해 충실히 재현합니다 (권장 방식 ✓)</div>
+      : <div className="gen-note">일부 씬에 이미지가 연결되지 않아 씬 설정 텍스트만으로 그립니다 — 5단계에서 씬마다 이미지를 연결하면 스토리보드 품질이 훨씬 좋아집니다.</div>}
     <PromptBox title={"스토리보드 이미지 프롬프트 (씬 " + sb.count + "개 → 한 캔버스)"} kr={sb.kr} en={P.withGpt(sb.en)} />
     <GenRow kind="image" label="🎨 스토리보드 이미지 생성"
       savedUrl={gen.storyUrl}
       onResult={(jobId, url) => set({ gen: { ...S.gen, storyJobId: jobId, storyUrl: url } })}
       getParams={() => ({ model: "gpt_image_2", quality: "high", aspect_ratio: "9:16", prompt: sb.en,
-        medias: refMedias([gen.modelRef, gen.productRef]) })} />
+        medias: sb.refs.length ? refMedias(sb.refs) : refMedias([gen.modelRef, gen.productRef]) })} />
     <div className="field-row" style={{ marginTop: 14 }}>
       <label>또는 기존 스토리보드 job ID 연결 (채팅에서 이미 만든 스토리보드를 그대로 쓸 때)</label>
       <input className="text-field" value={gen.storyJobId || ""} placeholder="전체 job ID 36자를 붙여넣으세요"
@@ -1144,10 +1167,9 @@ function App() {
   const markVisited = () => setS((s) => s.visited.includes(s.step) ? s : { ...s, visited: [...s.visited, s.step] });
   const resetStep = () => {
     const key = ["project", "product", "model", "location", "scenes", "storyboard", "composer", null, "post"][S.step];
-    if (key === "post") { if (confirm("후반 작업(대사·Voice·립싱크·믹싱) 설정을 초기화할까요?")) set({ post: mergePost(null) }); return; }
-    if (key === "storyboard") { if (confirm("스토리보드 생성 결과를 초기화할까요?")) set({ gen: { ...S.gen, storyJobId: "", storyUrl: "", storyVidUrl: "" } }); return; }
+    if (key === "post") { set({ post: mergePost(null) }); return; }
+    if (key === "storyboard") { set({ gen: { ...S.gen, storyJobId: "", storyUrl: "", storyVidUrl: "" } }); return; }
     if (!key) return;
-    if (!confirm("현재 단계 설정을 초기화할까요?")) return;
     if (key === "scenes") set({ scenes: [], sceneSeq: 1, composer: { ...S.composer, timeline: [] } });
     else if (key === "project") set({ project: { ...DEFAULTS.project }, global: { ...DEFAULTS.global } });
     else set({ [key]: JSON.parse(JSON.stringify(DEFAULTS[key])) });
@@ -1180,7 +1202,8 @@ function App() {
             </span>
           ))}
         </div>
-        <button className="ghost danger" onClick={() => { if (confirm("프로젝트 전체를 초기화할까요?")) { localStorage.removeItem(STORAGE_KEY); setS({ ...JSON.parse(JSON.stringify(DEFAULTS)), started: true }); } }}>전체 초기화</button>
+        <ArmedButton className="ghost danger" label="전체 초기화" armedLabel="⚠ 전체 삭제 — 한 번 더 클릭"
+          onRun={() => { localStorage.removeItem(STORAGE_KEY); setS(applySeed({ ...JSON.parse(JSON.stringify(DEFAULTS)), post: mergePost(null), started: true })); }} />
       </header>
 
       <div className="layout">

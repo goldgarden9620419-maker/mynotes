@@ -16,7 +16,7 @@ export const POST_DEFAULTS = {
   voice: { gender: "여성", age: "30대", style: "Natural", engine: "minimax", voiceId: "c25f78a0-714e-42af-8da3-a399cef94968", speed: 1.0, jobs: {}, mergedId: "", mergedUrl: "" },
   lip: { jobId: "", url: "" },
   mix: { voice: 100, bgm: 35, orig: 0, mixedId: "", mixedUrl: "" },
-  final: { mediaId: "", url: "", info: null }
+  final: { mediaId: "", url: "", info: null, capcutUrl: "" }
 };
 export function mergePost(p) {
   const d = JSON.parse(JSON.stringify(POST_DEFAULTS));
@@ -327,8 +327,79 @@ function buildMixCmd(opts, uploadUrl) {
   parts.push(`curl -sf -X PUT -H "Content-Type: audio/wav" --data-binary @mix.wav ${shQ(uploadUrl)} -o /dev/null -w 'UPLOAD %{http_code}\\n'`);
   return parts.join(" && ");
 }
-function buildMuxCmd(videoUrl, audioUrl, uploadUrl) {
-  return `cd /home/user && curl -sf -o video.mp4 ${shQ(videoUrl)} && curl -sf -o mix.wav ${shQ(audioUrl)} && ffmpeg -loglevel error -y -i video.mp4 -i mix.wav -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k -shortest final.mp4 && ffprobe -v quiet -print_format json -show_format -show_streams final.mp4 | python3 -c "import sys,json; d=json.load(sys.stdin); f=d['format']; v=[s for s in d['streams'] if s['codec_type']=='video'][0]; print('INFO', json.dumps({'duration': round(float(f['duration']),1), 'size_mb': round(int(f['size'])/1048576,1), 'w': v['width'], 'h': v['height'], 'vcodec': v['codec_name']}))" && curl -sf -X PUT -H "Content-Type: video/mp4" --data-binary @final.mp4 ${shQ(uploadUrl)} -o /dev/null -w 'UPLOAD %{http_code}\\n'`;
+/* STEP 2 대사를 씬 타이밍에 맞춰 자막(ASS)으로 — 캡컷 없이 자막 번인 */
+function buildAss(rows, total, lineOf) {
+  const t = (s) => {
+    const cs = Math.max(0, Math.round(s * 100));
+    const h = Math.floor(cs / 360000), m = Math.floor(cs / 6000) % 60, sec = Math.floor(cs / 100) % 60, c = cs % 100;
+    return `${h}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}.${String(c).padStart(2, "0")}`;
+  };
+  const evs = rows.map((r) => {
+    const ln = lineOf(r.scene);
+    if (!(ln.text || "").trim() || ln.mode === "NONE") return null;
+    const st = r.start + 0.1, en = Math.min(r.end, total) - 0.05;
+    if (en <= st) return null;
+    const text = ln.text.replace(/[\r\n]+/g, " ").replace(/[{}]/g, "").replace(/ASSEOF/g, "");
+    return `Dialogue: 0,${t(st)},${t(en)},Cap,${text}`;
+  }).filter(Boolean);
+  if (!evs.length) return "";
+  return [
+    "[Script Info]", "PlayResX: 1080", "PlayResY: 1920", "",
+    "[V4+ Styles]",
+    "Format: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Outline, Shadow, Alignment, MarginL, MarginR, MarginV",
+    "Style: Cap,Noto Sans KR,62,&H00FFFFFF,&H99000000,&H00000000,1,4,0,8,60,60,620", "",
+    "[Events]", "Format: Layer, Start, End, Style, Text",
+    ...evs
+  ].join("\n");
+}
+/* 캡컷용 SRT 자막 — 씬 타이밍 그대로 */
+function buildSrt(rows, total, lineOf) {
+  const t = (s) => {
+    const ms = Math.max(0, Math.round(s * 1000));
+    const h = Math.floor(ms / 3600000), m = Math.floor(ms / 60000) % 60, sec = Math.floor(ms / 1000) % 60, mm = ms % 1000;
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")},${String(mm).padStart(3, "0")}`;
+  };
+  let i = 0;
+  const blocks = rows.map((r) => {
+    const ln = lineOf(r.scene);
+    if (!(ln.text || "").trim() || ln.mode === "NONE") return null;
+    const st = r.start + 0.1, en = Math.min(r.end, total) - 0.05;
+    if (en <= st) return null;
+    i += 1;
+    return `${i}\n${t(st)} --> ${t(en)}\n${ln.text.replace(/[\r\n]+/g, " ")}`;
+  }).filter(Boolean);
+  return blocks.join("\n\n") + "\n";
+}
+/* 캡컷 편집 패키지 — 영상·음성·BGM·SRT·캡션을 ZIP으로.
+   heredoc은 && 체인으로 이으면 종료 마커가 깨지므로 set -e + 줄 단위로 실행한다. */
+function buildCapcutCmd(opts, uploadUrl) {
+  const body = (s) => {
+    s = String(s || "").replace(/SRTEOF|CAPEOF/g, "");
+    return s.endsWith("\n") ? s : s + "\n";
+  };
+  const lines = ["set -e", "cd /home/user", "rm -rf pkg && mkdir pkg"];
+  lines.push(`curl -sf -o pkg/video_no_subs.mp4 ${shQ(opts.videoUrl)}`);
+  if (opts.voiceUrl) lines.push(`curl -sf -o pkg/voice_track.wav ${shQ(opts.voiceUrl)}`);
+  if (opts.bgmUrl) {
+    lines.push(`curl -sfL -o bgm_src.audio ${shQ(opts.bgmUrl)}`);
+    lines.push(`ffmpeg -loglevel error -y -i bgm_src.audio -t ${opts.total} -af "afade=t=out:st=${Math.max(0, opts.total - 1.6).toFixed(1)}:d=1.6" pkg/bgm_${Math.round(opts.total)}s.mp3`);
+  }
+  lines.push(`cat > pkg/subtitles.srt <<'SRTEOF'\n${body(opts.srt)}SRTEOF`);
+  lines.push(`cat > pkg/caption_instagram.txt <<'CAPEOF'\n${body(opts.capIg)}CAPEOF`);
+  lines.push(`cat > pkg/caption_tiktok.txt <<'CAPEOF'\n${body(opts.capTt)}CAPEOF`);
+  lines.push(`cd pkg && zip -q -r ../capcut_package.zip . && cd ..`);
+  lines.push(`curl -sf -X PUT -H "Content-Type: application/zip" --data-binary @capcut_package.zip ${shQ(uploadUrl)} -o /dev/null -w 'UPLOAD %{http_code}\n'`);
+  return lines.join("\n");
+}
+function buildMuxCmd(videoUrl, audioUrl, uploadUrl, ass) {
+  const subPart = ass
+    ? ` && curl -sfL -o NotoSansKR.ttf 'https://github.com/google/fonts/raw/main/ofl/notosanskr/NotoSansKR%5Bwght%5D.ttf' && cat > subs.ass <<'ASSEOF'
+${ass}
+ASSEOF
+`
+    : " && ";
+  const vopts = ass ? `-vf "ass=subs.ass:fontsdir=." -c:v libx264 -preset veryfast -crf 19` : `-c:v copy`;
+  return `cd /home/user && curl -sf -o video.mp4 ${shQ(videoUrl)} && curl -sf -o mix.wav ${shQ(audioUrl)}${subPart}ffmpeg -loglevel error -y -i video.mp4 -i mix.wav -map 0:v:0 -map 1:a:0 ${vopts} -c:a aac -b:a 192k -shortest final.mp4 && ffprobe -v quiet -print_format json -show_format -show_streams final.mp4 | python3 -c "import sys,json; d=json.load(sys.stdin); f=d['format']; v=[s for s in d['streams'] if s['codec_type']=='video'][0]; print('INFO', json.dumps({'duration': round(float(f['duration']),1), 'size_mb': round(int(f['size'])/1048576,1), 'w': v['width'], 'h': v['height'], 'vcodec': v['codec_name']}))" && curl -sf -X PUT -H "Content-Type: video/mp4" --data-binary @final.mp4 ${shQ(uploadUrl)} -o /dev/null -w 'UPLOAD %{http_code}\\n'`;
 }
 
 /* ── 공용 UI 조각 ── */
@@ -374,7 +445,7 @@ export function StepPost({ S, set }) {
   const baseVideoUrl = post.lip.url || gen.storyVidUrl || "";
 
   // 완료 판정 (§1 — 단계별 완료 시각 표시)
-  const lineOf = (sc) => post.lines[sc.id] || { text: "", mode: classifyScene(sc) };
+  const lineOf = (sc) => { const ln = post.lines[sc.id] || {}; return { text: ln.text || "", mode: ln.mode || classifyScene(sc) }; };
   const spokenScenes = rows.map((r) => r.scene).filter((sc) => lineOf(sc).mode !== "NONE");
   const doneMap = {
     1: post.bgm.skip || /^https?:\/\//.test(post.bgm.mediaId),
@@ -383,7 +454,7 @@ export function StepPost({ S, set }) {
     4: !!post.lip.url,
     5: !!post.mix.mixedId,
     6: !!post.mix.mixedId && !!post.lip.url,
-    7: !!post.final.url
+    7: !!post.final.url || !!post.final.capcutUrl
   };
 
   return (
@@ -406,11 +477,15 @@ export function StepPost({ S, set }) {
       {post.step === 4 && <PPLip S={S} post={post} setPost={setPost} rows={rows} total={total} />}
       {post.step === 5 && <PPMix S={S} post={post} setPost={setPost} total={total} baseVideoUrl={baseVideoUrl} />}
       {post.step === 6 && <PPPreview S={S} post={post} setPost={setPost} rows={rows} total={total} baseVideoUrl={baseVideoUrl} />}
-      {post.step === 7 && <PPExport S={S} post={post} setPost={setPost} total={total} baseVideoUrl={baseVideoUrl} />}
+      {post.step === 7 && <PPExport S={S} post={post} setPost={setPost} rows={rows} total={total} baseVideoUrl={baseVideoUrl} />}
       <div className="nav-buttons">
         <button className="ghost" disabled={post.step === 1} onClick={() => setPost({ step: post.step - 1 })}>← 이전 단계</button>
         <div className="spacer" />
-        <button className="primary" disabled={post.step === 7} onClick={() => setPost({ step: post.step + 1 })}>다음 단계 →</button>
+        {post.step < 7
+          ? <button className="primary" onClick={() => setPost({ step: post.step + 1 })}>다음 단계 →</button>
+          : <span className={"pp-finish" + (doneMap[7] ? " ok" : "")}>
+              {doneMap[7] ? "🎉 후반 작업 완료 — 최종 파일을 다운로드해서 업로드하면 끝!" : "마지막 단계입니다 — FINAL RENDER 또는 캡컷 편집 패키지로 마무리하세요"}
+            </span>}
       </div>
     </>
   );
@@ -509,7 +584,8 @@ function PPScript({ S, post, setPost, rows }) {
       </div>
       {rows.map((r, i) => {
         const sc = r.scene;
-        const ln = lines[sc.id] || { text: "", mode: classifyScene(sc) };
+        const raw = lines[sc.id] || {};
+        const ln = { text: raw.text || "", mode: raw.mode || classifyScene(sc) };
         const slot = r.end - r.start;
         const est = estDur(ln.text, post.voice.speed);
         const fit = !ln.text || est <= slot;
@@ -555,7 +631,7 @@ function PPVoice({ S, post, setPost, rows, total }) {
   const [st, setSt] = useState({ phase: "idle" });
   const [pv, setPv] = useState({ phase: "idle" });
   const voices = VoiceProvider.getVoices(v.gender);
-  const lineOf = (sc) => post.lines[sc.id] || { text: "", mode: classifyScene(sc) };
+  const lineOf = (sc) => { const ln = post.lines[sc.id] || {}; return { text: ln.text || "", mode: ln.mode || classifyScene(sc) }; };
   const spoken = rows.filter((r) => { const ln = lineOf(r.scene); return ln.mode !== "NONE" && (ln.text || "").trim(); });
 
   const preview = async () => {
@@ -633,7 +709,7 @@ function PPVoice({ S, post, setPost, rows, total }) {
 function PPLip({ S, post, setPost, rows, total }) {
   const [st, setSt] = useState({ phase: "idle" });
   const gen = S.gen || {};
-  const lineOf = (sc) => post.lines[sc.id] || { text: "", mode: classifyScene(sc) };
+  const lineOf = (sc) => { const ln = post.lines[sc.id] || {}; return { text: ln.text || "", mode: ln.mode || classifyScene(sc) }; };
   const canRun = post.voice.mergedId && gen.storyJobId;
 
   const buildPrompt = () => {
@@ -765,7 +841,7 @@ function PPMix({ S, post, setPost, total, baseVideoUrl }) {
 
 /* ── STEP 6. Preview + 자동 검수 ── */
 function PPPreview({ S, post, setPost, rows, total, baseVideoUrl }) {
-  const lineOf = (sc) => post.lines[sc.id] || { text: "", mode: classifyScene(sc) };
+  const lineOf = (sc) => { const ln = post.lines[sc.id] || {}; return { text: ln.text || "", mode: ln.mode || classifyScene(sc) }; };
   const checks = [];
   const add = (grp, ok, label, warn) => checks.push({ grp, ok, label, warn });
   add("VIDEO", rows.length > 0, "Scene 연결 정상", "타임라인이 비어 있습니다");
@@ -824,8 +900,11 @@ function PPPreview({ S, post, setPost, rows, total, baseVideoUrl }) {
 }
 
 /* ── STEP 7. Final Render + Export ── */
-function PPExport({ S, post, setPost, total, baseVideoUrl }) {
+function PPExport({ S, post, setPost, rows, total, baseVideoUrl }) {
   const [st, setSt] = useState({ phase: "idle" });
+  const lineOf = (sc) => { const ln = post.lines[sc.id] || {}; return { text: ln.text || "", mode: ln.mode || classifyScene(sc) }; };
+  const hasSubLines = (rows || []).some((r) => { const ln = lineOf(r.scene); return ln.mode !== "NONE" && (ln.text || "").trim(); });
+  const [burnSubs, setBurnSubs] = useState(true);
   const canRun = !!baseVideoUrl && !!post.mix.mixedUrl;
   const dateStr = () => { const d = new Date(); return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`; };
   const fname = `${(prodName(S) || "AD").replace(/\s+/g, "_")}_AD_FINAL_${dateStr()}.mp4`;
@@ -833,24 +912,53 @@ function PPExport({ S, post, setPost, total, baseVideoUrl }) {
     try {
       setSt({ phase: "run", msg: "Preparing Video", pct: 10 });
       const up = await RenderProvider.upload(fname, "video/mp4");
-      setSt({ phase: "run", msg: "Mixing Audio + Rendering Video", pct: 45 });
-      const out = await RenderProvider.run(buildMuxCmd(baseVideoUrl, post.mix.mixedUrl, up.upload_url));
+      const ass = burnSubs && hasSubLines ? buildAss(rows, total, lineOf) : "";
+      setSt({ phase: "run", msg: ass ? "Mixing Audio + 자막 번인 + Rendering" : "Mixing Audio + Rendering Video", pct: 45 });
+      const out = await RenderProvider.run(buildMuxCmd(baseVideoUrl, post.mix.mixedUrl, up.upload_url, ass));
       setSt({ phase: "run", msg: "Encoding", pct: 90 });
       if (!/UPLOAD 200/.test(out)) throw new Error("최종 파일 업로드 실패: " + out.slice(-160));
       const infoMatch = out.match(/INFO (\{.*\})/);
       const info = infoMatch ? JSON.parse(infoMatch[1]) : null;
       await RenderProvider.confirm(up.media_id, "video");
-      setPost({ final: { mediaId: up.media_id, url: up.url, info } });
+      setPost({ final: { ...post.final, mediaId: up.media_id, url: up.url, info } });
       setSt({ phase: "done", msg: "Complete 100%" });
     } catch (e) { setSt({ phase: "error", msg: e.code ? hfErrMsg(e) : e.message }); }
+  };
+  const [cst, setCst] = useState({ phase: "idle" });
+  const capOf = (re) => {
+    const pfs = P.platformsOf(S);
+    const pf = pfs.find((p) => re.test(p)) || pfs[0] || "SNS";
+    return P.buildSnsCaption(S, pf) + (post.bgm.track ? "\n" + bgmCredit(post.bgm.track) : "");
+  };
+  const runCapcut = async () => {
+    try {
+      setCst({ phase: "run", msg: "재료 수집 중 (영상·음성·BGM·자막)", pct: 15 });
+      const up = await RenderProvider.upload("capcut_package.zip", "application/zip");
+      const bgmUrl = !post.bgm.skip && /^https?:/.test(post.bgm.mediaId || "") ? post.bgm.mediaId : "";
+      setCst({ phase: "run", msg: "ZIP 패키지 생성 중", pct: 55 });
+      const out = await RenderProvider.run(buildCapcutCmd({
+        videoUrl: baseVideoUrl, voiceUrl: post.voice.mergedUrl || "", bgmUrl, total,
+        srt: buildSrt(rows, total, lineOf) || "1\n00:00:00,000 --> 00:00:01,000\n(대사 없음)\n",
+        capIg: capOf(/insta/i), capTt: capOf(/tik ?tok|틱톡/i)
+      }, up.upload_url));
+      if (!/UPLOAD 200/.test(out)) throw new Error("패키지 업로드 실패: " + out.slice(-160));
+      await RenderProvider.confirm(up.media_id, "file");
+      setPost({ final: { ...post.final, capcutUrl: up.url } });
+      setCst({ phase: "done", msg: "패키지 완성" });
+    } catch (e) { setCst({ phase: "error", msg: e.code ? hfErrMsg(e) : e.message }); }
   };
   const f = post.final;
   return (
     <div className="pp-panel">
       <div className="section-divider">STEP 7 — FINAL RENDER & EXPORT</div>
+      {hasSubLines && (
+        <div className="pp-toggles">
+          <label><input type="checkbox" checked={burnSubs} onChange={(e) => setBurnSubs(e.target.checked)} /> 자막 자동 입히기 — STEP 2 대사를 씬 타이밍에 맞춰 영상에 굽습니다 (캡컷 편집 불필요, 권장)</label>
+        </div>
+      )}
       <ApiGate>
         <div className="gen-row">
-          <button className="primary" disabled={!canRun || st.phase === "run"} onClick={run}>🎞 FINAL RENDER</button>
+          <button className="primary" disabled={!canRun || st.phase === "run"} onClick={run}>🎞 FINAL RENDER{burnSubs && hasSubLines ? " (자막 포함)" : ""}</button>
           {!canRun && <span className="gen-note">영상(7단계 또는 STEP 4)과 오디오 믹스(STEP 5)가 먼저 필요합니다.</span>}
         </div>
         <Busy st={st} />
@@ -873,6 +981,51 @@ function PPExport({ S, post, setPost, total, baseVideoUrl }) {
           </div>
         </div>
       )}
+
+      <div className="section-divider">📦 캡컷(CapCut) 편집 패키지 — 외부 편집용</div>
+      <div className="gen-note">캡컷은 직접 연동(커넥터)이 지원되지 않아, 편집에 필요한 재료를 <b>ZIP 하나</b>로 묶어드립니다: 무자막 영상 + 음성 트랙 + {Math.round(total)}초로 잘라둔 BGM + 자막 SRT + 플랫폼별 캡션 2종.</div>
+      <ApiGate>
+        <div className="gen-row">
+          <button className="primary" disabled={!baseVideoUrl || cst.phase === "run"} onClick={runCapcut}>📦 캡컷 편집 패키지 만들기</button>
+          {!baseVideoUrl && <span className="gen-note">영상(7단계 멀티샷 또는 STEP 4 립싱크)이 먼저 필요합니다.</span>}
+        </div>
+        <Busy st={cst} />
+      </ApiGate>
+      {f.capcutUrl && (
+        <div className="pp-scene">
+          <div className="gen-row">
+            <a className="primary small btn-link" href={f.capcutUrl} download="capcut_package.zip" target="_blank" rel="noreferrer">↓ capcut_package.zip 다운로드</a>
+          </div>
+          <div className="gen-note">
+            <b>캡컷에서 가져오는 방법</b><br />
+            ① ZIP 압축 해제 → 캡컷 새 프로젝트(9:16)에 <b>video_no_subs.mp4</b>를 타임라인에 올립니다.<br />
+            ② 영상에 이미 음성·BGM이 믹스되어 있으면 그대로 쓰고, 오디오를 따로 다듬으려면 영상 음소거 후 <b>voice_track.wav</b>와 <b>bgm_*.mp3</b>를 오디오 트랙에 각각 올립니다.<br />
+            ③ 자막: <b>캡컷 PC(데스크톱) 버전</b>에서 텍스트 → 로컬 자막 → <b>subtitles.srt</b> 가져오기 (모바일 앱은 SRT 가져오기 미지원 — PC에서 자막을 얹은 뒤 이어서 편집하세요).<br />
+            ④ 업로드 시 <b>caption_instagram.txt / caption_tiktok.txt</b> 내용을 복사해 캡션으로 사용합니다 (쿠팡 파트너스 대가성 고지 포함됨).
+          </div>
+        </div>
+      )}
+
+      <div className="section-divider">업로드 캡션 (플랫폼별) — 복사하거나 파일로 저장</div>
+      {P.platformsOf(S).map((pf) => {
+        const cap = P.buildSnsCaption(S, pf) + (post.bgm.track ? "\n" + bgmCredit(post.bgm.track) : "");
+        return (
+          <div className="pp-scene" key={pf}>
+            <div className="pp-scene-head"><b>{pf}</b>
+              <span className="pp-modes">
+                <button className="mini" onClick={() => { try { navigator.clipboard.writeText(cap); } catch (e) {} }}>복사</button>
+                <button className="mini" onClick={async () => {
+                  try {
+                    if (window.claude && window.claude.downloads) await window.claude.downloads.save({ filename: "caption_" + pf.replace(/[^A-Za-z0-9]+/g, "_") + ".txt", data: cap });
+                    else navigator.clipboard.writeText(cap);
+                  } catch (e) {}
+                }}>📥 파일 저장</button>
+              </span>
+            </div>
+            <textarea className="pp-line" readOnly rows={7} value={cap} />
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -430,10 +430,26 @@ function sceneBriefEn(scene, S) {
 }
 
 // 스토리보드 이미지 — 하나의 캔버스에 여러 씬을 패널로 배치하되 이음새 없이 하나의 키비주얼처럼
+const UUID_RE_SB = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 export function buildStoryboardPrompt(S) {
   const rows = timelineRows(S);
   const list = rows.length ? rows.map((r) => r.scene) : S.scenes;
   const n = Math.max(list.length, 1);
+  // 모든 씬에 이미지가 연결되어 있으면 — 씬 이미지들을 순서대로 참조해 충실히 재현하는 방식 (품질이 훨씬 안정적)
+  const refs = list.map((sc) => sc.imgJobId).filter((v) => v && UUID_RE_SB.test(v));
+  if (list.length >= 2 && refs.length === list.length) {
+    const refLines = list.map((sc, i) => `Scene ${i + 1} — reference #${i + 1} (${en(SCENE_ROLES, sc.role)}): reproduce this reference scene's composition, subject, pose, expression and details faithfully.`).join("\n");
+    const enTxt = [
+      `Create ONE single ${sourceRatio(S)} canvas that contains the ${n} supplied reference scenes arranged as a vertical advertising storyboard, in this exact order from top to bottom:`,
+      refLines,
+      `Do NOT redesign or reinterpret any reference scene — keep each one's framing, subject and action. Only unify lighting and color grading across the panels so the whole canvas reads as ONE continuous premium ad key visual: each scene occupies its own clearly readable zone, but the zones blend into each other seamlessly — no hard divider lines, no frames, no borders.`,
+      `Every scene shows the SAME product, the SAME woman with identical facial identity, the SAME outfit — perfect consistency across all scenes.`,
+      S.model.lock ? IDENTITY_LOCK_EN : "",
+      NO_TEXT_EN
+    ].filter(Boolean).join("\n\n");
+    const krTxt = `스토리보드 이미지 — 연결된 씬 이미지 ${n}장을 순서대로 한 캔버스에 충실히 재배치 / 이음새 없이 / ${sourceRatio(S)}`;
+    return { kr: krTxt, en: enTxt, count: n, refs };
+  }
   const sceneLines = list.map((sc, i) => `Scene ${i + 1} — ${en(SCENE_ROLES, sc.role)}: ${sceneBriefEn(sc, S)}.`).join("\n");
   const enTxt = [
     `Create ONE single ${sourceRatio(S)} canvas that contains ${n} distinct scenes arranged like a clean advertising storyboard.`,
@@ -446,7 +462,7 @@ export function buildStoryboardPrompt(S) {
     NO_TEXT_EN
   ].filter(Boolean).join("\n\n");
   const krTxt = `스토리보드 이미지 — 씬 ${n}개를 한 캔버스에 이음새 없이 배치 / 동일 제품·인물·의상·배경 아이덴티티 유지 / ${sourceRatio(S)}`;
-  return { kr: krTxt, en: enTxt, count: n };
+  return { kr: krTxt, en: enTxt, count: n, refs: [] };
 }
 
 // 스토리보드 → 멀티샷 영상 (모든 씬을 하나의 영상으로)

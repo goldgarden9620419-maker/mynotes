@@ -267,3 +267,6 @@ input:focus, textarea:focus, select:focus, button:focus-visible { outline: 2px s
 .lib-pick-regmark { color: var(--ok); font-size: 11px; white-space: nowrap; }
 .lib-pick-date { font-family: ui-monospace, monospace; font-size: 10px; color: var(--dim); white-space: nowrap; }
 .lib-pick-filter { display: flex; align-items: center; gap: 8px; padding: 2px 4px 6px; border-bottom: 1px solid var(--line-soft); margin-bottom: 4px; }
+button.armed { border-color: var(--red) !important; color: var(--red) !important; }
+.pp-finish { font-size: 13px; color: var(--sub); align-self: center; }
+.pp-finish.ok { color: var(--ok); font-weight: 600; }
