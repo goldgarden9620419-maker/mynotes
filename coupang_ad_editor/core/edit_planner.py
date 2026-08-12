@@ -13,11 +13,16 @@ from utils import config
 
 
 def _cut_at_word_boundary(seg: dict, max_len: float) -> float:
-    """세그먼트를 max_len 이하로 자를 때 단어 경계에서 끝점을 찾는다."""
+    """세그먼트를 max_len 이하로 자를 때 단어 경계에서 끝점을 찾는다.
+
+    문장이 max_len을 약간(35% 이내) 초과하는 정도라면 자르지 않고
+    문장 전체를 유지한다 — 말이 중간에 뚝 끊기는 것을 방지.
+    """
     start = seg["start"]
-    limit = start + max_len
-    if seg["end"] <= limit:
+    dur = seg["end"] - start
+    if dur <= max_len * 1.35:
         return seg["end"]
+    limit = start + max_len
     best = None
     for w in seg.get("words", []):
         if w["end"] <= limit:
@@ -84,32 +89,42 @@ def build_edl(segments: list, hook_seg: dict, platform_cfg: dict,
         end = _cut_at_word_boundary(seg, limit)
         return min(end, seg["end"]) - seg["start"] + pad * 2
 
+    # Hook도 문장을 중간에 끊지 않는다 — hook_max는 '이보다 짧은 후보 선호'의
+    # 의미로만 남기고, 실제 컷은 문장 단위로 유지한다.
     budget = target
-    budget -= clip_dur(hook_seg, hook_max) if hook_seg else 0.0
+    budget -= clip_dur(hook_seg, max_len) if hook_seg else 0.0
     if cta_seg:
         budget -= clip_dur(cta_seg, max_len)
 
-    # 3) 광고 구조 순서대로 채운다
-    for role in config.AD_STRUCTURE:
-        limit_n = config.ROLE_CLIP_LIMITS.get(role, 1)
-        for seg in by_role.get(role, [])[:limit_n]:
-            d = clip_dur(seg, max_len)
-            if d > budget:
-                continue
-            if push(seg, role):
-                budget -= d
+    # 3) 원본 발화 총량이 목표 길이 이내라면 전부 사용한다
+    #    (짧은 원본인데 일부만 골라 뚝뚝 끊기는 것 방지)
+    all_usable = [s for lst in by_role.values() for s in lst]
+    total_usable = sum(clip_dur(s, max_len) for s in all_usable)
+    use_everything = total_usable <= budget * 1.05
+    if use_everything:
+        for seg in sorted(all_usable, key=lambda s: s["start"]):
+            if push(seg, seg.get("role", "PRODUCT")):
+                budget -= clip_dur(seg, max_len)
+    else:
+        # 4) 원본이 길면 광고 구조 순서대로 골라 담는다
+        for role in config.AD_STRUCTURE:
+            limit_n = config.ROLE_CLIP_LIMITS.get(role, 1)
+            for seg in by_role.get(role, [])[:limit_n]:
+                d = clip_dur(seg, max_len)
+                if d > budget:
+                    continue
+                if push(seg, role):
+                    budget -= d
 
-    # 4) 너무 짧으면 남은 좋은 컷으로 보강
-    current = target - budget
-    if current < platform_cfg["min_duration"]:
+        # 5) 예산이 남으면 역할과 무관하게 좋은 컷으로 마저 채운다
         leftovers = sorted(
-            (s for role, lst in by_role.items() if role != "CTA" for s in lst
-             if id(s) not in used_ids),
+            (s for s in all_usable
+             if id(s) not in used_ids and s is not cta_seg),
             key=lambda s: -s.get("ad_score", 0))
         for seg in leftovers:
             d = clip_dur(seg, max_len)
-            if budget < d:
-                break
+            if d > budget:
+                continue
             if push(seg, seg.get("role", "PRODUCT")):
                 budget -= d
 
@@ -120,16 +135,24 @@ def build_edl(segments: list, hook_seg: dict, platform_cfg: dict,
     else:
         log.append("발화 중 CTA 없음 → 엔드카드 CTA로 마무리")
 
-    # 6) 같은 역할 그룹 내에서는 원본 시간순 유지 (점프컷 어색함 감소)
-    order_key = {"HOOK": 0, **{r: i + 1 for i, r in enumerate(config.AD_STRUCTURE)},
-                 "CTA": 99}
-    chosen.sort(key=lambda pair: (order_key.get(pair[1], 50), pair[0]["start"]))
+    # 6) 배치 순서 결정
+    if use_everything:
+        # 짧은 원본은 이야기 흐름 유지: 선택된 Hook만 맨 앞, 나머지는 촬영 순서
+        chosen.sort(key=lambda pair: (0 if pair[0] is hook_seg else 1,
+                                      pair[0]["start"]))
+    else:
+        # 긴 원본은 광고 구조 순서 우선, 같은 역할끼리는 원본 시간순
+        order_key = {"HOOK": 0,
+                     **{r: i + 1 for i, r in enumerate(config.AD_STRUCTURE)},
+                     "CTA": 99}
+        chosen.sort(key=lambda pair: (order_key.get(pair[1], 50),
+                                      pair[0]["start"]))
 
     # 7) 클립 생성 + 자동 Zoom
     clips = []
     zoom_cycle = itertools.cycle([1.05, 1.10])
     for seg, role in chosen:
-        limit = hook_max if role == "HOOK" else max_len
+        limit = max_len
         src_start = max(seg["start"] - pad, 0.0)
         src_end = _cut_at_word_boundary(seg, limit) + pad
         src_end = max(src_end, src_start + 0.5)
