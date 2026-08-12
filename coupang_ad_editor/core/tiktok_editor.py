@@ -45,6 +45,7 @@ def build(source_path: str, segments: list, hook_seg: dict, product: dict,
             "cta_text": cta_text,
             "show_price": tt_options.get("show_price", False),
             "show_discount": tt_options.get("show_discount", False),
+            "subtitles_enabled": tt_options.get("subtitles_enabled", True),
         },
     )
     ass_path = os.path.join(work_dir, "tiktok.ass")

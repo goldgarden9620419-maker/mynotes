@@ -123,6 +123,8 @@ def build_subtitles(edl: dict, platform_cfg: dict, product: dict,
     options:
       endcard_start / endcard_end: 엔드카드 구간(출력 타임라인)
       cta_text, show_price, show_discount
+      subtitles_enabled: False면 대사 자막을 넣지 않는다
+        (사용자가 직접 입력한 제품명/CTA/가격 자막은 유지 — 오타 위험 없음)
     반환: {"ass": str, "srt": str}
     """
     options = options or {}
@@ -151,11 +153,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
     events = []
     srt_items = []
 
+    show_speech = options.get("subtitles_enabled", True)
     all_chunks = []
     product_shown = False
     for clip in edl["clips"]:
-        chunks = _chunk_clip(clip)
-        all_chunks.extend(chunks)
+        if show_speech:
+            all_chunks.extend(_chunk_clip(clip))
 
         # 제품명 노출: 첫 PRODUCT 컷과 CTA 컷에만 자연스럽게 표시
         name = (product.get("name") or "").strip()

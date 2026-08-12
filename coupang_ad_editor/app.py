@@ -221,6 +221,12 @@ with st.expander("⚙️ 고급 모드 (직접 설정)", expanded=not auto_mode)
                                            disabled=auto_mode or not adv["use_duration"])
         adv["cut_speed"] = st.select_slider("컷 속도", ["느리게", "보통", "빠르게"],
                                             value="보통", disabled=auto_mode)
+        adv["subtitles_enabled"] = st.checkbox(
+            "대사 자막 표시", value=True,
+            help="음성 인식 오타가 거슬리면 끄세요. 직접 입력한 제품명/CTA/가격 자막은 유지됩니다.")
+        adv["whisper_accuracy"] = st.select_slider(
+            "음성 인식 정확도", ["표준(빠름)", "높음(느림)"], value="표준(빠름)",
+            help="'높음'은 더 큰 AI 모델을 사용해 오타가 줄지만 분석이 몇 배 느려집니다. 최초 1회 모델 추가 다운로드(약 1.5GB).")
     with a2:
         adv["show_price"] = st.checkbox("가격 표시 ON", value=False)
         adv["show_discount"] = st.checkbox("할인율 표시 ON", value=False)
@@ -262,7 +268,18 @@ if st.button("🔍 1단계: AI 영상/음성 분석 시작", type="primary",
 
             if video_info["has_audio"]:
                 st.write("🎙️ Whisper 음성 → 텍스트 변환 중 (최초 실행 시 모델 다운로드)...")
-                segments = transcription.transcribe(video_path, work_dir)
+                model_size = ("medium"
+                              if adv.get("whisper_accuracy") == "높음(느림)"
+                              else None)
+                # 제품 정보를 힌트로 넣어 제품 용어 오인식을 줄인다
+                hint = " ".join(
+                    x.strip() for x in [product["name"], product["category"],
+                                        product["features"],
+                                        product["selling_points"]]
+                    if x and x.strip())[:200]
+                segments = transcription.transcribe(
+                    video_path, work_dir,
+                    model_size=model_size, initial_prompt=hint or None)
             else:
                 segments = []
 
@@ -353,6 +370,7 @@ if st.button("🎬 2단계: Instagram / TikTok 광고 렌더링",
                 "cut_speed": adv.get("cut_speed", "보통"),
                 "show_price": adv.get("show_price", False),
                 "show_discount": adv.get("show_discount", False),
+                "subtitles_enabled": adv.get("subtitles_enabled", True),
                 "sfx_enabled": adv.get("sfx_enabled", False),
                 "bgm_path": bgm_path,
                 "cta_text": product["cta"],

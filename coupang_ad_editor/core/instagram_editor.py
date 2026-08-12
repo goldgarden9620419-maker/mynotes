@@ -32,6 +32,7 @@ def build(source_path: str, segments: list, hook_seg: dict, product: dict,
             "cta_text": options.get("cta_text"),
             "show_price": options.get("show_price", False),
             "show_discount": options.get("show_discount", False),
+            "subtitles_enabled": options.get("subtitles_enabled", True),
         },
     )
     ass_path = os.path.join(work_dir, "instagram.ass")
