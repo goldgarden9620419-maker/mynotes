@@ -13,6 +13,31 @@ import os
 from utils import config, ffmpeg_utils
 
 
+def normalize_source(source_path: str, work_dir: str) -> str:
+    """가변 프레임(VFR) 원본을 고정 30fps로 변환해 립싱크를 보정한다.
+
+    휴대폰 촬영 영상은 대부분 VFR이라 시간 기준으로 자르면
+    영상/음성이 어긋난다. 한 번 변환해 작업 폴더에 캐시한다.
+    """
+    out = os.path.join(work_dir, "source_cfr.mp4")
+    if os.path.exists(out) and os.path.getsize(out) > 1024:
+        return out
+    os.makedirs(work_dir, exist_ok=True)
+    ffmpeg_utils.run_cmd(
+        [
+            ffmpeg_utils.get_ffmpeg(), "-y", "-i", source_path,
+            "-vf", f"fps={config.OUT_FPS}",
+            "-vsync", "cfr",
+            "-c:v", config.VIDEO_CODEC, "-preset", "veryfast", "-crf", "18",
+            "-c:a", config.AUDIO_CODEC, "-b:a", config.AUDIO_BITRATE,
+            "-ar", str(config.AUDIO_SAMPLE_RATE),
+            out,
+        ],
+        desc="원본 프레임 보정(립싱크)",
+    )
+    return out
+
+
 def _afmt() -> str:
     return ("aresample=%d,aformat=sample_fmts=fltp:channel_layouts=stereo"
             % config.AUDIO_SAMPLE_RATE)

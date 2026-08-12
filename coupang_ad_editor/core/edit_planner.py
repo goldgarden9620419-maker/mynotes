@@ -125,19 +125,17 @@ def build_edl(segments: list, hook_seg: dict, platform_cfg: dict,
                  "CTA": 99}
     chosen.sort(key=lambda pair: (order_key.get(pair[1], 50), pair[0]["start"]))
 
-    # 7) 클립 생성 + 출력 타임라인 계산 + 자동 Zoom
+    # 7) 클립 생성 + 자동 Zoom
     clips = []
-    out_t = 0.0
     zoom_cycle = itertools.cycle([1.05, 1.10])
     for seg, role in chosen:
         limit = hook_max if role == "HOOK" else max_len
         src_start = max(seg["start"] - pad, 0.0)
         src_end = _cut_at_word_boundary(seg, limit) + pad
         src_end = max(src_end, src_start + 0.5)
-        dur = src_end - src_start
 
         zoom = 1.0
-        if dur >= platform_cfg["zoom_threshold"]:
+        if src_end - src_start >= platform_cfg["zoom_threshold"]:
             zoom = next(zoom_cycle)  # 100% → 105% → 110% 미세 punch-in
 
         words = [w for w in seg.get("words", [])
@@ -145,13 +143,31 @@ def build_edl(segments: list, hook_seg: dict, platform_cfg: dict,
         clips.append({
             "src_start": round(src_start, 3),
             "src_end": round(src_end, 3),
-            "out_start": round(out_t, 3),
-            "out_end": round(out_t + dur, 3),
             "role": role,
             "text": seg["text"],
             "words": words,
             "zoom": zoom,
         })
+
+    # 8) 소스 구간 겹침 제거 — 패딩/인식 구간 겹침으로 같은 대사가
+    #    두 번 재생되는 문제 방지 (겹치면 중간 지점에서 나눠 가진다)
+    by_src = sorted(clips, key=lambda c: (c["src_start"], c["src_end"]))
+    for a, b in zip(by_src, by_src[1:]):
+        if a["src_end"] > b["src_start"]:
+            cut = round((a["src_end"] + b["src_start"]) / 2, 3)
+            a["src_end"] = cut
+            b["src_start"] = cut
+
+    # 너무 짧아진 클립 제거 후 출력 타임라인 재계산
+    clips = [c for c in clips if c["src_end"] - c["src_start"] >= 0.3]
+    out_t = 0.0
+    for c in clips:
+        dur = c["src_end"] - c["src_start"]
+        c["out_start"] = round(out_t, 3)
+        c["out_end"] = round(out_t + dur, 3)
+        c["words"] = [w for w in c["words"]
+                      if c["src_start"] <= w["start"] and
+                      w["end"] <= c["src_end"] + 0.05]
         out_t += dur
 
     timeline = [

@@ -6,12 +6,14 @@
 """
 import json
 import os
+import shutil
 import traceback
 
 import streamlit as st
 
-from core import (ad_analyzer, caption_generator, hook_analyzer,
-                  instagram_editor, ng_detector, product_scraper,
+from core import (ad_analyzer, caption_generator, capcut_exporter,
+                  edit_planner, hook_analyzer, instagram_editor, ng_detector,
+                  product_scraper, render_engine, subtitle_engine,
                   tiktok_editor, transcription, video_analyzer)
 from utils import config, file_utils
 
@@ -356,6 +358,13 @@ st.divider()
 # ---------------------------------------------------------------------------
 st.header("5. 광고 영상 제작")
 
+output_mode = st.radio(
+    "출력 방식",
+    ["CapCut으로 이어서 편집 (추천)", "완성 MP4 자동 렌더링"],
+    horizontal=True,
+    help="CapCut 방식: AI가 NG 제거·광고 구조 재구성한 컷 편집을 CapCut 프로젝트로 만들어줍니다. "
+         "자막·효과·BGM은 CapCut에서 마무리하세요 (CapCut 자동 캡션은 오타가 훨씬 적습니다).")
+
 if st.button("🎬 2단계: Instagram / TikTok 광고 렌더링",
              type="primary", disabled=analysis is None,
              use_container_width=True):
@@ -386,10 +395,79 @@ if st.button("🎬 2단계: Instagram / TikTok 광고 렌더링",
                           else [selected_hook_idx] +
                           [i for i in range(len(hooks)) if i != selected_hook_idx])
 
-            editors = {"instagram": instagram_editor, "tiktok": tiktok_editor}
-            results = {"platforms": {}, "dirs": dirs}
+            # 휴대폰 VFR 영상 → 고정 30fps 변환 (립싱크 어긋남 방지)
+            st.write("🎞️ 원본 프레임 보정 중 (립싱크 정확도 향상)...")
+            src_for_render = render_engine.normalize_source(
+                analysis["video_path"], dirs["work"])
 
-            for platform in platforms:
+            capcut_mode = output_mode.startswith("CapCut")
+            editors = {"instagram": instagram_editor, "tiktok": tiktok_editor}
+            results = {"platforms": {}, "dirs": dirs,
+                       "mode": "capcut" if capcut_mode else "auto"}
+
+            if capcut_mode:
+                # --- CapCut 모드: 클린 컷 MP4 + CapCut 프로젝트 초안 ---
+                capcut_root = os.path.join(dirs["root"], "capcut")
+                os.makedirs(capcut_root, exist_ok=True)
+                capcut_source = os.path.join(capcut_root, "source.mp4")
+                if not os.path.exists(capcut_source):
+                    shutil.copy2(src_for_render, capcut_source)
+
+                hook = hooks[hook_order[0]]
+                for platform in platforms:
+                    cfg = config.PLATFORMS[platform]
+                    out_dir = os.path.join(capcut_root, platform)
+                    os.makedirs(out_dir, exist_ok=True)
+
+                    st.write(f'✂️ {cfg["label"]} 컷 편집 + 클린 컷 렌더링 중...')
+                    edl = edit_planner.build_edl(
+                        kept, hook["segment"], cfg, analysis["style"], options)
+
+                    # 자막 없는 클린 컷 (자막/효과는 CapCut에서)
+                    clean_subs = subtitle_engine.build_subtitles(
+                        edl, cfg, {"name": ""}, {"subtitles_enabled": False})
+                    ass_path = os.path.join(dirs["work"],
+                                            f"clean_{platform}.ass")
+                    file_utils.write_text(ass_path, clean_subs["ass"])
+                    mp4_path = os.path.join(out_dir, f"{platform}_cut.mp4")
+                    render_engine.render(
+                        src_for_render, edl, ass_path, mp4_path, cfg,
+                        has_audio=analysis["video_info"]["has_audio"])
+
+                    # AI 인식 대본 SRT (참고용 — CapCut 자동 캡션 권장)
+                    full_subs = subtitle_engine.build_subtitles(
+                        edl, cfg, product, {"subtitles_enabled": True})
+                    srt_path = os.path.join(out_dir,
+                                            f"{platform}_subtitle.srt")
+                    file_utils.write_text(srt_path, full_subs["srt"])
+
+                    st.write(f'📁 {cfg["label"]} CapCut 프로젝트 생성 중...')
+                    draft = capcut_exporter.export_draft(
+                        capcut_source, analysis["video_info"], edl,
+                        f"{file_utils.sanitize_name(p_name)}_{platform}",
+                        capcut_root)
+
+                    results["platforms"][platform] = [{
+                        "mp4": mp4_path, "srt": srt_path, "edl": edl,
+                        "hook": hook, "version": "", "draft": draft,
+                    }]
+
+                    # 게시글 문구/해시태그
+                    st.write(f'✍️ {cfg["label"]} 게시글 문구 작성 중...')
+                    if platform == "instagram":
+                        caption = caption_generator.instagram_caption(
+                            product, selling_points, hook["text"])
+                        cap_path = os.path.join(out_dir,
+                                                "instagram_caption.txt")
+                    else:
+                        caption = caption_generator.tiktok_caption(
+                            product, selling_points, hook["text"])
+                        cap_path = os.path.join(out_dir, "tiktok_caption.txt")
+                    file_utils.write_text(cap_path, caption)
+                    results["platforms"][platform + "_caption"] = caption
+
+            else:
+              for platform in platforms:
                 cfg = config.PLATFORMS[platform]
                 out_dir = dirs[platform]
                 results["platforms"][platform] = []
@@ -512,6 +590,11 @@ if results:
                         key=f'dl_{platform}_{built["version"]}',
                         use_container_width=True,
                     )
+                if built.get("draft"):
+                    if built["draft"]["installed"]:
+                        st.success("🎬 " + built["draft"]["message"])
+                    else:
+                        st.info("📁 " + built["draft"]["message"])
             caption = results["platforms"].get(platform + "_caption", "")
             if caption:
                 with st.expander(f"📝 {cfg['label']} 게시글 문구/해시태그"):
