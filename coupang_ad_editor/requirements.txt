@@ -5,3 +5,5 @@ opencv-python>=4.9.0.80
 pydub>=0.25.1
 numpy>=1.26
 pillow>=10.0
+requests>=2.31
+

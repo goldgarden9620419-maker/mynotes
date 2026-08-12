@@ -11,8 +11,8 @@ import traceback
 import streamlit as st
 
 from core import (ad_analyzer, caption_generator, hook_analyzer,
-                  instagram_editor, ng_detector, tiktok_editor,
-                  transcription, video_analyzer)
+                  instagram_editor, ng_detector, product_scraper,
+                  tiktok_editor, transcription, video_analyzer)
 from utils import config, file_utils
 
 st.set_page_config(
@@ -31,6 +31,7 @@ def _init_state():
         "video_path": None,
         "video_key": None,
         "work_dir": None,
+        "scraped_images": [],
     }
     for k, v in defaults.items():
         st.session_state.setdefault(k, v)
@@ -82,24 +83,68 @@ st.divider()
 # ---------------------------------------------------------------------------
 # 1. 제품 정보 입력
 # ---------------------------------------------------------------------------
-st.header("1️⃣ 제품 정보")
+st.header("1. 제품 정보")
+
+# --- 쿠팡 URL 자동 채우기 (필드보다 위에 있어야 같은 실행에서 값이 반영됨) ---
+u1, u2 = st.columns([3, 1])
+with u1:
+    st.text_input("쿠팡 상품 URL", key="p_url",
+                  placeholder="https://www.coupang.com/vp/products/...")
+with u2:
+    st.write("")
+    st.write("")
+    fill_clicked = st.button("🔗 URL에서 자동 채우기", use_container_width=True)
+
+if fill_clicked:
+    url_value = (st.session_state.get("p_url") or "").strip()
+    if not url_value:
+        st.warning("먼저 쿠팡 상품 URL을 붙여넣어주세요.")
+    else:
+        if st.session_state["work_dir"] is None:
+            st.session_state["work_dir"] = file_utils.make_temp_dir()
+        with st.spinner("쿠팡에서 상품 정보를 가져오는 중..."):
+            scraped = product_scraper.fetch_product_info(
+                url_value,
+                image_dir=os.path.join(st.session_state["work_dir"], "images"))
+        if scraped["ok"]:
+            if scraped["name"]:
+                st.session_state["p_name"] = scraped["name"]
+            if scraped["category"]:
+                st.session_state["p_category"] = scraped["category"]
+            if scraped["price"]:
+                st.session_state["p_price"] = scraped["price"]
+            if scraped["discount"]:
+                st.session_state["p_discount"] = scraped["discount"]
+            if scraped["image_path"] and \
+                    scraped["image_path"] not in st.session_state["scraped_images"]:
+                st.session_state["scraped_images"].append(scraped["image_path"])
+            st.success(f'✅ {scraped["message"]} — 아래 칸을 확인하고 '
+                       "특징/소구점 등은 직접 보완해주세요.")
+        else:
+            st.warning(f'⚠️ {scraped["message"]}')
+
 c1, c2 = st.columns(2)
 with c1:
-    p_name = st.text_input("제품명 *", placeholder="예: 접이식 미니 건조대")
-    p_category = st.text_input("제품 카테고리", placeholder="예: 생활/주방용품")
-    p_features = st.text_area("제품 핵심 특징", height=90,
+    p_name = st.text_input("제품명 *", key="p_name",
+                           placeholder="예: 접이식 미니 건조대")
+    p_category = st.text_input("제품 카테고리", key="p_category",
+                               placeholder="예: 생활/주방용품")
+    p_features = st.text_area("제품 핵심 특징", height=90, key="p_features",
                               placeholder="쉼표 또는 줄바꿈으로 구분\n예: 원터치 접이식, 스테인리스 재질")
-    p_selling = st.text_area("제품 핵심 소구점", height=90,
+    p_selling = st.text_area("제품 핵심 소구점", height=90, key="p_selling",
                              placeholder="예: 좁은 공간 활용, 설치 3초, 가성비")
-    p_target = st.text_input("타깃 고객", placeholder="예: 자취생, 1인 가구")
+    p_target = st.text_input("타깃 고객", key="p_target",
+                             placeholder="예: 자취생, 1인 가구")
 with c2:
-    p_price = st.text_input("제품 가격", placeholder="예: 19,900원")
-    p_discount = st.text_input("할인 정보", placeholder="예: 20% 할인 중")
+    p_price = st.text_input("제품 가격", key="p_price",
+                            placeholder="예: 19,900원")
+    p_discount = st.text_input("할인 정보", key="p_discount",
+                               placeholder="예: 20% 할인 중")
     cta_choice = st.selectbox("CTA 문구", config.CTA_PRESETS + ["직접 입력"])
     cta_custom = ""
     if cta_choice == "직접 입력":
         cta_custom = st.text_input("CTA 직접 입력", placeholder="예: 지금 쿠팡에서 만나보세요")
-    p_url = st.text_input("쿠팡 상품 URL", placeholder="https://www.coupang.com/...")
+p_url = st.session_state.get("p_url", "")
 
 product = {
     "name": p_name, "category": p_category, "features": p_features,
@@ -112,7 +157,7 @@ product = {
 # ---------------------------------------------------------------------------
 # 2. 제품 이미지 업로드
 # ---------------------------------------------------------------------------
-st.header("2️⃣ 제품 이미지")
+st.header("2. 제품 이미지")
 image_files = st.file_uploader(
     "쿠팡 제품 사진 또는 직접 촬영 이미지 (여러 장 가능)",
     type=["jpg", "jpeg", "png", "webp"], accept_multiple_files=True)
@@ -125,10 +170,21 @@ if image_files:
         with cols[i % len(cols)]:
             st.image(img, use_container_width=True)
 
+# URL 자동 채우기로 받아온 쿠팡 대표 이미지
+scraped_images = [p for p in st.session_state["scraped_images"]
+                  if os.path.exists(p)]
+if scraped_images:
+    st.caption("🔗 쿠팡에서 자동으로 가져온 대표 이미지 (엔드카드에 사용됩니다)")
+    cols = st.columns(min(len(scraped_images), 5))
+    for i, path in enumerate(scraped_images):
+        with cols[i % len(cols)]:
+            st.image(path, use_container_width=True)
+    image_paths.extend(scraped_images)
+
 # ---------------------------------------------------------------------------
 # 3. 원본 영상 업로드
 # ---------------------------------------------------------------------------
-st.header("3️⃣ 원본 영상 (MP4)")
+st.header("3. 원본 영상 (MP4)")
 video_file = st.file_uploader("촬영/제작한 원본 영상", type=["mp4"])
 video_info = None
 if video_file is not None:
@@ -192,7 +248,7 @@ st.divider()
 # ---------------------------------------------------------------------------
 # 4. 1단계: AI 분석
 # ---------------------------------------------------------------------------
-st.header("4️⃣ AI 분석")
+st.header("4. AI 분석")
 analyze_disabled = video_info is None or not p_name.strip()
 if analyze_disabled:
     st.info("제품명과 원본 영상을 먼저 입력/업로드해주세요.")
@@ -281,7 +337,7 @@ st.divider()
 # ---------------------------------------------------------------------------
 # 5. 2단계: 광고 영상 제작
 # ---------------------------------------------------------------------------
-st.header("5️⃣ 광고 영상 제작")
+st.header("5. 광고 영상 제작")
 
 if st.button("🎬 2단계: Instagram / TikTok 광고 렌더링",
              type="primary", disabled=analysis is None,
@@ -417,7 +473,7 @@ if st.button("🎬 2단계: Instagram / TikTok 광고 렌더링",
 # ---------------------------------------------------------------------------
 results = st.session_state["results"]
 if results:
-    st.header("6️⃣ 결과")
+    st.header("6. 결과")
     st.success(f'출력 폴더: {results["dirs"]["root"]}')
 
     col_map = st.columns(len(platforms))
