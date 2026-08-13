@@ -38,6 +38,12 @@ const RADIUS_OPTIONS = [
 const BLOG_URL = "https://diary21462.tistory.com/";
 
 function directionsUrl(lat: number, lng: number, travelMode: string) {
+  // 안드로이드 + 구글맵 앱: 이 스킴은 앱을 거치지 않고 바로 턴바이턴 길안내를 시작함
+  if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
+    const modeChar = travelMode === "walking" ? "w" : "d";
+    return `google.navigation:q=${lat},${lng}&mode=${modeChar}`;
+  }
+  // 아이폰/PC: 구글맵이 "경로 시작"을 앱 자체 UI로만 열어줘서, 여기서는 경로 화면까지만 연결 가능
   const params = new URLSearchParams({
     api: "1",
     destination: `${lat},${lng}`,
