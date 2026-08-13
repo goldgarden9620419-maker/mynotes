@@ -50,7 +50,7 @@ function directionsUrl(lat: number, lng: number, travelMode: string) {
   // "내 위치 → 목적지" 경로가 정확히 표시됨). 앱이 없으면 fallback URL로 자동 이동.
   if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
     const modeChar = travelMode === "walking" ? "w" : "d";
-    return `intent://maps.google.com/maps?daddr=${lat},${lng}&mode=${modeChar}#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(
+    return `intent://maps.google.com/maps?daddr=${lat},${lng}&dirflg=${modeChar}#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(
       fallbackUrl
     )};end`;
   }
