@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SiteBackground } from "@/components/ui/site-background";
 
 export const metadata: Metadata = {
   title: "숨은맛집찾기 | 내 위치 기반 맛집 추천",
@@ -10,7 +11,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className="h-full">
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <SiteBackground />
+        {children}
+      </body>
     </html>
   );
 }

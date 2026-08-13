@@ -4,7 +4,7 @@ import MatjipFinder from "./components/MatjipFinder";
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col items-center bg-background">
+    <div className="flex flex-1 flex-col items-center">
       <div className="w-full">
         <Hero07
           tagline="프랜차이즈는 빼고, 진짜 근처 로컬 맛집만"
