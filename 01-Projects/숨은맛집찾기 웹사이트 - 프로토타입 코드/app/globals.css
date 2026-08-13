@@ -7,15 +7,29 @@
   --card: #ffffff;
   --border: #e7e2d8;
   --muted: #78716c;
+  --secondary: #f0ebe0;
+  --destructive: #dc2626;
+  --ring: #e0793c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
+  --color-accent-foreground: #ffffff;
   --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
   --color-border: var(--border);
+  --color-input: var(--border);
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted);
+  --color-primary: var(--accent);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: #ffffff;
+  --color-ring: var(--ring);
   --font-sans: "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", -apple-system,
     BlinkMacSystemFont, sans-serif;
 }
