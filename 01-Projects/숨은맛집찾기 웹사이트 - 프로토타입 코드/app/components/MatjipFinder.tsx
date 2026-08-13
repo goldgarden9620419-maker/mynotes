@@ -23,8 +23,6 @@ const OCCASIONS = [
   { label: "혼밥", copy: "혼자서도 편하게 갈 수 있는", emoji: "🧑" },
 ] as const;
 
-const AGE_GROUPS = ["10대", "20대", "30대", "40대", "50대", "60대 이상"] as const;
-
 const PURPOSES = [
   { label: "식사", emoji: "🍽️", keyword: "맛집" },
   { label: "음주", emoji: "🍻", keyword: "술집" },
@@ -137,13 +135,66 @@ function Stepper({
   );
 }
 
-function LoadingSpinner() {
+function SearchingScene({ emoji }: Readonly<{ emoji: string }>) {
+  const particles = [0, 1, 2, 3];
   return (
-    <motion.div
-      className="mx-auto h-8 w-8 rounded-full border-[3px] border-accent/20 border-t-accent"
-      animate={{ rotate: 360 }}
-      transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
-    />
+    <div className="relative mx-auto h-40 w-40">
+      {/* 레이더 핑 */}
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={i}
+          className="absolute inset-0 rounded-full border-2 border-accent/40"
+          initial={{ scale: 0.3, opacity: 0.9 }}
+          animate={{ scale: 1.4, opacity: 0 }}
+          transition={{ duration: 2, repeat: Infinity, delay: i * 0.6, ease: "easeOut" }}
+        />
+      ))}
+
+      {/* 회전 스캔 라인 */}
+      <motion.div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "conic-gradient(from 0deg, transparent 0%, transparent 75%, var(--accent) 100%)",
+          opacity: 0.3,
+        }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
+      />
+
+      {/* 떠다니는 음식 이모지 파티클 */}
+      {particles.map((i) => {
+        const angle = (i / particles.length) * Math.PI * 2;
+        const radius = 58;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+        return (
+          <motion.div
+            key={i}
+            className="absolute left-1/2 top-1/2 text-xl"
+            initial={{ x, y, opacity: 0, scale: 0.5 }}
+            animate={{ opacity: [0, 1, 0], scale: [0.5, 1.1, 0.5] }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: i * 0.4,
+              ease: "easeInOut",
+            }}
+          >
+            {emoji}
+          </motion.div>
+        );
+      })}
+
+      {/* 중앙 위치 핀 */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center text-4xl"
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        📍
+      </motion.div>
+    </div>
   );
 }
 
@@ -156,7 +207,6 @@ export default function MatjipFinder() {
   const [adults, setAdults] = useState(2);
   const [teens, setTeens] = useState(0);
   const [children, setChildren] = useState(0);
-  const [ageGroupIdx, setAgeGroupIdx] = useState(1);
   const [occasionIdx, setOccasionIdx] = useState(0);
   const [purposeIdx, setPurposeIdx] = useState(0);
   const [foodIdx, setFoodIdx] = useState(0);
@@ -341,14 +391,6 @@ export default function MatjipFinder() {
               <Stepper label="청소년" value={teens} onChange={setTeens} min={0} />
               <Stepper label="어린이" value={children} onChange={setChildren} min={0} />
             </div>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              {AGE_GROUPS.map((label, i) => (
-                <PillButton key={label} active={ageGroupIdx === i} onClick={() => setAgeGroupIdx(i)}>
-                  {label}
-                </PillButton>
-              ))}
-            </div>
           </div>
 
           {/* 모임 성격 */}
@@ -435,8 +477,8 @@ export default function MatjipFinder() {
             className="mt-8 w-full max-w-xl"
           >
             {loading && (
-              <div className="flex flex-col items-center gap-4 py-10 text-center text-sm text-muted">
-                <LoadingSpinner />
+              <div className="flex flex-col items-center gap-3 py-8 text-center text-sm text-muted">
+                <SearchingScene emoji={FOOD_TYPES[foodIdx].emoji} />
                 {OCCASIONS[occasionIdx].copy} {FOOD_TYPES[foodIdx].label} {PURPOSES[purposeIdx].keyword}을
                 찾고 있어요...
               </div>
@@ -471,7 +513,6 @@ export default function MatjipFinder() {
                   {children > 0 && (
                     <span className="rounded-full bg-secondary px-2.5 py-1">어린이 {children}</span>
                   )}
-                  <span className="rounded-full bg-secondary px-2.5 py-1">{AGE_GROUPS[ageGroupIdx]}</span>
                   <span className="rounded-full bg-secondary px-2.5 py-1">{RADIUS_OPTIONS[radiusIdx].label} 이내</span>
                 </div>
                 <div className="flex flex-col gap-3">
