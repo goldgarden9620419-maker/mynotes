@@ -548,19 +548,13 @@ export default function MatjipFinder() {
                 </div>
                 <div className="flex flex-col gap-3">
                   {results.map((p, i) => (
-                    <motion.a
+                    <motion.div
                       key={p.id}
-                      href={p.mapsUri}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => {
-                        window.open(BLOG_URL, "_blank", "noopener,noreferrer");
-                      }}
                       initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.06, type: "spring", stiffness: 300, damping: 26 }}
                       whileHover={{ y: -3, scale: 1.01 }}
-                      className="block rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-accent hover:shadow-lg hover:shadow-accent/10"
+                      className="rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-accent hover:shadow-lg hover:shadow-accent/10"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -578,10 +572,25 @@ export default function MatjipFinder() {
                         </div>
                       </div>
                       <div className="mt-2 text-xs text-muted">{p.address}</div>
-                      <div className="mt-2 text-[11px] text-accent">
-                        📖 지도와 함께 이동 중 읽을거리도 열려요
+                      <div className="mt-3 flex gap-2">
+                        <a
+                          href={p.mapsUri}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 rounded-xl bg-accent px-3 py-2 text-center text-xs font-semibold text-white transition hover:opacity-90"
+                        >
+                          🗺️ 길찾기
+                        </a>
+                        <a
+                          href={BLOG_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 rounded-xl border border-accent px-3 py-2 text-center text-xs font-semibold text-accent transition hover:bg-accent/10"
+                        >
+                          📖 {p.name} 가는 길에 읽을거리
+                        </a>
                       </div>
-                    </motion.a>
+                    </motion.div>
                   ))}
                 </div>
               </>
