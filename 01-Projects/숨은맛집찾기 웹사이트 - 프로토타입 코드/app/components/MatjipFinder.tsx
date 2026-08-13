@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import MatjipMap from "./MatjipMap";
 
 const FOOD_TYPES = [
   { label: "한식", keyword: "한식", emoji: "🍚" },
@@ -57,6 +58,8 @@ type Place = {
   rating: number;
   userRatingCount: number;
   distance: number;
+  lat: number;
+  lng: number;
 };
 
 function isFranchise(name: string) {
@@ -314,6 +317,8 @@ export default function MatjipFinder() {
           mapsUri: (p.googleMapsUri as string) ?? "#",
           rating: p.rating ?? 0,
           userRatingCount: p.userRatingCount ?? 0,
+          lat: p.location.latitude as number,
+          lng: p.location.longitude as number,
           distance: Math.round(
             haversineMeters(coords.lat, coords.lng, p.location.latitude, p.location.longitude)
           ),
@@ -546,6 +551,12 @@ export default function MatjipFinder() {
                   )}
                   <span className="rounded-full bg-secondary px-2.5 py-1">{RADIUS_OPTIONS[radiusIdx].label} 이내</span>
                 </div>
+                {coords && (
+                  <MatjipMap
+                    center={coords}
+                    places={results.map((p) => ({ id: p.id, name: p.name, lat: p.lat, lng: p.lng }))}
+                  />
+                )}
                 <div className="flex flex-col gap-3">
                   {results.map((p, i) => (
                     <motion.div
