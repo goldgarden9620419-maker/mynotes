@@ -23,6 +23,20 @@ const OCCASIONS = [
   { label: "혼밥", copy: "혼자서도 편하게 갈 수 있는", emoji: "🧑" },
 ] as const;
 
+const AGE_GROUPS = ["10대", "20대", "30대", "40대", "50대", "60대 이상"] as const;
+
+const PURPOSES = [
+  { label: "식사", emoji: "🍽️", keyword: "맛집" },
+  { label: "음주", emoji: "🍻", keyword: "술집" },
+] as const;
+
+const RADIUS_OPTIONS = [
+  { label: "도보 5분", meters: 400 },
+  { label: "도보 15분", meters: 1200 },
+  { label: "차로 5분", meters: 2500 },
+  { label: "차로 15분", meters: 6000 },
+] as const;
+
 const FRANCHISE_BLOCKLIST = [
   "스타벅스", "이디야", "투썸플레이스", "커피빈", "폴바셋", "빽다방", "메가커피",
   "컴포즈커피", "할리스", "탐앤탐스", "매머드커피", "커피베이", "던킨",
@@ -34,8 +48,6 @@ const FRANCHISE_BLOCKLIST = [
   "cu", "gs25", "세븐일레븐", "이마트24", "미니스톱",
   "설빙", "공차", "빙그레", "요거트아이스크림의정석",
 ];
-
-const GEO_RADIUS_M = 2500;
 
 type Place = {
   id: string;
@@ -76,6 +88,55 @@ function PillButton({
   );
 }
 
+function Stepper({
+  label,
+  value,
+  onChange,
+  min = 0,
+  max = 20,
+}: Readonly<{
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+  min?: number;
+  max?: number;
+}>) {
+  return (
+    <div className="flex flex-col items-center gap-1.5 rounded-xl border border-border px-3 py-2.5">
+      <span className="text-xs text-muted">{label}</span>
+      <div className="flex items-center gap-2.5">
+        <motion.button
+          type="button"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => onChange(Math.max(min, value - 1))}
+          className="h-7 w-7 rounded-full border border-border text-sm hover:border-accent"
+        >
+          −
+        </motion.button>
+        <motion.span
+          key={value}
+          initial={{ scale: 1.3, opacity: 0.5 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 15 }}
+          className="w-5 text-center text-sm font-semibold"
+        >
+          {value}
+        </motion.span>
+        <motion.button
+          type="button"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => onChange(Math.min(max, value + 1))}
+          className="h-7 w-7 rounded-full border border-border text-sm hover:border-accent"
+        >
+          +
+        </motion.button>
+      </div>
+    </div>
+  );
+}
+
 function LoadingSpinner() {
   return (
     <motion.div
@@ -92,9 +153,14 @@ export default function MatjipFinder() {
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
 
-  const [peopleCount, setPeopleCount] = useState(2);
+  const [adults, setAdults] = useState(2);
+  const [teens, setTeens] = useState(0);
+  const [children, setChildren] = useState(0);
+  const [ageGroupIdx, setAgeGroupIdx] = useState(1);
   const [occasionIdx, setOccasionIdx] = useState(0);
+  const [purposeIdx, setPurposeIdx] = useState(0);
   const [foodIdx, setFoodIdx] = useState(0);
+  const [radiusIdx, setRadiusIdx] = useState(2);
 
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
@@ -102,6 +168,8 @@ export default function MatjipFinder() {
   const [searchError, setSearchError] = useState<string | null>(null);
 
   const placesRef = useRef<any>(null);
+
+  const totalPeople = adults + teens + children;
 
   useEffect(() => {
     if (sdkReady && window.kakao?.maps) {
@@ -141,13 +209,21 @@ export default function MatjipFinder() {
       setSearchError("지도 서비스를 불러오는 중이에요. 잠시 후 다시 시도해주세요.");
       return;
     }
+    if (totalPeople < 1) {
+      setLocationError("인원수를 1명 이상으로 설정해주세요.");
+      return;
+    }
 
     setLoading(true);
     setSearched(true);
     setSearchError(null);
     setResults([]);
 
-    const keyword = `${FOOD_TYPES[foodIdx].keyword} 맛집`;
+    const foodKeyword = FOOD_TYPES[foodIdx].keyword;
+    const purpose = PURPOSES[purposeIdx];
+    // 음식 종류가 이미 "술집"이면 목적 키워드를 중복으로 덧붙이지 않음
+    const suffix = foodKeyword === purpose.keyword ? "" : ` ${purpose.keyword}`;
+    const keyword = `${foodKeyword}${suffix}`;
     const kakaoLoc = new window.kakao.maps.LatLng(coords.lat, coords.lng);
 
     placesRef.current.keywordSearch(
@@ -171,7 +247,7 @@ export default function MatjipFinder() {
       },
       {
         location: kakaoLoc,
-        radius: GEO_RADIUS_M,
+        radius: RADIUS_OPTIONS[radiusIdx].meters,
         sort: window.kakao.maps.services.SortBy.DISTANCE,
       }
     );
@@ -195,13 +271,7 @@ export default function MatjipFinder() {
           className="pointer-events-none absolute -bottom-10 -left-10 -z-10 h-48 w-48 rounded-full bg-accent/10 blur-3xl"
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.5 }}
-          className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8"
-        >
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
           {/* 위치 확인 */}
           <div className="mb-6">
             <div className="mb-2 text-sm font-medium text-muted">1. 현재 위치</div>
@@ -261,35 +331,23 @@ export default function MatjipFinder() {
             )}
           </div>
 
-          {/* 인원수 */}
+          {/* 인원 구성 */}
           <div className="mb-6">
-            <div className="mb-2 text-sm font-medium text-muted">2. 인원수</div>
-            <div className="flex items-center gap-3">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setPeopleCount((n) => Math.max(1, n - 1))}
-                className="h-9 w-9 rounded-full border border-border text-lg hover:border-accent"
-              >
-                −
-              </motion.button>
-              <motion.span
-                key={peopleCount}
-                initial={{ scale: 1.3, opacity: 0.5 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 500, damping: 15 }}
-                className="w-12 text-center text-base font-semibold"
-              >
-                {peopleCount}명
-              </motion.span>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setPeopleCount((n) => Math.min(20, n + 1))}
-                className="h-9 w-9 rounded-full border border-border text-lg hover:border-accent"
-              >
-                +
-              </motion.button>
+            <div className="mb-2 text-sm font-medium text-muted">
+              2. 인원 구성 <span className="text-accent">· 총 {totalPeople}명</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <Stepper label="성인" value={adults} onChange={setAdults} min={0} />
+              <Stepper label="청소년" value={teens} onChange={setTeens} min={0} />
+              <Stepper label="어린이" value={children} onChange={setChildren} min={0} />
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              {AGE_GROUPS.map((label, i) => (
+                <PillButton key={label} active={ageGroupIdx === i} onClick={() => setAgeGroupIdx(i)}>
+                  {label}
+                </PillButton>
+              ))}
             </div>
           </div>
 
@@ -306,14 +364,39 @@ export default function MatjipFinder() {
             </div>
           </div>
 
+          {/* 목적: 식사/음주 */}
+          <div className="mb-6">
+            <div className="mb-2 text-sm font-medium text-muted">4. 목적</div>
+            <div className="flex flex-wrap gap-2">
+              {PURPOSES.map((p, i) => (
+                <PillButton key={p.label} active={purposeIdx === i} onClick={() => setPurposeIdx(i)}>
+                  <span className="mr-1">{p.emoji}</span>
+                  {p.label}
+                </PillButton>
+              ))}
+            </div>
+          </div>
+
           {/* 음식 종류 */}
-          <div className="mb-8">
-            <div className="mb-2 text-sm font-medium text-muted">4. 먹고 싶은 음식</div>
+          <div className="mb-6">
+            <div className="mb-2 text-sm font-medium text-muted">5. 먹고 싶은 음식</div>
             <div className="flex flex-wrap gap-2">
               {FOOD_TYPES.map((f, i) => (
                 <PillButton key={f.label} active={foodIdx === i} onClick={() => setFoodIdx(i)}>
                   <span className="mr-1">{f.emoji}</span>
                   {f.label}
+                </PillButton>
+              ))}
+            </div>
+          </div>
+
+          {/* 검색 반경 */}
+          <div className="mb-8">
+            <div className="mb-2 text-sm font-medium text-muted">6. 검색 반경</div>
+            <div className="flex flex-wrap gap-2">
+              {RADIUS_OPTIONS.map((r, i) => (
+                <PillButton key={r.label} active={radiusIdx === i} onClick={() => setRadiusIdx(i)}>
+                  {r.label}
                 </PillButton>
               ))}
             </div>
@@ -339,7 +422,7 @@ export default function MatjipFinder() {
               "숨은 맛집 찾기"
             )}
           </motion.button>
-        </motion.div>
+        </div>
       </div>
 
       {/* 결과 */}
@@ -354,7 +437,8 @@ export default function MatjipFinder() {
             {loading && (
               <div className="flex flex-col items-center gap-4 py-10 text-center text-sm text-muted">
                 <LoadingSpinner />
-                {OCCASIONS[occasionIdx].copy} {FOOD_TYPES[foodIdx].label} 맛집을 찾고 있어요...
+                {OCCASIONS[occasionIdx].copy} {FOOD_TYPES[foodIdx].label} {PURPOSES[purposeIdx].keyword}을
+                찾고 있어요...
               </div>
             )}
 
@@ -366,16 +450,30 @@ export default function MatjipFinder() {
 
             {!loading && !searchError && results.length === 0 && (
               <p className="rounded-xl bg-background px-4 py-6 text-center text-sm text-muted">
-                근처 {GEO_RADIUS_M}m 안에서는 조건에 맞는 곳을 찾지 못했어요. 다른 음식 종류로 시도해보세요.
+                근처 {RADIUS_OPTIONS[radiusIdx].label} 거리 안에서는 조건에 맞는 곳을 찾지 못했어요. 검색
+                반경을 넓히거나 다른 음식 종류로 시도해보세요.
               </p>
             )}
 
             {!loading && results.length > 0 && (
               <>
-                <h2 className="mb-4 text-lg font-bold">
-                  {peopleCount}명이서 {OCCASIONS[occasionIdx].copy} 숨은{" "}
-                  {FOOD_TYPES[foodIdx].label} 맛집
+                <h2 className="mb-2 text-lg font-bold">
+                  {totalPeople}명이서 {OCCASIONS[occasionIdx].copy} 숨은 {FOOD_TYPES[foodIdx].label}{" "}
+                  {PURPOSES[purposeIdx].keyword}
                 </h2>
+                <div className="mb-4 flex flex-wrap gap-1.5 text-xs text-muted">
+                  {adults > 0 && (
+                    <span className="rounded-full bg-secondary px-2.5 py-1">성인 {adults}</span>
+                  )}
+                  {teens > 0 && (
+                    <span className="rounded-full bg-secondary px-2.5 py-1">청소년 {teens}</span>
+                  )}
+                  {children > 0 && (
+                    <span className="rounded-full bg-secondary px-2.5 py-1">어린이 {children}</span>
+                  )}
+                  <span className="rounded-full bg-secondary px-2.5 py-1">{AGE_GROUPS[ageGroupIdx]}</span>
+                  <span className="rounded-full bg-secondary px-2.5 py-1">{RADIUS_OPTIONS[radiusIdx].label} 이내</span>
+                </div>
                 <div className="flex flex-col gap-3">
                   {results.map((p, i) => (
                     <motion.a
