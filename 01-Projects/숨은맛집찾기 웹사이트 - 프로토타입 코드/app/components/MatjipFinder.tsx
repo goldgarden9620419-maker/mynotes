@@ -315,7 +315,9 @@ export default function MatjipFinder() {
           distance: Math.round(
             haversineMeters(coords.lat, coords.lng, p.location.latitude, p.location.longitude)
           ),
-        }));
+        }))
+        // 구글의 위치 검색은 "선호"일 뿐 하드 제한이 아니라서, 실제 거리로 반경을 다시 걸러줌
+        .filter((p) => p.distance <= radiusMeters);
 
       // 별점 4.5 이상 + 리뷰 10개 이상인 곳 우선 (단순 5점 만점 하나짜리 리뷰에 휘둘리지 않도록)
       let quality = candidates.filter((p) => p.rating >= 4.5 && p.userRatingCount >= 10);
