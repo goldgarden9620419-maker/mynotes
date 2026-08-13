@@ -180,8 +180,7 @@ export function Hero07({
         )}
         variants={animate ? container : undefined}
         initial={animate ? "hidden" : false}
-        whileInView={animate ? "visible" : undefined}
-        viewport={{ once: true, margin: "-80px" }}
+        animate={animate ? "visible" : undefined}
       >
         <Reveal
           active={animate}
