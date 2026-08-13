@@ -34,6 +34,8 @@ const RADIUS_OPTIONS = [
   { label: "차로 15분", meters: 6000 },
 ] as const;
 
+const BLOG_URL = "https://diary21462.tistory.com/";
+
 const FRANCHISE_BLOCKLIST = [
   "스타벅스", "이디야", "투썸플레이스", "커피빈", "폴바셋", "빽다방", "메가커피",
   "컴포즈커피", "할리스", "탐앤탐스", "매머드커피", "커피베이", "던킨",
@@ -551,6 +553,9 @@ export default function MatjipFinder() {
                       href={p.mapsUri}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => {
+                        window.open(BLOG_URL, "_blank", "noopener,noreferrer");
+                      }}
                       initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.06, type: "spring", stiffness: 300, damping: 26 }}
@@ -573,6 +578,9 @@ export default function MatjipFinder() {
                         </div>
                       </div>
                       <div className="mt-2 text-xs text-muted">{p.address}</div>
+                      <div className="mt-2 text-[11px] text-accent">
+                        📖 지도와 함께 이동 중 읽을거리도 열려요
+                      </div>
                     </motion.a>
                   ))}
                 </div>
