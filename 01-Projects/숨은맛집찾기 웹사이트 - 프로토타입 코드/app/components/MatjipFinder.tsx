@@ -38,19 +38,25 @@ const RADIUS_OPTIONS = [
 const BLOG_URL = "https://diary21462.tistory.com/";
 
 function directionsUrl(lat: number, lng: number, travelMode: string) {
-  // 안드로이드 + 구글맵 앱: 이 스킴은 앱을 거치지 않고 바로 턴바이턴 길안내를 시작함
-  if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
-    const modeChar = travelMode === "walking" ? "w" : "d";
-    return `google.navigation:q=${lat},${lng}&mode=${modeChar}`;
-  }
-  // 아이폰/PC: 구글맵이 "경로 시작"을 앱 자체 UI로만 열어줘서, 여기서는 경로 화면까지만 연결 가능
   const params = new URLSearchParams({
     api: "1",
     destination: `${lat},${lng}`,
     travelmode: travelMode,
     dir_action: "navigate",
   });
-  return `https://www.google.com/maps/dir/?${params.toString()}`;
+  const fallbackUrl = `https://www.google.com/maps/dir/?${params.toString()}`;
+
+  // 안드로이드: Chrome이 명시적으로 지원하는 intent:// 형식으로 구글맵 앱의
+  // "내비게이션" 기능을 직접 호출 (단순 커스텀 스킴 링크보다 훨씬 안정적으로 인식됨)
+  if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
+    const modeChar = travelMode === "walking" ? "w" : "d";
+    return `intent://navigation?q=${lat},${lng}&mode=${modeChar}#Intent;scheme=google.navigation;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(
+      fallbackUrl
+    )};end`;
+  }
+
+  // 아이폰/PC: 구글맵이 "경로 시작"을 앱 자체 UI로만 열어줘서, 여기서는 경로 화면까지만 연결 가능
+  return fallbackUrl;
 }
 
 const FRANCHISE_BLOCKLIST = [
