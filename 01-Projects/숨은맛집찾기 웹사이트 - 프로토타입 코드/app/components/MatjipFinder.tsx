@@ -46,11 +46,11 @@ function directionsUrl(lat: number, lng: number, travelMode: string) {
   });
   const fallbackUrl = `https://www.google.com/maps/dir/?${params.toString()}`;
 
-  // 안드로이드: Chrome이 명시적으로 지원하는 intent:// 형식으로 구글맵 앱의
-  // "내비게이션" 기능을 직접 호출 (단순 커스텀 스킴 링크보다 훨씬 안정적으로 인식됨)
+  // 안드로이드: 구글이 공식 문서에서 안내하는 daddr 기반 intent 형식 (가장 안정적으로
+  // "내 위치 → 목적지" 경로가 정확히 표시됨). 앱이 없으면 fallback URL로 자동 이동.
   if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
     const modeChar = travelMode === "walking" ? "w" : "d";
-    return `intent://navigation?q=${lat},${lng}&mode=${modeChar}#Intent;scheme=google.navigation;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(
+    return `intent://maps.google.com/maps?daddr=${lat},${lng}&mode=${modeChar}#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(
       fallbackUrl
     )};end`;
   }
@@ -628,7 +628,7 @@ export default function MatjipFinder() {
                           rel="noopener noreferrer"
                           className="flex-1 rounded-xl bg-accent px-3 py-2 text-center text-xs font-semibold text-white transition hover:opacity-90"
                         >
-                          🧭 내비게이션 시작
+                          🧭 길찾기 (경로 보기)
                         </a>
                         <a
                           href={BLOG_URL}
