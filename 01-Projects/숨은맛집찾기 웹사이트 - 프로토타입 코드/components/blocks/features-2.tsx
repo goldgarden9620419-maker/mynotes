@@ -8,10 +8,11 @@ export function Features() {
       <div className="mx-auto max-w-5xl px-6">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-semibold sm:text-4xl">
-            이렇게 다릅니다
+            그 맛집, 사실 광고비 순위예요
           </h2>
           <p className="mt-4 text-muted-foreground">
-            광고에 밀려난 진짜 동네 맛집을, 명확한 기준으로 찾아드려요.
+            블로그·플레이스 상위 노출은 돈이면 됩니다. 저희는 광고 없이, 딱
+            3가지 기준으로만 골라드려요.
           </p>
         </div>
         <div className="mx-auto mt-10 grid max-w-sm grid-cols-1 gap-6 *:text-center sm:max-w-full sm:grid-cols-3 md:mt-16">
