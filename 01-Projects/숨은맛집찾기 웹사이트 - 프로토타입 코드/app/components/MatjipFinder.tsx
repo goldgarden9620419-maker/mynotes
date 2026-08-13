@@ -29,13 +29,23 @@ const PURPOSES = [
 ] as const;
 
 const RADIUS_OPTIONS = [
-  { label: "도보 5분", meters: 400 },
-  { label: "도보 15분", meters: 1200 },
-  { label: "차로 5분", meters: 2500 },
-  { label: "차로 15분", meters: 6000 },
+  { label: "도보 5분", meters: 400, travelMode: "walking" },
+  { label: "도보 15분", meters: 1200, travelMode: "walking" },
+  { label: "차로 5분", meters: 2500, travelMode: "driving" },
+  { label: "차로 15분", meters: 6000, travelMode: "driving" },
 ] as const;
 
 const BLOG_URL = "https://diary21462.tistory.com/";
+
+function directionsUrl(lat: number, lng: number, travelMode: string) {
+  const params = new URLSearchParams({
+    api: "1",
+    destination: `${lat},${lng}`,
+    travelmode: travelMode,
+    dir_action: "navigate",
+  });
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
 
 const FRANCHISE_BLOCKLIST = [
   "스타벅스", "이디야", "투썸플레이스", "커피빈", "폴바셋", "빽다방", "메가커피",
@@ -578,7 +588,14 @@ export default function MatjipFinder() {
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <div className="font-semibold">{p.name}</div>
+                          <a
+                            href={p.mapsUri}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold hover:text-accent hover:underline"
+                          >
+                            {p.name}
+                          </a>
                           <div className="mt-0.5 text-xs text-muted">{p.category}</div>
                         </div>
                         <div className="flex shrink-0 flex-col items-end gap-1">
@@ -594,12 +611,12 @@ export default function MatjipFinder() {
                       <div className="mt-2 text-xs text-muted">{p.address}</div>
                       <div className="mt-3 flex gap-2">
                         <a
-                          href={p.mapsUri}
+                          href={directionsUrl(p.lat, p.lng, RADIUS_OPTIONS[radiusIdx].travelMode)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex-1 rounded-xl bg-accent px-3 py-2 text-center text-xs font-semibold text-white transition hover:opacity-90"
                         >
-                          🗺️ 길찾기
+                          🧭 내비게이션 시작
                         </a>
                         <a
                           href={BLOG_URL}
