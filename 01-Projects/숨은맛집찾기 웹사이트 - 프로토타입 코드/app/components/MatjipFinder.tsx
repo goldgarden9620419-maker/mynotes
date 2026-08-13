@@ -5,22 +5,22 @@ import Script from "next/script";
 import { AnimatePresence, motion } from "framer-motion";
 
 const FOOD_TYPES = [
-  { label: "한식", keyword: "한식" },
-  { label: "중식", keyword: "중식" },
-  { label: "일식", keyword: "일식" },
-  { label: "양식", keyword: "양식" },
-  { label: "고기/구이", keyword: "고기집" },
-  { label: "분식", keyword: "분식" },
-  { label: "술집", keyword: "술집" },
-  { label: "카페/디저트", keyword: "카페" },
+  { label: "한식", keyword: "한식", emoji: "🍚" },
+  { label: "중식", keyword: "중식", emoji: "🥟" },
+  { label: "일식", keyword: "일식", emoji: "🍣" },
+  { label: "양식", keyword: "양식", emoji: "🍝" },
+  { label: "고기/구이", keyword: "고기집", emoji: "🥩" },
+  { label: "분식", keyword: "분식", emoji: "🍢" },
+  { label: "술집", keyword: "술집", emoji: "🍻" },
+  { label: "카페/디저트", keyword: "카페", emoji: "☕" },
 ] as const;
 
 const OCCASIONS = [
-  { label: "가족 모임", copy: "가족과 함께 가기 좋은" },
-  { label: "친구 모임", copy: "친구들과 편하게 가기 좋은" },
-  { label: "데이트", copy: "분위기 좋은 데이트하기 좋은" },
-  { label: "회식", copy: "다같이 회식하기 좋은" },
-  { label: "혼밥", copy: "혼자서도 편하게 갈 수 있는" },
+  { label: "가족 모임", copy: "가족과 함께 가기 좋은", emoji: "👨‍👩‍👧" },
+  { label: "친구 모임", copy: "친구들과 편하게 가기 좋은", emoji: "🧑‍🤝‍🧑" },
+  { label: "데이트", copy: "분위기 좋은 데이트하기 좋은", emoji: "💕" },
+  { label: "회식", copy: "다같이 회식하기 좋은", emoji: "🍺" },
+  { label: "혼밥", copy: "혼자서도 편하게 갈 수 있는", emoji: "🧑" },
 ] as const;
 
 const FRANCHISE_BLOCKLIST = [
@@ -52,6 +52,38 @@ type Place = {
 function isFranchise(name: string) {
   const normalized = name.toLowerCase().replace(/\s/g, "");
   return FRANCHISE_BLOCKLIST.some((b) => normalized.includes(b.replace(/\s/g, "")));
+}
+
+function PillButton({
+  active,
+  onClick,
+  children,
+}: Readonly<{ active: boolean; onClick: () => void; children: React.ReactNode }>) {
+  return (
+    <motion.button
+      onClick={onClick}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
+      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+      className={`rounded-full px-4 py-2 text-sm transition-colors ${
+        active
+          ? "bg-accent text-white shadow-sm shadow-accent/30"
+          : "border border-border text-foreground hover:border-accent"
+      }`}
+    >
+      {children}
+    </motion.button>
+  );
+}
+
+function LoadingSpinner() {
+  return (
+    <motion.div
+      className="mx-auto h-8 w-8 rounded-full border-[3px] border-accent/20 border-t-accent"
+      animate={{ rotate: 360 }}
+      transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
+    />
+  );
 }
 
 export default function MatjipFinder() {
@@ -152,103 +184,162 @@ export default function MatjipFinder() {
         onReady={() => setSdkReady(true)}
       />
 
-      <div className="w-full max-w-xl rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
-        {/* 위치 확인 */}
-        <div className="mb-6">
-          <div className="mb-2 text-sm font-medium text-muted">1. 현재 위치</div>
-          {coords ? (
-            <div className="flex items-center justify-between rounded-xl bg-accent/10 px-4 py-3 text-sm">
-              <span className="font-medium text-accent">📍 위치 확인 완료</span>
-              <button
-                onClick={requestLocation}
-                className="text-xs text-muted underline underline-offset-2"
-              >
-                다시 확인
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={requestLocation}
-              disabled={locating}
-              className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium hover:border-accent disabled:opacity-60"
-            >
-              {locating ? "위치 확인 중..." : "📍 내 위치 확인하기"}
-            </button>
-          )}
-          {locationError && (
-            <p className="mt-2 text-xs text-red-500">{locationError}</p>
-          )}
-        </div>
+      <div className="relative w-full max-w-xl">
+        {/* 배경 장식 블러 블롭 */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-16 -right-10 -z-10 h-56 w-56 rounded-full bg-accent/20 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -bottom-10 -left-10 -z-10 h-48 w-48 rounded-full bg-accent/10 blur-3xl"
+        />
 
-        {/* 인원수 */}
-        <div className="mb-6">
-          <div className="mb-2 text-sm font-medium text-muted">2. 인원수</div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setPeopleCount((n) => Math.max(1, n - 1))}
-              className="h-9 w-9 rounded-full border border-border text-lg"
-            >
-              −
-            </button>
-            <span className="w-12 text-center text-base font-semibold">
-              {peopleCount}명
-            </span>
-            <button
-              onClick={() => setPeopleCount((n) => Math.min(20, n + 1))}
-              className="h-9 w-9 rounded-full border border-border text-lg"
-            >
-              +
-            </button>
-          </div>
-        </div>
-
-        {/* 모임 성격 */}
-        <div className="mb-6">
-          <div className="mb-2 text-sm font-medium text-muted">3. 모임 성격</div>
-          <div className="flex flex-wrap gap-2">
-            {OCCASIONS.map((o, i) => (
-              <button
-                key={o.label}
-                onClick={() => setOccasionIdx(i)}
-                className={`rounded-full px-4 py-2 text-sm transition ${
-                  occasionIdx === i
-                    ? "bg-accent text-white"
-                    : "border border-border text-foreground"
-                }`}
-              >
-                {o.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 음식 종류 */}
-        <div className="mb-8">
-          <div className="mb-2 text-sm font-medium text-muted">4. 먹고 싶은 음식</div>
-          <div className="flex flex-wrap gap-2">
-            {FOOD_TYPES.map((f, i) => (
-              <button
-                key={f.label}
-                onClick={() => setFoodIdx(i)}
-                className={`rounded-full px-4 py-2 text-sm transition ${
-                  foodIdx === i
-                    ? "bg-accent text-white"
-                    : "border border-border text-foreground"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <button
-          onClick={handleSearch}
-          disabled={!sdkReady || loading}
-          className="w-full rounded-xl bg-accent px-4 py-3.5 text-base font-semibold text-white shadow-sm transition hover:opacity-90 disabled:opacity-50"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5 }}
+          className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8"
         >
-          {loading ? "숨은 맛집 찾는 중..." : "숨은 맛집 찾기"}
-        </button>
+          {/* 위치 확인 */}
+          <div className="mb-6">
+            <div className="mb-2 text-sm font-medium text-muted">1. 현재 위치</div>
+            {coords ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center justify-between rounded-xl bg-accent/10 px-4 py-3 text-sm"
+              >
+                <span className="flex items-center gap-1.5 font-medium text-accent">
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                  >
+                    📍
+                  </motion.span>
+                  위치 확인 완료
+                </span>
+                <button
+                  onClick={requestLocation}
+                  className="text-xs text-muted underline underline-offset-2 hover:text-accent"
+                >
+                  다시 확인
+                </button>
+              </motion.div>
+            ) : (
+              <motion.button
+                onClick={requestLocation}
+                disabled={locating}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium hover:border-accent disabled:opacity-60"
+              >
+                {locating ? (
+                  <span className="inline-flex items-center gap-2">
+                    <motion.span
+                      className="h-3.5 w-3.5 rounded-full border-2 border-accent/30 border-t-accent"
+                      animate={{ rotate: 360 }}
+                      transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
+                    />
+                    위치 확인 중...
+                  </span>
+                ) : (
+                  "📍 내 위치 확인하기"
+                )}
+              </motion.button>
+            )}
+            {locationError && (
+              <motion.p
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-2 text-xs text-red-500"
+              >
+                {locationError}
+              </motion.p>
+            )}
+          </div>
+
+          {/* 인원수 */}
+          <div className="mb-6">
+            <div className="mb-2 text-sm font-medium text-muted">2. 인원수</div>
+            <div className="flex items-center gap-3">
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setPeopleCount((n) => Math.max(1, n - 1))}
+                className="h-9 w-9 rounded-full border border-border text-lg hover:border-accent"
+              >
+                −
+              </motion.button>
+              <motion.span
+                key={peopleCount}
+                initial={{ scale: 1.3, opacity: 0.5 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 15 }}
+                className="w-12 text-center text-base font-semibold"
+              >
+                {peopleCount}명
+              </motion.span>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setPeopleCount((n) => Math.min(20, n + 1))}
+                className="h-9 w-9 rounded-full border border-border text-lg hover:border-accent"
+              >
+                +
+              </motion.button>
+            </div>
+          </div>
+
+          {/* 모임 성격 */}
+          <div className="mb-6">
+            <div className="mb-2 text-sm font-medium text-muted">3. 모임 성격</div>
+            <div className="flex flex-wrap gap-2">
+              {OCCASIONS.map((o, i) => (
+                <PillButton key={o.label} active={occasionIdx === i} onClick={() => setOccasionIdx(i)}>
+                  <span className="mr-1">{o.emoji}</span>
+                  {o.label}
+                </PillButton>
+              ))}
+            </div>
+          </div>
+
+          {/* 음식 종류 */}
+          <div className="mb-8">
+            <div className="mb-2 text-sm font-medium text-muted">4. 먹고 싶은 음식</div>
+            <div className="flex flex-wrap gap-2">
+              {FOOD_TYPES.map((f, i) => (
+                <PillButton key={f.label} active={foodIdx === i} onClick={() => setFoodIdx(i)}>
+                  <span className="mr-1">{f.emoji}</span>
+                  {f.label}
+                </PillButton>
+              ))}
+            </div>
+          </div>
+
+          <motion.button
+            onClick={handleSearch}
+            disabled={!sdkReady || loading}
+            whileHover={sdkReady && !loading ? { scale: 1.02 } : undefined}
+            whileTap={sdkReady && !loading ? { scale: 0.98 } : undefined}
+            className="w-full rounded-xl bg-accent px-4 py-3.5 text-base font-semibold text-white shadow-md shadow-accent/25 transition hover:opacity-90 disabled:opacity-50"
+          >
+            {loading ? (
+              <span className="inline-flex items-center justify-center gap-2">
+                <motion.span
+                  className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white"
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
+                />
+                숨은 맛집 찾는 중...
+              </span>
+            ) : (
+              "숨은 맛집 찾기"
+            )}
+          </motion.button>
+        </motion.div>
       </div>
 
       {/* 결과 */}
@@ -261,7 +352,8 @@ export default function MatjipFinder() {
             className="mt-8 w-full max-w-xl"
           >
             {loading && (
-              <div className="py-10 text-center text-sm text-muted">
+              <div className="flex flex-col items-center gap-4 py-10 text-center text-sm text-muted">
+                <LoadingSpinner />
                 {OCCASIONS[occasionIdx].copy} {FOOD_TYPES[foodIdx].label} 맛집을 찾고 있어요...
               </div>
             )}
@@ -291,10 +383,11 @@ export default function MatjipFinder() {
                       href={p.place_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="block rounded-2xl border border-border bg-card p-4 transition hover:border-accent hover:shadow-md"
+                      transition={{ delay: i * 0.06, type: "spring", stiffness: 300, damping: 26 }}
+                      whileHover={{ y: -3, scale: 1.01 }}
+                      className="block rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-accent hover:shadow-lg hover:shadow-accent/10"
                     >
                       <div className="flex items-start justify-between">
                         <div>
