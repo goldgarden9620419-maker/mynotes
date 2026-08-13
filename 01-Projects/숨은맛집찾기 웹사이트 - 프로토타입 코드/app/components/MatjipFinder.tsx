@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Script from "next/script";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const FOOD_TYPES = [
@@ -49,19 +48,59 @@ const FRANCHISE_BLOCKLIST = [
 
 type Place = {
   id: string;
-  place_name: string;
-  category_name: string;
-  category_group_code: string;
-  address_name: string;
-  road_address_name: string;
-  phone: string;
-  place_url: string;
-  distance: string;
+  name: string;
+  category: string;
+  address: string;
+  mapsUri: string;
+  rating: number;
+  userRatingCount: number;
+  distance: number;
 };
 
 function isFranchise(name: string) {
   const normalized = name.toLowerCase().replace(/\s/g, "");
   return FRANCHISE_BLOCKLIST.some((b) => normalized.includes(b.replace(/\s/g, "")));
+}
+
+function haversineMeters(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const R = 6371000;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+async function searchGooglePlaces(
+  keyword: string,
+  lat: number,
+  lng: number,
+  radiusMeters: number
+) {
+  const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ?? "",
+      "X-Goog-FieldMask":
+        "places.id,places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.googleMapsUri,places.primaryTypeDisplayName",
+    },
+    body: JSON.stringify({
+      textQuery: keyword,
+      locationBias: {
+        circle: { center: { latitude: lat, longitude: lng }, radius: radiusMeters },
+      },
+      languageCode: "ko",
+      regionCode: "KR",
+      maxResultCount: 20,
+    }),
+  });
+
+  if (!res.ok) throw new Error(`search failed: ${res.status}`);
+  const data = await res.json();
+  return (data.places ?? []) as any[];
 }
 
 function PillButton({
@@ -199,7 +238,6 @@ function SearchingScene({ emoji }: Readonly<{ emoji: string }>) {
 }
 
 export default function MatjipFinder() {
-  const [sdkReady, setSdkReady] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -217,17 +255,7 @@ export default function MatjipFinder() {
   const [results, setResults] = useState<Place[]>([]);
   const [searchError, setSearchError] = useState<string | null>(null);
 
-  const placesRef = useRef<any>(null);
-
   const totalPeople = adults + teens + children;
-
-  useEffect(() => {
-    if (sdkReady && window.kakao?.maps) {
-      window.kakao.maps.load(() => {
-        placesRef.current = new window.kakao.maps.services.Places();
-      });
-    }
-  }, [sdkReady]);
 
   function requestLocation() {
     setLocating(true);
@@ -250,13 +278,9 @@ export default function MatjipFinder() {
     );
   }
 
-  function handleSearch() {
+  async function handleSearch() {
     if (!coords) {
       setLocationError("먼저 현재 위치를 확인해주세요.");
-      return;
-    }
-    if (!placesRef.current) {
-      setSearchError("지도 서비스를 불러오는 중이에요. 잠시 후 다시 시도해주세요.");
       return;
     }
     if (totalPeople < 1) {
@@ -271,45 +295,48 @@ export default function MatjipFinder() {
 
     const foodKeyword = FOOD_TYPES[foodIdx].keyword;
     const purpose = PURPOSES[purposeIdx];
-    // 음식 종류가 이미 "술집"이면 목적 키워드를 중복으로 덧붙이지 않음
     const suffix = foodKeyword === purpose.keyword ? "" : ` ${purpose.keyword}`;
     const keyword = `${foodKeyword}${suffix}`;
-    const kakaoLoc = new window.kakao.maps.LatLng(coords.lat, coords.lng);
+    const radiusMeters = RADIUS_OPTIONS[radiusIdx].meters;
 
-    placesRef.current.keywordSearch(
-      keyword,
-      (data: Place[], status: string) => {
-        setLoading(false);
-        if (status !== window.kakao.maps.services.Status.OK) {
-          setSearchError("근처에서 맛집을 찾지 못했어요. 다른 음식 종류로 시도해보세요.");
-          return;
-        }
+    try {
+      const raw = await searchGooglePlaces(keyword, coords.lat, coords.lng, radiusMeters);
 
-        const filtered = data
-          .filter((p) => !isFranchise(p.place_name))
-          .filter((p) => p.category_group_code !== "CS2")
-          .sort((a, b) => Number(a.distance) - Number(b.distance));
+      const candidates: Place[] = raw
+        .filter((p) => p.displayName?.text && !isFranchise(p.displayName.text))
+        .map((p) => ({
+          id: p.id,
+          name: p.displayName.text as string,
+          category: (p.primaryTypeDisplayName?.text as string) ?? "",
+          address: (p.formattedAddress as string) ?? "",
+          mapsUri: (p.googleMapsUri as string) ?? "#",
+          rating: p.rating ?? 0,
+          userRatingCount: p.userRatingCount ?? 0,
+          distance: Math.round(
+            haversineMeters(coords.lat, coords.lng, p.location.latitude, p.location.longitude)
+          ),
+        }));
 
-        // 상위 2곳은 흔히 아는 곳일 확률이 높아 건너뛰고, 그 다음부터 "숨은" 맛집으로 제안
-        const hidden = filtered.length > 4 ? filtered.slice(2) : filtered;
-
-        setResults(hidden.slice(0, 8));
-      },
-      {
-        location: kakaoLoc,
-        radius: RADIUS_OPTIONS[radiusIdx].meters,
-        sort: window.kakao.maps.services.SortBy.DISTANCE,
+      // 별점 4.5 이상 + 리뷰 10개 이상인 곳 우선 (단순 5점 만점 하나짜리 리뷰에 휘둘리지 않도록)
+      let quality = candidates.filter((p) => p.rating >= 4.5 && p.userRatingCount >= 10);
+      if (quality.length < 5) {
+        quality = candidates.filter((p) => p.rating >= 4.3 && p.userRatingCount >= 5);
       }
-    );
+      if (quality.length < 3) {
+        quality = candidates.filter((p) => p.rating > 0);
+      }
+      quality.sort((a, b) => b.rating - a.rating || b.userRatingCount - a.userRatingCount);
+
+      setResults(quality.slice(0, 8));
+    } catch {
+      setSearchError("근처에서 맛집을 찾지 못했어요. 다른 음식 종류로 시도해보세요.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <>
-      <Script
-        src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JS_KEY}&libraries=services&autoload=false`}
-        onReady={() => setSdkReady(true)}
-      />
-
       <div className="relative w-full max-w-xl">
         {/* 배경 장식 블러 블롭 */}
         <div
@@ -446,9 +473,9 @@ export default function MatjipFinder() {
 
           <motion.button
             onClick={handleSearch}
-            disabled={!sdkReady || loading}
-            whileHover={sdkReady && !loading ? { scale: 1.02 } : undefined}
-            whileTap={sdkReady && !loading ? { scale: 0.98 } : undefined}
+            disabled={loading}
+            whileHover={!loading ? { scale: 1.02 } : undefined}
+            whileTap={!loading ? { scale: 0.98 } : undefined}
             className="w-full rounded-xl bg-accent px-4 py-3.5 text-base font-semibold text-white shadow-md shadow-accent/25 transition hover:opacity-90 disabled:opacity-50"
           >
             {loading ? (
@@ -500,7 +527,7 @@ export default function MatjipFinder() {
             {!loading && results.length > 0 && (
               <>
                 <h2 className="mb-2 text-lg font-bold">
-                  {totalPeople}명이서 {OCCASIONS[occasionIdx].copy} 숨은 {FOOD_TYPES[foodIdx].label}{" "}
+                  {totalPeople}명이서 {OCCASIONS[occasionIdx].copy} 별점 좋은 {FOOD_TYPES[foodIdx].label}{" "}
                   {PURPOSES[purposeIdx].keyword}
                 </h2>
                 <div className="mb-4 flex flex-wrap gap-1.5 text-xs text-muted">
@@ -519,7 +546,7 @@ export default function MatjipFinder() {
                   {results.map((p, i) => (
                     <motion.a
                       key={p.id}
-                      href={p.place_url}
+                      href={p.mapsUri}
                       target="_blank"
                       rel="noopener noreferrer"
                       initial={{ opacity: 0, y: 14 }}
@@ -528,20 +555,22 @@ export default function MatjipFinder() {
                       whileHover={{ y: -3, scale: 1.01 }}
                       className="block rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-accent hover:shadow-lg hover:shadow-accent/10"
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="flex items-start justify-between gap-2">
                         <div>
-                          <div className="font-semibold">{p.place_name}</div>
-                          <div className="mt-0.5 text-xs text-muted">
-                            {p.category_name.split(">").pop()?.trim()}
-                          </div>
+                          <div className="font-semibold">{p.name}</div>
+                          <div className="mt-0.5 text-xs text-muted">{p.category}</div>
                         </div>
-                        <span className="shrink-0 rounded-full bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent">
-                          {p.distance}m
-                        </span>
+                        <div className="flex shrink-0 flex-col items-end gap-1">
+                          {p.rating > 0 && (
+                            <span className="whitespace-nowrap rounded-full bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent">
+                              ⭐ {p.rating.toFixed(1)}{" "}
+                              <span className="text-muted">({p.userRatingCount})</span>
+                            </span>
+                          )}
+                          <span className="text-[10px] text-muted">{p.distance}m</span>
+                        </div>
                       </div>
-                      <div className="mt-2 text-xs text-muted">
-                        {p.road_address_name || p.address_name}
-                      </div>
+                      <div className="mt-2 text-xs text-muted">{p.address}</div>
                     </motion.a>
                   ))}
                 </div>
