@@ -1,4 +1,5 @@
 import Hero07 from "@/components/ui/hero-07";
+import { Features } from "@/components/blocks/features-2";
 import MatjipFinder from "./components/MatjipFinder";
 
 export default function Home() {
@@ -15,6 +16,8 @@ export default function Home() {
           primaryCTA={{ ctaEnabled: true, text: "숨은 맛집 찾아보기", link: "#finder", variant: "default" }}
         />
       </div>
+
+      <Features />
 
       <div
         id="finder"
