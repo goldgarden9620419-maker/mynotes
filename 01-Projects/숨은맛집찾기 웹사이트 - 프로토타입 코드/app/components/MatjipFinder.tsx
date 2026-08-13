@@ -60,6 +60,7 @@ type Place = {
   distance: number;
   lat: number;
   lng: number;
+  photoNames: string[];
 };
 
 function isFranchise(name: string) {
@@ -90,7 +91,7 @@ async function searchGooglePlaces(
       "Content-Type": "application/json",
       "X-Goog-Api-Key": process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ?? "",
       "X-Goog-FieldMask":
-        "places.id,places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.googleMapsUri,places.primaryTypeDisplayName",
+        "places.id,places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.googleMapsUri,places.primaryTypeDisplayName,places.photos",
     },
     body: JSON.stringify({
       textQuery: keyword,
@@ -106,6 +107,11 @@ async function searchGooglePlaces(
   if (!res.ok) throw new Error(`search failed: ${res.status}`);
   const data = await res.json();
   return (data.places ?? []) as any[];
+}
+
+function photoUrl(photoName: string, maxWidthPx = 500) {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ?? "";
+  return `https://places.googleapis.com/v1/${photoName}/media?maxWidthPx=${maxWidthPx}&key=${apiKey}`;
 }
 
 function PillButton({
@@ -258,6 +264,7 @@ export default function MatjipFinder() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [results, setResults] = useState<Place[]>([]);
+  const [openPhotosId, setOpenPhotosId] = useState<string | null>(null);
   const [searchError, setSearchError] = useState<string | null>(null);
 
   const totalPeople = adults + teens + children;
@@ -297,6 +304,7 @@ export default function MatjipFinder() {
     setSearched(true);
     setSearchError(null);
     setResults([]);
+    setOpenPhotosId(null);
 
     const foodKeyword = FOOD_TYPES[foodIdx].keyword;
     const purpose = PURPOSES[purposeIdx];
@@ -319,6 +327,7 @@ export default function MatjipFinder() {
           userRatingCount: p.userRatingCount ?? 0,
           lat: p.location.latitude as number,
           lng: p.location.longitude as number,
+          photoNames: ((p.photos ?? []) as any[]).slice(0, 5).map((ph) => ph.name as string),
           distance: Math.round(
             haversineMeters(coords.lat, coords.lng, p.location.latitude, p.location.longitude)
           ),
@@ -601,6 +610,44 @@ export default function MatjipFinder() {
                           📖 {p.name} 가는 길에 읽을거리
                         </a>
                       </div>
+
+                      {p.photoNames.length > 0 && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setOpenPhotosId(openPhotosId === p.id ? null : p.id)
+                            }
+                            className="mt-2 w-full rounded-xl border border-border px-3 py-2 text-center text-xs font-medium text-foreground transition hover:border-accent"
+                          >
+                            📷 사진/메뉴 보기 ({p.photoNames.length}장)
+                            {openPhotosId === p.id ? " ▲" : " ▼"}
+                          </button>
+                          <AnimatePresence>
+                            {openPhotosId === p.id && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="overflow-hidden"
+                              >
+                                <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+                                  {p.photoNames.map((name) => (
+                                    // eslint-disable-next-line @next/next/no-img-element
+                                    <img
+                                      key={name}
+                                      src={photoUrl(name)}
+                                      alt={`${p.name} 사진`}
+                                      loading="lazy"
+                                      className="h-32 w-32 shrink-0 rounded-xl object-cover"
+                                    />
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      )}
                     </motion.div>
                   ))}
                 </div>
