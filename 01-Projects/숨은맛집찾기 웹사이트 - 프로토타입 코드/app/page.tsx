@@ -12,7 +12,7 @@ export default function Home() {
           description="현재 위치, 인원수, 모임 성격, 먹고 싶은 음식만 알려주시면 진짜 숨은 맛집을 바로 찾아드려요."
           landscapeImage="/hero-food.jpg"
           landscapeAlt="따뜻한 조명 아래 정갈하게 차려진 맛집 한상"
-          animation="subtle"
+          animation="none"
           primaryCTA={{ ctaEnabled: true, text: "숨은 맛집 찾아보기", link: "#finder", variant: "default" }}
         />
       </div>
