@@ -1,0 +1,370 @@
+<title>블로그+스레드 발행 스튜디오 — 감정 저널링 습관</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-13</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>감정 저널링 습관 (감정, 표현, 기록)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">자기계발</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">문제해결형</span><span class="chip accent">솔직 고백형 훅</span><span class="chip accent">소제목 3개(배경→분석→적용)</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">감정저널링</span><span class="chip">감정일기</span><span class="chip">정서표현억제</span><span class="chip">표현적글쓰기</span><span class="chip">자기인식</span><span class="chip">정서조절</span><span class="chip">자기계발</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=Biup6_D9UJw" target="_blank" rel="noopener noreferrer">부정적 감정 표현 연습의 필요성 - 강현식 심리학자</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">감정 저널링 습관 (감정, 표현, 기록)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">감정저널링,감정일기,정서표현억제,표현적글쓰기,자기인식,정서조절,반추,자기계발,감정기록,직장인감정관리</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>자기계발</b>로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">감정 참는 게 성숙한 거라 믿었는데 완전히 착각이었음.
+
+억누른다고 감정이 사라지는 게 아니라 나중에 곱씹느라 더 힘들어짐.
+
+감정 저널링 시작하고 알게 된 것들 정리해봄.
+
+1. 참는 것과 조절하는 건 다름 - 정서표현억제는 표현만 억누르는 것
+2. 억눌린 감정은 반추로 돌아옴 - 뒤늦게 혼자 화남
+3. 글로 꺼내면 뇌 처리방식이 바뀜 - 표현적 글쓰기 연구 결과
+4. 화내느냐 참느냐가 아니라 어떻게 표현하느냐가 핵심
+5. 하루 5분, 형식 없이, 원인까지 같이 적기만 하면 됨
+
+참는 대신 기록하는 게 진짜 감정 조절이었음 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">감정 저널링 습관, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">솔직히 저는 감정을 드러내지 않는 게 사회생활을 잘하는 방법이라고 오랫동안 믿었습니다. 부당한 말을 들어도 그 자리에서는 웃으며 넘겼고, 내가 조금 참으면 된다고 스스로를 다독였습니다.<br /><br />그런데 그 감정은 사라지지 않았습니다. 집에 와서야 뒤늦게 화가 나거나, 엉뚱하게 가족에게 예민하게 반응하는 일이 반복됐습니다. 감정 저널링 습관을 만들며 제가 착각했던 것과 실제로 달라진 점을 정리해 봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">참는 게 능사가 아니었던 이유</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 분노를 조절한다는 것을 무조건 참는 것으로 착각했습니다. 심리학에서는 이렇게 감정을 겉으로 드러내지 않으려 애쓰는 것을 정서표현억제라고 부르는데, 감정을 안 느끼는 게 아니라 표정이나 말투 같은 겉으로 드러나는 반응만 억누르는 상태를 말합니다. 문제는 억누른다고 감정 자체가 사라지지 않는다는 점이었습니다.<br /><br />심리학 칼럼니스트 강현식(누다심)은 타인의 시선에 맞춰 계속 감정을 조절하고 가족의 기대에 부응하다 보면 정작 내 감정을 표현하는 방법 자체를 잊어버리게 되고, 참다 참다 결국 마음이 병든다고 지적합니다(<a href="https://www.youtube.com/watch?v=Biup6_D9UJw" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 부정적 감정 표현 연습의 필요성, 강현식 심리학자</a>). 저는 이 이야기가 제 경험과 정확히 겹쳤습니다. 직장에서는 순간적으로 화를 인식하지 못하고 넘어갔다가, 뒤늦게 그때 왜 아무 말도 못 했을까 곱씹으며 혼자 힘들어했기 때문입니다.<br /><br />이렇게 지나간 일을 계속 곱씹는 것을 심리학에서는 반추라고 하는데, 반추가 길어질수록 스트레스와 불안이 오히려 커진다고 합니다. 감정을 참는 것이 성숙함이 아니라, 오히려 그 감정을 뒤늦게 반추하게 만드는 원인이었던 셈입니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감정을 참는 것은 감정을 없애는 게 아니라 표현만 억누르는 것이며, 억눌린 감정은 반추라는 형태로 뒤늦게 저를 괴롭혔습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">감정을 기록하면 달라지는 것들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">심리학자 제임스 페니베이커는 사람들에게 힘들었던 경험과 그때의 감정을 며칠간 글로 쓰게 하는 실험을 반복했는데, 이를 표현적 글쓰기라고 부릅니다. 이 연구에서 표현적 글쓰기를 한 사람들은 침습적 사고와 회피적 사고가 줄고 작업 기억이 개선됐다는 결과가 나왔습니다(<a href="https://www.apa.org/news/podcasts/speaking-of-psychology/expressive-writing" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 미국심리학회(APA)</a>). 감정을 마음속에 쌓아두는 대신 글로 꺼내놓는 것만으로도 뇌가 그 사건을 처리하는 방식이 달라진다는 뜻으로 저는 이해했습니다.<br /><br />감정 저널링을 시작하고 제게 가장 크게 달라진 건 자기인식이었습니다. 예전엔 뭔가 불편한데 그게 정확히 무슨 감정인지도 모른 채 넘어갔다면, 이제는 그 순간의 감정에 이름을 붙이는 연습을 하게 됐습니다. 서울아산병원 정신건강칼럼에서도 감정을 다스리는 첫걸음은 지금 내가 느끼는 감정이 정확히 무엇인지 알아차리는 것이라고 설명합니다(<a href="https://www.amc.seoul.kr/asan/depts/mind/K/bbsDetail.do?menuId=4548&contentId=254263" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 서울아산병원 정신건강칼럼</a>).<br /><br />저는 이제 무조건 참는 사람이 좋은 사람이라고 생각하지 않습니다. 불편하면 불편하다고, 부당하면 부당하다고 상대를 공격하지 않는 선에서 표현하는 것도 저를 지키는 방법이라는 걸 알게 됐습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감정을 글로 꺼내는 표현적 글쓰기는 사고 처리 방식 자체를 바꾸며, 저에게는 감정을 정확히 알아차리는 자기인식 능력으로 이어졌습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">제가 실천하는 감정 저널링 방법</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 화를 내느냐 참느냐가 문제가 아니라 어떻게 표현하느냐가 진짜 문제라고 생각합니다. 감정을 쌓아두었다가 한꺼번에 터뜨리는 것도, 순간의 감정대로 쏟아내는 것도 저에게는 답이 아니었습니다. 직장이나 가족처럼 관계를 계속 이어가야 하는 곳에서는 "그 말은 조금 불편합니다"처럼 차분하게 선을 긋는 연습이 필요하다는 걸 감정 저널링을 하며 배웠습니다.<br /><br />거창한 규칙 없이 시작해도 충분하다는 게 제 경험입니다. 저는 특별한 형식 없이 그날 있었던 일과 그때 느낀 감정을 짧게 적는 것부터 시작했습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">하루 5분, 정해진 시간에만 짧게 적기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">기분 좋았다/나빴다가 아니라 감정의 원인까지 함께 적기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">문장이 이상하거나 앞뒤가 안 맞아도 자기 검열 없이 쓰기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">쓰고 나서 상대를 어떻게 존중하며 표현할지 한 문장 더 적기</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">결국 감정은 억압할 대상도, 마음껏 쏟아낼 대상도 아니라고 저는 결론 내렸습니다. 내 감정을 정확히 알아차리고 상대방을 존중하면서 표현하는 것, 그게 제가 생각하는 진짜 감정 조절입니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감정 저널링의 핵심은 참는 것도 쏟아내는 것도 아니라, 짧게 기록하며 감정을 알아차리고 존중하는 표현법을 함께 연습하는 것입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 감정을 참는 게 지금까지 내가 성숙하다고 생각했던 방식 아니었어?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇게 착각했었다고 저에게 인정했습니다. 참는 것과 조절하는 것은 다르다는 걸 알고 나서, 저는 성숙함을 표현을 억누르는 능력이 아니라 정확히 알아차리고 표현하는 능력으로 다시 정의했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 매일 감정을 기록하면 오히려 그 감정에 더 빠지는 거 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저도 처음엔 그게 걱정이었다고 솔직히 답했습니다. 하지만 감정을 곱씹기만 하는 반추와 짧게 적고 넘어가는 기록은 다르다는 걸 직접 해보고 나서 구분할 수 있게 됐습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 화를 표현하는 게 관계를 나쁘게 만들지 않을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 표현하는 방식에 달렸다고 저에게 정리해줬습니다. 상대를 공격하지 않는 선에서 "그 말은 불편합니다"라고 차분히 선을 긋는 것과 감정을 쏟아내는 것은 다르며, 저는 전자를 연습하기로 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 감정 저널링, 나는 얼마나 오래 해야 효과를 볼까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 꾸준함이 형식보다 중요하다고 저는 저에게 답했습니다. 완벽한 문장이 아니어도 매일 5분씩 쌓인 기록이, 어느 순간 제 감정을 더 빨리 알아차리게 해준다는 것을 시간이 지나서야 체감했습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">나이가 들수록 필요한 건 감정을 숨기는 능력이 아니라 내 감정을 정확히 알아차리고 건강하게 표현하는 능력이라고 저는 결론지었습니다. 감정 저널링은 그 알아차림을 위한 가장 쉬운 시작이었습니다.<br /><br />오늘 마음 한구석이 불편했다면, 그 감정에 이름을 붙여 짧게 적어보시길 권합니다. 참는 대신 기록하는 것, 그것부터가 건강한 감정 조절의 시작이라고 생각합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=Biup6_D9UJw" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=Biup6_D9UJw</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-emotionjournal-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
