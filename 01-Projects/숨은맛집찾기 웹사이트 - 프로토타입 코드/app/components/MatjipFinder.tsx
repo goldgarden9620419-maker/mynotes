@@ -37,26 +37,30 @@ const RADIUS_OPTIONS = [
 
 const BLOG_URL = "https://diary21462.tistory.com/";
 
-function directionsUrl(lat: number, lng: number, travelMode: string) {
-  const params = new URLSearchParams({
-    api: "1",
-    destination: `${lat},${lng}`,
-    travelmode: travelMode,
-    dir_action: "navigate",
-  });
-  const fallbackUrl = `https://www.google.com/maps/dir/?${params.toString()}`;
+// 구글 지도는 한국 정부 규제로 자동차/도보 "길찾기"(경로 계산) 자체를 지원하지 않아서
+// (대중교통만 계산됨), 한국에서 실제로 동작하는 카카오맵 앱으로 길찾기를 연결한다.
+function directionsUrl(
+  originLat: number,
+  originLng: number,
+  destLat: number,
+  destLng: number,
+  destName: string,
+  travelMode: string
+) {
+  const kakaoWebFallback = `https://map.kakao.com/link/to/${encodeURIComponent(
+    destName
+  )},${destLat},${destLng}`;
 
-  // 안드로이드: 구글이 공식 문서에서 안내하는 daddr 기반 intent 형식 (가장 안정적으로
-  // "내 위치 → 목적지" 경로가 정확히 표시됨). 앱이 없으면 fallback URL로 자동 이동.
   if (typeof navigator !== "undefined" && /Android/i.test(navigator.userAgent)) {
-    const modeChar = travelMode === "walking" ? "w" : "d";
-    return `intent://maps.google.com/maps?daddr=${lat},${lng}&dirflg=${modeChar}#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(
-      fallbackUrl
+    const by = travelMode === "walking" ? "FOOT" : "CAR";
+    return `intent://route?sp=${originLat},${originLng}&ep=${destLat},${destLng}&by=${by}#Intent;scheme=kakaomap;package=net.daum.android.map;S.browser_fallback_url=${encodeURIComponent(
+      kakaoWebFallback
     )};end`;
   }
 
-  // 아이폰/PC: 구글맵이 "경로 시작"을 앱 자체 UI로만 열어줘서, 여기서는 경로 화면까지만 연결 가능
-  return fallbackUrl;
+  // 아이폰/PC: 카카오맵 웹 버전으로 연결 (앱이 있으면 아이폰은 카카오맵 앱 스킴도 지원하지만,
+  // 웹 링크가 기기/브라우저에 상관없이 가장 안정적으로 열림)
+  return kakaoWebFallback;
 }
 
 const FRANCHISE_BLOCKLIST = [
@@ -623,7 +627,18 @@ export default function MatjipFinder() {
                       <div className="mt-2 text-xs text-muted">{p.address}</div>
                       <div className="mt-3 flex gap-2">
                         <a
-                          href={directionsUrl(p.lat, p.lng, RADIUS_OPTIONS[radiusIdx].travelMode)}
+                          href={
+                            coords
+                              ? directionsUrl(
+                                  coords.lat,
+                                  coords.lng,
+                                  p.lat,
+                                  p.lng,
+                                  p.name,
+                                  RADIUS_OPTIONS[radiusIdx].travelMode
+                                )
+                              : p.mapsUri
+                          }
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex-1 rounded-xl bg-accent px-3 py-2 text-center text-xs font-semibold text-white transition hover:opacity-90"
