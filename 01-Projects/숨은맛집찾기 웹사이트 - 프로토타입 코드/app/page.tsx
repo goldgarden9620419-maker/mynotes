@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Hero07 from "@/components/ui/hero-07";
 import { Features } from "@/components/blocks/features-2";
 import MatjipFinder from "./components/MatjipFinder";
@@ -26,8 +27,16 @@ export default function Home() {
         <MatjipFinder />
       </div>
 
-      <footer className="mb-16 text-center text-xs text-muted">
-        © 2026 숨은맛집찾기 · 위치 정보는 브라우저에서만 사용되며 저장되지 않습니다.
+      <footer className="mb-16 flex flex-col items-center gap-2 text-center text-xs text-muted">
+        <p>© 2026 숨은맛집찾기 · 위치 정보는 브라우저에서만 사용되며 저장되지 않습니다.</p>
+        <div className="flex gap-4">
+          <Link href="/privacy-policy" className="hover:text-accent hover:underline">
+            개인정보처리방침
+          </Link>
+          <Link href="/terms" className="hover:text-accent hover:underline">
+            이용약관
+          </Link>
+        </div>
       </footer>
     </div>
   );
