@@ -193,7 +193,7 @@ function autoShorten(text, maxSec, speed, scene, S, seed) {
   return t;
 }
 /* Scene 자동 분류 — LIP / VO / NONE */
-function classifyScene(scene) {
+export function classifyScene(scene) {
   if (["Hero Shot", "Brand Ending"].includes(scene.role)) return "NONE";
   if ((scene.assets || []).includes("MODEL")) return "LIP";
   return "VO";
@@ -577,7 +577,7 @@ function PPScript({ S, post, setPost, rows }) {
   return (
     <div className="pp-panel">
       <div className="section-divider">STEP 2 — 한국어 광고 대사</div>
-      <div className="gen-note">제품명·소구점·Scene 구성·길이는 프로젝트에서 자동으로 가져옵니다 — 다시 입력할 필요 없습니다. 홈쇼핑 톤이 아니라 실제 사용자가 말하는 톤으로 생성됩니다.</div>
+      <div className="gen-note">제품명·소구점·Scene 구성·길이는 프로젝트에서 자동으로 가져옵니다 — 다시 입력할 필요 없습니다. 홈쇼핑 톤이 아니라 실제 사용자가 말하는 톤으로 생성됩니다. "스토리보드 작성" 단계에서 이미 대사를 써두셨다면 여기 자동으로 채워져 있으니 확인·다듬기만 하면 됩니다.</div>
       <div className="gen-row">
         <button className="primary small" onClick={genAll}>🎬 AI 한국어 대사 생성</button>
         <button className="mini" onClick={fitAll}>영상 길이에 맞게 자동 축약</button>

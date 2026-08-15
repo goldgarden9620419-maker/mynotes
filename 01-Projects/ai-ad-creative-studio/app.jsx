@@ -84,8 +84,16 @@ function loadState() {
   return applySeed({ ...DEFAULTS, post: mergePost(null) });
 }
 
-const STEPS = ["프로젝트 설정", "제품", "AI 모델", "장소", "개별 Scene", "스토리보드", "Scene Composer", "최종 Export", "후반 작업"];
-const STEP_KEYS = ["PROJECT", "PRODUCT", "MODEL", "LOCATION", "SCENES", "STORY", "COMPOSER", "EXPORT", "POST"];
+const STEPS = ["프로젝트 설정", "제품", "AI 모델", "장소", "스토리보드 작성", "스토리보드 이미지", "영상 생성", "최종 Export", "후반 작업 · 합치기"];
+const STEP_KEYS = ["PROJECT", "PRODUCT", "MODEL", "LOCATION", "STORYBOARD", "IMAGE", "VIDEO", "EXPORT", "MERGE"];
+/* 좌측 내비를 4단계 흐름으로 묶어 보여주기 위한 그룹 표시 — 실제 step index/로직은 그대로 두고 라벨만 재구성 */
+const STEP_PHASES = [
+  { title: "설정", steps: [0, 1, 2, 3] },
+  { title: "1 · 스토리보드 작성", steps: [4] },
+  { title: "2 · 이미지 생성", steps: [5] },
+  { title: "3 · 영상 생성", steps: [6] },
+  { title: "4 · 합치기 · 최종화", steps: [7, 8] }
+];
 
 /* ───────────────────────── 공용 컴포넌트 ───────────────────────── */
 /* confirm() 팝업이 차단되는 환경이 있어, 위험 동작은 두 번 클릭 방식으로 확인한다 */
@@ -190,7 +198,7 @@ function PromptBox({ title, kr, en }) {
 
 /* ───────── 힉스필드 직접 생성 (window.claude.mcp) — hf.js 공용 헬퍼 사용 ───────── */
 import { hfReady, hfErrMsg, hfCall, hfWaitJob, isUuid, refMedias, badRefs, UUID_RE } from "./hf.js";
-import { StepPost, mergePost, POST_DEFAULTS } from "./postprod.jsx";
+import { StepPost, mergePost, POST_DEFAULTS, classifyScene } from "./postprod.jsx";
 
 /* 생성 버튼 한 줄 — kind: 'image' | 'video' */
 function GenRow({ kind, label, getParams, savedUrl, onResult, disabled, disabledMsg }) {
@@ -430,6 +438,10 @@ function SceneCard({ scene, S, set, idx }) {
   const upScene = (patch) => set({ scenes: S.scenes.map((sc) => sc.id === scene.id ? { ...sc, ...patch } : sc) });
   const imgP = showImg ? P.buildSceneImagePrompt(scene, S) : null;
   const vidP = showVid ? P.buildSceneVideoPrompt(scene, S) : null;
+  const post = S.post || {};
+  const line = (post.lines || {})[scene.id] || {};
+  const lineMode = line.mode || classifyScene(scene);
+  const upLine = (patch) => set({ post: { ...post, lines: { ...post.lines, [scene.id]: { mode: lineMode, text: line.text || "", ...patch } } } });
   return (
     <div className="scene-card">
       <div className="scene-head">
@@ -448,6 +460,20 @@ function SceneCard({ scene, S, set, idx }) {
       </div>
       <Options title="Scene 역할" list={C.SCENE_ROLES} value={scene.role} onChange={(v) => upScene({ role: v })} custom={false} cols={4} />
       <Options title="사용 Asset" list={C.SCENE_ASSETS} value={scene.assets} onChange={(v) => upScene({ assets: v })} multi custom={false} cols={4} />
+      <div className="opt-group" style={{ marginTop: 4 }}>
+        <div className="opt-title">이 씬 대사 · 자막
+          <span className="pp-modes" style={{ marginLeft: 8 }}>
+            {["LIP", "VO", "NONE"].map((m) => (
+              <button key={m} className={"mini" + (lineMode === m ? " on" : "")} onClick={() => upLine({ mode: m })}>
+                {m === "LIP" ? "LIP SYNC" : m === "VO" ? "VOICE OVER" : "NO VOICE"}
+              </button>
+            ))}
+          </span>
+        </div>
+        {lineMode !== "NONE"
+          ? <textarea className="pp-line" rows={2} placeholder="이 씬의 대사 (비워두면 후반 작업에서 AI가 자동 생성)" value={line.text || ""} onChange={(e) => upLine({ text: e.target.value })} />
+          : <div className="gen-note">음성 없는 씬입니다 (Hero Shot·CTA 등 — BGM만으로 진행).</div>}
+      </div>
       {scene.assets.includes("MODEL") && <>
         <Options title="소개 스타일 (말하는 톤)" list={C.PRESENT_STYLES} value={scene.presentStyle || "친구에게 추천하듯"} onChange={(v) => upScene({ presentStyle: v })} custom={false} />
         <Options title="시선 처리" list={C.PRESENT_GAZES} value={scene.gaze || "카메라 정면 응시"} onChange={(v) => upScene({ gaze: v })} custom={false} />
@@ -729,7 +755,8 @@ function StepScenes({ S, set }) {
   };
   return (
     <>
-      <h2>개별 Scene 빌더</h2>
+      <h2>스토리보드 작성 <span className="pp-sub">씬별 샷 · 대사 · 자막을 텍스트로 먼저 정합니다</span></h2>
+      <div className="banner">여기서 각 씬의 샷 구성과 대사·자막을 먼저 정해두면, 다음 단계(이미지 생성)부터는 이 내용을 그대로 참조합니다. 대사는 나중에 후반 작업에서 다시 확인·수정할 수 있어요.</div>
       <LibraryManager S={S} set={set} />
       <div className="gen-row" style={{ margin: "10px 0" }}>
         <button className="primary" onClick={addScene}>+ Scene 추가</button>
@@ -785,7 +812,7 @@ function StepStoryboard({ S, set }) {
   if (rows.length < 2) {
     return <>
       <h2>스토리보드</h2>
-      <div className="empty">개별 Scene 단계에서 씬을 2개 이상 만들면, 모든 씬을 한 캔버스에 배치한 스토리보드를 생성할 수 있습니다.</div>
+      <div className="empty">스토리보드 작성 단계에서 씬을 2개 이상 만들면, 모든 씬을 한 캔버스에 배치한 스토리보드 이미지를 생성할 수 있습니다.</div>
       <div className="gen-note" style={{ marginTop: 10 }}>스토리보드는 다음 단계(Scene Composer)에서 "자연스럽게 이어지는 하나의 영상"을 만드는 기준이 됩니다.</div>
     </>;
   }
@@ -861,7 +888,7 @@ function StepComposer({ S, set }) {
             {sc.name} <span className="opt-sub">{C.disp(C.SCENE_ROLES, sc.role)}</span>
           </button>
         ))}
-        {S.scenes.length === 0 && <div className="empty">개별 Scene 단계에서 Scene을 먼저 만들어주세요.</div>}
+        {S.scenes.length === 0 && <div className="empty">스토리보드 작성 단계에서 Scene을 먼저 만들어주세요.</div>}
       </div>
 
       <Options title="SCENE ORDER MODE" list={C.ORDER_MODES} value={c.orderMode} onChange={applyOrder} custom={false} cols={4} />
@@ -1208,10 +1235,15 @@ function App() {
 
       <div className="layout">
         <nav className="stepnav">
-          {STEPS.map((label, i) => (
-            <button key={label} className={"step-link" + (S.step === i ? " active" : "") + (done(i) ? " done" : "")} onClick={() => set({ step: i })}>
-              <span className="step-idx">{i + 1}</span>{label}
-            </button>
+          {STEP_PHASES.map((ph) => (
+            <div className="phase-group" key={ph.title}>
+              <div className="phase-title">{ph.title}</div>
+              {ph.steps.map((i) => (
+                <button key={STEPS[i]} className={"step-link" + (S.step === i ? " active" : "") + (done(i) ? " done" : "")} onClick={() => set({ step: i })}>
+                  <span className="step-idx">{i + 1}</span>{STEPS[i]}
+                </button>
+              ))}
+            </div>
           ))}
         </nav>
 
