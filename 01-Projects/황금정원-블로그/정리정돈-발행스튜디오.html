@@ -1,0 +1,379 @@
+<title>블로그+스레드 발행 스튜디오 — 정리정돈 습관</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-13</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>정리정돈 습관 (미니멀리즘, 손실회피, 비우기)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">스토리텔링형</span><span class="chip accent">공감 상황형 훅</span><span class="chip accent">소제목 4개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">정리정돈</span><span class="chip">미니멀리즘</span><span class="chip">손실회피</span><span class="chip">소유효과</span><span class="chip">매몰비용</span><span class="chip">비우기</span><span class="chip">자기계발</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=XTueIYuM2aY" target="_blank" rel="noopener noreferrer">물건 못 버리는 심리와 비우는 법</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">정리정돈 습관 (미니멀리즘, 손실회피, 비우기)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">정리정돈,미니멀리즘,손실회피,소유효과,매몰비용,비우기,선택의역설,자기계발,물건집착심리,정리습관</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">분명 버렸는데 한 달 뒤 서랍 열어보면 또 그대로임. 나만 그런 줄 알았음.
+
+의지 문제 아니라 뇌가 원래 그렇게 생겨먹은 거였음.
+
+정리정돈 시작하고 알게 된 것들 정리해봄.
+
+1. 소유효과 - 내 물건이 되는 순간 가치가 2배로 부풀어 보임
+2. 손실회피 - 버리는 아픔이 얻는 기쁨보다 훨씬 크게 느껴짐
+3. "언젠가 쓰겠지"는 사실 매몰비용 아까운 마음이었음
+4. 물건 많을수록 뇌가 처리하느라 집중력 깎임 (프린스턴 연구)
+5. 어지러운 집, 스트레스 호르몬까지 영향줌 (UCLA 연구)
+6. 한번에 다 버리지 말고 종류별로, 하나 들어오면 하나 내보내기
+
+최근 2년 안쓴 거 딱 3개만 골라보는 걸로 시작함 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">정리정돈 습관, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">분명히 버렸는데도 한 달 뒤 서랍을 열어보면 신기하게 또 그 자리에 물건이 채워져 있던 적, 저도 있습니다. 종이가방, 소스 유리병, 화장품 샘플. 다 그럴듯한 이유로 남겨뒀지만 정작 한 번도 다시 꺼낸 적이 없었습니다.<br /><br />저는 제가 유난히 게으르거나 미련이 많은 사람이라고 생각했습니다. 그런데 알고 보니 이건 의지의 문제가 아니라 우리 뇌가 원래 그렇게 설계되어 있는 문제였습니다. 정리정돈 습관을 만들며 제가 착각했던 것들을 정리해 봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">왜 나는 그 서랍을 다시 채웠을까</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">심리학자 대니얼 카너먼 연구팀은 사람들에게 머그컵을 공짜로 나눠주고, 컵을 받은 사람에게는 얼마면 팔겠느냐고, 받지 못한 사람에게는 얼마면 사겠느냐고 물었습니다. 결과는 뚜렷했습니다. 컵을 가진 사람은 갖지 않은 사람이 부른 값의 거의 두 배를 불렀습니다(<a href="https://web.mit.edu/curhan/www/docs/Articles/15341_Readings/Behavioral_Decision_Theory/Kahneman_et_al_1990_Experimental_tests.pdf" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Kahneman, Knetsch & Thaler, Journal of Political Economy</a>). 똑같은 컵인데도 내 것이 되는 순간 가치가 부풀어 오르는 이 현상을 소유효과라고 부릅니다. 여기에 사람은 얻는 기쁨보다 잃는 아픔을 훨씬 크게 느끼는 손실회피 성향까지 겹치면, 이미 내 것이 된 물건을 버리는 일이 유독 힘들게 느껴지는 이유가 설명됩니다.<br /><br />저도 예전에는 물건을 쉽게 버리지 못했습니다. 쇼핑백이나 택배 상자, 한두 번 쓰고 넣어둔 생활용품을 보면서 늘 언젠가는 쓰겠지라는 생각을 했습니다. 특히 돈을 주고 산 물건은 쓰지 않아도 버리는 순간 괜히 손해를 보는 것 같아 다시 서랍 속으로 넣어두곤 했습니다. 이게 제가 유난히 미련해서가 아니라 소유효과와 손실회피가 동시에 작동한 결과였다는 걸 나중에야 알게 됐습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 내 물건의 가치를 실제보다 부풀려 느끼는 소유효과와 잃는 것을 더 아프게 느끼는 손실회피가 겹쳐서, 물건을 버리는 손이 유독 무거워집니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">"언젠가"라는 말 뒤에 숨은 진짜 이유</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">우리가 물건을 붙잡을 때 가장 많이 하는 말이 언젠가 쓰겠지입니다. 그런데 이 언젠가의 정체를 들여다보면, 실은 이미 써버려서 되돌릴 수 없는 돈이나 시간이 아까운 마음, 그리고 아직 오지도 않은 후회를 미리 당겨와 걱정하는 마음이 함께 작용한 결과에 가깝습니다. 경제학에서는 이미 지출해 되돌릴 수 없는 비용을 매몰비용이라 부르는데, 그 물건을 사느라 쓴 돈은 물건을 계속 갖고 있든 버리든 이미 제 손을 떠난 돈입니다. 그런데도 그 돌아오지 않을 돈이 아까워서, 정작 지금 쓰지도 않는 물건에게 소중한 공간을 계속 내주고 있었던 셈입니다.<br /><br />저 역시 돈을 주고 산 물건일수록 버리는 게 유독 힘들었습니다. 그런데 어느 날 정리를 하다가 몇 년 동안 한 번도 사용하지 않은 물건들이 생각보다 너무 많다는 사실을 깨달았습니다. 그 순간 물건을 가지고 있는 것이 아끼는 게 아니라, 오히려 제 공간과 마음을 그 물건이 차지하고 있는 것이라는 생각이 들었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> "언젠가 쓰겠지"라는 말 뒤에는 이미 쓴 돈이 아까운 매몰비용 심리가 숨어 있으며, 그 돈은 물건을 계속 쥐고 있어도 돌아오지 않습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">정리하지 않은 집이 나를 몰아세우는 방식</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">프린스턴대학교 신경과학연구소 연구에 따르면, 눈에 보이는 여러 물건은 뇌의 시각피질 안에서 서로 신경 반응을 억누르며 주의를 끌기 위해 경쟁한다고 합니다(<a href="https://www.jneurosci.org/content/31/2/587" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Journal of Neuroscience, McMains & Kastner</a>). 서랍 안에 물건이 많을수록 뇌는 그 물건들을 하나하나 처리하느라 정작 중요한 일에는 에너지를 덜 쓰게 됩니다. 여기에 선택지가 많을수록 오히려 판단이 더 어려워진다는 선택의 역설까지 더해지면, 옷장 앞에서 한참을 서 있다가 결국 늘 입던 옷만 다시 꺼내 입는 이유가 설명됩니다.<br /><br />실제로 UCLA 연구팀이 가정집을 방문해 조사한 결과, 집을 어수선하다고 표현한 사람일수록 하루 동안의 스트레스 호르몬 변화 패턴이 건강하지 않은 쪽으로 나타났습니다(<a href="https://journals.sagepub.com/doi/10.1177/0146167209352864" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Saxbe & Repetti, Personality and Social Psychology Bulletin</a>). 쌓인 물건이 눈에 들어올 때마다 몸은 저것도 치워야 하는데 하고 작게 긴장한다는 뜻입니다. 세상에서 제일 편해야 할 집이, 정작 저를 은근히 몰아세우고 있었던 셈입니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 어지러운 공간은 뇌의 주의력을 갉아먹고 스트레스 호르몬 패턴까지 흔들어, 쉬어야 할 집에서도 몸이 긴장 상태로 있게 만듭니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">제가 실제로 겪은 변화와 실천법</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">몇 년간 안 쓴 물건이 너무 많다는 걸 깨달은 뒤로, 저는 한꺼번에 정리하려 하지 않고 서랍 하나, 옷장 한 칸씩 조금씩 비우기 시작했습니다. 처음에는 아까운 마음이 컸지만, 막상 정리하고 나니 이상하게 마음까지 가벼워졌습니다. 특히 오래 입지 않은 옷을 정리할 때마다 과거에 대한 미련도 함께 내려놓는 느낌이 들었습니다. 이제는 새로운 물건을 살 때도 정말 필요한지 한 번 더 생각하게 됩니다.<br /><br />다만 저는 비우면 마음이 가벼워진다는 것에는 공감하지만, 무조건 많이 버리는 것이 좋은 삶이라고는 생각하지 않습니다. 추억이 담긴 물건이나 다시 쓸 가능성이 있는 물건까지 미니멀리즘이라는 이유로 정리할 필요는 없다고 봅니다. 중요한 건 버리는 행동 자체가 아니라, 지금의 저에게 정말 필요한 것인지 판단하는 기준을 만드는 것이었습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">장소가 아니라 물건 종류로 시작하기 (오늘은 수건, 내일은 컵)</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">새 물건 하나가 들어오면 안 쓰는 물건 하나를 내보내기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">최근 2년간 손 한 번 안 간 물건, 딱 세 개만 골라 정리하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">바로 버리기 아까우면 나눔 상자에 담아 한동안 지켜보기</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">결국 정리는 적게 소유하는 경쟁이 아니라, 필요 없는 것을 내려놓고 제가 중요하게 생각하는 것에 더 집중하기 위한 과정이라고 저는 생각합니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 한꺼번에 비우려 하기보다 종류별로 조금씩, "최근 2년간 안 쓴 세 개만"처럼 작은 기준으로 반복하는 것이 저에게는 훨씬 오래갔습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 돈 주고 산 건데 버리면 손해 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그 돈은 산 순간 이미 제 손을 떠났다고 저에게 짚어줬습니다. 지금 물건을 붙잡고 있든 보내든 그 돈은 돌아오지 않으니, 매몰비용에 더는 공간을 저당잡히지 않기로 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 추억이 담긴 물건까지 다 정리해야 미니멀리스트인 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저에게 분명히 답했습니다. 정리는 적게 소유하는 경쟁이 아니라 지금 필요한 걸 가려내는 기준을 세우는 일이니, 의미 있는 물건은 남겨도 괜찮다고 정리했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 정리해도 며칠 지나면 나는 또 서랍을 채우지 않을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저도 실제로 그랬다고 인정했습니다. 그래서 한 번에 다 비우기보다, 하나 들어오면 하나 내보내는 규칙으로 다시 차오르는 걸 막는 쪽을 택했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 물건을 못 버리는 내가 유난히 미련한 사람인 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇지 않다고 저에게 정정했습니다. 소유효과와 손실회피는 제 성격이 아니라 사람 마음이 원래 그렇게 설계된 결과라는 걸 알고 나서, 저를 탓하는 대신 방법을 바꾸는 쪽을 택했습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">물건을 비운다는 건 결국 소유효과와 손실회피라는 마음의 자연스러운 반응을 조금씩 마주하는 연습이라고 저는 결론지었습니다. 정리는 물건을 잃는 일이 아니라, 그 물건에 저당잡혀 있던 공간과 마음의 여유를 도로 찾는 일이었습니다.<br /><br />오늘은 서랍 하나만 열어, 최근 2년간 손 한 번 안 간 물건 딱 세 개만 골라보시길 권합니다. 그거면 오늘 하루는 충분히 잘하신 겁니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=XTueIYuM2aY" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=XTueIYuM2aY</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-declutter-v2';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
