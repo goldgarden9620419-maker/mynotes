@@ -1,0 +1,406 @@
+<title>블로그+스레드 발행 스튜디오 — 그릿의 두 얼굴</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-17</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>그릿의 두 얼굴 (그릿, 성장마인드셋, 점검)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">정보추천</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">토론형</span><span class="chip accent">반전 질문형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">그릿</span><span class="chip">GRIT</span><span class="chip">앤절라더크워스</span><span class="chip">성장마인드셋</span><span class="chip">고정마인드셋</span><span class="chip">책추천</span><span class="chip">노력</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=sKsQOF9UGvE" target="_blank" rel="noopener noreferrer">왜 누군가는 포기하고 누군가는 끝까지 해내는가 — GRIT TED 강연</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=sKsQOF9UGvE" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">왜 누군가는 포기하고 누군가는 끝까지 해내는가? — GRIT(그릿), 앤절라 더크워스 TED 명강연<br />https://www.youtube.com/watch?v=sKsQOF9UGvE</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(강연 요지 정리)</b></p>
+    <details class="preview">
+      <summary>메모 펼쳐보기</summary>
+      <div class="snippet" style="margin-top:10px;max-height:380px;overflow:auto;">제가 놀랐던 점은 IQ가 제 학생들의 성취도 차이를 설명하는 유일한 변수가 아니라는 사실이었습니다. 가장 뛰어난 성과를 낸 학생들 중 일부는 IQ 점수가 아주 높지 않았거든요.
+가장 똑똑한 학생들 중 일부가 기대만큼 잘하지 못하는 것을 보며 저는 고민에 빠졌습니다. 학교나 삶에서의 성공이 단순히 빨리, 쉽게 배우는 능력보다 훨씬 더 많은 것에 달려 있다면 어떨까요?
+저는 모든 연구에서 '누가 여기서 성공하는가, 그리고 그 이유는 무엇인가?'라는 질문을 던졌습니다.
+제 연구팀과 저는 웨스트포인트 육군 사관학교를 방문했습니다. 우리는 어떤 생도가 군사 훈련을 끝까지 마칠지, 그리고 어떤 생도가 중도 포기할지를 예측하려고 했습니다.
+내셔널 스펠링 비 대회에서도 어떤 아이가 결승까지 진출할지 예측해보려 했습니다. 또한 아주 힘든 환경의 학교에서 근무하는 신입 교사들을 연구하며, 누가 학기 말까지 남아있을지, 그리고 그들 중 누가 학생들의 학습 성과를 가장 효과적으로 향상시킬지를 질문했습니다.
+기업들과도 협력하여 영업 사원들 중 누가 끝까지 살아남을지, 누가 가장 많은 돈을 벌게 될지 연구했습니다.
+이처럼 매우 다른 모든 분야에서 성공을 예측하는 유의미한 특성 하나가 발견되었습니다. 그것은 사회적 지능도, 외모나 신체적 건강도, IQ도 아니었습니다.
+그것은 바로 그릿(Grit)이었습니다. 그릿은 장기적인 목표를 향한 열정과 끈기입니다. 그릿은 지구력을 의미합니다.
+그릿은 일주일이나 한 달이 아니라, 수년 동안 미래를 향해 꾸준히 나아가며 그 미래를 현실로 만들기 위해 정말 열심히 노력하는 것을 의미합니다.
+어떻게 하면 아이들에게 그릿을 길러줄 수 있을까요. 솔직한 대답은 저도 모른다는 것입니다. 하지만 확실히 아는 것은 재능이 끈기를 만들지는 않는다는 점입니다. 사실 데이터에 따르면 그릿은 재능 지표와 무관하거나 심지어 반비례하는 경우가 많습니다.
+지금까지 아이들에게 그릿을 심어주는 방법으로 가장 좋은 아이디어는 성장 마인드셋입니다. 스탠퍼드대학교 캐럴 드웩 교수가 개발한 개념으로, 학습 능력은 고정된 것이 아니라 노력에 따라 변화할 수 있다는 믿음을 뜻합니다.
+성장 마인드셋은 그릿을 기르는 데 좋은 아이디어지만, 더 많은 것이 필요합니다. 우리는 가장 좋은 아이디어와 직관을 검증하고, 실패하고 틀리는 것을 감수하며 배운 교훈으로 다시 시작할 준비가 되어 있어야 합니다.</div>
+    </details>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">주말과 연휴 동안 『그릿』을 읽으면서 가장 오래 머릿속에 남은 말은 성공을 결정하는 것은 재능보다 장기적인 목표를 향한 열정과 끈기라는 내용이었다. 예전의 나는 무언가를 시작하면 빨리 결과가 나오기를 기대했고, 눈에 보이는 성과가 없으면 '내가 잘못하고 있는 건 아닐까?'라는 조급함을 느끼곤 했다. 하지만 요즘의 나를 돌아보면 조금 달라졌다. 매일 책을 읽고, 걷고, 명상하며 새로운 것을 배우는 시간을 꾸준히 이어가고 있다. 특히 AI와 콘텐츠 제작처럼 익숙하지 않은 분야를 공부하면서 막히고 실패하는 순간도 많지만, 예전처럼 쉽게 포기하기보다 다시 방법을 찾아보게 된다. 아직 내가 원하는 만큼의 결과가 나온 것은 아니지만, 『그릿』을 읽으며 어쩌면 지금의 이 과정 자체가 나에게 필요한 훈련이라는 생각이 들었다. 그릿은 특별한 능력이 아니라 오늘 해야 할 일을 포기하지 않고 내일도 다시 해보는 힘이 아닐까. 당장의 성과보다 어제보다 조금이라도 성장하는 것에 집중하며, 내가 정한 방향을 믿고 꾸준히 걸어가는 사람이 되고 싶다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">『그릿』을 읽으며 성공에는 재능보다 꾸준함과 끈기가 중요하다는 주장에 많이 공감했다. 나 역시 무언가를 시작할 때 의욕은 넘쳤지만 결과가 빨리 보이지 않으면 조급해했던 경험이 있기 때문이다. 다만 모든 성공을 그릿만으로 설명하는 것은 조금 경계할 필요가 있다고 생각한다. 아무리 끈기 있게 노력해도 방향이 잘못되었다면 노력한 시간만큼 좋은 결과가 따라오지는 않는다. 때로는 포기하지 않는 것보다 멈춰서 방향을 점검하고 새로운 방법을 선택하는 것이 더 중요할 수도 있다. 결국 내가 생각하는 진정한 그릿은 무조건 버티는 힘이 아니라, 실패를 인정하고 배우면서도 자신이 원하는 목표를 향해 다시 나아가는 힘이다. 꾸준함과 함께 스스로를 돌아보는 판단력이 있을 때 그릿은 더욱 가치 있는 힘이 된다고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">그릿의 두 얼굴 (그릿, 성장마인드셋, 점검)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">그릿,GRIT,앤절라더크워스,성장마인드셋,고정마인드셋,자기계발,책추천,노력,재능,끈기</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>정보추천</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">재능보다 노력이 중요하다는 말, 뻔하다고 생각했음.
+
+근데 앤절라 더크워스의 그릿(GRIT) 연구 보고 생각 바뀜.
+
+정리해봄.
+
+1. 웨스트포인트·스펠링비·영업직군까지 - 성공을 가장 잘 예측한 건 IQ도 재능도 아니었음
+2. 그릿은 장기 목표를 향한 열정과 끈기임 - 몇 달이 아니라 수년 단위임
+3. 그릿은 재능이랑 무관하거나 반비례하기도 함
+4. 그릿 기르는 열쇠는 성장마인드셋임 - 능력은 고정 아니라는 믿음
+5. 근데 방향 잘못되면 버티는 것만으로는 안 됨 - 점검이 필요함
+
+무조건 버티는 게 그릿이 아니라, 방향 점검하면서 다시 나아가는 게 진짜 그릿이었음 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">그릿의 두 얼굴, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">정말 노력이 재능을 이길까요? 저는 오랫동안 그 반대라고 믿었습니다. 앤절라 더크워스 교수의 《그릿(GRIT)》을 읽기 전까지는요. 재능보다 오래 붙잡고 늘어지는 힘, 그릿이 성취를 갈랐다는 그의 연구는 제 생각을 완전히 뒤집어 놓았습니다.<br /><br />그런데 그릿을 그대로 믿고 무조건 버티기만 하면 될까요. 책을 읽고 나서 제가 정리한 생각을 남겨봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">재능보다 그릿이 성취를 예측했다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">더크워스 교수는 원래 경영 컨설턴트였다가 중학교에서 수학을 가르치면서 이 연구를 시작했다고 합니다. 성적이 가장 좋은 학생들 중 일부는 IQ 점수가 특별히 높지 않았고, 반대로 IQ가 높은 학생 중 일부는 기대만큼 성과를 내지 못했습니다. 이 격차가 궁금해진 그는 웨스트포인트 육군사관학교 생도, 전국 스펠링비(단어 철자를 맞히는 대회) 결승 진출자, 어려운 환경의 학교에서 근무하는 신입 교사, 기업 영업 사원까지 서로 완전히 다른 집단을 연구했습니다.<br /><br />결과는 하나로 모였습니다. 사회적 지능도, 외모도, IQ도 아닌 그릿이 이 모든 집단의 성공을 가장 잘 예측했습니다. 그릿이란 장기적인 목표를 향한 열정과 끈기를 뜻하는 개념으로, 한 주나 한 달이 아니라 수년 동안 같은 방향으로 꾸준히 나아가는 힘을 말합니다(<a href="https://pubmed.ncbi.nlm.nih.gov/17547490/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Duckworth et al., 2007, Journal of Personality and Social Psychology</a>). 저는 이 대목을 읽으면서 제가 그동안 결과가 늦게 나오는 일을 얼마나 빨리 포기해왔는지 돌아보게 됐습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 그릿은 사회적 지능이나 IQ가 아니라, 장기 목표를 향해 수년간 꾸준히 나아가는 힘입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">그릿을 기르는 열쇠, 성장마인드셋</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">흥미로운 지점은 재능이 그릿을 만들어주지 않는다는 것이었습니다. 오히려 그릿 점수와 재능 지표가 무관하거나 반비례하는 경우도 많았다고 합니다. 더크워스는 아이들에게 그릿을 길러주는 가장 좋은 아이디어로 성장마인드셋을 꼽았습니다. 성장마인드셋이란 스탠퍼드대학교 캐럴 드웩 교수가 제시한 개념으로, 능력은 타고나는 게 아니라 노력에 따라 변화할 수 있다는 믿음을 뜻합니다. 이는 재능이나 지능이 고정되어 있다고 믿는 고정마인드셋과 대비되는 개념으로, 뇌가 도전 앞에서 실제로 변화하고 성장한다는 사실을 알게 된 아이들이 실패를 훨씬 잘 견뎌낸다는 연구 결과가 있습니다(<a href="https://ctl.stanford.edu/students/growth-mindset" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Stanford Center for Teaching and Learning</a>).<br /><br />저도 요즘 매일 책을 읽고 걷고 명상하는 시간을 꾸준히 이어가고 있는데, 특히 AI와 콘텐츠 제작처럼 낯선 분야를 공부하면서 막히는 순간이 정말 많습니다. 예전 같으면 쉽게 포기했을 텐데, 지금은 다시 방법을 찾아보게 됩니다. 아직 원하는 만큼의 결과가 나온 건 아니지만, 이 과정 자체가 저에게 필요한 훈련이라는 생각이 들었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 그릿은 타고나는 재능이 아니라, 실패를 배움의 기회로 보는 성장마인드셋에서 자라납니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">그릿에도 방향 점검이 필요한 이유</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">다만 저는 그릿만으로 모든 성공을 설명하는 것은 경계할 필요가 있다고 생각합니다. 아무리 끈기 있게 노력해도 방향이 잘못됐다면 노력한 시간만큼 좋은 결과가 따라오지 않기 때문입니다. 포기하지 않는 것 못지않게, 가끔 멈춰 서서 방향을 점검하고 필요하면 방법을 바꾸는 것도 중요하다고 저는 봅니다. 그래서 요즘 제가 실제로 하고 있는 점검 방식은 이렇습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">지금 하는 노력이 원래 목표와 같은 방향인지 주기적으로 되짚어보기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">결과가 늦게 나오는 일과 방법 자체가 잘못된 일을 구분해서 보기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">실패했을 때 그 이유를 기록해두고 다음 시도에 반영하기</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">더크워스 본인도 강연 말미에 그릿을 확실하게 길러주는 방법은 아직 모른다고 인정했습니다. 저는 이 솔직함이 오히려 신뢰가 갔습니다. 그릿은 무조건 버티는 힘이 아니라, 실패를 인정하고 배우면서도 원하는 목표를 향해 다시 나아가는 힘이라고 저는 결론지었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 진짜 그릿은 무조건 버티는 게 아니라, 방향을 점검하며 다시 나아가는 힘입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 정말 재능보다 노력을 믿고 있을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 예전엔 아니었다고 저는 인정합니다. 결과가 안 보이면 재능 탓을 하곤 했는데, 이제는 시간이 더 필요한 걸 수도 있다고 저에게 되묻습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 결과가 늦게 나오면 나는 계속 버틸 수 있을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 솔직히 매번 자신은 없다고 인정합니다. 다만 예전보다는 포기하는 속도가 느려졌다는 걸 저는 체감하고 있습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 방향이 잘못됐는데도 나는 무조건 버티기만 하는 건 아닐까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 가끔은 그랬다고 저는 인정합니다. 그래서 요즘은 지금 가는 방향이 맞는지 주기적으로 저에게 다시 묻는 습관을 들이고 있습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그릿이 없으면 나는 성공할 수 없는 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇지 않다고 저는 생각합니다. 더크워스도 그릿을 기르는 확실한 방법은 모른다고 했으니, 저는 지금의 시행착오 자체가 그 답을 찾아가는 과정이라고 믿습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 《그릿》을 읽고 나서 재능보다 오래 붙잡고 늘어지는 힘이 성취를 가른다는 사실을 받아들이게 됐습니다. 다만 그 끈기가 방향 점검 없이 무조건 버티는 것이어서는 안 된다는 것도 함께 배웠습니다.<br /><br />지금 어떤 목표를 붙잡고 계신다면, 포기할지 말지를 묻기 전에 지금 가는 방향이 맞는지부터 한 번 점검해보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=sKsQOF9UGvE" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=sKsQOF9UGvE</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-grit-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>

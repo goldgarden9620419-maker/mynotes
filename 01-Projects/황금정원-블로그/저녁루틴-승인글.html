@@ -1,0 +1,133 @@
+<meta charset="utf-8" />
+<title>못 일어나는 진짜 이유 (루틴, 준비, 알람) — 티스토리 승인글</title>
+<div style="max-width:860px;margin:0 auto;padding:24px 16px;font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f8fafc;">
+
+<!-- 상단: 제목 / 카테고리 / 태그 -->
+<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+  <p style="margin:0 0 6px 0;font-size:0.85rem;color:#6b7280;">글 제목</p>
+  <p id="postTitle" style="margin:0 0 10px 0;font-size:1.25rem;font-weight:700;color:#111827;">못 일어나는 진짜 이유 (루틴, 준비, 알람)</p>
+  <button onclick="copyText('postTitle', this)" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.9rem;cursor:pointer;">제목 복사</button>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;" />
+  <p style="margin:0 0 6px 0;font-size:0.85rem;color:#6b7280;">카테고리</p>
+  <p style="margin:0 0 10px 0;font-size:0.95rem;color:#374151;font-weight:700;">미라클모닝·아침루틴</p>
+  <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;" />
+  <p style="margin:0 0 6px 0;font-size:0.85rem;color:#6b7280;">태그</p>
+  <p id="postTags" style="margin:0 0 10px 0;font-size:0.95rem;color:#374151;">저녁루틴,아침기상,수면위생,일주기리듬,멜라토닌,미라클모닝,기상습관,알람습관,수면습관,자기계발</p>
+  <button onclick="copyText('postTags', this)" style="background:#2563eb;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.9rem;cursor:pointer;">태그 복사</button>
+</div>
+
+<!-- 중단: 본문 미리보기 -->
+<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;padding:20px 22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+  <p style="margin:0 0 12px 0;font-size:0.85rem;color:#6b7280;">본문 미리보기 (붙여넣었을 때 실제 모습)</p>
+  <div id="preview"></div>
+</div>
+
+<!-- 하단: 복사용 HTML -->
+<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;padding:20px 22px;box-shadow:0 2px 10px rgba(0,0,0,0.05);">
+  <p style="margin:0 0 10px 0;font-size:0.85rem;color:#6b7280;">복사용 본문 HTML</p>
+  <button onclick="copyBody(this)" style="background:#16a34a;color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:0.95rem;cursor:pointer;margin-bottom:12px;">본문 HTML 전체 복사</button>
+  <textarea id="htmlBox" readonly style="width:100%;height:320px;border:1px solid #d1d5db;border-radius:8px;padding:12px;font-size:0.8rem;font-family:monospace;box-sizing:border-box;background:#f9fafb;"></textarea>
+  <p style="margin:12px 0 0 0;font-size:0.9rem;color:#374151;line-height:1.7;">👉 티스토리 글쓰기에서 <b>HTML 모드로 전환</b> 후 붙여넣으세요. 모든 스타일이 인라인으로 포함되어 있어 <b>스킨에 CSS를 따로 등록하지 않아도</b> 카드 디자인이 그대로 보입니다.</p>
+</div>
+
+<script type="text/template" id="src">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">저도 처음엔 아침에 못 일어나는 게 제 의지가 약해서라고 생각했습니다. 알람을 여러 개 맞춰놔도 손이 먼저 알람을 끄고 다시 잠드는 날이 많았고, 그럴 때마다 스스로를 게으르다고 탓했습니다.<br /><br />그런데 돌아보니 문제는 의지가 아니라 하루 전체의 시간 패턴, 그중에서도 저녁을 어떻게 보내느냐에 있었습니다. 제가 직접 바꿔보면서 정리한 내용을 남겨봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">아침에 못 일어나는 건 의지가 아니라 루틴이다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">질병관리청 국가건강정보포털에서도 불면증을 개선하는 가장 기본적인 방법으로 수면위생을 꼽습니다. 수면위생이란 잠자리에 들고 일어나는 시간을 포함해 매일 지켜야 할 생활 습관 전반을 뜻하는 개념으로, 늦게 잠들었더라도 일어나는 시간만큼은 일정하게 유지하는 것이 핵심이라고 안내합니다(<a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=641" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 질병관리청 국가건강정보포털</a>). 저는 이 부분을 읽고서야 평일과 주말 기상 시간을 마음대로 오갔던 게 문제였다는 걸 알았습니다.<br /><br />요즘은 일어나면 잠깐이라도 걷고, 명상하고, 책을 읽으며 하루를 시작하려고 합니다. 처음부터 자연스러웠던 건 아닙니다. 전날 늦게 자거나 피곤하면 여전히 일어나기 힘든 날도 있었습니다. 그래도 완벽하게 지키려 하기보다 다음 날 다시 원래 루틴으로 돌아오려고 노력했고, 그렇게 반복하다 보니 어느 순간 아침에 일어나는 일이 예전만큼 힘들지 않게 됐습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 아침 기상은 의지력의 문제가 아니라, 하루 전체의 시간 패턴을 얼마나 일정하게 유지하느냐의 문제입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">잠들기 전 1시간이 만드는 준비</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">사람의 몸에는 약 24시간 주기로 잠과 각성을 오가게 하는 일주기리듬이라는 생체 시계가 있습니다. 이 리듬을 조절하는 호르몬이 멜라토닌인데, 스마트폰이나 모니터에서 나오는 청색광에 노출되면 멜라토닌 분비가 억제되어 잠들기까지 걸리는 시간이 길어진다고 합니다(<a href="https://www.msdmanuals.com/ko/home/%ED%8A%B9%EB%B3%84-%EC%A3%BC%EC%A0%9C/%EC%8B%9D%EC%9D%B4-%EB%B3%B4%EC%B6%A9%EC%A0%9C-%EB%B0%8F-%EB%B9%84%ED%83%80%EB%AF%BC/%EB%A9%9C%EB%9D%BC%ED%86%A0%EB%8B%8C" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: MSD 매뉴얼(일반인용), 멜라토닌</a>). 저도 자기 전까지 화면을 보던 날과 일찌감치 화면을 끄고 책을 조금 읽은 날의 다음 날 아침 컨디션이 확실히 다르다는 걸 체감했습니다.<br /><br />당장 다음 날 할 일을 미리 떠올려보는 것도 저에게는 도움이 됐습니다. 내일 몇 시에 일어나서 뭘 할지 구체적으로 그려보고 잠자리에 들면, 알람이 울렸을 때 몸을 일으키는 데 필요한 마음의 준비가 이미 되어 있는 느낌이었습니다. 다만 전날 늦게 자거나 몸이 지친 날은 이런 준비를 해도 여전히 힘들었는데, 결국 준비만큼이나 전날 수면의 질 자체가 뒷받침돼야 한다는 걸 저는 인정할 수밖에 없었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 잠들기 전 화면을 멀리하고 다음 날을 그려보는 준비가, 멜라토닌 분비를 방해하지 않으면서 아침을 수월하게 만들어줍니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">알람을 몸에 새기는 법, 그리고 제가 걸어둔 제동</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 알람이 울렸을 때 곧바로 몸을 일으키는 것도 결국 반복해서 만들어지는 습관이라고 생각합니다. 알람 소리에 반응해 몸을 움직이는 경험이 쌓일수록, 다음번 알람에도 더 쉽게 반응하게 되는 걸 느꼈습니다.<br /><br />다만 저는 누구나 며칠 안에 쉽게 아침형 인간이 될 수 있다는 주장에는 의문이 듭니다. 사람마다 필요한 수면 시간과 생활 환경, 생체리듬이 다르기 때문입니다. 무조건 일찍 일어나는 것 자체가 좋은 습관이라고도 생각하지 않습니다. 늦게 자면서 수면 시간을 줄여 억지로 일찍 일어난다면 오히려 하루의 컨디션을 망칠 수 있습니다. 결국 중요한 건 몇 시에 일어났느냐가 아니라, 충분히 자고 자신에게 맞는 시간에 규칙적으로 일어나 하루를 어떻게 쓰는가라고 저는 생각합니다. 저도 처음에는 남들이 말하는 새벽 기상 시간에 저를 억지로 맞추려다 며칠 만에 지쳐서 그만둔 적이 있습니다. 그 뒤로는 제가 유지할 수 있는 시간을 먼저 정하고, 그 시간을 지키는 데에만 집중하기로 했습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">평일·주말 관계없이 일어나는 시간만큼은 최대한 고정하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">잠들기 1시간 전부터 화면 멀리하고 책이나 메모로 대체하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">못 지킨 날은 자책하지 말고 바로 다음 날 루틴으로 복귀하기</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 알람에 반응하는 몸을 만드는 것도 중요하지만, 몇 시에 일어나느냐보다 자신에게 맞는 수면량을 지키는 것이 먼저입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 정말 의지가 약해서 못 일어났던 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 결론지었습니다. 기상 시간이 들쭉날쭉했던 게 문제였지, 의지력이 부족했던 건 아니라고 저에게 정정합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 루틴을 하루 어기면 나는 다 망친 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇지 않다고 저는 생각합니다. 하루 어겼다고 자책하기보다 다음 날 바로 돌아오면 된다는 걸 저는 반복해서 확인했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 왜 며칠 만에 아침형 인간이 되지 못했을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 사람마다 생체리듬이 다르기 때문이라고 저는 저에게 답합니다. 빨리 안 된다고 조급해할 이유가 없다는 걸 저는 이제 받아들였습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 무조건 일찍 일어나는 게 나에게 맞는 목표일까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 저에게 답합니다. 몇 시냐보다 충분히 자고 규칙적으로 일어나는 게 먼저라는 걸 저는 이 글을 쓰며 다시 확인했습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 아침 기상이 의지의 문제가 아니라 저녁부터 이어지는 습관의 문제라는 걸 직접 겪으며 확인했습니다. 다만 며칠 만에 완성되는 목표라기보다, 저에게 맞는 수면량을 지키면서 천천히 몸에 새겨가는 과정이라고 생각합니다.<br /><br />오늘 저녁, 잠들기 1시간 전에 화면을 끄는 것부터 한 번 시도해보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=Z3QQNjnTlW0" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=Z3QQNjnTlW0</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var src = document.getElementById('src').textContent.trim();
+document.getElementById('preview').innerHTML = src;
+document.getElementById('htmlBox').value = src;
+function copyText(id, btn) {
+  var t = document.getElementById(id).textContent;
+  doCopy(t, btn);
+}
+function copyBody(btn) {
+  var box = document.getElementById('htmlBox');
+  box.select();
+  doCopy(box.value, btn);
+}
+function doCopy(text, btn) {
+  var done = function() {
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fallbackCopy(text); done(); });
+  } else {
+    fallbackCopy(text); done();
+  }
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
+</div>
