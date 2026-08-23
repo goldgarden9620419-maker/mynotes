@@ -1,0 +1,391 @@
+<title>블로그+스레드 발행 스튜디오 — 짠테크는 틀렸다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-20</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>짠테크는 틀렸다 (가치, 자산, 감정소비)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">부자의 습관·자기계발</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">문제해결형</span><span class="chip accent">반전 질문형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">돈그릇</span><span class="chip">부자습관</span><span class="chip">소비습관</span><span class="chip">가치소비</span><span class="chip">자산우선</span><span class="chip">감정소비</span><span class="chip">재테크</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=9KMgJFqlJ-g" target="_blank" rel="noopener noreferrer">부자들의 소비습관: 돈을 대하는 똑똑한 방법</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=9KMgJFqlJ-g" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">부자들의 소비습관: 돈을 대하는 똑똑한 방법<br />https://www.youtube.com/watch?v=9KMgJFqlJ-g</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">영상에서는 부자들의 소비 습관을 세 가지로 정리했습니다. 첫째, 가격이 아니라 가치를 먼저 보는 태도로 워런 버핏의 오랜 자택 거주와 제프 베이조스의 초기 검소한 사무실 일화를 예로 들었습니다. 둘째, 수익이 생기면 소비보다 자산 투자를 먼저 하는 습관으로 재투자 후 남는 돈으로 소비한다는 원칙을 소개했습니다. 셋째, 감정에 따른 충동 소비를 경계하는 태도로, 결정을 내리기 전 시간을 두고 판단하는 여러 인물들의 태도를 소개했습니다. 마지막으로 24시간 대기법, 소득이 들어오면 자산 계좌로 먼저 이체하기, 소비 선택지 줄이기, 감정 기록 남기기 같은 실천법을 제안했습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">예전의 나는 돈을 잘 쓰는 것보다 돈을 더 많이 버는 것이 부자가 되는 가장 빠른 방법이라고 생각했다. 월급이 들어오면 한 달 동안 고생한 나에게 주는 보상이라는 이유로 필요하지 않은 물건을 사기도 했고, 스트레스를 받는 날에는 평소보다 쉽게 지갑을 열기도 했다. 당시에는 작은 소비라고 생각했지만 돌이켜보면 목적 없이 사라지는 돈이 적지 않았다. 최근에는 소비를 바라보는 기준이 조금씩 달라지고 있다. 무언가 사고 싶을 때 바로 결제하기보다 '이게 정말 나에게 필요한가? 오래 사용할 수 있는가?'를 한 번 더 생각하려고 한다. 특히 단순히 아끼는 것보다 미래의 나에게 도움이 되는 곳에 돈을 먼저 쓰는 것이 중요하다는 생각이 커졌다. 책이나 새로운 것을 배우는 데 드는 비용처럼 나의 성장 가능성을 높이는 지출은 오히려 가치 있는 투자라고 생각한다. 결국 부자가 되는 습관은 무조건 쓰지 않는 데 있는 것이 아니라, 돈을 어디에 써야 하는지 스스로 기준을 세우는 데 있다고 느낀다. 앞으로도 순간적인 만족을 위한 소비는 줄이고, 미래의 자산과 나의 성장을 만들어 주는 곳에는 과감하게 투자하는 소비 습관을 만들어가고 싶다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">부자들의 소비 습관에 대한 내용은 충분히 공감하지만, 검소한 소비만으로 부자가 될 수 있다는 식으로 받아들이는 것은 경계할 필요가 있다고 생각한다. 워런 버핏이나 제프 베이조스의 사례에서 중요한 것은 단순히 돈을 아꼈다는 사실보다 자신이 중요하다고 판단한 곳에 자원을 집중했다는 점이다. 무조건 소비를 줄이다 보면 현재의 행복이나 필요한 경험까지 포기할 수도 있다. 나 역시 돈을 쓰지 않는 것 자체를 목표로 삼기보다, 이 지출이 나에게 어떤 가치를 남기는지를 생각하는 것이 더 중요하다고 본다. 때로는 가족과의 시간이나 여행, 배움과 경험에 쓰는 돈도 미래를 위한 훌륭한 투자다. 결국 부자의 소비 습관에서 배워야 할 것은 절약이 아니라 감정에 휘둘리지 않고 자신의 기준과 목적에 따라 돈을 사용하는 태도라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">짠테크는 틀렸다 (가치, 자산, 감정소비)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">돈그릇,부자습관,소비습관,가치소비,자산우선,감정소비,워런버핏,재테크,자기계발,저축습관</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>부자의 습관·자기계발</b>로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">부자는 무조건 아낀다고 생각했음.
+
+근데 알고 보니 가격이 아니라 가치를 기준으로 쓰는 거였음.
+
+정리해봄.
+
+1. 버핏은 60년째 같은 집, 베이조스는 문짝 책상 - 절약 아니라 가치소비였음
+2. 돈 들어오면 소비보다 자산부터 챙기는 게 부자들 공통 습관임
+3. 한국은행 조사에서도 저축·투자 비중 높은 가구가 재정 안정성 높음
+4. 근데 무조건 아끼기만 하는 건 경계해야 함 - 중요한 데는 과감히 써야 함
+5. 감정에 휘둘리는 소비만 줄이면 됨 - 가족·경험·배움은 오히려 투자임
+
+지갑 열기 전에 이게 진짜 가치있는 선택인지 딱 한 번만 물어보시길 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">짠테크는 틀렸다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">부자라고 하면 무조건 아낀다고 생각하기 쉽습니다. 그런데 정말 부자들은 돈을 안 쓰는 걸까요? 워런 버핏이 60년 넘게 같은 집에 살고 있다는 이야기를 처음 들었을 때, 저는 이게 단순한 절약이 아니라는 걸 알게 됐습니다.<br /><br />부자들의 소비 습관과 돈 그릇을 다시 들여다보면서 제가 직접 적용해보고 정리한 내용을 남겨봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">부자는 돈을 안 쓰는 게 아니라 가치를 먼저 본다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">워런 버핏은 1958년에 산 오마하 집에서 60년 넘게 살고 있고, 제프 베이조스는 아마존 창업 초기 사무실에서 문짝에 다리를 붙인 책상을 썼다는 이야기는 유명합니다. 저는 이 두 일화를 보면서, 부자들이 돈을 안 쓰는 게 아니라 가격표보다 그 지출에서 얻는 가치를 먼저 따진다는 걸 알게 됐습니다. 이런 소비 방식을 가치소비라고 부르는데, 가치소비란 본인이 만족도가 높은 분야에는 과감히 지출하되 그렇지 않은 영역에서는 합리적으로 줄이는 소비 성향을 뜻합니다. 소비를 무조건 줄이는 게 아니라 더 의미 있는 방향으로 돈을 쓰는 방법이라고 설명됩니다(<a href="https://www.kca.go.kr/webzine/board/view?menuId=MENU00306&linkId=328&div=kca_2108" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 한국소비자원</a>).<br /><br />저도 예전엔 월급이 들어오면 한 달 고생한 저에게 주는 보상이라는 이유로 딱히 필요하지 않은 물건을 사곤 했습니다. 그런데 이 개념을 알고 나서는 뭔가 사고 싶을 때 이게 정말 저에게 필요한지, 오래 쓸 수 있는지를 한 번 더 묻게 됐습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 부자들이 돈을 아끼는 게 아니라, 가격이 아닌 가치를 기준으로 지출을 결정하는 것입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">소비보다 자산을 먼저 사는 습관</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">돈을 다루는 태도에서 또 하나 중요한 건 소비보다 자산을 먼저 챙기는 순서입니다. 수익이 생기면 먼저 돈을 불려주는 자산에 투자하고, 그러고 남은 돈으로 소비한다는 원칙은 여러 부자들의 공통된 습관으로 알려져 있습니다. 여기서 자산이란 시간이 지나면서 가치가 유지되거나 늘어나는 것을 뜻하는데, 사고 나면 가치가 바로 줄어드는 소비재와는 반대되는 개념입니다. 한국은행이 발표하는 가계금융복지조사에서도 가계의 자산과 부채 구성을 매년 추적하는데, 소득 대비 저축·투자 비중이 높은 가구일수록 재정 안정성이 높게 나타나는 경향이 있다고 설명합니다(<a href="https://www.bok.or.kr/portal/bbs/B0000501/view.do?menuNo=201264&nttId=10094917" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 한국은행, 가계금융복지조사 결과</a>).<br /><br />저는 이 순서를 소득이 들어오면 저축·투자 계좌로 일정 금액을 먼저 옮기고 남은 돈으로 생활하는 방식으로 적용해봤습니다. 처음엔 쓸 돈이 줄어드는 느낌이라 불편했는데, 몇 달 반복하다 보니 자산이 자동으로 쌓이고 남은 범위 안에서만 소비하는 습관이 자리 잡았습니다. 결국 부자가 되는 습관은 무조건 안 쓰는 데 있는 게 아니라, 돈을 어디에 먼저 쓰는지 기준을 세우는 데 있다고 저는 느꼈습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 돈이 들어오면 소비보다 자산을 먼저 채우는 순서가, 시간이 지날수록 재정 안정성을 만들어줍니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">감정 소비를 막는 나만의 기준</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">다만 저는 부자들의 소비 습관을 무조건적인 절약으로 받아들이는 건 경계해야 한다고 생각합니다. 워런 버핏이나 제프 베이조스의 사례에서 중요한 건 돈을 아꼈다는 사실 자체가 아니라, 스스로 중요하다고 판단한 곳에 자원을 집중했다는 점입니다. 무조건 소비를 줄이기만 하면 오히려 지금의 행복이나 꼭 필요한 경험까지 포기하게 될 수 있습니다.<br /><br />제가 실제로 세운 기준은 감정에 휘둘려 지갑을 여는 순간을 줄이는 것이었습니다. 사고 싶은 게 생기면 바로 결제하지 않고 하루 정도 미뤄보고, 옷장이나 물건의 종류를 미리 줄여서 고를 때마다 드는 판단 피로 자체를 줄였습니다. 가족과 보내는 시간이나 여행, 배움에 쓰는 돈까지 아끼려는 건 아니고, 오히려 그런 지출은 미래를 위한 훌륭한 투자라고 저는 생각합니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">사고 싶은 게 생기면 하루 정도 결제를 미뤄보기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">자주 안 쓰는 물건을 줄여 선택할 때 판단 피로 줄이기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">가족·경험·배움에 쓰는 돈은 아끼지 않고 투자로 보기</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 절약 자체가 목표가 아니라, 감정에 휘둘리지 않고 내 기준과 목적에 따라 돈을 쓰는 태도가 진짜 부자의 습관입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 정말 가치를 보고 돈을 쓰고 있었을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 인정합니다. 가격표만 보고 순간적으로 결제한 경우가 훨씬 많았다고 저에게 솔직히 답합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 자산부터 챙기면 나는 너무 답답해지지 않을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 처음엔 그렇게 느꼈다고 인정합니다. 그런데 몇 달 지나니 오히려 남은 돈 안에서 더 편하게 쓸 수 있었다는 걸 저는 확인했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 아끼기만 하면 나는 언젠가 부자가 될 수 있을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇지 않다고 저는 생각합니다. 어디에 쓸지 기준을 세우는 게 먼저지, 무조건 안 쓰는 게 답은 아니라고 저는 저에게 정정합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 가족·여행·배움에 쓰는 돈도 나는 줄여야 할까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 저에게 답합니다. 그런 지출은 오히려 아끼지 말아야 할 투자라고 저는 분명히 하고 싶습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 부자의 소비 습관이 무조건적인 절약이 아니라, 가치와 자산을 기준으로 지출 순서를 정하는 태도라는 걸 직접 확인했습니다. 감정에 휘둘리는 소비를 줄이는 대신, 정말 중요한 곳에는 오히려 과감히 쓰는 것이 핵심이었습니다.<br /><br />다음에 지갑을 열고 싶은 순간이 오면, 이게 저에게 진짜 가치 있는 선택인지 한 번만 스스로에게 물어보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=9KMgJFqlJ-g" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=9KMgJFqlJ-g</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-moneyhabits-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
