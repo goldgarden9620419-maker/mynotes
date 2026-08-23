@@ -1,0 +1,383 @@
+<title>블로그+스레드 발행 스튜디오 — 나는 호구가 아니었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-20</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>나는 호구가 아니었다 (방식, 경계)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">비교검증형</span><span class="chip accent">반전 질문형 훅</span><span class="chip accent">소제목 2개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">거절하는법</span><span class="chip">경계설정</span><span class="chip">인간관계</span><span class="chip">착한아이콤플렉스</span><span class="chip">대인관계스트레스</span><span class="chip">자기계발</span><span class="chip">관계심리</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=PR4qiSBtqts" target="_blank" rel="noopener noreferrer">"거절 못하는 성격, 억지로 고치지 마세요" 심리 기술</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=PR4qiSBtqts" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"거절 못하는 성격, 억지로 고치지 마세요" 호구 잡히지 않고 나를 지키는 12가지 심리 기술<br />https://www.youtube.com/watch?v=PR4qiSBtqts</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">영상에서는 거절 못하는 성격을 고치려 하지 말고 도움을 주는 방식을 바꾸자는 관점을 제시했습니다. 거절을 못하는 이유는 자존감이 낮아서가 아니라 공감 능력이 높아서인 경우가 많고, 이 정체성을 억지로 부정하기보다 확장하는 게 핵심이라고 설명했습니다. 구체적으로는 부탁 전체가 아니라 할 수 있는 범위만 받아들이기, 지금 대신 가능한 시간을 제안하기, 부탁을 받으면 바로 답하지 않고 생각할 시간을 갖기, 도움에도 등급을 매겨 에너지를 배분하기, 반복적으로 호의를 당연시하는 사람은 따로 구분해서 도움의 범위를 좁히기 등 총 12가지 전략을 제안했습니다. 마지막으로는 죄책감을 다루는 관점을 바꾸고, 자기 자신도 도움의 대상에 포함시켜야 한다는 조언으로 마무리했습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">돌이켜보면 나는 누군가 부탁을 하면 쉽게 거절하지 못하는 편이었다. 회사에서도 동료가 도움을 요청하면 내 일이 밀려 있어도 먼저 해결해 주려고 했고, 가까운 사람의 부탁은 내가 조금 힘들더라도 들어주는 것이 좋은 관계를 유지하는 방법이라고 생각했다. 하지만 이런 일이 반복되다 보니 정작 내가 해야 할 일에 집중하지 못하거나, 혼자 지쳐서 '왜 나만 이렇게까지 해야 하지?'라는 생각이 들 때도 있었다. 위 글을 읽으며 문제는 남을 도와주는 성격 자체가 아니라 도움을 주는 방식에 있었다는 생각이 들었다. 모든 부탁에 무조건 '예스'라고 할 필요도 없지만, 그렇다고 차갑게 '노'라고 말할 필요도 없다. 내가 할 수 있는 범위와 시간을 먼저 생각하고 "지금은 어렵지만 이때는 가능하다", "전부는 어렵지만 이 부분은 도와줄 수 있다"고 조율하는 것도 충분한 배려라는 것을 깨달았다. 앞으로는 부탁을 받자마자 대답하기보다 잠시 생각하고, 내 시간과 에너지를 지키면서도 필요한 도움을 줄 수 있는 방법을 선택하고 싶다. 좋은 사람이 된다는 것은 모든 부탁을 들어주는 것이 아니라, 나와 상대방 모두에게 무리가 되지 않는 관계를 만드는 것이라고 생각한다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">이 글에서 말하는 '거절하지 못하는 성격을 억지로 바꾸기보다 도움의 방식을 바꾸자'는 주장에 대체로 공감한다. 특히 모든 부탁을 거절하거나 받아들이는 이분법에서 벗어나 범위와 시간, 우선순위를 조정한다는 방법은 현실적인 대안이라고 생각한다. 나 역시 상대를 배려하는 마음 자체를 약점으로 볼 필요는 없다고 본다. 다만 거절하지 못하는 사람이 모두 공감 능력이 높기 때문이라고 설명하는 부분은 조금 경계할 필요가 있다. 거절을 못하는 이유에는 갈등에 대한 두려움, 인정받고 싶은 욕구, 관계가 멀어질 것이라는 불안 등 다양한 원인이 있을 수 있기 때문이다. 또한 모든 상황을 '조율'만으로 해결할 수도 없다. 반복적으로 호의를 당연하게 여기거나 나의 경계를 무시하는 사람에게는 분명하게 거절하는 태도도 필요하다. 결국 중요한 것은 무조건 착하게 행동하거나 무조건 거절하는 것이 아니라, 내가 감당할 수 있는 범위를 스스로 판단하고 선택하는 힘이라고 생각한다. 배려가 희생이 되지 않도록 자신의 시간과 에너지까지 존중할 때 건강한 관계도 오래 유지될 수 있다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">나는 호구가 아니었다 (방식, 경계)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">거절하는법,경계설정,인간관계,착한아이콤플렉스,대인관계스트레스,자기계발,확언,마인드셋,감정노동,관계심리</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">거절 못하는 거, 자존감 낮아서 그런 줄 알았음.
+
+근데 알고 보니 오히려 공감능력 큰 사람들이 그런 거였음.
+
+정리해봄.
+
+1. 거절 못하는 성격, 고칠 필요 없음 - 방식만 바꾸면 됨
+2. 전부 거절하거나 전부 받아들이지 말고 할 수 있는 범위만 조율하면 됨
+3. 부탁받으면 바로 대답 안 하고 시간 벌어도 됨
+4. 근데 조율도 안 통하는 사람 있음 - 호의를 당연시하는 사람
+5. 그런 사람한테는 조율 대신 확실한 거절이 답임
+
+부탁받으면 바로 답하지 말고 감당할 수 있는 범위부터 생각해보시길 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">나는 호구가 아니었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">거절 못하는 사람은 자존감이 낮아서 그렇다고 흔히 알려져 있습니다. 그런데 정말 그럴까요? 저는 이 통념을 뒤집는 이야기를 접하고 나서야, 제가 왜 그렇게 부탁을 거절하지 못했는지 이해하게 됐습니다.<br /><br />거절하는 법과 경계 설정을 다시 들여다보면서 제가 직접 적용해보고 정리한 내용을 남겨봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">거절 못하는 건 성격이 아니라 방식 문제다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">일반적으로 거절을 못 하는 이유는 자존감이 낮아서라고 알려져 있습니다. 그런데 제가 접한 자료에서는 다른 설명을 제시했습니다. 거절을 잘 못하는 사람일수록 오히려 공감 능력이 높은 경우가 많아서, 상대의 상황과 감정이 지나치게 선명하게 느껴져 거절을 주저하게 된다는 겁니다. 이런 패턴이 반복되면 착한아이콤플렉스로 이어질 수 있는데, 착한아이콤플렉스란 주변의 기대에 맞추기 위해 자신의 감정을 억누르고 항상 좋은 사람으로 보이려 하는 심리적 경향을 뜻합니다.<br /><br />대인관계에서 오는 스트레스가 자아존중감에도 영향을 미친다는 연구 결과가 있습니다(<a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002535635" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 한국학술지인용색인(KCI) 논문</a>). 국가정신건강정보포털에서도 반복되는 대인관계 스트레스가 정신 건강에 부정적인 영향을 줄 수 있다고 안내합니다(<a href="https://www.mentalhealth.go.kr/portal/disease/diseaseDetail.do?dissId=30&srCodeNm=Stress" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 국가정신건강정보포털</a>). 저는 이 설명을 읽고 나서야, 제가 부탁을 거절하지 못했던 게 의지가 약해서가 아니라 남을 배려하는 마음이 컸기 때문이라는 걸 인정하게 됐습니다. 그동안은 거절 못하는 저 자신을 계속 고쳐야 할 결점처럼 여겼는데, 문제는 성격이 아니라 그 성격을 다루는 방식에 있었다는 걸 알고 나니 마음이 한결 가벼워졌습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 거절을 못하는 건 자존감의 문제가 아니라, 공감 능력이 큰 사람에게 잘못된 방식이 쌓여 생기는 소모입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">조율로도 안 되는 사람은 따로 있다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 회사에서 동료가 도움을 요청하면 제 일이 밀려 있어도 먼저 해결해 주려고 했고, 가까운 사람의 부탁은 제가 조금 힘들더라도 들어주는 게 좋은 관계를 유지하는 방법이라고 생각했습니다. 그런데 이런 일이 반복되다 보니 정작 제가 해야 할 일에 집중하지 못하거나, 혼자 지쳐서 왜 저만 이렇게까지 해야 하는지 억울한 생각이 들 때도 있었습니다.<br /><br />범위와 시간을 조율하는 방식은 확실히 도움이 됐습니다. 전부는 어렵지만 이 부분은 도와줄 수 있다고 말하는 것만으로도, 부탁을 딱 잘라 거절하는 것보다 훨씬 부드럽게 전달됐습니다. 다만 저는 거절을 못 하는 이유가 전부 공감 능력 때문이라는 설명에는 조금 거리를 두고 싶습니다. 갈등에 대한 두려움, 인정받고 싶은 욕구, 관계가 멀어질 것 같은 불안처럼 다른 이유도 얼마든지 있을 수 있습니다.<br /><br />또한 반복적으로 호의를 당연하게 여기거나 제 경계를 무시하는 사람에게는 조율만으로 해결되지 않는다는 것도 저는 겪어봤습니다. 처음 한두 번은 범위를 정해서 도와줬는데도, 시간이 지나자 그 정도는 당연히 해주는 걸로 여기고 더 큰 부탁을 아무렇지 않게 꺼내는 경우가 있었습니다. 그럴 때는 아무리 부드럽게 조율해도 상대가 제 경계를 계속 넘어왔습니다. 그런 상대에게는 조율이 아니라 분명한 거절이 필요하다고 저는 생각합니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">부탁을 받으면 바로 답하지 말고 감당할 수 있는 범위부터 먼저 생각하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">전부 거절하거나 전부 받아들이지 말고, 할 수 있는 부분만 조율해서 제안하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">호의를 반복적으로 당연시하는 사람에게는 조율 대신 분명한 경계 긋기</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 조율은 대부분의 관계에서 효과적이지만, 호의를 당연시하는 사람 앞에서는 분명한 거절이 오히려 저를 지키는 방법입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 정말 공감 능력이 커서 거절을 못 했던 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그런 면도 있었지만 전부는 아니라고 저는 인정합니다. 갈등이 두려웠던 순간도 분명 있었다고 저에게 솔직히 답합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 범위를 조율하면 나는 매번 상대를 만족시킬 수 있을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 생각합니다. 조율을 받아들이지 않는 사람도 있다는 걸 저는 이번에 다시 확인했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 거절하면 나는 나쁜 사람이 되는 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇지 않다고 저는 저에게 답합니다. 제 시간과 에너지를 지키는 것도 배려의 일부라고 저는 생각합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 호의를 당연하게 여기는 사람에게도 나는 계속 맞춰줘야 할까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 분명히 하고 싶습니다. 그런 관계에서는 조율이 아니라 확실한 경계가 필요하다고 저는 결론지었습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 거절을 못하는 게 성격 문제가 아니라 방식의 문제라는 걸 인정하게 됐습니다. 범위와 시간을 조율하는 것만으로 많은 관계가 훨씬 편해졌습니다. 다만 조율조차 통하지 않는 사람 앞에서는 분명한 경계가 필요하다는 것도 함께 배웠습니다.<br /><br />다음에 부탁을 받으면, 바로 대답하기 전에 저에게 감당할 수 있는 범위가 어디까지인지 먼저 생각해보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=PR4qiSBtqts" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=PR4qiSBtqts</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-boundary-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
