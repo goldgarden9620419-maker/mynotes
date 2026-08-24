@@ -1,0 +1,401 @@
+<title>블로그+스레드 발행 스튜디오 — 늘 지는 게임이었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-24</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>늘 지는 게임이었다 (오류, 기준, 성장)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">토론형</span><span class="chip accent">핵심 팩트 직입형 훅</span><span class="chip accent">소제목 4개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">비교심리</span><span class="chip">사회비교이론</span><span class="chip">상향비교</span><span class="chip">절대평가</span><span class="chip">SNS비교</span><span class="chip">열등감</span><span class="chip">자기효능감</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=XCA5ugf7uJ8" target="_blank" rel="noopener noreferrer">"비교와 질투의 함정에서 벗어나는 방법" (오은환)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=XCA5ugf7uJ8" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"비교와 질투의 함정에서 벗어나는 방법" (동기부여 ep7 - 인생 조언 & 심리)<br />https://www.youtube.com/watch?v=XCA5ugf7uJ8</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">영상은 비교하지 말아야 한다는 걸 알면서도 계속 비교하게 되는 사람들을 위해 두 가지 전략을 제시했습니다. 첫 번째는 무엇을 비교하고 있는지 점검하는 것으로, 사람들이 흔히 상대의 잘하는 부분과 자신의 못하는 부분만 골라 비교하는 오류에 빠진다고 지적했습니다(예: 그램당 가격을 따지지 않고 가격표만 비교하는 것과 같은 불공정한 비교). 발표 자료의 숫자를 잘 다루는 동료와 비교해 자괴감을 느꼈지만, 정작 자신이 말을 잘한다는 강점은 비교 대상에 넣지 않았던 화자 본인의 일화를 예로 들었습니다. 두 번째 전략은 상대 평가를 절대 평가로 바꾸는 것으로, 기준을 타인이 아닌 자기 안에 두면 스스로 통제할 수 있는 영역이 된다고 설명했습니다. 체중 감량 사례를 들어, 살이 잘 안 찌는 친구와 비교하는 대신 일주일에 1kg처럼 스스로 정한 목표를 달성했는지로 평가하라고 제안했습니다. 결론적으로 비교의 저주에서 벗어나려면 같은 조건끼리 비교하는지 점검하고, 절대 평가로 스스로에게 기준을 부여하라고 정리했습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">나도 다른 사람과 비교하지 말아야 한다는 것을 알면서도 자연스럽게 비교하게 되는 경우가 많았다. 특히 나보다 일을 잘하거나 새로운 것을 빠르게 배우는 사람을 보면 &#39;나는 왜 저렇게 하지 못할까&#39;라는 생각이 들면서 자신감이 떨어지기도 했다. 그런데 돌이켜보면 나는 상대방이 가장 잘하는 부분과 내가 부족한 부분만 골라 비교하고 있었다. 사람마다 살아온 환경과 경험, 강점이 다른데 같은 기준으로 비교하면서 스스로를 낮게 평가했던 것이다.
+
+요즘에는 다른 사람보다 잘해야 한다는 생각보다 과거의 나와 현재의 나를 비교하려고 노력한다. 예전보다 책을 조금 더 읽었는지, 새로운 것을 하나라도 배웠는지, 계획했던 일을 얼마나 실천했는지를 나만의 기준으로 평가한다. 그렇게 생각하니 다른 사람의 성과도 경쟁의 대상이 아니라 배울 점으로 보이기 시작했다. 물론 지금도 누군가를 보며 부러운 마음이 생긴다. 하지만 비교하는 마음 자체를 없애려고 하기보다 &#39;나는 어제보다 무엇이 나아졌는가&#39;를 생각하려 한다. 결국 중요한 것은 남보다 앞서는 것이 아니라 내가 정한 방향으로 조금씩 성장하고 있는지 확인하는 것이라고 생각한다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">나는 다른 사람과의 비교를 무조건 나쁜 것으로 볼 필요는 없다고 생각한다. 비교를 통해 내가 부족한 부분을 발견하고 더 성장하려는 동기를 얻을 수도 있기 때문이다. 문제는 상대방의 장점과 나의 단점만을 비교하면서 스스로를 낮게 평가하는 데 있다. 사람마다 성장한 환경과 경험, 능력과 출발점이 다른데 결과만 놓고 비교한다면 공정한 비교라고 하기 어렵다. 특히 SNS에서는 다른 사람의 가장 화려하고 성공적인 모습만 보게 되기 때문에 비교할수록 상대적 박탈감이 커질 수 있다.
+
+글에서 제시한 것처럼 비교가 힘들다면 다른 사람을 기준으로 삼기보다 나만의 절대적인 기준을 만드는 것이 좋은 방법이라고 생각한다. 다만 다른 사람과 전혀 비교하지 않고 살아가는 것은 현실적으로 어렵다. 중요한 것은 비교 자체를 없애는 것이 아니라 비교를 어떻게 활용하느냐이다. 다른 사람의 성공을 보며 &#39;나는 왜 못하지?&#39;라고 자책하기보다 &#39;저 사람에게서 무엇을 배울 수 있을까?&#39;라고 생각한다면 비교도 성장의 도구가 될 수 있다. 결국 가장 의미 있는 비교 대상은 어제의 나이며, 조금이라도 나아지고 있다면 그것 역시 충분한 성장이라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">늘 지는 게임이었다 (오류, 기준, 성장)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">비교심리,사회비교이론,상향비교,절대평가,SNS비교,열등감,자기효능감,마인드셋,자기계발,상대적박탈감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">비교 안 해야지, 비교 안 해야지 하면서도 또 비교하고 있는 나 발견함.
+
+근데 알고 보니 문제는 비교 자체가 아니라 비교하는 방식이었음.
+
+정리해봄.
+
+1. 상대 잘하는 거랑 내 못하는 것만 골라 비교하고 있었음 - 이거부터 불공정함
+2. 기준을 밖에 두면 상대 위치 바뀔 때마다 나도 흔들림
+3. 기준을 내 안에 두는 절대평가로 바꾸니까 통제가 됨
+4. SNS 속 비교는 남의 하이라이트랑 내 일상 전체를 견주는 거라 더 불공정함
+5. 결국 가장 의미 있는 비교 대상은 어제의 나였음
+
+오늘 비교하고 있다면 지금 그거 사과 대 사과인지부터 점검해보시길 🌱</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">늘 지는 게임이었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">비교하지 말아야 한다는 걸 모르는 사람은 없습니다. 그런데도 저는 &#39;비교 안 해야지&#39;라고 다짐한 바로 다음 순간 또 비교하고 있는 저를 발견하곤 했습니다.<br /><br />비교 자체를 없애려던 게 문제였던 건 아닐까 싶어 이번에 제가 하던 비교 방식을 다시 들여다봤습니다. 그랬더니 제가 계속 실패했던 이유가 의지 문제가 아니라 비교하는 방식 자체에 있었다는 걸 알게 됐습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">저는 사과와 배를 비교하고 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">사회비교이론이란 사람이 자신을 평가할 때 다른 사람과 견주어 판단하는 심리적 경향을 설명하는 이론입니다. 문제는 이 비교가 항상 공정하게 이뤄지지 않는다는 데 있습니다.<br /><br />저는 발표 자료를 만들 때 숫자만 나오면 유독 힘들어했습니다. 그런데 그걸 옆에서 숫자를 능숙하게 다루는 동료와 놓고 비교하니 제가 한없이 부족하게 느껴졌습니다. 나중에 곰곰이 따져보니, 저는 상대방이 가장 잘하는 부분과 제가 가장 못하는 부분만 골라 견주고 있었습니다. 정작 제가 말을 조리 있게 전달하는 데는 강점이 있다는 사실은 비교 대상에 아예 넣지도 않았습니다.<br /><br />이런 비교는 그램당 가격을 따지지 않고 100g짜리와 30g짜리 가격표만 보고 뭐가 더 싼지 판단하는 것과 다를 게 없습니다. 저는 이 사실을 알고 나서야, 제가 힘들었던 건 상대가 뛰어나서가 아니라 애초에 비교 자체가 기울어져 있었기 때문이라는 걸 인정하게 됐습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 열등감은 상대의 장점과 나의 단점만 골라 비교할 때 생기는 착시에 가깝습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">밖이 아니라 안에 기준을 세웠다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그렇다면 비교를 아예 안 할 수는 없는 걸까요? 저는 완전히 끊기보다 기준을 바꾸는 쪽을 택했습니다.<br /><br />상대 평가는 기준이 항상 다른 사람에게 있습니다. 그 사람이 잘하면 제 위치도 같이 흔들립니다. 반대로 절대평가란 스스로 정한 목표를 얼마나 달성했는지로만 판단하는 방식입니다. 저는 예전보다 책을 조금 더 읽었는지, 계획했던 일을 얼마나 실천했는지처럼 저만의 기준으로 스스로를 평가하는 쪽으로 바꿔봤습니다.<br /><br />일반적으로 비교는 무조건 피해야 할 감정으로 여겨지지만, 실제로 겪어보니 비교 자체가 나쁜 건 아니었습니다. 비교를 통해 제가 부족한 부분을 발견하고 더 성장하려는 동기를 얻을 때도 분명 있었습니다. 문제는 기준을 밖에 두느냐 안에 두느냐의 차이였습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 기준을 밖에 두면 흔들리지만, 안에 두면 제가 통제할 수 있습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">SNS 비교는 시작부터 불공정했다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 SNS에서 비교할 때 유독 더 힘들었던 이유도 이제는 알 것 같습니다. SNS 이용과 사회비교 행동을 분석한 국내 연구에서는, 이용자들이 SNS 안에서 상향비교(자신보다 나은 대상과 견주는 것), 유사비교, 하향비교를 반복적으로 경험한다고 설명합니다.<br /><br />SNS에서는 다른 사람의 가장 화려하고 성공적인 순간만 편집되어 올라옵니다. 저는 제 하루 전체를 그 사람의 가장 빛나는 한 장면과 비교하고 있었던 셈입니다. 이건 애초에 같은 걸 놓고 비교하는 게 아니라, 제 일상과 남의 하이라이트를 견주는 불공정한 비교였습니다.<br /><br />그래서 저는 SNS를 보다가 비교하는 마음이 올라올 때는 &#39;이건 저 사람 하루 전체가 아니라 가장 잘 나온 한 장면일 뿐이다&#39;라고 한 번 짚고 넘어가는 습관을 들이기 시작했습니다.<br /><br />참고: <a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002021568" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 한국학술지인용색인(KCI), 사회비교이론 관점에서 살펴본 SNS 이용중단 의도</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> SNS 속 비교는 내 일상 전체와 남의 하이라이트를 견주는 애초에 불공정한 비교입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">어제의 저와 비교하기로 했다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그럼 가장 의미 있는 비교 대상은 누구일까요? 저는 결국 어제의 저라는 결론에 도달했습니다.<br /><br />사회비교와 자기비교를 다룬 심리학 연구에서도, 타인이 아닌 과거의 자기 자신을 기준으로 삼는 자기비교 과정이 별도로 존재한다고 설명합니다. 저는 이 관점을 알고 나서 다른 사람의 성과를 볼 때도 태도가 조금씩 달라졌습니다. 예전엔 &#39;나는 왜 저렇게 못 하지&#39;라고 자책했다면, 지금은 &#39;저 사람한테 배울 수 있는 게 뭘까&#39;를 먼저 떠올리려 합니다.<br /><br />물론 지금도 누군가를 보면 부러운 마음이 올라옵니다. 그 감정 자체를 완전히 없애야 한다고 생각하지는 않습니다. 다만 그 감정 다음에 오는 질문을 &#39;왜 나만 이럴까&#39;에서 &#39;어제보다 뭐가 나아졌나&#39;로 바꾼 것만으로도 마음이 훨씬 편해졌습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">비교할 땐 같은 조건끼리 견주고 있는지 먼저 점검한다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">기준을 상대가 아니라 내가 정한 목표로 바꾼다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">부러운 감정이 들면 &#39;배울 점이 뭘까&#39;로 질문을 바꿔본다</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 비교를 없애려 하기보다, 비교 대상을 어제의 나로 옮기는 쪽이 더 오래갔습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 비교하는 마음을 아예 없애야 하는 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 생각합니다. 비교 자체보다 무엇을 어떻게 비교하는지가 중요하다는 걸 저는 이번에 확인했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. SNS를 아예 끊어야 비교를 안 하게 될까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 완전히 끊기보다 편집된 화면이라는 걸 계속 상기하는 쪽을 택했습니다. 그것만으로도 충분히 도움이 됐습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그래도 부러운 마음이 들면 어떡해?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그 감정을 억누르려 하지 않기로 했습니다. 대신 그다음 질문을 &#39;왜 나만&#39;에서 &#39;뭘 배울 수 있을까&#39;로 바꿔보려고 합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그럼 앞으로 저는 뭘 비교 기준으로 삼을 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 어제의 저를 기준으로 삼기로 했습니다. 그게 제가 통제할 수 있는 유일한 비교 대상이라는 걸 저는 이번에 알게 됐습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 비교를 없애려던 게 아니라, 비교하는 방식 자체가 틀렸다는 걸 이번에 알게 됐습니다. 같은 조건끼리 견주고, 기준을 제 안에 두고, SNS의 편집된 장면과 제 일상 전체를 견주지 않는 것, 저는 이 세 가지만 바뀌어도 훨씬 덜 힘들다는 걸 느꼈습니다.<br /><br />오늘도 누군가와 저를 비교하고 있다면, 지금 그 비교가 사과 대 사과인지 한번 점검해보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=XCA5ugf7uJ8" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=XCA5ugf7uJ8</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-comparison-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
