@@ -2,8 +2,13 @@
 
 import { motion } from "motion/react";
 import { Mascot } from "./Mascot";
+import { daysSinceKst } from "@/lib/date";
+
+const PRACTICE_START_DATE = "2026-07-01";
 
 export function Hero({ blogUrl }: { blogUrl: string }) {
+  const day = daysSinceKst(PRACTICE_START_DATE);
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
       <Mascot />
@@ -13,7 +18,8 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="mb-6 rounded-full border border-white/12 bg-white/[0.07] px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-foreground-muted"
       >
-        새벽 기상 · 확언 · 자기암시로 바꾼 삶
+        새벽 기상 실천{" "}
+        <span className="font-semibold text-accent">{day}일째</span>
       </motion.span>
 
       <motion.h1

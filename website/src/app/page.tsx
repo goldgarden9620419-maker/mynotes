@@ -1,6 +1,7 @@
 import { AmbientBackground } from "@/components/AmbientBackground";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
+import { IntroStrip } from "@/components/IntroStrip";
 import { Pillars } from "@/components/Pillars";
 import { WhyIWrite } from "@/components/WhyIWrite";
 import { PostPreview } from "@/components/PostPreview";
@@ -15,6 +16,7 @@ export default function Home() {
       <Nav blogUrl={BLOG_URL} />
       <main>
         <Hero blogUrl={BLOG_URL} />
+        <IntroStrip />
         <Pillars />
         <WhyIWrite />
         <PostPreview />
