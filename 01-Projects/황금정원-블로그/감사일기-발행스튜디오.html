@@ -1,0 +1,399 @@
+<title>블로그+스레드 발행 스튜디오 — 착각했던 감사일기</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-17</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>착각했던 감사일기 (기술, 목록, 기쁨, 성공)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">스토리텔링형</span><span class="chip accent">솔직 고백형 훅</span><span class="chip accent">소제목 4개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">감사일기</span><span class="chip">감사습관</span><span class="chip">긍정심리</span><span class="chip">행복</span><span class="chip">스트레스완화</span><span class="chip">자기계발</span><span class="chip">마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=D62LciuMff4" target="_blank" rel="noopener noreferrer">'감사하기'의 습관으로 인생의 의미 찾기</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=D62LciuMff4" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">'감사하기'의 습관으로 인생의 의미 찾기 l 감사의 힐링 효과로 행복해지세요<br />https://www.youtube.com/watch?v=D62LciuMff4</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">감사하는 마음이 자신의 존재 의미를 확인시켜주고, 그 자체로 지속적인 기쁨을 주기 때문에 행복 지수를 높여 성공적인 삶의 토대가 된다는 주장을 폈습니다. 다만 실천이 쉽지 않다며 구체적인 방법 3가지를 제안했는데, 매달 말 다음 달 감사할 사람 30명을 영역별로 나눠 적어두기, 매일 다이어리에서 그날 떠올리기로 한 사람을 확인하고 마음으로 표현하기, 저녁에 하루를 마무리하며 감사했던 순간을 짧게 기록하기였습니다. 후반부에는 감사와 공동체 감각, 이타심이 연결되어 있으며 이런 태도가 결국 일과 사업의 성공으로도 이어진다는 견해도 덧붙였습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">예전에는 감사라는 말을 들으면 그저 마음속으로 '고맙다'고 생각하는 정도면 충분하다고 여겼다. 그런데 요즘 매일 반복하는 루틴과 새로운 공부를 이어가면서 생각이 조금 달라졌다. 내가 지금까지 혼자 힘으로 여기까지 온 것이 아니라는 사실을 자주 느끼기 때문이다. 가족이 묵묵히 내 시간을 이해해 주는 것, 누군가의 글과 책을 통해 새로운 생각을 배우는 것, 주변 사람의 작은 도움을 받는 것까지 당연한 것은 하나도 없었다. 특히 내가 먼저 누군가에게 작은 도움을 주거나 고마운 마음을 표현했을 때 오히려 내가 더 기분 좋아지는 경험을 여러 번 했다. 감사는 상대방을 위한 행동이라고 생각했는데, 결국 내 마음을 더 풍요롭게 만드는 일이기도 했다. 물론 감사한다고 해서 모든 일이 잘 풀리고 반드시 성공하는 것은 아닐 것이다. 하지만 감사하는 마음을 가지면 사람과 세상을 바라보는 태도가 달라지고, 그 태도가 결국 행동을 바꾼다고 생각한다. 그래서 이제는 하루를 마무리할 때 오늘 도움받은 일과 감사한 사람을 한 번이라도 떠올려 보려고 한다. 작은 감사 하나가 당장 인생을 바꾸지는 않겠지만, 매일 쌓인다면 분명 내가 살아가는 방향은 조금씩 달라질 것이라 믿는다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">감사하는 마음이 삶을 긍정적으로 변화시킨다는 내용에는 크게 공감한다. 나 역시 누군가에게 도움을 주거나 진심으로 고마움을 표현했을 때 상대방보다 오히려 내가 더 큰 기쁨을 느꼈던 경험이 있기 때문이다. 다만 감사하는 사람이 반드시 성공한다거나, 좋은 기운이 상대에게 전달되어 결국 좋은 결과로 돌아온다는 주장은 조금 경계할 필요가 있다고 생각한다. 감사는 성공을 보장하는 공식이라기보다 사람과 세상을 바라보는 태도를 바꾸는 힘에 가깝지 않을까. 아무리 감사하는 마음이 커도 행동과 노력이 없다면 현실은 쉽게 달라지지 않는다. 또한 억지로 감사할 이유를 찾는 것 역시 진정한 감사와는 거리가 있을 수 있다. 결국 중요한 것은 감사를 성공의 도구로 이용하는 것이 아니라, 받은 것을 당연하게 여기지 않고 작은 감사라도 행동으로 표현하는 것이다. 그런 태도가 쌓이면 인간관계와 내 마음이 건강해지고, 결과적으로 더 나은 삶으로 이어질 가능성도 커진다고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">착각했던 감사일기 (기술, 목록, 기쁨, 성공)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">감사일기,감사습관,긍정심리,행복,스트레스완화,자기계발,확언,마인드셋,셀프케어,정신건강</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">감사는 그냥 마음먹기 나름인 줄 알았음.
+
+근데 알고 보니 감사도 연습해야 느는 기술이었음.
+
+정리해봄.
+
+1. UC데이비스 연구자도 감사 의식적으로 실천하면 행복감·회복력 올라간다고 함
+2. 매달 감사할 사람 30명 미리 적어두면 안 잊어버림
+3. 감사는 상대 위한 건 줄 알았는데 오히려 내가 더 기뻐짐
+4. 근데 감사한다고 무조건 성공하는 건 아님 - 행동·노력 없인 현실 안 바뀜
+5. 중요한 건 받은 걸 당연하게 여기지 않는 태도임
+
+오늘 감사한 사람 한 명만 떠올려보시길 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">착각했던 감사일기, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">솔직히 저는 감사라는 말을 들으면 마음속으로 "고맙다"고 한 번 생각하는 정도면 충분하다고 여겼습니다. 그런데 감사를 구체적인 기술로 실천하는 방법을 알게 되면서, 제가 그동안 감사를 너무 막연하게만 대해왔다는 걸 깨달았습니다.<br /><br />감사일기와 감사 습관을 직접 실천해보면서 제가 정리한 내용을 남겨봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">감사는 마음이 아니라 기술이다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">세계적인 감사 연구자로 꼽히는 UC 데이비스의 로버트 에먼스 교수는 감사를 의식적으로 실천하는 사람일수록 행복감이 높아지고 부정적인 사건에 대한 회복력도 커진다고 설명합니다(<a href="https://www.ucdavis.edu/news/people-are-happier-when-they-feel-grateful" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: UC Davis</a>). 저는 이 연구를 보고 나서야, 감사가 저절로 우러나오길 기다리는 감정이 아니라 매일 연습해야 느는 기술이라는 걸 인정하게 됐습니다.<br /><br />긍정심리학에서는 이런 의도적인 감사 연습을 감사 개입이라고 부르는데, 감사 개입이란 특정한 대상이나 순간에 대해 정기적으로 고마움을 기록하거나 표현하도록 유도하는 훈련을 뜻합니다. 저는 예전엔 그냥 마음속으로 고맙다고 생각하는 정도면 충분하다고 여겼는데, 바쁘게 살다 보면 그 마음조차 금방 잊어버린다는 걸 여러 번 겪었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감사는 저절로 생기는 감정이 아니라, 의식적으로 연습해야 느는 기술입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">매달 감사할 30명을 미리 적어두는 이유</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">제가 실제로 적용해본 방법은 이렇습니다. 매달 말, 다음 달에 감사를 전하고 싶은 사람 30명을 미리 적어두는 겁니다. 가족, 친구, 함께 활동하는 사람들처럼 영역별로 나눠서 몇 명씩 적으면 30명을 채우는 게 생각보다 어렵지 않았습니다. 그리고 매일 다이어리를 펼칠 때 오늘 떠올리기로 한 사람을 다시 확인하고, 하루 중 생각날 때마다 짧게라도 그 사람을 위해 마음속으로 고마움을 표현합니다. 저녁에는 하루를 마무리하며 오늘 감사했던 순간과 사람을 한 줄이라도 적어봅니다.<br /><br />처음엔 이렇게까지 미리 계획해서 감사할 사람을 정해야 하나 싶었는데, 막상 해보니 순간순간 떠올리는 것보다 미리 목록을 만들어두는 쪽이 훨씬 꾸준히 이어졌습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">매달 말 다음 달 감사할 사람 30명을 영역별로 나눠 적기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">매일 그중 한 사람을 떠올리고 짧게라도 마음으로 표현하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">저녁에 오늘 감사했던 순간을 한 줄이라도 기록하기</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감사할 대상을 미리 목록으로 만들어두면, 바쁜 일상 속에서도 감사를 잊지 않고 꾸준히 실천할 수 있습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">감사가 나를 더 기쁘게 만든 이유</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">돌아보면 저는 감사가 상대방을 위한 행동이라고만 생각했습니다. 그런데 제가 먼저 누군가에게 작은 도움을 주거나 고마운 마음을 표현했을 때, 오히려 제 기분이 더 좋아지는 경험을 여러 번 했습니다. 가족이 묵묵히 제 시간을 이해해준 것, 다른 사람의 글과 책을 통해 새로운 생각을 배운 것, 주변 사람의 작은 도움을 받은 것까지 돌아보니 당연한 것은 하나도 없었습니다.<br /><br />질병관리청이 운영하는 국가정신건강정보포털에서도 감사 수준이 높은 사람일수록 행복감이 높고 우울과 불안 수준은 낮다고 설명합니다(<a href="https://www.mentalhealth.go.kr/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 국가정신건강정보포털</a>). 저는 이 설명을 보면서, 제가 느꼈던 그 기쁨이 단순한 기분 탓이 아니라 실제로 근거가 있는 현상이었다는 걸 확인했습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감사는 상대를 위한 행동처럼 보이지만, 실제로는 제 마음을 더 풍요롭게 만드는 경험이었습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">감사가 성공을 보장하지는 않는다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">다만 저는 감사하는 사람이 반드시 성공한다거나, 좋은 마음이 상대에게 전해져 결국 좋은 결과로 돌아온다는 식의 주장에는 조금 거리를 두고 싶습니다. 감사는 성공을 보장하는 공식이라기보다, 사람과 세상을 바라보는 태도를 바꾸는 힘에 가깝다고 저는 생각합니다. 아무리 감사하는 마음이 커도 행동과 노력이 없다면 현실은 쉽게 달라지지 않습니다. 억지로 감사할 이유를 찾는 것 역시 진짜 감사와는 거리가 있다고 봅니다.<br /><br />결국 제가 내린 결론은, 감사를 성공의 도구로 쓰려 하기보다 받은 것을 당연하게 여기지 않고 작은 감사라도 행동으로 표현하는 태도 자체가 중요하다는 것입니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감사가 성공을 보장하지는 않지만, 받은 것을 당연히 여기지 않는 태도는 삶을 분명히 바꿔놓습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 감사를 정말 실천하고 있었을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 인정합니다. 마음속으로 생각만 하고 표현으로 옮기지 않은 경우가 훨씬 많았다고 저에게 솔직히 답합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 감사할 사람을 30명이나 미리 적는 게 억지스럽지 않을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 처음엔 그렇게 느꼈다고 인정합니다. 그런데 미리 적어두지 않으면 결국 잊어버리더라는 걸 저는 직접 겪으며 확인했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 감사한다고 정말 내가 더 행복해질까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇다고 저는 확인했습니다. 상대를 위해 한 행동인데 오히려 제 기분이 더 좋아지는 경험을 저는 여러 번 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 감사하면 정말 성공까지 보장될까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 저에게 답합니다. 감사는 태도를 바꿀 뿐, 행동과 노력을 대신해주지는 않는다고 저는 분명히 하고 싶습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 감사가 저절로 우러나오길 기다리는 감정이 아니라, 매일 연습해야 느는 기술이라는 걸 직접 확인했습니다. 성공을 보장해주지는 않지만, 받은 것을 당연히 여기지 않는 태도만큼은 분명히 제 삶을 바꿔놓았습니다.<br /><br />오늘 하루를 마무리하며, 감사한 사람 한 명만 떠올려보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=D62LciuMff4" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=D62LciuMff4</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-gratitude-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>

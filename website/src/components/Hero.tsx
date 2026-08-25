@@ -58,7 +58,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
           whileTap={{ scale: 0.98 }}
           className="cursor-pointer rounded-full bg-accent px-8 py-3.5 text-base font-medium text-white shadow-[0_0_40px_-8px_var(--accent-glow)] transition-colors hover:bg-accent/90"
         >
-          블로그 방문하기
+          오늘 쓴 이야기 읽으러 가기
         </motion.a>
         <a
           href="#pillars"

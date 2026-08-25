@@ -1,0 +1,393 @@
+<title>블로그+스레드 발행 스튜디오 — 도망칠수록 깊어졌다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-25</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>도망칠수록 깊어졌다 (원인, 회피, 표현)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">문제해결형</span><span class="chip accent">공감 상황형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">번아웃</span><span class="chip">고립감</span><span class="chip">회피</span><span class="chip">트라우마</span><span class="chip">감정표현</span><span class="chip">직장스트레스</span><span class="chip">통제감상실</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=yGjq_aYYJHE" target="_blank" rel="noopener noreferrer">"번아웃과 현타가 오는 의외의 이유"</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=yGjq_aYYJHE" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"번아웃과 현타가 오는 의외의 이유"<br />https://www.youtube.com/watch?v=yGjq_aYYJHE</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">영상은 상담 형식으로, 잘 다니던 직장에서 갑자기 무기력과 번아웃, 현타가 온 사례를 다뤘습니다. 동료나 상사가 자기 편을 들어주지 않는다고 느낀 순간부터 고립감과 통제감 상실을 경험했고, 이것이 트라우마적 반응(출근 두려움, 무기력, 회피)으로 이어졌다고 설명했습니다. 상담자는 회피가 당장은 안도감을 주지만 트라우마에서는 악순환을 일으켜 오히려 더 오래갈 수 있다고 짚었습니다. 힘들어도 원인이 되는 상황을 마주하는 것이 회복에 도움이 되며, 감당하기 힘든 감정을 신뢰할 수 있는 사람에게 자세히 드러내고 공감받으면 감정이 점차 해소된다고 설명했습니다. 또한 감정은 공감받아야 하지만, 그 감정에 따라 필요한 행동을 하고 행동을 통해 감정이 해결되는 경험을 하지 않으면 패턴으로 남아 감정이 해소되지 않는다고 강조했습니다. 직장을 그만두는 것이 답은 아니며, 무조건 버티라는 것도 아니고, 내가 왜 힘든지 원인을 파악하고 감정을 표현하며 일상을 이어가는 것이 회복의 핵심이라고 정리했습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">몇 년 전부터 회사를 다니면서 가장 힘들었던 건 업무량보다 사람으로 인한 스트레스였다. 처음에는 "조금만 참으면 괜찮아지겠지"라고 생각했지만, 어느 순간 출근길이 두려워지고 아침에 눈을 뜨는 것조차 부담스러워졌다. 퇴근 후에도 회사에서 있었던 일이 계속 떠올라 쉬어도 쉬는 느낌이 없었고, 주말이 지나면 다시 월요일이 오는 것이 무서웠다. 그때는 내가 의지가 약해서 그런 줄 알았지만, 돌이켜보면 번아웃은 마음이 지쳐 보내는 신호였다.
+
+가장 큰 변화는 혼자 버티려고 했던 태도를 내려놓으면서 시작됐다. 믿을 수 있는 사람에게 속마음을 털어놓고, 내가 느낀 불안과 억울함을 있는 그대로 말했더니 감정이 조금씩 정리되기 시작했다. 문제를 피하는 것이 회복이라고 생각했지만, 오히려 감정을 인정하고 작은 일상부터 다시 해내는 과정이 나를 살렸다. 지금도 힘든 날은 있지만, 번아웃을 숨기기보다 돌보는 것이 더 중요한 회복의 시작이라는 것을 몸으로 배웠다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">이 글에서 가장 공감되는 부분은 번아웃을 단순히 의지 부족이나 나약함의 문제로 보지 않는다는 점이다. 특히 업무 자체보다 인간관계에서 느끼는 고립감과 통제감 상실이 사람을 더 지치게 할 수 있다는 설명은 현실적이라고 생각한다. 아무리 일을 잘해도 조직에서 내 편이 없다고 느끼거나 반복적으로 감정을 억눌러야 한다면 결국 마음이 소진될 수밖에 없다.
+
+다만 직장을 그만두는 것을 단순히 &#39;회피&#39;라고 보는 시각에는 동의하기 어렵다. 때로는 버티는 것이 회복에 도움이 되지만, 지속적인 괴롭힘이나 부당한 조직문화처럼 개인의 노력만으로 해결하기 어려운 환경이라면 그곳을 떠나는 것도 자신을 보호하기 위한 합리적인 선택일 수 있다. 중요한 것은 무조건 버티거나 무조건 도망치는 것이 아니라 내가 왜 힘든지 원인을 정확히 파악하는 것이라고 생각한다. 감정을 충분히 인정하고 필요한 도움을 받으면서, 내가 바꿀 수 있는 것과 바꿀 수 없는 것을 구분해야 한다. 결국 번아웃의 회복은 참는 능력을 키우는 것이 아니라 나에게 필요한 변화가 무엇인지 판단하고 실제 행동으로 옮기는 과정이라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">도망칠수록 깊어졌다 (원인, 회피, 표현)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">번아웃,고립감,회피,트라우마,감정표현,정서처리,직장스트레스,통제감상실,정신건강,회복탄력성</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">번아웃, 업무량이 문제인 줄 알았음.
+
+근데 알고 보니 진짜 원인은 관계 속 고립감이었음.
+
+정리해봄.
+
+1. 일 자체보다 "내 편이 없다"고 느낀 순간부터 무너지기 시작했음
+2. 그만두면 나아질 줄 알았는데 회피할수록 오히려 더 깊이 빠졌음
+3. 비슷한 상황은 어디서든 다시 만남 - 회피하면 활동 반경만 좁아짐
+4. 감정을 믿을 수 있는 사람한테 구체적으로 표현하니까 정리가 됐음
+5. 감정 정리되길 기다리지 말고 작은 일부터 이어가는 게 회복이었음
+
+무작정 피하기 전에 지금 힘든 진짜 이유부터 들여다보시길 🌱</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">도망칠수록 깊어졌다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">월요일이 다가올수록 가슴이 답답해지고, 주말 내내 쉬어도 회사 생각이 떠나지 않는 분들 많으실 겁니다. 저도 그랬습니다.<br /><br />처음엔 그냥 일이 많아서 그런 줄 알았습니다. 그런데 알고 보니 저를 가장 힘들게 했던 건 업무량이 아니라 사람들 사이에서 느낀 고립감이었습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">번아웃의 진짜 원인은 업무가 아니라 고립감이었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 몇 년 동안 회사를 별 탈 없이 잘 다녔습니다. 그런데 동료나 상사가 제 편을 들어주지 않는다고 느낀 순간부터 상황이 완전히 달라졌습니다.<br /><br />업무 자체는 예전과 크게 다르지 않았습니다. 그런데 &#39;이 사람들 사이에서 나는 혼자일 수도 있겠다&#39;는 생각이 든 순간부터, 출근길이 두렵고 아침에 눈을 뜨는 것조차 버거워졌습니다. 되짚어보니 저를 무너뜨린 건 일의 양이 아니라 통제감 상실, 즉 이 상황을 제 힘으로 다룰 수 없다는 느낌이었습니다.<br /><br />번아웃이라고 하면 흔히 야근이나 과중한 업무를 먼저 떠올립니다. 하지만 저는 인간관계에서 오는 고립감이 오히려 더 크게 사람을 지치게 만든다는 걸 몸으로 겪었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 번아웃을 부르는 건 업무량보다 관계 속에서 느끼는 고립감과 통제감 상실인 경우가 많습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">회피할수록 오히려 더 깊이 빠졌다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그럼 힘들 때 그 상황을 피하는 게 도움이 될까요? 저는 한동안 그렇게 믿었지만, 실제로는 정반대였습니다.<br /><br />국가트라우마센터에서도 힘든 기억이나 감정을 계속 피하기만 하면 증상이 오히려 반복되고 강화될 수 있다고 안내합니다. 저는 회사를 그만두면 이 고통에서 완전히 벗어날 수 있을 거라 생각했습니다. 하지만 비슷한 느낌을 주는 사람이나 상황은 어디서든 다시 만날 수 있고, 그때마다 제 활동 반경만 점점 좁아질 뿐이라는 걸 알게 됐습니다.<br /><br />저는 힘들어도 출근해서 그 상황을 마주하는 쪽을 택했습니다. 쉬운 선택은 아니었지만, 계속 피하기만 했다면 비슷한 상황을 마주할 때마다 매번 처음부터 다시 흔들렸을 거라는 생각이 듭니다.<br /><br />참고: <a href="https://www.nct.go.kr/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 국가트라우마센터</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 힘든 감정을 피하기만 하면 활동 반경이 좁아지고 증상은 오히려 더 오래갑니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">감정을 표현하고 다시 움직이는 게 회복이었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그럼 회피하지 않으면서 회복하려면 뭘 해야 할까요? 저는 두 가지가 함께 필요했습니다.<br /><br />트라우마를 다룬 연구에서는 힘들었던 경험을 언어로 표현하고 구체적으로 풀어낼수록 그 기억이 주는 스트레스가 줄어든다고 설명합니다. 저는 믿을 수 있는 사람에게 제가 느낀 불안과 억울함을 있는 그대로 털어놓기 시작했습니다. 감정을 숨기지 않고 꺼내는 것만으로도 마음이 조금씩 정리되는 걸 느꼈습니다.<br /><br />동시에 저는 일상의 작은 일들을 계속 해내려고 했습니다. 감정이 완전히 정리되길 기다렸다가 움직이는 게 아니라, 힘든 채로도 최소한의 할 일은 이어가는 쪽이 오히려 회복에 도움이 됐습니다.<br /><br />다만 저는 무조건 버티는 것만이 답이라는 시각에는 동의하기 어렵습니다. 지속적인 괴롭힘이나 부당한 환경이라면, 그곳을 떠나는 것도 저를 지키기 위한 합리적인 선택일 수 있습니다. 중요한 건 무조건 버티거나 무조건 도망치는 게 아니라, 제가 왜 힘든지 원인을 정확히 파악하고 바꿀 수 있는 부분과 없는 부분을 구분하는 것이라고 생각합니다.<br /><br />참고: <a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART001988940" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 한국학술지인용색인(KCI), 심리적 트라우마의 정보처리: 뇌생리학적 근거와 트라우마 내러티브</a></p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">힘든 감정을 믿을 수 있는 사람에게 구체적으로 표현해본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">감정이 정리되길 기다리지 말고 작은 할 일부터 이어간다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">버틸지 떠날지는 원인을 정확히 파악한 뒤 판단한다</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감정을 표현하면서도 일상의 작은 행동을 이어가는 것, 그게 회피와 다른 진짜 회복이었습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 힘들면 그냥 그만두는 게 낫지 않아?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 무조건 그렇지는 않다고 생각합니다. 다만 지속적인 괴롭힘처럼 제 힘으로 바꿀 수 없는 환경이라면 떠나는 것도 저를 지키는 선택이라고 봅니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 감정을 표현하는 게 왜 그렇게 중요해?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 감정을 숨기기만 하면 오히려 더 오래간다는 걸 직접 겪었습니다. 말로 꺼내는 것만으로도 마음이 정리되는 걸 느꼈습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 힘든데 억지로 일상을 이어가야 해?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 완벽하게는 아니어도 최소한만 이어가려고 합니다. 감정이 다 정리되길 기다리기보다 그게 저한테는 더 도움이 됐습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그럼 다음에 비슷한 상황이 오면 저는 뭘 먼저 할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 그 상황을 피하기 전에 왜 힘든지부터 정확히 들여다보려고 합니다. 그리고 믿을 수 있는 사람에게 먼저 이야기를 꺼낼 생각입니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 번아웃과 현타가 업무량이 아니라 관계 속 고립감에서 왔다는 걸, 그리고 피할수록 오히려 더 깊이 빠진다는 걸 이번에 직접 겪었습니다. 감정을 표현하고 작은 일상을 이어가는 것, 저는 이게 회피보다 훨씬 확실한 회복법이라고 생각합니다.<br /><br />지금 비슷한 무기력을 느끼고 계신다면, 무작정 피하기 전에 지금 힘든 진짜 이유가 무엇인지부터 들여다보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=yGjq_aYYJHE" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=yGjq_aYYJHE</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-burnoutavoid-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>

@@ -1,0 +1,392 @@
+<title>블로그+스레드 발행 스튜디오 — 휴대폰 탓이 아니었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-17</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>휴대폰 탓이 아니었다 (집중력, 목적, 기준)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">심층분석형</span><span class="chip accent">핵심 팩트 직입형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">디지털디톡스</span><span class="chip">집중력</span><span class="chip">스마트폰과의존</span><span class="chip">도파민</span><span class="chip">웰빙루틴</span><span class="chip">휴대폰사용습관</span><span class="chip">자기계발</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=rWjo5rspKcE" target="_blank" rel="noopener noreferrer">내가 스마트폰 중독에서 벗어난 방법 | 도파민 디톡스</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=rWjo5rspKcE" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">내가 스마트폰 중독에서 벗어난 방법 | 도파민 디톡스<br />https://www.youtube.com/watch?v=rWjo5rspKcE</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">스마트폰이 결제·알람·길찾기·이메일·독서까지 일상 전반을 대체하면서 필요 이상으로 시간을 허비하게 만들고, 눈앞의 일(식사·대화)에 대한 집중을 방해한다는 문제의식을 다뤘습니다. 이를 해결하기 위한 휴대폰 디톡스 챌린지로 식사 중 휴대폰 금지, 걸을 때 사용 안 하기, SNS 하루 사용 시간 제한, 시간 확인은 시계로 하기, 목적 없이 화면 켜지 않기 등을 제안했습니다. 특히 식사 중 휴대폰을 내려놓는 첫 번째 챌린지를 실천한 뒤 식사에 더 집중할 수 있었고 두뇌가 쉬는 듯한 느낌을 받았다는 소감이 이어졌습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">나 역시 하루를 돌아보면 생각보다 많은 시간을 휴대폰과 함께 보내고 있다. 아침에 눈을 뜨자마자 시간을 확인하고, 잠깐만 본다는 생각으로 유튜브나 SNS를 열었다가 예상보다 많은 시간을 보내기도 했다. 특히 퇴근 후 피곤하다는 이유로 휴대폰을 보고 있으면 어느새 한 시간이 훌쩍 지나가 버린 경험도 많다. 문제는 휴대폰을 사용한 시간보다 그 시간이 지나고 난 뒤 남는 것이 별로 없다는 점이었다. 요즘은 독서나 AI 공부, 블로그처럼 내가 해야 할 일에 집중하려고 하다 보니 휴대폰이 얼마나 자주 집중을 끊는지도 느끼게 된다. 책을 읽다가 알림 하나를 확인했을 뿐인데 다른 콘텐츠까지 보게 되는 경우도 있었다. 그래서 휴대폰을 무조건 멀리하기보다 목적 없이 보는 시간을 줄여야겠다는 생각을 하게 됐다. 식사할 때만이라도 휴대폰을 내려놓고, 책을 읽거나 공부할 때는 눈에 보이지 않는 곳에 두는 작은 실천부터 시작해보려고 한다. 결국 휴대폰을 줄인다는 것은 단순히 사용시간을 줄이는 것이 아니라, 내 시간과 집중력을 다시 내가 선택하는 연습이라는 생각이 든다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">휴대폰 때문에 우리가 생각보다 많은 시간과 집중력을 빼앗기고 있다는 내용에는 공감한다. 나 역시 잠깐 확인하려고 휴대폰을 들었다가 어느새 다른 영상이나 정보를 계속 보고 있는 경우가 있기 때문이다. 다만 휴대폰 자체를 문제의 원인으로 보는 것은 조금 다르게 생각한다. 휴대폰은 독서나 공부, 업무, 정보 검색처럼 잘 활용하면 오히려 시간을 절약하고 성장에 도움을 주는 훌륭한 도구이기도 하다. 결국 문제는 사용시간보다 '어떤 목적으로 사용했는가'에 있다고 생각한다. 무조건 사용을 줄이는 디톡스보다는 식사나 독서처럼 집중이 필요한 순간에는 내려놓고, 필요한 순간에는 적극적으로 활용하는 기준을 만드는 것이 더 현실적이다. 휴대폰을 통제하는 것이 목적이 아니라, 휴대폰에 내 시간과 선택권을 빼앗기지 않는 것이 더 중요하다고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">휴대폰 탓이 아니었다 (집중력, 목적, 기준)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">디지털디톡스,집중력,스마트폰과의존,도파민,웰빙루틴,휴대폰사용습관,자기계발,SNS사용시간,생산성,습관</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">성인 5명 중 1명이 스마트폰 과의존 위험군이라는 조사 결과 보고 뜨끔했음.
+
+근데 문제는 휴대폰 자체가 아니라 목적 없이 켜는 습관이었음.
+
+정리해봄.
+
+1. 성인 과의존위험군 22.7%, 청소년은 40.1%임 - 남 얘기 아니었음
+2. 도파민 때문에 자극이 반복될수록 오히려 집중력·인내심 약해짐
+3. 문제는 사용시간이 아니라 목적 없이 켠 순간들이었음
+4. 완전 차단은 며칠 못 감 - 식사시간 하나만 지키는 게 더 오래 감
+5. 휴대폰 통제가 목적 아니라 내 시간 뺏기지 않는 게 진짜 목적임
+
+오늘 식사할 때 딱 한 번 휴대폰 내려놓고 먹어보시길 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">휴대폰 탓이 아니었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">국내 성인 다섯 명 중 한 명 이상인 22.7%가 스마트폰 과의존 위험군에 속한다는 조사 결과를 보고, 저는 이게 남 얘기가 아니라는 걸 바로 알았습니다.<br /><br />휴대폰 사용 습관을 다시 들여다보면서 제가 직접 시도해보고 정리한 내용을 남겨봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">휴대폰이 뺏어가는 건 시간이 아니라 집중력이다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">과학기술정보통신부의 스마트폰 과의존 실태조사에 따르면 성인 과의존위험군은 22.7%, 청소년은 40.1%에 달합니다(<a href="https://www.korea.kr/briefing/pressReleaseView.do?newsId=156681128" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 대한민국 정책브리핑, 스마트폰 과의존 실태조사 결과</a>). 과의존이란 스마트폰 이용에 대한 조절력이 떨어지고 그로 인해 일상생활에 문제가 생기는 상태를 뜻하는데, 저는 제 얘기가 아니라고 생각했다가 이 수치를 보고 다시 하루를 돌아보게 됐습니다.<br /><br />질병관리청 국가건강정보포털에서는 스마트폰을 비롯한 디지털 기기 과의존이 인지기능에 영향을 준다고 설명합니다(<a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoYouthView.do?cntnts_sn=6624" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 질병관리청 국가건강정보포털</a>). 저도 책을 읽다가 알림 하나를 확인했을 뿐인데 다른 콘텐츠까지 보게 되는 경우가 많았는데, 이게 단순히 시간을 잃는 게 아니라 눈앞의 일에 집중하는 능력 자체가 끊기는 문제였다는 걸 알게 됐습니다. 요즘 독서나 공부처럼 제가 해야 할 일에 집중하려고 하다 보니, 휴대폰이 얼마나 자주 그 집중을 끊어놓는지도 더 선명하게 느끼게 됐습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 휴대폰 과다 사용의 진짜 문제는 흘려보낸 시간이 아니라, 반복적으로 끊기는 집중력입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">목적 없는 사용이 진짜 문제였다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">스마트폰이 계속 손이 가게 만드는 데는 도파민이라는 신경전달물질이 관여합니다. 도파민은 뇌의 보상 시스템에서 즐거움을 느끼게 하는 역할을 하는데, 알림이나 짧은 영상처럼 강하고 반복적인 자극이 계속되면 더 많은 자극을 원하게 되면서 오히려 집중력과 인내심이 약해진다고 합니다. 저는 이 설명을 보고 나서야, 딱히 볼 게 없는데도 습관적으로 휴대폰을 켜게 되는 이유를 이해했습니다.<br /><br />돌아보니 저에게 문제였던 건 휴대폰을 썼다는 사실 자체가 아니라, 목적 없이 켠 순간들이었습니다. 아침에 눈을 뜨자마자 시간만 확인하려다 SNS를 열고, 잠깐만 본다는 생각으로 시작했다가 예상보다 훨씬 오래 붙잡혀 있었던 경험이 저에게도 많았습니다. 특히 퇴근 후 피곤하다는 이유로 잠깐 휴대폰을 보고 있으면 어느새 한 시간이 훌쩍 지나가 있곤 했는데, 문제는 그 한 시간을 썼다는 것보다 그 시간이 지나고 나서 남는 게 거의 없다는 점이었습니다. 필요할 때 검색하고 확인하는 용도로 쓸 때는 전혀 문제가 없었는데, 목적 없이 켜는 순간부터 시간이 흘러가 버렸습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 휴대폰 사용 자체가 아니라, 목적 없이 켜는 순간이 시간과 집중력을 갉아먹습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">완전 차단이 아니라 기준을 세우는 법</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">다만 저는 휴대폰 자체를 문제의 원인으로 몰아붙이는 시각에는 동의하기 어렵습니다. 휴대폰은 독서나 공부, 업무, 정보 검색에 잘 활용하면 오히려 시간을 절약하고 성장에 도움을 주는 도구이기도 합니다. 무조건 사용 시간을 줄이는 디톡스보다, 집중이 필요한 순간에는 내려놓고 필요한 순간에는 적극적으로 쓰는 기준을 세우는 게 저에게는 더 현실적이었습니다.<br /><br />제가 실제로 적용해본 기준은 이렇습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">식사할 때는 휴대폰을 내려놓고 먹는 것에만 집중하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">독서나 공부할 때는 휴대폰을 눈에 보이지 않는 곳에 두기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">시간 확인은 휴대폰 대신 시계로 하고, 목적 없이 화면 켜지 않기</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">휴대폰을 통제하는 것 자체가 목적이 아니라, 제 시간과 선택권을 휴대폰에 빼앗기지 않는 것이 진짜 목적이라고 저는 생각합니다. 완전히 끊어내겠다는 결심은 며칠 못 가 무너지기 쉬웠지만, 식사 시간 하나만 지키자는 작은 기준은 오히려 꾸준히 이어갈 수 있었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 휴대폰을 무조건 멀리하기보다, 언제 내려놓고 언제 쓸지 나만의 기준을 세우는 것이 더 오래 지속됩니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 정말 필요해서 휴대폰을 켰던 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 인정합니다. 대부분은 목적 없이 습관적으로 켰던 거라고 저에게 솔직히 답합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 휴대폰을 아예 안 쓰는 게 답일까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇지 않다고 저는 생각합니다. 도구로 잘 쓰면 오히려 도움이 된다는 걸 저는 인정하고 있습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 기준을 세워도 나는 계속 지킬 수 있을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 솔직히 매번 자신은 없다고 저에게 인정합니다. 그래도 식사 시간 하나부터 지켜보니 조금씩 익숙해진다는 걸 저는 확인했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 집중력이 떨어진 걸 나는 그냥 나이 탓으로 돌리고 있던 건 아닐까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그런 면이 있었다고 저는 인정합니다. 습관을 먼저 점검하고 나서야 원인을 제대로 봤다는 걸 저는 이번에 깨달았습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 문제가 휴대폰 자체가 아니라 목적 없이 켜는 습관이었다는 걸 직접 확인했습니다. 무조건 멀리하기보다, 언제 쓰고 언제 내려놓을지 저만의 기준을 세우는 게 더 오래 가는 방법이었습니다.<br /><br />오늘 식사할 때 딱 한 번, 휴대폰을 내려놓고 먹어보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=rWjo5rspKcE" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=rWjo5rspKcE</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-digitaldetox-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>

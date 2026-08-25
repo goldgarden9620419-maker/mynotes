@@ -1,0 +1,480 @@
+<title>블로그+스레드 발행 스튜디오 — 오해했던 아모르파티</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-16</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>오해했던 아모르파티 (니체, 초인, 나다움)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">질문유도형</span><span class="chip accent">솔직 고백형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">아모르파티</span><span class="chip">니체</span><span class="chip">운명애</span><span class="chip">초인</span><span class="chip">영원회귀</span><span class="chip">낙타사자아이</span><span class="chip">나다움</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=iEZGEalHyek" target="_blank" rel="noopener noreferrer">니체 - 진짜 나 자신으로 삶을 사는 방법</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=iEZGEalHyek" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">니체 - 진짜 나 자신으로 삶을 사는 방법 ('아모르 파티'의 진짜 의미)<br />https://www.youtube.com/watch?v=iEZGEalHyek</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 스크립트 원문</b></p>
+    <details class="preview">
+      <summary>스크립트 펼쳐보기</summary>
+      <div class="snippet" style="margin-top:10px;max-height:380px;overflow:auto;">요즘 자기다움이라고 대중매체가 발달했다 보니까 대형 매스컴에서 보도되는 주로 요구되는 삶의 형태대로 살려는 의식이 강했다면 요즘에는 사회가 훨씬 더 다변화되면서 정말로 내가 원하는 게 뭐지, 어떻게 해야 내가 행복하지 이 주제에 대해서 생각하시는 분들이 많아졌습니다.
+이런 현상을 가르쳐서 한국에서는 MZ세대 특이라 이런 식으로 우스갯소리로 말하기도 하잖아요.
+그런데 나답게 산다는 건 생각보다 굉장히 어렵고 복잡한 주제입니다.
+왜냐면 만약에 사회에서 나답게 살아야 된다는 메시지가 널리 퍼져서, 아, 그래. 저런 이야기를 들어보니까 나는 정말 나답게 살아야 하는 거 같아, 이렇게 생각하면서 정말 내가 원하는 게 뭔지 찾으려고 한다면 그게 정말 나답게 사는 거라고 말할 수 있을까요?
+그건 진정한 의미에서 나에게서 우러나온 생각이라기보다는 주변에서 들리는 목소리에 따라서 행동하고 생각하는 것일 뿐이잖아요.
+그래서 요즘처럼 사회적으로 자기다움을 찾는 목소리가 점점 강해지는 추세에서는 과연 진짜로 나답게 산다는 건 뭘까가 훨씬 더 복잡하게 질문될 수밖에 없습니다.
+저는 오늘 이 어려운 질문에 대해서 철학자 니체의 사상을 바탕으로 나름의 대답을 내놓아 보려고 합니다.
+이번에 니체에 되게 좋은 책이 한 권 나왔는데요. 한국말로 혼자일 수 없다면 나아갈 수 없다 이렇게 제목이 지어졌는데, 이 책은 니체가 죽고 나서 발견된 편지, 일기, 메모, 미완성 유고, 이런 것들에 담겨 있는 짧은 글들을 모아서 엮은 책인데요.
+니체 책들이 읽기가 어려운 편이거든요. 근데 이 책은 한두 페이지 정도의 호흡으로 짧게 짧게 끊겨 있는 아이디어 스케치를 많이 담고 있기 때문에 체계적인 사전 지식이 없어도 읽기 되게 좋은 것 같더라고요.
+이 책에서는 아모르파티라는 말이 굉장히 중요한 주제로 등장합니다. 아모르파티는 운명을 사랑한다라는 뜻인데요. 니체가 이 말을 굉장히 중요하게 생각을 했습니다.
+운명을 사랑한다는 건 나에게 주어진 조건이 상황, 현재의 삶을 긍정할 줄 안다는 걸 뜻하거나 만약에 '아모르 파티' 가사, 살아가세요. 당신의 삶을 긍정하면서 밝은 마음으로 살아가세요.' 이 정도의 메시지였다면 그거는 우리가 자기 계발서 같은 데서도 쉽게 접하는 말이잖아요.
+이렇게 생각해 보면 뭐 니체가 뭐 특별한 말을 했다는 거야? 이런 생각이 드실 수가 있습니다.
+그런데 니체가 말하는 '아모르 파티'는 이것보다는 훨씬 더 복잡하고 다층적인 의미를 품고 있습니다. 아마 그렇지 않았다면 니체가 이렇게까지 역사적으로 중요한 철학자로 받아들여지지는 않았을 거거든요.
+먼저 니체는 기본적으로 인생은 밝지 않다고 생각했습니다. 오히려 고통이 가득한 게 인생이라고 생각했어요.
+실질적으로 우리가 신체적인 고통을 많이 느끼면서 살아가기도 하고 정신적인 스트레스를 받으면서 살아가기도 하죠.
+니체의 메모들을 보면 30대 중반 때부터 이미 몸이 너무 안 좋아서 제대로 일을 할 수가 없는 상태였고 눈이 아파서 책도 제대로 볼 수 없는 상태였다는 말이 나오거든요.
+그때부터 니체는 죽을 때까지 건강 문제로 거의 칩거 생활을 했습니다.
+게다가 니체는 정신병을 앓기도 했습니다. 50대에 비교적 일찍 세상을 떠났는데 죽기 전에는 거의 말도 제대로 못 하고 제대로 된 판단력이 없는 상태였다고 해요.
+이런 사람의 입장에서 보면 삶이 좋은 것이라기보다는 너무나 힘들고 고된 것이었겠죠.
+그런데 삶과 고통의 연관성에 대한 니체의 통찰은 이것보다 훨씬 더 복잡합니다.
+니체는 이런 말을 했습니다. 나는 삶의 문제에 대해서 이야기하고자 하는 게 아니라 삶 자체가 곧 문제라고 이야기하려고 한다.
+이게 무슨 말이냐면 우리는 흔히 삶의 문제가 있다고 생각하잖아요. 소중한 사람이 세상을 떠난다든지 신체적인 고통을 겪는다든지 큰 돈을 잃는다든지 이런 고통스러운 일을 겪을 때 우리의 삶이 불행해진다고 생각합니다.
+이런 관점에서 생각해 보면 삶 자체는 어떤 중립적인 장으로서 미리 존재하고 있고, 그 안에서 좋은 일이 일어나냐 아니면 안 좋은 일이 일어나냐, 따라서 인생이 고통스러울 수도 있고 조금 즐거울 수도 있고 할 텐데요.
+그런데 니체는 이렇게 삶에서 고통이 일어나는 게 아니라 삶 자체가 곧 고통과 동일하다고 생각했습니다.
+니체가 왜 이런 생각을 했을지 한번 생각해 보자면, 니체는 인간은 자신의 존재의 질문을 던질 줄 아는 존재라는 것을 강조하거나 다른 동물들과 달리 내가 지금 왜 살지, 내 삶에서 필요한 게 뭐지, 이런 질문을 던질 줄 압니다.
+그런데 바로 이러한 능력 때문에 우리의 삶에 언제나 커다란 빈 공간, 아, 해결되지 않는 미스터리가 존재합니다.
+그냥 우리가 아무런 질문도 던지지 않고 자연스럽게 순리에 따라서 살아간다면 어쩌면 삶의 조건이 완벽하다면 완벽한 삶이라는 게 존재할 수도 있을 겁니다.
+그런데 인간은 항상 질문을 던지고 빈 공간을 찾고 내 안에서 암흑을 발견할 수 있는 존재이기 때문에 아무리 객관적으로 좋은 삶의 조건에 있다고 할지라도 어떻게든 결핍을 찾고 그 결핍 때문에 고통스러워하는 그런 존재라는 거죠.
+이렇게 보면 안 그래도 삶에는 고통스러운 일들이 가득한데 꼭 그런 고통스러운 일이 없다고 해도 이미 인간으로서 존재한다는 거 자체가 곧 고통이라는 거죠.
+그렇다면 더더욱이나 의문이 듭니다. 니체는 왜 이런 고통이 가득한, 고통 그 자체인 나의 삶이 운명을 사랑하라고 말한 걸까요?
+이 질문에 답하기 위해서는 니체가 말한 사랑의 관념을 한번 들여다봐야 합니다.
+이 혼자일 수 없다면 나아갈 수 없다라는 책에는 이런 구절이 나옵니다. '진실한 사랑이란 영혼이 육체의 결점을 감싸 줄 때이다.'
+이 말이 어떤 맥락에서 나오냐면 서로 행복한 결혼 생활을 어떻게 하면 오래 유지할 수 있을까를 생각해 봤을 때 그냥 처음에 서로에게 느낀 육체적인 이끌림을 사랑이라고 생각하고 그걸 바탕으로 결혼을 결정해 버리면 우리의 육체적인 아름다움이나 생기는 금방 사라져 버리기 때문에 나중에 결국에는 불행한 결혼 생활을 할 수밖에 없다, 그보다 20년 30년이 지나면서 자연스럽게 나와 상대방의 육체가 쇠락해 가더라도 그것을 잘 인지하고 인정하면서도 상대방을 존중하고 상대를 원할 수 있는 그런 관계를 그리면서 사랑을 해 나가야 행복한 결혼 생활을 할 수 있다, 이런 식으로 니체는 말합니다.
+저는 이 진실한 사랑이란 영혼이 육체의 결점을 감싸 줄 때이다, 구절은 단순히 플라토닉 러브에 대해서 말하는 구절이 아니라고 생각합니다.
+플라토닉 러브는 육체적 사랑이 배제된 정신적 사랑을 얘기하잖아요. 플라토닉 러브에서 육체적인 관계, 점점 쇠락할 수밖에 없는 우리의 불완전한 육체는 진실한 사랑에서는 극복해야 할 무언가입니다.
+반면에 니체가 말하는 진실한 사랑은 우리가 가진 고유의 육체적인 한계를 긍정할 줄 아는 사랑입니다.
+한계가 있다고 해서 그걸 극복해야 할 장애물로 바라보는 게 아니라 그 한계가 나와 상대방의 본질적인 부분을 이루는 것으로 겸허하게 받아들일 줄 알아야 한다는 거죠.
+저는 이 니체가 말한 진실한 사랑의 관념이 아모르 파티에도 그대로 적용될 수 있다고 생각해요.
+내 운명을 사랑하라는 건 만약 내 삶을 긍정적으로만 바라보라는 게 아니라 오히려 내 삶의 내재적으로 있는 고통과 불행을 겸허하게 인정한 상태에서 그것을 함께 이끌고 나의 삶을 힘차게 살아갈 줄 알아야 한다는 거죠.
+나에게는 결함으로 받아들여질 만한 요소가 정말 많지만 그것에 좌절하지는 말아야 한다는 겁니다.
+여기서의 논리가 상당히 복잡합니다. 우리는 흔히 너의 삶을 사랑하라, 이런 말을 들으면 내가 가진 조건들을 긍정하면서 거기에 만족할 줄 알아야 한다는 뜻으로 받아들일 때가 많거든요.
+그런데 니체는 인식과 만족은 완전히 다른 거라고 생각했습니다.
+내가 이러이러한 조건을 가지고 있다는 걸 인지하고 거기에서부터 도망치지 않는 거랑 그 선에서 만족하고 더 이상 나아가지 않는 건 아주 다르다는 거죠.
+니체는 인간은 초인이 돼야 한다고 생각했는데요. 초인은 인간을 넘어선 존재를 뜻하는데, 인간을 넘어선다는 건 내가 지금 가지고 있는 조건들을 뛰어넘는다는 걸 뜻합니다.
+니체는 인간은 그 자체로 사랑받고 존중받을 만한 존재가 아니라고 생각했어요.
+왜냐하면 우리는 이미 너무나 많은 사회적인 관점을 학습한 상태고 그 사회적 관점에는 니체가 생각하기에는 굉장히 추한 것들이 많거든요.
+예를 들어서 우리는 권위주의적인 시스템을 너무 쉽게 받아들이기도 하고요. 이 세상에 있는 불공정한 것들에 쉽게 눈을 감기도 합니다.
+그렇게 반항하지 않고 살아가도록 어렸을 때부터 교육을 받아요.
+이렇게 우리는 이미 사회의 입맛에 맞게, 특히 권력자들의 입맛에 맞게 어렸을 때부터 잘 맞춰져 온 상태이기 때문에 지금의 나를 있는 그대로 사랑하면서 완전히 긍정하라는 말은 전혀 말이 되지 않는다고 니체는 생각했습니다.
+내가 지금 이 상태 그 자체로 존중받을 만한 존재라는 것도 말이 안 된다고 생각했고요.
+니체는 오히려 우리는 우리 자신의 추한 면들을 끊임없이 극복하려고 노력해야 한다고 생각했습니다.
+그런데 그렇게 나의 현재 조건을 극복하려고 노력을 하려면 내가 가진 현재 조건을 알아야 하거든요.
+그런데 그 나의 현재 조건을 잘 아는 그 활동부터 이미 나의 한계로부터 회피하지 않는 상당한 용기와 결단이 필요한 일입니다.
+한마디로 우리는 우리 스스로가 처한 조건을 순수하게 긍정해서 안 되고 순수하게 부정해도 안 됩니다.
+순수하게 긍정한다는 건 지금 이 상태로도 좋아, 다 좋아, 그냥 지금에 만족할 줄 알면 행복할 수 있어, 이렇게 생각하는 걸 뜻하고요.
+순수하게 부정한다는 건 나는 그런 면들을 갖고 있지 않은데, 나는 그런 사람이 아니야, 이렇게 생각하는 걸 뜻합니다.
+니체가 말하는 아모르파티는 이렇게 안주하지 않고 회피하지 않고 머리로는 나 자신의 조건과 한계를 그대로 인지하면서 행동으로는 그것을 극복하기 위해 노력하는 걸 뜻한다고 저는 해석을 하고 있습니다.
+이런 관점에서 우리는 니체가 말한 낙타, 사자, 아이의 비유를 이해할 수 있습니다.
+니체는 인간의 정신은 세 단계의 변화를 겪어야 한다고 생각했습니다.
+첫째는 낙타의 단계입니다. 낙타는 무거운 짐을 짊어지고 사막을 건너져 인간은 마치 낙타처럼 나의 존재라는 짐을 짊어지고 사막처럼 고난이 가득한 이 삶을 헤쳐 나갈 수 있어야 합니다. 이 힘든 과정으로부터 도망치면 안 된다는 거죠.
+두 번째 단계는 사자입니다. 인간은 낙타처럼 짐을 짊어지기만 하는 게 아니라 안주하지 않고 화를 내고 기존의 억압적인 체계를 무너뜨리고자 도전할 줄 알아야 합니다.
+세 번째 관계는 아이입니다. 인간은 아이처럼 천진난만하게 스스로가 가치의 창조자가 될 수 있어야 합니다.
+우리가 아이들이 노는 걸 보면 가끔씩은 어른들이 도저히 생각하지 못하는 참신한 관점으로 세상을 바라볼 때가 있잖아요.
+근데 점점 나이가 들고 교육을 받으면서 자신의 그 참신한 관점을 버리고 사회가 요구하는 대로만 생각하면서 살아가게 되죠.
+니체는 인간은 최종적으로는 어린아이 시절로 되돌아간 것처럼 스스로 오리지널한 관점을 품을 수 있어야 한다고 생각했습니다.
+그런데 제가 여기서 강조하고 싶은 건 아이의 모습이랑 과연 뭘까, 이걸 한번 생각해 보면 아이의 모습은 상당히 우리가 피하고 싶고 부끄러운 그런 모습이라는 겁니다.
+어디 가서 어린아이처럼 행동하면 창피한 거잖아요. 우리는 어린아이처럼 행동하지 마라, 이런 말을 들으면서 자라기도 하고요.
+그런데 어린아이 같다는 게 부끄럽다, 창피하다는 게 과연 뭘까를 생각해 보면 결국에 평균적인 어른의 행동으로부터 많이 벗어나 있기 때문에 우리가 창피함을 느끼는 거잖아요.
+우리는 성장하는 과정에서 아이 특유의 참신한 관점을 점점점 통제하기를 요구하면서 계속해서 평균적인 삶의 방식에 맞추도록 요구받습니다.
+그렇다 보니까 때로는 나한테 전혀 다르게 행동할 수도 있다라는 가능성 자체를 완전히 차단해 버리죠. 의식에 아예 그런 가능성이 떠오르지가 않습니다. 내 안에는 분명 그런 가능성의 에너지가 있는데도 불구하고요.
+이런 관점에서 생각해 봤을 때 우리가 니체 메시지에서 취해야 할 건 우리는 때로 부끄러운 존재가 될 줄 알아야 한다는 겁니다.
+혹은 나는 이미 부끄러운 면모를 너무나 많이 갖고 있는 존재라는 걸 겸허하게 인정할 줄 알아야 한다는 겁니다.
+니체가 말한 아모르파티는 내 안에 부끄러운 면을 사랑하라는 메시지로 읽힐 수 있다고 저는 생각합니다.
+우리가 가진 많은 부끄러운 면들 중에는 물론 추한 면도 있을 겁니다. 그런데 그것 이상으로 창조적인 행동을 할 수 있는 에너지도 많이 깃들어 있을 거거든요.
+그거를 순수하게 긍정하지도 말고 그렇다고 순수하게 부정하지도 말고 그것이 있다는 것을 인지한 상태에서 행동으로는 그것을 발판삼아서 새로운 단계, 새로운 차원, 새로운 지평을 창조할 수 있도록 노력하는 게 니체가 생각하는 정말로 나다운 삶, 나 자신의 운명을 사랑하는 삶일 겁니다.
+오늘은 이렇게 혼자일 수 없다면 나아갈 수 없다라는 니체의 책의 내용을 바탕으로 니체가 말한 아모르 파티에 대해서 설명을 드리면서 자기다움에 대해서도 제가 생각하는 중요한 관점을 전달드려 봤는데요.
+요즘에 자기다움, 나다움 이런 것에 관련한 메시지는 정말로 많이 유통이 되고 있는데 주로 말해진 논리들을 보면 정말로 네가 원하는 것을 찾아라, 정말로 네가 행복한 방식대로 살아가야 한다, 이런 식의 말을 많이 접할 수가 있습니다.
+그런데 서두에서 말씀드렸지만 저는 그것만으로는 상당히 부족하고 이론적으로 봤을 때 모순적인 그런 단계에 이른다고 생각해요.
+왜냐면 나 스스로 지금 의식적으로 느낄 수 있는 나의 것, 나의 욕망이라는 거는 이미 사회적으로 형성이 되어 있는 것이기 때문에 그냥 단순히 '아, 내가 뭘 원할까' 지금 느껴 봐야지, 이렇게만 생각해서는 나답게 살려고 할수록 오히려 사회 입맛에 맞게 살아갈 가능성이 높다고 생각하거든요.
+그래서 정말로 나다움에 대해서 조금 더 잘 성찰하기 위해서는 내가 가진 부끄러운 면모, 나의 한계, 쇠락할 수밖에 없는 나의 운명이라는 것에 대해서 정말로 진지하게 생각해 보고 그것을 겸허하게 받아들일 줄 알아야 하지 않을까 생각해 봅니다.
+그런 과정에 많이 도움이 되는 후보로서 니체의 사상이 있다고 생각해요.
+저는 니체의 사상에 긍정적으로 평가할 부분만 들어 있다고 생각하지 않아요. 니체는 제 기준에서는 별로 동의하고 싶지 않은 방향의 사상도 많이 펼친 사람이지만 그것 이상으로 역사적으로 개인이라는 존재, 나다운 삶이라는 것의 아이디어가 발달하는 과정에서 엄청나게 중요한 영향을 끼친 사상가임에는 분명하거든요.
+그런데 니체의 책을 읽기가 참 쉬운 건 아니에요. 근데 이번에 나온 이, 혼자 설 수 없다면 나아갈 수 없다라는 책은 비교적 어렵지 않으면서도 니체의 오리지널한 말들을 직접 접해 볼 수 있는 책이기 때문에 삶에 대해 고민이 있으신 분들께는 많은 도움이 될 것 같습니다.
+네, 제가 오늘 준비한 내용은 여기까지고요.
+다음에 또 재밌는 내용으로 돌아오도록 하겠습니다.
+감사합니다.</div>
+    </details>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">예전에는 나답게 산다는 것이 무엇인지 깊이 생각해 본 적이 없었습니다. 직장생활을 하면서 남들이 가는 방향을 따라가고, 안정적으로 월급을 받으며 가족을 책임지는 것이 잘 사는 삶이라고 생각했습니다. 그런데 어느 순간 반복되는 일상 속에서 '나는 정말 내가 원하는 삶을 살고 있는 걸까?'라는 질문이 생겼습니다. 그때부터 독서를 하고 새로운 것을 배우며 조금씩 나를 들여다보기 시작했습니다. 니체의 아모르파티를 접하면서 나답게 산다는 것이 지금의 나를 무조건 사랑하고 만족하는 것만은 아니라는 생각이 들었습니다. 부족한 모습과 지나온 후회, 현실적인 한계까지도 내 삶의 일부로 인정하되 거기에 머물지 않고 조금씩 넘어서는 것이 중요하다고 느꼈습니다. 지금도 새로운 도전을 하면서 잘하고 있는지 불안할 때가 있습니다. 하지만 그 불안과 부족함까지 외면하지 않고 앞으로 나아가는 과정 자체가 어쩌면 나다운 삶인지도 모르겠습니다. 남들이 정해놓은 성공이 아니라 어제보다 조금 성장한 나를 만들어가는 것, 지금은 그것이 제가 생각하는 '나답게 사는 삶'입니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">'나답게 살아야 한다'는 말에는 공감하지만, 때로는 이 말 자체가 또 다른 사회적 압박이 될 수도 있다고 생각합니다. 꼭 남들과 다른 길을 가야만 나다운 것도 아니고, 지금 당장 내가 원하는 것이 무엇인지 명확하게 알아야 하는 것도 아닙니다. 오히려 나다움을 찾겠다는 조급함 때문에 현실의 책임이나 관계를 가볍게 생각해서도 안 된다고 봅니다. 니체의 아모르파티처럼 중요한 것은 현재의 부족함과 한계를 외면하지 않고 인정하면서도 거기에 안주하지 않는 태도라고 생각합니다. 나답게 산다는 것은 완성된 '진짜 나'를 발견하는 일이 아니라, 수많은 선택과 실패를 경험하면서 조금씩 만들어가는 과정에 더 가깝지 않을까요. 결국 다른 사람의 기준에서 벗어나는 것만큼이나 중요한 것은 내 생각조차 끊임없이 의심하고 돌아보면서, 내가 선택한 삶에 스스로 책임지는 자세라고 생각합니다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">오해했던 아모르파티 (니체, 초인, 나다움)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">아모르파티,니체,운명애,초인,영원회귀,낙타사자아이,자기계발,확언,나다움,철학</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">"너답게 살아라" 이 말 들을 때마다 되게 불편했음.
+
+근데 니체의 아모르파티(운명애) 보고 그 이유를 알았음.
+
+정리해봄.
+
+1. 니체는 삶 자체가 고통이라고 봤음 - 문제가 생기는 게 아니라 삶 자체가 문제라는 거임
+2. 아모르파티, 무조건 긍정하라는 말 아니었음
+3. 진짜 사랑은 결점까지 감싸안는 거라고 함 - 근데 거기 머물면 안 됨
+4. 낙타-사자-아이, 세 단계 거쳐야 초인이 된다고 함
+5. 부끄러운 내 모습 인정하는 게 진짜 나다움의 시작임
+
+나다움은 발견하는 게 아니라 계속 만들어가는 거였음 🌱
+
+전체 이야기는 댓글 블로그에서 이어감</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">아모르 파티, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">솔직히 저는 "너답게 살아라"는 말을 들을 때마다 마음 한구석이 불편했습니다. 나답다는 게 뭔지 정의조차 못 내리면서 그 말만 따르라고 하니 오히려 더 헷갈렸기 때문입니다. 아모르파티(Amor fati)란 라틴어로 "운명에 대한 사랑"을 뜻하는 말로, 철학자 니체가 남긴 개념인데, 이 말을 다시 들여다보고 나서야 저는 그 불편함의 정체를 조금은 알 것 같았습니다.<br /><br />운명을 사랑하라는 니체의 말이 정말 무조건 긍정적으로 살라는 뜻이었을까요. 제가 직접 들여다본 내용을 정리해 봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">니체가 본 삶, 고통 그 자체라는 통찰</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">니체는 서른 중반부터 눈이 아파 책도 제대로 보지 못할 만큼 건강이 나빠졌고, 이후 정신적인 문제까지 겹치면서 쉰을 갓 넘긴 나이에 세상을 떠났습니다. 그가 남긴 메모에는 "나는 삶의 문제에 대해 이야기하고자 하는 게 아니라 삶 자체가 곧 문제라고 이야기하려 한다"는 문장이 있는데, 저는 이 구절을 처음 읽었을 때 소름이 돋았습니다.<br /><br />니체는 이 통찰을 영원회귀라는 개념과 연결지었습니다. 영원회귀란 지금 이 순간이 정확히 똑같은 모습으로 무한히 반복된다고 가정했을 때도 이 삶을 긍정할 수 있는가를 스스로에게 묻는 사고실험을 뜻합니다(<a href="https://plato.stanford.edu/entries/nietzsche/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Stanford Encyclopedia of Philosophy</a>). 저는 예전엔 이런 질문을 스스로에게 던져본 적이 없었습니다. 그냥 하루하루를 버티듯 살았을 뿐입니다.<br /><br />그런데 반복되는 직장 생활 속에서 문득 "나는 정말 내가 원하는 삶을 살고 있는 걸까"라는 질문이 든 순간이 있었습니다. 그 질문이 왜 그렇게 불편했는지를, 저는 니체를 통해서야 이해했습니다. 인간은 스스로에게 질문을 던질 줄 아는 존재이기 때문에, 아무리 좋은 조건에 있어도 결핍을 찾아내고 그 결핍 때문에 괴로워한다는 겁니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 니체는 삶에 고통이 끼어드는 게 아니라 삶 자체가 고통과 같다고 보았고, 이 통찰이 아모르파티의 출발점이 됩니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">아모르파티는 긍정이 아니라 초인이 되는 것</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 처음에 아모르파티를 "무조건 긍정적으로 살아라"는 자기계발서 문구쯤으로 오해했습니다. 그런데 니체가 말한 사랑은 그런 뜻이 아니었습니다. 그는 "진실한 사랑이란 영혼이 육체의 결점을 감싸 줄 때이다"라고 썼는데, 저는 이 문장이 상대의 약점을 극복해야 할 장애물이 아니라 본질의 일부로 받아들이는 태도, 흔히 말하는 플라토닉 러브와는 다른 결의 사랑을 가리킨다고 읽었습니다. 운명을 대하는 태도도 마찬가지여서, 내 삶의 조건을 긍정하되 거기서 만족하고 멈추는 게 아니라는 뜻이었습니다.<br /><br />니체는 인간이 넘어서야 할 존재로 초인을 제시했습니다. 초인이란 지금 가진 조건과 사회가 학습시킨 관성을 스스로 넘어서는 인간을 가리키는 개념으로, 니체는 지금의 나를 있는 그대로 사랑하고 만족하라는 말은 성립할 수 없다고 봤습니다(<a href="https://www.britannica.com/topic/superman-philosophy" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Britannica, Superman(philosophy)</a>). 저는 이 대목에서 제가 왜 지금 상태에 안주하지 못하고 계속 뭔가를 배우려 했는지 조금 이해가 됐습니다.<br /><br />니체는 이 극복의 과정을 낙타-사자-아이라는 세 단계 비유로 설명했습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">낙타: 짊어진 조건과 고난을 회피하지 않고 받아들이는 단계</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">사자: 기존의 억압적인 틀에 맞서 싸우는 단계</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">아이: 스스로 가치를 새롭게 창조하는 단계</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">이 세 단계 중 제가 가장 어렵게 느낀 건 아이의 단계였습니다. 어린아이처럼 행동한다는 건 오히려 부끄럽고 창피한 일로 여겨지는데, 니체는 바로 그 부끄러움을 감수할 줄 알아야 진짜 새로운 관점을 만들 수 있다고 봤습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 아모르파티는 지금의 나에게 만족하라는 말이 아니라, 내 조건을 인정한 채로 계속 넘어서라는 뜻입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">그래서 나다움이란 무엇인가</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">예전의 저는 남들이 가는 방향을 따라가고, 안정적으로 월급을 받으며 가족을 책임지는 것이 잘 사는 삶이라고 생각했습니다. 그런데 반복되는 일상 속에서 "나는 정말 내가 원하는 삶을 살고 있는 걸까"라는 질문이 생기면서부터, 독서를 하고 새로운 것을 배우며 조금씩 저를 들여다보기 시작했습니다. 아모르파티를 접하면서 저는 나답게 산다는 게 지금의 저를 무조건 사랑하고 만족하는 게 아니라는 걸 알게 됐습니다. 부족한 모습과 지나온 후회, 현실적인 한계까지도 제 삶의 일부로 인정하되 거기 머물지 않고 조금씩 넘어서는 것이 중요하다고 느꼈습니다.<br /><br />다만 저는 "나답게 살아야 한다"는 말 자체가 때로는 또 다른 사회적 압박이 될 수 있다고 생각합니다. 꼭 남들과 다른 길을 가야만 나다운 것도 아니고, 지금 당장 내가 원하는 게 뭔지 명확히 알아야 하는 것도 아닙니다. 오히려 나다움을 찾겠다는 조급함 때문에 현실의 책임이나 관계를 가볍게 여겨서도 안 된다고 봅니다. 니체가 말한 아모르파티처럼, 중요한 건 지금의 부족함과 한계를 외면하지 않고 인정하면서도 거기에 안주하지 않는 태도라고 저는 생각합니다. 나다움은 완성된 "진짜 나"를 어느 날 발견하는 일이 아니라, 수많은 선택과 실패를 거치며 조금씩 만들어가는 과정에 더 가깝다고 저는 결론지었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 나다움은 발견하는 것이 아니라, 한계를 인정한 채로 끊임없이 선택하며 만들어가는 과정입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 정말 지금의 내 모습을 사랑할 수 있을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 처음엔 아니라고 저에게 답했습니다. 그런데 니체를 알고 나서, 사랑한다는 게 지금 이대로 만족한다는 뜻이 아니라 인정하고 나아간다는 뜻이라는 걸 저는 깨달았습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나답게 살라는 말, 나는 정말 그 말대로 살고 있는 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 솔직히 저도 확신은 없다고 인정했습니다. 다만 남들이 정해놓은 기준이 아니라 어제보다 조금 나아진 저를 만들어가고 있다면, 그거면 충분하다고 저에게 답했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 부끄러운 내 모습까지 다 받아들여야 하는 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그래야 한다고 저는 결론지었습니다. 회피하지 않고 인정하는 데서부터 다음 단계로 넘어갈 힘이 생긴다는 걸 저는 경험으로 알게 됐습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나다움을 못 찾으면 나는 실패한 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저에게 분명히 답했습니다. 나다움은 어느 날 발견하는 결과물이 아니라 지금도 계속 만들어가는 과정이라는 걸 저는 잊지 않으려 합니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 아모르파티를 무조건 긍정하며 살라는 말로 오해했던 지난 시간을 돌아보게 됐습니다. 니체가 말한 운명애는 지금의 부족함까지 끌어안되 거기서 멈추지 않고 계속 나아가는 태도였습니다. 나다움이라는 것도 결국 완성된 답을 찾는 일이 아니라, 오늘의 저를 조금씩 넘어서는 과정이라고 저는 생각합니다.<br /><br />혹시 지금 나답게 살고 있는지 스스로 확신이 없으시다면, 완벽한 답을 찾으려 하기보다 오늘 하루 무엇을 조금 더 넘어섰는지부터 돌아보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=iEZGEalHyek" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=iEZGEalHyek</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-amorfati-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>

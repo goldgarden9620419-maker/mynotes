@@ -1,0 +1,393 @@
+<title>블로그+스레드 발행 스튜디오 — 자책이 폭력이었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-24</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>자책이 폭력이었다 (과부하, 도파민, 환경)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">심층분석형</span><span class="chip accent">핵심 팩트 직입형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">자책</span><span class="chip">완벽주의</span><span class="chip">도파민중독</span><span class="chip">뇌과학</span><span class="chip">밤의후회</span><span class="chip">환경설계</span><span class="chip">습관형성</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=BmG2jLwuPYo" target="_blank" rel="noopener noreferrer">완벽주의·자책과 밤의 후회를 다룬 뇌과학 심리 영상</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=BmG2jLwuPYo" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">완벽주의·자책과 밤의 후회를 다룬 뇌과학 심리 영상<br />https://www.youtube.com/watch?v=BmG2jLwuPYo</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">영상은 매일 밤 완벽한 계획을 지키지 못하고 자책하는 현상을 뇌과학적으로 설명했습니다. 완벽한 계획은 전두엽에 과부하를 일으키고, 편도체가 이를 위험 신호로 인식해 뇌를 생존 모드로 전환시켜 행동을 멈추게 만든다고 설명했습니다. 후회할 때 스마트폰을 보는 습관은 도파민 보상 회로가 자극적인 콘텐츠에 소모되어 정작 해야 할 일에는 반응하지 않게 만드는 악순환이라고 짚었습니다. 자책은 단순한 감정이 아니라 통증을 처리하는 뇌 부위(전대상피질)를 활성화시켜 실제 신체 통증처럼 작용하며, 이것이 뇌를 더 깊은 무기력으로 몰아넣는다고 설명했습니다. 해결책으로는 의지력에 기대기보다 5초 카운트다운으로 몸을 먼저 움직이기, 한 곳을 응시해 각성 상태 만들기, 70% 지점에서 의도적으로 멈춰 미완성 효과(자이가르닉 효과)를 이용하기, 스마트폰을 시야에서 치우는 등 환경을 재설계하는 방법을 제안했습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">예전의 나는 하루를 시작할 때마다 계획을 너무 많이 세우는 편이었다. 아침에는 오늘만큼은 운동도 하고, 책도 읽고, 해야 할 일도 모두 끝내겠다고 다짐했다. 하지만 예상하지 못한 일이 생기거나 계획한 것 중 하나라도 제대로 하지 못하면 금세 의욕이 떨어졌다. 결국 저녁이 되면 스마트폰을 보면서 시간을 보내고, 잠들기 전에는 "오늘도 제대로 한 게 없네"라며 나 자신을 자책하곤 했다. 완벽한 계획이 오히려 부담이 되어 행동을 멈추게 만들 수 있다는 내용이 내 경험과 많이 닮아 있었다.
+
+최근에는 이런 방식을 조금씩 바꾸려고 노력하고 있다. 처음부터 모든 것을 완벽하게 해내려고 하기보다 작은 행동이라도 꾸준히 하는 것을 중요하게 생각한다. 책을 많이 읽지 못해도 몇 페이지라도 읽고, 운동할 시간이 부족하면 짧게라도 몸을 움직인다. 또한 스마트폰처럼 집중을 방해하는 것은 가능한 한 눈앞에서 치우려고 한다. 의지만 믿기보다 행동하기 쉬운 환경을 만드는 것이 실제로 도움이 된다고 느낀다. 이제는 하루 계획을 모두 지키지 못했다고 실패했다고 생각하지 않는다. 완벽한 하루를 만드는 것보다 작은 행동을 반복하며 오래 지속하는 것이 결국 나를 더 크게 변화시킨다는 것을 경험하고 있기 때문이다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">나는 이 글에서 말하는 &#39;완벽한 하루를 만들려는 욕심이 오히려 행동을 방해할 수 있다&#39;는 점에 공감한다. 우리는 계획을 많이 세우고 모두 실천해야 부지런하고 성공적인 사람이라고 생각하기 쉽다. 하지만 목표가 지나치게 크면 시작하기도 전에 부담을 느끼고, 하나라도 지키지 못하면 하루 전체를 실패했다고 평가하게 된다. 특히 실패의 원인을 무조건 의지 부족이나 게으름으로 돌리며 자신을 자책하는 것은 오히려 다음 행동을 어렵게 만들 수 있다고 생각한다.
+
+다만 모든 행동을 뇌의 작용이나 환경 탓으로만 설명하는 것은 경계할 필요가 있다. 때로는 스스로 책임지고 불편함을 견디며 행동해야 성장할 수 있기 때문이다. 중요한 것은 의지를 없애는 것이 아니라 의지에만 의존하지 않는 것이다. 거창한 계획보다 작은 목표를 세우고, 스마트폰과 같은 방해 요소를 줄이며, 실패한 날에도 다시 시작할 수 있는 환경을 만드는 것이 현실적인 방법이라고 생각한다. 결국 완벽하게 해내는 하루보다 부족하더라도 꾸준히 이어가는 하루가 장기적으로 더 큰 변화를 만든다고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">자책이 폭력이었다 (과부하, 도파민, 환경)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">자책,완벽주의,도파민중독,뇌과학,밤의후회,환경설계,자기효능감,마인드셋,습관형성,전대상피질</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">자책할 때 뇌에서 활성화되는 부위, 몸이 아플 때랑 똑같다는 거 알고 있었음?
+
+근데 나는 매일 밤 나한테 그 짓을 하고 있었음.
+
+정리해봄.
+
+1. 완벽한 계획 세울수록 뇌는 과부하로 느껴서 아예 멈춰버림
+2. 후회할 때 스마트폰 보는 거, 쉬는 게 아니라 도파민 소모전임
+3. 자책은 진짜 통증처럼 뇌에 타격을 줌 - 그래서 더 못 움직임
+4. 의지 대신 환경을 바꾸니까 확실히 달라졌음
+5. 근데 전부 뇌·환경 탓으로만 돌리는 것도 경계할 필요 있음
+
+오늘 밤 후회 밀려오면 자책 전에 폰부터 다른 방에 두시길 🌱</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">자책이 폭력이었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">자책할 때 활성화되는 뇌 부위가 실제 신체적 통증을 느낄 때와 같은 곳이라는 연구 결과가 있습니다. 저는 이 사실을 알고 나서야, 제가 매일 밤 스스로에게 던졌던 말들이 단순한 잔소리가 아니라 진짜 상처였다는 걸 깨달았습니다.<br /><br />완벽한 하루를 계획하고 지키지 못한 날이면 저는 어김없이 &#39;왜 나는 이 모양일까&#39;라고 되뇌었습니다. 그런데 문제는 의지가 아니라 그 계획 자체와, 계획이 무너졌을 때 제가 저 자신에게 했던 말에 있었습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">완벽한 계획이 뇌를 멈추게 했다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 아침마다 운동도 하고 책도 읽고 밀린 일도 다 끝내겠다는 계획을 세우는 편이었습니다. 그런데 예상 못한 일이 하나라도 생기면 그날 계획 전체가 흔들렸고, 결국 저녁엔 아무것도 못 한 채 무기력해지곤 했습니다.<br /><br />이걸 뇌과학 쪽에서는 전두엽 과부하로 설명합니다. 전두엽이란 계획을 세우고 판단을 내리는 이성적 사고를 담당하는 뇌 부위인데, 여기에 너무 많은 목표를 한꺼번에 밀어 넣으면 순식간에 처리 용량을 넘어서 버립니다. 이때 위험 신호를 감지하는 편도체가 반응하면서, 뇌는 논리적인 사고 대신 생존 모드로 전환해버립니다.<br /><br />저는 이 설명을 읽고 제 패턴이 딱 들어맞는다고 느꼈습니다. 계획이 하나라도 어긋나면 &#39;이럴 거면 다 하지 말자&#39;는 식으로 극단적으로 포기해버렸는데, 이게 의지 부족이 아니라 뇌가 과부하를 견디지 못해 꺼져버린 상태에 더 가까웠던 겁니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 완벽한 계획은 성장이 아니라 과부하로 받아들여져 뇌를 멈추게 만듭니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">후회할수록 화면만 들여다봤다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">계획이 무너진 날 저는 어김없이 침대에 누워 스마트폰을 들여다봤습니다. 분명 쉬고 있는데도 오히려 몸은 더 무겁고 기분은 가라앉았는데, 그 이유를 이번에 알게 됐습니다.<br /><br />짧고 자극적인 영상은 뇌의 보상 회로를 도파민으로 빠르게 채웁니다. 도파민이란 원래 행동의 동기를 만들어주는 신경전달물질인데, 이렇게 손쉽게 고용량으로 채워지고 나면 공부나 업무처럼 은은한 자극에는 뇌가 반응하지 않게 됩니다. 저는 이걸 겪고 나서야 제가 왜 해야 할 일 앞에서 그렇게 무기력했는지 이해했습니다.<br /><br />결국 후회할수록 화면에 더 매달리고, 그 화면이 다시 다음 날의 무기력을 만드는 순환이 반복되고 있었던 셈입니다. 저는 쉬고 있다고 생각했지만 사실은 뇌가 전혀 쉬지 못하고 있었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 자극적인 화면은 휴식이 아니라 뇌의 보상 회로를 갉아먹는 소모전입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">자책 대신 환경을 바꿨다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그런데 정말 저를 오래 붙잡아둔 건 계획이 무너진 것 자체가 아니라, 그 뒤에 스스로에게 했던 말이었습니다. &#39;나는 왜 이 모양이냐&#39;는 말을 뇌가 실제로 어떻게 받아들이는지 알고 나서 생각이 많이 바뀌었습니다.<br /><br />2003년 사회적 배제를 다룬 한 신경과학 연구에서는, 사람이 소외감이나 자책 같은 심리적 고통을 느낄 때 신체적 통증을 처리하는 뇌 부위인 전대상피질이 똑같이 활성화된다는 결과를 보여줬습니다. 즉 제가 매일 밤 스스로에게 쏘아붙인 말들은 뇌 입장에서 진짜 타격이었던 셈입니다.<br /><br />그래서 저는 자책 대신 환경을 바꾸는 쪽을 택했습니다. 스마트폰은 잠들기 전 아예 다른 방에 두고, 다음 날 할 일은 책상 위에 딱 한 가지만 펼쳐두는 식으로 선택의 여지를 줄였습니다. 시선을 한곳에 모으는 것만으로도 각성 상태를 만들 수 있다는 자료도 참고했는데, 실제로 아침에 책상 앞 물건 하나를 잠깐 응시하는 습관을 들이니 몸이 확실히 더 빨리 움직여졌습니다.<br /><br />다만 저는 모든 걸 뇌나 환경 탓으로만 돌리는 데는 선을 긋고 싶습니다. 때로는 불편함을 감수하고 스스로 책임지고 움직여야 나아지는 부분도 분명 있었습니다. 중요한 건 의지를 아예 없애는 게 아니라, 의지에만 기대지 않는 것이라고 저는 생각합니다.<br /><br />참고: <a href="https://www.science.org/doi/10.1126/science.1089134" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Eisenberger et al., Science(2003)</a> · <a href="https://www.hubermanlab.com/episode/focus-toolkit-tools-to-improve-your-focus-and-concentration" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Huberman Lab, Focus Toolkit</a></p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">잠들기 전 스마트폰을 다른 공간에 두고 잔다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">다음 날 할 일은 책상 위에 딱 한 가지만 펼쳐 둔다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">계획이 무너진 날엔 자책 대신 &#39;그럴 수 있다&#39;고 말해준다</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 자책은 뇌에 실제 타격을 주지만, 환경을 바꾸는 것만으로도 의지 없이 행동이 달라집니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 계획을 세우는 것 자체가 잘못된 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 생각합니다. 다만 계획이 너무 많으면 저는 하나도 못 지키는 편이라, 이제는 하루에 꼭 지킬 한두 가지만 남겨두려고 합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 후회하는 밤엔 스마트폰을 아예 안 봐야 해?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 완전히 끊기보다 손이 안 닿는 곳에 두는 것부터 시작했습니다. 눈에 보이지 않으면 뇌가 금방 잊는다는 걸 저는 직접 확인했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 자책하지 말라는 게 나를 그냥 놔두라는 뜻이야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇지 않다고 저는 생각합니다. 자책을 멈추는 건 포기가 아니라, 다시 움직일 수 있는 상태로 저를 돌려놓는 과정이라고 저는 정리했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그럼 의지는 아예 필요 없는 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 분명히 하고 싶습니다. 저는 의지에만 기대지 않되, 필요한 순간엔 불편함을 감수하는 것도 여전히 중요하다고 생각합니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 매일 밤 후회했던 이유가 의지가 약해서가 아니라, 완벽한 계획과 그 뒤의 자책이 뇌를 계속 멈춰 세우고 있었기 때문이라는 걸 이번에 알게 됐습니다. 계획을 줄이고 환경을 바꾸고, 무너진 날엔 자책 대신 다음을 준비하는 것, 저는 이게 훨씬 오래가는 방법이라고 생각합니다.<br /><br />오늘 밤에도 후회가 밀려온다면, 자신을 몰아붙이기 전에 스마트폰부터 다른 방에 두는 것부터 해보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=BmG2jLwuPYo" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=BmG2jLwuPYo</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-nightregret-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
