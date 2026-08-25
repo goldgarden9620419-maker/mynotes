@@ -1,0 +1,387 @@
+<title>블로그+스레드 발행 스튜디오 — 그건 긍정이 아니라 도피였다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-24</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>그건 긍정이 아니라 도피였다 (편집, 책임)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">질문유도형</span><span class="chip accent">경험담 직입형 훅</span><span class="chip accent">소제목 2개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">자기합리화</span><span class="chip">긍정적사고</span><span class="chip">인지부조화</span><span class="chip">자기연민</span><span class="chip">자기면죄부</span><span class="chip">회복탄력성</span><span class="chip">감정조절</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=M5fTzop1O08" target="_blank" rel="noopener noreferrer">"자기 합리화 VS. 긍정적 사고, 확실하게 구분하는 법" (마풀러 정민)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=M5fTzop1O08" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"자기 합리화 VS. 긍정적 사고, 확실하게 구분하는 법"<br />https://www.youtube.com/watch?v=M5fTzop1O08</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">영상은 자기합리화와 긍정적 사고가 마음의 불편함을 줄인다는 점에서 비슷해 보이지만 실제로는 다르다고 설명했습니다. 자기합리화는 실패의 아픔을 가라앉히려 현실을 재구성(편집)하는 것이고, 긍정적 사고는 다양한 가능성을 보며 절망을 누그러뜨리는(확장) 것이라고 구분했습니다. 감정 자체는 합리화가 필요 없으며, 감정을 바탕으로 어떤 말과 행동을 하는지가 중요하다고 짚었습니다. 자기합리화의 핵심 동기는 에고 보호와 인지부조화 회피이고, 긍정적 사고의 핵심 동기는 희망과 가능성 확장이라고 설명했습니다. 균형 잡힌 사고를 위한 방법으로는 감정에 이름 붙이기, 실제 일어난 일을 사실대로 적어보기, 통제 가능한 범위에만 집중하기, 자기연민과 자기 면죄부 구분하기(잘못을 인정하는 것이 변화의 시작), 구체적 개선 방법 찾기, 과거에 인정하지 않고 넘어간 일들을 돌아보는 반증 자료 수집을 제안했습니다. 마지막으로 자기합리화로 자꾸 이끄는 것은 어린 시절 형성된 내재된 수치심일 수 있다며, 내면 아이를 다독이듯 스스로에게 다정하게 말해줄 것을 권했습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">돌이켜보면 나 역시 힘든 일이 생기거나 결과가 좋지 않을 때 긍정적으로 생각한다고 하면서 사실은 자기 합리화를 했던 경우가 많았다. 일이 계획대로 되지 않으면 상황이 좋지 않았다고 생각하거나 다른 사람 때문에 어쩔 수 없었다는 이유를 먼저 찾았다. 그렇게 생각하면 당장은 마음이 편해졌지만, 비슷한 문제가 반복되는 것을 보면 결국 내가 바뀌지 않았기 때문이라는 생각이 들었다.
+
+특히 무언가 새로운 일을 시작했는데 기대한 만큼 성과가 나오지 않을 때 "아직 때가 아닌가 보다"라고 넘기는 것과 "이번에는 무엇이 부족했을까?"라고 돌아보는 것은 전혀 다른 결과를 만든다는 것을 경험했다. 실패했다고 해서 나 자신까지 부정할 필요는 없지만, 그렇다고 잘못된 선택이나 부족했던 노력을 외면해서도 안 된다고 생각한다.
+
+요즘은 일이 잘못됐을 때 누구의 잘못인지부터 찾기보다 내가 바꿀 수 있는 것이 무엇인지 먼저 생각하려고 한다. 실수는 인정하되 그 실수 때문에 나 자신을 무능한 사람으로 규정하지 않는 것이다. 나에게 긍정적인 사고란 무조건 "잘될 거야"라고 믿는 것이 아니라 현실을 인정하고 다음에는 무엇을 다르게 할지 찾는 태도에 더 가깝다. 결국 진짜 긍정은 현실을 피하는 위로가 아니라 현실을 받아들이면서도 다시 움직이게 만드는 힘이라고 생각한다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">나는 긍정적인 사고가 무조건 좋은 방향으로 생각하는 것만을 의미하지는 않는다고 생각한다. 오히려 현실을 정확하게 인정하면서도 앞으로 나아갈 방법을 찾는 것이 진정한 긍정에 가깝다. 실패했는데도 "괜찮아, 다음에는 잘될 거야"라고 말하며 원인을 돌아보지 않는다면 그것은 긍정보다는 자기 합리화가 될 수 있다. 반대로 실패의 원인을 모두 자신의 부족함으로 돌리는 것도 바람직하지 않다. 지나친 자기반성은 오히려 자신감을 떨어뜨리고 새로운 도전을 어렵게 만들 수 있기 때문이다.
+
+다만 모든 문제를 개인의 태도와 노력으로 해결할 수 있다는 관점에는 조금 주의할 필요가 있다고 본다. 때로는 개인이 통제할 수 없는 환경이나 타인의 행동이 실제 원인이 되기도 한다. 중요한 것은 무조건 내 책임이라고 생각하는 것이 아니라 사실과 감정을 구분하고, 그중 내가 책임져야 할 부분을 정확히 바라보는 것이다. 잘못은 인정하되 자신을 비난하지 않고, 외부의 문제는 냉정하게 구분하면서 내가 바꿀 수 있는 부분에 집중하는 것. 이것이 자기 합리화에 빠지지 않으면서도 긍정적인 마음을 유지하는 가장 현실적인 태도라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">그건 긍정이 아니라 도피였다 (편집, 책임)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">자기합리화,긍정적사고,인지부조화,자기연민,자기면죄부,마인드셋,자기계발,회복탄력성,감정조절,확언</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">일이 안 풀릴 때마다 "상황이 안 좋았다"고 생각하는 거, 긍정인 줄 알았음.
+
+근데 알고 보니 그건 긍정이 아니라 현실을 편집하는 거였음.
+
+정리해봄.
+
+1. 자기합리화는 현실을 편집하는 거고, 긍정은 현실을 확장하는 거임
+2. 감정 자체는 죄가 없음 - 그 감정 뒤에 하는 행동이 중요함
+3. 잘못 인정하는 거랑 나를 무능하다고 낙인찍는 건 다른 문제임
+4. 자기연민은 문제를 회피 안 함 - 자기 면죄부랑 다름
+5. 사실과 감정 나누고, 내가 책임질 부분만 정확히 가져오면 됨
+
+오늘 스스로에게 괜찮다고 말하고 있다면 그게 위로인지 도피인지 점검해보시길 🌱</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">그건 긍정이 아니라 도피였다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">저는 일이 계획대로 안 풀릴 때마다 &#39;상황이 안 좋았다&#39;, &#39;그 사람 때문에 어쩔 수 없었다&#39;는 이유부터 찾았습니다. 그게 긍정적으로 생각하는 거라고 믿었습니다.<br /><br />그런데 비슷한 문제가 계속 반복되는 걸 보고서야, 제가 하고 있던 건 긍정이 아니라 현실을 편집하는 일이었다는 걸 알게 됐습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">그건 긍정이 아니라 현실 편집이었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">자기합리화와 긍정적 사고, 둘이 정말 다른 걸까요? 저도 이 둘을 한동안 구분하지 못했습니다.<br /><br />두 감정 모두 마음의 불편함을 줄여준다는 점에서는 비슷하게 느껴집니다. 하지만 자기합리화는 실패의 아픔을 가라앉히려고 현실을 제 멋대로 재구성하는 것이고, 긍정적 사고는 여러 가능성을 보며 절망을 누그러뜨리는 것입니다. 전자는 현실을 편집하고, 후자는 현실을 확장합니다.<br /><br />이 둘의 뿌리에는 인지부조화라는 개념이 있습니다. 인지부조화란 제 생각과 행동, 믿음이 서로 어긋날 때 느끼는 심리적 불편함을 뜻합니다. 저는 마감을 못 지켰을 때 &#39;그 사람이 계속 수정을 시켜서 어쩔 수 없었다&#39;며 이 불편함을 남 탓으로 지워버렸는데, 이게 바로 인지부조화를 회피하는 전형적인 방식이었습니다.<br /><br />여기서 한 가지 더 짚고 싶은 건, 감정 자체는 합리화가 필요 없다는 점입니다. 화가 나든 실망스럽든 감정은 그냥 일어나는 것이고, 맞고 틀림을 따질 대상이 아닙니다. 문제는 그 감정 뒤에 제가 어떤 말과 행동으로 이어가느냐에 있습니다. 저는 이 구분을 알고 나서, 화가 났다는 사실 자체를 부끄러워하기보다 그 화를 표현한 방식을 돌아보게 됐습니다.<br /><br />참고: <a href="https://www.kci.go.kr/kciportal/landing/article.kci?arti_id=ART002301622" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 한국학술지인용색인(KCI), 인지부조화 해소 방법 훈련을 통한 인성 교육 방안</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 자기합리화는 현실을 편집해 불편함을 없애고, 긍정적 사고는 현실을 확장해 불편함을 견딥니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">책임은 인정하되 나를 비난하지 않기로 했다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그럼 실수를 인정하면서도 무너지지 않으려면 어떻게 해야 할까요? 저는 이 지점에서 자기연민과 자기 면죄부를 구분하는 게 핵심이라는 걸 알게 됐습니다.<br /><br />자기연민 연구로 잘 알려진 심리학자 크리스틴 네프의 연구에서는, 자기연민이 스스로를 봐주는 게 아니라 오히려 동기와 회복력을 높인다고 설명합니다. 자기연민이란 실수했을 때 자신을 다정하게 대하면서도 문제를 회피하지 않는 태도를 말합니다. 이건 &#39;힘들었으니 아무것도 안 해도 괜찮다&#39;는 자기 면죄부와는 다릅니다.<br /><br />저는 예전에 새로운 일을 시작했다가 기대만큼 성과가 안 나오면 &#39;아직 때가 아닌가 보다&#39;라며 넘기곤 했습니다. 그런데 이건 저를 다독이는 게 아니라 그냥 문제를 덮은 것에 가까웠습니다. 요즘은 &#39;이번엔 무엇이 부족했을까&#39;를 먼저 묻습니다.<br /><br />저는 실수를 인정한 다음엔 반드시 구체적인 개선 방법까지 찾으려고 합니다. 예를 들어 이메일을 보낼 때 중요한 내용을 자주 빠뜨렸던 적이 있는데, &#39;다음엔 정신 차려야지&#39;라는 막연한 다짐 대신 &#39;보내기 전에 인쇄해서 한 번 더 확인한다&#39;는 구체적인 습관을 만들었습니다. 감정을 다독이는 데서 멈추지 않고 행동으로 이어질 때, 그제서야 자기합리화와 분명히 갈라진다는 걸 느꼈습니다.<br /><br />다만 저는 모든 문제를 개인의 태도나 노력 부족으로만 돌리는 것도 경계하고 싶습니다. 때로는 제가 통제할 수 없는 환경이나 다른 사람의 행동이 실제 원인일 때도 있었습니다. 중요한 건 사실과 감정을 구분하고, 그중에서 제가 책임질 부분만 정확히 가져오는 것이라고 생각합니다.<br /><br />참고: <a href="https://self-compassion.org/the-research/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Kristin Neff, Self-Compassion Research</a></p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">감정이 올라올 때 그 감정에 이름부터 붙여본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">무슨 일이 실제로 일어났는지 사실만 적어본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">내가 통제할 수 있는 부분과 아닌 부분을 나눠본다</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 잘못은 인정하되 저 자신을 무능한 사람으로 규정하지 않는 것, 그게 자기연민과 자기합리화의 차이입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 긍정적으로 생각하는 것과 자기합리화, 어떻게 구분해?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 그 생각 뒤에 구체적인 행동 계획이 있는지를 봅니다. &#39;다음엔 이렇게 해보자&#39;가 있으면 긍정, &#39;그건 내 잘못 아니야&#39;로 끝나면 합리화라고 저는 정리했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 실수를 인정하면 자존감이 무너지지 않을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 그렇지 않다고 생각합니다. 실수를 인정하는 것과 저 자신을 무능하다고 규정하는 건 다른 문제라는 걸 이번에 배웠습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 모든 게 다 내 책임인 건 아니잖아?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 맞다고 저는 생각합니다. 그래서 저는 사실과 감정을 나누고, 제가 통제할 수 있는 부분만 책임지려고 합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그럼 다음에 비슷한 상황이 오면 저는 뭐라고 할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. &#39;이번엔 무엇이 부족했을까&#39;부터 묻기로 했습니다. 그게 저를 계속 같은 자리에 머물게 하지 않는 질문이라는 걸 저는 확인했습니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 이번에 긍정적 사고라고 믿었던 것들 중 상당수가 사실은 자기합리화였다는 걸 인정하게 됐습니다. 현실을 편집하는 대신 확장하고, 잘못은 인정하되 저 자신을 비난하지 않는 것, 저는 이 균형이 진짜 긍정이라고 생각합니다.<br /><br />오늘도 스스로에게 괜찮다고 말하고 있다면, 그게 위로인지 도피인지 한번 점검해보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=M5fTzop1O08" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=M5fTzop1O08</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-selfjustify-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
