@@ -1,0 +1,385 @@
+<title>블로그+스레드 발행 스튜디오 — 밤마다 속고 있었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-26</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>밤마다 속고 있었다 (허기, 보상, 기록)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">문제해결형</span><span class="chip accent">경험담 직입형 훅</span><span class="chip accent">소제목 2개 (팩트/경험 대비)</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">야식</span><span class="chip">야식증후군</span><span class="chip">가짜배고픔</span><span class="chip">감정적허기</span><span class="chip">식사일기</span><span class="chip">도파민</span><span class="chip">식습관</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=TtBM1qb1i9M" target="_blank" rel="noopener noreferrer">"밤만 되면 왕성해지는 식욕, 사실은 가짜 배고픔이다?" (EBS 귀하신 몸)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=TtBM1qb1i9M" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"밤만 되면 왕성해지는 식욕, 사실은 가짜 배고픔이다? 야식만 끊었을 뿐인데, 몸에 나타난 놀라운 변화" (EBS 귀하신 몸)<br />https://www.youtube.com/watch?v=TtBM1qb1i9M</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">방송은 야식증후군을 겪는 세 사례자의 2주 개선 프로젝트를 다뤘습니다. 야식증후군은 저녁 식사 이후 하루 섭취 열량의 상당 부분을 먹고, 잠들기 전까지 먹고 싶은 충동을 강하게 느끼는 상태로 설명됐습니다. 달고 자극적인 음식이 도파민 분비로 쾌감을 주고, 반복되면 내성이 생겨 더 강한 갈망으로 이어진다고 짚었습니다. 진짜 배고픔과 가짜 배고픔을 구별하는 방법으로 '브로콜리 테스트'(생 브로콜리라도 먹겠다면 진짜 허기)와 물 한 잔 마시고 5~10분 기다리기가 소개됐습니다. fMRI 검사에서는 야식 갈망이 우울 정서, 충동 조절 저하, 불안(편도체 활성화)과 연결돼 있다는 결과가 나왔고, 사례자들이 "야식 시간이 온전히 내 시간"이라고 표현하는 등 야식이 감정적 보상의 성격을 갖는다는 점이 강조됐습니다. 해결책으로는 규칙적인 저녁 식사, 한 글자 음식(밥·술·빵·면·떡·탕·국) 줄이기, 20분 이상 천천히 먹기(렙틴 분비 시간), 마음챙김 식사, 식사일기(자기 관찰 기법), 채소·과일·우유 등 포만감 식품 늘리기, 간단한 운동이 제시됐습니다. 2주 후 세 사람 모두 체중·혈당·중성지방 등이 개선됐고, 음식 갈망과 우울 네트워크의 연결성이 약해진 뇌 변화도 확인됐습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">나 역시 하루 일과를 마치고 늦은 시간에 집에 돌아오면 배가 고프지 않은데도 뭔가 먹고 싶다는 생각이 들 때가 있었다. 특히 힘들거나 스트레스를 많이 받은 날에는 '오늘 하루 고생했으니 이 정도는 괜찮겠지'라는 생각으로 야식이나 자극적인 음식을 찾곤 했다. 돌이켜보면 그것은 진짜 배고픔보다는 하루 동안 쌓인 피로와 스트레스를 음식으로 보상받으려는 마음에 가까웠던 것 같다. 실제로 야식은 단순한 허기가 아니라 스트레스나 불안 같은 감정적인 허기와 연결될 수 있다는 내용이 특히 공감됐다.
+
+먹는 순간에는 기분이 좋아지지만 다음 날이면 속이 더부룩하고 몸이 무거워 후회하는 경우도 있었다. 결국 중요한 것은 무조건 참는 의지가 아니라 내가 왜 지금 음식을 찾는지 먼저 알아차리는 것이라고 생각한다. 앞으로는 늦은 시간 무언가 먹고 싶을 때 습관적으로 배달음식부터 찾기보다 물을 마시거나 잠시 움직이면서 정말 배가 고픈 것인지 확인해보려고 한다. 작은 식습관 하나를 바꾸는 것도 결국 나 자신을 소중하게 대하는 방법이라는 생각이 든다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">야식을 단순히 의지가 약해서 생기는 습관이라고 보는 것은 너무 단순한 판단이라고 생각한다. 많은 사람들은 하루 종일 일과 가족을 챙기느라 정작 자신을 돌볼 시간이 부족하고, 늦은 밤이 되어서야 비로소 자신만의 시간을 갖는다. 그래서 야식은 배고픔을 해결하는 음식이라기보다 하루 동안 쌓인 스트레스와 허전함을 달래는 보상이 되기도 한다. 실제 사례에서도 야식을 먹는 시간이 '온전히 내 시간'이라는 표현이 등장한다.
+
+따라서 무조건 야식을 끊으라고 강조하기보다 왜 밤에 음식을 찾게 되는지를 먼저 살펴볼 필요가 있다. 다만 스트레스가 원인이라고 해서 반복되는 야식을 정당화해서도 안 된다. 순간의 위로를 위해 건강을 계속 희생한다면 결국 더 큰 부담으로 돌아올 수 있기 때문이다. 결국 중요한 것은 참는 의지보다 규칙적인 식사와 운동, 충분한 휴식 등 다른 방식으로 나를 보상하는 습관을 만드는 것이라고 생각한다. 야식을 줄이는 것은 단순한 다이어트가 아니라 내 몸과 생활을 스스로 관리하는 과정이라는 점에서 의미가 있다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">밤마다 속고 있었다 (허기, 보상, 기록)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">야식,야식증후군,가짜배고픔,감정적허기,식사일기,렙틴,도파민,식습관,늦은저녁,건강습관</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">밤마다 야식 당기는 거, 배고파서인 줄 알았음.
+
+근데 알고 보니 배가 아니라 마음이 고픈 거였음.
+
+정리해봄.
+
+1. 특정 음식만 당기면 가짜 배고픔임 - 브로콜리라도 먹고 싶어야 진짜임
+2. 자극적인 음식은 도파민으로 뇌를 달래는 거라 반복될수록 내성 생김
+3. 야식 시간이 "온전히 내 시간"이라 느껴진다면 그건 허기가 아니라 보상임
+4. 물 한 잔 마시고 5분만 기다려보면 진짜인지 판별됨
+5. 참는 의지보다 다른 보상(차, 산책, 스트레칭)을 미리 정해두는 게 먼저임
+
+오늘 밤 주문 버튼 누르기 전에 물 한 잔부터 마셔보시길 🌱</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">밤마다 속고 있었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">저도 하루 일과를 마치고 늦게 집에 돌아오면, 배가 고프지 않은데도 뭔가 먹고 싶다는 생각이 들 때가 있었습니다. 특히 스트레스를 많이 받은 날엔 &#39;오늘 하루 고생했으니 이 정도는 괜찮겠지&#39;라며 자극적인 음식부터 찾았습니다.<br /><br />그런데 늦은 밤의 그 허기를 들여다보니, 저는 배가 고팠던 게 아니었습니다. 야식을 부르는 진짜 원인과 제가 바꿔보려는 것들을 정리해봅니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">밤의 허기는 대부분 가짜였다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">밤마다 야식이 당기는 게 단순히 식탐 때문일까요? 저녁 식사 이후에 하루 섭취 열량의 상당 부분을 먹고, 잠들기 전까지 먹고 싶은 충동을 강하게 느끼는 상태를 야식증후군이라고 부릅니다. 야식증후군이란 식사 시간의 리듬이 밤 쪽으로 밀리면서 늦은 시간의 섭취가 습관으로 굳어진 상태를 말합니다.<br /><br />여기서 핵심은 그 허기가 진짜가 아닐 수 있다는 점입니다. 달고 자극적인 음식을 먹으면 뇌에서 도파민이 분비되는데, 도파민이란 쾌감과 보상을 담당하는 신경전달물질입니다. 이 쾌감이 반복되면 내성이 생겨서 점점 더 강한 자극을 찾게 됩니다. 즉 몸에 에너지가 필요해서가 아니라, 뇌가 보상을 원해서 배고픔처럼 느껴지는 겁니다.<br /><br />가짜 배고픔을 구별하는 방법도 있습니다. 지금 생 브로콜리밖에 먹을 게 없다고 상상했을 때 그거라도 먹겠다면 진짜 허기, 라면이나 치킨처럼 특정 음식만 당긴다면 가짜 허기일 확률이 높습니다. 물 한 잔을 마시고 5~10분 기다렸을 때 허기가 가라앉는지 보는 방법도 있습니다. 저는 이 기준을 적용해보고, 제 밤의 허기가 대부분 가짜였다는 걸 인정하게 됐습니다.<br /><br />참고: <a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoMain.do?lclasSn=0" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 질병관리청 국가건강정보포털</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 밤의 허기는 몸이 아니라 뇌의 보상 회로가 만드는 가짜 배고픔인 경우가 많습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">야식은 저에게 보상이었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그럼 왜 하필 밤마다 그 가짜 허기가 찾아올까요? 저는 야식을 의지가 약해서 생기는 습관으로만 보는 건 너무 단순한 판단이라고 생각합니다.<br /><br />하루 종일 일과 사람에 치이다 보면 정작 저를 돌볼 시간이 없고, 늦은 밤이 되어서야 비로소 저만의 시간이 생깁니다. 그 시간에 먹는 야식은 배고픔을 해결하는 음식이라기보다, 하루 동안 쌓인 스트레스와 허전함을 달래는 보상에 가까웠습니다. 먹는 순간엔 분명 기분이 좋아지는데, 다음 날이면 속이 더부룩하고 몸이 무거워 후회하는 일이 반복됐습니다.<br /><br />이런 감정적 허기는 우울감이나 불안과도 연결될 수 있다고 합니다. 실제로 스트레스 상황에서 자극적인 음식을 찾는 건 기분을 끌어올리는 가장 손쉬운 방법이기 때문입니다. 그래서 저는 무작정 참는 대신, 야식이 아닌 다른 방식으로 저를 보상하는 습관을 만들어보기로 했습니다.<br /><br />제가 시작한 건 식사일기입니다. 무엇을 언제 먹었는지만이 아니라 그때의 기분과 상황까지 함께 적는 방법인데, 이렇게 기록하는 것 자체가 식욕 조절에 도움이 된다고 합니다. 저는 며칠 적어보고 나서야 제가 유독 힘들었던 날에만 배달 앱을 열고 있었다는 패턴을 발견했습니다. 다만 스트레스가 원인이라고 해서 반복되는 야식이 정당화되는 건 아니라고 생각합니다. 순간의 위로를 위해 건강을 계속 내어주면 결국 더 큰 부담으로 돌아오기 때문입니다.<br /><br />참고: <a href="https://www.mentalhealth.go.kr/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 국가정신건강정보포털</a></p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">늦은 밤 허기가 오면 물 한 잔 마시고 5~10분 기다려본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">먹은 것과 그때의 기분을 함께 식사일기에 적는다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">야식 대신 다른 보상(가벼운 스트레칭, 좋아하는 차 한 잔)을 미리 정해둔다</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 야식은 허기가 아니라 보상이었습니다. 참는 의지보다 다른 보상 습관을 만드는 게 먼저입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 야식이 그렇게 먹고 싶으면 그냥 먹으면 안 돼?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 가끔은 괜찮다고 저는 생각합니다. 다만 그게 매번 반복되면 습관이 되고, 저는 그 습관의 대가를 다음 날 아침마다 치르고 있었습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 지금 이 배고픔이 진짜인지 어떻게 알아?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 브로콜리 기준을 씁니다. 아무 음식이라도 먹고 싶으면 진짜, 특정 자극적인 음식만 당기면 가짜라고 판단하기로 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 스트레스 받은 날엔 보상이 필요하지 않아?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 필요하다고 저는 생각합니다. 다만 그 보상이 꼭 음식일 필요는 없다는 걸 이번에 배웠습니다. 따뜻한 차나 가벼운 산책도 충분한 보상이 됐습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그럼 오늘 밤에 또 먹고 싶어지면 어떻게 할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 배달 앱을 열기 전에 물부터 한 잔 마시기로 저와 약속했습니다. 그리고 지금 이 허기가 배에서 온 건지 마음에서 온 건지 한 번 물어볼 생각입니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 밤마다 찾아오던 허기가 배가 아니라 마음에서 왔다는 걸 이번에 알게 됐습니다. 야식을 줄이는 건 단순한 다이어트가 아니라, 제가 저를 어떻게 대하는지를 바꾸는 일이라고 생각합니다.<br /><br />오늘 밤 뭔가 먹고 싶어진다면, 주문 버튼을 누르기 전에 물 한 잔 마시고 5분만 기다려보시길 권합니다. 그 허기가 진짜인지 아닌지, 몸이 먼저 답해줄 겁니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=TtBM1qb1i9M" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=TtBM1qb1i9M</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-nighteating-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
