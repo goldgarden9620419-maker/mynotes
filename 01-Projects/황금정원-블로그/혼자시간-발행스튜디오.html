@@ -1,0 +1,405 @@
+<title>블로그+스레드 발행 스튜디오 — 같이 있어도 외로웠다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-27</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>같이 있어도 외로웠다 (정체, 선택, 균형)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">비교검증형</span><span class="chip accent">경험담 직입형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">외로움</span><span class="chip">고독</span><span class="chip">혼자있는시간</span><span class="chip">혼자의힘</span><span class="chip">정서조절</span><span class="chip">자기성찰</span><span class="chip">감정관리</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=0pP99GQehoE" target="_blank" rel="noopener noreferrer">"외롭지 않게 사는 법 — 혼자의 시간을 다스리는 힘"</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=0pP99GQehoE" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"외롭지 않게 사는 법 — 혼자의 시간을 다스리는 힘"<br />https://www.youtube.com/watch?v=0pP99GQehoE</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">영상은 외로움과 고독을 구분하는 강의입니다. 외로움은 단순히 혼자 있어서 생기는 감정이 아니고 타인과 함께 있어도 느낄 수 있으며, 심리학·종교적 관점에서는 마음이 만들어낸 허상으로 보기도 한다고 설명합니다. 반면 고독은 스스로 선택해서 혼자 있는 상태이고, 고독한 시간은 가장 솔직한 자신과 마주하며 발전할 수 있는 소중한 시간이라고 말합니다. 외로울 때는 섣불리 사람을 만나거나 아무에게나 기대지 않는 것이 중요하며, 사회생활이나 연인 관계에서 느끼는 외로움도 스스로 고독해지는 노력을 통해 극복할 수 있다고 봅니다. 평소 고독해지는 연습을 해두면 타의에 의한 외로움이 찾아와도 휘말리지 않고 대처할 수 있고, 외로움에 휘말려 잘못된 결과를 만들지 않도록 경계해야 한다는 점, 타의에 의한 외로움보다 자의에 의한 고독을 선택하는 것이 자신을 살리는 길이라는 결론으로 마무리됩니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">살다 보면 사람들과 함께 있어도 문득 외롭다는 생각이 들 때가 있었다. 예전에는 그런 감정이 생기면 누군가를 만나거나 연락하면서 외로움을 없애려고 했다. 하지만 사람을 만나는 동안에는 괜찮아지는 것 같아도 혼자가 되면 다시 같은 감정이 찾아왔다. 그래서 어느 순간부터 외로움을 무조건 피하려 하기보다 혼자 있는 시간을 받아들이려고 노력하게 되었다.
+
+처음에는 혼자 걷거나 책을 읽고 생각을 정리하는 시간이 어색했지만, 반복하다 보니 오히려 그 시간이 편안하게 느껴졌다. 다른 사람의 시선을 의식하지 않고 내가 무엇을 원하는지, 앞으로 어떻게 살아가고 싶은지를 생각할 수 있었기 때문이다. 특히 힘든 일이 있을 때 무조건 다른 사람에게 위로나 답을 구하기보다 혼자 생각을 정리한 뒤 사람을 만나면 감정에 휘둘리는 일도 줄어들었다.
+
+이런 경험을 통해 혼자 있다는 사실 자체가 외로움은 아니라는 것을 알게 되었다. 타의에 의해 혼자가 되면 외로울 수 있지만, 스스로 선택한 고독은 나를 돌아보고 성장하게 만드는 시간이 될 수 있다. 이제는 외로움이 찾아왔을 때 무조건 피하기보다 나 자신과 조금 더 가까워질 수 있는 시간으로 받아들이려고 한다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">나는 외로움을 피하기 위해 무조건 사람을 찾기보다 혼자 있는 시간을 받아들이는 연습이 필요하다는 생각에 공감한다. 사람들과 함께 있다고 해서 외로움이 사라지는 것은 아니며, 오히려 관계 속에서도 이해받지 못한다고 느끼면 더 큰 외로움을 경험할 수 있기 때문이다. 스스로 선택한 고독의 시간을 통해 자신의 감정을 돌아보고 무엇을 원하는지 생각하는 것은 삶을 살아가는 데 꼭 필요한 과정이라고 생각한다.
+
+다만 외로움을 단순히 마음이 만들어낸 허상이라고 보는 관점에는 다소 동의하기 어렵다. 인간은 다른 사람과 관계를 맺으며 살아가는 존재이기 때문에 외로움은 실제로 필요한 관계가 부족하다는 신호가 될 수도 있다. 또한 외로울 때 사람에게 기대는 행동을 무조건 부정적으로 볼 필요도 없다고 생각한다. 때로는 가족이나 친구에게 솔직하게 마음을 털어놓는 것이 문제를 해결하는 데 도움이 될 수 있기 때문이다.
+
+결국 중요한 것은 외로움을 무조건 피하거나 반대로 혼자서만 견디는 것이 아니라, 혼자 있는 힘과 다른 사람에게 도움을 요청하는 능력 사이에서 적절한 균형을 찾는 것이라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">같이 있어도 외로웠다 (정체, 선택, 균형)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">외로움,고독,혼자있는시간,혼자의힘,정서조절,인간관계,마인드셋,자기성찰,중년심리,감정관리</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">사람들 틈에서 웃다가 문득 외로웠던 적 있음.
+
+혼자라서 그런 게 아니었음. 그날도 같이 있었음.
+
+정리해봄.
+
+1. 외로움은 혼자 있어서만 생기는 게 아님 - 같이 있어도 찾아옴
+2. 외로움과 고독의 차이는 딱 하나 - 그 혼자를 내가 선택했는가
+3. 연구상 혼자 있는 시간은 들뜬 감정을 가라앉히는 진정 효과가 있음
+4. 외롭다고 아무나 만나면 그 순간만 괜찮고 돌아서면 다시 외로움
+5. 단, 몇 달씩 이어지는 외로움은 참지 말고 기댈 사람을 찾을 것
+
+오늘 밤 외로우면 연락처 열기 전에 혼자만의 30분부터 가져보시길 🌱
+
+이런 심리 정리 계속 올림. 문득 외로운 날 꺼내 보고 싶으면 팔로우, 도움 됐으면 좋아요 하나면 충분함</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">같이 있어도 외로웠다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">몇 해 전 모임 자리에서였습니다. 다들 웃고 떠드는 한가운데서 저는 문득 외롭다는 생각이 들었습니다. 분명 혼자가 아닌데도 그랬습니다. 일반적으로 외로움은 혼자 있어서 생기는 감정이라고 알려져 있지만, 제 경험은 달랐던 겁니다.<br /><br />그날 이후 이 감정의 정체가 궁금해졌습니다. 혼자 있는 시간을 두려워하던 제가 그 시간을 기다리게 되기까지의 이야기를 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">외로움의 정체부터 달랐다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">외로움은 곁에 사람이 있어도 찾아옵니다. 저는 예전에 그 감정이 생기면 누군가를 만나거나 연락하면서 지우려고 했습니다. 만나는 동안에는 괜찮아지는 것 같았는데 혼자가 되면 같은 감정이 다시 돌아왔습니다. 사람으로 덮는 방식은 저에게 임시방편이었던 셈입니다.<br /><br />외로움을 마음이 만들어낸 허상으로 보는 관점도 있습니다. 마음을 다스리면 사라지는 감정이라는 겁니다. 저는 절반만 동의합니다. 심리학 쪽 근거를 찾아보니 외로움은 몸에 실제 흔적을 남기고 있었습니다. 148개 연구를 묶어 종합한 메타분석이 있는데, 메타분석이란 같은 주제의 여러 연구 결과를 통계적으로 합쳐 전체 경향을 확인하는 연구 방법입니다. 이 분석에서 외로움은 조기 사망 위험을 26% 높이는 요인으로 나타났습니다. 흡연이나 비만에 견줄 만한 수치라고 합니다.<br /><br />그래서 저는 외로움을 무시해도 되는 착각으로만 보기는 어렵다고 생각합니다. 필요한 관계가 부족하다는 몸의 신호일 수 있기 때문입니다. 다만 그 신호에 어떻게 응답할지는 별개의 문제였습니다. 아무나 만나서 덮는 게 응답은 아니었으니까요.<br /><br />참고: <a href="https://pubmed.ncbi.nlm.nih.gov/25910392/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Holt-Lunstad et al., Perspectives on Psychological Science(2015)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 외로움은 함께 있어도 찾아오고, 무시할 허상이라기보다 관계가 부족하다는 몸의 신호에 가깝습니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">외로움과 고독은 선택이 갈랐다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">정체를 알고 나니 다음 질문이 생겼습니다. 같은 혼자인데 왜 어떤 날은 괴롭고 어떤 날은 충만할까. 제가 찾은 답은 선택권이었습니다. 외로움과 고독을 가르는 건 혼자라는 사실이 아니라 그 시간을 제가 골랐느냐였습니다. 타의로 혼자가 되면 외로움이 되고, 스스로 고른 혼자는 고독이 됩니다.<br /><br />연구도 이 구분을 뒷받침합니다. 정서 조절을 다룬 실험이 있는데, 정서 조절이란 감정의 세기와 방향을 스스로 다루는 능력을 말합니다. 이 실험에서 혼자 있는 시간은 분노나 흥분 같은 고각성 감정을 가라앉히는 진정 효과를 보였습니다. 고각성 감정이란 심장이 뛰고 몸이 들뜨는 강한 상태의 감정을 가리킵니다. 특히 혼자 있는 동안 무엇을 생각할지 스스로 정한 사람들은 긍정적인 기분까지 유지했습니다. 혼자라는 조건보다 그 시간을 어떻게 쥐고 있느냐가 결과를 바꾼 겁니다.<br /><br />저도 처음에는 혼자 걷거나 책을 읽고 생각을 정리하는 시간이 어색했습니다. 반복하다 보니 오히려 그 시간이 편안해졌습니다. 다른 사람의 시선을 의식하지 않고 제가 무엇을 원하는지, 앞으로 어떻게 살고 싶은지를 생각할 수 있었기 때문입니다. 고독한 시간은 가장 솔직한 저와 마주 앉는 시간이었습니다.<br /><br />참고: <a href="https://pubmed.ncbi.nlm.nih.gov/29072531/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Nguyen et al., Personality and Social Psychology Bulletin(2018)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 스스로 고른 혼자는 감정을 가라앉히고 저를 마주하게 합니다. 갈림길은 혼자라는 사실이 아니라 선택권이었습니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">혼자의 힘과 기대는 힘의 균형</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그래서 요즘 저는 외로움이 밀려올 때 섣불리 연락처부터 열지 않습니다. 힘든 일이 있을 때도 무조건 위로나 답을 구하기 전에 혼자 생각을 정리하는 시간을 먼저 가집니다. 그렇게 하고 사람을 만나니 감정에 휘둘리는 일이 눈에 띄게 줄었습니다.<br /><br />그렇다고 혼자 버티는 것만이 정답이라고 보지는 않습니다. 사람에게 기대는 행동을 무조건 부정적으로 볼 필요도 없다고 생각합니다. 가족이나 친구에게 솔직하게 마음을 털어놓는 게 문제를 푸는 데 도움이 될 때도 분명 있었습니다. 특히 만성 외로움은 주의해야 합니다. 만성 외로움이란 일시적으로 스쳐가지 않고 몇 달 이상 이어지는 외로움을 말하는데, 이 상태는 혼자 연습만으로 풀기 어려워 주변이나 전문가에게 도움을 요청하는 쪽이 낫습니다.<br /><br />제가 요즘 지키는 균형은 이렇습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">외로움이 밀려오면 연락처를 열기 전에 혼자만의 30분(걷기, 쓰기)을 먼저 가진다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">그래도 남는 마음은 가장 편한 한 사람에게 솔직하게 말한다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">일주일에 한 번은 스스로 고른 혼자의 시간을 미리 달력에 넣어둔다</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">혼자 있는 힘과 도움을 요청하는 능력은 서로를 대신하지 못했습니다. 둘 사이의 균형을 찾는 게 제가 내린 결론입니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 혼자 정리하는 시간을 먼저 갖되, 오래가는 외로움은 신호로 받아들이고 기댈 사람을 찾습니다. 둘의 균형이 핵심입니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 혼자가 편해진 나, 사람이 싫어진 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 정리했습니다. 사람이 싫어진 게 아니고 저를 채우는 방법이 하나 더 늘어난 겁니다. 혼자의 시간이 편해진 뒤로 사람을 만나는 시간도 오히려 즐거워졌습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 오늘 밤 외로움이 밀려오면 뭘 할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 연락처를 열기 전에 일단 30분을 저에게 주려 합니다. 걷거나 지금 마음을 적어볼 겁니다. 그러고도 남는 마음이면 그때 편한 사람에게 연락하겠습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그래도 외로움이 몇 달씩 이어지면 어떡할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그건 연습 부족이 아니고 관계가 부족하다는 신호로 받아들이기로 했습니다. 참지 말고 사람을 찾고, 필요하면 전문가의 도움도 구할 겁니다. 몸의 신호를 무시하지 않는 게 저와의 약속입니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 고독 연습, 당장 뭐부터 시작할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 이번 주 달력에 혼자의 시간 한 칸을 미리 넣어두는 것부터 하겠습니다. 스스로 고른 혼자는 기다려지는 시간이 된다는 걸 이미 겪어봤으니까요.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 이제 외로움이 와도 예전처럼 허둥대며 사람으로 덮지 않습니다. 먼저 혼자만의 시간으로 들어가 마음을 가라앉히고, 그래도 남는 마음은 편한 사람에게 솔직하게 꺼냅니다. 이 순서 하나 바꿨을 뿐인데 외로움에 휘말려 후회할 일이 줄었습니다.<br /><br />오늘 문득 외로우셨다면 연락처를 열기 전에 혼자만의 30분을 먼저 가져보시길 권합니다. 그 시간이 편안해지는 순간부터 혼자는 더 이상 벌이 아니게 됩니다.<br /><br />다음에 또 외로움이 밀려오는 밤 이 글을 다시 찾아 헤매지 않으시려면 구독해두시는 걸 권합니다. 공감♥ 하나는 저에게 &#39;혼자 쓰는 이 시간이 헛되지 않았다&#39;는 확인으로 받겠습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.youtube.com/watch?v=0pP99GQehoE" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=0pP99GQehoE</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-solitude-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
