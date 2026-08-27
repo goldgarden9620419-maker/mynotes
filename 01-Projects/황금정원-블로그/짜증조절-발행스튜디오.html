@@ -1,0 +1,394 @@
+<title>블로그+스레드 발행 스튜디오 — 참을수록 커졌다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-27</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>참을수록 커졌다 (누적, 행동, 알아차림)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">문제해결형</span><span class="chip accent">핵심 팩트 직입형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">짜증</span><span class="chip">분노조절</span><span class="chip">감정조절</span><span class="chip">백곰효과</span><span class="chip">그라운딩테크닉</span><span class="chip">쿠션토크</span><span class="chip">감정관리</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=wD6yE_khF-I" target="_blank" rel="noopener noreferrer">"나이 들수록 늘어나는 짜증, 다스리는 법" (이호선 교수)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=wD6yE_khF-I" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"나이 들수록 늘어나는 짜증, 다스리는 법" (이호선 교수 — 숭실사이버대 기독교상담복지학과 학과장·한국노인상담센터)<br />https://www.youtube.com/watch?v=wD6yE_khF-I</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">가족·노년 상담 전문가 이호선 교수의 대담입니다. 중년 이후 유난히 늘어나는 짜증의 원인을 세 갈래로 짚었습니다. ① 배고픔 — 1차 욕구가 밀리면 나머지가 다 뒤로 밀려 예민해지므로, 나이 들어 이유 없이 짜증이 나면 십중팔구 밥부터 먹이면 괜찮아진다. ② 현실적 불안 — 노력해도 풀리지 않는 미해결 숙제나 당면한 위협이 있으면 스트레스가 쌓이는데, 감정은 1+1이 4+α가 되는 식으로 불어나고 하나의 짜증이 또 다른 짜증 상황을 만들어내는 연쇄가 일어난다. 중년은 위아래로 눌리는 샌드위치 세대라 여러 어려움이 동시다발로 몰려 짜증이 날 수밖에 없다. ③ 신경증적 불안 — 성장 과정의 경험이나 유전적 소인에서 오는, 원인이 불명확한 채 올라오는 불안. 없애기는 어렵지만 다루는 능력이 있으면 되고, 우울·불안·짜증도 습관이 되므로 새로운 행동을 선택하는 게 중요하다. 대처법으로는 심호흡·명상이 백곰 효과(생각을 억누를수록 더 떠오름) 때문에 역효과가 날 수 있으니 감정은 감정으로 다스리지 말고 행동으로 다스리라고 했습니다. 짜증 난 공간에 머물지 말고 개방된 공간으로 이동하고 산책으로 시선을 분산할 것, 누적된 짜증(여러 세대에게 "왜 짜증 내냐"는 말을 듣는 경우)은 터지기 직전의 신체 신호(울컥함, 붉어짐)를 알아채는 의식화가 먼저이며, 그 틈에 그라운딩 테크닉(접지법: 보기 5·듣기 4·만지기 3·냄새 2·맛 1)을 끼워 넣으면 효과가 있다고 했습니다. 말이 화처럼 나가는 사람은 자신이 화내는 사람임을 인정하고, 말하기 전 목을 가다듬는 쿠션 토크로 한 템포 쉬라고 조언했습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">나이가 들면서 예전보다 사소한 일에도 짜증이 나는 경우가 많아졌다는 것을 느낀다. 특히 해야 할 일이 많거나 해결되지 않은 문제가 머릿속에 남아 있을 때는 평소라면 그냥 넘어갈 수 있는 일에도 예민하게 반응하곤 했다. 돌이켜보면 그 순간의 일 자체가 문제라기보다 여러 걱정과 스트레스가 계속 쌓여 있다가 작은 일을 계기로 밖으로 나온 경우가 많았다. 실제로 해결되지 않은 현실적인 문제와 감정이 누적되면 또 다른 짜증으로 이어질 수 있다는 내용이 내 경험과 많이 닮아 있었다.
+
+예전에는 짜증이 나면 그 감정을 억지로 참거나 머릿속에서 없애려고 했다. 하지만 오히려 생각하면 할수록 화가 더 커지는 경우도 있었다. 요즘은 그럴 때 바로 반응하기보다 잠시 자리를 벗어나거나 밖으로 나가 걷는다. 글에서 감정을 감정으로 다스리기보다 행동으로 다스리고, 짜증이 나는 공간에서 벗어나 산책하는 것이 도움이 된다는 부분에 특히 공감했다. 실제로 걷다 보면 복잡했던 생각이 정리되고 감정도 조금씩 가라앉는다. 결국 중요한 것은 짜증이 나지 않게 만드는 것이 아니라, 짜증이 올라오는 순간을 알아차리고 내가 어떤 행동을 선택하느냐라는 생각이 든다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">나는 짜증이나 화가 단순히 성격의 문제만은 아니라는 내용에 공감한다. 사람은 피곤하거나 배가 고플 때도 예민해질 수 있고, 해결되지 않은 현실적인 문제와 불안이 계속 쌓이면 사소한 일에도 쉽게 짜증을 낼 수 있다. 특히 감정이 누적되면서 또 다른 짜증을 만들어낸다는 설명은 우리가 왜 별것 아닌 일에 크게 반응하는지를 잘 보여준다고 생각한다.
+
+다만 짜증이 날 때 무조건 밖으로 나가거나 행동을 바꾸는 것만으로 모든 문제가 해결된다고 보기는 어렵다. 잠시 걷거나 공간을 이동하는 것은 감정을 진정시키는 데 도움이 되지만, 짜증의 근본적인 원인이 인간관계나 경제적 문제, 직장 스트레스 등에 있다면 결국 그 원인을 해결하려는 노력도 필요하다. 또한 자신의 화를 단순히 참는 것보다 감정이 올라오는 순간을 스스로 알아차리는 과정이 중요하다고 생각한다. 결국 감정 자체를 없애려고 하기보다 '내가 지금 왜 짜증이 나는가'를 살펴보고, 바로 반응하지 않는 습관을 만드는 것이 현실적인 감정 관리 방법이라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">참을수록 커졌다 (누적, 행동, 알아차림)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">짜증,분노조절,감정조절,백곰효과,그라운딩테크닉,신경증적불안,쿠션토크,중년심리,마인드셋,감정관리</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">별일 아닌 일에 욱하고 돌아서서 후회하는 날이 많았음.
+
+근데 성격 문제가 아니라 쌓인 게 터지는 거였음.
+
+정리해봄.
+
+1. 짜증의 크기는 그날 일보다 쌓여 있던 스트레스가 정함
+2. 이유 없이 짜증나면 일단 배고픈지부터 확인 - 밥 먹으면 십중팔구 가라앉음
+3. 참을수록 더 생각나는 건 백곰 효과라 정상임
+4. 짜증나면 그 자리에 머물지 말고 일단 다른 공간으로 이동 - 걷기가 최고
+5. 터지기 직전 몸의 신호(울컥, 화끈)를 알아채는 게 절반임
+
+오늘 욱 올라오면 그 자리에서 결론 내리지 말고 일단 일어나 걸어보시길 🌱</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">참을수록 커졌다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">백곰을 생각하지 마시라는 말을 들으면 그 순간부터 백곰이 떠오릅니다. 1987년 미국 심리학 실험으로 확인된 사실입니다. 저는 이 실험 이야기를 듣고 제 짜증이 떠올랐습니다. 참아야지 하고 누를수록 더 크게 터져 나왔기 때문입니다.<br /><br />나이가 들면서 부쩍 늘어난 짜증의 정체가 뭔지, 저는 어떻게 다루고 있는지 이번에 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">짜증의 정체는 누적이었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">요즘 들어 평소라면 그냥 넘어갈 일에 욱하고 돌아서서 후회하는 날이 많아졌습니다. 처음엔 제 성격이 나빠진 줄 알았습니다. 그런데 돌이켜보니 그 순간의 일 자체가 문제였던 적은 별로 없었습니다. 해야 할 일이 밀려 있거나 해결되지 않은 문제가 머릿속에 남아 있을 때, 쌓여 있던 걱정과 스트레스가 작은 일을 계기로 밖으로 터져 나온 경우가 대부분이었습니다.<br /><br />심리학에서는 이걸 감정의 누적으로 설명합니다. 해결되지 않은 감정은 단순한 덧셈으로 끝나지 않고 서로 엉키면서 예상보다 크게 불어나고, 하나의 짜증이 또 다른 짜증 상황을 만들어내는 연쇄를 일으킨다고 합니다. 이때 바탕에 깔린 불안은 두 종류로 나뉩니다. 현실적 불안은 눈앞에 실제로 닥친 문제나 위협에서 오는 불안을 말합니다. 신경증적 불안이라는 것도 있는데, 어린 시절부터 쌓인 경험 탓에 뚜렷한 이유 없이 올라오는 불안을 가리킵니다. 아무 일도 없는데 짜증이 계속된다면 이쪽을 의심해볼 만합니다.<br /><br />허무할 만큼 단순한 원인도 있습니다. 배고픔입니다. 사람은 먹고 자는 것 같은 1차 욕구가 밀리면 다른 모든 일에 예민해집니다. 그래서 저는 요즘 짜증이 올라오면 심각한 고민에 들어가기 전에 끼니부터 점검합니다. 실제로 밥을 먹고 나면 별일 아니었던 경우가 생각보다 많았습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 짜증의 크기는 그날 사건보다 쌓여 있던 스트레스가 정합니다. 배고픔 같은 단순한 원인부터 먼저 점검합니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">참기 대신 행동을 바꿨습니다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">예전의 저는 짜증이 나면 억지로 눌렀습니다. 생각을 지우려고 애쓰고 그래도 안 되면 그냥 참았습니다. 결과는 반대였습니다. 곱씹을수록 화가 커졌고 하루를 넘겨 이어지기도 했습니다.<br /><br />백곰 효과를 알고 나서야 이유를 이해했습니다. 백곰 효과란 어떤 생각을 하지 않으려고 애쓸수록 그 생각이 오히려 더 자주 떠오르는 심리 현상으로, 사고 억제의 역설이라고도 부릅니다. 1987년 실험에서 백곰을 생각하지 말라는 지시를 받은 참가자들은 억제에 실패했을 뿐 아니라 나중에는 처음부터 자유롭게 생각한 사람들보다 백곰을 더 많이 떠올렸습니다. 명상이나 심호흡이 누구에게나 통하지는 않는 이유도 여기에 있어 보입니다. 비우려고 할수록 생각은 더 선명해집니다.<br /><br />그래서 요즘 저는 감정을 머리로 누르는 대신 몸을 움직입니다. 짜증이 난 그 공간에 머무르지 않고 일단 일어나 다른 곳으로 갑니다. 형편이 되면 밖으로 나가 걷습니다. 흔들리는 나뭇잎이나 지나가는 사람들로 시선이 분산되면 뱅뱅 돌던 생각도 느슨해집니다. 이십 분쯤 걷고 돌아오면 아까 그 일이 그렇게까지 화낼 일이었나 싶어질 때가 많았습니다.<br /><br />참고: <a href="https://pubmed.ncbi.nlm.nih.gov/3612492/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Wegner et al., Journal of Personality and Social Psychology(1987)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 누를수록 커지는 게 감정입니다. 공간을 옮기고 걷는 행동 전환이 저에게는 참기보다 훨씬 잘 통했습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">올라오는 순간을 알아차리는 연습</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">짜증이 오래 습관이 된 사람은 감정이 올라오는 순간과 터뜨리는 순간 사이 간격이 아주 짧다고 합니다. 본인이 눈치채기도 전에 이미 짜증을 내고 있는 겁니다. 그래서 필요한 게 의식화입니다. 의식화란 무심코 지나가던 내면의 신호를 스스로 알아차리는 과정을 말합니다. 제 경우 터지기 직전에 울컥하는 느낌과 함께 얼굴이 화끈해지고 어깨에 힘이 들어갔습니다. 이 신호를 알아채면 다음 행동을 고를 여유가 생깁니다.<br /><br />그 짧은 틈에 끼워 넣기 좋은 도구가 그라운딩 테크닉입니다. 접지법이라고도 하는데, 주의를 감각으로 돌려 폭주하는 감정에서 빠져나오는 기법입니다. 방법은 간단합니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">눈으로 주변 물건 다섯 가지를 자세히 살펴본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">귀로 들리는 소리 네 가지를 찾아본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">손으로 세 가지를 만지고, 냄새 두 가지를 맡고, 사탕이나 껌 한 가지를 맛본다</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">말이 화처럼 나가는 분들께는 쿠션 토크도 도움이 됩니다. 말을 내뱉기 전에 목을 한번 가다듬으며 한 템포 쉬어가는 방식입니다.<br /><br />다만 저는 이런 기법만으로 모든 게 해결된다고 보지는 않습니다. 짜증의 뿌리가 인간관계나 돈 문제, 직장 스트레스에 있다면 결국 그 원인을 풀려는 노력이 같이 가야 합니다. 목표는 감정을 없애는 게 아니라 바로 반응하지 않는 습관을 만드는 것이라고 저는 정리했습니다.<br /><br />참고: <a href="https://www.mentalhealth.go.kr/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 국가정신건강정보포털(보건복지부·국립정신건강센터)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 터지기 직전의 신체 신호를 알아채고 주의를 감각으로 옮기면 반응을 고를 여유가 생깁니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 요즘 부쩍 짜증이 늘어난 나, 성격이 나빠진 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 성격보다 누적을 의심하기로 했습니다. 해결 안 된 문제와 걱정이 쌓였다는 신호였고, 끼니와 잠이 부족했던 날도 많았습니다. 저를 탓하기 전에 상태부터 살피는 게 순서였습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 참는 게 미덕 아니야? 그냥 넘기면 되잖아.</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 참기만 하다가 더 크게 터진 게 저였습니다. 백곰 효과처럼 누를수록 오히려 커졌습니다. 그래서 누르는 대신 자리를 옮기는 쪽을 택했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 나는 화낸 적이 없는데 가족은 화냈다고 하면 어떡할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 상대가 그렇게 느꼈다면 그 기준을 받아들이기로 했습니다. 억울함을 따지기보다 말투를 바꾸는 게 빨랐습니다. 말 꺼내기 전에 목을 가다듬는 것부터 해보고 있습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그래서 오늘 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 울컥 올라오는 몸의 신호를 알아차리는 것부터 해보려 합니다. 신호가 오면 일단 그 자리에서 일어나 걸을 겁니다. 걷고 나서 다시 이야기해도 늦지 않으니까요.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 짜증을 없애겠다는 목표를 버렸습니다. 대신 올라오는 순간을 알아차리고 몸을 먼저 움직이는 쪽으로 방향을 바꿨습니다. 그것만으로도 욱하고 후회하는 횟수가 눈에 띄게 줄었습니다.<br /><br />오늘 사소한 일에 울컥하셨다면 그 자리에서 결론 내리지 말고 일단 일어나 걸어보시길 권합니다. 스무 걸음쯤 걷고 나면 그 일의 크기가 달라져 보일 겁니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=wD6yE_khF-I" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=wD6yE_khF-I</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-irritation-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>

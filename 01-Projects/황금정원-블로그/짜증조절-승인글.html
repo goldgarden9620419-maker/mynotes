@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>승인글 - 참을수록 커졌다</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;background:#f3f4f6;margin:0;padding:24px;color:#111827;}
+.wrap{max-width:760px;margin:0 auto;}
+.meta-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+.meta-row{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;}
+.meta-label{font-weight:700;color:#374151;min-width:70px;font-size:0.92rem;}
+.meta-val{font-size:0.98rem;color:#111827;flex:1;}
+.copy-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.85rem;cursor:pointer;}
+.copy-btn:hover{background:#1d4ed8;}
+h1.page-title{font-size:1.3rem;margin:0 0 6px 0;}
+.section-title{font-size:1.05rem;font-weight:700;margin:26px 0 10px 0;color:#1e3a8a;}
+.preview{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;margin-bottom:20px;}
+textarea{width:100%;height:260px;box-sizing:border-box;font-family:monospace;font-size:0.82rem;padding:12px;border-radius:10px;border:1px solid #d1d5db;}
+.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;font-size:0.9rem;color:#92400e;margin-top:14px;}
+/* card CSS */
+.lead-intro{font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;}
+.post-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;}
+.post-card h2{font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;}
+.card-body{padding:20px 22px;}
+.card-body p{font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;}
+.card-body p:last-child{margin-bottom:0;}
+.card-body h3{font-size:1.1rem;font-weight:700;color:#1e3a8a;margin:18px 0 10px 0;}
+.summary-card{background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;}
+.summary-card b{color:#1d4ed8;}
+.card-body ul,.card-body ol{margin:10px 0 14px 22px;padding:0;}
+.card-body li{margin:6px 0;line-height:1.8;color:#374151;}
+.card-body a{color:#2563eb;text-decoration:underline;}
+.faq-card h2{background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;}
+.faq-item{margin:0;}
+.faq-q{font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;}
+.faq-a{font-size:1rem;line-height:1.9;color:#374151;margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="page-title">승인글 — 참을수록 커졌다 (누적, 행동, 알아차림)</h1>
+
+<div class="meta-box">
+<div class="meta-row">
+<span class="meta-label">제목</span>
+<span class="meta-val" id="titleText">참을수록 커졌다 (누적, 행동, 알아차림)</span>
+<button class="copy-btn" onclick="copyText('titleText')">복사</button>
+</div>
+<div class="meta-row">
+<span class="meta-label">카테고리</span>
+<span class="meta-val"><b>확언·심리·마인드셋</b></span>
+</div>
+<div class="meta-row">
+<span class="meta-label">태그</span>
+<span class="meta-val" id="tagsText">짜증,분노조절,감정조절,백곰효과,그라운딩테크닉,신경증적불안,쿠션토크,중년심리,마인드셋,감정관리</span>
+<button class="copy-btn" onclick="copyText('tagsText')">복사</button>
+</div>
+</div>
+
+<div class="section-title">본문 미리보기</div>
+<div class="preview" id="previewArea"></div>
+
+<div class="section-title">복사용 본문 HTML</div>
+<textarea id="src" readonly></textarea>
+<button class="copy-btn" onclick="copySrc()" style="margin-top:8px;">본문 HTML 전체 복사</button>
+
+<div class="notice">티스토리 글쓰기에서 HTML 모드로 전환 후 붙여넣으세요. 카드 CSS는 스킨에 최초 1회만 등록하면 됩니다.</div>
+</div>
+
+<script type="text/template" id="srcData">
+<p class="lead-intro" data-ke-size="size16">백곰을 생각하지 마시라는 말을 들으면 그 순간부터 백곰이 떠오릅니다. 1987년 미국 심리학 실험으로 확인된 사실입니다. 저는 이 실험 이야기를 듣고 제 짜증이 떠올랐습니다. 참아야지 하고 누를수록 더 크게 터져 나왔기 때문입니다.<br /><br />나이가 들면서 부쩍 늘어난 짜증의 정체가 뭔지, 저는 어떻게 다루고 있는지 이번에 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card">
+<h2 data-ke-size="size26">짜증의 정체는 누적이었다</h2>
+<div class="card-body">
+<p data-ke-size="size16">요즘 들어 평소라면 그냥 넘어갈 일에 욱하고 돌아서서 후회하는 날이 많아졌습니다. 처음엔 제 성격이 나빠진 줄 알았습니다. 그런데 돌이켜보니 그 순간의 일 자체가 문제였던 적은 별로 없었습니다. 해야 할 일이 밀려 있거나 해결되지 않은 문제가 머릿속에 남아 있을 때, 쌓여 있던 걱정과 스트레스가 작은 일을 계기로 밖으로 터져 나온 경우가 대부분이었습니다.<br /><br />심리학에서는 이걸 감정의 누적으로 설명합니다. 해결되지 않은 감정은 단순한 덧셈으로 끝나지 않고 서로 엉키면서 예상보다 크게 불어나고, 하나의 짜증이 또 다른 짜증 상황을 만들어내는 연쇄를 일으킨다고 합니다. 이때 바탕에 깔린 불안은 두 종류로 나뉩니다. 현실적 불안은 눈앞에 실제로 닥친 문제나 위협에서 오는 불안을 말합니다. 신경증적 불안이라는 것도 있는데, 어린 시절부터 쌓인 경험 탓에 뚜렷한 이유 없이 올라오는 불안을 가리킵니다. 아무 일도 없는데 짜증이 계속된다면 이쪽을 의심해볼 만합니다.<br /><br />허무할 만큼 단순한 원인도 있습니다. 배고픔입니다. 사람은 먹고 자는 것 같은 1차 욕구가 밀리면 다른 모든 일에 예민해집니다. 그래서 저는 요즘 짜증이 올라오면 심각한 고민에 들어가기 전에 끼니부터 점검합니다. 실제로 밥을 먹고 나면 별일 아니었던 경우가 생각보다 많았습니다.</p>
+<div class="summary-card"><b>요약:</b> 짜증의 크기는 그날 사건보다 쌓여 있던 스트레스가 정합니다. 배고픔 같은 단순한 원인부터 먼저 점검합니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">참기 대신 행동을 바꿨습니다</h2>
+<div class="card-body">
+<p data-ke-size="size16">예전의 저는 짜증이 나면 억지로 눌렀습니다. 생각을 지우려고 애쓰고 그래도 안 되면 그냥 참았습니다. 결과는 반대였습니다. 곱씹을수록 화가 커졌고 하루를 넘겨 이어지기도 했습니다.<br /><br />백곰 효과를 알고 나서야 이유를 이해했습니다. 백곰 효과란 어떤 생각을 하지 않으려고 애쓸수록 그 생각이 오히려 더 자주 떠오르는 심리 현상으로, 사고 억제의 역설이라고도 부릅니다. 1987년 실험에서 백곰을 생각하지 말라는 지시를 받은 참가자들은 억제에 실패했을 뿐 아니라 나중에는 처음부터 자유롭게 생각한 사람들보다 백곰을 더 많이 떠올렸습니다. 명상이나 심호흡이 누구에게나 통하지는 않는 이유도 여기에 있어 보입니다. 비우려고 할수록 생각은 더 선명해집니다.<br /><br />그래서 요즘 저는 감정을 머리로 누르는 대신 몸을 움직입니다. 짜증이 난 그 공간에 머무르지 않고 일단 일어나 다른 곳으로 갑니다. 형편이 되면 밖으로 나가 걷습니다. 흔들리는 나뭇잎이나 지나가는 사람들로 시선이 분산되면 뱅뱅 돌던 생각도 느슨해집니다. 이십 분쯤 걷고 돌아오면 아까 그 일이 그렇게까지 화낼 일이었나 싶어질 때가 많았습니다.<br /><br />참고: <a href="https://pubmed.ncbi.nlm.nih.gov/3612492/" target="_blank" rel="noopener noreferrer">출처: Wegner et al., Journal of Personality and Social Psychology(1987)</a></p>
+<div class="summary-card"><b>요약:</b> 누를수록 커지는 게 감정입니다. 공간을 옮기고 걷는 행동 전환이 저에게는 참기보다 훨씬 잘 통했습니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">올라오는 순간을 알아차리는 연습</h2>
+<div class="card-body">
+<p data-ke-size="size16">짜증이 오래 습관이 된 사람은 감정이 올라오는 순간과 터뜨리는 순간 사이 간격이 아주 짧다고 합니다. 본인이 눈치채기도 전에 이미 짜증을 내고 있는 겁니다. 그래서 필요한 게 의식화입니다. 의식화란 무심코 지나가던 내면의 신호를 스스로 알아차리는 과정을 말합니다. 제 경우 터지기 직전에 울컥하는 느낌과 함께 얼굴이 화끈해지고 어깨에 힘이 들어갔습니다. 이 신호를 알아채면 다음 행동을 고를 여유가 생깁니다.<br /><br />그 짧은 틈에 끼워 넣기 좋은 도구가 그라운딩 테크닉입니다. 접지법이라고도 하는데, 주의를 감각으로 돌려 폭주하는 감정에서 빠져나오는 기법입니다. 방법은 간단합니다.</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li data-ke-size="size16">눈으로 주변 물건 다섯 가지를 자세히 살펴본다</li>
+<li data-ke-size="size16">귀로 들리는 소리 네 가지를 찾아본다</li>
+<li data-ke-size="size16">손으로 세 가지를 만지고, 냄새 두 가지를 맡고, 사탕이나 껌 한 가지를 맛본다</li>
+</ul>
+<p data-ke-size="size16">말이 화처럼 나가는 분들께는 쿠션 토크도 도움이 됩니다. 말을 내뱉기 전에 목을 한번 가다듬으며 한 템포 쉬어가는 방식입니다.<br /><br />다만 저는 이런 기법만으로 모든 게 해결된다고 보지는 않습니다. 짜증의 뿌리가 인간관계나 돈 문제, 직장 스트레스에 있다면 결국 그 원인을 풀려는 노력이 같이 가야 합니다. 목표는 감정을 없애는 게 아니라 바로 반응하지 않는 습관을 만드는 것이라고 저는 정리했습니다.<br /><br />참고: <a href="https://www.mentalhealth.go.kr/" target="_blank" rel="noopener noreferrer">출처: 국가정신건강정보포털(보건복지부·국립정신건강센터)</a></p>
+<div class="summary-card"><b>요약:</b> 터지기 직전의 신체 신호를 알아채고 주의를 감각으로 옮기면 반응을 고를 여유가 생깁니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card">
+<h2 data-ke-size="size26">제가 저에게 던진 질문들</h2>
+<div class="card-body">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 요즘 부쩍 짜증이 늘어난 나, 성격이 나빠진 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 성격보다 누적을 의심하기로 했습니다. 해결 안 된 문제와 걱정이 쌓였다는 신호였고, 끼니와 잠이 부족했던 날도 많았습니다. 저를 탓하기 전에 상태부터 살피는 게 순서였습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 참는 게 미덕 아니야? 그냥 넘기면 되잖아.</b></p>
+<p class="faq-a" data-ke-size="size16">A. 참기만 하다가 더 크게 터진 게 저였습니다. 백곰 효과처럼 누를수록 오히려 커졌습니다. 그래서 누르는 대신 자리를 옮기는 쪽을 택했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 나는 화낸 적이 없는데 가족은 화냈다고 하면 어떡할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 상대가 그렇게 느꼈다면 그 기준을 받아들이기로 했습니다. 억울함을 따지기보다 말투를 바꾸는 게 빨랐습니다. 말 꺼내기 전에 목을 가다듬는 것부터 해보고 있습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 그래서 오늘 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 울컥 올라오는 몸의 신호를 알아차리는 것부터 해보려 합니다. 신호가 오면 일단 그 자리에서 일어나 걸을 겁니다. 걷고 나서 다시 이야기해도 늦지 않으니까요.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">결론</h2>
+<div class="card-body">
+<p data-ke-size="size16">저는 짜증을 없애겠다는 목표를 버렸습니다. 대신 올라오는 순간을 알아차리고 몸을 먼저 움직이는 쪽으로 방향을 바꿨습니다. 그것만으로도 욱하고 후회하는 횟수가 눈에 띄게 줄었습니다.<br /><br />오늘 사소한 일에 울컥하셨다면 그 자리에서 결론 내리지 말고 일단 일어나 걸어보시길 권합니다. 스무 걸음쯤 걷고 나면 그 일의 크기가 달라져 보일 겁니다.</p>
+<p data-ke-size="size16">참고: <a href="https://www.youtube.com/watch?v=wD6yE_khF-I" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=wD6yE_khF-I</a></p>
+</div>
+</section>
+</script>
+
+<script>
+function copyText(id){
+  var t=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t);
+}
+function copySrc(){
+  var ta=document.getElementById('src');
+  ta.select();
+  document.execCommand('copy');
+}
+window.onload=function(){
+  var raw=document.getElementById('srcData').innerHTML;
+  document.getElementById('src').value=raw.trim();
+  document.getElementById('previewArea').innerHTML=raw;
+};
+</script>
+</body>
+</html>
