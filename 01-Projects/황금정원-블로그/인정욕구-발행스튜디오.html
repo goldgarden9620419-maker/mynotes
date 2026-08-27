@@ -1,0 +1,391 @@
+<title>블로그+스레드 발행 스튜디오 — 눈치 볼 필요가 없었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+details.refscript summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.refscript summary::before{content:"▸";}
+details.refscript[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-26</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>눈치 볼 필요가 없었다 (욕구, 착각, 기준)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">스토리텔링형</span><span class="chip accent">공감 상황형 훅</span><span class="chip accent">소제목 2개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">인정욕구</span><span class="chip">자존감</span><span class="chip">스포트라이트효과</span><span class="chip">라이킹갭</span><span class="chip">눈치</span><span class="chip">인간관계</span><span class="chip">자기수용</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=K6O7uoyiZck" target="_blank" rel="noopener noreferrer">"인정 욕구에 흔들리지 않는 법" (서울대 심리학과 한소원)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=K6O7uoyiZck" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"인정 욕구에 흔들리지 않는 법 — 타인은 당신 생각보다 더 괜찮습니다" (서울대학교 심리학과 한소원 교수, 비온뒤 사이콜로지)<br />https://www.youtube.com/watch?v=K6O7uoyiZck</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">방송은 인정 욕구를 주제로 한 대담입니다. 인정 욕구는 사회적 존재인 인간의 본성이라 좋고 나쁨을 따질 대상이 아니며, 타인의 반응은 나를 평가하는 중요한 정보라 높은 자존감만으로 버티기 어렵고, 나를 무조건 인정해주는 '한 사람'의 존재가 중요하다고 설명했습니다. 다크 심리학이 인정 욕구를 조종에 이용하는 수법(과한 칭찬 후 거두기, "나니까 너를 인정한다"식 희소성 심기, 자존감 깎기 — 가스라이팅으로 이어짐)을 소개하며 반복해서 낮춰 말하는 관계에는 단호히 선을 그으라고 조언했습니다. 인정 욕구를 건강하게 채우는 방법으로는 대가 없는 작은 도움 주기, 내 강점 찾기(괜찮다고 생각하는 사람의 장점을 적어보면 나에게도 있는 걸 발견), 실수를 옆집 사람 일처럼 객관화하기를 제시했습니다. 심리학 연구로는 사람들이 대화 후 상대가 나를 좋아하는 정도를 실제보다 낮춰 짐작한다는 결과(내 짐작보다 남들은 나를 좋게 평가하며 몇 달 후에도 호감도 유지), 스포트라이트 효과와 투명성의 오류(내 실수를 남들이 다 알아볼 거라는 과대평가)를 소개했습니다. 결과 조건부 인정만 주는 상사와는 일로만 연결된 관계로 바운더리를 긋고 일 바깥의 관계를 만들 것, SNS 좋아요·읽음 표시가 인정 욕구를 증폭시키는 시대적 문제라는 점도 짚었습니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">나 역시 살아오면서 다른 사람에게 인정받고 싶다는 마음을 많이 가지고 있었던 것 같다. 특히 직장생활을 하면서 내가 맡은 일을 열심히 하고 좋은 결과를 만들어도 상사나 주변 사람에게 별다른 반응이 없으면 괜히 서운한 마음이 들었다. 반대로 작은 칭찬이라도 들으면 기분이 좋아지고 '내가 제대로 하고 있구나'라는 생각에 더 열심히 일하기도 했다. 지금 생각해 보면 다른 사람의 평가를 통해 내 가치를 확인하려 했던 것이다. 인정받고 싶은 마음 자체는 사회적 존재인 인간에게 자연스러운 욕구라는 내용에 공감한다.
+
+하지만 시간이 지나면서 모든 사람에게 좋은 평가를 받을 수는 없다는 것도 조금씩 알게 되었다. 내가 최선을 다해도 누군가는 부족하다고 생각할 수 있고, 내 의견에 반대하는 사람도 있을 수 있다. 예전에는 그런 반응에 오래 신경을 썼지만 이제는 다른 사람의 평가보다 내가 얼마나 성실하게 노력했고 어제보다 무엇을 배우고 성장했는지를 더 중요하게 생각하려 한다. 남의 인정은 힘이 될 수 있지만 그것이 내 가치의 기준이 되어서는 안 된다는 것을 경험을 통해 배우고 있다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">사람이라면 누구나 다른 사람에게 인정받고 싶은 마음이 있다고 생각한다. 직장이나 인간관계에서 칭찬과 좋은 평가를 받으면 자신감이 생기고 더 노력하게 되는 긍정적인 효과도 있다. 따라서 인정 욕구 자체를 부정적으로 볼 필요는 없다. 실제로 인정받고 싶은 마음은 인간이 사회적 존재이기 때문에 나타나는 자연스러운 욕구라고 설명한다.
+
+문제는 자신의 가치를 지나치게 다른 사람의 평가에 맡길 때 생긴다고 생각한다. 누군가 칭찬하면 내가 괜찮은 사람이 되고, 반대로 무관심하거나 비판하면 가치 없는 사람이 된 것처럼 느낀다면 결국 타인의 반응에 끌려다니게 된다. 특히 칭찬과 무관심을 반복하면서 상대의 인정 욕구를 이용해 사람을 조종하는 관계는 더욱 경계해야 한다. 결국 중요한 것은 인정받지 않으려는 것이 아니라 인정에 의존하지 않는 태도라고 생각한다. 다른 사람의 평가는 참고하되 내가 노력한 과정과 성장, 내가 가진 장점을 스스로 인정할 수 있어야 한다. 타인의 인정은 나를 움직이는 힘이 될 수 있지만 내 가치까지 결정하게 해서는 안 된다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">눈치 볼 필요가 없었다 (욕구, 착각, 기준)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">인정욕구,자존감,스포트라이트효과,라이킹갭,눈치,인간관계,마인드셋,확언,사회심리학,자기수용</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">단톡방에서 내 말만 씹힐 때, 내가 뭘 잘못했나 싶었음.
+
+근데 심리학 연구 보니까 그 불안, 대부분 착각이었음.
+
+정리해봄.
+
+1. 인정받고 싶은 마음은 사회적 본성이라 죄가 없음 - 없애려 할 필요 없음
+2. 사람들은 대화 후 상대가 날 좋아하는 정도를 실제보다 낮춰 짐작함 (라이킹 갭)
+3. 내 실수를 남들이 다 알아챌 거라는 것도 과대평가임 (스포트라이트 효과)
+4. 나한테 제일 엄격한 사람은 나 자신임 - 남들은 그냥 넘겨줌
+5. 칭찬했다 거뒀다 하며 인정 욕구를 이용하는 사람은 단호하게 거리 두기
+
+읽씹에 마음 상하면 침묵의 의미를 지어내기 전에 라이킹 갭부터 떠올려보시길 🌱</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">눈치 볼 필요가 없었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">단톡방에 말을 던졌는데 아무도 답하지 않고 자기들 대화만 이어갈 때, 괜히 마음이 서늘해지는 순간 있으시죠. 저도 그랬습니다. 열심히 일하고도 상사가 아무 반응이 없으면 서운했고, 작은 칭찬 하나에 하루 종일 기분이 좋아지기도 했습니다.<br /><br />인정받고 싶은 마음이 저를 움직이는 동시에 저를 지치게 하고 있었습니다. 그 마음을 어떻게 다뤄야 할지 이번에 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">인정받고 싶은 욕구엔 죄가 없었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 한동안 인정받고 싶어 하는 제 모습이 부끄러웠습니다. 어른이면 남 평가에 흔들리지 않아야 한다고 믿었기 때문입니다. 그런데 심리학에서는 인정 욕구를 다르게 설명합니다. 인정 욕구란 사회적 존재인 인간이 자신의 가치를 타인에게 확인받고 싶어 하는 본성으로, 좋고 나쁨을 따질 대상이 아니라는 겁니다.<br /><br />다른 사람이 저를 대하는 태도는 제가 어떤 사람인지 알려주는 중요한 정보이기도 합니다. 아무리 자존감이 높아도 주변의 반응이라는 정보 없이 혼자 버티기는 어렵습니다. 그래서 저를 무조건 인정해주는 단 한 사람의 존재가 그렇게 큰 힘이 되는 것이었습니다.<br /><br />다만 이 욕구를 노리는 사람들은 경계해야 합니다. 과한 칭찬을 퍼붓다가 갑자기 차갑게 구는 식으로 상대를 불안하게 만들고, &#39;나니까 너를 인정한다&#39;며 다른 관계를 끊어내게 하는 수법도 있습니다. 이런 식으로 상대의 현실 감각과 자존감을 무너뜨리는 걸 가스라이팅이라고 부르는데, 조종의 첫 단계가 바로 자존감 깎기라고 합니다. 저는 이 대목에서 배우자든 친구든 저를 반복해서 낮춰 말하는 사람과는 분명하게 선을 그어야 한다는 걸 배웠습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 인정 욕구는 사회적 본성이라 잘못이 없습니다. 문제는 그 욕구를 이용해 자존감을 깎는 관계입니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">제 착각보다 남들은 저를 좋게 보고 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그런데 정작 저를 오래 괴롭힌 건 타인이 아니라 제 착각이었습니다. 직장에서 좋은 결과를 내고도 반응이 없으면 &#39;내가 부족했나&#39; 싶었고, 메시지가 읽씹당하면 제가 뭘 잘못했는지부터 되짚었습니다.<br /><br />심리학 연구들은 이 불안이 과장된 착각이라고 말합니다. 라이킹 갭이라는 개념이 있는데, 대화가 끝난 뒤 상대가 나를 좋아하는 정도를 사람들이 체계적으로 낮춰 짐작한다는 연구 결과입니다. 실제로는 제 짐작보다 상대가 저를 더 좋게 보고 있었다는 뜻입니다. 스포트라이트 효과라는 개념도 있습니다. 무대 조명이 나만 비추는 것처럼 남들이 내 실수와 단점을 다 알아챌 거라 과대평가하는 심리인데, 실험에서 사람들은 자기 실수를 알아본 관찰자 수를 실제보다 훨씬 부풀려 짐작했습니다.<br /><br />저는 이 연구들을 접하고 제 직장 생활을 다시 돌아봤습니다. 제가 밤새 곱씹던 실수를 정작 동료들은 기억조차 못 하는 경우가 많았습니다. 나에게 제일 엄격한 사람은 나 자신이고, 남들은 같은 실수를 &#39;컨디션이 안 좋았나 보다&#39;하고 넘겨주고 있었습니다.<br /><br />그래서 저는 평가의 기준을 밖에서 안으로 옮기는 연습을 시작했습니다. 남의 반응 대신 제가 얼마나 성실하게 노력했는지, 어제보다 무엇을 배웠는지를 먼저 묻는 겁니다. 되돌려받을 생각 없이 남에게 작은 도움을 건네는 것도 도움이 됐습니다. &#39;나는 괜찮은 사람이다&#39;라는 확인을 남의 말 대신 제 행동에서 얻는 방법이기 때문입니다.<br /><br />참고: <a href="https://journals.sagepub.com/doi/abs/10.1177/0956797618783714" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Boothby et al., Psychological Science(2018)</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/10707330/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Gilovich et al., Journal of Personality and Social Psychology(2000)</a></p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">반응이 없어 불안할 땐 &#39;라이킹 갭&#39;을 떠올린다 — 상대는 내 짐작보다 나를 좋게 본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">실수를 곱씹게 되면 옆집 사람 일이라 생각하고 다시 평가해본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">하루 끝에 남의 평가 대신 제가 배운 것 하나를 적어본다</li>
+</ul>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 남들은 제 짐작보다 저를 좋게 봅니다. 기준을 타인의 반응에서 제 성장으로 옮기면 눈치에서 자유로워집니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 인정받고 싶은 마음, 없애야 하는 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아니라고 저는 결론지었습니다. 사회적 존재의 본성이라 없앨 수도 없습니다. 없애는 게 아니라 의존하지 않는 게 목표라고 저는 정리했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 칭찬 한마디에 기분이 오르내리는 나, 이상한 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 대부분의 사람이 그렇다는 걸 저는 이번에 확인했습니다. 다들 좋아요 수에 흔들리고 읽씹에 서운해합니다. 저만 유별난 게 아니었습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 결과를 내야만 인정해주는 상사 밑에서는 어떻게 버텨?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 그 관계를 일로만 연결된 관계로 선을 긋기로 했습니다. 그리고 일 바깥의 관계를 따로 만들어서 인정의 공급처를 한 곳에 몰아두지 않으려 합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그럼 오늘부터 저는 뭘 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 자기 전에 제 좋은 점을 다섯 개 적어보려고 합니다. 잘 안 떠오르면 제가 괜찮다고 생각하는 사람의 장점을 먼저 적어볼 겁니다. 그 목록에 저한테도 있는 게 분명히 섞여 있을 테니까요.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 인정받고 싶은 마음을 없애려다 실패했고, 이제는 그 마음과 같이 사는 쪽을 택했습니다. 욕구는 인정하되 기준은 제 안에 두는 것, 그리고 남들이 저를 제 짐작보다 좋게 본다는 사실을 기억하는 것. 이 두 가지만으로도 눈치 보는 시간이 눈에 띄게 줄었습니다.<br /><br />오늘 누군가의 무반응에 마음이 상하셨다면, 그 침묵의 의미를 지어내기 전에 제 글의 라이킹 갭 이야기를 한번 떠올려보시길 권합니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0;">참고: <a href="https://www.youtube.com/watch?v=K6O7uoyiZck" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=K6O7uoyiZck</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-approval-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
