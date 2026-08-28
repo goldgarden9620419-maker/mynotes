@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>승인글 - 모르겠다가 뇌를 멈췄다</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;background:#f3f4f6;margin:0;padding:24px;color:#111827;}
+.wrap{max-width:760px;margin:0 auto;}
+.meta-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+.meta-row{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;}
+.meta-label{font-weight:700;color:#374151;min-width:70px;font-size:0.92rem;}
+.meta-val{font-size:0.98rem;color:#111827;flex:1;}
+.copy-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.85rem;cursor:pointer;}
+.copy-btn:hover{background:#1d4ed8;}
+h1.page-title{font-size:1.3rem;margin:0 0 6px 0;}
+.section-title{font-size:1.05rem;font-weight:700;margin:26px 0 10px 0;color:#1e3a8a;}
+.preview{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;margin-bottom:20px;}
+textarea{width:100%;height:260px;box-sizing:border-box;font-family:monospace;font-size:0.82rem;padding:12px;border-radius:10px;border:1px solid #d1d5db;}
+.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;font-size:0.9rem;color:#92400e;margin-top:14px;}
+/* card CSS */
+.lead-intro{font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;}
+.post-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;}
+.post-card h2{font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;}
+.card-body{padding:20px 22px;}
+.card-body p{font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;}
+.card-body p:last-child{margin-bottom:0;}
+.card-body h3{font-size:1.1rem;font-weight:700;color:#1e3a8a;margin:18px 0 10px 0;}
+.summary-card{background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;}
+.summary-card b{color:#1d4ed8;}
+.card-body ul,.card-body ol{margin:10px 0 14px 22px;padding:0;}
+.card-body li{margin:6px 0;line-height:1.8;color:#374151;}
+.card-body a{color:#2563eb;text-decoration:underline;}
+.faq-card h2{background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;}
+.faq-item{margin:0;}
+.faq-q{font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;}
+.faq-a{font-size:1rem;line-height:1.9;color:#374151;margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="page-title">승인글 — &#39;모르겠다&#39;가 뇌를 멈췄다 (입버릇, 그래도, 균형)</h1>
+
+<div class="meta-box">
+<div class="meta-row">
+<span class="meta-label">제목</span>
+<span class="meta-val" id="titleText">&#39;모르겠다&#39;가 뇌를 멈췄다 (입버릇, 그래도, 균형)</span>
+<button class="copy-btn" onclick="copyText('titleText')">복사</button>
+</div>
+<div class="meta-row">
+<span class="meta-label">카테고리</span>
+<span class="meta-val"><b>확언·심리·마인드셋</b></span>
+</div>
+<div class="meta-row">
+<span class="meta-label">태그</span>
+<span class="meta-val" id="tagsText">말버릇,입버릇,뇌속대화,셀프토크,자기암시,뇌가소성,자기거리두기,혼잣말,마인드셋,확언</span>
+<button class="copy-btn" onclick="copyText('tagsText')">복사</button>
+</div>
+</div>
+
+<div class="section-title">본문 미리보기</div>
+<div class="preview" id="previewArea"></div>
+
+<div class="section-title">복사용 본문 HTML</div>
+<textarea id="src" readonly></textarea>
+<button class="copy-btn" onclick="copySrc()" style="margin-top:8px;">본문 HTML 전체 복사</button>
+
+<div class="notice">티스토리 글쓰기에서 HTML 모드로 전환 후 붙여넣으세요. 카드 CSS는 스킨에 최초 1회만 등록하면 됩니다.</div>
+</div>
+
+<script type="text/template" id="srcData">
+<p class="lead-intro" data-ke-size="size16">솔직히 고백하면 저는 오랫동안 &#39;내가 이걸 할 수 있을까&#39;가 입버릇이었습니다. 새로운 일 앞에서는 늘 그 말부터 나왔고, 나이가 들수록 &#39;지금 시작해서 되겠나&#39;가 따라붙었습니다. 그런데 뇌과학 책에서 그런 한마디가 나오는 순간 뇌가 생각을 멈춘다는 대목을 읽고 뜨끔했습니다.<br /><br />무심코 뱉는 말이 뇌를 어떻게 움직이는지, 저는 입버릇을 어떻게 고쳐가고 있는지 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card">
+<h2 data-ke-size="size26">입버릇이 뇌를 조종하고 있었다</h2>
+<div class="card-body">
+<p data-ke-size="size16">사람은 하루에 1만 6천에서 4만 6천 개의 단어를 쓴다고 합니다. 그리고 이 지구에서 제가 가장 많이 대화하는 상대는 다른 누구도 아닌 저 자신이었습니다. 혼잣말과 머릿속 중얼거림까지 합치면 저에게 가장 큰 영향을 주는 목소리는 결국 제 목소리인 셈입니다. 이런 말들이 자기 암시로 작동하는데, 자기 암시란 반복해서 듣고 말한 내용이 실제 생각과 행동의 방향을 정해버리는 심리 현상을 말합니다.<br /><br />뇌는 말을 하려는 순간부터 그 말을 이미지로 그립니다. &#39;할 수 없다&#39;고 말하는 순간 뇌는 할 수 없는 상태부터 그려놓고 생각을 멈춘다고 합니다. 특히 조심할 입버릇이 세 가지였습니다. &#39;모르겠다&#39;는 뇌에게 더 생각하지 않아도 된다는 신호가 되고, &#39;할 수 없다&#39;는 못 하는 그림을 먼저 그리게 하고, &#39;알고 있다&#39;는 학습을 그 자리에서 끝내버립니다. 셋 다 제가 즐겨 쓰던 말이라 뜨끔했습니다. 정말 모를 때는 &#39;글쎄요, 몇 가지 방법이 있을 겁니다&#39;처럼 생각을 이어가는 말로 바꾸는 게 낫다고 합니다.<br /><br />다행인 건 입버릇도 바뀐다는 사실입니다. 뇌에는 가소성이 있기 때문인데, 뇌 가소성이란 어른이 된 뒤에도 쓰는 방식에 따라 뇌 회로가 계속 바뀌는 성질을 말합니다. 굳은 줄 알았던 말버릇도 연습으로 다시 깔 수 있는 길이라는 뜻입니다.</p>
+<div class="summary-card"><b>요약:</b> 저에게 가장 큰 영향을 주는 목소리는 제 목소리입니다. &#39;모르겠다, 할 수 없다, 알고 있다&#39;는 뇌의 생각을 멈추는 3대 입버릇입니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">&#39;그래도&#39; 세 글자, 그리고 남처럼 말 걸기</h2>
+<div class="card-body">
+<p data-ke-size="size16">그럼 어떻게 바꿔야 할까. 제가 바로 써먹은 건 &#39;그래도&#39; 기법입니다. &#39;피곤해&#39;가 튀어나오면 뒤에 &#39;그래도&#39;를 붙이는 겁니다. &#39;피곤해, 그래도 오늘 할 건 다 했다&#39;처럼 뇌는 앞말과 반대되는 말을 만들어내려고 해서 긍정적인 문장이 저절로 따라 나옵니다. 의지력이 필요 없고 잊지만 않으면 되는 방법이라 마음에 들었습니다.<br /><br />불안할 때는 주어를 바꾸는 방법이 효과가 있었습니다. 자기 거리 두기라고 하는데, &#39;나는 괜찮아&#39; 대신 &#39;너는 괜찮아&#39;나 자기 이름을 불러 남에게 말하듯 말을 거는 방식입니다. 심리학 실험에서 이름이나 2인칭으로 자신에게 말을 건 사람들이 사회적 스트레스 상황에서 감정을 더 잘 다스렸고, 뇌 영상 연구에서는 이 방식이 큰 노력 없이도 불안을 만드는 편도체의 활동을 가라앉히는 것으로 나타났습니다. 편도체는 공포와 불안 반응을 일으키는 뇌 부위입니다. 테니스 선수 앤디 머레이가 세계 1위와의 결승에서 &#39;너는 지지 않는다&#39;고 되뇌며 우승한 일화도 있습니다.<br /><br />저도 요즘은 모르는 게 나오면 &#39;어렵다&#39; 대신 &#39;모르면 배우면 되지&#39;, &#39;일단 한번 해보자&#39;로 바꿔 말하려고 합니다. 이렇게 말한다고 갑자기 일이 다 풀리는 건 아니었습니다. 그래도 신기하게 다시 해볼 힘은 생겼습니다. 아침 걷기도 명상도 블로그도 AI 공부도 그 한마디에서 다시 시작된 날이 많았습니다.<br /><br />참고: <a href="https://pubmed.ncbi.nlm.nih.gov/24467424/" target="_blank" rel="noopener noreferrer">출처: Kross et al., Journal of Personality and Social Psychology(2014)</a> · <a href="https://www.nature.com/articles/s41598-017-04047-3" target="_blank" rel="noopener noreferrer">출처: Moser et al., Scientific Reports(2017)</a></p>
+<div class="summary-card"><b>요약:</b> 부정어 뒤에 &#39;그래도&#39;를 붙이면 뇌가 반대말을 찾아냅니다. 불안할 땐 이름이나 &#39;너&#39;로 저에게 말을 겁니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">말과 행동 사이, 저의 균형법</h2>
+<div class="card-body">
+<p data-ke-size="size16">다만 저는 긍정적인 말만 반복하면 인생이 바뀐다는 식의 결론에는 조심스럽습니다. 아무리 &#39;나는 할 수 있다&#39;를 외쳐도 행동이 따라붙지 않으면 달라지는 게 없었기 때문입니다. 실험에서도 비슷한 경고가 나옵니다. 시험 전에 자신을 칭찬하는 말을 반복한 그룹은 뇌의 보상 회로가 켜져 기분은 좋아졌지만 성적은 오르지 않았습니다. 과한 자신감이 긴장을 풀어버려 주의력이 떨어진 탓이라고 합니다.<br /><br />그래서 저는 더블 사고를 함께 쓰기로 했습니다. 더블 사고란 최고의 그림과 최악의 그림을 동시에 그려두는 사고법으로, &#39;분명 잘될 거야&#39;와 &#39;이 부분은 막힐지도 몰라&#39;를 같이 준비하는 겁니다. 성공한 사람들 중에 꿈만 꾸는 낙관주의자는 없었다는 대목이 오래 남았습니다.<br /><br />제가 생각하는 긍정적인 말의 진짜 힘은 현실을 외면하는 데가 아니라 힘든 상황에서 다시 움직이게 만드는 데 있습니다. &#39;무조건 잘될 거야&#39;보다 &#39;쉽지는 않겠지만 할 수 있는 것부터 해보자&#39;가 저에게는 훨씬 현실적이었습니다. 제가 지키는 건 세 가지입니다.</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li data-ke-size="size16">부정적인 말이 튀어나오면 그 자리에서 &#39;그래도&#39;를 붙인다</li>
+<li data-ke-size="size16">불안이 커지면 제 이름을 부르며 남에게 말하듯 저에게 말을 건다</li>
+<li data-ke-size="size16">&#39;잘될 거야&#39; 다음에는 반드시 오늘 할 수 있는 행동 하나를 정한다</li>
+</ul>
+<p data-ke-size="size16">말이 생각을 바꾸고 바뀐 생각이 행동으로 이어질 때, 그때 비로소 삶이 조금씩 달라진다고 저는 정리했습니다.</p>
+<div class="summary-card"><b>요약:</b> 말만으로는 바뀌지 않습니다. 기분을 살리는 말과 오늘의 행동 하나를 묶어야 입버릇 교정이 삶의 변화로 이어집니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card">
+<h2 data-ke-size="size26">제가 저에게 던진 질문들</h2>
+<div class="card-body">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 긍정 확언, 오글거려서 못 하겠는데 꼭 해야 해?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 저도 오글거리는 문장은 잘 못 합니다. 그래서 &#39;그래도&#39; 세 글자만 씁니다. 부정어 뒤에 붙이기만 하면 뇌가 알아서 다음 말을 찾아주니 이 정도면 부담이 없었습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 말버릇 하나 고친다고 인생이 바뀔까?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 말이 전부를 바꿔주지는 않았습니다. 대신 시작을 바꿔줬습니다. &#39;일단 해보자&#39;가 나온 날은 실제로 뭐라도 하게 됐고, 그 하루들이 쌓이는 게 변화라고 저는 생각합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 그럼 &#39;나는 최고야&#39;를 매일 외치면 되는 거 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 그건 역효과일 수 있다는 걸 이번에 배웠습니다. 능력을 부풀리는 말은 긴장을 풀어 주의력을 떨어뜨립니다. 기분을 살리는 말과 저를 과대평가하는 말을 구분하기로 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 오늘 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 오늘 &#39;피곤해&#39;가 나오는 순간 &#39;그래도&#39;를 붙여볼 겁니다. 그리고 자기 전에 제 이름을 부르면서 오늘 잘 버텼다고 한마디 건네려 합니다. 남한테는 잘하는 위로를 저한테도 해보는 겁니다.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">결론</h2>
+<div class="card-body">
+<p data-ke-size="size16">저는 이제 &#39;내가 이걸 할 수 있을까&#39;가 올라오면 한 박자 쉬고 말을 고칩니다. &#39;쉽지는 않겠지만 할 수 있는 것부터 해보자&#39;로요. 입버릇을 고치는 건 거창한 결심이 필요한 일이 아니었습니다. 세 글자를 붙이고 주어 하나를 바꾸는 일이었습니다.<br /><br />오늘 부정적인 말이 튀어나오는 순간이 오면 그 뒤에 &#39;그래도&#39;를 한번 붙여보시길 권합니다. 뇌가 다음 문장을 어떻게 바꾸는지 직접 확인하실 수 있을 겁니다.<br /><br />이 글을 &#39;알고 있는 얘기네&#39;로 닫으시기 전에 구독해두시는 걸 권합니다. 공감♥ 하나는 저에게 &#39;그래도 쓰길 잘했다&#39;는 다음 문장이 되어 돌아옵니다.</p>
+<p data-ke-size="size16">참고: <a href="https://www.youtube.com/watch?v=WEaYHDjwYjg" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=WEaYHDjwYjg</a></p>
+</div>
+</section>
+</script>
+
+<script>
+function copyText(id){
+  var t=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t);
+}
+function copySrc(){
+  var ta=document.getElementById('src');
+  ta.select();
+  document.execCommand('copy');
+}
+window.onload=function(){
+  var raw=document.getElementById('srcData').innerHTML;
+  document.getElementById('src').value=raw.trim();
+  document.getElementById('previewArea').innerHTML=raw;
+};
+</script>
+</body>
+</html>
