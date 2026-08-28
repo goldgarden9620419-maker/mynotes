@@ -1,0 +1,388 @@
+<title>블로그+스레드 발행 스튜디오 — 잃어버린 기억은 없었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-27</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>잃어버린 기억은 없었다 (단서, 오감, 숙면)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">비교검증형</span><span class="chip accent">반전 질문형 훅</span><span class="chip accent">소제목 2개(팩트·경험 대비)</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">건망증</span><span class="chip">기억력</span><span class="chip">치매예방</span><span class="chip">뇌건강</span><span class="chip">프루스트효과</span><span class="chip">숙면</span><span class="chip">뇌과학</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=kcie_y3MlBo" target="_blank" rel="noopener noreferrer">"치매는 기억을 잃는 병이 아니었습니다" (문제일 교수)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=kcie_y3MlBo" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"치매는 기억을 잃는 병이 아니었습니다… 뇌과학자가 밝힌 충격적인 진실" (대구경북과학기술원 뇌과학과 문제일 교수)<br />https://www.youtube.com/watch?v=kcie_y3MlBo</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">DGIST 뇌과학과 문제일 교수의 강의입니다. 치매의 종류(알츠하이머 70% 이상, 혈관성 치매는 동양인에 많음, 전두측두엽 치매 등)와 진행 3단계(시간→장소→사람, 마지막엔 거울 속 자기도 못 알아봄)를 소개합니다. 핵심은 인그램 셀(기억 흔적 세포) 연구 — 치매 동물의 사라진 줄 알았던 기억을 광유전학 자극으로 되살려낸 실험으로, 치매 초기의 기억은 지워진 것이 아니라 숨겨진 것(못 찾는 것)임이 밝혀졌다는 내용입니다. 후각은 변연계와 직결되어 냄새 하나가 감정·기억을 통째로 불러오고(프루스트 효과), 알츠하이머는 해마보다 후각 부위가 먼저 망가져 판정 10~30년 전부터 신호가 나타난다고 합니다(익숙한 냄새의 기억·이름이 안 떠오를 때 의심, 피넛 버터 테스트 — 왼쪽 코가 특히 둔해짐, 파킨슨은 몸에서 특유의 냄새 — 간호사 조이 밀런 사례). 콧물 속 아밀로이드 베타로 조기 진단하는 연구, 혈액 바이오마커도 소개됩니다. 예방 전략은 기억에 오감 인식표 달기(필사·요리처럼 여러 감각을 쓰는 활동, 쇼츠 같은 단일 감각 자극 줄이기, 내비 끄고 새 길 가기, 후각 훈련 키트 — 4가지 향 12주), 뇌는 게으르고 새것을 좋아하며 쓰지 않으면 퇴화한다는 것(Fire together, wire together), 산책은 디폴트 모드 네트워크로 기억을 정리하고 해마의 새 세포 생성을 돕는다는 것, 그리고 숙면 중에만 작동하는 글림프 시스템이 아밀로이드 베타 등 노폐물을 청소하므로 깊은 잠이 치매 예방에 결정적이라는 것입니다. 나이를 핑계 대지 말고 새로운 일에 뛰어들라는 조언으로 마무리됩니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">나도 어느 순간부터 나이가 들어가는 것을 그냥 받아들이기보다는 내가 할 수 있는 것을 꾸준히 해보자는 생각으로 생활을 바꾸기 시작했다. 아침에 일찍 일어나 걷고 명상을 하고 책을 읽는 것도 그렇게 시작한 습관이다. 처음에는 좋은 습관 하나 만들어보자는 정도였는데 지금은 매일 반복하면서 생각보다 나에게 많은 변화가 생겼다고 느낀다. 특히 책을 읽고 글을 쓰면서 예전에는 그냥 지나쳤던 것들을 한 번 더 생각하게 되었다. 요즘은 AI도 공부하고 블로그에 글도 쓰면서 내가 잘 모르는 새로운 것들을 계속 배우려고 한다. 솔직히 나이가 들수록 새로운 것을 배우는 게 예전처럼 쉽지는 않다. 한 번 들었다고 바로 기억나는 것도 아니고 몇 번씩 다시 봐야 이해될 때도 있다. 그래도 모른다고 포기하기보다는 천천히라도 계속 해보려고 한다. 이번 내용을 보면서 내가 지금 하고 있는 독서나 글쓰기, 걷기, 새로운 공부들이 단순한 자기계발만은 아니라는 생각이 들었다. 앞으로도 나이를 핑계로 편한 것만 찾기보다는 조금 귀찮고 어려워도 새로운 것을 배우고 경험하면서 살고 싶다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">이번 내용을 보면서 가장 공감했던 부분은 나이가 들었다고 해서 뇌도 자연스럽게 늙는다고 생각하고 아무것도 하지 않는 것이 오히려 더 큰 문제일 수 있다는 점이다. 새로운 것을 배우고 책을 읽고 글을 쓰고 걷는 것처럼 계속 뇌에 자극을 주는 것이 중요하다는 말에 공감한다. 나 역시 예전에는 나이가 들면 새로운 것을 배우는 것이 늦었다고 생각한 적도 있었지만 지금은 생각이 많이 달라졌다. 다만 치매 예방을 위해 무조건 새로운 것을 많이 해야 한다는 식으로 받아들일 필요는 없다고 생각한다. 억지로 무언가를 계속 배우는 것도 오히려 스트레스가 될 수 있기 때문이다. 중요한 것은 거창한 도전보다 내가 할 수 있는 범위에서 꾸준히 하는 것이라고 생각한다. 책을 몇 페이지라도 읽고, 걷고, 글을 쓰고, 평소와 다른 것을 하나씩 해보는 것도 충분히 의미가 있다. 결국 나이가 중요한 것이 아니라 내가 하루를 어떻게 보내고 무엇을 배우면서 살아가느냐가 더 중요하지 않을까 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">잃어버린 기억은 없었다 (단서, 오감, 숙면)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">건망증,기억력,치매예방,뇌건강,프루스트효과,오감자극,숙면,글림프시스템,후각,뇌과학</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">요즘 부쩍 깜빡해서 나 치매인가 싶었음.
+
+근데 뇌과학 보니까 초기 기억은 지워진 게 아니고 숨어 있는 거였음.
+
+정리해봄.
+
+1. 치매 초기는 기억이 사라진 게 아니라 꺼낼 단서를 잃은 상태임
+2. 냄새는 기억의 비밀통로 - 향 하나로 잊은 기억이 통째로 돌아옴 (프루스트 효과)
+3. 오감을 섞어 기억하면 인식표가 많아져 훨씬 오래감 - 눈으로만 읽지 말고 쓰면서 읽기
+4. 뇌 청소는 깊이 잘 때만 돌아감 - 숙면이 곧 치매 예방임
+5. 익숙한 냄새가 낯설게 느껴지면 그냥 넘기지 말 것 - 후각은 10년 먼저 오는 경고임
+
+오늘은 내비 끄고 새 길로 한번 돌아가보시길 🌱
+
+이런 뇌 건강 정리 계속 올림. 깜빡하는 날 꺼내 보고 싶으면 팔로우, 도움 됐으면 좋아요 하나면 충분함</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">잃어버린 기억은 없었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">치매는 기억이 지워지는 병일까요? 저는 당연히 그런 줄 알았습니다. 그런데 뇌과학 강의를 보니 초기 치매의 기억은 뇌 속 어딘가에 숨어 있을 뿐이라고 합니다. 냉장고 앞에서 뭘 꺼내려 했는지 잊는 일이 부쩍 늘어난 저에게는 귀가 번쩍 뜨이는 이야기였습니다.<br /><br />깜빡하는 뇌를 어떻게 지켜야 할지, 팩트와 제 실천을 나눠 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">뇌 속 기억은 단서를 기다리고 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">일반적으로 깜빡하는 일이 잦아지면 치매부터 걱정하게 됩니다. 그런데 건망증과 치매는 작동 방식부터 다르다고 합니다. 건망증은 저장된 정보를 일시적으로 꺼내지 못하는 상태라 힌트를 주면 대부분 기억이 되살아납니다. 어제 만난 사람 이름이 안 떠오르다가 첫 글자를 듣는 순간 튀어나오는 경우가 여기에 해당합니다.<br /><br />더 놀라운 건 치매 초기도 비슷하다는 연구입니다. 인그램 셀 연구가 그 근거인데, 인그램 셀이란 하나의 기억이 저장될 때 함께 활성화된 신경 세포 무리를 가리키는 말로 흔히 기억 흔적 세포라고 부릅니다. 치매 동물의 사라진 줄 알았던 기억을 광유전학으로 자극했더니 다시 살아났습니다. 광유전학이란 빛으로 특정 신경 세포를 켜고 끄는 기술입니다. 치매 초기의 기억은 지워진 게 아니라 꺼낼 단서를 잃은 상태였던 겁니다.<br /><br />그 단서 중 가장 강력한 게 냄새입니다. 후각 세포는 기억과 감정을 다루는 변연계와 직통으로 연결되어 있어서 향 하나가 그때의 장면과 감정을 통째로 불러옵니다. 이걸 프루스트 효과라고 하는데, 홍차에 적신 과자 냄새로 어린 시절 기억을 되살린 소설가의 이름에서 온 표현입니다.<br /><br />후각은 경고등 역할도 합니다. 알츠하이머에서는 기억을 담당하는 해마보다 후각 담당 부위가 먼저 망가져서, 빠르면 판정 10년 전부터 신호가 나타난다고 합니다. 익숙한 냄새인데 관련된 기억이나 이름이 떠오르지 않으면 의심해볼 필요가 있습니다. 미국에서는 눈을 감고 한쪽 코씩 땅콩버터 냄새를 맡아보는 피넛 버터 테스트를 쓰는데, 왼쪽 코가 유난히 둔해졌을 때를 신호로 봅니다.<br /><br />참고: <a href="https://www.snuh.org/health/nMedInfo/nView.do?medid=AA001223" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 서울대학교병원 의학정보(건망증)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 깜빡함 자체보다 익숙한 냄새를 못 알아보는 게 진짜 경고입니다. 초기 기억은 숨어 있을 뿐이라 단서만 있으면 찾을 수 있습니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">오감을 쓰는 하루가 저의 예방법입니다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">기억이 숨는 거라면 찾기 쉽게 인식표를 많이 달아두면 됩니다. 눈으로만 읽은 기억보다 보고 듣고 쓰고 냄새까지 얹은 기억이 훨씬 오래가는 이유입니다. 뇌는 쓰지 않는 길을 폐허로 만들고 자주 다니는 길만 넓히는 기관이라, 한 가지 감각만 쓰는 쇼츠 시청 같은 활동만 반복하면 나머지 부위는 서서히 잠들게 됩니다.<br /><br />저도 어느 순간부터 나이 드는 걸 그냥 받아들이기보다 할 수 있는 걸 꾸준히 해보자는 쪽으로 생활을 바꿨습니다. 아침에 일찍 일어나 걷고 명상을 하고 책을 읽는 습관이 그렇게 시작됐습니다. 요즘은 블로그에 글을 쓰고 AI 공부도 하면서 잘 모르는 것들을 계속 배우고 있습니다. 솔직히 나이가 들수록 한 번 들었다고 바로 기억되지 않고 몇 번씩 다시 봐야 할 때도 많습니다. 그래도 이 반복 자체가 뇌에는 운동이 된다는 걸 알고 나니 포기할 이유가 없어졌습니다.<br /><br />걷기도 단순한 운동이 아니었습니다. 멍하니 걸을 때 뇌에서는 디폴트 모드 네트워크가 켜지는데, 이는 흐트러진 기억과 생각을 정리하는 뇌의 청소 회로 같은 것입니다. 밤의 숙면은 한 발 더 나아갑니다. 깊은 잠에 들었을 때만 글림프 시스템이 작동하는데, 글림프 시스템이란 뇌척수액이 신경 세포 사이를 씻어내며 치매 원인 물질로 알려진 아밀로이드 베타 같은 노폐물을 청소하는 배수 장치입니다. 잠을 줄이는 건 뇌 청소를 건너뛰는 셈입니다.<br /><br />다만 저는 치매가 무섭다고 억지로 새로운 걸 잔뜩 배워야 한다고 보지는 않습니다. 억지 도전은 오히려 스트레스가 되기 때문입니다. 거창한 계획보다 제가 할 수 있는 범위에서 꾸준히 하는 게 중요하다고 생각합니다. 제가 지키는 건 세 가지입니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">하루 한 번은 눈 말고 다른 감각을 하나 더 써서 기억한다 — 쓰면서 읽기, 향을 맡으며 정리하기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">내비게이션이나 쇼츠처럼 뇌를 대신 써주는 것들을 하루 한 번은 끄고 새 길로 가본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">밤에는 뇌 청소 시간을 지킨다 — 야식과 휴대폰 대신 숙면</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.amc.seoul.kr/asan/mobile/healthstory/medicalcolumn/medicalColumnDetail.do?medicalColumnId=33937" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 서울아산병원 메디컬칼럼(건망증과 치매)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 오감으로 인식표를 달고, 뇌 대신 일해주는 도구를 하루 한 번 끄고, 숙면으로 뇌를 청소합니다. 거창한 도전보다 이 꾸준함이 저의 예방법입니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 깜빡할 때마다 치매 걱정하는 나, 유난인 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 구분법을 알고 나니 걱정이 줄었습니다. 힌트를 들으면 기억이 되살아나는 건 대개 건망증이었습니다. 대신 익숙한 냄새가 낯설게 느껴지는지는 가끔 점검해보기로 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 이 나이에 새 공부, 너무 늦은 거 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 해마는 어른이 되어서도 새 신경 세포를 만드는 유일한 곳이라고 합니다. 그러니 늦지 않았다고 저는 결론지었습니다. 몇 번씩 다시 봐야 외워지는 요즘의 공부도 그 자체로 뇌 운동이었습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 꼭 그렇게까지 새로운 걸 해야 해?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 억지로는 안 하기로 했습니다. 스트레스가 되면 역효과니까요. 새 길로 걸어보기, 새 향 맡아보기, 책 몇 페이지 읽기 정도면 충분하다는 게 제 판단입니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 오늘 밤 당장 뭐부터 할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 휴대폰을 일찍 내려놓고 뇌 청소 시간을 지킬 겁니다. 자기 전에 오늘 배운 것 하나를 손으로 적어보려 합니다. 눈과 손을 같이 쓰면 인식표가 두 개 달리는 셈이니까요.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 이제 깜빡하는 순간마다 겁먹는 대신 뇌에 인식표를 늘리는 쪽을 택했습니다. 오감을 섞어 기억하고, 뇌 대신 일해주는 도구를 가끔 끄고, 밤에는 뇌 청소 시간을 지키는 것. 나이를 핑계 삼지 않고 새로운 걸 조금씩 배우는 하루하루가 결국 기억을 지키는 길이라고 믿습니다.<br /><br />오늘 퇴근길엔 내비게이션을 끄고 새 길로 한번 돌아가보시길 권합니다. 뇌가 오랜만에 기분 좋게 일하는 느낌이 들 겁니다.<br /><br />다음에 또 깜빡하는 날 이 글의 위치까지 깜빡하지 않으시려면 구독해두시는 걸 권합니다. 공감♥ 하나는 제 뇌에 &#39;이 글 쓰길 잘했다&#39;는 단서로 남겨두겠습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.youtube.com/watch?v=kcie_y3MlBo" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=kcie_y3MlBo</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-memory-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
