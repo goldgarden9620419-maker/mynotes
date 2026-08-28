@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basalt — Notes that stay yours</title>
+<style>
+  /* DESIGN.md 토큰 (linear-design-analysis) */
+  :root {
+    --primary: #5e6ad2; --on-primary: #ffffff; --primary-hover: #828fff; --primary-focus: #5e69d1;
+    --ink: #f7f8f8; --ink-muted: #d0d6e0; --ink-subtle: #8a8f98; --ink-tertiary: #62666d;
+    --canvas: #010102; --surface-1: #0f1011; --surface-2: #141516; --surface-3: #18191a;
+    --hairline: #23252a; --hairline-strong: #34343a;
+    --r-xs: 4px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-pill: 9999px;
+    --sp-xxs: 4px; --sp-xs: 8px; --sp-sm: 12px; --sp-md: 16px; --sp-lg: 24px;
+    --sp-xl: 32px; --sp-xxl: 48px; --sp-section: 96px;
+    --font: "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--canvas); color: var(--ink); font-family: var(--font);
+         font-size: 16px; line-height: 1.5; letter-spacing: -0.05px; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 var(--sp-xl); }
+  a { color: inherit; text-decoration: none; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px;
+         padding: 8px 14px; border-radius: var(--r-md); border: none; cursor: pointer;
+         font-family: var(--font); font-size: 14px; font-weight: 500; line-height: 1.2; }
+  .btn-primary { background: var(--primary); color: var(--on-primary); }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-primary:active { background: var(--primary-focus); }
+  .btn-secondary { background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline); }
+  .btn:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; }
+
+  /* top-nav */
+  .top-nav { height: 56px; display: flex; align-items: center; border-bottom: 1px solid var(--hairline);
+             position: sticky; top: 0; background: var(--canvas); z-index: 10; }
+  .top-nav .container { display: flex; align-items: center; gap: var(--sp-lg); width: 100%; }
+  .wordmark { display: flex; align-items: center; gap: var(--sp-xs); font-weight: 600; font-size: 15px; }
+  .mark { width: 18px; height: 18px; border-radius: var(--r-xs); background: var(--primary); }
+  .nav-links { display: flex; gap: var(--sp-lg); flex: 1; justify-content: center; font-size: 14px; color: var(--ink-muted); }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-actions { display: flex; gap: var(--sp-xs); }
+
+  /* 1. hero */
+  .hero { padding: var(--sp-section) 0 0; text-align: center; }
+  .eyebrow { font-size: 13px; font-weight: 500; letter-spacing: 0.4px; text-transform: uppercase;
+             color: var(--primary); }
+  .hero h1 { font-size: 80px; font-weight: 600; line-height: 1.05; letter-spacing: -3px;
+             margin-top: var(--sp-md); }
+  .hero .sub { font-size: 18px; letter-spacing: -0.1px; color: var(--ink-muted);
+               margin-top: var(--sp-lg); }
+  .hero .actions { display: flex; gap: var(--sp-sm); justify-content: center; margin-top: var(--sp-xl); }
+  .app-frame { margin: var(--sp-section) auto 0; background: var(--surface-1);
+               border: 1px solid var(--hairline); border-radius: var(--r-xl); padding: var(--sp-lg);
+               max-width: 1040px; text-align: left; }
+  .app-window { background: var(--surface-2); border: 1px solid var(--hairline); border-radius: var(--r-md);
+                display: grid; grid-template-columns: 220px 1fr; min-height: 380px; overflow: hidden; }
+  .app-sidebar { border-right: 1px solid var(--hairline); padding: var(--sp-md); font-size: 13px; color: var(--ink-subtle); }
+  .app-sidebar .item { padding: 6px var(--sp-xs); border-radius: var(--r-xs); }
+  .app-sidebar .item.active { background: var(--surface-3); color: var(--ink); }
+  .app-editor { padding: var(--sp-lg); font-family: var(--mono); font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+  .app-editor .h { color: var(--ink); font-weight: 500; }
+  .app-editor .dim { color: var(--ink-tertiary); }
+
+  /* 2. features */
+  .features { padding-top: var(--sp-section); }
+  .features h2 { font-size: 40px; font-weight: 600; line-height: 1.15; letter-spacing: -1px;
+                 margin-top: var(--sp-xs); }
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-md);
+               margin-top: var(--sp-xl); }
+  .feature-card { background: var(--surface-1); border: 1px solid var(--hairline);
+                  border-radius: var(--r-lg); padding: var(--sp-lg); }
+  .feature-card .icon { width: 32px; height: 32px; border: 1px solid var(--hairline-strong);
+                        border-radius: var(--r-md); display: flex; align-items: center; justify-content: center;
+                        color: var(--ink-muted); margin-bottom: var(--sp-md); }
+  .feature-card .icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+  .feature-card h3 { font-size: 22px; font-weight: 500; letter-spacing: -0.4px; line-height: 1.25; }
+  .feature-card p { font-size: 14px; color: var(--ink-subtle); margin-top: var(--sp-xs); }
+
+  /* 3. testimonial */
+  .testimonial { padding-top: var(--sp-section); text-align: center; }
+  .quote { font-size: 32px; font-weight: 400; line-height: 1.35; letter-spacing: -0.6px;
+           max-width: 760px; margin: 0 auto; }
+  .person { display: flex; align-items: center; justify-content: center; gap: var(--sp-sm);
+            margin-top: var(--sp-xl); }
+  .avatar { width: 36px; height: 36px; border-radius: var(--r-pill); background: var(--surface-3);
+            border: 1px solid var(--hairline-strong); display: flex; align-items: center;
+            justify-content: center; font-size: 13px; color: var(--ink-muted); }
+  .person .name { font-size: 14px; text-align: left; }
+  .person .role { font-size: 12px; color: var(--ink-subtle); }
+  .logo-row { display: flex; justify-content: center; gap: var(--sp-xxl); margin-top: var(--sp-section);
+              color: var(--ink-tertiary); font-size: 13px; font-weight: 500; letter-spacing: 0.4px; }
+
+  /* 4. cta + footer */
+  .cta { padding-top: var(--sp-section); }
+  .cta-banner { background: var(--surface-1); border: 1px solid var(--hairline);
+                border-radius: var(--r-lg); padding: var(--sp-xxl); text-align: center;
+                display: flex; flex-direction: column; align-items: center; gap: var(--sp-md); }
+  .cta-banner h2 { font-size: 28px; font-weight: 600; letter-spacing: -0.6px; line-height: 1.2; }
+  .cta-banner p { font-size: 16px; color: var(--ink-muted); }
+  .cta-banner .btn { margin-top: var(--sp-xs); }
+  footer { margin-top: var(--sp-section); border-top: 1px solid var(--hairline); padding: 64px 32px; }
+  footer .container { display: flex; justify-content: space-between; gap: var(--sp-xl); flex-wrap: wrap; padding: 0; }
+  .foot-cols { display: flex; gap: var(--sp-section); flex-wrap: wrap; }
+  .foot-col h4 { font-size: 12px; font-weight: 500; color: var(--ink-muted); margin-bottom: var(--sp-sm); }
+  .foot-col a { display: block; font-size: 12px; color: var(--ink-subtle); line-height: 2; }
+  .foot-col a:hover { color: var(--ink); }
+
+  @media (max-width: 1024px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hero h1 { font-size: 40px; letter-spacing: -1px; }
+    .hero, .features, .testimonial, .cta { padding-top: var(--sp-xxl); }
+    .card-grid { grid-template-columns: 1fr; }
+    .app-window { grid-template-columns: 1fr; }
+    .app-sidebar { display: none; }
+    .quote { font-size: 22px; }
+    .logo-row { flex-wrap: wrap; gap: var(--sp-lg); }
+    .app-frame { margin-top: var(--sp-xxl); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="wordmark"><span class="mark"></span>Basalt</div>
+    <div class="nav-links"><a href="#features">Features</a><a href="#">Docs</a><a href="#">Pricing</a><a href="#">Changelog</a></div>
+    <div class="nav-actions">
+      <button class="btn btn-secondary">Sign in</button>
+      <button class="btn btn-primary">Get started</button>
+    </div>
+  </div>
+</nav>
+
+<!-- 1. Hero -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Local-first notes</span>
+    <h1>Notes that stay yours.</h1>
+    <p class="sub">Plain markdown files on your disk, synced with git.</p>
+    <div class="actions">
+      <button class="btn btn-primary">Get started</button>
+      <button class="btn btn-secondary">Read the docs</button>
+    </div>
+    <div class="app-frame">
+      <div class="app-window">
+        <div class="app-sidebar">
+          <div class="item">00-Inbox</div>
+          <div class="item active">weekly-review.md</div>
+          <div class="item">reading-notes.md</div>
+          <div class="item">project-basalt.md</div>
+          <div class="item">travel-2026.md</div>
+        </div>
+        <div class="app-editor">
+          <div class="h"># Weekly review</div>
+          <br>
+          <div>Shipped the sync fix on Tuesday. The vault now</div>
+          <div>pulls before every commit, so conflicts are rare.</div>
+          <br>
+          <div class="dim">- [x] merge sync branch</div>
+          <div class="dim">- [ ] write changelog entry</div>
+          <div class="dim">- [ ] tag v0.4.0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Features -->
+<section class="features" id="features">
+  <div class="container">
+    <span class="eyebrow">Why Basalt</span>
+    <h2>Built on files, not lock-in.</h2>
+    <div class="card-grid">
+      <div class="feature-card">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg></div>
+        <h3>Plain markdown</h3>
+        <p>Every note is a .md file you can open anywhere.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.3 6.8 15.7 11M8.3 17.2 15.7 13"/></svg></div>
+        <h3>Git sync</h3>
+        <p>Commit, push, and pull your whole vault.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.8-4.8"/></svg></div>
+        <h3>Instant search</h3>
+        <p>Find any line across thousands of notes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Testimonial -->
+<section class="testimonial">
+  <div class="container">
+    <p class="quote">“I stopped worrying about losing ten years of notes. They are just files, and they are mine.”</p>
+    <div class="person">
+      <span class="avatar">DP</span>
+      <div><div class="name">Dana Park</div><div class="role">technical writer</div></div>
+    </div>
+    <div class="logo-row">
+      <span>FIELDNOTE</span><span>ARCHIVA</span><span>PAPERTRAIL</span><span>DRAFTHOUSE</span><span>MARGIN</span>
+    </div>
+  </div>
+</section>
+
+<!-- 4. CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Start writing tonight.</h2>
+      <p>Free for personal vaults. Your files, forever.</p>
+      <button class="btn btn-primary">Get started</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="wordmark"><span class="mark" style="width:14px;height:14px;"></span><span style="color: var(--ink-muted);">Basalt</span></div>
+    <div class="foot-cols">
+      <div class="foot-col"><h4>Product</h4><a href="#">Features</a><a href="#">Pricing</a><a href="#">Changelog</a></div>
+      <div class="foot-col"><h4>Resources</h4><a href="#">Docs</a><a href="#">Guides</a><a href="#">Support</a></div>
+      <div class="foot-col"><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="#">Contact</a></div>
+      <div class="foot-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
