@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#010102">
 <title>Basalt — Notes that stay yours</title>
 <style>
   /* DESIGN.md 토큰 (linear-design-analysis) */
   :root {
+    color-scheme: dark;
     --primary: #5e6ad2; --on-primary: #ffffff; --primary-hover: #828fff; --primary-focus: #5e69d1;
     --ink: #f7f8f8; --ink-muted: #d0d6e0; --ink-subtle: #8a8f98; --ink-tertiary: #62666d;
     --canvas: #010102; --surface-1: #0f1011; --surface-2: #141516; --surface-3: #18191a;
@@ -22,14 +24,22 @@
          font-size: 16px; line-height: 1.5; letter-spacing: -0.05px; }
   .container { max-width: 1280px; margin: 0 auto; padding: 0 var(--sp-xl); }
   a { color: inherit; text-decoration: none; }
+  a:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; border-radius: var(--r-xs); }
+  h1, h2 { text-wrap: balance; }
+  .skip-link { position: absolute; left: var(--sp-md); top: -100px; z-index: 20;
+               background: var(--surface-2); color: var(--ink); padding: 8px 14px;
+               border-radius: var(--r-md); border: 1px solid var(--hairline-strong); font-size: 14px; }
+  .skip-link:focus-visible { top: var(--sp-md); }
 
   .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px;
          padding: 8px 14px; border-radius: var(--r-md); border: none; cursor: pointer;
-         font-family: var(--font); font-size: 14px; font-weight: 500; line-height: 1.2; }
+         font-family: var(--font); font-size: 14px; font-weight: 500; line-height: 1.2;
+         touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .btn-primary { background: var(--primary); color: var(--on-primary); }
   .btn-primary:hover { background: var(--primary-hover); }
   .btn-primary:active { background: var(--primary-focus); }
   .btn-secondary { background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline); }
+  .btn-secondary:hover { background: var(--surface-2); border-color: var(--hairline-strong); }
   .btn:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; }
 
   /* top-nav */
@@ -64,7 +74,7 @@
   .app-editor .dim { color: var(--ink-tertiary); }
 
   /* 2. features */
-  .features { padding-top: var(--sp-section); }
+  .features { padding-top: var(--sp-section); scroll-margin-top: 72px; }
   .features h2 { font-size: 40px; font-weight: 600; line-height: 1.15; letter-spacing: -1px;
                  margin-top: var(--sp-xs); }
   .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-md);
@@ -103,7 +113,7 @@
   footer { margin-top: var(--sp-section); border-top: 1px solid var(--hairline); padding: 64px 32px; }
   footer .container { display: flex; justify-content: space-between; gap: var(--sp-xl); flex-wrap: wrap; padding: 0; }
   .foot-cols { display: flex; gap: var(--sp-section); flex-wrap: wrap; }
-  .foot-col h4 { font-size: 12px; font-weight: 500; color: var(--ink-muted); margin-bottom: var(--sp-sm); }
+  .foot-title { font-size: 12px; font-weight: 500; color: var(--ink-muted); margin-bottom: var(--sp-sm); }
   .foot-col a { display: block; font-size: 12px; color: var(--ink-subtle); line-height: 2; }
   .foot-col a:hover { color: var(--ink); }
 
@@ -123,16 +133,20 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main">Skip to content</a>
+
 <nav class="top-nav">
   <div class="container">
     <div class="wordmark"><span class="mark"></span>Basalt</div>
     <div class="nav-links"><a href="#features">Features</a><a href="#">Docs</a><a href="#">Pricing</a><a href="#">Changelog</a></div>
     <div class="nav-actions">
-      <button class="btn btn-secondary">Sign in</button>
-      <button class="btn btn-primary">Get started</button>
+      <a class="btn btn-secondary" href="#">Sign in</a>
+      <a class="btn btn-primary" href="#">Get started</a>
     </div>
   </div>
 </nav>
+
+<main id="main">
 
 <!-- 1. Hero -->
 <section class="hero">
@@ -141,8 +155,8 @@
     <h1>Notes that stay yours.</h1>
     <p class="sub">Plain markdown files on your disk, synced with git.</p>
     <div class="actions">
-      <button class="btn btn-primary">Get started</button>
-      <button class="btn btn-secondary">Read the docs</button>
+      <a class="btn btn-primary" href="#">Get started</a>
+      <a class="btn btn-secondary" href="#">Read the docs</a>
     </div>
     <div class="app-frame">
       <div class="app-window">
@@ -175,17 +189,17 @@
     <h2>Built on files, not lock-in.</h2>
     <div class="card-grid">
       <div class="feature-card">
-        <div class="icon"><svg viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg></div>
+        <div class="icon"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg></div>
         <h3>Plain markdown</h3>
         <p>Every note is a .md file you can open anywhere.</p>
       </div>
       <div class="feature-card">
-        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.3 6.8 15.7 11M8.3 17.2 15.7 13"/></svg></div>
+        <div class="icon"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.3 6.8 15.7 11M8.3 17.2 15.7 13"/></svg></div>
         <h3>Git sync</h3>
         <p>Commit, push, and pull your whole vault.</p>
       </div>
       <div class="feature-card">
-        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.8-4.8"/></svg></div>
+        <div class="icon"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.8-4.8"/></svg></div>
         <h3>Instant search</h3>
         <p>Find any line across thousands of notes.</p>
       </div>
@@ -213,19 +227,21 @@
     <div class="cta-banner">
       <h2>Start writing tonight.</h2>
       <p>Free for personal vaults. Your files, forever.</p>
-      <button class="btn btn-primary">Get started</button>
+      <a class="btn btn-primary" href="#">Get started</a>
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="container">
     <div class="wordmark"><span class="mark" style="width:14px;height:14px;"></span><span style="color: var(--ink-muted);">Basalt</span></div>
     <div class="foot-cols">
-      <div class="foot-col"><h4>Product</h4><a href="#">Features</a><a href="#">Pricing</a><a href="#">Changelog</a></div>
-      <div class="foot-col"><h4>Resources</h4><a href="#">Docs</a><a href="#">Guides</a><a href="#">Support</a></div>
-      <div class="foot-col"><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="#">Contact</a></div>
-      <div class="foot-col"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+      <div class="foot-col"><div class="foot-title">Product</div><a href="#">Features</a><a href="#">Pricing</a><a href="#">Changelog</a></div>
+      <div class="foot-col"><div class="foot-title">Resources</div><a href="#">Docs</a><a href="#">Guides</a><a href="#">Support</a></div>
+      <div class="foot-col"><div class="foot-title">Company</div><a href="#">About</a><a href="#">Blog</a><a href="#">Contact</a></div>
+      <div class="foot-col"><div class="foot-title">Legal</div><a href="#">Privacy</a><a href="#">Terms</a></div>
     </div>
   </div>
 </footer>
