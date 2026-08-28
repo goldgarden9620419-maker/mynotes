@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linear Style Guide — DESIGN.md</title>
+<style>
+  /* ===== DESIGN.md 토큰 — 여기 정의된 값만 사용 ===== */
+  :root {
+    /* colors */
+    --primary: #5e6ad2;
+    --on-primary: #ffffff;
+    --primary-hover: #828fff;
+    --primary-focus: #5e69d1;
+    --ink: #f7f8f8;
+    --ink-muted: #d0d6e0;
+    --ink-subtle: #8a8f98;
+    --ink-tertiary: #62666d;
+    --canvas: #010102;
+    --surface-1: #0f1011;
+    --surface-2: #141516;
+    --surface-3: #18191a;
+    --surface-4: #191a1b;
+    --hairline: #23252a;
+    --hairline-strong: #34343a;
+    --hairline-tertiary: #3e3e44;
+    --inverse-canvas: #ffffff;
+    --inverse-surface-1: #f5f6f6;
+    --inverse-surface-2: #f6f7f7;
+    --inverse-ink: #000000;
+    --brand-secure: #7a7fad;
+    --semantic-success: #27a644;
+    --semantic-overlay: #000000;
+    /* rounded */
+    --r-xs: 4px; --r-sm: 6px; --r-md: 8px; --r-lg: 12px; --r-xl: 16px; --r-xxl: 24px; --r-pill: 9999px;
+    /* spacing */
+    --sp-xxs: 4px; --sp-xs: 8px; --sp-sm: 12px; --sp-md: 16px; --sp-lg: 24px; --sp-xl: 32px; --sp-xxl: 48px; --sp-section: 96px;
+    /* font stacks (DESIGN.md 명시 대체 스택) */
+    --font-display: "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    --font-text: "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-text);
+    font-size: 16px; font-weight: 400; line-height: 1.5; letter-spacing: -0.05px;
+  }
+
+  /* ===== typography 토큰 ===== */
+  .t-display-xl { font-family: var(--font-display); font-size: 80px; font-weight: 600; line-height: 1.05; letter-spacing: -3.0px; }
+  .t-display-lg { font-family: var(--font-display); font-size: 56px; font-weight: 600; line-height: 1.10; letter-spacing: -1.8px; }
+  .t-display-md { font-family: var(--font-display); font-size: 40px; font-weight: 600; line-height: 1.15; letter-spacing: -1.0px; }
+  .t-headline   { font-family: var(--font-display); font-size: 28px; font-weight: 600; line-height: 1.20; letter-spacing: -0.6px; }
+  .t-card-title { font-family: var(--font-display); font-size: 22px; font-weight: 500; line-height: 1.25; letter-spacing: -0.4px; }
+  .t-subhead    { font-family: var(--font-display); font-size: 20px; font-weight: 400; line-height: 1.40; letter-spacing: -0.2px; }
+  .t-body-lg    { font-family: var(--font-text); font-size: 18px; font-weight: 400; line-height: 1.50; letter-spacing: -0.1px; }
+  .t-body       { font-family: var(--font-text); font-size: 16px; font-weight: 400; line-height: 1.50; letter-spacing: -0.05px; }
+  .t-body-sm    { font-family: var(--font-text); font-size: 14px; font-weight: 400; line-height: 1.50; letter-spacing: 0; }
+  .t-caption    { font-family: var(--font-text); font-size: 12px; font-weight: 400; line-height: 1.40; letter-spacing: 0; }
+  .t-button     { font-family: var(--font-text); font-size: 14px; font-weight: 500; line-height: 1.20; letter-spacing: 0; }
+  .t-eyebrow    { font-family: var(--font-text); font-size: 13px; font-weight: 500; line-height: 1.30; letter-spacing: 0.4px; text-transform: uppercase; }
+  .t-mono       { font-family: var(--font-mono); font-size: 13px; font-weight: 400; line-height: 1.50; letter-spacing: 0; }
+
+  /* ===== 레이아웃 ===== */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 var(--sp-xl); }
+  section { padding: var(--sp-section) 0 0; }
+  .section-head { margin-bottom: var(--sp-xl); }
+  .section-head .t-eyebrow { color: var(--primary); display: block; margin-bottom: var(--sp-xs); }
+  .section-head p { color: var(--ink-subtle); margin-top: var(--sp-xs); max-width: 640px; }
+  .token-name { font-family: var(--font-mono); font-size: 13px; color: var(--ink-subtle); }
+
+  /* ===== top-nav 컴포넌트 ===== */
+  .top-nav {
+    height: 56px; background: var(--canvas); border-bottom: 1px solid var(--hairline);
+    display: flex; align-items: center; position: sticky; top: 0; z-index: 10;
+  }
+  .top-nav .container { display: flex; align-items: center; gap: var(--sp-lg); width: 100%; }
+  .wordmark { display: flex; align-items: center; gap: var(--sp-xs); font-weight: 600; }
+  .wordmark-dot { width: 18px; height: 18px; border-radius: var(--r-xs); background: var(--primary); }
+  .nav-links { display: flex; gap: var(--sp-lg); flex: 1; justify-content: center; }
+  .nav-links a { color: var(--ink-muted); text-decoration: none; font-size: 14px; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-actions { display: flex; gap: var(--sp-xs); }
+
+  /* ===== 버튼 컴포넌트 ===== */
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px;
+         padding: 8px 14px; border-radius: var(--r-md); border: none; cursor: pointer;
+         font-family: var(--font-text); font-size: 14px; font-weight: 500; line-height: 1.2; }
+  .btn-primary { background: var(--primary); color: var(--on-primary); }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-primary:active { background: var(--primary-focus); }
+  .btn-primary-hover-demo { background: var(--primary-hover); color: var(--on-primary); }
+  .btn-primary-pressed-demo { background: var(--primary-focus); color: var(--on-primary); }
+  .btn-secondary { background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline); }
+  .btn-tertiary { background: var(--canvas); color: var(--ink); }
+  .btn-inverse { background: var(--inverse-canvas); color: var(--inverse-ink); }
+  .btn:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; }
+
+  /* ===== 색 견본 ===== */
+  .swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--sp-md); }
+  .swatch { border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; background: var(--surface-1); }
+  .swatch-chip { height: 72px; }
+  .swatch-meta { padding: var(--sp-sm) var(--sp-md); }
+  .swatch-meta .hex { color: var(--ink-muted); font-family: var(--font-mono); font-size: 12px; }
+  .swatch-group-title { color: var(--ink-muted); margin: var(--sp-lg) 0 var(--sp-sm); }
+
+  /* ===== 타이포 표본 ===== */
+  .type-row { display: flex; align-items: baseline; gap: var(--sp-lg); padding: var(--sp-lg) 0; border-bottom: 1px solid var(--hairline); flex-wrap: wrap; }
+  .type-row .spec { flex: 0 0 220px; }
+  .type-row .spec .token-name { display: block; }
+  .type-row .spec .detail { color: var(--ink-tertiary); font-size: 12px; }
+  .type-sample { overflow-wrap: anywhere; }
+
+  /* ===== 간격/모서리 ===== */
+  .space-row { display: flex; align-items: center; gap: var(--sp-md); padding: var(--sp-xs) 0; }
+  .space-row .token-name { flex: 0 0 140px; }
+  .space-bar { height: 16px; background: var(--primary); border-radius: var(--r-xs); opacity: 0.85; }
+  .radius-grid { display: flex; gap: var(--sp-md); flex-wrap: wrap; }
+  .radius-box { width: 96px; height: 96px; background: var(--surface-2); border: 1px solid var(--hairline-strong);
+                display: flex; align-items: center; justify-content: center; }
+  .radius-box .token-name { color: var(--ink-muted); }
+
+  /* ===== 표면 사다리 ===== */
+  .ladder { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--sp-md); }
+  .ladder-step { border-radius: var(--r-lg); border: 1px solid var(--hairline); padding: var(--sp-lg); min-height: 120px; }
+
+  /* ===== 카드 컴포넌트 ===== */
+  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-md); }
+  .feature-card { background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline);
+                  border-radius: var(--r-lg); padding: var(--sp-lg); }
+  .feature-card h3 { margin-bottom: var(--sp-xs); }
+  .feature-card p { color: var(--ink-subtle); font-size: 14px; }
+  .pricing-card { background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline);
+                  border-radius: var(--r-lg); padding: var(--sp-lg); display: flex; flex-direction: column; gap: var(--sp-md); }
+  .pricing-card-featured { background: var(--surface-2); border-color: var(--hairline-strong); }
+  .pricing-card .price { font-size: 40px; font-weight: 600; letter-spacing: -1.0px; font-family: var(--font-display); }
+  .pricing-card ul { list-style: none; color: var(--ink-muted); font-size: 14px; display: flex; flex-direction: column; gap: var(--sp-xs); }
+  .pricing-card ul li::before { content: "✓"; color: var(--semantic-success); margin-right: var(--sp-xs); }
+  .testimonial-card { background: var(--surface-1); border: 1px solid var(--hairline); border-radius: var(--r-lg);
+                      padding: var(--sp-xl); font-size: 18px; letter-spacing: -0.1px; line-height: 1.5; }
+  .testimonial-card .person { display: flex; align-items: center; gap: var(--sp-sm); margin-top: var(--sp-lg); }
+  .avatar { width: 36px; height: 36px; border-radius: var(--r-pill); background: var(--surface-3); border: 1px solid var(--hairline-tertiary);
+            display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--ink-muted); }
+  .cta-banner { background: var(--surface-1); border: 1px solid var(--hairline); border-radius: var(--r-lg);
+                padding: var(--sp-xxl); text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--sp-lg); }
+
+  /* ===== 필/배지/입력 ===== */
+  .pill-row { display: flex; gap: var(--sp-xs); align-items: center; flex-wrap: wrap; }
+  .pricing-tab { min-height: 36px; padding: 6px 14px; border-radius: var(--r-pill); border: none; cursor: pointer;
+                 font-family: var(--font-text); font-size: 14px; font-weight: 500; }
+  .pricing-tab-default { background: var(--canvas); color: var(--ink-subtle); }
+  .pricing-tab-selected { background: var(--surface-2); color: var(--ink); }
+  .status-badge { background: var(--surface-2); color: var(--ink-muted); border-radius: var(--r-pill);
+                  padding: 2px 8px; font-size: 12px; }
+  .status-badge .dot { display: inline-block; width: 8px; height: 8px; border-radius: var(--r-pill);
+                       background: var(--semantic-success); margin-right: var(--sp-xxs); }
+  .text-input { background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline);
+                border-radius: var(--r-md); padding: 8px 12px; min-height: 44px; width: 100%; max-width: 320px;
+                font-family: var(--font-text); font-size: 16px; }
+  .text-input::placeholder { color: var(--ink-tertiary); }
+  .text-input:focus { outline: 2px solid rgba(94, 105, 209, 0.5); outline-offset: 0; border-color: var(--hairline-strong); }
+  .input-focused-demo { outline: 2px solid rgba(94, 105, 209, 0.5); border-color: var(--hairline-strong); }
+
+  /* ===== footer ===== */
+  footer { background: var(--canvas); color: var(--ink-subtle); padding: 64px 32px; margin-top: var(--sp-section);
+           border-top: 1px solid var(--hairline); font-size: 12px; }
+  footer .container { display: flex; justify-content: space-between; gap: var(--sp-lg); flex-wrap: wrap; }
+
+  /* ===== 반응형 (DESIGN.md 브레이크포인트) ===== */
+  @media (max-width: 1024px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .t-display-xl { font-size: 40px; letter-spacing: -1.0px; }
+    .t-display-lg { font-size: 36px; letter-spacing: -1.0px; }
+    section { padding-top: var(--sp-xxl); }
+  }
+</style>
+</head>
+<body>
+
+<!-- top-nav -->
+<nav class="top-nav">
+  <div class="container">
+    <div class="wordmark t-body-sm"><span class="wordmark-dot"></span>Style Guide</div>
+    <div class="nav-links">
+      <a href="#colors">색</a><a href="#type">글꼴</a><a href="#space">간격·모서리</a><a href="#buttons">버튼</a><a href="#cards">카드</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-secondary">Sign in</button>
+      <button class="btn btn-primary">Get started</button>
+    </div>
+  </div>
+</nav>
+
+<!-- 헤더 -->
+<header class="container" style="padding-top: var(--sp-section);">
+  <span class="t-eyebrow" style="color: var(--primary);">DESIGN.MD · LINEAR-DESIGN-ANALYSIS</span>
+  <h1 class="t-display-xl" style="margin-top: var(--sp-md);">스타일 가이드</h1>
+  <p class="t-body-lg" style="color: var(--ink-muted); margin-top: var(--sp-lg); max-width: 640px;">
+    프로젝트 루트 DESIGN.md에 정의된 색, 글꼴, 간격, 컴포넌트 토큰을 그대로 렌더링한 견본 페이지입니다.
+    여기 보이는 모든 값은 DESIGN.md에서 왔습니다 — 새로 만든 색이나 글꼴은 없습니다.
+  </p>
+  <div style="margin-top: var(--sp-lg);"><span class="status-badge"><span class="dot"></span>tokens: colors 24 · type 13 · spacing 8 · rounded 8</span></div>
+</header>
+
+<!-- 색 -->
+<section id="colors">
+  <div class="container">
+    <div class="section-head">
+      <span class="t-eyebrow">01 · Colors</span>
+      <h2 class="t-display-md">색</h2>
+      <p class="t-body">강조색은 라벤더 블루 하나뿐이고, 위계는 4단계 표면 사다리가 만듭니다.</p>
+    </div>
+
+    <p class="swatch-group-title t-body-sm">브랜드 · 강조</p>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#5e6ad2"></div><div class="swatch-meta"><span class="token-name">primary</span><div class="hex">#5e6ad2</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#828fff"></div><div class="swatch-meta"><span class="token-name">primary-hover</span><div class="hex">#828fff</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#5e69d1"></div><div class="swatch-meta"><span class="token-name">primary-focus</span><div class="hex">#5e69d1</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#7a7fad"></div><div class="swatch-meta"><span class="token-name">brand-secure</span><div class="hex">#7a7fad</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#27a644"></div><div class="swatch-meta"><span class="token-name">semantic-success</span><div class="hex">#27a644</div></div></div>
+    </div>
+
+    <p class="swatch-group-title t-body-sm">표면 (Surface Ladder)</p>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#010102"></div><div class="swatch-meta"><span class="token-name">canvas</span><div class="hex">#010102</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#0f1011"></div><div class="swatch-meta"><span class="token-name">surface-1</span><div class="hex">#0f1011</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#141516"></div><div class="swatch-meta"><span class="token-name">surface-2</span><div class="hex">#141516</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#18191a"></div><div class="swatch-meta"><span class="token-name">surface-3</span><div class="hex">#18191a</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#191a1b"></div><div class="swatch-meta"><span class="token-name">surface-4</span><div class="hex">#191a1b</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#23252a"></div><div class="swatch-meta"><span class="token-name">hairline</span><div class="hex">#23252a</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#34343a"></div><div class="swatch-meta"><span class="token-name">hairline-strong</span><div class="hex">#34343a</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#3e3e44"></div><div class="swatch-meta"><span class="token-name">hairline-tertiary</span><div class="hex">#3e3e44</div></div></div>
+    </div>
+
+    <p class="swatch-group-title t-body-sm">글자</p>
+    <div class="swatch-grid">
+      <div class="swatch"><div class="swatch-chip" style="background:#f7f8f8"></div><div class="swatch-meta"><span class="token-name">ink</span><div class="hex">#f7f8f8</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#d0d6e0"></div><div class="swatch-meta"><span class="token-name">ink-muted</span><div class="hex">#d0d6e0</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#8a8f98"></div><div class="swatch-meta"><span class="token-name">ink-subtle</span><div class="hex">#8a8f98</div></div></div>
+      <div class="swatch"><div class="swatch-chip" style="background:#62666d"></div><div class="swatch-meta"><span class="token-name">ink-tertiary</span><div class="hex">#62666d</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 표면 사다리 -->
+<section>
+  <div class="container">
+    <div class="section-head">
+      <span class="t-eyebrow">02 · Elevation</span>
+      <h2 class="t-display-md">표면 사다리</h2>
+      <p class="t-body">그림자 대신 표면 밝기 단계와 1px 헤어라인 테두리로 깊이를 만듭니다.</p>
+    </div>
+    <div class="ladder">
+      <div class="ladder-step" style="background: var(--canvas);"><span class="token-name">canvas</span><p class="t-body-sm" style="color: var(--ink-subtle); margin-top: var(--sp-xs);">기본 배경</p></div>
+      <div class="ladder-step" style="background: var(--surface-1);"><span class="token-name">surface-1</span><p class="t-body-sm" style="color: var(--ink-subtle); margin-top: var(--sp-xs);">기본 카드</p></div>
+      <div class="ladder-step" style="background: var(--surface-2); border-color: var(--hairline-strong);"><span class="token-name">surface-2</span><p class="t-body-sm" style="color: var(--ink-subtle); margin-top: var(--sp-xs);">추천 카드 · 호버</p></div>
+      <div class="ladder-step" style="background: var(--surface-3);"><span class="token-name">surface-3</span><p class="t-body-sm" style="color: var(--ink-subtle); margin-top: var(--sp-xs);">서브 내비 · 드롭다운</p></div>
+      <div class="ladder-step" style="background: var(--surface-4);"><span class="token-name">surface-4</span><p class="t-body-sm" style="color: var(--ink-subtle); margin-top: var(--sp-xs);">가장 높은 표면</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 타이포그래피 -->
+<section id="type">
+  <div class="container">
+    <div class="section-head">
+      <span class="t-eyebrow">03 · Typography</span>
+      <h2 class="t-display-md">글꼴</h2>
+      <p class="t-body">큰 제목일수록 자간을 강하게 좁힙니다(-3.0px → 0). 제목 600, 본문 400 — 두 굵기가 전부입니다.</p>
+    </div>
+    <div class="type-row"><div class="spec"><span class="token-name">display-xl</span><span class="detail">80px · 600 · -3.0px</span></div><div class="type-sample t-display-xl">계획하고 만들다</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">display-lg</span><span class="detail">56px · 600 · -1.8px</span></div><div class="type-sample t-display-lg">섹션 여는 제목</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">display-md</span><span class="detail">40px · 600 · -1.0px</span></div><div class="type-sample t-display-md">하위 섹션 제목</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">headline</span><span class="detail">28px · 600 · -0.6px</span></div><div class="type-sample t-headline">가격 티어 · CTA 배너 제목</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">card-title</span><span class="detail">22px · 500 · -0.4px</span></div><div class="type-sample t-card-title">기능 카드 제목</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">subhead</span><span class="detail">20px · 400 · -0.2px</span></div><div class="type-sample t-subhead">도입 문단과 리드 본문에 쓰는 크기입니다.</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">body-lg</span><span class="detail">18px · 400 · -0.1px</span></div><div class="type-sample t-body-lg">히어로 서브헤드, 리드 문단.</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">body</span><span class="detail">16px · 400 · -0.05px</span></div><div class="type-sample t-body">기본 본문. 대부분의 글이 이 크기입니다.</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">body-sm</span><span class="detail">14px · 400 · 0</span></div><div class="type-sample t-body-sm">카드 본문, 푸터 칼럼.</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">caption</span><span class="detail">12px · 400 · 0</span></div><div class="type-sample t-caption">캡션, 메타 정보, 상태 표시.</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">button</span><span class="detail">14px · 500 · 0</span></div><div class="type-sample t-button">모든 버튼 레이블</div></div>
+    <div class="type-row"><div class="spec"><span class="token-name">eyebrow</span><span class="detail">13px · 500 · +0.4px</span></div><div class="type-sample t-eyebrow" style="color: var(--primary);">SECTION EYEBROW</div></div>
+    <div class="type-row" style="border-bottom: none;"><div class="spec"><span class="token-name">mono</span><span class="detail">13px · 400 · 0</span></div><div class="type-sample t-mono">const issue = linear.create()</div></div>
+  </div>
+</section>
+
+<!-- 간격 & 모서리 -->
+<section id="space">
+  <div class="container">
+    <div class="section-head">
+      <span class="t-eyebrow">04 · Spacing &amp; Radius</span>
+      <h2 class="t-display-md">간격 · 모서리</h2>
+      <p class="t-body">4px 기본 단위. 버튼·입력창은 8px, 카드는 12px, 스크린샷 패널은 16px 모서리.</p>
+    </div>
+    <div style="margin-bottom: var(--sp-xl);">
+      <div class="space-row"><span class="token-name">xxs · 4px</span><div class="space-bar" style="width:4px"></div></div>
+      <div class="space-row"><span class="token-name">xs · 8px</span><div class="space-bar" style="width:8px"></div></div>
+      <div class="space-row"><span class="token-name">sm · 12px</span><div class="space-bar" style="width:12px"></div></div>
+      <div class="space-row"><span class="token-name">md · 16px</span><div class="space-bar" style="width:16px"></div></div>
+      <div class="space-row"><span class="token-name">lg · 24px</span><div class="space-bar" style="width:24px"></div></div>
+      <div class="space-row"><span class="token-name">xl · 32px</span><div class="space-bar" style="width:32px"></div></div>
+      <div class="space-row"><span class="token-name">xxl · 48px</span><div class="space-bar" style="width:48px"></div></div>
+      <div class="space-row"><span class="token-name">section · 96px</span><div class="space-bar" style="width:96px"></div></div>
+    </div>
+    <div class="radius-grid">
+      <div class="radius-box" style="border-radius: var(--r-xs);"><span class="token-name">xs 4</span></div>
+      <div class="radius-box" style="border-radius: var(--r-sm);"><span class="token-name">sm 6</span></div>
+      <div class="radius-box" style="border-radius: var(--r-md);"><span class="token-name">md 8</span></div>
+      <div class="radius-box" style="border-radius: var(--r-lg);"><span class="token-name">lg 12</span></div>
+      <div class="radius-box" style="border-radius: var(--r-xl);"><span class="token-name">xl 16</span></div>
+      <div class="radius-box" style="border-radius: var(--r-xxl);"><span class="token-name">xxl 24</span></div>
+      <div class="radius-box" style="border-radius: var(--r-pill);"><span class="token-name">pill</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 버튼 -->
+<section id="buttons">
+  <div class="container">
+    <div class="section-head">
+      <span class="t-eyebrow">05 · Buttons</span>
+      <h2 class="t-display-md">버튼</h2>
+      <p class="t-body">모든 버튼은 8px 모서리, 8×14px 패딩. 라벤더는 primary CTA에만 씁니다. 필 모양 CTA 금지.</p>
+    </div>
+    <div class="pill-row" style="gap: var(--sp-md);">
+      <div><button class="btn btn-primary">button-primary</button></div>
+      <div><button class="btn btn-primary-hover-demo">primary-hover</button></div>
+      <div><button class="btn btn-primary-pressed-demo">primary-pressed</button></div>
+      <div><button class="btn btn-secondary">button-secondary</button></div>
+      <div><button class="btn btn-tertiary">button-tertiary</button></div>
+      <div><button class="btn btn-inverse">button-inverse</button></div>
+    </div>
+    <p class="swatch-group-title t-body-sm">가격 탭 · 상태 배지</p>
+    <div class="pill-row">
+      <button class="pricing-tab pricing-tab-selected">월간</button>
+      <button class="pricing-tab pricing-tab-default">연간</button>
+      <span class="status-badge" style="margin-left: var(--sp-md);"><span class="dot"></span>Operational</span>
+      <span class="status-badge">v2.4 출시됨</span>
+    </div>
+    <p class="swatch-group-title t-body-sm">입력창 (기본 · 포커스)</p>
+    <div class="pill-row" style="gap: var(--sp-md); align-items: flex-start;">
+      <input class="text-input" type="text" placeholder="text-input">
+      <input class="text-input input-focused-demo" type="text" value="text-input-focused">
+    </div>
+  </div>
+</section>
+
+<!-- 카드 -->
+<section id="cards">
+  <div class="container">
+    <div class="section-head">
+      <span class="t-eyebrow">06 · Cards</span>
+      <h2 class="t-display-md">카드</h2>
+      <p class="t-body">카드는 surface-1 배경 + 1px 헤어라인 + 12px 모서리. 추천 카드만 surface-2로 한 단계 올립니다.</p>
+    </div>
+
+    <p class="swatch-group-title t-body-sm">feature-card (3-up 그리드)</p>
+    <div class="card-grid">
+      <div class="feature-card"><h3 class="t-card-title">이슈 추적</h3><p>키보드만으로 이슈를 만들고 옮기고 닫습니다.</p></div>
+      <div class="feature-card"><h3 class="t-card-title">프로젝트 보기</h3><p>로드맵과 진행률을 한 화면에서 확인합니다.</p></div>
+      <div class="feature-card"><h3 class="t-card-title">주기 관리</h3><p>스프린트가 자동으로 시작되고 마감됩니다.</p></div>
+    </div>
+
+    <p class="swatch-group-title t-body-sm">pricing-card · pricing-card-featured</p>
+    <div class="card-grid">
+      <div class="pricing-card">
+        <span class="t-headline">Free</span>
+        <span class="price">₩0</span>
+        <ul><li>멤버 무제한</li><li>이슈 250개</li></ul>
+        <button class="btn btn-secondary">시작하기</button>
+      </div>
+      <div class="pricing-card pricing-card-featured">
+        <span class="t-headline">Standard</span>
+        <span class="price">₩12,000</span>
+        <ul><li>이슈 무제한</li><li>어드민 도구</li><li>우선 지원</li></ul>
+        <button class="btn btn-primary">시작하기</button>
+      </div>
+      <div class="pricing-card">
+        <span class="t-headline">Plus</span>
+        <span class="price">₩18,000</span>
+        <ul><li>Standard 전부</li><li>고급 보안</li></ul>
+        <button class="btn btn-secondary">영업팀 문의</button>
+      </div>
+    </div>
+
+    <p class="swatch-group-title t-body-sm">testimonial-card</p>
+    <div class="testimonial-card" style="max-width: 640px;">
+      "도구가 조용해서 일이 잘 보입니다. 화면 어디에도 필요 없는 색이 없어요."
+      <div class="person"><span class="avatar">김</span><div><div class="t-body-sm">김지원</div><div class="t-caption" style="color: var(--ink-subtle);">제품 디자이너</div></div></div>
+    </div>
+
+    <p class="swatch-group-title t-body-sm">cta-banner</p>
+    <div class="cta-banner">
+      <h3 class="t-headline">오늘부터 이 기준으로 만드세요</h3>
+      <p class="t-body" style="color: var(--ink-muted); max-width: 480px;">DESIGN.md의 토큰만 사용하면 어떤 페이지를 만들어도 같은 목소리를 냅니다.</p>
+      <button class="btn btn-primary">Get started</button>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<footer>
+  <div class="container">
+    <div class="wordmark"><span class="wordmark-dot" style="width:14px;height:14px;"></span><span style="color: var(--ink-muted);">Style Guide</span></div>
+    <div>DESIGN.md (linear-design-analysis) 토큰 기반 · 이 페이지의 모든 색·글꼴·간격은 DESIGN.md에서 왔습니다</div>
+  </div>
+</footer>
+
+</body>
+</html>
