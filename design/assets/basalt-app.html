@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Basalt app demo</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --primary: #5e6ad2; --ink: #f7f8f8; --ink-muted: #d0d6e0; --ink-subtle: #8a8f98; --ink-tertiary: #62666d;
+    --canvas: #010102; --surface-1: #0f1011; --surface-2: #141516; --surface-3: #18191a;
+    --hairline: #23252a; --hairline-strong: #34343a;
+    --font: "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--surface-2); color: var(--ink-muted); font-family: var(--font); overflow: hidden; }
+  .app { display: grid; grid-template-columns: 232px 1fr; height: 100vh; }
+  .sidebar { border-right: 1px solid var(--hairline); padding: 14px 10px; font-size: 13px; }
+  .vault { display: flex; align-items: center; gap: 8px; padding: 4px 8px 14px; color: var(--ink); font-weight: 600; font-size: 13px; }
+  .vault .mark { width: 14px; height: 14px; border-radius: 4px; background: var(--primary); }
+  .group { color: var(--ink-tertiary); font-size: 11px; letter-spacing: 0.4px; text-transform: uppercase; padding: 10px 8px 4px; }
+  .item { padding: 5px 8px; border-radius: 4px; color: var(--ink-subtle); }
+  .item.active { background: var(--surface-3); color: var(--ink); }
+  .editor { display: flex; flex-direction: column; }
+  .toolbar { height: 40px; border-bottom: 1px solid var(--hairline); display: flex; align-items: center;
+             padding: 0 16px; gap: 10px; font-size: 12px; color: var(--ink-subtle); }
+  .crumb b { color: var(--ink-muted); font-weight: 500; }
+  .sync { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 12px; }
+  .sync .ok { color: var(--ink-subtle); }
+  .pane { flex: 1; padding: 26px 34px; font-family: var(--mono); font-size: 13.5px; line-height: 1.75; }
+  .h1 { color: var(--ink); font-weight: 600; font-size: 15px; }
+  .dim { color: var(--ink-tertiary); }
+  .accent { color: var(--primary); }
+  p { margin: 12px 0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="vault"><span class="mark"></span>my-vault</div>
+    <div class="group">00-Inbox</div>
+    <div class="item active">weekly-review.md</div>
+    <div class="item">reading-notes.md</div>
+    <div class="item">travel-2026.md</div>
+    <div class="group">01-Projects</div>
+    <div class="item">project-basalt.md</div>
+    <div class="item">home-server.md</div>
+    <div class="group">03-Resources</div>
+    <div class="item">recipes.md</div>
+    <div class="item">book-list.md</div>
+  </aside>
+  <main class="editor">
+    <div class="toolbar">
+      <span class="crumb">00-Inbox / <b>weekly-review.md</b></span>
+      <span class="sync"><span class="accent">↑ 2</span><span class="ok">synced with origin/main</span></span>
+    </div>
+    <div class="pane">
+      <div class="h1"># Weekly review</div>
+      <p>Shipped the sync fix on Tuesday. The vault now pulls<br>before every commit, so conflicts are rare.</p>
+      <p class="dim">- [x] merge sync branch<br>- [ ] write changelog entry<br>- [ ] tag v0.4.0</p>
+      <p>Next week: move the <span class="accent">[[reading-notes]]</span> backlog into<br>projects, and archive anything older than a season.</p>
+    </div>
+  </main>
+</div>
+</body>
+</html>

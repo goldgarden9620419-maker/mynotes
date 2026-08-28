@@ -10,7 +10,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
   const day = daysSinceKst(PRACTICE_START_DATE);
 
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
+    <section className="relative flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center">
       <Mascot />
       <motion.span
         initial={{ opacity: 0, y: 12 }}
@@ -29,9 +29,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         className="max-w-3xl font-serif text-4xl leading-tight font-semibold text-foreground sm:text-6xl lg:text-7xl"
       >
         <span className="block">확언 한 줄로,</span>
-        <span className="block bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent">
-          정말 인생이 바뀔까
-        </span>
+        <span className="block text-accent">정말 인생이 바뀔까</span>
       </motion.h1>
 
       <motion.p
@@ -58,7 +56,7 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
           whileTap={{ scale: 0.98 }}
           className="cursor-pointer rounded-full bg-accent px-8 py-3.5 text-base font-medium text-white shadow-[0_0_40px_-8px_var(--accent-glow)] transition-colors hover:bg-accent/90"
         >
-          오늘 쓴 이야기 읽으러 가기
+          이야기 읽으러 가기
         </motion.a>
         <a
           href="#pillars"
@@ -66,18 +64,6 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
         >
           어떤 이야기인지 보기
         </a>
-      </motion.div>
-
-      <motion.div
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-10 flex flex-col items-center gap-2 text-foreground-muted"
-      >
-        <span className="text-xs tracking-[0.2em] uppercase">Scroll</span>
-        <svg width="16" height="24" viewBox="0 0 16 24" fill="none" aria-hidden="true">
-          <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="8" cy="7" r="1.5" fill="currentColor" />
-        </svg>
       </motion.div>
     </section>
   );

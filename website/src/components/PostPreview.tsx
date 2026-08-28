@@ -24,7 +24,7 @@ export async function PostPreview() {
   const isLive = livePosts.length > 0;
 
   return (
-    <section id="posts" className="relative mx-auto max-w-5xl px-6 py-32">
+    <section id="posts" className="relative mx-auto max-w-5xl scroll-mt-24 px-6 py-32">
       <Reveal className="mb-16 text-center">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
           먼저 살짝 보여드릴게요

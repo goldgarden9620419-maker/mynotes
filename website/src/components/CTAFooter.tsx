@@ -24,7 +24,7 @@ export function CTAFooter({ blogUrl }: { blogUrl: string }) {
           whileTap={{ scale: 0.98 }}
           className="mt-8 cursor-pointer rounded-full bg-accent px-8 py-3.5 text-base font-medium text-white shadow-[0_0_40px_-8px_var(--accent-glow)] transition-colors hover:bg-accent/90"
         >
-          새벽 루틴 기록 보러 가기
+          이야기 읽으러 가기
         </motion.a>
         <p className="mt-10 text-xs text-foreground-muted">
           © 2026 황금정원. 새벽 기상과 확언으로 만든 습관을 기록합니다.

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 type MascotPose = "leaf" | "wave" | "flag" | "heart" | "note";
 
@@ -16,6 +16,7 @@ export function Mascot({
   delay?: number;
 }) {
   const gradientId = `mascotGradient-${pose}`;
+  const reduce = useReducedMotion();
 
   return (
     <motion.div
@@ -26,7 +27,7 @@ export function Mascot({
       aria-hidden="true"
     >
       <motion.div
-        animate={{ y: [0, -12, 0] }}
+        animate={reduce ? undefined : { y: [0, -12, 0] }}
         transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
       >
         <svg width={size} height={size} viewBox="0 0 140 150" fill="none">
@@ -43,7 +44,7 @@ export function Mascot({
             rx="30"
             ry="7"
             fill="#6366f1"
-            animate={{ opacity: [0.22, 0.1, 0.22], scaleX: [1, 0.85, 1] }}
+            animate={reduce ? undefined : { opacity: [0.22, 0.1, 0.22], scaleX: [1, 0.85, 1] }}
             transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
           />
 
@@ -51,7 +52,7 @@ export function Mascot({
             <motion.path
               d="M70 20 C 78 4, 96 4, 100 18 C 88 22, 76 24, 70 20 Z"
               fill="#7c3aed"
-              animate={{ rotate: [-6, 6, -6] }}
+              animate={reduce ? undefined : { rotate: [-6, 6, -6] }}
               transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
               style={{ transformOrigin: "70px 20px" }}
             />
@@ -59,7 +60,7 @@ export function Mascot({
 
           {pose === "flag" && (
             <motion.g
-              animate={{ rotate: [-5, 5, -5] }}
+              animate={reduce ? undefined : { rotate: [-5, 5, -5] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
               style={{ transformOrigin: "70px 30px" }}
             >
@@ -70,7 +71,7 @@ export function Mascot({
 
           {pose === "note" && (
             <motion.g
-              animate={{ y: [0, -3, 0], rotate: [-3, 3, -3] }}
+              animate={reduce ? undefined : { y: [0, -3, 0], rotate: [-3, 3, -3] }}
               transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
               style={{ transformOrigin: "75px 15px" }}
             >
@@ -83,7 +84,7 @@ export function Mascot({
             <motion.path
               d="M100 6 C97 0 88 0 87 8 C86 0 77 0 74 6 C71 14 87 26 87 26 C87 26 103 14 100 6 Z"
               fill="#f472b6"
-              animate={{ scale: [1, 1.15, 1], y: [0, -4, 0] }}
+              animate={reduce ? undefined : { scale: [1, 1.15, 1], y: [0, -4, 0] }}
               transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
               style={{ transformOrigin: "87px 13px" }}
             />
@@ -98,7 +99,7 @@ export function Mascot({
               rx="9"
               ry="15"
               fill={`url(#${gradientId})`}
-              animate={{ rotate: [0, -25, 5, -25, 0] }}
+              animate={reduce ? undefined : { rotate: [0, -25, 5, -25, 0] }}
               transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 0.6, ease: "easeInOut" }}
               style={{ transformOrigin: "118px 55px" }}
             />
@@ -108,7 +109,7 @@ export function Mascot({
           <circle cx="94" cy="90" r="7" fill="#ffffff" opacity="0.18" />
 
           <motion.g
-            animate={{ scaleY: [1, 1, 0.1, 1, 1] }}
+            animate={reduce ? undefined : { scaleY: [1, 1, 0.1, 1, 1] }}
             transition={{
               duration: 4,
               repeat: Infinity,

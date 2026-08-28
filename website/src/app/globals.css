@@ -35,6 +35,9 @@ main > section {
 }
 
 body {
+  /* 한글은 단어 중간에서 끊기지 않게 (모바일 줄바꿈 품질) */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   background:
     radial-gradient(
       ellipse 80% 60% at 50% -10%,

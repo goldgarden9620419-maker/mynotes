@@ -12,7 +12,7 @@ const pillars = [
   },
   {
     title: "부자의 습관",
-    description: "스텔스 웰스, 절제, 자산관리까지 — 부자들의 생각법을 정리합니다.",
+    description: "스텔스 웰스, 절제, 자산관리까지 부자들의 생각법을 정리합니다.",
   },
   {
     title: "사주 · 운세",
@@ -22,7 +22,7 @@ const pillars = [
 
 export function Pillars() {
   return (
-    <section id="pillars" className="relative">
+    <section id="pillars" className="relative scroll-mt-24">
       <Mascot pose="wave" size={100} delay={0.1} className="top-10 right-2 lg:right-10 xl:right-24" />
       <div className="mx-auto max-w-5xl px-6 py-32">
         <Reveal className="mb-16 text-center">
@@ -30,7 +30,7 @@ export function Pillars() {
             작은 습관이 만든 변화
           </h2>
           <p className="mt-4 text-foreground-muted">
-            새벽 기상과 확언, 부자의 마인드셋까지 — 직접 겪고 검증한 이야기만 정리해서 올립니다.
+            새벽 기상과 확언, 부자의 마인드셋까지, 직접 겪고 검증한 이야기만 정리해서 올립니다.
           </p>
         </Reveal>
         <div className="grid gap-5 sm:grid-cols-2">
