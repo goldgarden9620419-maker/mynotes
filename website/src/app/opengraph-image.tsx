@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "황금정원 — 새벽 기상과 확언으로 바꾼 삶을 기록하는 블로그";
+export const alt = "황금정원, 새벽 기상과 확언으로 바꾼 삶을 기록하는 블로그";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

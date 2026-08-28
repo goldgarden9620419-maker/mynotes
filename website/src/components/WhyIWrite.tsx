@@ -24,7 +24,7 @@ const steps = [
 
 export function WhyIWrite() {
   return (
-    <section id="why" className="relative">
+    <section id="why" className="relative scroll-mt-24">
       <Mascot pose="note" size={95} delay={0.1} className="top-10 left-2 lg:left-10 xl:left-20" />
       <div className="mx-auto max-w-4xl px-6 py-32">
         <Reveal className="mb-16 text-center">
