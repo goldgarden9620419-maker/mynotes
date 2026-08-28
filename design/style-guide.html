@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#010102">
 <title>Linear Style Guide — DESIGN.md</title>
 <style>
   /* ===== DESIGN.md 토큰 — 여기 정의된 값만 사용 ===== */
   :root {
+    color-scheme: dark;
     /* colors */
     --primary: #5e6ad2;
     --on-primary: #ffffff;
@@ -67,7 +69,14 @@
 
   /* ===== 레이아웃 ===== */
   .container { max-width: 1280px; margin: 0 auto; padding: 0 var(--sp-xl); }
-  section { padding: var(--sp-section) 0 0; }
+  section { padding: var(--sp-section) 0 0; scroll-margin-top: 72px; }
+  a:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; border-radius: var(--r-xs); }
+  h1, h2 { text-wrap: balance; }
+  .skip-link { position: absolute; left: var(--sp-md); top: -100px; z-index: 20;
+               background: var(--surface-2); color: var(--ink); padding: 8px 14px;
+               border-radius: var(--r-md); border: 1px solid var(--hairline-strong); font-size: 14px;
+               text-decoration: none; }
+  .skip-link:focus-visible { top: var(--sp-md); }
   .section-head { margin-bottom: var(--sp-xl); }
   .section-head .t-eyebrow { color: var(--primary); display: block; margin-bottom: var(--sp-xs); }
   .section-head p { color: var(--ink-subtle); margin-top: var(--sp-xs); max-width: 640px; }
@@ -89,15 +98,19 @@
   /* ===== 버튼 컴포넌트 ===== */
   .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px;
          padding: 8px 14px; border-radius: var(--r-md); border: none; cursor: pointer;
-         font-family: var(--font-text); font-size: 14px; font-weight: 500; line-height: 1.2; }
+         font-family: var(--font-text); font-size: 14px; font-weight: 500; line-height: 1.2;
+         text-decoration: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   .btn-primary { background: var(--primary); color: var(--on-primary); }
   .btn-primary:hover { background: var(--primary-hover); }
   .btn-primary:active { background: var(--primary-focus); }
   .btn-primary-hover-demo { background: var(--primary-hover); color: var(--on-primary); }
   .btn-primary-pressed-demo { background: var(--primary-focus); color: var(--on-primary); }
   .btn-secondary { background: var(--surface-1); color: var(--ink); border: 1px solid var(--hairline); }
+  .btn-secondary:hover { background: var(--surface-2); border-color: var(--hairline-strong); }
   .btn-tertiary { background: var(--canvas); color: var(--ink); }
+  .btn-tertiary:hover { background: var(--surface-1); }
   .btn-inverse { background: var(--inverse-canvas); color: var(--inverse-ink); }
+  .btn-inverse:hover { background: var(--inverse-surface-1); }
   .btn:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; }
 
   /* ===== 색 견본 ===== */
@@ -151,7 +164,9 @@
   /* ===== 필/배지/입력 ===== */
   .pill-row { display: flex; gap: var(--sp-xs); align-items: center; flex-wrap: wrap; }
   .pricing-tab { min-height: 36px; padding: 6px 14px; border-radius: var(--r-pill); border: none; cursor: pointer;
-                 font-family: var(--font-text); font-size: 14px; font-weight: 500; }
+                 font-family: var(--font-text); font-size: 14px; font-weight: 500;
+                 touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  .pricing-tab:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; }
   .pricing-tab-default { background: var(--canvas); color: var(--ink-subtle); }
   .pricing-tab-selected { background: var(--surface-2); color: var(--ink); }
   .status-badge { background: var(--surface-2); color: var(--ink-muted); border-radius: var(--r-pill);
@@ -183,6 +198,8 @@
 </head>
 <body>
 
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
 <!-- top-nav -->
 <nav class="top-nav">
   <div class="container">
@@ -191,11 +208,13 @@
       <a href="#colors">색</a><a href="#type">글꼴</a><a href="#space">간격·모서리</a><a href="#buttons">버튼</a><a href="#cards">카드</a>
     </div>
     <div class="nav-actions">
-      <button class="btn btn-secondary">Sign in</button>
-      <button class="btn btn-primary">Get started</button>
+      <a class="btn btn-secondary" href="#">Sign in</a>
+      <a class="btn btn-primary" href="#">Get started</a>
     </div>
   </div>
 </nav>
+
+<main id="main">
 
 <!-- 헤더 -->
 <header class="container" style="padding-top: var(--sp-section);">
@@ -345,8 +364,8 @@
     </div>
     <p class="swatch-group-title t-body-sm">입력창 (기본 · 포커스)</p>
     <div class="pill-row" style="gap: var(--sp-md); align-items: flex-start;">
-      <input class="text-input" type="text" placeholder="text-input">
-      <input class="text-input input-focused-demo" type="text" value="text-input-focused">
+      <input class="text-input" type="text" name="demo-input" aria-label="text-input 견본" autocomplete="off" spellcheck="false" placeholder="text-input">
+      <input class="text-input input-focused-demo" type="text" name="demo-input-focused" aria-label="text-input-focused 견본" autocomplete="off" spellcheck="false" value="text-input-focused" readonly>
     </div>
   </div>
 </section>
@@ -403,6 +422,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- footer -->
 <footer>
