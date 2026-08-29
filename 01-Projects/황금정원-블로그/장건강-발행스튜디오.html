@@ -1,0 +1,397 @@
+<title>블로그+스레드 발행 스튜디오 — 두 번째 뇌는 뱃속에 있었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-29</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>두 번째 뇌는 뱃속에 있었다 (연결, 식사, 균형)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">스토리텔링형</span><span class="chip accent">핵심 팩트 직입형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">장건강</span><span class="chip">장뇌축</span><span class="chip">장내미생물</span><span class="chip">미주신경</span><span class="chip">세로토닌</span><span class="chip">기분관리</span><span class="chip">건강습관</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=eizqv_idYiE" target="_blank" rel="noopener noreferrer">"두 번째 뇌, 장을 깨워라" (JTBC 새로고침)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=eizqv_idYiE" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"장 건강이 뇌에 영향을 끼친다?! 장내미생물의 중요성" (JTBC 새로고침: 두 번째 뇌, 장을 깨워라)<br />https://www.youtube.com/watch?v=eizqv_idYiE</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">장과 뇌의 연결이 과학적으로 증명됐다는 내용의 방송 대담입니다. 2004년의 핵심 실험을 소개하는데, 장내 미생물을 제거한 쥐를 잠깐 묶어 스트레스를 주자 뇌가 스트레스 호르몬을 과도하게 뿜어냈고, 장내 미생물을 다시 주입하자 그 반응이 급감했다는 결과입니다. 출연자는 이 실험이 장내 미생물이 뇌의 정상적인 스트레스 반응에 필요조건임을 보여준 것이며, 장과 뇌의 축(장뇌축)을 최초로 증명한 논문이라고 설명합니다. 이후 이 분야 신경과학이 비약적으로 발전했다는 언급과 함께, 뇌에서 시작해 심장을 지나 위와 장까지 이어지는 몸에서 가장 긴 신경인 미주신경이 뇌와 장이 소통하는 직접 통로라는 설명이 이어집니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">예전에는 스트레스를 받거나 기분이 좋지 않을 때 그 원인이 대부분 마음에 있다고 생각했다. 그래서 힘들 때마다 생각을 긍정적으로 바꾸거나 마음을 다잡으려고 노력했다. 그런데 돌이켜보면 몸 상태가 좋지 않을 때 유독 예민해지고 작은 일에도 쉽게 짜증이 났던 경험이 많았다. 특히 과식하거나 자극적인 음식을 먹은 다음 날에는 속이 불편한 것뿐만 아니라 집중도 잘되지 않고 기분까지 무거워지는 느낌이 들었다. 반대로 식사를 규칙적으로 하고 걷기나 운동을 꾸준히 하면서 몸의 컨디션이 좋아지면 마음도 한결 편안해졌다. 당시에는 단순히 기분 탓이라고 생각했는데 장과 뇌가 서로 영향을 주고받는다는 내용을 접하고 나니 내가 겪었던 변화가 조금은 이해됐다. 마음이 힘들다고 해서 마음만 들여다볼 것이 아니라 내가 무엇을 먹고 어떻게 생활하고 있는지도 함께 살펴봐야겠다는 생각이 들었다. 결국 정신과 몸은 따로 떨어져 있는 것이 아니라 서로 영향을 주고받는 하나의 연결된 시스템이라는 것을 내 경험을 통해 다시 생각하게 됐다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">장과 뇌가 서로 연결되어 있고 장내 미생물이 스트레스와 감정에도 영향을 줄 수 있다는 내용은 상당히 흥미로웠다. 우리는 보통 스트레스를 받으면 마음이 약해서 그렇다거나 생각을 긍정적으로 바꾸면 된다고 쉽게 말한다. 하지만 몸의 상태가 마음에도 영향을 줄 수 있다면 정신적인 문제를 단순히 의지의 문제로만 판단해서는 안 된다고 생각한다. 다만 장내 미생물이 중요하다고 해서 모든 스트레스나 우울한 감정의 원인을 장 건강에서 찾는 것도 조심해야 한다. 사람의 감정에는 인간관계, 경제적인 문제, 직장 환경, 수면, 생활습관 등 수많은 요소가 함께 작용하기 때문이다. 특히 동물실험의 결과가 사람에게 똑같이 적용된다고 단정하는 것도 경계할 필요가 있다. 결국 중요한 것은 장 건강 하나에만 집중하는 것이 아니라 잘 먹고, 잘 자고, 적당히 움직이면서 스트레스의 원인이 무엇인지 함께 살펴보는 것이라고 생각한다. 마음이 힘들 때 마음만 고치려고 하기보다 내 몸과 생활 전체를 돌아보는 시각이 필요하다는 점에서 의미 있는 내용이었다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">두 번째 뇌는 뱃속에 있었다 (연결, 식사, 균형)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">장건강,장뇌축,장내미생물,미주신경,세로토닌,기분관리,식습관,스트레스,멘탈관리,건강습관</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">기분이 가라앉으면 내 마음이 약한 탓인 줄 알았음.
+
+근데 범인은 뱃속에 있을 때가 많았음.
+
+정리해봄.
+
+1. 장내 미생물 없앤 쥐는 같은 스트레스에도 호르몬을 훨씬 많이 뿜었음 (2004년 실험)
+2. 뇌와 장은 미주신경이라는 전용선으로 연결돼 서로 신호를 주고받음 (장뇌축)
+3. 과식·자극적인 음식 다음 날 유독 기분이 무거웠던 건 다 이유가 있었음
+4. 마음이 힘들면 마음만 보지 말고 최근 식사·수면·움직임부터 적어볼 것
+5. 단, 유산균이 만능은 아님 - 감정에는 관계·환경·수면도 같이 작용함
+
+오늘 속이 불편했다면 내일 아침 기분도 한번 관찰해보시길 🌱
+
+이런 몸·마음 정리 계속 올림. 이유 없이 가라앉는 날 꺼내 보고 싶으면 팔로우, 도움 됐으면 좋아요 하나면 충분함</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">두 번째 뇌는 뱃속에 있었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">2004년 한 실험에서 장내 미생물을 없앤 쥐는 같은 스트레스를 받아도 스트레스 호르몬을 훨씬 많이 뿜어냈습니다. 그런데 미생물을 다시 넣어주자 그 반응이 눈에 띄게 가라앉았다고 합니다. 이 실험이 장과 뇌 연구의 문을 열었습니다.<br /><br />처음 이 이야기를 들었을 때 저는 제 지난날들이 떠올랐습니다. 속이 불편했던 날마다 유독 예민했던 기억들 말입니다. 장과 기분의 연결 고리를 제 경험과 함께 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">뇌와 장은 연결되어 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 오랫동안 기분이 가라앉으면 그 원인이 전부 마음에 있다고 믿었습니다. 그래서 힘들 때마다 생각을 긍정적으로 바꾸거나 마음을 다잡으려고만 했습니다. 그런데 방송에서 소개된 장뇌축 이야기를 듣고 생각이 바뀌었습니다. 장뇌축이란 장과 뇌가 신경과 호르몬, 장내 미생물을 통해 서로 신호를 주고받는 연결 체계를 말합니다.<br /><br />두 기관을 잇는 전용선도 있습니다. 미주신경입니다. 미주신경이란 뇌에서 출발해 심장을 지나 위와 장까지 내려가는 우리 몸에서 가장 긴 신경으로, 뱃속의 상태가 이 길을 타고 실시간으로 뇌에 보고됩니다. 게다가 기분을 좌우하는 세로토닌은 상당량이 장에서 만들어진다고 알려져 있습니다. 세로토닌은 안정감과 행복감에 관여해 흔히 행복 호르몬이라고 불리는 신경전달물질입니다.<br /><br />서두에 소개한 무균 쥐 실험이 이 연결을 처음 증명했습니다. 장내 미생물이 있어야 뇌가 스트레스에 정상적으로 반응한다는 사실이 확인된 뒤로 관련 연구가 빠르게 늘었다고 합니다. 기분은 머리에서만 만들어지는 게 아니라 뱃속에서도 올라오고 있었습니다.<br /><br />참고: <a href="https://physoc.onlinelibrary.wiley.com/doi/10.1113/jphysiol.2004.063388" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Sudo et al., The Journal of Physiology(2004)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 장과 뇌는 미주신경과 장내 미생물로 이어진 하나의 회로입니다. 뱃속 상태가 스트레스 반응까지 바꿉니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">식사가 기분을 바꾸고 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">이 연결을 알고 나니 제 경험들이 하나씩 설명되기 시작했습니다. 과식했거나 자극적인 음식을 먹은 다음 날이면 속만 불편한 게 아니었습니다. 집중이 잘 안 되고 기분까지 무겁게 가라앉았습니다. 당시에는 단순히 기분 탓이려니 하고 넘겼습니다.<br /><br />반대의 경험도 있었습니다. 식사를 규칙적으로 하고 걷기와 운동을 꾸준히 이어가며 몸의 컨디션이 올라오면 신기하게 마음도 한결 편안해졌습니다. 몸 상태가 나쁜 날 유독 작은 일에 짜증이 났던 것도, 컨디션 좋은 날 같은 일을 웃어넘겼던 것도 결국 같은 회로의 양면이었던 셈입니다.<br /><br />그래서 저는 요즘 기분이 계속 가라앉으면 마음을 들여다보기 전에 최근 며칠의 식탁부터 돌아봅니다. 늦은 밤 자극적인 음식이 늘지 않았는지, 채소와 발효식품이 빠지지 않았는지, 끼니 시간이 들쭉날쭉하지 않았는지를 먼저 점검합니다. 마음이 힘들다고 마음만 붙잡고 있던 예전보다 회복이 빨라졌다고 느낍니다. 정신과 몸은 따로 떨어진 게 아니고 서로 영향을 주고받는 하나의 연결된 시스템이라는 걸 몸으로 배우고 있습니다.<br /><br />참고: <a href="https://health.kdca.go.kr/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 질병관리청 국가건강정보포털</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 자극적인 음식 다음 날의 무거운 기분에는 이유가 있었습니다. 기분이 가라앉으면 마음보다 식탁을 먼저 돌아봅니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">장에만 매달리지 않는 균형</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">다만 저는 여기서 균형을 강조하고 싶습니다. 장내 미생물이 중요하다고 해서 모든 스트레스와 우울의 원인을 장에서 찾는 건 곤란하다고 생각합니다. 사람의 감정에는 인간관계와 경제 문제, 직장 환경, 수면, 생활습관까지 수많은 요소가 함께 작용하기 때문입니다. 유산균 하나로 마음이 낫는다는 식의 이야기는 경계할 필요가 있습니다.<br /><br />동물실험 결과를 사람에게 그대로 적용하는 것도 조심해야 합니다. 무균 쥐 실험은 방향을 보여주는 중요한 근거이지 사람의 우울과 불안을 전부 설명하는 답은 못 됩니다. 저는 이 대목이 오히려 위안이 됐습니다. 감정의 문제를 의지가 약한 탓으로만 몰아붙일 근거도, 장 하나로 전부 해결된다고 믿을 근거도 없다는 뜻이니까요.<br /><br />그래서 제가 택한 방법은 거창하지 않습니다. 잘 먹고 잘 자고 적당히 움직이면서 스트레스의 원인이 무엇인지 같이 살펴보는 것입니다. 요즘 지키는 세 가지는 이렇습니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">기분이 사흘 이상 가라앉으면 최근 일주일의 식사·수면·움직임을 먼저 적어본다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">늦은 밤 자극적인 음식을 먹은 다음 날의 기분을 기록해 나만의 연결 고리를 확인한다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">한 끼에 채소나 발효식품을 하나씩 더하고 식후에 10분이라도 걷는다</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">마음이 힘들 때 마음만 고치려 들기보다 몸과 생활 전체를 돌아보는 것. 그게 제가 이 방송에서 얻은 가장 큰 수확입니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 장은 만능 열쇠보다 점검 목록에 가깝습니다. 식사·수면·움직임·스트레스 원인을 함께 살피는 균형이 핵심입니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 기분이 자꾸 가라앉는 건 내 마음이 약해서일까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그렇게만 볼 일은 아니라고 저는 정리했습니다. 몸 상태가 마음을 끌어내리는 날도 분명 있었습니다. 자책하기 전에 요즘 뭘 먹고 어떻게 잤는지부터 살펴보기로 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 그럼 유산균만 챙겨 먹으면 되는 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그건 아니라는 게 제 판단입니다. 감정에는 관계와 환경, 수면까지 같이 작용합니다. 유산균은 거들 수 있어도 원인을 살피는 일을 대신해주지는 못합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 쥐 실험 결과를 사람인 나한테 적용해도 될까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그대로 단정하지는 않기로 했습니다. 방향을 알려주는 근거로만 받아들입니다. 대신 제 몸으로 확인은 해볼 수 있습니다. 먹은 것과 다음 날 기분을 적어보면 제 데이터가 쌓이니까요.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 오늘 저녁 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 오늘은 자극적인 야식 대신 가볍게 먹고 식후에 동네 한 바퀴를 걸을 겁니다. 그리고 내일 아침 기분이 어떤지 한 줄 적어보려 합니다. 제 뱃속과 기분의 연결을 직접 확인해보는 첫 기록입니다.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 이제 기분이 이유 없이 가라앉는 날이면 마음과 함께 뱃속을 의심합니다. 며칠의 식탁과 잠, 움직임을 돌아보고 고칠 수 있는 것부터 고칩니다. 두 번째 뇌를 돌보는 일이 곧 첫 번째 뇌를 돌보는 일이었습니다.<br /><br />오늘 속이 더부룩했다면 내일 아침 기분도 한번 관찰해보시길 권합니다. 자기만의 연결 고리를 발견하는 순간부터 기분 관리가 훨씬 구체적인 일이 됩니다.<br /><br />다음에 이유 없이 가라앉는 날 이 글을 찾아 헤매지 않으시려면 구독해두시는 걸 권합니다. 공감♥ 하나는 저에게 잘 차린 한 끼처럼 든든하게 남습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.youtube.com/watch?v=eizqv_idYiE" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=eizqv_idYiE</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-gutbrain-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
