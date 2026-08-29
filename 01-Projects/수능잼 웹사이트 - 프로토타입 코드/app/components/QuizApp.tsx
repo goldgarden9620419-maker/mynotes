@@ -100,7 +100,7 @@ export default function QuizApp() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <button
             onClick={() => pickSubject("english")}
-            className="rounded-2xl border border-border bg-card p-6 text-left transition hover:border-accent"
+            className="rounded-2xl border border-border bg-card p-6 text-left transition hover:border-accent active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <div className="text-sm text-muted">{formatDate(latestDateFor("english"))} 문제</div>
             <div className="mt-1 text-2xl font-bold">영어 5문제</div>
@@ -108,7 +108,7 @@ export default function QuizApp() {
           </button>
           <button
             onClick={() => pickSubject("math")}
-            className="rounded-2xl border border-border bg-card p-6 text-left transition hover:border-accent"
+            className="rounded-2xl border border-border bg-card p-6 text-left transition hover:border-accent active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <div className="text-sm text-muted">{formatDate(latestDateFor("math"))} 문제</div>
             <div className="mt-1 text-2xl font-bold">수학 5문제</div>
@@ -141,7 +141,7 @@ export default function QuizApp() {
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <button
               onClick={backToHome}
-              className="rounded-xl bg-accent px-5 py-3 font-semibold text-accent-foreground"
+              className="rounded-xl bg-accent px-5 py-3 font-semibold text-accent-foreground transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               다른 과목 풀기
             </button>
@@ -163,7 +163,10 @@ export default function QuizApp() {
   return (
     <div className="w-full max-w-md">
       <div className="mb-3 flex items-center justify-between text-sm text-muted">
-        <button onClick={backToHome} className="hover:text-foreground">
+        <button
+          onClick={backToHome}
+          className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent hover:text-foreground"
+        >
           ← 과목 선택
         </button>
         <span>
@@ -178,7 +181,7 @@ export default function QuizApp() {
         />
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-6">
+      <div key={current.id} className="motion-safe:animate-[fade-in-up_0.25s_ease-out] rounded-2xl border border-border bg-card p-6">
         <span className="inline-block rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-accent">
           {current.type}
         </span>
@@ -210,7 +213,7 @@ export default function QuizApp() {
                 key={i}
                 onClick={() => handleChoice(i)}
                 disabled={selected !== null}
-                className={`rounded-xl border px-4 py-3 text-left text-sm transition ${style}`}
+                className={`rounded-xl border px-4 py-3 text-left text-sm transition enabled:active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${style}`}
               >
                 <span className="mr-2 text-muted">{i + 1}.</span>
                 {choice}
@@ -227,7 +230,7 @@ export default function QuizApp() {
             <p className="mt-2 text-sm leading-relaxed text-muted">{current.explanation}</p>
             <button
               onClick={next}
-              className="mt-4 w-full rounded-xl bg-accent px-5 py-3 font-semibold text-accent-foreground"
+              className="mt-4 w-full rounded-xl bg-accent px-5 py-3 font-semibold text-accent-foreground transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               다음 문제 →
             </button>

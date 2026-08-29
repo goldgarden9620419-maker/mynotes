@@ -5,17 +5,16 @@ export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 pb-16 pt-12 sm:pt-16">
       <div className="mb-8 flex max-w-md flex-col items-center text-center">
-        <span className="animate-pulse rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-accent">
-          🔥 매일 새로운 5문제 · D-Day 상관없이 매일 갱신
+        <span className="motion-safe:animate-pulse rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-accent">
+          🔥 매일 새로운 5문제
         </span>
-        <h1 className="mt-4 text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl">
+        <h1 className="text-balance mt-4 text-3xl font-extrabold leading-snug tracking-tight sm:text-4xl">
           &ldquo;공부할 시간이 없다&rdquo;는
           <br />
           핑계, <span className="text-accent">오늘부로 끝.</span>
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted">
-          버스에서, 쉬는 시간에, 잠들기 전 1~2분이면 충분해요. 영어·수학 수능 유형 딱 5문제.
-          맞히면 바로 다음 문제로, 틀리면 그 자리에서 해설까지.
+          버스에서, 쉬는 시간에, 잠들기 전 1~2분. 영어·수학 딱 5문제면 충분해요.
         </p>
       </div>
 
