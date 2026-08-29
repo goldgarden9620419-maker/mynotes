@@ -94,25 +94,25 @@ export default function QuizApp() {
   if (!subject) {
     return (
       <div className="w-full max-w-md">
-        <div className="mb-5">
-          <Teacher message="안녕! 오늘의 선생님이야. 짬날 때마다 나랑 5문제씩 풀어볼까? 어떤 과목부터 해볼래?" />
+        <div className="mb-3 sm:mb-5">
+          <Teacher size="sm" message="안녕! 짬날 때마다 5문제씩 풀어볼까? 어떤 과목부터 해볼래?" />
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
           <button
             onClick={() => pickSubject("english")}
-            className="rounded-2xl border border-border bg-card p-6 text-left transition hover:border-accent active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="rounded-2xl border border-border bg-card p-3.5 text-left transition hover:border-accent active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-6"
           >
-            <div className="text-sm text-muted">{formatDate(latestDateFor("english"))} 문제</div>
-            <div className="mt-1 text-2xl font-bold">영어 5문제</div>
-            <div className="mt-2 text-sm text-muted">어법 · 빈칸추론 · 순서 · 문장삽입 · 주제</div>
+            <div className="text-[11px] text-muted sm:text-sm">{formatDate(latestDateFor("english"))} 문제</div>
+            <div className="mt-1 text-base font-bold sm:text-2xl">영어 5문제</div>
+            <div className="mt-1 hidden text-sm text-muted sm:mt-2 sm:block">어법 · 빈칸추론 · 순서 · 문장삽입 · 주제</div>
           </button>
           <button
             onClick={() => pickSubject("math")}
-            className="rounded-2xl border border-border bg-card p-6 text-left transition hover:border-accent active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="rounded-2xl border border-border bg-card p-3.5 text-left transition hover:border-accent active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:p-6"
           >
-            <div className="text-sm text-muted">{formatDate(latestDateFor("math"))} 문제</div>
-            <div className="mt-1 text-2xl font-bold">수학 5문제</div>
-            <div className="mt-2 text-sm text-muted">수열 · 미분 · 적분 · 확률과통계 · 삼각함수</div>
+            <div className="text-[11px] text-muted sm:text-sm">{formatDate(latestDateFor("math"))} 문제</div>
+            <div className="mt-1 text-base font-bold sm:text-2xl">수학 5문제</div>
+            <div className="mt-1 hidden text-sm text-muted sm:mt-2 sm:block">수열 · 미분 · 적분 · 확률과통계 · 삼각함수</div>
           </button>
         </div>
       </div>

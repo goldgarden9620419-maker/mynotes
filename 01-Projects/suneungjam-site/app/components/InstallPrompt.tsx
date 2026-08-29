@@ -30,8 +30,8 @@ export default function InstallPrompt() {
   }
 
   return (
-    <div className="mb-5 flex w-full max-w-md items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-      <p className="text-sm">
+    <div className="mb-2.5 flex w-full max-w-md items-center justify-between gap-3 rounded-2xl border border-border bg-card px-3 py-2 sm:mb-5 sm:px-4 sm:py-3">
+      <p className="text-xs sm:text-sm">
         📲 <span className="font-semibold">홈 화면에 추가</span>하면 앱처럼 바로 열 수 있어요.
       </p>
       <div className="flex shrink-0 gap-2">
