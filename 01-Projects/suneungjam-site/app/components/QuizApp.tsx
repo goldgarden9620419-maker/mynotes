@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import problemsData from "../../data/problems.json";
 import Teacher from "./Teacher";
 import { WRONG_ANSWERS_KEY } from "./reviewStorage";
+import { renderUnderlinedText } from "./renderUnderline";
 
 type Problem = {
   id: string;
@@ -218,7 +219,7 @@ export default function QuizApp() {
 
         {current.passage && (
           <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-foreground/90">
-            {current.passage}
+            {renderUnderlinedText(current.passage)}
           </p>
         )}
 

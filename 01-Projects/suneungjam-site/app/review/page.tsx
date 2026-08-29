@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { WRONG_ANSWERS_KEY } from "../components/reviewStorage";
+import { renderUnderlinedText } from "../components/renderUnderline";
 
 type Problem = {
   id: string;
@@ -72,7 +73,9 @@ export default function ReviewPage() {
             )}
 
             {p.passage && (
-              <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">{p.passage}</p>
+              <p className="mt-3 whitespace-pre-line text-sm leading-relaxed">
+                {renderUnderlinedText(p.passage)}
+              </p>
             )}
 
             <div className="mt-4 flex flex-col gap-1.5">
