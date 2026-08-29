@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-const UNDERLINE_PATTERN = /\[u\](.*?)\[\/u\]/gs;
+const UNDERLINE_PATTERN = /\[u\]([\s\S]*?)\[\/u\]/g;
 
 export function renderUnderlinedText(text: string): ReactNode[] {
   return text
