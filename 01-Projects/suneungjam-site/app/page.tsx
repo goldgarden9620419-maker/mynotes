@@ -1,6 +1,7 @@
 import Link from "next/link";
 import QuizApp from "./components/QuizApp";
 import InstallPrompt from "./components/InstallPrompt";
+import AffirmationCard from "./components/AffirmationCard";
 
 export default function Home() {
   return (
@@ -21,6 +22,10 @@ export default function Home() {
       </div>
 
       <QuizApp />
+
+      <div className="mt-10">
+        <AffirmationCard />
+      </div>
 
       <footer className="mt-16 flex flex-col items-center gap-2 text-center text-xs text-muted">
         <p>© 2026 수능잼(suneungjam.com) · 실제 기출문제가 아닌, 출제 경향을 참고해 새로 만든 연습문제입니다.</p>
