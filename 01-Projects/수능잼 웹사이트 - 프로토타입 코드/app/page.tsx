@@ -1,9 +1,11 @@
 import Link from "next/link";
 import QuizApp from "./components/QuizApp";
+import InstallPrompt from "./components/InstallPrompt";
 
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center px-4 pb-16 pt-12 sm:pt-16">
+      <InstallPrompt />
       <div className="mb-8 flex max-w-md flex-col items-center text-center">
         <span className="motion-safe:animate-pulse rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-accent">
           🔥 매일 새로운 5문제
