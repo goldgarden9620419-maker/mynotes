@@ -16,6 +16,8 @@ type Problem = {
   choices: string[];
   answerIndex: number;
   explanation: string;
+  vocab?: { word: string; meaning: string }[];
+  concept?: string;
 };
 
 export default function ReviewPage() {
@@ -78,6 +80,17 @@ export default function ReviewPage() {
               </p>
             )}
 
+            {p.vocab && p.vocab.length > 0 && (
+              <p className="mt-3 text-xs leading-relaxed text-muted">
+                {p.vocab.map((v, i) => (
+                  <span key={v.word}>
+                    {i > 0 && " · "}
+                    <span className="italic">{v.word}</span> {v.meaning}
+                  </span>
+                ))}
+              </p>
+            )}
+
             <div className="mt-4 flex flex-col gap-1.5">
               {p.choices.map((choice, i) => (
                 <div
@@ -96,6 +109,9 @@ export default function ReviewPage() {
 
             <div className="mt-4 rounded-xl bg-secondary p-3">
               <p className="text-xs font-semibold text-muted">해설</p>
+              {p.concept && (
+                <p className="mt-1 text-xs font-medium text-accent">💡 {p.concept}</p>
+              )}
               <p className="mt-1 text-sm leading-relaxed">{p.explanation}</p>
             </div>
           </div>

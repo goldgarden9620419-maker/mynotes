@@ -18,6 +18,8 @@ type Problem = {
   choices: string[];
   answerIndex: number;
   explanation: string;
+  vocab?: { word: string; meaning: string }[];
+  concept?: string;
 };
 
 const problems = problemsData as Problem[];
@@ -223,6 +225,17 @@ export default function QuizApp() {
           </p>
         )}
 
+        {current.vocab && current.vocab.length > 0 && (
+          <p className="mt-3 text-xs leading-relaxed text-muted">
+            {current.vocab.map((v, i) => (
+              <span key={v.word}>
+                {i > 0 && " · "}
+                <span className="italic">{v.word}</span> {v.meaning}
+              </span>
+            ))}
+          </p>
+        )}
+
         <div className="mt-5 flex flex-col gap-2">
           {current.choices.map((choice, i) => {
             const isAnswer = i === current.answerIndex;
@@ -251,6 +264,11 @@ export default function QuizApp() {
             <p className={`font-semibold ${isCorrect ? "text-accent" : "text-wrong"}`}>
               {isCorrect ? "정답입니다!" : "틀렸어요 — 해설을 확인해보세요"}
             </p>
+            {current.concept && (
+              <p className="mt-2 rounded-lg bg-secondary px-3 py-2 text-xs font-medium text-accent">
+                💡 {current.concept}
+              </p>
+            )}
             <p className="mt-2 text-sm leading-relaxed text-muted">{current.explanation}</p>
             <button
               onClick={next}
