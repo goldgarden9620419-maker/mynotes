@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import problemsData from "../../data/problems.json";
+import Teacher from "./Teacher";
 
 type Problem = {
   id: string;
@@ -33,6 +34,22 @@ function formatDate(iso: string) {
   const [, m, d] = iso.split("-");
   return `${Number(m)}월 ${Number(d)}일`;
 }
+
+const TYPE_TIP: Record<string, string> = {
+  어법: "밑줄 다섯 개 중에 딱 하나만 문법이 틀렸어. 하나씩 침착하게 보자!",
+  빈칸추론: "빈칸 문제는 흐름이 생명이야. 앞뒤 문장을 꼭 같이 봐줘.",
+  순서: "However, As a result 같은 연결어를 먼저 찾으면 순서가 보여.",
+  문장삽입: "주어진 문장의 대명사·연결어가 어디로 이어지는지가 힌트야.",
+  주제: "글 전체를 관통하는 한 문장을 찾는다는 느낌으로 읽어보자.",
+  수열: "등차수열이면 공차부터, 등비수열이면 공비부터 구하는 게 먼저야.",
+  미분: "극값은 f'(x) = 0이 되는 지점부터 찾는 거, 기억하지?",
+  적분: "곡선과 x축 사이 넓이는 교점을 먼저 구하는 게 순서야.",
+  확률과통계: "경우의 수를 나눌 때는 조건을 정확히 나누는 게 핵심이야.",
+  삼각함수: "삼각함수 방정식은 치환해서 이차방정식으로 바꾸는 게 자주 쓰는 방법이야.",
+};
+
+const CORRECT_LINES = ["정답이야! 역시 잘하네!", "맞았어, 완벽해!", "오, 바로 맞히네!"];
+const WRONG_LINES = ["괜찮아, 같이 해설 보면서 이해해보자.", "다음엔 맞을 수 있어, 해설부터 볼까?"];
 
 export default function QuizApp() {
   const [subject, setSubject] = useState<Problem["subject"] | null>(null);
@@ -77,6 +94,9 @@ export default function QuizApp() {
   if (!subject) {
     return (
       <div className="w-full max-w-md">
+        <div className="mb-5">
+          <Teacher message="안녕! 오늘의 선생님이야. 짬날 때마다 나랑 5문제씩 풀어볼까? 어떤 과목부터 해볼래?" />
+        </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <button
             onClick={() => pickSubject("english")}
@@ -100,22 +120,33 @@ export default function QuizApp() {
   }
 
   if (isDone) {
+    const ratio = score / todaySet.length;
+    const wrapUpLine =
+      ratio === 1
+        ? "다 맞혔어! 오늘 짬 시간 완벽하게 썼다!"
+        : ratio >= 0.6
+          ? "오늘도 수고했어! 이 페이스면 금방 늘 거야."
+          : "틀린 건 해설로 다 짚었으니 괜찮아. 내일 또 도전해보자!";
     return (
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 text-center">
-        <div className="text-3xl">🎉</div>
-        <h2 className="mt-3 text-xl font-bold">오늘의 {SUBJECT_LABEL[subject]} 문제 완료!</h2>
-        <p className="mt-2 text-muted">
-          {todaySet.length}문제 중 <span className="text-accent font-semibold">{score}개</span> 정답
-        </p>
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <button
-            onClick={backToHome}
-            className="rounded-xl bg-accent px-5 py-3 font-semibold text-accent-foreground"
-          >
-            다른 과목 풀기
-          </button>
+      <div className="w-full max-w-md">
+        <div className="mb-5">
+          <Teacher message={`${wrapUpLine} 내일 또 새로운 문제로 만나자.`} />
         </div>
-        <p className="mt-4 text-xs text-muted">내일 또 새로운 문제로 찾아올게요.</p>
+        <div className="rounded-2xl border border-border bg-card p-8 text-center">
+          <div className="text-3xl">🎉</div>
+          <h2 className="mt-3 text-xl font-bold">오늘의 {SUBJECT_LABEL[subject]} 문제 완료!</h2>
+          <p className="mt-2 text-muted">
+            {todaySet.length}문제 중 <span className="text-accent font-semibold">{score}개</span> 정답
+          </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <button
+              onClick={backToHome}
+              className="rounded-xl bg-accent px-5 py-3 font-semibold text-accent-foreground"
+            >
+              다른 과목 풀기
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -123,6 +154,11 @@ export default function QuizApp() {
   if (!current) return null;
 
   const isCorrect = selected !== null && selected === current.answerIndex;
+  const feedbackLine = selected === null
+    ? ""
+    : isCorrect
+      ? CORRECT_LINES[index % CORRECT_LINES.length]
+      : WRONG_LINES[index % WRONG_LINES.length];
 
   return (
     <div className="w-full max-w-md">
@@ -133,6 +169,13 @@ export default function QuizApp() {
         <span>
           {SUBJECT_LABEL[subject]} {index + 1} / {todaySet.length}
         </span>
+      </div>
+
+      <div className="mb-4">
+        <Teacher
+          size="sm"
+          message={selected === null ? (TYPE_TIP[current.type] ?? "이번 문제도 차근차근 풀어보자!") : feedbackLine}
+        />
       </div>
 
       <div className="rounded-2xl border border-border bg-card p-6">
