@@ -41,3 +41,24 @@ body {
     transform: translateY(0);
   }
 }
+
+@media print {
+  .review-page {
+    --background: #ffffff;
+    --foreground: #14171a;
+    --card: #ffffff;
+    --border: #d9dee3;
+    --muted: #5a6570;
+    --accent: #0a6b46;
+    --accent-foreground: #ffffff;
+    --secondary: #f3f5f7;
+    background: var(--background);
+    color: var(--foreground);
+  }
+  .review-page .review-item {
+    break-inside: avoid;
+  }
+  .review-page .review-answer {
+    background: #eafaf3 !important;
+  }
+}

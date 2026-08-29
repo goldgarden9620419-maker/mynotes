@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import problemsData from "../../data/problems.json";
 import Teacher from "./Teacher";
+import { WRONG_ANSWERS_KEY } from "./reviewStorage";
 
 type Problem = {
   id: string;
@@ -52,10 +54,12 @@ const CORRECT_LINES = ["정답이야! 역시 잘하네!", "맞았어, 완벽해!
 const WRONG_LINES = ["괜찮아, 같이 해설 보면서 이해해보자.", "다음엔 맞을 수 있어, 해설부터 볼까?"];
 
 export default function QuizApp() {
+  const router = useRouter();
   const [subject, setSubject] = useState<Problem["subject"] | null>(null);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState<Problem[]>([]);
 
   const todaySet = useMemo(() => {
     if (!subject) return [];
@@ -71,12 +75,22 @@ export default function QuizApp() {
     setIndex(0);
     setSelected(null);
     setScore(0);
+    setWrongAnswers([]);
   }
 
   function handleChoice(i: number) {
     if (selected !== null || !current) return;
     setSelected(i);
-    if (i === current.answerIndex) setScore((s) => s + 1);
+    if (i === current.answerIndex) {
+      setScore((s) => s + 1);
+    } else {
+      setWrongAnswers((w) => [...w, current]);
+    }
+  }
+
+  function downloadWrongAnswersPdf() {
+    sessionStorage.setItem(WRONG_ANSWERS_KEY, JSON.stringify(wrongAnswers));
+    router.push("/review");
   }
 
   function next() {
@@ -89,6 +103,7 @@ export default function QuizApp() {
     setIndex(0);
     setSelected(null);
     setScore(0);
+    setWrongAnswers([]);
   }
 
   if (!subject) {
@@ -139,6 +154,14 @@ export default function QuizApp() {
             {todaySet.length}문제 중 <span className="text-accent font-semibold">{score}개</span> 정답
           </p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            {wrongAnswers.length > 0 && (
+              <button
+                onClick={downloadWrongAnswersPdf}
+                className="rounded-xl border border-border px-5 py-3 font-semibold transition active:scale-[0.98] hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                📄 틀린 문제 PDF로 저장 ({wrongAnswers.length}개)
+              </button>
+            )}
             <button
               onClick={backToHome}
               className="rounded-xl bg-accent px-5 py-3 font-semibold text-accent-foreground transition active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
