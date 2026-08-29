@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+배포: Vercel 프로젝트 `suneungjam`이 이 저장소(`mynotes`)의 `claude/side-income-ideas-9b5crk` 브랜치, Root Directory `01-Projects/수능잼 웹사이트 - 프로토타입 코드`를 바라보도록 연결되어 있습니다.
+
 ## Getting Started
 
 First, run the development server:
