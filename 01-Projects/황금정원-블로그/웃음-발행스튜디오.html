@@ -1,0 +1,390 @@
+<title>블로그+스레드 발행 스튜디오 — 웃는 날은 평생 20일이었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-08-30</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>웃는 날은 평생 20일이었다 (효과, 경계, 연습)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">비교검증형</span><span class="chip accent">핵심 팩트 직입형 훅</span><span class="chip accent">소제목 2개(팩트·경험 대비)</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">웃음</span><span class="chip">웃음치료</span><span class="chip">억지웃음</span><span class="chip">뒤센미소</span><span class="chip">스트레스해소</span><span class="chip">박장대소</span><span class="chip">웰빙</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=FfF_zaRLioQ" target="_blank" rel="noopener noreferrer">"억지로 웃어도 효과가 있다? 웃음의 건강학" (TBC 클리닉건강365)</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=FfF_zaRLioQ" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"억지로 웃어도 효과가 있다? 스트레스 날리는 웃음 운동법 — 웃음의 건강학" (TBC 클리닉건강365, 한국웃음임상치료센터 정혜성 대표 출연)<br />https://www.youtube.com/watch?v=FfF_zaRLioQ</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">웃음 치료사(한국웃음임상치료센터 대표, 의료인·병원 종사자 대상 웃음 치료 교육 19년)가 출연한 건강 프로그램입니다. 80세 기준 근심·걱정으로 보내는 시간은 6년 7개월인데 깔깔 웃는 시간은 20일뿐이라는 수치로 시작해, 웃음을 '높은 깨달음'으로 풀이하고 어른이 되며 웃음 포인트를 잃어버린다는 이야기를 나눕니다. 국내 웃음 치료는 2001년 서울대학교병원이 유방암 환자 대상으로 처음 도입했고, 병원 게시판에 웃음의 효과를 혈압강하제·혈당강하제·항우울제·수면제·면역증강제·천연진통제·복합소화제·피로회복제·비만치료제에 빗대 소개할 정도라고 합니다(부교감 신경 활성화, 소화·수면·혈압·혈당에 도움). 박장대소 4단계(발 구르기→손가락에 힘 준 박수→상체 흔들기→'이응' 웃음소리 15초)와, 웃을 때 엔도르핀·도파민·세로토닌·옥시토신 같은 신경전달물질이 분비된다는 설명이 이어집니다. 진짜 웃음(뒤센 미소 — 눈꼬리·광대 근육이 함께 움직임)과 가짜 웃음(팬암 미소 — 입꼬리만 올라감)의 구분, 20개국 884명이 웃음소리만으로 진짜·가짜를 구별해낸 UCLA 연구, 감정 준비 없이 직업적으로 웃음을 강요받으면 생기는 스마일 우울증(가면 우울증)과 승무원 집단 우울 사례도 소개됩니다. 웃음 치료의 아버지 노먼 커즌스(강직성 척추염 통증을 코미디 시청과 의도적 웃음으로 극복, '웃음의 치유력' 저술) 일화, 독일 두덴 사전의 유머 정의("삶의 고난과 역경에 유쾌하게 대처하는 능력"), 오케이 웃음("나는 지금 잘하고 있어, 오케이"), 침샘 마사지 웃음 기법(이하선·악하선·설하선, 연진법)까지 다룹니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">예전에는 웃는다는 것을 그냥 기분이 좋거나 재미있는 일이 있을 때 자연스럽게 나오는 행동이라고만 생각했다. 그런데 나이가 들수록 웃을 일이 줄어든다는 것을 나도 느끼게 된다. 회사생활을 하면서 일에 대한 부담이나 사람과의 관계, 앞으로의 걱정까지 생각하다 보면 하루 종일 웃지 않고 지나가는 날도 많았다. 특히 일이 잘 풀리지 않을 때는 표정부터 굳어지고 별것 아닌 일에도 예민하게 반응했던 것 같다.
+
+그런데 가끔 힘든 상황에서도 농담 한마디를 하거나 주변 사람들과 웃고 나면 신기하게도 마음이 조금 가벼워지는 경험을 했다. 문제가 해결된 것은 아닌데 그 문제를 바라보는 내 마음이 달라지는 것이다. 그래서 요즘은 행복해야 웃을 수 있는 것이 아니라, 웃는 행동이 내 마음을 바꾸는 시작이 될 수도 있다는 생각이 든다. 물론 힘든데 무조건 웃으라는 말은 현실적이지 않다. 하지만 걱정한다고 해결되지 않는 일이라면 가끔은 의식적으로라도 웃어보는 것이 나를 위해 필요한 습관이라는 생각이 든다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">웃음이 몸과 마음에 좋은 영향을 준다는 점에는 충분히 공감한다. 나 역시 힘든 일이 있을 때 누군가와 이야기하며 웃고 나면 답답했던 마음이 조금은 가벼워지는 경험을 많이 했다. 특히 "행복해서 웃는 것이 아니라 웃어서 행복해진다"는 말도 어느 정도는 맞는 말이라고 생각한다. 하지만 웃음이 모든 문제를 해결해 주는 것처럼 받아들이는 것은 조금 조심해야 한다고 본다. 힘들고 지친 사람에게 무조건 긍정적으로 생각하고 웃으라고 하는 것은 오히려 자신의 감정을 숨기게 만들 수도 있기 때문이다. 실제로 글에서도 감정이 준비되지 않은 상태에서 직업적으로 웃음을 계속 강요받으면 문제가 될 수 있다고 말한다. 결국 중요한 것은 억지로 웃는 것보다 내 감정을 인정하면서도 힘든 상황에 너무 오래 끌려가지 않는 것이라고 생각한다. 웃음은 문제를 없애주는 치료제가 아니라, 문제를 조금 다른 시선으로 바라보고 다시 일어설 힘을 주는 하나의 방법으로 받아들이는 것이 더 현실적이라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">웃는 날은 평생 20일이었다 (효과, 경계, 연습)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">웃음,웃음치료,억지웃음,뒤센미소,스트레스해소,면역력,박장대소,스마일우울증,건강습관,웰빙</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">80년 인생에서 깔깔 웃는 시간이 얼마인지 아는가. 20일이라고 함.
+
+걱정하는 시간은 6년 7개월인데.
+
+정리해봄.
+
+1. 병원에선 웃음을 혈압약+수면제+면역증강제+진통제라고 소개함 (서울대병원 웃음치료)
+2. 젓가락 물려서 모르고 웃게 한 실험에서도 스트레스 회복이 빨라졌음
+3. 진짜 웃음은 입이 웃는 게 아니라 눈꼬리와 광대가 웃음 (뒤센 미소)
+4. 단, 감정 준비 없이 웃음만 강요하면 스마일 우울증이 됨 - 감정 인정이 먼저
+5. 유머는 웃기는 재주가 아니라 고난에 유쾌하게 대처하는 삶의 태도임 (독일 사전)
+
+오늘 하루 안 웃었다면 자기 전에 15초만 소리 내 웃어보시길 🌱
+
+이런 몸·마음 정리 계속 올림. 웃을 일 없는 날 꺼내 보고 싶으면 팔로우, 도움 됐으면 좋아요 하나면 충분함</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">웃는 날은 평생 20일이었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">80세까지 산다고 할 때 근심과 걱정을 안고 사는 시간은 6년 7개월, 깔깔 소리 내어 웃는 시간은 고작 20일이라고 합니다. 이 숫자를 듣고 저는 뜨끔했습니다. 하루를 돌아보면 웃지 않고 지나간 날이 정말 많았기 때문입니다.<br /><br />웃음이 몸에 어떤 약이 되는지, 그리고 어디까지 믿어야 하는지를 제 경험과 함께 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">억지웃음에도 효과는 진짜였다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">일반적으로 웃음은 기분 좋을 때 나오는 결과라고 알려져 있습니다. 그런데 의료 현장에서는 웃음을 치료 도구로 씁니다. 국내에서는 2001년 서울대학교병원이 유방암 환자들을 대상으로 웃음 치료를 처음 도입했고, 병원 게시판에는 웃음의 효과를 아예 약에 빗대 소개했다고 합니다. 혈압강하제, 항우울제, 수면제, 면역증강제, 천연 진통제, 소화제까지 겸하는 약이라는 겁니다. 웃을 때 부교감 신경이 활성화되기 때문인데, 부교감 신경이란 긴장을 풀고 몸을 회복 상태로 돌리는 자율신경을 말합니다.<br /><br />더 흥미로운 건 억지웃음도 통한다는 실험입니다. 참가자들에게 젓가락을 입에 물려 자기도 모르게 웃는 표정을 만들게 하고 스트레스 과제를 시켰더니, 웃는 근육을 쓴 사람들은 무표정 그룹보다 심박수가 빠르게 안정됐습니다. 웃는 줄 모르고 웃어도 몸은 반응한 겁니다. 특히 효과가 컸던 건 뒤센 미소였습니다. 뒤센 미소란 입꼬리만 올라가는 웃음과 달리 눈꼬리와 광대 근육까지 함께 움직이는 진짜 웃음을 가리킵니다.<br /><br />웃음 치료의 출발점이 된 일화도 있습니다. 강직성 척추염으로 10분도 잠들지 못하던 미국의 한 작가가 코미디 프로그램을 보고 웃은 날 한 시간을 내리 잔 경험을 계기로 의도적인 웃음을 반복했고, 통증에서 벗어난 과정을 책으로 남기며 웃음의 치유력이 알려졌습니다. 저도 비슷한 경험이 있습니다. 힘든 상황에서 농담 한마디에 다 같이 웃고 나면 문제는 그대로인데 그 문제를 바라보는 제 마음이 조금 가벼워져 있었습니다.<br /><br />참고: <a href="https://journals.sagepub.com/doi/abs/10.1177/0956797612445312" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Kraft &amp; Pressman, Psychological Science(2012)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 병원이 약에 빗댈 만큼 웃음의 몸 효과는 확인되어 있습니다. 웃는 줄 모르는 억지웃음조차 스트레스 회복을 앞당겼습니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">웃음 만능론은 경계합니다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그렇다고 웃음이 만능이라고 보지는 않습니다. 감정이 준비되지 않은 상태에서 웃음을 강요당하면 오히려 병이 됩니다. 서비스직처럼 직업상 늘 웃어야 하는 분들이 겪는 스마일 우울증이 그 예입니다. 스마일 우울증이란 겉으로는 웃고 있지만 속으로는 우울이 쌓여가는 상태로, 가면 우울증이라고도 부릅니다. 억지 미소를 강요받던 항공사 승무원들이 집단 우울 증세를 보인 사례에서 가짜 웃음을 팬암 미소라고 부르게 됐을 정도입니다.<br /><br />그래서 저는 힘들어하는 사람에게 무조건 웃으라고 하는 말을 경계합니다. 그 말이 자기 감정을 숨기게 만들 수 있기 때문입니다. 제 결론은 이렇습니다. 웃음은 문제를 없애주는 치료제가 아니라 문제를 다른 시선으로 바라보고 다시 일어설 힘을 주는 방법입니다. 제 감정을 먼저 인정하되 그 감정에 너무 오래 끌려가지 않도록 웃음을 도구로 쓰는 겁니다.<br /><br />저도 회사 일과 관계, 앞날 걱정에 하루 종일 웃지 않고 지나가는 날이 많았습니다. 일이 안 풀리는 날엔 표정부터 굳었고 별것 아닌 일에 예민해졌습니다. 그래서 요즘은 웃을 일을 기다리는 대신 웃는 몸부터 만드는 연습을 합니다. 제가 하는 세 가지입니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">하루 한 번 15초 박장대소 — 발을 구르고 손가락에 힘을 준 박수, 상체를 흔들며 소리 내어 웃는다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">아침 거울 앞에서 &#39;나는 지금 잘하고 있어, 오케이&#39;를 외치고 한 번 웃는다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">많이 힘든 날은 웃음을 강요하지 않는다 — 감정을 먼저 적어 인정하고, 그다음에 예능 한 편을 본다</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">유머의 정의도 마음에 새겨뒀습니다. 독일 두덴 사전은 유머를 웃기는 재주로 설명하지 않고 삶의 고난과 역경에 유쾌하게 대처하는 능력이라고 풀이한다고 합니다. 잘 웃는 사람은 결국 잘 버티는 사람이었습니다.<br /><br />참고: <a href="https://www.amc.seoul.kr/asan/mobile/healthtv/video/videoDetail.do?videoId=3587&amp;categoryCode=C02009003" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 서울아산병원 건강TV(웃음 치료)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 감정을 누른 채 웃기만 하면 스마일 우울증이 됩니다. 감정을 인정한 뒤 웃음을 회복 도구로 쓰는 게 저의 방식입니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 웃을 일이 없는데 어떻게 웃어?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 순서를 뒤집기로 했습니다. 웃을 일을 기다리지 않고 웃는 근육부터 움직입니다. 젓가락을 문 사람들도 몸이 반응했으니 저라고 안 될 이유가 없다고 생각합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 억지로 웃는 건 가식 아닐까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 남에게 보여주려는 웃음과 저를 위한 웃음 운동은 다르다고 정리했습니다. 혼자 하는 박장대소는 스쿼트 같은 운동입니다. 보는 사람이 없으니 가식일 것도 없습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 힘들어하는 가족에게 웃으라고 해도 될까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그 말은 아끼기로 했습니다. 감정이 준비되지 않은 사람에게는 강요가 될 수 있으니까요. 대신 먼저 이야기를 들어주고, 같이 웃을 수 있는 자리를 만드는 쪽을 택하겠습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 오늘 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 자기 전에 15초 박장대소부터 해볼 겁니다. 민망하면 세수하러 들어간 화장실 거울 앞에서 하면 됩니다. 오늘 하루 몇 번 웃었는지 세어보는 것도 시작해보려 합니다.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 행복해지면 웃겠다는 순서를 버리기로 했습니다. 평생 20일이라는 숫자를 보고 나니 웃을 일을 기다리다가는 너무 늦겠다 싶었습니다. 감정은 솔직하게 인정하되, 웃는 근육은 미리 움직여두는 것. 그게 제가 찾은 현실적인 절충입니다.<br /><br />오늘 하루 한 번도 웃지 않으셨다면 자기 전 15초만 소리 내어 웃어보시길 권합니다. 문제는 그대로여도 그 문제를 보는 눈이 조금 달라져 있을 겁니다.<br /><br />다음에 웃을 일이 없는 날 이 글을 찾아 헤매지 않으시려면 구독해두시는 걸 권합니다. 공감♥ 하나는 저에게 눈꼬리까지 접히는 뒤센 미소로 돌아옵니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.youtube.com/watch?v=FfF_zaRLioQ" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=FfF_zaRLioQ</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-laughter-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
