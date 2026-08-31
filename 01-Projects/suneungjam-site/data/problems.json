@@ -468,5 +468,246 @@
     "answerIndex": 2,
     "explanation": "sin²θ = 1-cos²θ를 대입하면 2(1-cos²θ)+cosθ-1=0, 정리하면 2cos²θ-cosθ-1=0입니다. 인수분해하면 (2cosθ+1)(cosθ-1)=0이므로 cosθ=-1/2 또는 cosθ=1입니다. cosθ=1은 θ=0 (1개), cosθ=-1/2는 θ=2π/3, 4π/3 (2개)이므로 총 3개입니다.",
     "concept": "sin²θ = 1 - cos²θ 관계를 이용해 cosθ만의 식으로 치환한다."
+  },
+  {
+    "id": "en-2026-08-31-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-08-31",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Biologists studying birds in cities have noticed [u]that[/u]① many urban populations sing at a higher pitch than their rural relatives. Traffic noise tends to occupy lower frequency ranges, so birds [u]singing[/u]② at higher pitches are more likely to be heard clearly above the surrounding hum. Over several generations, this adjustment appears to spread through local populations, even in species [u]that rarely travel[/u]③ far from their home territory. Some researchers have also found that birds raised in noisy environments tend to sing louder overall, a change that seems [u]to require[/u]④ less energy than one might expect. Because pitch and volume affect how easily a mate can locate a singing bird, these small acoustic shifts [u]has[/u]⑤ become an unexpected example of evolution responding to human activity.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 주어 shifts는 복수이므로 동사도 have become이 되어야 하는데 단수 동사 has가 쓰여 문장이 틀렸습니다. 나머지는 모두 올바릅니다: ①은 noticed의 목적어로 쓰인 that절, ②는 birds를 수식하는 현재분사구, ③은 species를 수식하는 관계절, ④는 seem to부정사 구문입니다.",
+    "vocab": [
+      {
+        "word": "frequency",
+        "meaning": "주파수"
+      },
+      {
+        "word": "acoustic",
+        "meaning": "음향의"
+      },
+      {
+        "word": "territory",
+        "meaning": "영역, 서식지"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-08-31",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Athletes who cram all of their practice into a single long session often see rapid improvement that afternoon, yet this improvement frequently fades within days. Coaches who study skill acquisition have found that spreading the same amount of practice across several shorter sessions, with real rest in between, produces slower initial progress but far more durable skill retention weeks later. One explanation is that the brain needs idle time, free from the specific movements just practiced, to consolidate what was learned into long-term memory. This suggests that when it comes to building a lasting skill, what matters most is not ______ but how that time is distributed across days.",
+    "choices": [
+      "how skilled the coach guiding the session is",
+      "the total number of hours spent practicing",
+      "how expensive the training equipment is",
+      "how motivated the athlete feels that day",
+      "how many other athletes are training nearby"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 연습을 한 번에 몰아서 하는 것보다, 같은 시간을 여러 날에 나누어 쉬면서 연습할 때 장기적인 기술 유지가 더 잘 된다는 내용입니다. 빈칸 뒤에 '그 시간이 며칠에 걸쳐 어떻게 분배되는지가 더 중요하다'고 했으므로, 이와 대조되는 빈칸에는 '총 연습 시간'을 의미하는 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "cram",
+        "meaning": "벼락치기로 하다, 몰아서 하다"
+      },
+      {
+        "word": "acquisition",
+        "meaning": "습득"
+      },
+      {
+        "word": "consolidate",
+        "meaning": "(기억 등을) 공고히 하다, 굳히다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-08-31",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "For much of the twentieth century, cities facing rising water simply built taller concrete walls along their coastlines.\n(A) When storms arrive, these wetlands absorb and slow incoming water instead of forcing it to crash directly against a rigid barrier.\n(B) Engineers have increasingly found, however, that these walls often shift flooding problems to neighboring areas rather than solving them.\n(C) As a result, many coastal planners now favor restoring wetlands and marshes in front of the wall, or in place of it entirely.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 '20세기 도시들이 수위 상승에 콘크리트 벽을 높이 쌓는 방식으로 대응했다'는 도입입니다. (B)는 'however'로 이 방식이 오히려 인근 지역에 홍수 문제를 떠넘긴다는 문제점을 제시하고, (C)는 'As a result' 그 결과로 습지 복원을 선호하게 되었다는 결론을 제시하며, (A)는 습지가 실제로 폭풍 때 어떻게 작동하는지 구체적으로 설명합니다. 따라서 순서는 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "seawall",
+        "meaning": "방파제, 해안 옹벽"
+      },
+      {
+        "word": "marsh",
+        "meaning": "습지"
+      },
+      {
+        "word": "barrier",
+        "meaning": "장벽"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-08-31",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Ironically, the more forcefully a warning insists that a choice is dangerous or forbidden, the more some people feel an urge to make exactly that choice.",
+    "passage": "Public health campaigns often assume that a stronger warning will produce a stronger deterrent effect. ( ① ) Signs that simply state a risk in neutral language are frequently replaced with bolder wording meant to shock or alarm. ( ② ) Psychologists call the unintended backlash that sometimes follows \"reactance,\" a reaction rooted in the basic desire to protect one's own freedom of choice. ( ③ ) When people feel that a decision is being made for them rather than left up to them, some respond by reasserting control, even at real personal cost. ( ④ ) This does not mean that warnings are useless, but it does suggest that messages emphasizing personal choice tend to work better than those that sound like commands. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '경고가 강하게 금지할수록, 오히려 그 선택을 하고 싶은 충동을 느낀다'는 역설적 현상을 설명합니다. 바로 뒤 문장이 '심리학자들은 이런 의도치 않은 반발을 reactance(반발심리)라고 부른다'며 방금 설명된 현상에 이름을 붙이는 흐름이므로, 주어진 문장은 그 현상을 먼저 서술하는 ②에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "deterrent",
+        "meaning": "억제책, 단념시키는 것"
+      },
+      {
+        "word": "backlash",
+        "meaning": "반발"
+      },
+      {
+        "word": "reassert",
+        "meaning": "(권리 등을) 다시 주장하다, 되찾으려 하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-08-31",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "People consistently overestimate how much a new purchase, whether a car, a gadget, or a bigger house, will improve their day-to-day happiness. Psychologists studying this pattern find that much of the expected joy comes from imagining the object as something new and remarkable, a feeling that fades quickly once the item becomes part of ordinary life. Within weeks, most owners stop consciously noticing the purchase at all, and their baseline mood returns to roughly where it was before. This gap between the happiness people expect from a purchase and the happiness they actually experience helps explain why acquiring more possessions rarely produces the lasting satisfaction that advertisements often promise.",
+    "choices": [
+      "reasons why advertisements exaggerate the benefits of new products",
+      "how consumers can save money by avoiding unnecessary purchases",
+      "the gap between the happiness people expect from buying something and what they actually feel afterward",
+      "techniques companies use to make products feel new for longer",
+      "why bigger houses tend to make owners measurably happier"
+    ],
+    "answerIndex": 2,
+    "explanation": "이 글은 사람들이 새로운 구매가 가져다줄 행복을 실제보다 과대평가하며, 몇 주만 지나면 그 만족감이 사라지고 원래의 기분으로 돌아온다는 내용입니다. 즉 구매에서 기대하는 행복과 실제로 느끼는 행복 사이의 간극을 설명하고 있으므로, 주제로 가장 적절한 것은 ③입니다.",
+    "vocab": [
+      {
+        "word": "overestimate",
+        "meaning": "과대평가하다"
+      },
+      {
+        "word": "baseline",
+        "meaning": "기준(치), 기준선"
+      },
+      {
+        "word": "acquiring",
+        "meaning": "획득하는 것, 취득"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-08-31-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-08-31",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, 공비 r의 값은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "answerIndex": 1,
+    "explanation": "a₅/a₂ = r³ = 48/6 = 8이므로 r = 2입니다.",
+    "concept": "등비수열의 일반항: aₙ = a₁rⁿ⁻¹, 이웃하지 않는 두 항의 비는 공비의 거듭제곱이다."
+  },
+  {
+    "id": "math-2026-08-31-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-08-31",
+    "prompt": "함수 f(x) = -x³ + 6x² - 9x + 4가 x=a에서 극댓값을, x=b에서 극솟값을 가질 때, a+b의 값은?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = -3x²+12x-9 = -3(x-1)(x-3)이므로 x=1, 3에서 f'(x)=0입니다. 부호를 조사하면 x=1 좌우에서 -에서 +로 바뀌어 극소, x=3 좌우에서 +에서 -로 바뀌어 극대입니다. 따라서 극댓값을 갖는 a=3, 극솟값을 갖는 b=1이므로 a+b=4입니다.",
+    "concept": "극값 판정: f'(x)=0인 점 좌우에서 f'(x) 부호가 +에서 -로 바뀌면 극대, -에서 +로 바뀌면 극소이다."
+  },
+  {
+    "id": "math-2026-08-31-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-08-31",
+    "prompt": "∫₀² (3x² - 4x + 1) dx의 값은?",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³-2x²+x이고, x=2일 때 8-8+2=2, x=0일 때 0이므로 정적분 값은 2-0=2입니다.",
+    "concept": "정적분 계산: 부정적분을 구한 뒤 상한과 하한을 대입해 뺀다."
+  },
+  {
+    "id": "math-2026-08-31-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-08-31",
+    "prompt": "서로 다른 5개의 문자 A, B, C, D, E를 일렬로 나열할 때, A와 B가 이웃하게 나열되는 경우의 수는?",
+    "choices": [
+      "24",
+      "36",
+      "48",
+      "60",
+      "120"
+    ],
+    "answerIndex": 2,
+    "explanation": "A, B를 하나로 묶으면 4개의 대상(AB, C, D, E)을 나열하는 경우의 수는 4! = 24가지이고, 묶음 내부에서 A, B의 순서는 2! = 2가지이므로 전체 경우의 수는 24×2 = 48입니다.",
+    "concept": "이웃하는 원소는 하나로 묶어 순열을 구한 뒤, 묶음 내부의 순서도 곱해준다."
+  },
+  {
+    "id": "math-2026-08-31-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-08-31",
+    "prompt": "삼각형 ABC에서 A=60°, b=4, c=6일 때, 변 a의 길이는?",
+    "choices": [
+      "2√6",
+      "2√7",
+      "3√3",
+      "4√2",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "코사인법칙에 의해 a² = b² + c² - 2bc cosA = 16 + 36 - 2×4×6×(1/2) = 52 - 24 = 28이므로 a = √28 = 2√7입니다.",
+    "concept": "코사인법칙: a² = b² + c² - 2bc cosA"
   }
 ]
