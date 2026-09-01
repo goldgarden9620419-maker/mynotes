@@ -1,0 +1,403 @@
+<title>블로그+스레드 발행 스튜디오 — 취미가 숙제가 되고 있었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-09-01</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>취미가 숙제가 되고 있었다 (허세, 즐거움, 관찰)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">문제해결형</span><span class="chip accent">솔직 고백형 훅</span><span class="chip accent">소제목 3개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">취미</span><span class="chip">취미찾기</span><span class="chip">여가</span><span class="chip">휴식</span><span class="chip">번아웃</span><span class="chip">비교심리</span><span class="chip">소확행</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=wpIG61jKCMY" target="_blank" rel="noopener noreferrer">"사는 게 재미없어? (취미 찾는 법)"</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=wpIG61jKCMY" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"사는 게 재미없어? (취미 찾는 법)"<br />https://www.youtube.com/watch?v=wpIG61jKCMY</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">취미가 없어 곤란해하는 사람들을 위한 에세이형 영상입니다. '취미가 뭐예요?'라는 질문 앞에서 있어 보이려고 과장하게 되는 심리에서 출발해, 해답으로 '우아한 취미'를 버리라고 제안합니다. 우아하고 고상하고 전문적이고 멋져 보인다는 형용사를 빼면 취미의 본질인 즐거움이 남는다는 것입니다. 휴식마저 완벽하게 보내려고 분석·검색·계획하며 스트레스를 받는 세태를 꼬집고, "유머를 정리하고 분석하는 것은 유머가 없는 사람들의 취미다"(로버트 벤칠리)를 변주해 "취미를 정리하고 분석하는 것은 취미가 없는 사람들의 취미"라고 말합니다. 등산은 풀 세팅과 정상 등반, 골프쯤은 돼야 우아한 취미로 쳐주고 커피 취미엔 바리스타 자격증을 기대하는 높은 기준, 그리고 남에게 비춰지는 나를 위한 취미와 나를 위한 취미의 구분법(남 시선이 신경 쓰이는지, 장비·기술 압박이 드는지)을 제시합니다. 제작자 본인은 공유 자전거로 하루 15~20분 동네 천변을 달리며 아이스크림을 사 먹는 것이 취미라며, 남들 반응은 시큰둥해도 그 시간이 일상을 지탱하는 큰 힘이라고 말합니다. 취미의 사전 정의("전문적으로 하는 것이 아니라 즐기기 위하여 하는 일")를 근거로, 취미를 고급화·전문화·수익화하려 하지 말고 즐거움이 전부임을 받아들이라고 하며, 취미가 없다면 일상에서 자주 웃고 감동하는 순간을 관찰해보라는 조언으로 마무리됩니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">나는 예전부터 누군가 취미가 뭐냐고 물어보면 딱히 대답할 게 없었다. 운동이나 독서라고 말하기도 했지만 솔직히 취미라기보다는 나를 위해 해야 한다고 생각해서 하는 것에 가까웠다. 그래서 어떤 한 가지에 푹 빠져서 즐기는 사람들을 보면 부럽기도 했다. 나도 남들에게 이야기했을 때 그럴듯하고 멋있어 보이는 취미 하나쯤 있었으면 좋겠다는 생각도 했다.
+
+그런데 요즘은 생각이 조금 달라졌다. 취미까지 꼭 잘해야 하고 특별해야 할 필요가 있을까 싶다. 가만히 생각해보면 나는 아침에 걷는 시간도 좋아하고, 책을 읽다가 마음에 드는 문장을 발견하는 것도 좋아한다. 블로그에 내 생각을 정리해서 올리는 것도 어느 순간부터 자연스럽게 계속하고 있다. 예전에는 이런 것들을 취미라고 생각하지 않았다. 너무 평범하고 특별할 게 없다고 생각했기 때문이다.
+
+하지만 중요한 것은 남들이 어떻게 보느냐가 아니라 내가 그 시간을 좋아하느냐인 것 같다. 꼭 돈이 되거나 실력이 늘어야 하는 것도 아니다. 이제는 나에게 편안함과 작은 즐거움을 주고 계속 하고 싶은 것이 있다면 그것도 충분히 취미라고 생각한다. 어쩌면 새로운 취미를 찾는 것보다 내가 이미 즐기고 있는 것을 알아차리는 게 먼저인지도 모르겠다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">나는 요즘 취미마저 하나의 경쟁이 되어버린 것 같아 씁쓸하다. 원래 취미는 일을 하거나 공부하면서 쌓인 피로를 풀고 내가 좋아하는 것을 편하게 즐기는 시간이라고 생각한다. 그런데 요즘은 취미를 시작하면 어느 순간부터 남들과 비교하게 된다. 러닝을 하면 거리와 기록을 비교하고, 골프를 하면 장비와 실력을 따지고, 여행을 가면 어디를 갔는지 보여주고, 독서를 해도 몇 권을 읽었는지가 중요해진다. 그냥 좋아서 시작했던 일이 어느 순간 또 하나의 경쟁이 되는 것이다.
+
+더 큰 문제는 취미에서도 성과를 만들어야 한다는 분위기다. 잘해야 하고, 꾸준히 해야 하고, 가능하면 자격증을 따거나 돈까지 벌어야 제대로 된 취미처럼 인정받는다. 이렇게 되면 취미는 더 이상 휴식이 아니라 또 다른 숙제가 된다. 우리는 이미 직장과 사회에서 충분히 비교하고 경쟁하면서 살고 있다. 그런데 쉬는 시간까지 남보다 잘해야 한다면 도대체 언제 편하게 쉴 수 있을까. 취미만큼은 못해도 되고, 발전하지 않아도 되고, 남들에게 보여주지 않아도 된다고 생각한다. 아무런 성과가 없어도 그 시간을 기다리게 되고 즐겁다면 그것만으로 충분한 취미가 아닐까.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">취미가 숙제가 되고 있었다 (허세, 즐거움, 관찰)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">취미,취미찾기,여가,휴식,번아웃,비교심리,소확행,일상즐거움,마인드셋,멘탈관리</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">'취미가 뭐예요?' 이 질문이 제일 곤란했음.
+
+멋있어 보이려고 없는 취미를 부풀린 적도 있음.
+
+정리해봄.
+
+1. 취미의 사전 정의는 '전문적으로가 아니라 즐기기 위해 하는 일' - 잘할 필요가 애초에 없음
+2. 남 시선이 신경 쓰이고 장비 압박감이 들면 그건 취미여도 즐거움은 아님
+3. 즐거운 여가활동이 많은 사람일수록 혈압과 스트레스 호르몬이 낮았음 (연구)
+4. 러닝 기록, 골프 장비, 독서 권수를 비교하기 시작하면 취미가 숙제로 바뀜
+5. 새 취미 찾기 전에 내가 이미 좋아하는 시간부터 관찰할 것 - 답은 보통 일상에 있음
+
+하루 15분 동네 산책도 그 시간이 기다려지면 훌륭한 취미임 🌱
+
+이런 심리 정리 계속 올림. '취미 뭐예요'가 곤란한 날 꺼내 보고 싶으면 팔로우, 도움 됐으면 좋아요 하나면 충분함</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">취미가 숙제가 되고 있었다, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">솔직히 고백하면 저는 &#39;취미가 뭐예요?&#39;라는 질문이 늘 곤란했습니다. 운동이나 독서라고 답하긴 했지만 즐긴다기보다 해야 해서 하는 일에 가까웠고, 뭔가에 푹 빠져 있는 사람들이 부러웠습니다. 남들에게 말했을 때 그럴듯해 보이는 취미 하나쯤 있었으면 했습니다.<br /><br />그런데 요즘 생각이 바뀌었습니다. 취미까지 잘해야 할 필요가 있을까. 그 물음에서 시작한 이야기를 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">취미에 허세가 끼어 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">돌아보니 문제는 취미가 없는 게 아니었습니다. 취미의 기준이 너무 높았던 겁니다. 남들 입에서 &#39;멋지다&#39;가 나올 만큼 우아하고 전문적이어야 취미로 쳐주는 분위기가 있습니다. 등산이라 말하려면 정상 등반 경험이 쌓여 있어야 할 것 같고, 커피가 취미라면 드립 정도는 내려야 할 것 같은 압박입니다.<br /><br />여기에 경쟁까지 얹어집니다. 러닝을 하면 거리와 기록을 비교하고, 골프를 하면 장비와 실력을 따지고, 독서를 해도 몇 권 읽었는지가 중요해집니다. 좋아서 시작한 일이 어느 순간 사회적 비교의 무대가 되는 겁니다. 사회적 비교란 남과 견주어 자기 위치를 평가하려는 심리를 말하는데, 직장에서 충분히 하고 있는 이 비교를 쉬는 시간까지 끌고 들어오는 셈입니다.<br /><br />성과 강박도 따라옵니다. 꾸준히 해야 하고 가능하면 자격증을 따거나 수익까지 내야 제대로 된 취미로 인정받는 분위기 말입니다. 이쯤 되면 취미는 휴식이기를 멈추고 또 하나의 숙제가 됩니다. 쉬라고 있는 시간에 완벽한 계획을 세우고 장비를 검색하며 스트레스를 받는다면, 이미 재미와는 멀어진 뒤입니다. 저 역시 있어 보이는 취미를 찾느라 정작 즐거움을 놓치고 있었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 취미가 없는 게 문제가 아니었습니다. 우아해야 하고 비교에서 이겨야 하고 성과까지 내야 한다는 기준이 취미를 숙제로 만들고 있었습니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">즐거움이 전부라는 기준</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">사전을 찾아보면 취미는 전문적으로 하는 일이 아니고 즐기기 위하여 하는 일이라고 되어 있습니다. 정의 어디에도 잘해야 한다거나 남에게 보여줘야 한다는 말이 없습니다. 잘할 필요가 애초에 없었던 겁니다.<br /><br />건강 근거도 있습니다. 성인 1,399명을 조사한 연구에서 즐거운 여가 활동에 많이 참여하는 사람일수록 혈압이 낮고 코르티솔 수치도 낮았으며 심리 상태도 좋았습니다. 코르티솔이란 스트레스를 받을 때 분비되는 호르몬으로, 만성적으로 높으면 몸 곳곳에 부담을 줍니다. 핵심은 활동의 격이 높아서가 아니고 본인이 즐거워하는 활동이 많다는 데 있었습니다.<br /><br />제 취미인지 허세인지 가르는 기준도 간단했습니다. 그 활동을 할 때 남들이 어떻게 볼지 신경 쓰이는지, 더 좋은 장비와 기술이 있어야 한다는 압박이 드는지 물어보는 겁니다. 둘 중 하나라도 그렇다면 취미일 수는 있어도 즐거움은 되기 어렵습니다. 하루 15분 동네 천변을 공유 자전거로 달리며 아이스크림 하나 사 먹는 사람이, 풀 세팅 장비를 갖추고도 남의 시선에 시달리는 사람보다 취미의 본질에는 가까울 수 있다는 이야기입니다.<br /><br />참고: <a href="https://pubmed.ncbi.nlm.nih.gov/19592515/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Pressman et al., Psychosomatic Medicine(2009)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 취미의 사전 정의에는 &#39;잘해야 한다&#39;가 없습니다. 즐거운 여가가 많은 사람일수록 혈압과 스트레스 호르몬이 낮았습니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">이미 즐기는 것을 관찰하는 일</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">기준을 바꾸고 나서 제 일상을 관찰해봤습니다. 저는 아침에 걷는 시간을 좋아합니다. 책을 읽다가 마음에 드는 문장을 발견하는 순간을 좋아하고, 블로그에 생각을 정리해 올리는 일도 어느 순간부터 자연스럽게 계속하고 있습니다. 예전에는 이런 것들을 취미로 치지 않았습니다. 너무 평범하고 특별할 게 없다고 여겼기 때문입니다.<br /><br />지금은 다르게 봅니다. 중요한 건 남들이 어떻게 보느냐가 아니라 제가 그 시간을 좋아하느냐였습니다. 돈이 되지 않아도, 실력이 늘지 않아도 그 시간이 기다려지고 편안하다면 충분히 취미였습니다. 어쩌면 새로운 취미를 찾는 것보다 이미 즐기고 있는 것을 알아차리는 게 먼저인지도 모릅니다. 번아웃을 막는 휴식도 결국 이런 시간에서 나옵니다. 번아웃이란 에너지가 바닥나 일도 일상도 무기력해지는 소진 상태를 말하는데, 쉬는 시간까지 성과로 채우는 사람일수록 가까워지기 쉽습니다.<br /><br />그래서 요즘 제가 지키는 건 세 가지입니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">일주일간 내가 자주 웃고 기다리게 되는 순간을 적어본다 — 답은 대개 일상에 이미 있다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">취미에서는 기록, 장비, 권수를 세지 않는다 — 비교가 시작되면 잠시 멈춘다</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">누가 취미를 물으면 부풀리지 않고 그대로 말한다 — &#39;아침에 걷고 좋은 문장 모으는 게 취미예요&#39;</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.mentalhealth.go.kr/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 국가정신건강정보포털(보건복지부·국립정신건강센터)</a></p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b style="color:#1d4ed8;">요약:</b> 새 취미를 찾기 전에 이미 좋아하는 시간을 알아차리는 게 먼저입니다. 기다려지는 시간이 있다면 그게 취미입니다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 걷기랑 독서가 취미라고 하면 너무 시시해 보이지 않을까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 시시하게 보는 건 남의 기준이었습니다. 제 기준은 그 시간이 기다려지는가 하나로 정했습니다. 기다려지는 시간을 시시하다고 부를 이유가 없다고 저는 결론지었습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 취미로 돈도 벌 수 있으면 더 좋은 거 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 벌리면 좋겠지만 그걸 목표로 삼는 순간 취미는 일이 됐습니다. 저에게는 성과 없이도 즐거운 시간이 하나쯤 남아 있어야 나머지 삶이 버텨진다는 게 경험에서 나온 답입니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 좋아하는 게 정말 하나도 안 떠오르면 어떡할 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 그럴 땐 일주일만 저를 관찰하기로 했습니다. 언제 웃었는지, 어떤 시간이 빨리 갔는지 적어보는 겁니다. 특별한 걸 새로 시작하기보다 이미 있는 즐거움부터 찾아볼 생각입니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 오늘 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 오늘 저녁 수첩에 &#39;기다려지는 시간&#39; 목록을 만들어볼 겁니다. 아침 걷기와 좋은 문장 수집이 첫 줄에 들어갈 것 같습니다. 그리고 다음에 취미를 물어보는 사람에게는 부풀리지 않고 이 목록을 그대로 말하려 합니다.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 이제 멋진 취미를 찾는 일을 그만뒀습니다. 대신 이미 좋아하고 있던 시간들에 취미라는 이름을 붙여줬습니다. 못해도 되고 발전하지 않아도 되고 보여주지 않아도 되는 시간. 그 시간이 있어야 직장과 일상의 경쟁을 버틸 힘이 생긴다는 걸 이제는 압니다.<br /><br />오늘 하루를 돌아보며 기다려졌던 순간 하나를 찾아보시길 권합니다. 그게 남들 눈에 아무리 사소해 보여도 당신을 즐겁게 했다면 이미 훌륭한 취미입니다.<br /><br />다음에 누가 취미를 물어 곤란해지는 날 이 글을 찾아 헤매지 않으시려면 구독해두시는 걸 권합니다. 공감♥ 하나는 제 &#39;기다려지는 시간&#39; 목록에 한 줄로 올려두겠습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.youtube.com/watch?v=wpIG61jKCMY" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=wpIG61jKCMY</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-hobby-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
