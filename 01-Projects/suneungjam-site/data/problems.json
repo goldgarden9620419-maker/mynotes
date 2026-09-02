@@ -1195,5 +1195,246 @@
     "answerIndex": 2,
     "explanation": "2cosθ+1=0에서 cosθ=-1/2입니다. 0≤θ<2π에서 cosθ=-1/2를 만족하는 θ는 2π/3과 4π/3이므로 모든 해의 합은 2π/3 + 4π/3 = 6π/3 = 2π입니다.",
     "concept": "cosθ=k (-1<k<0) 형태의 방정식은 0≤θ<2π에서 y축 대칭인 두 해를 갖는다."
+  },
+  {
+    "id": "en-2026-09-03-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-03",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists have found [u]that memories are not simply stored but actively reorganized during sleep[/u]①. During deep sleep stages, the brain replays patterns of neural activity [u]associated with[/u]② recent experiences, strengthening connections between related memories. This process allows seemingly unrelated pieces of information [u]to become[/u]③ linked in ways that support creative problem solving. Researchers studying this phenomenon have observed that participants who slept after a learning task performed [u]far better[/u]④ than those who remained awake. Consequently, many experts now argue [u]what adequate sleep is essential[/u]⑤ for effective learning and memory retention.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 argue의 목적어로는 명사절 접속사 that가 와야 하는데 의문사 what이 잘못 쓰였으므로 that adequate sleep is essential로 고쳐야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 found의 목적어로 쓰인 that 명사절, ②는 activity를 수식하는 과거분사구(associated with), ③은 allow+목적어+to부정사 구조, ④는 비교급 better를 강조하는 부사 far입니다.",
+    "vocab": [
+      {
+        "word": "reorganized",
+        "meaning": "재구성된"
+      },
+      {
+        "word": "phenomenon",
+        "meaning": "현상"
+      },
+      {
+        "word": "retention",
+        "meaning": "보유, 유지"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-03",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When team members are asked to estimate their percentage of contribution to a joint project, the sum of their individual estimates typically exceeds 100 percent by a wide margin. This happens not because people are dishonest, but because each individual tends to notice and remember ______. A person who spent hours revising a report, for instance, vividly recalls that specific effort, while the equally important work quietly done by a teammate, such as gathering the initial data, fades into the background. As a result, group members often walk away from a shared task believing they carried more of the load than they actually did.",
+    "choices": [
+      "the mistakes made by other team members",
+      "their own effort more vividly than the effort contributed by others",
+      "the final outcome of the group project",
+      "the amount of time spent on unrelated tasks",
+      "the opinions of external evaluators"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 뒤에서 자신이 직접 들인 노력(보고서 수정)은 생생히 기억하지만 동료가 조용히 한 노력(자료 수집)은 기억에서 흐려진다고 설명합니다. 즉 사람들은 타인의 기여보다 자신의 노력을 더 생생하게 기억하는 경향이 있다는 뜻이므로 빈칸에는 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "vividly",
+        "meaning": "생생하게"
+      },
+      {
+        "word": "fade",
+        "meaning": "희미해지다"
+      },
+      {
+        "word": "margin",
+        "meaning": "차이, 폭"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-03",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Before mechanical clocks became common in workplaces, laborers organized their day mainly around natural cues such as sunlight and the completion of tasks.\n(A) Consequently, punctuality became a moral virtue, and being even a few minutes late was treated as a sign of poor character.\n(B) Once factories began installing clocks, however, managers started dividing the workday into precise, measurable units of time.\n(C) This shift transformed how people thought about time itself, turning it from a loose backdrop for activity into a resource that could be wasted or saved.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 시계가 도입되기 전 노동자들이 자연스러운 신호에 따라 하루를 조직했다는 내용입니다. (B)는 'however'로 공장에 시계가 도입되며 하루를 정밀한 단위로 나누기 시작했다는 전환을 제시하고, (C)는 'This shift'로 그 변화가 시간을 아끼거나 낭비할 수 있는 자원으로 바꿔놓았다고 설명하며, (A)는 'Consequently' 그 결과 시간 엄수가 도덕적 미덕이 되었다고 마무리합니다. 따라서 순서는 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "punctuality",
+        "meaning": "시간 엄수"
+      },
+      {
+        "word": "backdrop",
+        "meaning": "배경"
+      },
+      {
+        "word": "virtue",
+        "meaning": "미덕"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-03",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet this concern is often exaggerated, since most people view a request for help as a sign of trust rather than weakness.",
+    "passage": "Many people hesitate to ask others for help, even when a simple question would save time and effort. ( ① ) One common reason is the belief that requesting assistance signals weakness or incompetence. ( ② ) Some people therefore avoid reaching out even when they are stuck on a problem for a long time. ( ③ ) In fact, studies indicate that colleagues often view someone who asks a thoughtful question as more capable, since it shows an accurate sense of one's own limits. ( ④ ) Recognizing this gap between fear and reality could encourage more people to seek support when they genuinely need it. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'Yet(그러나) 이러한 우려는 과장된 것이며, 대부분의 사람들은 도움 요청을 신뢰의 표시로 본다'는 내용으로, 바로 앞의 '오랫동안 문제에 갇혀 있어도 도움을 피한다'는 문장과 대조를 이루고, 바로 뒤의 '실제로 연구에 따르면 사려 깊은 질문을 하는 동료가 더 유능하게 평가된다'는 문장이 그 근거로 자연스럽게 이어집니다. 따라서 정답은 ③입니다.",
+    "vocab": [
+      {
+        "word": "incompetence",
+        "meaning": "무능함"
+      },
+      {
+        "word": "exaggerated",
+        "meaning": "과장된"
+      },
+      {
+        "word": "genuinely",
+        "meaning": "진정으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-03",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Common wisdom suggests that silence is always the best condition for concentration, but recent studies complicate this assumption. Researchers have found that for highly repetitive or routine tasks, a moderate level of background noise, such as the hum of a café, can actually enhance focus by keeping the mind mildly stimulated rather than allowing it to wander. For tasks that require deep analytical thinking or the memorization of complex material, however, the same background noise tends to reduce performance by competing for limited mental resources. This suggests that the ideal working environment is not a fixed condition but depends heavily on the nature of the task being performed.",
+    "choices": [
+      "reasons why silence improves memorization ability",
+      "the idea that the best noise level for concentration depends on the type of task",
+      "methods for measuring background noise in workplaces",
+      "why cafés are popular places for students to study",
+      "the history of research on noise pollution"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 침묵이 항상 집중에 가장 좋은 조건이라는 통념과 달리, 반복적인 작업에는 적당한 배경 소음이 오히려 집중을 돕고 분석적 사고나 암기가 필요한 작업에는 방해가 된다는 점을 설명하며, 결국 이상적인 작업 환경은 과제의 성격에 따라 달라진다고 말하고 있습니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "stimulated",
+        "meaning": "자극받는"
+      },
+      {
+        "word": "analytical",
+        "meaning": "분석적인"
+      },
+      {
+        "word": "wander",
+        "meaning": "헤매다, 방황하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-03-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-03",
+    "prompt": "등차수열 {aₙ}의 첫째항이 5이고 공차가 4일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "220",
+      "225",
+      "230",
+      "235",
+      "240"
+    ],
+    "answerIndex": 2,
+    "explanation": "등차수열의 합 공식 Sₙ = n/2 × {2a₁ + (n-1)d}에 a₁=5, d=4, n=10을 대입하면 S₁₀ = 10/2 × {2×5 + 9×4} = 5 × {10+36} = 5 × 46 = 230입니다.",
+    "concept": "등차수열의 합 공식: Sₙ = n/2 × {2a₁ + (n-1)d}"
+  },
+  {
+    "id": "math-2026-09-03-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-03",
+    "prompt": "함수 f(x) = x³ - 3x² + 2의 극솟값은?",
+    "choices": [
+      "-4",
+      "-3",
+      "-2",
+      "-1",
+      "0"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 6x = 3x(x-2)이므로 f'(x)=0인 x는 0과 2입니다. x=0의 좌우에서 f'(x)가 양에서 음으로 바뀌므로 x=0은 극댓값을 갖고(f(0)=2), x=2의 좌우에서 f'(x)가 음에서 양으로 바뀌므로 x=2에서 극솟값을 갖습니다. f(2) = 8 - 12 + 2 = -2이므로 극솟값은 -2입니다.",
+    "concept": "f'(x)=0인 점 중 f'(x)의 부호가 음에서 양으로 바뀌는 점에서 극솟값을 갖는다."
+  },
+  {
+    "id": "math-2026-09-03-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-03",
+    "prompt": "∫₀² (3x² - 4x + 2) dx의 값은?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ - 2x² + 2x입니다. x=2일 때 8-8+4=4, x=0일 때 0이므로 정적분 값은 4-0=4입니다.",
+    "concept": "정적분은 부정적분을 구한 뒤 상한값을 대입한 값에서 하한값을 대입한 값을 뺀다."
+  },
+  {
+    "id": "math-2026-09-03-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-03",
+    "prompt": "빨간 공 3개, 파란 공 2개가 들어 있는 주머니에서 임의로 2개를 동시에 꺼낼 때, 두 공의 색이 같을 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 5개 중 2개를 꺼내는 경우의 수는 C(5,2)=10가지입니다. 두 공이 모두 빨간색일 경우의 수는 C(3,2)=3가지, 모두 파란색일 경우의 수는 C(2,2)=1가지이므로 색이 같은 경우의 수는 3+1=4가지입니다. 따라서 구하는 확률은 4/10 = 2/5입니다.",
+    "concept": "조합 C(n,r)을 이용해 각 사건의 경우의 수를 구한 뒤 전체 경우의 수로 나눈다."
+  },
+  {
+    "id": "math-2026-09-03-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-03",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2sinθ - √3 = 0의 모든 해의 합은?",
+    "choices": [
+      "π/2",
+      "2π/3",
+      "π",
+      "4π/3",
+      "3π/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "2sinθ-√3=0에서 sinθ=√3/2입니다. 0≤θ<2π에서 sinθ=√3/2를 만족하는 θ는 π/3과 2π/3이므로 모든 해의 합은 π/3 + 2π/3 = π입니다.",
+    "concept": "sinθ=k (0<k<1) 형태의 방정식은 0≤θ<2π에서 y축(θ=π/2)에 대해 대칭인 두 해를 갖는다."
   }
 ]
