@@ -709,5 +709,491 @@
     "answerIndex": 1,
     "explanation": "코사인법칙에 의해 a² = b² + c² - 2bc cosA = 16 + 36 - 2×4×6×(1/2) = 52 - 24 = 28이므로 a = √28 = 2√7입니다.",
     "concept": "코사인법칙: a² = b² + c² - 2bc cosA"
+  },
+  {
+    "id": "en-2026-09-01-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-01",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "For decades, many organizations have assumed that brainstorming in a group [u]produces[/u]① more creative ideas than individuals working alone. Yet researchers who compare group sessions with equivalent numbers of solo thinkers have repeatedly found [u]that[/u]② the opposite is often true. One reason is a phenomenon in which participants [u]waiting[/u]③ for their turn to speak forget or suppress ideas they wanted to share. Because only one person can talk at a time, many promising thoughts [u]is lost[/u]④ before they are ever spoken aloud. Some companies have responded by shifting to written brainstorming, an approach [u]that allows[/u]⑤ everyone to contribute ideas simultaneously without interruption.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 주어는 복수형인 thoughts이므로 동사도 are lost가 되어야 하는데 단수 동사 is lost가 쓰여 어법상 틀렸습니다. 나머지는 모두 올바릅니다: ①은 단수 동명사 brainstorming을 받는 단수 동사, ②는 found의 목적어로 쓰인 that절, ③은 participants를 수식하는 현재분사구, ⑤는 단수 명사 approach를 받는 관계절 동사입니다.",
+    "vocab": [
+      {
+        "word": "suppress",
+        "meaning": "억누르다, 억압하다"
+      },
+      {
+        "word": "simultaneously",
+        "meaning": "동시에"
+      },
+      {
+        "word": "interruption",
+        "meaning": "방해, 중단"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-01",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Experienced experts are often assumed to make the best teachers, since they understand a subject more deeply than anyone else in the room. Yet studies of instruction have found that the opposite can be true: once someone has mastered a skill so thoroughly that it feels automatic, they often struggle to remember which steps a beginner still finds difficult. A veteran chess player, for instance, may glance at a board and instantly sense the right move without being able to explain the reasoning behind it, because that reasoning long ago became unconscious. This suggests that being a good teacher depends less on ______ and more on the ability to recall, and communicate, what it was like not to know.",
+    "choices": [
+      "how much someone knows about a subject",
+      "how many years someone has spent teaching",
+      "how confident a teacher appears in front of a class",
+      "how many textbooks a teacher has read",
+      "how well a teacher can grade exams quickly"
+    ],
+    "answerIndex": 0,
+    "explanation": "이 글은 전문가일수록 오히려 초보자가 무엇을 어려워하는지 기억하지 못해 가르치기 어려워질 수 있다는 내용입니다. 빈칸 뒤에서 '모르던 시절이 어땠는지 기억하고 전달하는 능력'과 대조되는 개념이 필요하므로, 빈칸에는 '얼마나 많이 아는가'를 의미하는 ①이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "veteran",
+        "meaning": "노련한, 베테랑의"
+      },
+      {
+        "word": "unconscious",
+        "meaning": "무의식적인"
+      },
+      {
+        "word": "glance",
+        "meaning": "흘낏 보다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-01",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Grocery stores have long placed everyday staples such as milk and eggs at the very back of the store, far from the entrance.\n(A) By the time they finally reach the milk, they have walked past shelves of items they had not originally planned to buy.\n(B) Yet retail researchers point out that this layout is rarely accidental: staples are what most shoppers come in for, so placing them far away forces customers to walk through the rest of the store first.\n(C) As a result, this seemingly inconvenient arrangement quietly increases the average amount each customer spends per visit.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '식료품점이 우유·달걀 같은 필수품을 매장 맨 뒤쪽에 배치한다'는 도입입니다. (B)는 이 배치가 우연이 아니라 고객이 매장 전체를 지나가게 만들려는 의도임을 설명하고, (A)는 그 결과 고객이 계획에 없던 상품 진열대를 지나치게 된다는 구체적 상황을 이어서 설명하며, (C)는 이러한 배치가 결국 평균 구매액을 늘린다는 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "staples",
+        "meaning": "필수 식료품"
+      },
+      {
+        "word": "retail",
+        "meaning": "소매의"
+      },
+      {
+        "word": "layout",
+        "meaning": "배치, 구조"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-01",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Because writing by hand is slower, students are forced to summarize and paraphrase ideas in their own words rather than copying them verbatim.",
+    "passage": "When laptops became common in university lecture halls, many assumed that typing notes would help students capture more information and therefore learn more. ( ① ) Researchers who compared students taking notes by hand with those typing on laptops found a surprising result: despite recording less content overall, the handwriting group performed better on tests of conceptual understanding. ( ② ) Typing, by contrast, is fast enough that students can transcribe a lecture nearly word for word without ever pausing to process what they are hearing. ( ③ ) This kind of shallow, transcription-style note-taking appears to bypass the very processing that turns information into lasting understanding. ( ④ ) The findings suggest that the physical slowness often seen as a drawback of handwriting may actually be doing important cognitive work behind the scenes. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '손으로 쓰는 것이 느리기 때문에 학생들이 자기 말로 요약·바꿔 말하게 된다'는, 손글씨 집단이 더 좋은 성과를 낸 이유를 설명합니다. 바로 뒤에서 'Typing, by contrast'로 타이핑의 특징과 대조되는 흐름이 이어지므로, 주어진 문장은 손글씨 집단의 우수한 성과를 언급한 직후인 ②에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "transcribe",
+        "meaning": "받아적다, 옮겨 적다"
+      },
+      {
+        "word": "verbatim",
+        "meaning": "그대로, 축어적으로"
+      },
+      {
+        "word": "paraphrase",
+        "meaning": "바꾸어 말하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-01",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When people are given the chance to reverse a decision later, most assume they will end up happier, since they retain the freedom to correct any mistake. Psychologists who study decision-making have found the opposite pattern in many everyday choices: people who commit to a decision with no option to change it later often report greater satisfaction than those who keep the option open. One explanation is that an irreversible choice pushes the mind to stop comparing the decision to alternatives and instead focus on finding reasons to feel good about what was chosen. Someone who knows a decision cannot be undone has little use for continued doubt, so attention shifts toward the positive aspects of the outcome. In contrast, people who keep their options open tend to keep mentally re-evaluating alternatives, which can quietly undermine their satisfaction with whatever they eventually keep.",
+    "choices": [
+      "reasons why people regret decisions they cannot reverse",
+      "how limiting the ability to reverse a decision can increase satisfaction with it",
+      "why psychologists disagree about the benefits of freedom of choice",
+      "techniques for helping people make decisions more quickly",
+      "why people prefer options that can be changed at any time"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 결정을 되돌릴 수 없을 때 오히려 대안과의 비교를 멈추고 선택에 만족하는 이유를 찾게 되어 만족도가 높아지는 반면, 선택지를 열어두면 계속 대안을 재평가하게 되어 만족도가 낮아진다는 내용입니다. 즉 되돌릴 수 없는 선택이 만족도를 높이는 원리를 설명하고 있으므로, 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "irreversible",
+        "meaning": "되돌릴 수 없는"
+      },
+      {
+        "word": "undermine",
+        "meaning": "약화시키다"
+      },
+      {
+        "word": "commit",
+        "meaning": "전념하다, 확약하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-01-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-01",
+    "prompt": "등차수열 {aₙ}의 첫째항이 3이고 공차가 4일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "190",
+      "200",
+      "210",
+      "220",
+      "230"
+    ],
+    "answerIndex": 2,
+    "explanation": "등차수열의 합 공식 Sₙ = n/2 × {2a₁ + (n-1)d}에 a₁=3, d=4, n=10을 대입하면 S₁₀ = 10/2 × {2×3 + 9×4} = 5 × (6+36) = 5×42 = 210입니다.",
+    "concept": "등차수열의 합 공식: Sₙ = n/2 × {2a₁ + (n-1)d}"
+  },
+  {
+    "id": "math-2026-09-01-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-01",
+    "prompt": "함수 f(x) = x³ - 3x² - 9x + 5의 극솟값은?",
+    "choices": [
+      "-30",
+      "-24",
+      "-22",
+      "-18",
+      "-10"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 6x - 9 = 3(x-3)(x+1)이므로 f'(x)=0인 x는 -1, 3입니다. f''(x)=6x-6이고, f''(3)=12>0이므로 x=3에서 극소, f''(-1)=-12<0이므로 x=-1에서 극대입니다. 따라서 극솟값은 f(3) = 27-27-27+5 = -22입니다.",
+    "concept": "극값 판정: f'(x)=0인 점에서 f''(x)>0이면 극소, f''(x)<0이면 극대이다."
+  },
+  {
+    "id": "math-2026-09-01-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-01",
+    "prompt": "∫₀³ (x² - 2x + 3) dx의 값은?",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answerIndex": 3,
+    "explanation": "부정적분은 x³/3 - x² + 3x이고, x=3일 때 9-9+9=9, x=0일 때 0이므로 정적분 값은 9-0=9입니다.",
+    "concept": "정적분 계산: 부정적분을 구한 뒤 상한과 하한 값의 차를 구한다."
+  },
+  {
+    "id": "math-2026-09-01-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-01",
+    "prompt": "주머니에 흰 공 3개와 검은 공 2개가 들어있다. 이 중에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 공이 모두 흰 공일 확률은?",
+    "choices": [
+      "1/10",
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 5개 중 2개를 꺼내는 경우의 수는 ₅C₂=10가지이고, 흰 공 3개 중 2개를 꺼내는 경우의 수는 ₃C₂=3가지이므로 확률은 3/10입니다.",
+    "concept": "동시에 꺼내는 경우의 확률: (원하는 사건의 조합의 수) ÷ (전체 조합의 수)"
+  },
+  {
+    "id": "math-2026-09-01-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-01",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2sinθ - 1 = 0의 해의 개수는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "answerIndex": 1,
+    "explanation": "2sinθ-1=0에서 sinθ=1/2입니다. 0≤θ<2π에서 sinθ=1/2를 만족하는 θ는 π/6과 5π/6이므로 해의 개수는 2개입니다.",
+    "concept": "sinθ=k (0<k<1) 형태의 방정식은 0≤θ<2π에서 두 개의 해를 갖는다(제1사분면과 제2사분면)."
+  },
+  {
+    "id": "en-2026-09-02-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-02",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many students believe that rereading a textbook chapter several times is the most effective way [u]to study[/u]① for an exam, since it feels thorough and familiar. Yet cognitive scientists who study memory have found that a technique called retrieval practice, [u]which requires[/u]② learners to recall information from memory without looking at the text, produces far stronger long-term retention. One reason is that the mental effort of [u]retrieve[/u]③ a fact, even when the attempt fails, strengthens the neural pathways associated with that memory. Rereading, by contrast, creates a comforting but often false sense of mastery, because recognizing a sentence [u]is[/u]④ easier than reproducing it unaided. Consequently, many educators now encourage students to close their books and quiz themselves, an approach [u]shown[/u]⑤ to outperform passive review in study after study.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③에서 전치사 of의 목적어 자리이므로 동명사 retrieving이 되어야 하는데 동사원형 retrieve가 쓰여 어법상 틀렸습니다. 나머지는 모두 올바릅니다: ①은 '~하는 가장 효과적인 방법'을 뜻하는 to부정사, ②는 retrieval practice를 부연 설명하는 관계절 동사, ④는 단수 동명사 recognizing을 받는 단수 동사, ⑤는 approach를 수식하는 과거분사구입니다.",
+    "vocab": [
+      {
+        "word": "retrieval",
+        "meaning": "인출, 회수"
+      },
+      {
+        "word": "retention",
+        "meaning": "기억 유지, 보유"
+      },
+      {
+        "word": "unaided",
+        "meaning": "도움 없이"
+      },
+      {
+        "word": "outperform",
+        "meaning": "능가하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-02",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In many Western conversational styles, even a brief pause of more than a second or two after someone finishes speaking can feel awkward, prompting the next speaker to jump in quickly to fill the gap. Linguists who study conversation across cultures point out that this discomfort is not a universal reaction to silence itself but rather a learned expectation about pacing. In some cultures, several seconds of silence between turns is entirely normal and even signals that a listener is thoughtfully considering what was just said, rather than that the conversation has broken down. This suggests that the tension so many people feel during a lull in conversation says less about silence itself and more about ______.",
+    "choices": [
+      "the particular rhythm their culture has trained them to expect",
+      "how confident the two speakers are in the conversation",
+      "how much both speakers already know about the topic",
+      "the volume at which people usually speak to each other",
+      "how quickly people are able to think of new topics"
+    ],
+    "answerIndex": 0,
+    "explanation": "이 글은 대화 중 침묵이 불편하게 느껴지는 것이 침묵 자체의 문제가 아니라 문화마다 다르게 학습된 대화 속도에 대한 기대 때문이라는 내용입니다. 따라서 빈칸에는 '문화가 학습시킨 특정한 리듬'을 의미하는 ①이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "lull",
+        "meaning": "소강상태, 잠시 멈춤"
+      },
+      {
+        "word": "pacing",
+        "meaning": "속도 조절"
+      },
+      {
+        "word": "prompting",
+        "meaning": "촉발하다, 재촉하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-02",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "It is well known that upscale restaurants often keep their dining rooms dimly lit rather than brightly illuminated.\n(A) Under dim light, diners tend to eat more slowly and rely more on taste and conversation than on the visual appearance of the food.\n(B) Yet lighting designers argue that this choice is about more than atmosphere: dim light subtly shifts how people behave at the table.\n(C) As a result, the meal feels less rushed and more intimate, which restaurants believe encourages guests to linger and order another course or drink.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 고급 레스토랑이 어두운 조명을 사용한다는 사실을 도입합니다. (B)는 이것이 단순한 분위기 연출이 아니라 손님의 행동을 바꾸는 의도적 선택이라는 설명이고, (A)는 어두운 조명 아래서 사람들이 천천히 먹고 대화와 맛에 집중한다는 구체적 효과를, (C)는 그 결과 식사가 덜 서두르는 느낌이 되어 손님이 더 머물게 된다는 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "illuminated",
+        "meaning": "조명이 밝혀진"
+      },
+      {
+        "word": "linger",
+        "meaning": "머무르다, 오래 남다"
+      },
+      {
+        "word": "intimate",
+        "meaning": "친밀한, 아늑한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-02",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Ironically, the store offering only six flavors sold far more jars of jam than the one offering twenty-four.",
+    "passage": "Consumers often assume that having more options when shopping will make it easier to find exactly what they want. ( ① ) To test this assumption, researchers set up two tasting booths in a grocery store: one displaying six varieties of jam and another displaying twenty-four. ( ② ) The larger display attracted more browsers, since passersby were curious to sample such a wide variety. ( ③ ) However, when it came time to actually purchase a jar, most shoppers who had faced twenty-four choices left without buying anything, apparently overwhelmed by the difficulty of comparing so many options. ( ④ ) This finding suggests that beyond a certain point, additional choices can create anxiety and indecision rather than satisfaction. ( ⑤ ) Retailers who assume that “more is always better” may therefore be undermining their own sales without realizing it.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 '여섯 가지 잼을 진열한 매장이 스물네 가지를 진열한 매장보다 더 많이 팔았다'는 구체적 결과입니다. 이는 스물네 가지 선택지 앞에서 압도되어 구매하지 않고 떠난 소비자들에 대한 설명 직후에 이어져야 자연스럽고, 바로 다음 문장인 'This finding suggests...'가 이 결과를 가리키므로 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "overwhelmed",
+        "meaning": "압도된"
+      },
+      {
+        "word": "indecision",
+        "meaning": "우유부단함, 결정 못함"
+      },
+      {
+        "word": "undermining",
+        "meaning": "약화시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-02",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Most people feel confident that they understand how everyday devices work, such as a bicycle, a zipper, or a flush toilet. When asked to rate their own understanding before being tested, they typically give themselves a high score. Yet when researchers then ask these same people to explain, step by step, exactly how the device functions, most struggle to get past a vague description and are unable to account for how the parts interact. Confronted with this gap, participants usually lower their confidence ratings substantially, admitting that their sense of understanding had been far shallower than they assumed. This pattern reveals that our everyday feeling of comprehension is often an illusion, one that persists only until we are forced to articulate the mechanism in detail.",
+    "choices": [
+      "how expert knowledge differs from everyday intuition",
+      "why people often overestimate how well they understand common things until asked to explain them",
+      "techniques for testing people's confidence levels accurately",
+      "why mechanical devices are more complicated than they appear",
+      "how researchers measure differences in intelligence"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 사람들이 평소 익숙한 기계의 작동 원리를 잘 안다고 믿지만, 막상 단계별로 설명해보라고 하면 제대로 설명하지 못하고 자신감이 낮아진다는 내용으로, 일상적 이해가 실제로는 착각일 수 있음을 보여줍니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "confronted",
+        "meaning": "직면한"
+      },
+      {
+        "word": "articulate",
+        "meaning": "명확히 설명하다"
+      },
+      {
+        "word": "comprehension",
+        "meaning": "이해"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-02-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-02",
+    "prompt": "등비수열 {aₙ}의 첫째항이 2이고 공비가 3일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "240",
+      "242",
+      "244",
+      "246",
+      "248"
+    ],
+    "answerIndex": 1,
+    "explanation": "등비수열의 합 공식 Sₙ = a₁(rⁿ-1)/(r-1)에 a₁=2, r=3, n=5를 대입하면 S₅ = 2×(3⁵-1)/(3-1) = 2×(243-1)/2 = 242입니다.",
+    "concept": "등비수열의 합 공식: Sₙ = a₁(rⁿ-1)/(r-1) (단, r≠1)"
+  },
+  {
+    "id": "math-2026-09-02-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-02",
+    "prompt": "곡선 y = x³ - 4x + 1 위의 점 (1, -2)에서의 접선의 기울기는?",
+    "choices": [
+      "-3",
+      "-2",
+      "-1",
+      "0",
+      "1"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(x) = x³ - 4x + 1이라 하면 f'(x) = 3x² - 4입니다. 점 (1, -2)에서의 접선의 기울기는 f'(1) = 3(1)² - 4 = 3 - 4 = -1입니다.",
+    "concept": "곡선 위의 한 점에서의 접선의 기울기는 그 점에서의 미분계수 f'(a)와 같다."
+  },
+  {
+    "id": "math-2026-09-02-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-02",
+    "prompt": "∫₁² (3x² - 2x + 1) dx의 값은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ - x² + x입니다. x=2일 때 8-4+2=6, x=1일 때 1-1+1=1이므로 정적분 값은 6-1=5입니다.",
+    "concept": "정적분은 부정적분을 구한 뒤 상한값을 대입한 값에서 하한값을 대입한 값을 뺀다."
+  },
+  {
+    "id": "math-2026-09-02-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-02",
+    "prompt": "어느 반 학생 중 60%는 안경을 쓰고, 안경을 쓴 학생 중 30%는 왼손잡이다. 안경을 쓰지 않은 학생 중 20%는 왼손잡이다. 이 반에서 임의로 한 학생을 선택했을 때, 이 학생이 왼손잡이일 확률은?",
+    "choices": [
+      "1/5",
+      "6/25",
+      "13/50",
+      "3/10",
+      "7/20"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 확률의 법칙에 의해 P(왼손잡이) = P(안경)×P(왼손잡이|안경) + P(안경아님)×P(왼손잡이|안경아님) = (3/5)×(3/10) + (2/5)×(1/5) = 9/50 + 4/50 = 13/50입니다.",
+    "concept": "전체 확률의 법칙: P(A) = P(A|B)P(B) + P(A|Bᶜ)P(Bᶜ)"
+  },
+  {
+    "id": "math-2026-09-02-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-02",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2cosθ + 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 2,
+    "explanation": "2cosθ+1=0에서 cosθ=-1/2입니다. 0≤θ<2π에서 cosθ=-1/2를 만족하는 θ는 2π/3과 4π/3이므로 모든 해의 합은 2π/3 + 4π/3 = 6π/3 = 2π입니다.",
+    "concept": "cosθ=k (-1<k<0) 형태의 방정식은 0≤θ<2π에서 y축 대칭인 두 해를 갖는다."
   }
 ]
