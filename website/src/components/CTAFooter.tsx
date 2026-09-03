@@ -16,7 +16,7 @@ export function CTAFooter({ blogUrl }: { blogUrl: string }) {
           loop
           playsInline
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-bg-deep via-bg-deep/70 to-bg-deep" />
+        <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/60 via-bg-deep/35 to-bg-deep" />
       </div>
       <Mascot pose="heart" size={100} delay={0.2} className="top-6 right-4 lg:top-10 lg:right-24" />
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-white/12 bg-white/[0.07] px-8 py-16 text-center backdrop-blur-xl">
