@@ -10,7 +10,18 @@ export function Hero({ blogUrl }: { blogUrl: string }) {
   const day = daysSinceKst(PRACTICE_START_DATE);
 
   return (
-    <section className="relative flex min-h-[100dvh] flex-col items-center justify-center px-6 text-center">
+    <section className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-6 text-center">
+      <div className="absolute inset-0 -z-10">
+        <video
+          className="h-full w-full object-cover"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_3HJnC5CkXHg6AD5BHY10m7yn4pr/hf_20260903_061412_e18f46ac-9268-4983-a22d-8716fa7cf61a.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-bg-deep/75 via-bg-deep/55 to-bg-deep" />
+      </div>
       <Mascot />
       <motion.span
         initial={{ opacity: 0, y: 12 }}
