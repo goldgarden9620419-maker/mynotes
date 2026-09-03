@@ -6,7 +6,18 @@ import { Reveal } from "./Reveal";
 
 export function CTAFooter({ blogUrl }: { blogUrl: string }) {
   return (
-    <footer className="relative px-6 py-32">
+    <footer className="relative overflow-hidden px-6 py-32">
+      <div className="absolute inset-0 -z-10">
+        <video
+          className="h-full w-full object-cover"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_3HJnC5CkXHg6AD5BHY10m7yn4pr/hf_20260903_063427_94ed32e3-e1a2-4e3a-a105-855d5b21d654.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-bg-deep via-bg-deep/70 to-bg-deep" />
+      </div>
       <Mascot pose="heart" size={100} delay={0.2} className="top-6 right-4 lg:top-10 lg:right-24" />
       <Reveal className="mx-auto flex max-w-2xl flex-col items-center rounded-3xl border border-white/12 bg-white/[0.07] px-8 py-16 text-center backdrop-blur-xl">
         <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">
