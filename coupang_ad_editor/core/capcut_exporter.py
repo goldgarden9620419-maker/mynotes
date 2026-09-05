@@ -235,6 +235,17 @@ def _patch_meta(draft_dir: str, draft_name: str, total_us: int, root: str):
         for key, value in updates.items():
             if key in meta:
                 meta[key] = value
+        # 견본(템플릿)에서 딸려온 미디어 목록 제거 — 이게 남아 있으면
+        # CapCut이 프로젝트를 열 때 '미디어 연결(파일을 찾을 수 없음)'
+        # 창을 띄운다. 우리 타임라인은 source.mp4만 쓰므로 비워도 안전.
+        if "draft_materials" in meta:
+            if isinstance(meta["draft_materials"], list):
+                for group in meta["draft_materials"]:
+                    if isinstance(group, dict) and isinstance(
+                            group.get("value"), list):
+                        group["value"] = []
+            else:
+                meta["draft_materials"] = []
         with open(meta_path, "w", encoding="utf-8") as f:
             json.dump(meta, f, ensure_ascii=False)
     except (OSError, ValueError):
