@@ -1,0 +1,1922 @@
+[
+  {
+    "id": "en-2026-08-29-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-08-29",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Most people believe [u]that willpower alone determines success[/u]① However, research suggests that context often matters more than willpower itself. When environments are designed to reduce friction, individuals are more likely to repeat desired behaviors [u]consistent with their goals[/u]②. For example, someone trying to read more books might place a book on their pillow, making it the very object [u]they see[/u]③ before sleep. Over time, such small adjustments can [u]reducing[/u]④ the mental effort required to begin a task, allowing habits to form naturally. This is why many psychologists argue [u]that environment shapes behavior as much as motivation does[/u]⑤.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 조동사 can 뒤에는 동사원형이 와야 하므로 reducing이 아니라 reduce가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 believe의 목적어로 쓰인 명사절, ②는 behaviors를 뒤에서 수식하는 형용사구, ③은 목적격 관계대명사가 생략된 관계절(the object (that) they see), ⑤는 argue의 목적어로 쓰인 명사절입니다.",
+    "vocab": [
+      {
+        "word": "willpower",
+        "meaning": "의지력"
+      },
+      {
+        "word": "friction",
+        "meaning": "마찰, 저항(여기선 장애 요인)"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-29-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-08-29",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When people are asked to estimate how long a task will take, they consistently underestimate the time required, even when they have completed similar tasks before. This tendency, known as the planning fallacy, persists because people tend to focus on the best-case scenario for the specific task in front of them rather than on ______. A traveler packing for a trip, for instance, might recall how quickly they packed once in the past, ignoring the many other times unexpected delays occurred. As a result, plans built on optimistic assumptions frequently unravel when reality intervenes.",
+    "choices": [
+      "their own personal preferences",
+      "the past record of how similar tasks actually went",
+      "the opinions of other people involved",
+      "the specific tools available to them",
+      "the amount of time they have available"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 뒤 예시에서 여행자가 '한 번 빨리 쌌던 기억'만 떠올리고 '지연이 있었던 다른 여러 번'은 무시한다고 했습니다. 즉 사람들은 비슷한 과제들이 실제로 어떻게 진행되었는지에 대한 과거 기록을 무시하고 최선의 시나리오에만 집중한다는 뜻이므로, 빈칸에는 '비슷한 과제들의 실제 진행 기록'을 의미하는 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "fallacy",
+        "meaning": "오류, 잘못된 통념"
+      },
+      {
+        "word": "underestimate",
+        "meaning": "과소평가하다"
+      },
+      {
+        "word": "unravel",
+        "meaning": "틀어지다, 어긋나다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-29-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-08-29",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Public libraries were once viewed simply as buildings that stored books for the community to borrow.\n(A) As a result, libraries began offering meeting rooms, workshops, and public computers, transforming quiet reading halls into lively community hubs.\n(B) However, this narrow view started to change as digital technology reduced the need for physical book storage.\n(C) This shift reflected a broader recognition that public spaces could serve purposes beyond their original function.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 '도서관은 책을 보관하는 건물로 여겨졌다'는 통념을 제시합니다. (B)는 'However'로 이 통념이 디지털 기술 때문에 바뀌기 시작했다고 전환하고, (A)는 'As a result' 그 결과로 도서관이 회의실·워크숍·컴퓨터를 제공하는 공간으로 변모했다고 설명하며, (C)는 'This shift'로 앞의 변화를 받아 더 넓은 의미를 정리합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "hub",
+        "meaning": "중심지, 거점"
+      },
+      {
+        "word": "recognition",
+        "meaning": "인식"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-29-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-08-29",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet without such interruptions, the brain rarely receives a clear signal that a change in approach is needed.",
+    "passage": "Mistakes are often treated as failures to be avoided at all costs. ( ① ) In many learning environments, students are encouraged to get every answer right on the first attempt. ( ② ) This approach, however, overlooks an important function that errors serve: they interrupt automatic patterns of thinking and force a person to slow down. ( ③ ) When everything proceeds smoothly, the mind tends to continue relying on the same familiar strategies, even when those strategies are no longer effective. ( ④ ) For this reason, some educators now design lessons that deliberately expose students to manageable failures, encouraging deeper reflection than error-free practice ever could. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'Yet(그러나) 이런 방해[중단]가 없으면 뇌는 접근법을 바꿔야 한다는 신호를 받지 못한다'는 내용으로, 바로 앞의 '오류가 자동적 사고 패턴을 방해하고 느리게 만든다'는 문장과 대조를 이루며 자연스럽게 이어집니다. 그 뒤에는 '모든 것이 순조로우면 계속 같은 전략에 의존한다'는 문장이 이어져야 논리가 통하므로, 정답은 ③입니다.",
+    "vocab": [
+      {
+        "word": "deliberately",
+        "meaning": "의도적으로"
+      },
+      {
+        "word": "manageable",
+        "meaning": "감당할 수 있는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-29-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-08-29",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many companies now track employee productivity through detailed digital monitoring, assuming that closer observation naturally leads to better performance. Yet several studies suggest the opposite can occur: when workers feel constantly watched, they often shift their attention toward appearing busy rather than accomplishing meaningful work. Employees may respond to surveillance by prioritizing tasks that are easy to measure, even if those tasks matter less, simply because visible effort is rewarded more directly than genuine results. Ironically, the very systems designed to boost accountability can end up encouraging performance for an audience instead of authentic contribution.",
+    "choices": [
+      "reasons why companies should monitor employees more closely",
+      "how digital tools measure employee productivity accurately",
+      "the possibility that workplace surveillance backfires by encouraging visible effort over real contribution",
+      "methods for reducing the cost of employee monitoring systems",
+      "the history of workplace surveillance technology"
+    ],
+    "answerIndex": 2,
+    "explanation": "이 글은 직원을 더 촘촘히 감시하면 성과가 좋아질 거라는 가정과 달리, 감시가 오히려 '보여주기식 바쁨'을 유도해 실제 성과보다 눈에 띄는 노력을 우선시하게 만든다는 역설을 설명하고 있습니다. 따라서 주제로 가장 적절한 것은 ③입니다.",
+    "vocab": [
+      {
+        "word": "surveillance",
+        "meaning": "감시"
+      },
+      {
+        "word": "accountability",
+        "meaning": "책임(소재)"
+      },
+      {
+        "word": "authentic",
+        "meaning": "진정한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-08-29-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-08-29",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, a₂₀의 값은?",
+    "choices": [
+      "52",
+      "55",
+      "58",
+      "61",
+      "64"
+    ],
+    "answerIndex": 2,
+    "explanation": "공차를 d라 하면 a₇ - a₃ = 4d = 12이므로 d = 3입니다. a₁ = a₃ - 2d = 7 - 6 = 1이므로 aₙ = 1 + 3(n-1) = 3n - 2입니다. 따라서 a₂₀ = 3×20 - 2 = 58입니다.",
+    "concept": "등차수열의 일반항: aₙ = a₁ + (n-1)d (d는 공차)"
+  },
+  {
+    "id": "math-2026-08-29-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-08-29",
+    "prompt": "함수 f(x) = x³ - 3x² - 9x + 2가 극값을 가지는 x의 값을 각각 a, b (a < b)라 할 때, f(a) - f(b)의 값은?",
+    "choices": [
+      "24",
+      "28",
+      "32",
+      "36",
+      "40"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 6x - 9 = 3(x-3)(x+1)이므로 극값을 가지는 x는 -1과 3입니다. 즉 a = -1, b = 3입니다. f(-1) = -1 - 3 + 9 + 2 = 7이고, f(3) = 27 - 27 - 27 + 2 = -25입니다. 따라서 f(a) - f(b) = 7 - (-25) = 32입니다.",
+    "concept": "극값은 f'(x)=0인 지점에서 f'(x)의 부호가 바뀔 때 나타난다."
+  },
+  {
+    "id": "math-2026-08-29-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-08-29",
+    "prompt": "곡선 y = x² - 4x + 3과 x축으로 둘러싸인 영역의 넓이는?",
+    "choices": [
+      "1",
+      "4/3",
+      "5/3",
+      "2",
+      "7/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "x² - 4x + 3 = 0의 해는 x = 1, 3이고, 이 구간에서 곡선은 x축 아래에 있으므로 넓이는 ∫₁³ {-(x² - 4x + 3)} dx 입니다. 부정적분은 -x³/3 + 2x² - 3x이고, x=3일 때 값은 -9+18-9=0, x=1일 때 값은 -1/3+2-3=-4/3이므로 넓이는 0-(-4/3) = 4/3입니다.",
+    "concept": "곡선이 x축 아래에 있는 구간의 넓이는 -f(x)를 적분해서 구한다."
+  },
+  {
+    "id": "math-2026-08-29-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-08-29",
+    "prompt": "주머니에 1부터 5까지의 숫자가 하나씩 적힌 공 5개가 들어 있다. 이 중 서로 다른 2개의 공을 동시에 꺼낼 때, 꺼낸 두 공에 적힌 수의 합이 짝수일 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 ₅C₂ = 10가지입니다. 두 수의 합이 짝수이려면 두 수가 모두 홀수이거나 모두 짝수여야 합니다. 홀수 {1,3,5} 중 2개를 고르는 경우는 ₃C₂ = 3가지, 짝수 {2,4} 중 2개를 고르는 경우는 ₂C₂ = 1가지로 총 4가지입니다. 따라서 확률은 4/10 = 2/5입니다.",
+    "concept": "확률 = (원하는 경우의 수) ÷ (전체 경우의 수), 조합 nCr = n!/(r!(n-r)!)"
+  },
+  {
+    "id": "math-2026-08-29-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-08-29",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2cos²θ - 3sinθ = 0을 만족하는 θ의 개수는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "cos²θ = 1 - sin²θ를 대입하면 2(1-sin²θ) - 3sinθ = 0, 즉 2sin²θ + 3sinθ - 2 = 0입니다. sinθ를 t로 놓으면 2t² + 3t - 2 = 0이고, t = (-3±5)/4이므로 t = 1/2 또는 t = -2입니다. sinθ는 -1과 1 사이의 값만 가지므로 t = -2는 불가능하고, sinθ = 1/2을 만족하는 θ는 0 ≤ θ < 2π에서 π/6과 5π/6, 즉 2개입니다.",
+    "concept": "cos²θ = 1 - sin²θ 관계를 이용해 sinθ만의 식으로 치환한다."
+  },
+  {
+    "id": "en-2026-08-30-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-08-30",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "City planners have begun to recognize [u]that[/u]① rows of mature trees can lower local temperatures more effectively than most engineered cooling systems. As leaves release moisture into the air, the surrounding pavement and buildings [u]are kept[/u]② several degrees cooler than they would be without shade. This effect, often called the urban cooling effect, becomes especially valuable during long summer heat waves, when heat-related illnesses [u]rising[/u]③ sharply in neighborhoods with little greenery. Because planting large trees along streets takes decades to show full benefits, some cities have started planning decades ahead, treating tree cover as infrastructure [u]that must be maintained[/u]④ carefully rather than added occasionally. Officials now argue that maintaining shade should be considered just as essential as [u]repairing[/u]⑤ roads or replacing streetlights.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③에서 when절의 동사는 정동사(rise)가 와야 하는데 분사 rising으로 쓰여 문장이 성립하지 않습니다. rising을 rise로 고쳐야 합니다. 나머지는 모두 올바릅니다: ①은 recognize의 목적어로 쓰인 that절, ②는 주어(pavement and buildings)에 맞는 수동태, ④는 infrastructure를 수식하는 관계절, ⑤는 as...as 비교 구문에서 앞의 maintaining과 병렬을 이루는 동명사입니다.",
+    "vocab": [
+      {
+        "word": "pavement",
+        "meaning": "포장도로"
+      },
+      {
+        "word": "moisture",
+        "meaning": "수분, 습기"
+      },
+      {
+        "word": "greenery",
+        "meaning": "녹지, 초목"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-30-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-08-30",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When people believe they are multitasking efficiently, they are often unaware that each shift between tasks carries a hidden cost. Switching from writing an email to checking a phone message does not happen instantly; the brain must first disengage from the rules and goals of the first task before it can fully apply itself to the second. Because this disengagement takes a measurable amount of time, workers who constantly switch between small tasks often finish the day having accomplished less than they expected, even though they felt continuously busy. Research on this \"switching cost\" suggests that productivity depends less on ______ and more on how rarely a person interrupts one task to begin another.",
+    "choices": [
+      "how many hours a person spends at their desk",
+      "how many separate tasks a person juggles at once",
+      "how much experience a person has with each task",
+      "how supportive a person's coworkers are",
+      "how organized a person's workspace looks"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 멀티태스킹이 효율적이라는 착각과 달리, 작업을 전환할 때마다 숨겨진 '전환 비용'이 발생한다는 내용입니다. 빈칸 뒤에 '~보다는, 한 작업을 얼마나 드물게 방해하고 다른 작업을 시작하는지에 더 좌우된다'고 했으므로, 이와 대조되는 빈칸에는 '한 번에 얼마나 많은 작업을 동시에 처리하려 하는지'를 의미하는 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "disengage",
+        "meaning": "(하던 일에서) 손을 떼다, 벗어나다"
+      },
+      {
+        "word": "juggle",
+        "meaning": "여러 일을 동시에 처리하다"
+      },
+      {
+        "word": "measurable",
+        "meaning": "측정 가능한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-30-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-08-30",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Community gardens were originally created to give city residents a small plot of land to grow their own vegetables.\n(A) As neighbors began spending more time together while gardening, these spaces gradually took on a second purpose beyond food production.\n(B) Yet in many neighborhoods, the gardens ended up serving a purpose that had little to do with agriculture at all.\n(C) Today, some cities treat community gardens primarily as social infrastructure, valuing the relationships they create as much as the produce they yield.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '지역사회 정원은 원래 채소를 기르기 위한 땅을 제공하려고 만들어졌다'는 도입입니다. (B)는 'Yet'으로 실제로는 농업과 거의 무관한 다른 목적으로 쓰이게 되었다고 반전을 제시하고, (A)는 이웃들이 함께 시간을 보내면서 정원이 두 번째 목적을 갖게 된 과정을 구체적으로 설명하며, (C)는 'Today'로 오늘날의 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "plot",
+        "meaning": "작은 땅, 부지"
+      },
+      {
+        "word": "infrastructure",
+        "meaning": "사회기반시설"
+      },
+      {
+        "word": "yield",
+        "meaning": "(작물 등을) 산출하다, 산출물"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-30-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-08-30",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet this restless search for stimulation may be exactly what prevents the mind from wandering long enough to generate anything new.",
+    "passage": "Boredom is usually treated as an unpleasant state to be avoided as quickly as possible. ( ① ) Whenever a spare moment appears, most people instinctively reach for a phone or another source of entertainment. ( ② ) This habit is so automatic that many people rarely experience more than a few seconds of true boredom in a given day. ( ③ ) Psychologists who study creativity, however, point out that boredom often forces the mind to wander freely, drifting between unrelated thoughts until unexpected connections form. ( ④ ) Without occasional periods of understimulation, the mind may simply move from one quick distraction to the next, never settling long enough for a genuinely new idea to emerge. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'Yet(그러나) 자극을 향한 이 끊임없는 탐색이 오히려 새로운 생각이 떠오를 만큼 충분히 정신이 자유롭게 떠돌지 못하게 막는 것일 수 있다'는 내용으로, 바로 앞의 '사람들이 자동적으로 휴대폰 등을 찾아 지루함을 거의 느끼지 않는다'는 습관 설명과 자연스럽게 대조를 이룹니다. 그 뒤에는 심리학자들이 지루함(자극이 없는 상태)이 오히려 창의성에 도움이 된다고 설명하는 문장이 이어져야 논리가 통하므로, 정답은 ③입니다.",
+    "vocab": [
+      {
+        "word": "restless",
+        "meaning": "가만히 있지 못하는, 끊임없는"
+      },
+      {
+        "word": "stimulation",
+        "meaning": "자극"
+      },
+      {
+        "word": "understimulation",
+        "meaning": "자극 부족"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-30-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-08-30",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Conversation is often treated as an exchange best measured by how much each person says, but researchers who study communication increasingly emphasize the opposite. In many recorded conversations, the listeners who are rated as most engaged and most trustworthy are not those who speak the most, but those who pause the longest before responding, giving the speaker room to finish forming a thought. Frequent interruptions, even well-intentioned ones meant to show enthusiasm, tend to make speakers feel unheard and less willing to share difficult or uncertain ideas. Because of this, some organizations have begun training employees to deliberately slow down their responses in meetings, treating silence not as an awkward gap to be filled but as a signal of attentiveness.",
+    "choices": [
+      "reasons why longer meetings tend to produce better decisions",
+      "how interrupting a speaker shows genuine enthusiasm for their ideas",
+      "the value of measured silence and patience in building trust during conversation",
+      "techniques for training employees to speak more confidently in meetings",
+      "why recorded conversations are useful tools for corporate training"
+    ],
+    "answerIndex": 2,
+    "explanation": "이 글은 대화에서 말을 많이 하는 사람보다, 반응하기 전에 충분히 멈추고 기다려주는 사람이 더 신뢰받고 몰입도가 높다고 평가된다는 내용입니다. 빈번한 끼어들기는 오히려 화자를 위축시키고, 일부 조직은 침묵을 어색한 공백이 아니라 경청의 신호로 여기도록 훈련한다고 했으므로, 주제로 가장 적절한 것은 ③입니다.",
+    "vocab": [
+      {
+        "word": "engaged",
+        "meaning": "적극적으로 참여하는, 몰입한"
+      },
+      {
+        "word": "trustworthy",
+        "meaning": "신뢰할 수 있는"
+      },
+      {
+        "word": "attentiveness",
+        "meaning": "주의를 기울임, 경청"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-08-30-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-08-30",
+    "prompt": "등차수열 {aₙ}의 첫째항이 5이고, 첫째항부터 제10항까지의 합이 140일 때, 공차 d의 값은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "등차수열의 합 공식 Sₙ = n/2[2a₁+(n-1)d]에서 S₁₀ = 10/2[2×5+9d] = 5(10+9d) = 50+45d = 140이므로 45d = 90, d = 2입니다.",
+    "concept": "등차수열의 합: Sₙ = n/2 [2a₁ + (n-1)d]"
+  },
+  {
+    "id": "math-2026-08-30-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-08-30",
+    "prompt": "곡선 y = x³ - 3x + 1 위의 점 (2, 3)에서의 접선이 y축과 만나는 점의 y좌표는?",
+    "choices": [
+      "-21",
+      "-18",
+      "-15",
+      "-12",
+      "-9"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(x) = x³-3x+1, f'(x) = 3x²-3입니다. f(2) = 8-6+1 = 3, f'(2) = 12-3 = 9이므로 접선은 y-3 = 9(x-2), 즉 y = 9x-15입니다. x=0일 때 y=-15이므로 y축과 만나는 점의 y좌표는 -15입니다.",
+    "concept": "접선의 방정식: y - f(a) = f'(a)(x - a)"
+  },
+  {
+    "id": "math-2026-08-30-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-08-30",
+    "prompt": "곡선 y = x²과 직선 y = 2x로 둘러싸인 영역의 넓이는?",
+    "choices": [
+      "2/3",
+      "1",
+      "4/3",
+      "5/3",
+      "2"
+    ],
+    "answerIndex": 2,
+    "explanation": "x² = 2x에서 x = 0, 2입니다. 이 구간에서 y=2x가 y=x²보다 위에 있으므로 넓이 = ∫₀² (2x - x²) dx = [x² - x³/3]₀² = (4 - 8/3) - 0 = 4/3입니다.",
+    "concept": "두 곡선 사이의 넓이 = ∫(위쪽 함수 - 아래쪽 함수) dx"
+  },
+  {
+    "id": "math-2026-08-30-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-08-30",
+    "prompt": "두 개의 주사위를 동시에 던질 때, 나온 눈의 수의 합이 8 이상일 확률은?",
+    "choices": [
+      "1/4",
+      "1/3",
+      "5/12",
+      "7/18",
+      "1/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 6×6=36가지입니다. 합이 8인 경우 5가지, 9인 경우 4가지, 10인 경우 3가지, 11인 경우 2가지, 12인 경우 1가지로 총 15가지입니다. 따라서 확률은 15/36 = 5/12입니다.",
+    "concept": "두 주사위를 던질 때 전체 경우의 수는 6×6=36가지이며, 각 경우는 동등하게 나타난다."
+  },
+  {
+    "id": "math-2026-08-30-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-08-30",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2sin²θ + cosθ - 1 = 0을 만족하는 θ의 개수는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin²θ = 1-cos²θ를 대입하면 2(1-cos²θ)+cosθ-1=0, 정리하면 2cos²θ-cosθ-1=0입니다. 인수분해하면 (2cosθ+1)(cosθ-1)=0이므로 cosθ=-1/2 또는 cosθ=1입니다. cosθ=1은 θ=0 (1개), cosθ=-1/2는 θ=2π/3, 4π/3 (2개)이므로 총 3개입니다.",
+    "concept": "sin²θ = 1 - cos²θ 관계를 이용해 cosθ만의 식으로 치환한다."
+  },
+  {
+    "id": "en-2026-08-31-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-08-31",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Biologists studying birds in cities have noticed [u]that[/u]① many urban populations sing at a higher pitch than their rural relatives. Traffic noise tends to occupy lower frequency ranges, so birds [u]singing[/u]② at higher pitches are more likely to be heard clearly above the surrounding hum. Over several generations, this adjustment appears to spread through local populations, even in species [u]that rarely travel[/u]③ far from their home territory. Some researchers have also found that birds raised in noisy environments tend to sing louder overall, a change that seems [u]to require[/u]④ less energy than one might expect. Because pitch and volume affect how easily a mate can locate a singing bird, these small acoustic shifts [u]has[/u]⑤ become an unexpected example of evolution responding to human activity.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 주어 shifts는 복수이므로 동사도 have become이 되어야 하는데 단수 동사 has가 쓰여 문장이 틀렸습니다. 나머지는 모두 올바릅니다: ①은 noticed의 목적어로 쓰인 that절, ②는 birds를 수식하는 현재분사구, ③은 species를 수식하는 관계절, ④는 seem to부정사 구문입니다.",
+    "vocab": [
+      {
+        "word": "frequency",
+        "meaning": "주파수"
+      },
+      {
+        "word": "acoustic",
+        "meaning": "음향의"
+      },
+      {
+        "word": "territory",
+        "meaning": "영역, 서식지"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-08-31",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Athletes who cram all of their practice into a single long session often see rapid improvement that afternoon, yet this improvement frequently fades within days. Coaches who study skill acquisition have found that spreading the same amount of practice across several shorter sessions, with real rest in between, produces slower initial progress but far more durable skill retention weeks later. One explanation is that the brain needs idle time, free from the specific movements just practiced, to consolidate what was learned into long-term memory. This suggests that when it comes to building a lasting skill, what matters most is not ______ but how that time is distributed across days.",
+    "choices": [
+      "how skilled the coach guiding the session is",
+      "the total number of hours spent practicing",
+      "how expensive the training equipment is",
+      "how motivated the athlete feels that day",
+      "how many other athletes are training nearby"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 연습을 한 번에 몰아서 하는 것보다, 같은 시간을 여러 날에 나누어 쉬면서 연습할 때 장기적인 기술 유지가 더 잘 된다는 내용입니다. 빈칸 뒤에 '그 시간이 며칠에 걸쳐 어떻게 분배되는지가 더 중요하다'고 했으므로, 이와 대조되는 빈칸에는 '총 연습 시간'을 의미하는 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "cram",
+        "meaning": "벼락치기로 하다, 몰아서 하다"
+      },
+      {
+        "word": "acquisition",
+        "meaning": "습득"
+      },
+      {
+        "word": "consolidate",
+        "meaning": "(기억 등을) 공고히 하다, 굳히다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-08-31",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "For much of the twentieth century, cities facing rising water simply built taller concrete walls along their coastlines.\n(A) When storms arrive, these wetlands absorb and slow incoming water instead of forcing it to crash directly against a rigid barrier.\n(B) Engineers have increasingly found, however, that these walls often shift flooding problems to neighboring areas rather than solving them.\n(C) As a result, many coastal planners now favor restoring wetlands and marshes in front of the wall, or in place of it entirely.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 '20세기 도시들이 수위 상승에 콘크리트 벽을 높이 쌓는 방식으로 대응했다'는 도입입니다. (B)는 'however'로 이 방식이 오히려 인근 지역에 홍수 문제를 떠넘긴다는 문제점을 제시하고, (C)는 'As a result' 그 결과로 습지 복원을 선호하게 되었다는 결론을 제시하며, (A)는 습지가 실제로 폭풍 때 어떻게 작동하는지 구체적으로 설명합니다. 따라서 순서는 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "seawall",
+        "meaning": "방파제, 해안 옹벽"
+      },
+      {
+        "word": "marsh",
+        "meaning": "습지"
+      },
+      {
+        "word": "barrier",
+        "meaning": "장벽"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-08-31",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Ironically, the more forcefully a warning insists that a choice is dangerous or forbidden, the more some people feel an urge to make exactly that choice.",
+    "passage": "Public health campaigns often assume that a stronger warning will produce a stronger deterrent effect. ( ① ) Signs that simply state a risk in neutral language are frequently replaced with bolder wording meant to shock or alarm. ( ② ) Psychologists call the unintended backlash that sometimes follows \"reactance,\" a reaction rooted in the basic desire to protect one's own freedom of choice. ( ③ ) When people feel that a decision is being made for them rather than left up to them, some respond by reasserting control, even at real personal cost. ( ④ ) This does not mean that warnings are useless, but it does suggest that messages emphasizing personal choice tend to work better than those that sound like commands. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '경고가 강하게 금지할수록, 오히려 그 선택을 하고 싶은 충동을 느낀다'는 역설적 현상을 설명합니다. 바로 뒤 문장이 '심리학자들은 이런 의도치 않은 반발을 reactance(반발심리)라고 부른다'며 방금 설명된 현상에 이름을 붙이는 흐름이므로, 주어진 문장은 그 현상을 먼저 서술하는 ②에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "deterrent",
+        "meaning": "억제책, 단념시키는 것"
+      },
+      {
+        "word": "backlash",
+        "meaning": "반발"
+      },
+      {
+        "word": "reassert",
+        "meaning": "(권리 등을) 다시 주장하다, 되찾으려 하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-08-31-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-08-31",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "People consistently overestimate how much a new purchase, whether a car, a gadget, or a bigger house, will improve their day-to-day happiness. Psychologists studying this pattern find that much of the expected joy comes from imagining the object as something new and remarkable, a feeling that fades quickly once the item becomes part of ordinary life. Within weeks, most owners stop consciously noticing the purchase at all, and their baseline mood returns to roughly where it was before. This gap between the happiness people expect from a purchase and the happiness they actually experience helps explain why acquiring more possessions rarely produces the lasting satisfaction that advertisements often promise.",
+    "choices": [
+      "reasons why advertisements exaggerate the benefits of new products",
+      "how consumers can save money by avoiding unnecessary purchases",
+      "the gap between the happiness people expect from buying something and what they actually feel afterward",
+      "techniques companies use to make products feel new for longer",
+      "why bigger houses tend to make owners measurably happier"
+    ],
+    "answerIndex": 2,
+    "explanation": "이 글은 사람들이 새로운 구매가 가져다줄 행복을 실제보다 과대평가하며, 몇 주만 지나면 그 만족감이 사라지고 원래의 기분으로 돌아온다는 내용입니다. 즉 구매에서 기대하는 행복과 실제로 느끼는 행복 사이의 간극을 설명하고 있으므로, 주제로 가장 적절한 것은 ③입니다.",
+    "vocab": [
+      {
+        "word": "overestimate",
+        "meaning": "과대평가하다"
+      },
+      {
+        "word": "baseline",
+        "meaning": "기준(치), 기준선"
+      },
+      {
+        "word": "acquiring",
+        "meaning": "획득하는 것, 취득"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-08-31-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-08-31",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, 공비 r의 값은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "answerIndex": 1,
+    "explanation": "a₅/a₂ = r³ = 48/6 = 8이므로 r = 2입니다.",
+    "concept": "등비수열의 일반항: aₙ = a₁rⁿ⁻¹, 이웃하지 않는 두 항의 비는 공비의 거듭제곱이다."
+  },
+  {
+    "id": "math-2026-08-31-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-08-31",
+    "prompt": "함수 f(x) = -x³ + 6x² - 9x + 4가 x=a에서 극댓값을, x=b에서 극솟값을 가질 때, a+b의 값은?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = -3x²+12x-9 = -3(x-1)(x-3)이므로 x=1, 3에서 f'(x)=0입니다. 부호를 조사하면 x=1 좌우에서 -에서 +로 바뀌어 극소, x=3 좌우에서 +에서 -로 바뀌어 극대입니다. 따라서 극댓값을 갖는 a=3, 극솟값을 갖는 b=1이므로 a+b=4입니다.",
+    "concept": "극값 판정: f'(x)=0인 점 좌우에서 f'(x) 부호가 +에서 -로 바뀌면 극대, -에서 +로 바뀌면 극소이다."
+  },
+  {
+    "id": "math-2026-08-31-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-08-31",
+    "prompt": "∫₀² (3x² - 4x + 1) dx의 값은?",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³-2x²+x이고, x=2일 때 8-8+2=2, x=0일 때 0이므로 정적분 값은 2-0=2입니다.",
+    "concept": "정적분 계산: 부정적분을 구한 뒤 상한과 하한을 대입해 뺀다."
+  },
+  {
+    "id": "math-2026-08-31-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-08-31",
+    "prompt": "서로 다른 5개의 문자 A, B, C, D, E를 일렬로 나열할 때, A와 B가 이웃하게 나열되는 경우의 수는?",
+    "choices": [
+      "24",
+      "36",
+      "48",
+      "60",
+      "120"
+    ],
+    "answerIndex": 2,
+    "explanation": "A, B를 하나로 묶으면 4개의 대상(AB, C, D, E)을 나열하는 경우의 수는 4! = 24가지이고, 묶음 내부에서 A, B의 순서는 2! = 2가지이므로 전체 경우의 수는 24×2 = 48입니다.",
+    "concept": "이웃하는 원소는 하나로 묶어 순열을 구한 뒤, 묶음 내부의 순서도 곱해준다."
+  },
+  {
+    "id": "math-2026-08-31-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-08-31",
+    "prompt": "삼각형 ABC에서 A=60°, b=4, c=6일 때, 변 a의 길이는?",
+    "choices": [
+      "2√6",
+      "2√7",
+      "3√3",
+      "4√2",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "코사인법칙에 의해 a² = b² + c² - 2bc cosA = 16 + 36 - 2×4×6×(1/2) = 52 - 24 = 28이므로 a = √28 = 2√7입니다.",
+    "concept": "코사인법칙: a² = b² + c² - 2bc cosA"
+  },
+  {
+    "id": "en-2026-09-01-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-01",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "For decades, many organizations have assumed that brainstorming in a group [u]produces[/u]① more creative ideas than individuals working alone. Yet researchers who compare group sessions with equivalent numbers of solo thinkers have repeatedly found [u]that[/u]② the opposite is often true. One reason is a phenomenon in which participants [u]waiting[/u]③ for their turn to speak forget or suppress ideas they wanted to share. Because only one person can talk at a time, many promising thoughts [u]is lost[/u]④ before they are ever spoken aloud. Some companies have responded by shifting to written brainstorming, an approach [u]that allows[/u]⑤ everyone to contribute ideas simultaneously without interruption.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 주어는 복수형인 thoughts이므로 동사도 are lost가 되어야 하는데 단수 동사 is lost가 쓰여 어법상 틀렸습니다. 나머지는 모두 올바릅니다: ①은 단수 동명사 brainstorming을 받는 단수 동사, ②는 found의 목적어로 쓰인 that절, ③은 participants를 수식하는 현재분사구, ⑤는 단수 명사 approach를 받는 관계절 동사입니다.",
+    "vocab": [
+      {
+        "word": "suppress",
+        "meaning": "억누르다, 억압하다"
+      },
+      {
+        "word": "simultaneously",
+        "meaning": "동시에"
+      },
+      {
+        "word": "interruption",
+        "meaning": "방해, 중단"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-01",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Experienced experts are often assumed to make the best teachers, since they understand a subject more deeply than anyone else in the room. Yet studies of instruction have found that the opposite can be true: once someone has mastered a skill so thoroughly that it feels automatic, they often struggle to remember which steps a beginner still finds difficult. A veteran chess player, for instance, may glance at a board and instantly sense the right move without being able to explain the reasoning behind it, because that reasoning long ago became unconscious. This suggests that being a good teacher depends less on ______ and more on the ability to recall, and communicate, what it was like not to know.",
+    "choices": [
+      "how much someone knows about a subject",
+      "how many years someone has spent teaching",
+      "how confident a teacher appears in front of a class",
+      "how many textbooks a teacher has read",
+      "how well a teacher can grade exams quickly"
+    ],
+    "answerIndex": 0,
+    "explanation": "이 글은 전문가일수록 오히려 초보자가 무엇을 어려워하는지 기억하지 못해 가르치기 어려워질 수 있다는 내용입니다. 빈칸 뒤에서 '모르던 시절이 어땠는지 기억하고 전달하는 능력'과 대조되는 개념이 필요하므로, 빈칸에는 '얼마나 많이 아는가'를 의미하는 ①이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "veteran",
+        "meaning": "노련한, 베테랑의"
+      },
+      {
+        "word": "unconscious",
+        "meaning": "무의식적인"
+      },
+      {
+        "word": "glance",
+        "meaning": "흘낏 보다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-01",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Grocery stores have long placed everyday staples such as milk and eggs at the very back of the store, far from the entrance.\n(A) By the time they finally reach the milk, they have walked past shelves of items they had not originally planned to buy.\n(B) Yet retail researchers point out that this layout is rarely accidental: staples are what most shoppers come in for, so placing them far away forces customers to walk through the rest of the store first.\n(C) As a result, this seemingly inconvenient arrangement quietly increases the average amount each customer spends per visit.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '식료품점이 우유·달걀 같은 필수품을 매장 맨 뒤쪽에 배치한다'는 도입입니다. (B)는 이 배치가 우연이 아니라 고객이 매장 전체를 지나가게 만들려는 의도임을 설명하고, (A)는 그 결과 고객이 계획에 없던 상품 진열대를 지나치게 된다는 구체적 상황을 이어서 설명하며, (C)는 이러한 배치가 결국 평균 구매액을 늘린다는 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "staples",
+        "meaning": "필수 식료품"
+      },
+      {
+        "word": "retail",
+        "meaning": "소매의"
+      },
+      {
+        "word": "layout",
+        "meaning": "배치, 구조"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-01",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Because writing by hand is slower, students are forced to summarize and paraphrase ideas in their own words rather than copying them verbatim.",
+    "passage": "When laptops became common in university lecture halls, many assumed that typing notes would help students capture more information and therefore learn more. ( ① ) Researchers who compared students taking notes by hand with those typing on laptops found a surprising result: despite recording less content overall, the handwriting group performed better on tests of conceptual understanding. ( ② ) Typing, by contrast, is fast enough that students can transcribe a lecture nearly word for word without ever pausing to process what they are hearing. ( ③ ) This kind of shallow, transcription-style note-taking appears to bypass the very processing that turns information into lasting understanding. ( ④ ) The findings suggest that the physical slowness often seen as a drawback of handwriting may actually be doing important cognitive work behind the scenes. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '손으로 쓰는 것이 느리기 때문에 학생들이 자기 말로 요약·바꿔 말하게 된다'는, 손글씨 집단이 더 좋은 성과를 낸 이유를 설명합니다. 바로 뒤에서 'Typing, by contrast'로 타이핑의 특징과 대조되는 흐름이 이어지므로, 주어진 문장은 손글씨 집단의 우수한 성과를 언급한 직후인 ②에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "transcribe",
+        "meaning": "받아적다, 옮겨 적다"
+      },
+      {
+        "word": "verbatim",
+        "meaning": "그대로, 축어적으로"
+      },
+      {
+        "word": "paraphrase",
+        "meaning": "바꾸어 말하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-01-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-01",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When people are given the chance to reverse a decision later, most assume they will end up happier, since they retain the freedom to correct any mistake. Psychologists who study decision-making have found the opposite pattern in many everyday choices: people who commit to a decision with no option to change it later often report greater satisfaction than those who keep the option open. One explanation is that an irreversible choice pushes the mind to stop comparing the decision to alternatives and instead focus on finding reasons to feel good about what was chosen. Someone who knows a decision cannot be undone has little use for continued doubt, so attention shifts toward the positive aspects of the outcome. In contrast, people who keep their options open tend to keep mentally re-evaluating alternatives, which can quietly undermine their satisfaction with whatever they eventually keep.",
+    "choices": [
+      "reasons why people regret decisions they cannot reverse",
+      "how limiting the ability to reverse a decision can increase satisfaction with it",
+      "why psychologists disagree about the benefits of freedom of choice",
+      "techniques for helping people make decisions more quickly",
+      "why people prefer options that can be changed at any time"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 결정을 되돌릴 수 없을 때 오히려 대안과의 비교를 멈추고 선택에 만족하는 이유를 찾게 되어 만족도가 높아지는 반면, 선택지를 열어두면 계속 대안을 재평가하게 되어 만족도가 낮아진다는 내용입니다. 즉 되돌릴 수 없는 선택이 만족도를 높이는 원리를 설명하고 있으므로, 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "irreversible",
+        "meaning": "되돌릴 수 없는"
+      },
+      {
+        "word": "undermine",
+        "meaning": "약화시키다"
+      },
+      {
+        "word": "commit",
+        "meaning": "전념하다, 확약하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-01-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-01",
+    "prompt": "등차수열 {aₙ}의 첫째항이 3이고 공차가 4일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "190",
+      "200",
+      "210",
+      "220",
+      "230"
+    ],
+    "answerIndex": 2,
+    "explanation": "등차수열의 합 공식 Sₙ = n/2 × {2a₁ + (n-1)d}에 a₁=3, d=4, n=10을 대입하면 S₁₀ = 10/2 × {2×3 + 9×4} = 5 × (6+36) = 5×42 = 210입니다.",
+    "concept": "등차수열의 합 공식: Sₙ = n/2 × {2a₁ + (n-1)d}"
+  },
+  {
+    "id": "math-2026-09-01-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-01",
+    "prompt": "함수 f(x) = x³ - 3x² - 9x + 5의 극솟값은?",
+    "choices": [
+      "-30",
+      "-24",
+      "-22",
+      "-18",
+      "-10"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 6x - 9 = 3(x-3)(x+1)이므로 f'(x)=0인 x는 -1, 3입니다. f''(x)=6x-6이고, f''(3)=12>0이므로 x=3에서 극소, f''(-1)=-12<0이므로 x=-1에서 극대입니다. 따라서 극솟값은 f(3) = 27-27-27+5 = -22입니다.",
+    "concept": "극값 판정: f'(x)=0인 점에서 f''(x)>0이면 극소, f''(x)<0이면 극대이다."
+  },
+  {
+    "id": "math-2026-09-01-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-01",
+    "prompt": "∫₀³ (x² - 2x + 3) dx의 값은?",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answerIndex": 3,
+    "explanation": "부정적분은 x³/3 - x² + 3x이고, x=3일 때 9-9+9=9, x=0일 때 0이므로 정적분 값은 9-0=9입니다.",
+    "concept": "정적분 계산: 부정적분을 구한 뒤 상한과 하한 값의 차를 구한다."
+  },
+  {
+    "id": "math-2026-09-01-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-01",
+    "prompt": "주머니에 흰 공 3개와 검은 공 2개가 들어있다. 이 중에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 공이 모두 흰 공일 확률은?",
+    "choices": [
+      "1/10",
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 5개 중 2개를 꺼내는 경우의 수는 ₅C₂=10가지이고, 흰 공 3개 중 2개를 꺼내는 경우의 수는 ₃C₂=3가지이므로 확률은 3/10입니다.",
+    "concept": "동시에 꺼내는 경우의 확률: (원하는 사건의 조합의 수) ÷ (전체 조합의 수)"
+  },
+  {
+    "id": "math-2026-09-01-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-01",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2sinθ - 1 = 0의 해의 개수는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "answerIndex": 1,
+    "explanation": "2sinθ-1=0에서 sinθ=1/2입니다. 0≤θ<2π에서 sinθ=1/2를 만족하는 θ는 π/6과 5π/6이므로 해의 개수는 2개입니다.",
+    "concept": "sinθ=k (0<k<1) 형태의 방정식은 0≤θ<2π에서 두 개의 해를 갖는다(제1사분면과 제2사분면)."
+  },
+  {
+    "id": "en-2026-09-02-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-02",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many students believe that rereading a textbook chapter several times is the most effective way [u]to study[/u]① for an exam, since it feels thorough and familiar. Yet cognitive scientists who study memory have found that a technique called retrieval practice, [u]which requires[/u]② learners to recall information from memory without looking at the text, produces far stronger long-term retention. One reason is that the mental effort of [u]retrieve[/u]③ a fact, even when the attempt fails, strengthens the neural pathways associated with that memory. Rereading, by contrast, creates a comforting but often false sense of mastery, because recognizing a sentence [u]is[/u]④ easier than reproducing it unaided. Consequently, many educators now encourage students to close their books and quiz themselves, an approach [u]shown[/u]⑤ to outperform passive review in study after study.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③에서 전치사 of의 목적어 자리이므로 동명사 retrieving이 되어야 하는데 동사원형 retrieve가 쓰여 어법상 틀렸습니다. 나머지는 모두 올바릅니다: ①은 '~하는 가장 효과적인 방법'을 뜻하는 to부정사, ②는 retrieval practice를 부연 설명하는 관계절 동사, ④는 단수 동명사 recognizing을 받는 단수 동사, ⑤는 approach를 수식하는 과거분사구입니다.",
+    "vocab": [
+      {
+        "word": "retrieval",
+        "meaning": "인출, 회수"
+      },
+      {
+        "word": "retention",
+        "meaning": "기억 유지, 보유"
+      },
+      {
+        "word": "unaided",
+        "meaning": "도움 없이"
+      },
+      {
+        "word": "outperform",
+        "meaning": "능가하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-02",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In many Western conversational styles, even a brief pause of more than a second or two after someone finishes speaking can feel awkward, prompting the next speaker to jump in quickly to fill the gap. Linguists who study conversation across cultures point out that this discomfort is not a universal reaction to silence itself but rather a learned expectation about pacing. In some cultures, several seconds of silence between turns is entirely normal and even signals that a listener is thoughtfully considering what was just said, rather than that the conversation has broken down. This suggests that the tension so many people feel during a lull in conversation says less about silence itself and more about ______.",
+    "choices": [
+      "the particular rhythm their culture has trained them to expect",
+      "how confident the two speakers are in the conversation",
+      "how much both speakers already know about the topic",
+      "the volume at which people usually speak to each other",
+      "how quickly people are able to think of new topics"
+    ],
+    "answerIndex": 0,
+    "explanation": "이 글은 대화 중 침묵이 불편하게 느껴지는 것이 침묵 자체의 문제가 아니라 문화마다 다르게 학습된 대화 속도에 대한 기대 때문이라는 내용입니다. 따라서 빈칸에는 '문화가 학습시킨 특정한 리듬'을 의미하는 ①이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "lull",
+        "meaning": "소강상태, 잠시 멈춤"
+      },
+      {
+        "word": "pacing",
+        "meaning": "속도 조절"
+      },
+      {
+        "word": "prompting",
+        "meaning": "촉발하다, 재촉하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-02",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "It is well known that upscale restaurants often keep their dining rooms dimly lit rather than brightly illuminated.\n(A) Under dim light, diners tend to eat more slowly and rely more on taste and conversation than on the visual appearance of the food.\n(B) Yet lighting designers argue that this choice is about more than atmosphere: dim light subtly shifts how people behave at the table.\n(C) As a result, the meal feels less rushed and more intimate, which restaurants believe encourages guests to linger and order another course or drink.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 고급 레스토랑이 어두운 조명을 사용한다는 사실을 도입합니다. (B)는 이것이 단순한 분위기 연출이 아니라 손님의 행동을 바꾸는 의도적 선택이라는 설명이고, (A)는 어두운 조명 아래서 사람들이 천천히 먹고 대화와 맛에 집중한다는 구체적 효과를, (C)는 그 결과 식사가 덜 서두르는 느낌이 되어 손님이 더 머물게 된다는 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "illuminated",
+        "meaning": "조명이 밝혀진"
+      },
+      {
+        "word": "linger",
+        "meaning": "머무르다, 오래 남다"
+      },
+      {
+        "word": "intimate",
+        "meaning": "친밀한, 아늑한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-02",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Ironically, the store offering only six flavors sold far more jars of jam than the one offering twenty-four.",
+    "passage": "Consumers often assume that having more options when shopping will make it easier to find exactly what they want. ( ① ) To test this assumption, researchers set up two tasting booths in a grocery store: one displaying six varieties of jam and another displaying twenty-four. ( ② ) The larger display attracted more browsers, since passersby were curious to sample such a wide variety. ( ③ ) However, when it came time to actually purchase a jar, most shoppers who had faced twenty-four choices left without buying anything, apparently overwhelmed by the difficulty of comparing so many options. ( ④ ) This finding suggests that beyond a certain point, additional choices can create anxiety and indecision rather than satisfaction. ( ⑤ ) Retailers who assume that “more is always better” may therefore be undermining their own sales without realizing it.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 '여섯 가지 잼을 진열한 매장이 스물네 가지를 진열한 매장보다 더 많이 팔았다'는 구체적 결과입니다. 이는 스물네 가지 선택지 앞에서 압도되어 구매하지 않고 떠난 소비자들에 대한 설명 직후에 이어져야 자연스럽고, 바로 다음 문장인 'This finding suggests...'가 이 결과를 가리키므로 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "overwhelmed",
+        "meaning": "압도된"
+      },
+      {
+        "word": "indecision",
+        "meaning": "우유부단함, 결정 못함"
+      },
+      {
+        "word": "undermining",
+        "meaning": "약화시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-02-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-02",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Most people feel confident that they understand how everyday devices work, such as a bicycle, a zipper, or a flush toilet. When asked to rate their own understanding before being tested, they typically give themselves a high score. Yet when researchers then ask these same people to explain, step by step, exactly how the device functions, most struggle to get past a vague description and are unable to account for how the parts interact. Confronted with this gap, participants usually lower their confidence ratings substantially, admitting that their sense of understanding had been far shallower than they assumed. This pattern reveals that our everyday feeling of comprehension is often an illusion, one that persists only until we are forced to articulate the mechanism in detail.",
+    "choices": [
+      "how expert knowledge differs from everyday intuition",
+      "why people often overestimate how well they understand common things until asked to explain them",
+      "techniques for testing people's confidence levels accurately",
+      "why mechanical devices are more complicated than they appear",
+      "how researchers measure differences in intelligence"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 사람들이 평소 익숙한 기계의 작동 원리를 잘 안다고 믿지만, 막상 단계별로 설명해보라고 하면 제대로 설명하지 못하고 자신감이 낮아진다는 내용으로, 일상적 이해가 실제로는 착각일 수 있음을 보여줍니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "confronted",
+        "meaning": "직면한"
+      },
+      {
+        "word": "articulate",
+        "meaning": "명확히 설명하다"
+      },
+      {
+        "word": "comprehension",
+        "meaning": "이해"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-02-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-02",
+    "prompt": "등비수열 {aₙ}의 첫째항이 2이고 공비가 3일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "240",
+      "242",
+      "244",
+      "246",
+      "248"
+    ],
+    "answerIndex": 1,
+    "explanation": "등비수열의 합 공식 Sₙ = a₁(rⁿ-1)/(r-1)에 a₁=2, r=3, n=5를 대입하면 S₅ = 2×(3⁵-1)/(3-1) = 2×(243-1)/2 = 242입니다.",
+    "concept": "등비수열의 합 공식: Sₙ = a₁(rⁿ-1)/(r-1) (단, r≠1)"
+  },
+  {
+    "id": "math-2026-09-02-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-02",
+    "prompt": "곡선 y = x³ - 4x + 1 위의 점 (1, -2)에서의 접선의 기울기는?",
+    "choices": [
+      "-3",
+      "-2",
+      "-1",
+      "0",
+      "1"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(x) = x³ - 4x + 1이라 하면 f'(x) = 3x² - 4입니다. 점 (1, -2)에서의 접선의 기울기는 f'(1) = 3(1)² - 4 = 3 - 4 = -1입니다.",
+    "concept": "곡선 위의 한 점에서의 접선의 기울기는 그 점에서의 미분계수 f'(a)와 같다."
+  },
+  {
+    "id": "math-2026-09-02-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-02",
+    "prompt": "∫₁² (3x² - 2x + 1) dx의 값은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ - x² + x입니다. x=2일 때 8-4+2=6, x=1일 때 1-1+1=1이므로 정적분 값은 6-1=5입니다.",
+    "concept": "정적분은 부정적분을 구한 뒤 상한값을 대입한 값에서 하한값을 대입한 값을 뺀다."
+  },
+  {
+    "id": "math-2026-09-02-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-02",
+    "prompt": "어느 반 학생 중 60%는 안경을 쓰고, 안경을 쓴 학생 중 30%는 왼손잡이다. 안경을 쓰지 않은 학생 중 20%는 왼손잡이다. 이 반에서 임의로 한 학생을 선택했을 때, 이 학생이 왼손잡이일 확률은?",
+    "choices": [
+      "1/5",
+      "6/25",
+      "13/50",
+      "3/10",
+      "7/20"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 확률의 법칙에 의해 P(왼손잡이) = P(안경)×P(왼손잡이|안경) + P(안경아님)×P(왼손잡이|안경아님) = (3/5)×(3/10) + (2/5)×(1/5) = 9/50 + 4/50 = 13/50입니다.",
+    "concept": "전체 확률의 법칙: P(A) = P(A|B)P(B) + P(A|Bᶜ)P(Bᶜ)"
+  },
+  {
+    "id": "math-2026-09-02-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-02",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2cosθ + 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 2,
+    "explanation": "2cosθ+1=0에서 cosθ=-1/2입니다. 0≤θ<2π에서 cosθ=-1/2를 만족하는 θ는 2π/3과 4π/3이므로 모든 해의 합은 2π/3 + 4π/3 = 6π/3 = 2π입니다.",
+    "concept": "cosθ=k (-1<k<0) 형태의 방정식은 0≤θ<2π에서 y축 대칭인 두 해를 갖는다."
+  },
+  {
+    "id": "en-2026-09-03-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-03",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists have found [u]that memories are not simply stored but actively reorganized during sleep[/u]①. During deep sleep stages, the brain replays patterns of neural activity [u]associated with[/u]② recent experiences, strengthening connections between related memories. This process allows seemingly unrelated pieces of information [u]to become[/u]③ linked in ways that support creative problem solving. Researchers studying this phenomenon have observed that participants who slept after a learning task performed [u]far better[/u]④ than those who remained awake. Consequently, many experts now argue [u]what adequate sleep is essential[/u]⑤ for effective learning and memory retention.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 argue의 목적어로는 명사절 접속사 that가 와야 하는데 의문사 what이 잘못 쓰였으므로 that adequate sleep is essential로 고쳐야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 found의 목적어로 쓰인 that 명사절, ②는 activity를 수식하는 과거분사구(associated with), ③은 allow+목적어+to부정사 구조, ④는 비교급 better를 강조하는 부사 far입니다.",
+    "vocab": [
+      {
+        "word": "reorganized",
+        "meaning": "재구성된"
+      },
+      {
+        "word": "phenomenon",
+        "meaning": "현상"
+      },
+      {
+        "word": "retention",
+        "meaning": "보유, 유지"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-03",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When team members are asked to estimate their percentage of contribution to a joint project, the sum of their individual estimates typically exceeds 100 percent by a wide margin. This happens not because people are dishonest, but because each individual tends to notice and remember ______. A person who spent hours revising a report, for instance, vividly recalls that specific effort, while the equally important work quietly done by a teammate, such as gathering the initial data, fades into the background. As a result, group members often walk away from a shared task believing they carried more of the load than they actually did.",
+    "choices": [
+      "the mistakes made by other team members",
+      "their own effort more vividly than the effort contributed by others",
+      "the final outcome of the group project",
+      "the amount of time spent on unrelated tasks",
+      "the opinions of external evaluators"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 뒤에서 자신이 직접 들인 노력(보고서 수정)은 생생히 기억하지만 동료가 조용히 한 노력(자료 수집)은 기억에서 흐려진다고 설명합니다. 즉 사람들은 타인의 기여보다 자신의 노력을 더 생생하게 기억하는 경향이 있다는 뜻이므로 빈칸에는 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "vividly",
+        "meaning": "생생하게"
+      },
+      {
+        "word": "fade",
+        "meaning": "희미해지다"
+      },
+      {
+        "word": "margin",
+        "meaning": "차이, 폭"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-03",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Before mechanical clocks became common in workplaces, laborers organized their day mainly around natural cues such as sunlight and the completion of tasks.\n(A) Consequently, punctuality became a moral virtue, and being even a few minutes late was treated as a sign of poor character.\n(B) Once factories began installing clocks, however, managers started dividing the workday into precise, measurable units of time.\n(C) This shift transformed how people thought about time itself, turning it from a loose backdrop for activity into a resource that could be wasted or saved.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 시계가 도입되기 전 노동자들이 자연스러운 신호에 따라 하루를 조직했다는 내용입니다. (B)는 'however'로 공장에 시계가 도입되며 하루를 정밀한 단위로 나누기 시작했다는 전환을 제시하고, (C)는 'This shift'로 그 변화가 시간을 아끼거나 낭비할 수 있는 자원으로 바꿔놓았다고 설명하며, (A)는 'Consequently' 그 결과 시간 엄수가 도덕적 미덕이 되었다고 마무리합니다. 따라서 순서는 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "punctuality",
+        "meaning": "시간 엄수"
+      },
+      {
+        "word": "backdrop",
+        "meaning": "배경"
+      },
+      {
+        "word": "virtue",
+        "meaning": "미덕"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-03",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet this concern is often exaggerated, since most people view a request for help as a sign of trust rather than weakness.",
+    "passage": "Many people hesitate to ask others for help, even when a simple question would save time and effort. ( ① ) One common reason is the belief that requesting assistance signals weakness or incompetence. ( ② ) Some people therefore avoid reaching out even when they are stuck on a problem for a long time. ( ③ ) In fact, studies indicate that colleagues often view someone who asks a thoughtful question as more capable, since it shows an accurate sense of one's own limits. ( ④ ) Recognizing this gap between fear and reality could encourage more people to seek support when they genuinely need it. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'Yet(그러나) 이러한 우려는 과장된 것이며, 대부분의 사람들은 도움 요청을 신뢰의 표시로 본다'는 내용으로, 바로 앞의 '오랫동안 문제에 갇혀 있어도 도움을 피한다'는 문장과 대조를 이루고, 바로 뒤의 '실제로 연구에 따르면 사려 깊은 질문을 하는 동료가 더 유능하게 평가된다'는 문장이 그 근거로 자연스럽게 이어집니다. 따라서 정답은 ③입니다.",
+    "vocab": [
+      {
+        "word": "incompetence",
+        "meaning": "무능함"
+      },
+      {
+        "word": "exaggerated",
+        "meaning": "과장된"
+      },
+      {
+        "word": "genuinely",
+        "meaning": "진정으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-03-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-03",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Common wisdom suggests that silence is always the best condition for concentration, but recent studies complicate this assumption. Researchers have found that for highly repetitive or routine tasks, a moderate level of background noise, such as the hum of a café, can actually enhance focus by keeping the mind mildly stimulated rather than allowing it to wander. For tasks that require deep analytical thinking or the memorization of complex material, however, the same background noise tends to reduce performance by competing for limited mental resources. This suggests that the ideal working environment is not a fixed condition but depends heavily on the nature of the task being performed.",
+    "choices": [
+      "reasons why silence improves memorization ability",
+      "the idea that the best noise level for concentration depends on the type of task",
+      "methods for measuring background noise in workplaces",
+      "why cafés are popular places for students to study",
+      "the history of research on noise pollution"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 침묵이 항상 집중에 가장 좋은 조건이라는 통념과 달리, 반복적인 작업에는 적당한 배경 소음이 오히려 집중을 돕고 분석적 사고나 암기가 필요한 작업에는 방해가 된다는 점을 설명하며, 결국 이상적인 작업 환경은 과제의 성격에 따라 달라진다고 말하고 있습니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "stimulated",
+        "meaning": "자극받는"
+      },
+      {
+        "word": "analytical",
+        "meaning": "분석적인"
+      },
+      {
+        "word": "wander",
+        "meaning": "헤매다, 방황하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-03-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-03",
+    "prompt": "등차수열 {aₙ}의 첫째항이 5이고 공차가 4일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "220",
+      "225",
+      "230",
+      "235",
+      "240"
+    ],
+    "answerIndex": 2,
+    "explanation": "등차수열의 합 공식 Sₙ = n/2 × {2a₁ + (n-1)d}에 a₁=5, d=4, n=10을 대입하면 S₁₀ = 10/2 × {2×5 + 9×4} = 5 × {10+36} = 5 × 46 = 230입니다.",
+    "concept": "등차수열의 합 공식: Sₙ = n/2 × {2a₁ + (n-1)d}"
+  },
+  {
+    "id": "math-2026-09-03-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-03",
+    "prompt": "함수 f(x) = x³ - 3x² + 2의 극솟값은?",
+    "choices": [
+      "-4",
+      "-3",
+      "-2",
+      "-1",
+      "0"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 6x = 3x(x-2)이므로 f'(x)=0인 x는 0과 2입니다. x=0의 좌우에서 f'(x)가 양에서 음으로 바뀌므로 x=0은 극댓값을 갖고(f(0)=2), x=2의 좌우에서 f'(x)가 음에서 양으로 바뀌므로 x=2에서 극솟값을 갖습니다. f(2) = 8 - 12 + 2 = -2이므로 극솟값은 -2입니다.",
+    "concept": "f'(x)=0인 점 중 f'(x)의 부호가 음에서 양으로 바뀌는 점에서 극솟값을 갖는다."
+  },
+  {
+    "id": "math-2026-09-03-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-03",
+    "prompt": "∫₀² (3x² - 4x + 2) dx의 값은?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ - 2x² + 2x입니다. x=2일 때 8-8+4=4, x=0일 때 0이므로 정적분 값은 4-0=4입니다.",
+    "concept": "정적분은 부정적분을 구한 뒤 상한값을 대입한 값에서 하한값을 대입한 값을 뺀다."
+  },
+  {
+    "id": "math-2026-09-03-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-03",
+    "prompt": "빨간 공 3개, 파란 공 2개가 들어 있는 주머니에서 임의로 2개를 동시에 꺼낼 때, 두 공의 색이 같을 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 5개 중 2개를 꺼내는 경우의 수는 C(5,2)=10가지입니다. 두 공이 모두 빨간색일 경우의 수는 C(3,2)=3가지, 모두 파란색일 경우의 수는 C(2,2)=1가지이므로 색이 같은 경우의 수는 3+1=4가지입니다. 따라서 구하는 확률은 4/10 = 2/5입니다.",
+    "concept": "조합 C(n,r)을 이용해 각 사건의 경우의 수를 구한 뒤 전체 경우의 수로 나눈다."
+  },
+  {
+    "id": "math-2026-09-03-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-03",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2sinθ - √3 = 0의 모든 해의 합은?",
+    "choices": [
+      "π/2",
+      "2π/3",
+      "π",
+      "4π/3",
+      "3π/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "2sinθ-√3=0에서 sinθ=√3/2입니다. 0≤θ<2π에서 sinθ=√3/2를 만족하는 θ는 π/3과 2π/3이므로 모든 해의 합은 π/3 + 2π/3 = π입니다.",
+    "concept": "sinθ=k (0<k<1) 형태의 방정식은 0≤θ<2π에서 y축(θ=π/2)에 대해 대칭인 두 해를 갖는다."
+  },
+  {
+    "id": "en-2026-09-04-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-04",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Research in cognitive psychology has shown that experts organize their knowledge differently from novices, and this difference [u]affects[/u]① how efficiently they solve problems. When novices encounter a new problem, they tend to focus on the surface features [u]described[/u]② in the question, while experts immediately recognize the underlying structure. This ability, which develops only after years of deliberate practice, allows experts [u]to retrieve[/u]③ relevant strategies almost automatically. Because their knowledge is organized into meaningful chunks rather than isolated facts, experts can devote more of their limited attention [u]to reasoning[/u]④ through the aspects of a problem that are genuinely unfamiliar. Some educators argue that novices should therefore be taught explicit problem-solving strategies before they [u]exposing[/u]⑤ to advanced material.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 주어 they가 '노출시키다'가 아니라 '노출되다'라는 의미이므로 수동태가 필요합니다. exposing은 능동형이자 동사 원형이 아니어서 문장의 정동사 자리에 올 수 없으므로 are exposed로 고쳐야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 단수 주어 this difference에 맞는 단수 동사 affects, ②는 features를 수식하는 과거분사 described, ③은 allow+목적어+to부정사 구조의 to retrieve, ④는 'devote 시간/주의를 to 동명사'의 구조에 맞는 동명사 reasoning입니다.",
+    "vocab": [
+      {
+        "word": "cognitive",
+        "meaning": "인지의"
+      },
+      {
+        "word": "deliberate",
+        "meaning": "의도적인, 신중한"
+      },
+      {
+        "word": "isolated",
+        "meaning": "고립된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-04-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-04",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Once someone has mastered a skill or a piece of information, it becomes surprisingly difficult for them to imagine what it is like not to know it. This phenomenon, often called the curse of knowledge, explains why experienced teachers sometimes struggle to explain basic concepts clearly: they unconsciously assume that learners already share ______. A math teacher who has understood a formula for decades, for example, may skip over a logical step that seems too obvious to mention, leaving beginners confused about how the two ideas connect. Recognizing this gap is often the first step toward becoming a more effective communicator.",
+    "choices": [
+      "their own uncertainty about the topic",
+      "the background knowledge that the experts themselves possess",
+      "the emotional reactions to difficult problems",
+      "the desire to appear more knowledgeable than others",
+      "the mistakes that beginners commonly make"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 뒤에서 수십 년간 공식을 이해해 온 수학 교사가 너무 당연해 보이는 논리적 단계를 건너뛰어 초보자들이 혼란스러워한다고 설명합니다. 즉 전문가들은 학습자도 자신이 가진 배경지식을 이미 공유하고 있다고 무의식적으로 가정한다는 뜻이므로 빈칸에는 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "phenomenon",
+        "meaning": "현상"
+      },
+      {
+        "word": "unconsciously",
+        "meaning": "무의식적으로"
+      },
+      {
+        "word": "mastered",
+        "meaning": "숙달한, 통달한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-04-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-04",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Cities are often several degrees warmer than the surrounding countryside, a phenomenon known as the urban heat island effect.\n(A) As a result, city planners in many regions have begun incorporating rooftop gardens and shaded walkways into new construction projects.\n(B) One major contributor to this effect is the widespread use of dark, heat-absorbing materials such as asphalt and concrete, which store solar energy throughout the day and release it slowly at night.\n(C) These simple design choices can lower surface temperatures by several degrees, demonstrating that thoughtful urban design can meaningfully offset the heat generated by dense construction.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 도시가 주변 지역보다 더운 열섬 현상을 소개합니다. (B)는 그 주요 원인으로 아스팔트와 콘크리트 같은 열 흡수 소재를 제시하고, (A)는 'As a result'로 그 결과 도시계획가들이 옥상 정원과 그늘진 보행로를 도입하기 시작했다는 내용을 이어가며, (C)는 'These simple design choices'로 그러한 설계 선택이 표면 온도를 낮춘다고 마무리합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "asphalt",
+        "meaning": "아스팔트"
+      },
+      {
+        "word": "offset",
+        "meaning": "상쇄하다"
+      },
+      {
+        "word": "incorporate",
+        "meaning": "포함시키다, 통합하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-04-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-04",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet the actual number of people who noticed and remembered the shirt was far smaller than the participants had predicted.",
+    "passage": "Many people avoid trying new things in public, such as wearing an unusual outfit or asking a question in a large lecture hall, because they fear that everyone around them will notice and judge their behavior. ( ① ) Psychologists refer to this tendency to overestimate how much attention others pay to us as the spotlight effect. ( ② ) In one classic study, participants who wore an embarrassing T-shirt into a room estimated that roughly half of the other people present would remember it. ( ③ ) This gap between perceived and actual attention arises largely because people are naturally absorbed in their own thoughts and concerns rather than closely observing those around them. ( ④ ) Understanding this tendency can free people to take more social risks without excessive worry about being judged. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'Yet(그러나) 실제로 셔츠를 기억한 사람 수는 참가자들의 예상보다 훨씬 적었다'는 내용입니다. 바로 앞 문장에서 참가자들이 '절반 정도가 기억할 것'이라고 예상했다는 내용이 나오고, 바로 뒤 문장에서 'This gap(이 격차)'가 예상과 실제 사이의 차이를 가리키므로, 그 격차를 만들어내는 실제 결과를 제시하는 주어진 문장은 ③에 들어가야 문맥이 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "overestimate",
+        "meaning": "과대평가하다"
+      },
+      {
+        "word": "absorbed",
+        "meaning": "몰두한, 열중한"
+      },
+      {
+        "word": "perceived",
+        "meaning": "인지된, 인식된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-04-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-04",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "It might seem that creativity flourishes best when people have unlimited resources and complete freedom, yet a growing body of research suggests the opposite is often true. When designers, writers, or engineers are given a specific set of constraints, such as a limited budget, a strict deadline, or a small set of allowed materials, they frequently produce more original solutions than when given open-ended freedom. This happens because constraints force people to abandon obvious, conventional approaches and search for less familiar combinations of ideas. Without any limits, individuals tend to default to the first solution that comes to mind, which is often the most predictable one. Structured limitations, in other words, can act as a hidden engine of innovation rather than an obstacle to it.",
+    "choices": [
+      "the reasons why unlimited resources always produce the most creative outcomes",
+      "how a lack of constraints leads directly to more predictable designs",
+      "the idea that certain limitations can actually promote more original thinking",
+      "methods for reducing the cost of creative projects",
+      "the history of constraint-based design in engineering"
+    ],
+    "answerIndex": 2,
+    "explanation": "이 글은 무제한의 자유보다 오히려 제약이 주어졌을 때 더 독창적인 해결책이 나온다는 연구 결과를 설명하며, 제약이 혁신을 방해하는 요소가 아니라 오히려 숨겨진 원동력이 될 수 있다고 말하고 있습니다. 따라서 주제로 가장 적절한 것은 ③입니다.",
+    "vocab": [
+      {
+        "word": "flourish",
+        "meaning": "번성하다, 잘 자라다"
+      },
+      {
+        "word": "constraint",
+        "meaning": "제약, 제한"
+      },
+      {
+        "word": "conventional",
+        "meaning": "관습적인, 기존의"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-04-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-04",
+    "prompt": "등비수열 {aₙ}의 첫째항이 3이고 공비가 2일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "89",
+      "91",
+      "93",
+      "95",
+      "97"
+    ],
+    "answerIndex": 2,
+    "explanation": "등비수열의 합 공식 Sₙ = a₁(rⁿ-1)/(r-1)에 a₁=3, r=2, n=5를 대입하면 S₅ = 3×(2⁵-1)/(2-1) = 3×31/1 = 93입니다.",
+    "concept": "등비수열의 합 공식: Sₙ = a₁(rⁿ-1)/(r-1) (단, r≠1)"
+  },
+  {
+    "id": "math-2026-09-04-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-04",
+    "prompt": "곡선 y = x³ - 2x + 1 위의 점 (1, 0)에서의 접선의 y절편은?",
+    "choices": [
+      "-3",
+      "-2",
+      "-1",
+      "0",
+      "1"
+    ],
+    "answerIndex": 2,
+    "explanation": "y' = 3x² - 2이므로 x=1에서의 접선의 기울기는 3(1)²-2 = 1입니다. 점 (1,0)을 지나고 기울기가 1인 접선의 방정식은 y = (x-1) = x - 1이므로, x=0일 때 y절편은 -1입니다.",
+    "concept": "접선의 기울기는 도함수 f'(x)에 접점의 x좌표를 대입하여 구하고, 이를 이용해 접선의 방정식을 세운다."
+  },
+  {
+    "id": "math-2026-09-04-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-04",
+    "prompt": "∫₀² (3x² - 2x + 1) dx의 값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ - x² + x입니다. x=2일 때 8-4+2=6, x=0일 때 0이므로 정적분 값은 6-0=6입니다.",
+    "concept": "정적분은 부정적분을 구한 뒤 상한값을 대입한 값에서 하한값을 대입한 값을 뺀다."
+  },
+  {
+    "id": "math-2026-09-04-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-04",
+    "prompt": "한 개의 주사위를 3번 던질 때, 6의 눈이 정확히 2번 나올 확률은?",
+    "choices": [
+      "5/72",
+      "5/36",
+      "1/12",
+      "5/216",
+      "1/6"
+    ],
+    "answerIndex": 0,
+    "explanation": "주사위를 3번 던져 6이 정확히 2번 나오는 사건은 이항분포를 따릅니다. P = C(3,2) × (1/6)² × (5/6)¹ = 3 × (1/36) × (5/6) = 15/216 = 5/72입니다.",
+    "concept": "반복시행에서 특정 사건이 k번 일어날 확률은 P(X=k) = C(n,k)pᵏ(1-p)ⁿ⁻ᵏ로 구한다."
+  },
+  {
+    "id": "math-2026-09-04-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-04",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2cos²θ - 1 = 0을 만족시키는 θ의 개수는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "2cos²θ-1=0에서 cos²θ=1/2이므로 cosθ=√2/2 또는 cosθ=-√2/2입니다. 0≤θ<2π에서 cosθ=√2/2를 만족하는 θ는 π/4, 7π/4의 2개이고, cosθ=-√2/2를 만족하는 θ는 3π/4, 5π/4의 2개이므로, 모두 합쳐 총 4개의 해가 존재합니다.",
+    "concept": "cos²θ=c (0<c<1) 꼴의 방정식은 cosθ=±√c로 나뉘며, 0≤θ<2π에서 각각 두 개씩 총 네 개의 해를 가질 수 있다."
+  },
+  {
+    "id": "en-2026-09-05-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-05",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Although wildfires often appear purely destructive, ecologists have increasingly recognized that periodic fires [u]play[/u]① an essential role in maintaining the health of certain forest ecosystems. Many plant species native to fire-prone regions have evolved seeds [u]protected[/u]② by a thick, resin-covered coating that only cracks open when exposed to intense heat. Without occasional fires, these seeds might remain dormant in the soil for decades, [u]never germinating[/u]③ into new plants. Fires also clear away dense undergrowth and fallen branches, [u]which[/u]④ compete with mature trees for sunlight, water, and nutrients. For this reason, forest managers in some regions now deliberately allow small, controlled fires [u]burns[/u]⑤ rather than suppressing every blaze immediately.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서는 'allow+목적어+동사원형'이 아니라 'allow+목적어+to부정사' 구조가 되어야 하므로 burns를 to burn으로 고쳐야 합니다(allow는 목적격보어로 to부정사를 취하는 동사입니다). 나머지는 모두 어법상 올바릅니다: ①은 복수 주어 periodic fires에 맞는 복수 동사 play, ②는 seeds를 수동적으로 수식하는 과거분사 protected, ③은 결과를 나타내는 분사구문 never germinating, ④는 복수 선행사 undergrowth and fallen branches를 받는 관계대명사 which입니다.",
+    "vocab": [
+      {
+        "word": "dormant",
+        "meaning": "휴면 상태의, 잠재해 있는"
+      },
+      {
+        "word": "germinate",
+        "meaning": "발아하다, 싹트다"
+      },
+      {
+        "word": "suppress",
+        "meaning": "진압하다, 억제하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-05-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-05",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When large birds such as geese travel long distances, they often fly in a distinctive V-shaped formation rather than a random cluster. Aerodynamic studies using sensors attached to individual birds have revealed that each bird, except the leader, times its wingbeats to catch the small vortex of upward-moving air left behind by the bird flying just ahead of it. By positioning itself slightly behind and to the side of another bird, a goose can noticeably reduce the amount of energy it spends flapping, because the formation allows each individual to benefit from ______. This is also why the lead position is by far the most exhausting spot in the formation, and birds are frequently observed rotating to the back to rest before taking their turn at the front again.",
+    "choices": [
+      "the aerodynamic lift generated by the birds flying ahead of it",
+      "the ability to communicate danger signals more quickly",
+      "a reduced need to search for food during the journey",
+      "the warmth produced by nearby birds' body heat",
+      "a shorter overall distance to their destination"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 앞에서 각 새가 앞서 나는 새가 남긴 상승기류(vortex)를 이용해 날갯짓 에너지를 줄인다고 설명하고, 빈칸 뒤에서는 그래서 선두 자리가 가장 힘들어 새들이 교대로 뒤로 이동한다고 이어집니다. 즉 대형(formation) 안에서 얻는 이점은 앞선 새가 만들어내는 공기 흐름, 즉 공기역학적 양력을 이용하는 것이므로 빈칸에는 ①이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "vortex",
+        "meaning": "소용돌이"
+      },
+      {
+        "word": "flapping",
+        "meaning": "(날개를) 퍼덕거림"
+      },
+      {
+        "word": "aerodynamic",
+        "meaning": "공기역학의"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-05-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-05",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Coral reefs are often described as the rainforests of the sea because they support an extraordinarily high density of marine species relative to the area they cover.\n(A) As a result, when ocean temperatures rise even slightly above normal for an extended period, corals expel these algae, causing them to turn pale white in a process known as bleaching.\n(B) This diversity is made possible largely by a symbiotic relationship between coral polyps and microscopic algae that live within their tissues, providing the coral with both color and a steady supply of nutrients through photosynthesis.\n(C) Although a bleached coral is not immediately dead, it is placed under severe stress, and if warm conditions persist for too long, the coral will eventually starve and die.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 산호초가 매우 높은 생물 다양성을 지닌다고 소개합니다. (B)는 그 다양성을 가능하게 하는 산호와 조류의 공생 관계를 설명하고, (A)는 'As a result'로 수온이 오르면 산호가 이 조류를 내보내 백화 현상이 일어난다는 결과를 제시하며, (C)는 백화된 산호가 스트레스를 받다가 결국 죽을 수 있다는 내용으로 마무리합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "symbiotic",
+        "meaning": "공생의"
+      },
+      {
+        "word": "expel",
+        "meaning": "내보내다, 배출하다"
+      },
+      {
+        "word": "persist",
+        "meaning": "지속되다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-05-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-05",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Many long-distance runners report a distinct shift in mood that occurs after running continuously for thirty minutes or more, a sensation informally known as runner's high. ( ① ) For decades, scientists assumed this euphoric feeling was caused primarily by a surge of endorphins, the body's natural painkillers, released during prolonged exercise. ( ② ) There was, however, one problem with this explanation: endorphin molecules are too large to pass through the barrier between the blood and the brain in significant amounts, meaning they may relieve pain throughout the body without directly reaching the brain regions responsible for mood. ( ③ ) More recent research using blood and brain imaging has instead pointed to a different class of chemicals called endocannabinoids, which are also produced during aerobic exercise. ( ④ ) As a result, many exercise physiologists now consider endocannabinoids, not endorphins, the more likely source of the emotional lift runners describe. ( ⑤ )",
+    "givenSentence": "Unlike endorphins, these smaller molecules are able to cross that barrier easily and bind directly to receptors that regulate mood.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 'Unlike endorphins(엔도르핀과 달리), 이 더 작은 분자들은 그 장벽을 쉽게 통과해 기분을 조절하는 수용체에 직접 결합한다'는 내용입니다. 바로 앞 문장에서 endocannabinoids라는 새로운 물질이 언급되므로 'these smaller molecules'가 이를 가리키고, 바로 뒤 문장의 'As a result'가 그 결과로 엔도르핀보다 이 물질이 더 유력한 원인으로 여겨진다는 결론으로 자연스럽게 이어지므로 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "euphoric",
+        "meaning": "도취된, 행복감에 찬"
+      },
+      {
+        "word": "aerobic",
+        "meaning": "유산소의"
+      },
+      {
+        "word": "receptor",
+        "meaning": "수용체"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-05-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-05",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "For much of the twentieth century, forgetting was viewed simply as a flaw in the brain's storage system, a sign that memory had failed to hold onto information properly. More recent neuroscience research, however, suggests that forgetting is often an active and even beneficial process rather than a passive breakdown. Specific neurons appear to be responsible for weakening or erasing certain memory traces, and this process tends to target information that is outdated, rarely used, or no longer relevant to current goals. By clearing away such details, the brain preserves its capacity to form new memories and to generalize useful patterns from past experience rather than becoming cluttered with every minor event. In this light, an imperfect memory may not indicate that something has gone wrong; it may instead reflect a system that is functioning exactly as it should.",
+    "choices": [
+      "reasons why memory naturally deteriorates with age",
+      "the idea that forgetting can be a purposeful and adaptive brain function",
+      "techniques neuroscientists use to study memory traces",
+      "why cluttered memories always lead to poor decision-making",
+      "the argument that memory storage capacity is physically unlimited"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 망각이 기억 저장의 단순한 실패가 아니라, 오래되거나 불필요한 정보를 능동적으로 제거하여 새로운 기억을 형성할 여지를 남기는 유익하고 적응적인 뇌 기능일 수 있다는 최근 신경과학 연구를 소개하고 있습니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "trace",
+        "meaning": "흔적, 자취"
+      },
+      {
+        "word": "cluttered",
+        "meaning": "어수선한, 뒤죽박죽인"
+      },
+      {
+        "word": "generalize",
+        "meaning": "일반화하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-05-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-05",
+    "prompt": "등차수열 {aₙ}의 첫째항이 5이고 공차가 3일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "165",
+      "175",
+      "185",
+      "195",
+      "205"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₁=5, d=3이므로 a₁₀ = 5 + 9×3 = 32입니다. 등차수열의 합 공식 Sₙ = n(a₁+aₙ)/2에 n=10을 대입하면 S₁₀ = 10×(5+32)/2 = 10×37/2 = 185입니다.",
+    "concept": "등차수열의 합 공식: Sₙ = n/2 × (a₁+aₙ) = n/2 × {2a₁+(n-1)d}"
+  },
+  {
+    "id": "math-2026-09-05-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-05",
+    "prompt": "함수 f(x) = x³ - 6x² + 9x + 1의 극댓값은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 12x + 9 = 3(x-1)(x-3)이므로 극값 후보는 x=1, x=3입니다. f''(x) = 6x - 12이고 f''(1) = -6 < 0이므로 x=1에서 극댓값을 가집니다. f(1) = 1 - 6 + 9 + 1 = 5이므로 극댓값은 5입니다.",
+    "concept": "함수의 극값은 f'(x)=0의 해를 구한 뒤 f''(x)의 부호로 판별한다(f''<0이면 극댓값, f''>0이면 극솟값)."
+  },
+  {
+    "id": "math-2026-09-05-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-05",
+    "prompt": "∫₀² (x³ - x) dx의 값은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "부정적분은 x⁴/4 - x²/2입니다. x=2일 때 16/4 - 4/2 = 4 - 2 = 2이고, x=0일 때 0이므로 정적분 값은 2 - 0 = 2입니다.",
+    "concept": "정적분은 부정적분 F(x)를 구한 뒤 F(상한) - F(하한)으로 계산한다."
+  },
+  {
+    "id": "math-2026-09-05-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-05",
+    "prompt": "빨간 공 3개, 파란 공 2개가 들어 있는 상자에서 임의로 2개의 공을 동시에 꺼낼 때, 두 개 모두 빨간 공일 확률은?",
+    "choices": [
+      "1/10",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 5개 중 2개를 꺼내는 경우의 수는 C(5,2)=10이고, 빨간 공 3개 중 2개를 꺼내는 경우의 수는 C(3,2)=3입니다. 따라서 구하는 확률은 3/10입니다.",
+    "concept": "여러 개를 동시에 꺼내는 확률은 조합을 이용해 (원하는 사건의 경우의 수)/(전체 경우의 수)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-05-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-05",
+    "prompt": "sinθ + cosθ = 1/2일 때, sinθcosθ의 값은?",
+    "choices": [
+      "-3/8",
+      "-1/4",
+      "1/4",
+      "3/8",
+      "1/2"
+    ],
+    "answerIndex": 0,
+    "explanation": "(sinθ+cosθ)² = sin²θ + 2sinθcosθ + cos²θ = 1 + 2sinθcosθ이므로, 양변에 1/2을 제곱하면 1 + 2sinθcosθ = 1/4입니다. 따라서 2sinθcosθ = 1/4 - 1 = -3/4이므로 sinθcosθ = -3/8입니다.",
+    "concept": "(sinθ+cosθ)² = 1 + 2sinθcosθ 공식을 이용하면 sinθcosθ의 값을 구할 수 있다."
+  }
+]
