@@ -105,12 +105,29 @@ def _fetch_html_browser(url: str, timeout: int = 30):
                         locale="ko-KR",
                         viewport={"width": 480, "height": 640})
                     page = context.new_page()
+                    # 쿠팡 메인을 먼저 방문해 쿠키를 받아두면 차단이 줄어든다
+                    try:
+                        page.goto("https://www.coupang.com",
+                                  wait_until="domcontentloaded",
+                                  timeout=timeout * 1000)
+                        page.wait_for_timeout(1500)
+                    except Exception:  # noqa: BLE001
+                        pass
                     page.goto(url, wait_until="domcontentloaded",
                               timeout=timeout * 1000)
                     page.wait_for_timeout(2500)  # 스크립트 렌더 대기
                     html = page.content()
+                    if _looks_blocked(200, html):
+                        # 잠시 기다렸다가 한 번 새로고침 재시도
+                        page.wait_for_timeout(3000)
+                        page.reload(wait_until="domcontentloaded")
+                        page.wait_for_timeout(2500)
+                        html = page.content()
                 finally:
                     browser.close()
+                if html and _looks_blocked(200, html):
+                    last_error = "쿠팡이 브라우저 접근도 차단함"
+                    continue
                 if html and ("og:title" in html or "<title>" in html):
                     return html, None
                 last_error = "페이지 내용을 읽지 못함"
@@ -131,6 +148,11 @@ def _parse(text: str, image_dir: str, timeout: int) -> dict:
         r"<title>([^<]+)</title>",
     ])
     result["name"] = _clean_title(name)
+    # 차단 페이지 제목을 제품명으로 오인하지 않도록 걸러낸다
+    if result["name"].strip().lower() in (
+            "access denied", "access to this page has been denied",
+            "접근이 거부되었습니다", "잠시만 기다려 주세요", "coupang", "쿠팡"):
+        result["name"] = ""
 
     # 가격: 쿠폰가 → 판매가 순
     price_raw = _first_match(text, [
