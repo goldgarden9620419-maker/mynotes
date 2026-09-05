@@ -76,6 +76,16 @@ def hashtags(product: dict, platform: str) -> list:
     return result[:limit]
 
 
+# 쿠팡 파트너스 활동 시 필수 대가성 표기 문구
+PARTNERS_DISCLOSURE = ("이 포스팅은 쿠팡 파트너스 활동의 일환으로, "
+                       "이에 따른 일정액의 수수료를 제공받습니다.")
+
+
+def _is_partners_link(url: str) -> bool:
+    url = (url or "").lower()
+    return "link.coupang.com" in url or "coupa.ng" in url
+
+
 def instagram_caption(product: dict, selling_points: list,
                       hook_text: str = "") -> str:
     """instagram_caption.txt 내용."""
@@ -111,6 +121,9 @@ def instagram_caption(product: dict, selling_points: list,
     lines.append("저장해두면 나중에 찾기 편해요 📌")
     lines.append("")
     lines.append(" ".join(hashtags(product, "instagram")))
+    if _is_partners_link(url):
+        lines.append("")
+        lines.append(PARTNERS_DISCLOSURE)
     return "\n".join(line for line in lines if _is_safe(line))
 
 
@@ -127,4 +140,6 @@ def tiktok_caption(product: dict, selling_points: list,
         lines.append(f"한줄평: {selling_points[0]} 👍")
     lines.append(f"{cta} 🔗")
     lines.append(" ".join(hashtags(product, "tiktok")))
+    if _is_partners_link(_clean(product.get("url"))):
+        lines.append(PARTNERS_DISCLOSURE)
     return "\n".join(line for line in lines if _is_safe(line))
