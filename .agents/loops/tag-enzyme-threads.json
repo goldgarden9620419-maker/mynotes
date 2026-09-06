@@ -1,13 +1,28 @@
 {
   "loop": "tag-enzyme-threads",
-  "last_run": null,
-  "cursor": null,
+  "last_run": "2026-09-06",
+  "cursor": "2026-09-06",
   "buffer_target": 1,
   "product": "국민 T.A.G 효소",
   "channel": "개인 Threads 계정",
-  "used_angles": ["추천 체크리스트 각도"],
-  "pending_drafts": [
-    "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-1-추천체크리스트.md"
+  "posting_method": "partial-auto (post_to_threads.ps1 / post_video_to_threads.ps1 / post_reply_to_threads.ps1, user runs on own machine)",
+  "used_angles": ["추천 체크리스트 각도", "제품 영상 각도"],
+  "pending_drafts": [],
+  "published": [
+    {
+      "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-1-추천체크리스트.md",
+      "angle": "추천 체크리스트 각도",
+      "published_at": "2026-09-06",
+      "account": "kim_jade0419",
+      "has_purchase_link_comment": true
+    },
+    {
+      "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-2-제품영상.md",
+      "angle": "제품 영상 각도",
+      "published_at": "2026-09-06",
+      "account": "kim_jade0419",
+      "has_purchase_link_comment": true
+    }
   ],
   "counters": {
     "consecutive_no_new_angle": 0
