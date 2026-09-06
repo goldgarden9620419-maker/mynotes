@@ -1918,5 +1918,246 @@
     "answerIndex": 0,
     "explanation": "(sinθ+cosθ)² = sin²θ + 2sinθcosθ + cos²θ = 1 + 2sinθcosθ이므로, 양변에 1/2을 제곱하면 1 + 2sinθcosθ = 1/4입니다. 따라서 2sinθcosθ = 1/4 - 1 = -3/4이므로 sinθcosθ = -3/8입니다.",
     "concept": "(sinθ+cosθ)² = 1 + 2sinθcosθ 공식을 이용하면 sinθcosθ의 값을 구할 수 있다."
+  },
+  {
+    "id": "en-2026-09-06-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-06",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "For decades, researchers dismissed the placebo effect as a mere psychological trick, but growing evidence now suggests that it [u]triggers[/u]① measurable biological changes in the brain and body. When patients believe they are receiving an effective treatment, their brains often release natural painkillers and other chemicals [u]similar to[/u]② those triggered by the real drug being mimicked. Interestingly, the strength of a placebo's effect can depend heavily on context: a pill described by a doctor as \"powerful\" tends to produce stronger relief than the same pill [u]handed over[/u]③ without any explanation. Some studies have even shown that placebos [u]work[/u]④ to some degree even when patients are explicitly told the pill contains no active medicine, suggesting that the ritual of treatment itself carries meaning. Such findings have led some researchers [u]arguing[/u]⑤ that clinical trials should be redesigned to account for the placebo's surprisingly durable influence on the body.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서는 'lead+목적어+to부정사' 구조가 되어야 하므로 arguing을 to argue로 고쳐야 합니다(lead는 목적격보어로 to부정사를 취하는 동사입니다). 나머지는 모두 어법상 올바릅니다: ①은 단수 주어 it(placebo effect)에 맞는 단수 동사 triggers, ②는 비교 대상을 이끄는 similar to, ③은 pill을 수동적으로 수식하는 과거분사 handed over, ④는 복수 주어 placebos에 맞는 복수 동사 work입니다.",
+    "vocab": [
+      {
+        "word": "mimicked",
+        "meaning": "모방된, 흉내 낸"
+      },
+      {
+        "word": "ritual",
+        "meaning": "의식, 정해진 절차"
+      },
+      {
+        "word": "durable",
+        "meaning": "지속적인, 내구성 있는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-06-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-06",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Psychologists have long studied why bystanders often fail to help someone in an emergency when many other people are present, a pattern known as the bystander effect. Early explanations focused on apathy, but controlled experiments suggest otherwise: when people first notice a potential emergency in a crowd, they instinctively glance at the reactions of those around them to judge whether the situation is truly serious, and if others appear calm, they too remain calm, each one misreading the group's outward composure as a sign that nothing is wrong. Once bystanders do recognize that help is genuinely needed, however, their reluctance to act often stems from the belief that ______, so intervening no longer feels like something only they can do. This is why safety trainers now advise that a person in a crowd requesting help single out one specific bystander directly, for example by pointing and making eye contact, rather than calling out to the group as a whole.",
+    "choices": [
+      "at least one of the many other witnesses will step in to help",
+      "the emergency will resolve on its own without any intervention",
+      "professional responders can arrive faster than any bystander could",
+      "their intervention might be recorded and used against them later",
+      "the victim would prefer not to draw attention from strangers"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤에서 'so intervening no longer feels like something only they can do(그래서 개입하는 것이 자신만 해야 할 일처럼 느껴지지 않는다)'라고 이어지고, 마지막 문장에서 도움을 요청할 때는 군중 전체가 아니라 특정 한 사람을 지목해야 한다고 조언하는 것으로 보아, 빈칸에는 다른 목격자 중 누군가가 도와줄 것이라는 책임감 분산(diffusion of responsibility)의 내용이 들어가야 함을 알 수 있습니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "apathy",
+        "meaning": "무관심"
+      },
+      {
+        "word": "composure",
+        "meaning": "침착함, 평정"
+      },
+      {
+        "word": "reluctance",
+        "meaning": "꺼림, 내키지 않음"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-06-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-06",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Trees growing in regions with distinct seasons form one new ring of wood each year, and by examining these rings scientists can reconstruct centuries of environmental history.\n(A) For example, a series of unusually narrow rings appearing across many trees in the same region often indicates a period of severe drought, since limited water availability restricts a tree's growth during that year.\n(B) This is possible because the width and density of each ring reflect the specific growing conditions of that year, with favorable conditions such as ample rainfall producing wider rings and harsh conditions producing narrower ones.\n(C) By cross-referencing ring patterns from living trees with those preserved in ancient timber or buried logs, researchers have even been able to extend these climate records back thousands of years beyond written history.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 나무의 나이테를 통해 환경사를 재구성할 수 있다고 소개합니다. (B)는 'This is possible because'로 나이테의 폭과 밀도가 그 해의 생장 조건을 반영한다는 원리를 설명하고, (A)는 'For example'로 폭이 좁은 나이테가 가뭄을 나타내는 구체적 예를 들며, (C)는 살아있는 나무의 나이테와 고대 목재의 나이테를 대조해 기록을 수천 년 전까지 확장한다는 내용으로 마무리합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "reconstruct",
+        "meaning": "재구성하다"
+      },
+      {
+        "word": "ample",
+        "meaning": "충분한, 풍부한"
+      },
+      {
+        "word": "timber",
+        "meaning": "목재"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-06-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-06",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Yawning is one of the most familiar human behaviors, yet scientists are still not entirely certain why watching someone else yawn so often triggers an urge to yawn ourselves. ( ① ) One long-standing hypothesis proposed that contagious yawning helps regulate brain temperature, since a yawn draws in cool air and increases blood flow to the brain. ( ② ) This theory, however, does not fully explain why the urge to yawn is specifically triggered by seeing or hearing another person yawn, rather than occurring simply whenever the brain becomes slightly warmer. ( ③ ) More recent research has instead linked contagious yawning to empathy, noting that people who score higher on empathy tests tend to catch yawns more readily and more frequently from others. ( ④ ) Brain imaging studies support this connection, showing that the same neural regions activated during emotional mirroring also light up when a person watches someone else yawn. ( ⑤ ) Some researchers therefore now suspect that contagious yawning is less a matter of temperature regulation and more a subtle form of unconscious social bonding among group members.",
+    "givenSentence": "Under this newer view, contagious yawning is thought to reflect an unconscious mirroring of others' behavioral or emotional states, similar to the way people unconsciously mimic another person's posture or tone of voice.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 'Under this newer view(이 새로운 관점에 따르면)'로 시작해, 전염성 하품이 타인의 자세나 말투를 무의식적으로 따라 하는 것과 비슷한 무의식적 모방이라는 내용을 담고 있습니다. 바로 앞 ③ 뒤 문장에서 공감(empathy)과의 연관성이 처음 언급되므로 'this newer view'가 이를 가리키고, 이어지는 문장의 'this connection'이 주어진 문장에서 설명한 모방 개념과 뇌 영상 연구 결과를 자연스럽게 연결하므로 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "contagious",
+        "meaning": "전염되는, 옮기 쉬운"
+      },
+      {
+        "word": "mirroring",
+        "meaning": "(행동·감정을) 그대로 반영함, 모방"
+      },
+      {
+        "word": "posture",
+        "meaning": "자세"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-06-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-06",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many people pride themselves on their ability to multitask, believing that answering emails while attending a meeting or texting while studying allows them to accomplish more in less time. Cognitive research, however, consistently shows that what feels like doing two things simultaneously is usually the brain rapidly switching back and forth between tasks rather than processing them in parallel. Each switch carries a hidden cost: it takes the brain a measurable amount of time to disengage fully from one task and reorient its attention to another, and during that transition, performance on both tasks tends to suffer. Studies measuring completion time and error rates have found that people who attempt to juggle multiple demanding tasks often take longer overall and make more mistakes than those who complete the same tasks one after another. Despite this evidence, the illusion of productivity persists, in part because switching tasks frequently feels active and engaging, masking the inefficiency it actually produces.",
+    "choices": [
+      "the psychological reasons some tasks feel more enjoyable than others",
+      "how frequent task-switching secretly undermines the productivity it seems to boost",
+      "methods for training the brain to genuinely process multiple tasks in parallel",
+      "historical changes in workplace attitudes toward multitasking",
+      "the difference between short-term memory and long-term memory formation"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 멀티태스킹이 실제로는 뇌가 과제 사이를 빠르게 전환하는 것일 뿐이며, 전환할 때마다 숨겨진 비용이 발생해 완료 시간이 늘고 실수가 늘어남에도 불구하고 그 활동적인 느낌 때문에 생산적이라는 착각이 유지된다는 내용입니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "disengage",
+        "meaning": "(하던 일에서) 벗어나다, 분리되다"
+      },
+      {
+        "word": "reorient",
+        "meaning": "다시 방향을 맞추다, 재조정하다"
+      },
+      {
+        "word": "illusion",
+        "meaning": "착각, 환상"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-06-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-06",
+    "prompt": "등비수열 {aₙ}의 첫째항이 3이고 공비가 2일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "90",
+      "93",
+      "96",
+      "99",
+      "102"
+    ],
+    "answerIndex": 1,
+    "explanation": "a₁=3, r=2이므로 등비수열의 합 공식 Sₙ = a₁(rⁿ-1)/(r-1)에 n=5를 대입하면 S₅ = 3×(2⁵-1)/(2-1) = 3×31 = 93입니다. (직접 더해도 3+6+12+24+48=93으로 같습니다.)",
+    "concept": "등비수열의 합 공식: Sₙ = a₁(rⁿ-1)/(r-1) (단, r≠1)"
+  },
+  {
+    "id": "math-2026-09-06-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-06",
+    "prompt": "함수 f(x) = 2x³ - 4x² + 3x - 1 위의 점 (1, f(1))에서의 접선의 기울기는?",
+    "choices": [
+      "-1",
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 6x² - 8x + 3이므로 f'(1) = 6 - 8 + 3 = 1입니다. 따라서 점 (1, f(1))에서의 접선의 기울기는 1입니다.",
+    "concept": "곡선 위의 한 점에서의 접선의 기울기는 그 점에서의 도함수 값 f'(x)와 같다."
+  },
+  {
+    "id": "math-2026-09-06-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-06",
+    "prompt": "∫₀¹ (6x² + 2x) dx의 값은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 2x³ + x²입니다. x=1일 때 2×1 + 1 = 3이고, x=0일 때 0이므로 정적분 값은 3 - 0 = 3입니다.",
+    "concept": "정적분은 부정적분 F(x)를 구한 뒤 F(상한) - F(하한)으로 계산한다."
+  },
+  {
+    "id": "math-2026-09-06-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-06",
+    "prompt": "두 개의 주사위를 동시에 던질 때, 나온 눈의 합이 8일 확률은?",
+    "choices": [
+      "1/9",
+      "5/36",
+      "1/6",
+      "7/36",
+      "2/9"
+    ],
+    "answerIndex": 1,
+    "explanation": "두 주사위를 던져 나올 수 있는 전체 경우의 수는 6×6=36가지입니다. 눈의 합이 8이 되는 경우는 (2,6),(3,5),(4,4),(5,3),(6,2)로 5가지이므로, 구하는 확률은 5/36입니다.",
+    "concept": "두 주사위의 눈의 합에 대한 확률은 전체 36가지 경우 중 조건을 만족하는 경우의 수를 세어 계산한다."
+  },
+  {
+    "id": "math-2026-09-06-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-06",
+    "prompt": "0<θ<π/2이고 sinθ = 3/5일 때, tanθ의 값은?",
+    "choices": [
+      "3/5",
+      "3/4",
+      "4/3",
+      "4/5",
+      "5/4"
+    ],
+    "answerIndex": 1,
+    "explanation": "sin²θ+cos²θ=1이므로 cos²θ = 1 - 9/25 = 16/25이고, 0<θ<π/2에서 cosθ>0이므로 cosθ = 4/5입니다. 따라서 tanθ = sinθ/cosθ = (3/5)/(4/5) = 3/4입니다.",
+    "concept": "sin²θ+cos²θ=1임을 이용해 cosθ를 구한 뒤 tanθ=sinθ/cosθ로 계산한다."
   }
 ]
