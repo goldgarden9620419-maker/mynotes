@@ -1,0 +1,18 @@
+{
+  "loop": "golden-garden-content",
+  "last_run": null,
+  "cursor": null,
+  "buffer_target": 2,
+  "pillars": ["새벽 루틴", "확언·자기암시", "부자의 습관", "사주·운세"],
+  "handled_topics": [
+    "미라클모닝 실패 이유 (수면, 루틴, 습관)",
+    "확언 문장 만드는 법 (감정, 가치, 문장)"
+  ],
+  "pending_drafts": [
+    "01-Projects/황금정원-블로그/미라클모닝-실패-이유.md",
+    "01-Projects/황금정원-블로그/확언-문장-만드는-법.md"
+  ],
+  "counters": {
+    "consecutive_no_new_topic": 0
+  }
+}
