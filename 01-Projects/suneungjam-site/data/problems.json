@@ -2159,5 +2159,246 @@
     "answerIndex": 1,
     "explanation": "sin²θ+cos²θ=1이므로 cos²θ = 1 - 9/25 = 16/25이고, 0<θ<π/2에서 cosθ>0이므로 cosθ = 4/5입니다. 따라서 tanθ = sinθ/cosθ = (3/5)/(4/5) = 3/4입니다.",
     "concept": "sin²θ+cos²θ=1임을 이용해 cosθ를 구한 뒤 tanθ=sinθ/cosθ로 계산한다."
+  },
+  {
+    "id": "en-2026-09-07-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-07",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Although dreams often feel vivid and emotionally intense while they are happening, the vast majority of them [u]fade[/u]① from memory within minutes of waking, a phenomenon that has puzzled researchers for decades. One influential theory holds that during REM sleep, the brain's activity resembles that of an [u]awakening[/u]② state, yet a key neurotransmitter linked to forming long-term memories, noradrenaline, remains at especially low levels. Without this chemical support, newly formed dream memories struggle to become properly encoded in the mind, meaning that even highly detailed dreams often leave [u]little[/u]③ trace behind by morning. Some studies further suggest that waking up abruptly in the middle of a dream, rather than gradually drifting into consciousness, [u]makes[/u]④ people more likely to remember what they had been dreaming. This may explain why alarm clocks that interrupt sleep at random moments sometimes leave people with vivid recollections, while a natural, gradual awakening [u]tend[/u]⑤ to erase the dream almost entirely.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤의 주어는 단수 명사구인 'a natural, gradual awakening'이므로 동사도 이에 수를 일치시켜 tends가 되어야 합니다. 나머지는 모두 올바릅니다: ①은 복수 개념인 'the vast majority of them'에 맞는 복수 동사 fade, ②는 명사를 수식하는 형용사적 용법의 awakening, ③은 trace를 수식하는 little, ④는 단수 동명사구 주어 'waking up abruptly...'에 맞는 단수 동사 makes입니다.",
+    "vocab": [
+      {
+        "word": "noradrenaline",
+        "meaning": "노르아드레날린(신경전달물질)"
+      },
+      {
+        "word": "encoded",
+        "meaning": "부호화된, (기억으로) 저장된"
+      },
+      {
+        "word": "recollections",
+        "meaning": "회상, 기억"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-07-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-07",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Advertisers have long observed that consumers often come to prefer products, songs, or even faces simply because they have encountered them repeatedly, a pattern psychologists call the mere-exposure effect. In laboratory experiments, participants shown unfamiliar shapes or nonsense words multiple times consistently rate them as more pleasant than shapes or words they are seeing for the first time, even when they cannot consciously recall having seen the repeated items before. This finding suggests that ______, since the preference emerges without any deliberate reasoning about the item's actual qualities. Marketers have exploited this principle for decades, reasoning that placing a brand's name or logo in front of consumers again and again, even without any persuasive message attached, can quietly build favorable attitudes toward the brand over time.",
+    "choices": [
+      "familiarity itself, rather than a conscious evaluation of quality, can generate liking",
+      "people rely entirely on price to judge how much they will enjoy a product",
+      "viewers instinctively dislike anything that reminds them of past purchases",
+      "conscious memory of an item is required before any preference can form",
+      "novelty is always rated as more attractive than something familiar"
+    ],
+    "answerIndex": 0,
+    "explanation": "실험에서 참가자들은 반복해서 본 것을 이전에 봤다는 사실을 의식적으로 기억하지 못해도 그것을 더 선호했습니다. 이는 곧이어 나오는 'the preference emerges without any deliberate reasoning about the item's actual qualities'와 연결되어, 단순한 노출을 통한 친숙함 자체가 품질에 대한 의식적 평가 없이도 호감을 만들어낼 수 있음을 보여줍니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "deliberate",
+        "meaning": "의도적인, 신중한"
+      },
+      {
+        "word": "exploited",
+        "meaning": "이용했다, 활용했다"
+      },
+      {
+        "word": "favorable",
+        "meaning": "호의적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-07-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-07",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Ecologists use the term \"keystone species\" to describe organisms whose influence on an ecosystem is far greater than their numbers alone would suggest.\n(A) When sea otters are removed from an ecosystem, however, sea urchin populations explode unchecked, and the urchins graze so heavily on kelp that entire underwater forests can disappear within just a few years.\n(B) The sea otter, for instance, preys on sea urchins along the Pacific coast, and by keeping urchin numbers low, it allows dense kelp forests to grow and provide habitat for countless other species.\n(C) This dramatic transformation, triggered by the loss of a single predator, illustrates why protecting keystone species is often considered one of the most efficient strategies in conservation biology.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 핵심종(keystone species)이라는 개념을 소개합니다. (B)는 'for instance'로 해달이라는 구체적 예시를 들어 해달이 성게를 잡아먹어 켈프 숲을 지켜준다는 원리를 설명하고, (A)는 'however'로 해달이 사라졌을 때 성게가 폭증해 켈프 숲이 사라지는 반대 상황을 제시하며, (C)는 'this dramatic transformation'으로 앞선 변화를 요약하며 핵심종 보호의 중요성으로 마무리합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "graze",
+        "meaning": "(풀 등을) 뜯어 먹다"
+      },
+      {
+        "word": "unchecked",
+        "meaning": "억제되지 않는, 저지되지 않는"
+      },
+      {
+        "word": "predator",
+        "meaning": "포식자"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-07-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-07",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "When you first step into a bakery, the smell of fresh bread can feel almost overwhelming, yet after only a few minutes inside, that same smell seems to fade almost completely from your awareness. ( ① ) This phenomenon, known as sensory adaptation, occurs because the nerve cells responsible for detecting a constant stimulus gradually reduce how strongly they respond to it over time. ( ② ) From an evolutionary standpoint, this makes a great deal of sense, since a stimulus that has remained unchanged for a while is rarely providing new, useful information about the environment. ( ③ ) Detecting brand-new smells, sounds, or changes in one's surroundings was almost certainly far more valuable for survival than continuously registering something already confirmed to be safe. ( ④ ) Sensory adaptation, however, is highly selective, typically affecting only the specific stimulus that has stayed constant while leaving sensitivity to other stimuli untouched. ( ⑤ ) A person who has fully adapted to the smell of bread, for instance, will still immediately notice the sudden smell of smoke, because that new stimulus activates an entirely different, unadapted set of receptors.",
+    "givenSentence": "In other words, unchanging information is, in a sense, old news, and the brain has little to gain by continuing to expend energy processing it.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'In other words'로 시작해 변하지 않는 정보는 이미 '오래된 뉴스'와 같아서 뇌가 그것을 계속 처리할 이유가 없다는, 앞 내용을 재진술하는 문장입니다. ② 뒤 문장에서 '변하지 않는 자극은 새로운 유용한 정보를 거의 제공하지 않는다'는 내용이 나오고, 그 뒤에 주어진 문장이 이를 'in other words'로 다시 설명한 뒤, ③ 뒤에서 'Detecting brand-new smells...'로 새로운 자극을 감지하는 것이 왜 더 가치 있는지 대조하며 이어지므로 ③에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "stimulus",
+        "meaning": "자극"
+      },
+      {
+        "word": "receptors",
+        "meaning": "수용체"
+      },
+      {
+        "word": "expend",
+        "meaning": "(에너지·시간 등을) 쏟다, 소비하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-07-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-07",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When students take notes by hand rather than typing them on a laptop, they generally cannot capture a lecture word for word, since handwriting is simply slower than typing. Instead of transcribing everything verbatim, hand-note-takers are forced to listen actively, identify the most important ideas, and rephrase them in their own words as they write. Researchers who compared the two note-taking methods found that, despite typists often producing longer and more complete notes, students who wrote by hand performed significantly better on tests measuring conceptual understanding afterward. The advantage did not come from the physical act of writing itself, but from the mental processing that slower, selective note-taking demands: summarizing and paraphrasing require learners to engage with the material rather than merely recording it, and that deeper engagement is what makes information easier to remember later. Simply owning more comprehensive notes, it turns out, is far less valuable than having briefly wrestled with the meaning of what one just heard.",
+    "choices": [
+      "why typed notes are generally more accurate than handwritten ones",
+      "how the mental effort required by handwriting improves later recall of lecture material",
+      "techniques for increasing typing speed during lectures",
+      "the history of note-taking methods used in classrooms",
+      "the reasons some students prefer laptops to notebooks"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 손으로 필기하면 타이핑보다 느리기 때문에 오히려 요약하고 바꾸어 말하는 정신적 처리 과정을 거치게 되고, 이러한 깊은 인지적 관여가 나중에 내용을 더 잘 기억하게 만든다는 내용입니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "verbatim",
+        "meaning": "(한 자도 틀리지 않고) 그대로, 축어적으로"
+      },
+      {
+        "word": "transcribing",
+        "meaning": "(말한 것을 그대로) 받아 적는 것"
+      },
+      {
+        "word": "paraphrasing",
+        "meaning": "바꾸어 말하기, 다른 말로 표현하기"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-07-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-07",
+    "prompt": "등차수열 {aₙ}에서 a₃=11, a₇=23일 때, a₁₀의 값은?",
+    "choices": [
+      "29",
+      "30",
+      "31",
+      "32",
+      "33"
+    ],
+    "answerIndex": 3,
+    "explanation": "a₇-a₃=4d=23-11=12이므로 공차 d=3입니다. a₃=a₁+2d=11이므로 a₁=11-6=5입니다. 따라서 a₁₀=a₁+9d=5+27=32입니다.",
+    "concept": "등차수열의 일반항 aₙ=a₁+(n-1)d를 이용하면, 두 항의 값 차이로부터 공차 d와 첫째항 a₁을 구할 수 있다."
+  },
+  {
+    "id": "math-2026-09-07-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-07",
+    "prompt": "함수 f(x) = x³ - 3x² - 9x + 5가 극값을 갖는 x의 값을 모두 더한 값은?",
+    "choices": [
+      "-2",
+      "-1",
+      "0",
+      "1",
+      "2"
+    ],
+    "answerIndex": 4,
+    "explanation": "f'(x) = 3x² - 6x - 9 = 3(x-3)(x+1)이므로 f'(x)=0을 만족하는 x는 -1과 3입니다. x=-1 앞뒤에서 f'(x)의 부호가 양에서 음으로, x=3 앞뒤에서 음에서 양으로 바뀌므로 두 값 모두 실제 극값을 갖습니다. 따라서 두 값의 합은 -1+3=2입니다.",
+    "concept": "f'(x)=0의 해 중 그 값의 좌우에서 f'(x)의 부호가 실제로 바뀌는 x에서만 극값을 가지며, 인수분해된 이차식의 두 근의 합으로 계산할 수 있다."
+  },
+  {
+    "id": "math-2026-09-07-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-07",
+    "prompt": "∫₁² (3x² - 4x + 1) dx의 값은?",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 F(x) = x³ - 2x² + x입니다. F(2) = 8 - 8 + 2 = 2이고 F(1) = 1 - 2 + 1 = 0이므로, 정적분 값은 F(2) - F(1) = 2 - 0 = 2입니다.",
+    "concept": "정적분 ∫ₐᵇ f(x)dx의 값은 피적분함수의 부정적분 F(x)를 구한 뒤 F(b)-F(a)를 계산하여 구한다."
+  },
+  {
+    "id": "math-2026-09-07-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-07",
+    "prompt": "주머니에 빨간 공 3개와 파란 공 5개가 들어 있다. 이 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 두 공의 색이 서로 다를 확률은?",
+    "choices": [
+      "1/2",
+      "13/28",
+      "15/28",
+      "3/7",
+      "5/14"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 8개의 공 중 2개를 꺼내는 경우의 수는 C(8,2)=28가지입니다. 색이 서로 다르려면 빨간 공 1개와 파란 공 1개를 각각 뽑아야 하므로 그 경우의 수는 3×5=15가지입니다. 따라서 구하는 확률은 15/28입니다.",
+    "concept": "서로 다른 색의 공을 뽑는 경우의 수는 각 색에서 하나씩 뽑는 경우의 수를 곱해서 구하고, 이를 전체 조합의 수로 나누어 확률을 계산한다."
+  },
+  {
+    "id": "math-2026-09-07-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-07",
+    "prompt": "π/2<θ<π이고 cosθ = -4/5일 때, sinθ의 값은?",
+    "choices": [
+      "-4/5",
+      "-3/5",
+      "3/5",
+      "4/5",
+      "1"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin²θ+cos²θ=1이므로 sin²θ = 1 - 16/25 = 9/25입니다. π/2<θ<π인 제2사분면에서는 sinθ>0이므로 sinθ = 3/5입니다.",
+    "concept": "sin²θ+cos²θ=1과 각 사분면에서의 삼각함수 부호(제2사분면에서는 사인이 양수)를 이용해 값을 구한다."
   }
 ]
