@@ -2400,5 +2400,246 @@
     "answerIndex": 2,
     "explanation": "sin²θ+cos²θ=1이므로 sin²θ = 1 - 16/25 = 9/25입니다. π/2<θ<π인 제2사분면에서는 sinθ>0이므로 sinθ = 3/5입니다.",
     "concept": "sin²θ+cos²θ=1과 각 사분면에서의 삼각함수 부호(제2사분면에서는 사인이 양수)를 이용해 값을 구한다."
+  },
+  {
+    "id": "en-2026-09-08-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-08",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "A song that suddenly plays in your head over and over, often called an \"earworm,\" is one of the most common and mildly frustrating experiences of everyday mental life. Researchers investigating why certain melodies become stuck in memory have found that songs with a relatively simple, repetitive melodic contour are far more likely to trigger this effect than musically complex pieces [u]are[/u]①. Interestingly, earworms tend to occur most often during moments of low cognitive demand, such as when a person is walking, showering, or performing a task so familiar [u]that[/u]② it requires little conscious attention. Under these conditions, the brain's auditory cortex, having little external input to occupy it, seems to reactivate melodic fragments already stored in memory, replaying them [u]repeatedly[/u]③ without deliberate intention. Attempting to consciously suppress an earworm by deliberately not thinking about it typically fails and can even make the melody [u]persist[/u]④ longer, a pattern that resembles other forms of thought suppression studied by psychologists. Curiously, one strategy shown to be effective is deliberately [u]listens[/u]⑤ to the entire song once, from beginning to end, since this appears to give the brain a sense of completion it was otherwise lacking.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 앞의 'is'는 주어 'one strategy shown to be effective'의 보어를 필요로 하므로 그 자리에는 to부정사가 와야 합니다. 따라서 'listens'가 아니라 'to listen'(또는 'is deliberately to listen')이 되어야 합니다. 나머지는 모두 올바릅니다: ①은 비교구문에서 앞의 동사(are likely)를 대신하는 be동사 are, ②는 'so ~ that' 구문의 that, ③은 동사 replaying을 수식하는 부사 repeatedly, ④는 사역동사 make의 목적격 보어로 오는 원형부정사 persist입니다.",
+    "vocab": [
+      {
+        "word": "contour",
+        "meaning": "윤곽, (선율의) 흐름"
+      },
+      {
+        "word": "cortex",
+        "meaning": "(대뇌) 피질"
+      },
+      {
+        "word": "suppression",
+        "meaning": "억제, 억압"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-08-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-08",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Researchers studying consumer psychology have repeatedly found that people tend to place a disproportionately high value on products they have partially assembled themselves, a tendency now widely known as the IKEA effect. In one experiment, participants who built their own simple furniture, storage boxes, and origami figures rated these self-made items as being nearly as valuable as professionally crafted versions, even when the objects were, by any objective visual standard, imperfect or slightly clumsy in appearance. Non-builders, meanwhile, evaluating the very same objects, judged them far less favorably. The researchers concluded that ______, since the labor itself, rather than the resulting object's actual quality, appears to be the primary source of the inflated sense of value. This insight has since been applied by furniture retailers and meal-kit companies alike, who intentionally require customers to complete some portion of assembly themselves, betting that the resulting sense of ownership will translate into greater satisfaction and loyalty.",
+    "choices": [
+      "the effort invested in creating something increases how much people value it, regardless of the object's objective quality",
+      "people always undervalue any object that requires physical assembly",
+      "professional craftsmanship is valued more highly than personal effort in every situation",
+      "financial cost is the only factor that determines an object's perceived value",
+      "consumers are generally unable to distinguish well-made furniture from poorly made furniture"
+    ],
+    "answerIndex": 0,
+    "explanation": "실험에서 직접 조립한 사람들은 객관적으로 엉성해 보이는 물건도 전문가가 만든 것만큼 높이 평가했지만, 조립하지 않은 사람들은 같은 물건을 훨씬 낮게 평가했습니다. 이어지는 문장에서 'the labor itself, rather than the resulting object's actual quality, appears to be the primary source of the inflated sense of value'라고 명시하므로, 빈칸에는 들인 노력 자체가 객관적 품질과 무관하게 가치 평가를 높인다는 내용이 들어가야 합니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "disproportionately",
+        "meaning": "불균형적으로, 과도하게"
+      },
+      {
+        "word": "clumsy",
+        "meaning": "엉성한, 서투른"
+      },
+      {
+        "word": "inflated",
+        "meaning": "부풀려진, 과장된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-08-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-08",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Honeybee foragers, upon returning to the hive after locating a promising source of nectar, perform a distinctive series of movements known as the waggle dance to inform their nestmates of its location.\n(A) By carefully observing the angle of this waggle run relative to vertical and comparing it to the sun's current position outside the hive, other bees are able to calculate the precise direction they must fly.\n(B) At the center of the dance lies a straight segment called the waggle run, during which the bee vibrates its abdomen rapidly while walking in a fixed direction across the vertical surface of the honeycomb.\n(C) Combined with the duration of the waggle run, which indicates distance, this remarkably precise system allows an entire colony to be redirected toward a newly discovered food source within minutes.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 벌이 waggle dance로 먹이 위치를 알린다는 내용을 소개합니다. (B)는 이 춤의 핵심 요소인 'waggle run'을 처음 정의하며 배를 진동시키며 걷는 직선 구간이라고 설명합니다. (A)는 'this waggle run'으로 (B)의 내용을 받아 그 각도를 태양 위치와 비교해 방향을 계산한다고 설명합니다. (C)는 방향 정보에 더해 지속 시간이 나타내는 거리 정보까지 결합하여 전체 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "forager",
+        "meaning": "먹이를 찾아다니는 개체"
+      },
+      {
+        "word": "nestmate",
+        "meaning": "둥지 동료"
+      },
+      {
+        "word": "abdomen",
+        "meaning": "복부"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-08-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-08",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Yawning is one of the most peculiar behaviors observed across many vertebrate species, and perhaps its strangest feature is how easily it spreads from one individual to another. ( ① ) Simply watching another person yawn, reading the word \"yawn,\" or even just thinking about yawning is often enough to trigger the same response in an observer. ( ② ) For decades, scientists assumed that this contagious quality was closely tied to empathy, since studies found that people who scored higher on empathy tests were somewhat more likely to catch a yawn from someone else. ( ③ ) More recent research, however, has complicated this picture considerably. ( ④ ) Brain-imaging studies have identified a specific region, associated largely with automatic, reflexive motor responses rather than emotional understanding, that activates strongly whenever a person is exposed to a contagious yawn. ( ⑤ ) This has led some researchers to argue that contagious yawning may be less a product of emotional connection than an involuntary echo produced by mirror neurons responding to observed movement, regardless of how much the observer actually empathizes with the yawner.",
+    "givenSentence": "Some individuals with conditions known to reduce empathic response, for instance, have nevertheless been shown to yawn just as contagiously as anyone else.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "③ 뒤 문장인 'More recent research, however, has complicated this picture considerably' 뒤에는 공감 가설을 복잡하게 만드는 구체적 반박 근거가 이어져야 자연스럽습니다. 주어진 문장은 공감 능력이 낮은 사람들도 똑같이 전염성 하품을 보인다는 반박 사례를 제시하고, 이어서 ④ 뒤 문장에서 'Brain-imaging studies have identified...'로 신경학적 증거를 추가로 제시하므로, 주어진 문장은 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "peculiar",
+        "meaning": "기이한, 특이한"
+      },
+      {
+        "word": "empathic",
+        "meaning": "공감의, 감정 이입의"
+      },
+      {
+        "word": "involuntary",
+        "meaning": "무의식적인, 비자발적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-08-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-08",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "For much of the twentieth century, boredom was regarded almost exclusively as an unpleasant state to be avoided or eliminated as quickly as possible, a feeling with no redeeming psychological value. Recent research, however, has begun to challenge this assumption by demonstrating an unexpected link between boredom and creative thinking. In a series of experiments, participants who were first assigned to a deliberately monotonous task, such as copying numbers from a phone book, subsequently generated more original and unusual solutions on creative problem-solving tasks than participants who had not been bored beforehand. Researchers suggest that boredom functions as a kind of internal signal prompting the mind to seek novel stimulation, and that when external distractions are removed, attention naturally drifts toward imaginative, associative thinking rather than remaining fixed on the tedious task at hand. Rather than being purely wasted time, then, moments of boredom may quietly prepare the mind to make unexpected creative connections once it is finally given a more engaging challenge.",
+    "choices": [
+      "the historical reasons boredom was considered a negative emotion",
+      "how being bored can unexpectedly stimulate creative thinking afterward",
+      "techniques for eliminating boredom in the modern workplace",
+      "the difference between boredom and general fatigue",
+      "why monotonous tasks are becoming more common in daily life"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 지루함이 부정적으로만 여겨졌으나, 실제로는 단조로운 과제를 수행한 후 창의적 문제 해결 과제에서 더 독창적인 해결책을 만들어냈다는 실험 결과를 통해 지루함이 예상외로 이후의 창의적 사고를 자극할 수 있음을 보여줍니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "monotonous",
+        "meaning": "단조로운"
+      },
+      {
+        "word": "tedious",
+        "meaning": "지루한, 싫증나는"
+      },
+      {
+        "word": "associative",
+        "meaning": "연상적인, 연관된"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-08-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-08",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 8, a₇ = 20일 때, a₁₅의 값은?",
+    "choices": [
+      "38",
+      "41",
+      "44",
+      "47",
+      "50"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ - a₃ = 4d = 20 - 8 = 12이므로 d = 3입니다. a₃ = a₁ + 2d = 8이므로 a₁ = 8 - 6 = 2입니다. 따라서 a₁₅ = a₁ + 14d = 2 + 42 = 44입니다.",
+    "concept": "등차수열에서 두 항의 차를 이용해 공차를 구한 뒤, 일반항 공식 aₙ = a₁ + (n-1)d를 활용하여 원하는 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-08-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-08",
+    "prompt": "함수 f(x) = x³ - 6x² + 9x + 2가 x = a에서 극댓값을, x = b에서 극솟값을 가질 때, a + b의 값은?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 12x + 9 = 3(x-1)(x-3)이므로 f'(x) = 0의 해는 x = 1, 3입니다. x < 1에서 f'(x) > 0, 1 < x < 3에서 f'(x) < 0이므로 x = 1에서 극대이고, x > 3에서 다시 f'(x) > 0이 되므로 x = 3에서 극소입니다. 따라서 a = 1, b = 3이고 a + b = 4입니다.",
+    "concept": "삼차함수의 극값은 f'(x) = 0의 근을 구한 뒤, 그 근의 좌우에서 f'(x)의 부호가 양에서 음으로 바뀌면 극대, 음에서 양으로 바뀌면 극소임을 이용해 판별한다."
+  },
+  {
+    "id": "math-2026-09-08-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-08",
+    "prompt": "∫₀² (x³ - 2x + 3) dx의 값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 F(x) = x⁴/4 - x² + 3x입니다. F(2) = 16/4 - 4 + 6 = 4 - 4 + 6 = 6이고 F(0) = 0이므로, 정적분 값은 F(2) - F(0) = 6 - 0 = 6입니다.",
+    "concept": "정적분 ∫ₐᵇ f(x)dx의 값은 각 항을 거듭제곱 적분 공식(∫xⁿdx = xⁿ⁺¹/(n+1))으로 부정적분 F(x)를 구한 뒤 F(b) - F(a)를 계산하여 구한다."
+  },
+  {
+    "id": "math-2026-09-08-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-08",
+    "prompt": "주사위를 3번 던질 때, 6의 눈이 정확히 2번 나올 확률은?",
+    "choices": [
+      "1/36",
+      "5/216",
+      "5/72",
+      "5/36",
+      "1/6"
+    ],
+    "answerIndex": 2,
+    "explanation": "6이 나올 확률은 1/6, 나오지 않을 확률은 5/6입니다. 3번 중 정확히 2번 6이 나올 확률은 C(3,2)×(1/6)²×(5/6)¹ = 3×1/36×5/6 = 15/216 = 5/72입니다.",
+    "concept": "독립시행에서 특정 사건이 n번 중 정확히 r번 일어날 확률은 이항분포 공식 C(n,r)×p^r×(1-p)^(n-r)로 구한다."
+  },
+  {
+    "id": "math-2026-09-08-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-08",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2sin²θ - 3cosθ = 0을 만족하는 θ의 개수는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "sin²θ = 1 - cos²θ를 대입하면 2(1 - cos²θ) - 3cosθ = 0, 즉 2cos²θ + 3cosθ - 2 = 0입니다. 근의 공식으로 풀면 cosθ = (-3 ± 5)/4이므로 cosθ = 1/2 또는 cosθ = -2입니다. cosθ = -2는 −1 ≤ cosθ ≤ 1 범위를 벗어나 불가능하고, cosθ = 1/2을 만족하는 θ는 0 ≤ θ < 2π에서 θ = π/3, 5π/3으로 총 2개입니다.",
+    "concept": "sin²θ + cos²θ = 1을 이용해 방정식을 cosθ에 대한 이차방정식으로 바꾼 뒤 풀고, cosθ의 값이 −1 ≤ cosθ ≤ 1 범위를 벗어나는 해는 버린다."
   }
 ]
