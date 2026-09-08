@@ -2641,5 +2641,246 @@
     "answerIndex": 1,
     "explanation": "sin²θ = 1 - cos²θ를 대입하면 2(1 - cos²θ) - 3cosθ = 0, 즉 2cos²θ + 3cosθ - 2 = 0입니다. 근의 공식으로 풀면 cosθ = (-3 ± 5)/4이므로 cosθ = 1/2 또는 cosθ = -2입니다. cosθ = -2는 −1 ≤ cosθ ≤ 1 범위를 벗어나 불가능하고, cosθ = 1/2을 만족하는 θ는 0 ≤ θ < 2π에서 θ = π/3, 5π/3으로 총 2개입니다.",
     "concept": "sin²θ + cos²θ = 1을 이용해 방정식을 cosθ에 대한 이차방정식으로 바꾼 뒤 풀고, cosθ의 값이 −1 ≤ cosθ ≤ 1 범위를 벗어나는 해는 버린다."
+  },
+  {
+    "id": "en-2026-09-09-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-09",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Psychologists have long observed that people tend to judge repeated statements as more truthful than statements they are encountering for the first time, a tendency known as the illusory truth effect. In early studies, researchers presented participants with a mix of true and false trivia statements and asked them to rate how accurate each one [u]seemed[/u]①, only to find that statements repeated across multiple sessions received significantly higher truth ratings than statements presented only once, regardless of whether the statements were actually correct. This effect appears to occur because repeated exposure makes a statement feel more familiar, and the brain, seeking an efficient shortcut, often [u]mistake[/u]② that sense of familiarity for a sign of accuracy. Notably, the effect persists even among individuals [u]who[/u]③ possess accurate prior knowledge that directly contradicts the repeated statement, suggesting that familiarity can override existing knowledge under certain conditions. Some researchers have proposed that this vulnerability helps explain [u]why[/u]④ misinformation spreads so effectively on social media, where the same claims are often encountered dozens of times across different posts. Deliberately pausing to evaluate the actual source of a claim, rather than relying on how familiar it feels, has been shown to be one of the few reliable strategies for [u]reducing[/u]⑤ susceptibility to this bias.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "②의 주어는 단수인 'the brain'이므로 동사는 'mistakes'가 되어야 합니다. 'often'은 부사로 주어와 동사 수 일치에 영향을 주지 않으므로, 단수 주어 the brain에 맞춰 3인칭 단수 현재형 mistakes를 써야 합니다. 나머지 밑줄은 모두 어법상 올바릅니다: ①은 how accurate each one seemed에서 seemed는 과거시제로 올바르며, ③의 who는 individuals를 선행사로 하는 주격 관계대명사로 적절하고, ④의 why는 explain의 목적어 역할을 하는 명사절을 이끄는 의문사로 적절하며, ⑤의 reducing은 전치사 for의 목적어로 쓰인 동명사로 적절합니다.",
+    "vocab": [
+      {
+        "word": "illusory",
+        "meaning": "환상에 불과한, 착각을 일으키는"
+      },
+      {
+        "word": "trivia",
+        "meaning": "사소한 정보, 잡학 지식"
+      },
+      {
+        "word": "susceptibility",
+        "meaning": "취약성, ~에 걸리기 쉬운 성질"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-09-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-09",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When individuals work together on a shared task, psychologists have consistently observed a curious decline in effort compared to when the same individuals work alone, a phenomenon known as social loafing. In one classic experiment, participants were asked to pull on a rope as hard as they could, either alone or as part of a group, and their individual effort was measured using hidden equipment attached to the rope. The results showed that as group size increased, the average force exerted by each individual participant steadily decreased, even though the participants believed they were still trying just as hard as before. Researchers explain this pattern by noting that ______, since in a group setting no single member's contribution can be easily identified or evaluated, which reduces the psychological cost of underperforming. This insight has practical implications for team-based work: management researchers now recommend that tasks be structured so that each individual's specific contribution remains visible and traceable, a strategy shown to significantly reduce the tendency toward reduced effort in group settings.",
+    "choices": [
+      "when personal responsibility becomes diffused among group members, individuals feel less accountable for the outcome and consequently exert less effort",
+      "people always work harder when surrounded by others regardless of the type of task involved",
+      "larger groups naturally have more physical strength available for completing any given task",
+      "individuals become more motivated when their personal identity is kept completely anonymous",
+      "psychological studies of team dynamics have remained largely inconclusive up to the present day"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤 문장에서 'no single member's contribution can be easily identified or evaluated, which reduces the psychological cost of underperforming'라고 설명하는데, 이는 집단 속에서 개인의 책임이 흐려져 결과에 대한 책임감이 줄어든다는 내용을 뒷받침합니다. 따라서 빈칸에는 '개인의 책임이 분산되어 결과에 덜 책임감을 느끼고 노력을 덜 기울인다'는 내용이 들어가야 하며, 이는 선택지 1과 일치합니다. 나머지 선택지는 지문의 실험 결과(노력 감소)와 반대되거나 관련 없는 내용입니다.",
+    "vocab": [
+      {
+        "word": "diffused",
+        "meaning": "분산된, 널리 퍼진"
+      },
+      {
+        "word": "accountable",
+        "meaning": "책임이 있는"
+      },
+      {
+        "word": "underperform",
+        "meaning": "기대에 못 미치는 성과를 내다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-09-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-09",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Bats flying through pitch-black caves are able to navigate around obstacles and locate flying insects with remarkable precision, relying not on sight but on a biological sonar system known as echolocation.\n(A) By measuring the time delay between the emitted call and its returning echo, along with subtle shifts in pitch in the reflected sound, the bat's brain calculates both the distance to an object and its relative speed.\n(B) This process begins when a bat emits a rapid sequence of high-frequency calls, most of which lie far above the range of human hearing, through its mouth or nose as it flies.\n(C) Combining this constantly updated stream of distance and speed information, the bat's brain constructs an evolving three-dimensional map of its surroundings, allowing it to swerve around obstacles and intercept prey in flight within fractions of a second.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 박쥐가 반향정위(echolocation)라는 음파 시스템으로 어둠 속을 탐색한다고 소개합니다. (B)는 'This process begins when a bat emits...'로 그 과정이 고주파 소리를 내는 것에서 시작한다고 설명하며 시작점을 제시합니다. (A)는 'its returning echo'로 (B)에서 언급된 소리가 되돌아온다는 것을 받아 그 시간차와 음높이 변화로 거리와 속도를 계산한다고 설명합니다. (C)는 'this constantly updated stream of distance and speed information'으로 (A)의 내용을 받아 이를 종합해 3차원 지도를 구성한다는 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "echolocation",
+        "meaning": "반향정위(음파를 이용한 위치 탐지)"
+      },
+      {
+        "word": "emit",
+        "meaning": "방출하다, 내뿜다"
+      },
+      {
+        "word": "intercept",
+        "meaning": "가로채다, 도중에 붙잡다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-09-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-09",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Synesthesia is a rare neurological condition in which stimulation of one sensory pathway leads to involuntary experiences in a second, seemingly unrelated pathway. ( ① ) For instance, some individuals with synesthesia report that hearing a particular musical note reliably triggers the perception of a specific color, even though no actual light is present. ( ② ) For decades, scientists debated whether these reported experiences were genuine perceptual events or simply vivid, learned associations recalled from memory. ( ③ ) Brain-imaging studies eventually settled much of this debate by demonstrating that, in synesthetes, hearing a tone activates the visual cortex directly, a region that ordinarily responds only to actual visual input. ( ④ ) This unusual pattern of cross-activation is now believed to result from atypical neural connections that persist from infancy, when sensory pathways in all human brains are still loosely interconnected. ( ⑤ ) Rather than being a disorder to be corrected, synesthesia is now generally regarded by researchers as simply one further point along the normal spectrum of human perceptual variation.",
+    "givenSentence": "Crucially, this activation occurred even when synesthetes were blindfolded and given no visual cues whatsoever, ruling out the possibility that they were merely imagining an association.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "③ 뒤 문장은 뇌 영상 연구가 공감각자에게서 소리를 들을 때 시각피질이 직접 활성화된다는 것을 보여주었다는 내용입니다. 주어진 문장은 'this activation'으로 이 활성화를 가리키며, 시각적 단서가 전혀 없는 눈가리개 상태에서도 활성화가 일어났다는 추가 증거를 제시합니다. 이어지는 ④ 뒤 문장은 'This unusual pattern of cross-activation'으로 주어진 문장에서 확인된 활성화 패턴을 다시 지칭하며 그 원인을 설명하므로, 주어진 문장은 ④에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "synesthesia",
+        "meaning": "공감각(한 감각이 다른 감각을 유발하는 현상)"
+      },
+      {
+        "word": "involuntary",
+        "meaning": "무의식적인, 비자발적인"
+      },
+      {
+        "word": "atypical",
+        "meaning": "비정형적인, 이례적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-09-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-09",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "For much of the history of psychology, forgetting was treated purely as a failure of memory, a flaw to be minimized wherever possible. Recent research, however, suggests that the ability to forget certain information may serve an important adaptive function rather than representing a simple deficiency. In a series of studies, researchers found that individuals who were better able to suppress irrelevant or outdated memories performed significantly better on tasks requiring flexible, updated thinking than individuals who retained nearly everything they had learned. Brain-imaging data further revealed that actively forgetting outdated information engaged specific neural mechanisms distinct from those involved in simple memory decay, suggesting a deliberate, active process rather than passive fading. Researchers now argue that an efficient memory system must not only store useful information but also actively clear away memories that have become irrelevant, allowing the mind to remain adaptable and to prioritize information that is currently useful over information that merely happens to be old.",
+    "choices": [
+      "how the brain physically stores long-term memories over time",
+      "evidence that forgetting can serve a useful, adaptive function in the mind",
+      "techniques for improving memory retention among students",
+      "the difference between short-term and long-term memory systems",
+      "why older memories tend to be less reliable than recent ones"
+    ],
+    "answerIndex": 1,
+    "explanation": "지문은 망각이 단순한 기억력의 결함이 아니라 오래되거나 불필요한 정보를 능동적으로 제거하여 사고를 유연하게 유지시켜주는 적응적 기능을 한다는 연구 결과를 소개하고 있습니다. 따라서 이 글의 주제는 '망각이 정신에 유용한 적응적 기능을 할 수 있다는 증거'이며, 이는 선택지 2와 일치합니다. 나머지 선택지는 기억의 저장 방식, 기억력 향상법, 기억 체계의 종류, 기억의 신뢰도 등 지문의 핵심 주장과 다른 내용을 다룹니다.",
+    "vocab": [
+      {
+        "word": "adaptive",
+        "meaning": "적응적인, 적응에 도움이 되는"
+      },
+      {
+        "word": "deficiency",
+        "meaning": "결핍, 결함"
+      },
+      {
+        "word": "suppress",
+        "meaning": "억누르다, 억제하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-09-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-09",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, a₈의 값은?",
+    "choices": [
+      "192",
+      "288",
+      "320",
+      "384",
+      "448"
+    ],
+    "answerIndex": 3,
+    "explanation": "a₅ / a₂ = r³ = 48 / 6 = 8이므로 공비 r = 2입니다. a₂ = a₁ × r = 6이므로 a₁ = 3입니다. 따라서 a₈ = a₁ × r⁷ = 3 × 128 = 384입니다.",
+    "concept": "등비수열에서 두 항의 비를 이용해 공비를 구한 뒤, 일반항 공식 aₙ = a₁ · r^(n-1)을 이용하여 원하는 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-09-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-09",
+    "prompt": "곡선 y = x² - 4x + 5 위의 점 (1, 2)에서의 접선이 x축과 만나는 점의 x좌표는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "y' = 2x - 4이므로 x = 1에서의 접선의 기울기는 2(1) - 4 = -2입니다. 점 (1, 2)를 지나는 접선의 방정식은 y - 2 = -2(x - 1), 즉 y = -2x + 4입니다. 이 직선이 x축(y = 0)과 만나는 점은 0 = -2x + 4에서 x = 2입니다.",
+    "concept": "곡선 위의 한 점에서의 접선의 기울기는 그 점에서의 미분계수 f'(a)와 같으며, 이를 이용해 접선의 방정식 y - f(a) = f'(a)(x - a)를 구한 뒤 필요한 좌표를 계산한다."
+  },
+  {
+    "id": "math-2026-09-09-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-09",
+    "prompt": "함수 f(x) = 3x² - 2x + 1일 때, ∫₁³ f(x) dx의 값은?",
+    "choices": [
+      "16",
+      "18",
+      "20",
+      "22",
+      "24"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 F(x) = x³ - x² + x입니다. F(3) = 27 - 9 + 3 = 21이고 F(1) = 1 - 1 + 1 = 1이므로, 정적분 값은 F(3) - F(1) = 21 - 1 = 20입니다.",
+    "concept": "정적분 ∫ₐᵇ f(x)dx는 미적분의 기본정리에 따라 부정적분 F(x)를 구한 뒤 F(b) - F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-09-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-09",
+    "prompt": "5명의 학생 중에서 대표 2명을 뽑아 각각 회장, 부회장 역할을 맡길 때, 가능한 경우의 수는?",
+    "choices": [
+      "10",
+      "15",
+      "20",
+      "25",
+      "30"
+    ],
+    "answerIndex": 2,
+    "explanation": "회장과 부회장은 서로 다른 역할이므로 순서를 고려한 순열입니다. 5명 중 2명을 뽑아 순서를 정하는 경우의 수는 ₅P₂ = 5 × 4 = 20입니다.",
+    "concept": "서로 다른 역할이 구분되는 경우의 수는 순열 ₙPᵣ = n! / (n-r)!을 이용하여 계산한다."
+  },
+  {
+    "id": "math-2026-09-09-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-09",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2cos²θ + sinθ - 1 = 0을 만족하는 θ의 개수는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 2,
+    "explanation": "cos²θ = 1 - sin²θ를 대입하면 2(1 - sin²θ) + sinθ - 1 = 0, 즉 -2sin²θ + sinθ + 1 = 0이 되고, 양변에 -1을 곱하면 2sin²θ - sinθ - 1 = 0입니다. 이를 인수분해하면 (2sinθ + 1)(sinθ - 1) = 0이므로 sinθ = 1 또는 sinθ = -1/2입니다. sinθ = 1을 만족하는 θ는 0 ≤ θ < 2π에서 π/2로 1개이고, sinθ = -1/2을 만족하는 θ는 7π/6, 11π/6으로 2개입니다. 따라서 총 3개입니다.",
+    "concept": "sin²θ + cos²θ = 1을 이용해 방정식을 sinθ에 대한 이차방정식으로 바꾼 뒤 인수분해하여 풀고, 각 sinθ 값에 대해 0 ≤ θ < 2π 범위에서 가능한 θ의 개수를 센다."
   }
 ]
