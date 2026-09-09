@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>승인글 - 쉬어도 쉰 게 아니었다</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;background:#f3f4f6;margin:0;padding:24px;color:#111827;}
+.wrap{max-width:760px;margin:0 auto;}
+.meta-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+.meta-row{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;}
+.meta-label{font-weight:700;color:#374151;min-width:70px;font-size:0.92rem;}
+.meta-val{font-size:0.98rem;color:#111827;flex:1;}
+.copy-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.85rem;cursor:pointer;}
+.copy-btn:hover{background:#1d4ed8;}
+h1.page-title{font-size:1.3rem;margin:0 0 6px 0;}
+.section-title{font-size:1.05rem;font-weight:700;margin:26px 0 10px 0;color:#1e3a8a;}
+.preview{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;margin-bottom:20px;}
+textarea{width:100%;height:260px;box-sizing:border-box;font-family:monospace;font-size:0.82rem;padding:12px;border-radius:10px;border:1px solid #d1d5db;}
+.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;font-size:0.9rem;color:#92400e;margin-top:14px;}
+/* card CSS */
+.lead-intro{font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;}
+.post-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;}
+.post-card h2{font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;}
+.card-body{padding:20px 22px;}
+.card-body p{font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;}
+.card-body p:last-child{margin-bottom:0;}
+.card-body h3{font-size:1.1rem;font-weight:700;color:#1e3a8a;margin:18px 0 10px 0;}
+.summary-card{background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;}
+.summary-card b{color:#1d4ed8;}
+.card-body ul,.card-body ol{margin:10px 0 14px 22px;padding:0;}
+.card-body li{margin:6px 0;line-height:1.8;color:#374151;}
+.card-body a{color:#2563eb;text-decoration:underline;}
+.faq-card h2{background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;}
+.faq-item{margin:0;}
+.faq-q{font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;}
+.faq-a{font-size:1rem;line-height:1.9;color:#374151;margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="page-title">승인글 — 쉬어도 쉰 게 아니었다 (뇌휴식, 멍때리기, 균형)</h1>
+
+<div class="meta-box">
+<div class="meta-row">
+<span class="meta-label">제목</span>
+<span class="meta-val" id="titleText">쉬어도 쉰 게 아니었다 (뇌휴식, 멍때리기, 균형)</span>
+<button class="copy-btn" onclick="copyText('titleText')">복사</button>
+</div>
+<div class="meta-row">
+<span class="meta-label">카테고리</span>
+<span class="meta-val"><b>건강·웰빙 루틴</b></span>
+</div>
+<div class="meta-row">
+<span class="meta-label">태그</span>
+<span class="meta-val" id="tagsText">멍때리기,불멍,물멍,뇌휴식,뇌피로,디폴트모드네트워크,휴식법,번아웃회복,뇌건강,힐링</span>
+<button class="copy-btn" onclick="copyText('tagsText')">복사</button>
+</div>
+</div>
+
+<div class="section-title">본문 미리보기</div>
+<div class="preview" id="previewArea"></div>
+
+<div class="section-title">복사용 본문 HTML</div>
+<textarea id="src" readonly></textarea>
+<button class="copy-btn" onclick="copySrc()" style="margin-top:8px;">본문 HTML 전체 복사</button>
+
+<div class="notice">티스토리 글쓰기에서 HTML 모드로 전환 후 붙여넣으세요. 카드 CSS는 스킨에 최초 1회만 등록하면 됩니다.</div>
+</div>
+
+<script type="text/template" id="srcData">
+<p class="lead-intro" data-ke-size="size16">주말 내내 소파에 누워 스마트폰과 TV를 번갈아 보며 쉬었는데, 월요일 아침이 더 무거웠던 적 없으신가요. 저도 그런 주말을 수없이 보냈습니다.<br /><br />뇌과학은 이 피로를 이렇게 설명합니다. 뇌에는 외부 자극이 끊겼을 때 오히려 켜지는 영역이 있고, 과학자들은 이것을 디폴트 모드 네트워크라고 부릅니다. 제가 휴식이라고 불렀던 시간에 이 회로는 한 번도 켜지지 못했던 겁니다. 요즘 유행하는 멍때리기와 불멍이 왜 뇌 휴식으로 각광받는지, 그리고 어디까지 믿어야 하는지 제 경험과 함께 정리했습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card">
+<h2 data-ke-size="size26">진짜 뇌 휴식은 따로 있었다</h2>
+<div class="card-body">
+<p data-ke-size="size16">돌아보니 제가 쉰다고 부르던 시간의 대부분은 뇌 입장에서 근무 연장이었습니다. 소파에 누워 있어도 눈은 화면을 따라가고 귀는 소리를 처리하느라 바빴으니까요. 뇌과학에서 말하는 쉬는 상태는 몸이 편한 상태 대신 시각, 청각, 후각, 촉각, 미각으로 뇌에 접수되는 정보가 없는 상태를 가리킵니다. 이 기준으로 다시 세어보니 저는 주말 내내 한 번도 쉰 적이 없었습니다.<br /><br />이 사실이 밝혀진 계기가 재미있습니다. 2001년 미국의 신경과학자 마커스 라이클 박사가 PET 촬영을 하다가 뜻밖의 장면을 봤습니다. PET 촬영이란 미량의 방사성 물질로 뇌의 어느 부위가 일하는지 영상으로 찍어내는 검사인데, 검사받는 사람이 눈을 감고 무념무상에 빠진 순간 내측 전두엽과 후측 대상 피질 같은 영역이 오히려 바빠진 겁니다. 컴퓨터가 아무 작업을 하지 않을 때 돌아가는 기본값 프로그램처럼 뇌가 쉴 때 스스로 가동되는 이 회로에 디폴트 모드 네트워크라는 이름이 붙었습니다. <a href="https://pubmed.ncbi.nlm.nih.gov/11209064/" target="_blank" rel="noopener noreferrer">출처: PNAS(미국국립과학원회보)</a><br /><br />이 회로가 돌아갈 때 벌어지는 일도 확인돼 있습니다. 미국 코넬 대학교 연구팀이 참가자들에게 얼굴 사진을 보여주고 앞서 본 인물과 같은지 맞히게 했더니, 다른 활동을 하던 사람보다 아무것도 하지 않고 가만히 있던 사람이 더 정확하고 빠르게 맞혔다는 결과가 있습니다. 일본의 한 대학 연구팀 실험에서는 멍한 상태에서 뇌 혈류가 오히려 원활해지고 아이디어 제시도 빨라졌다고 합니다.<br /><br />저도 이 회로가 켜지는 순간을 한 번 선명하게 경험했습니다. 가족들과 캠핑을 가서 작은 모닥불을 피워 놓고 아이들과 깔깔대며 장난치다가, 잠깐 아무 말 없이 불꽃만 바라본 적이 있습니다. 몇 분도 안 되는 시간이었는데 이상하게 머릿속이 조용해지고 마음이 깨끗해지는 느낌이 들었습니다. 고민이 해결된 것도, 특별한 생각을 한 것도 아니었습니다. 그런데 그 몇 분의 기분이 지금까지도 기억에 남아 있습니다. 불멍이 왜 힐링이라고 불리는지 그때 몸으로 이해했습니다.</p>
+<div class="summary-card"><b>요약:</b> 뇌는 오감 자극이 끊겼을 때 디폴트 모드 네트워크라는 회로를 켜서 스스로를 정리한다. 화면을 보며 보내는 휴식으로는 이 회로가 켜질 기회가 없으며, 멍때리기가 기억력과 창의력에 도움이 된다는 연구 결과들이 이 회로의 역할을 뒷받침한다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">멍때리기는 사탕이었다</h2>
+<div class="card-body">
+<p data-ke-size="size16">그렇다면 멍때리기를 최대한 많이 하면 될까요. 여기서부터는 반대 방향의 근거를 봐야 했습니다. 뇌에는 가소성이라는 성질이 있습니다. 쓰면 쓸수록 해당 회로가 강해지고 안 쓰면 약해지는 성질입니다. 유명한 예가 런던 택시기사 연구입니다. 복잡한 런던 시내를 외워서 달리는 기사들은 공간 탐색을 담당하는 해마, 그러니까 기억과 길 찾기를 맡는 뇌 부위의 뒤쪽이 보통 사람보다 컸고, 운전 경력이 길수록 더 컸습니다. <a href="https://pubmed.ncbi.nlm.nih.gov/10716738/" target="_blank" rel="noopener noreferrer">출처: PNAS(미국국립과학원회보)</a><br /><br />가소성을 뒤집으면 이런 뜻이 됩니다. 자극 없는 시간만 계속 늘리면 뇌 피로 해소를 넘어 노화를 앞당길 수 있다는 겁니다. 실제로 멍때리기에만 기대는 습관이 길어지면 건망증이 심해지고 판단력이 떨어지며 우울감이 이어질 수 있다는 의견도 제시되고 있습니다. 당이 떨어졌을 때 먹는 사탕에 비유되는 이유가 여기 있습니다. 당장의 피로는 풀어주지만 근본 해결책은 못 된다는 겁니다.<br /><br />저도 멍때리기 자체가 특별한 치료법이라고까지는 생각하지 않습니다. 솔직히 중요한 건 멍하게 있는 행동 자체가 아니라 평소 얼마나 제대로 쉬고 있는가라고 봅니다. 저부터가 휴대폰을 보면서 쉰다고 생각했지만 실제로는 또 다른 자극을 계속 받고 있었고, 반대로 아무것도 하지 않는 시간만 늘린다고 삶이 건강해지는 것도 아니니까요. 뇌도 쉴 때는 쉬고 움직일 때는 움직여야 한다는 게 제 결론입니다. 그래서 제 나름의 원칙을 세 가지로 정리했습니다.</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li data-ke-size="size16">하루 15분, 조용한 곳에서 편안한 자세로 눈을 감고 명상하듯 멍때리기</li>
+<li data-ke-size="size16">쉬는 시간 중 한 구간은 휴대폰을 손이 닿지 않는 곳에 두기</li>
+<li data-ke-size="size16">멍때리기 하나에 기대는 대신 운동, 독서, 수면, 대화를 섞어서 회복하기</li>
+</ul>
+<div class="summary-card"><b>요약:</b> 멍때리기는 당 떨어졌을 때 먹는 사탕 같은 응급처치이며, 여기에만 의존하면 뇌 가소성 원리에 따라 오히려 노화가 빨라질 수 있다. 하루 15분 눈 감고 하는 멍때리기에 운동과 수면, 대화 같은 회복 활동을 섞는 것이 균형 잡힌 뇌 휴식이다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card">
+<h2 data-ke-size="size26">제가 저에게 던진 질문들</h2>
+<div class="card-body">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 휴대폰 보면서 쉬는 것도 쉬는 거 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 뇌 입장에서는 근무 중이라는 걸 이번에 배웠습니다. 화면이 켜져 있는 동안 시각과 청각 정보가 쉬지 않고 접수되니까요. 몸만 눕고 뇌는 계속 일하니 쉬어도 피곤했던 거라고 저는 결론 내렸습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 그럼 멍때리기를 많이 할수록 좋은 거야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 그건 또 다른 함정으로 보입니다. 자극 없는 시간만 늘리면 가소성 원리로 뇌 기능이 무뎌질 수 있다는 의견이 있습니다. 저는 하루 15분 정도를 상한선으로 잡았습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 불멍 하려면 캠핑까지 가야 하는 거 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 그날 모닥불이 특별했던 건 장비 덕분이라기보다 아무 자극 없던 그 몇 분 자체였습니다. 조용한 방에서 눈만 감아도 같은 상태에 들어갈 수 있다고 합니다. 눈 감고 하는 멍때리기, 눈멍이면 충분합니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 오늘 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 자기 전에 휴대폰을 거실에 두고 15분만 눈을 감아볼 겁니다. 그리고 언젠가 온전히 저만의 시간이 생기면 불 앞이든 물 앞이든 가만히 앉아 있어보려 합니다. 그때의 깨끗해지던 기분을 다시 만나고 싶어서입니다.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">결론</h2>
+<div class="card-body">
+<p data-ke-size="size16">저는 이제 쉼의 기준을 하나로 바꿨습니다. 몸이 편했는가 대신 뇌로 들어가는 자극이 멈췄는가를 봅니다. 그 기준으로 하루 15분을 떼어 눈을 감는 것부터 시작해보시길 권합니다. 돈도 장비도 필요 없고 오늘 밤 잠들기 전에 바로 해볼 수 있는 일입니다.<br /><br />다만 멍때리기는 사탕이라는 것도 함께 기억하시면 좋겠습니다. 운동과 수면, 대화가 밥이라면 멍때리기는 그 사이의 달콤한 한 알입니다.<br /><br />이 글이 잠깐의 눈멍 같은 쉼표가 되었다면 공감♥ 하나로 알려주시길 바랍니다. 쉬어도 피곤한 날 다시 찾아오실 수 있게 구독해두시면 제가 계속 채워두겠습니다.</p>
+<p data-ke-size="size16">참고: <a href="https://www.youtube.com/watch?v=kVva9VKxo-k" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=kVva9VKxo-k</a></p>
+</div>
+</section>
+</script>
+
+<script>
+function copyText(id){
+  var t=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t);
+}
+function copySrc(){
+  var ta=document.getElementById('src');
+  ta.select();
+  document.execCommand('copy');
+}
+window.onload=function(){
+  var raw=document.getElementById('srcData').innerHTML;
+  document.getElementById('src').value=raw.trim();
+  document.getElementById('previewArea').innerHTML=raw;
+};
+</script>
+</body>
+</html>
