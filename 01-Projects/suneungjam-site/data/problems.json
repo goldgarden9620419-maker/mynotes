@@ -2882,5 +2882,246 @@
     "answerIndex": 2,
     "explanation": "cos²θ = 1 - sin²θ를 대입하면 2(1 - sin²θ) + sinθ - 1 = 0, 즉 -2sin²θ + sinθ + 1 = 0이 되고, 양변에 -1을 곱하면 2sin²θ - sinθ - 1 = 0입니다. 이를 인수분해하면 (2sinθ + 1)(sinθ - 1) = 0이므로 sinθ = 1 또는 sinθ = -1/2입니다. sinθ = 1을 만족하는 θ는 0 ≤ θ < 2π에서 π/2로 1개이고, sinθ = -1/2을 만족하는 θ는 7π/6, 11π/6으로 2개입니다. 따라서 총 3개입니다.",
     "concept": "sin²θ + cos²θ = 1을 이용해 방정식을 sinθ에 대한 이차방정식으로 바꾼 뒤 인수분해하여 풀고, 각 sinθ 값에 대해 0 ≤ θ < 2π 범위에서 가능한 θ의 개수를 센다."
+  },
+  {
+    "id": "en-2026-09-10-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-10",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Psychological research has long shown that people tend to remember interrupted or unfinished tasks more vividly than tasks [u]that[/u]① they have already completed, a phenomenon known as the Zeigarnik effect. In one of the original studies, waiters who had not yet delivered a customer's order were able to recall its details with striking accuracy, whereas once the order [u]were delivered[/u]②, the same waiters quickly forgot much of what they had remembered so clearly only moments before. Zeigarnik proposed that an unfinished task creates a kind of lingering mental tension, and this tension keeps related information active and [u]accessible[/u]③ in memory until the task is finally brought to a close. Later researchers extended this idea by showing that participants [u]who[/u]④ were interrupted while solving a puzzle later reported thinking about that puzzle far more often than participants who had been allowed to finish it without interruption. This effect helps explain why simply [u]writing[/u]⑤ down an unfinished task on a list, even without completing it, can measurably reduce the mental tension associated with it.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "②의 주어는 단수인 'the order'이므로 동사는 수동태 단수형인 'was delivered'가 되어야 합니다. 복수 동사 'were'는 단수 주어와 수가 일치하지 않으므로 틀렸습니다. 나머지 밑줄은 모두 어법상 올바릅니다: ①의 that은 tasks를 선행사로 하는 목적격 관계대명사로 적절하고, ③의 accessible은 keeps의 목적격보어로 active와 병렬 연결된 형용사이며, ④의 who는 participants를 선행사로 하는 주격 관계대명사이고, ⑤의 writing은 전치사 why절의 주어 역할을 하는 동명사로 적절합니다.",
+    "vocab": [
+      {
+        "word": "vividly",
+        "meaning": "생생하게, 뚜렷하게"
+      },
+      {
+        "word": "lingering",
+        "meaning": "오래 지속되는, 좀처럼 사라지지 않는"
+      },
+      {
+        "word": "measurably",
+        "meaning": "눈에 띄게, 측정 가능할 정도로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-10-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-10",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When consumers are presented with an unusually large number of options, classic economic theory predicts that they should feel more satisfied, since a wider range of choices increases the likelihood of finding an ideal match. However, a well-known study involving a supermarket jam display found the opposite: shoppers who encountered a table with twenty-four varieties of jam were far less likely to actually purchase any jam than shoppers who encountered a table with only six varieties, even though the larger display initially attracted more attention and seemed to overwhelm shoppers with possibilities. Researchers explain this outcome by suggesting that ______, since evaluating and comparing many options simultaneously requires significant mental effort and often leaves people uncertain that they made the best possible choice. This insight has influenced product design across many industries: companies now frequently curate a smaller, carefully selected set of options rather than offering every possible variation, countering the intuitive assumption that more options are inherently preferable.",
+    "choices": [
+      "an excessive number of choices increases the cognitive burden of decision-making and can leave people less confident in, and less likely to act on, their decision",
+      "people always prefer smaller stores over larger stores regardless of what is being sold",
+      "shoppers who see more options are more likely to trust the reputation of the brand offering them",
+      "an abundance of choices makes it easier for consumers to identify the objectively best product",
+      "shoppers become confused only when the products differ greatly in price rather than in variety"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤 문장에서 'evaluating and comparing many options simultaneously requires significant mental effort and often leaves people uncertain that they made the best possible choice'라고 설명하는데, 이는 선택지가 많을수록 의사결정의 인지적 부담이 커지고 확신이 줄어든다는 내용을 뒷받침합니다. 따라서 빈칸에는 선택지 1의 내용이 들어가야 합니다. 나머지 선택지는 지문의 실험 결과(구매율 감소)와 무관하거나 반대되는 내용입니다.",
+    "vocab": [
+      {
+        "word": "overwhelm",
+        "meaning": "압도하다, 어쩔 줄 모르게 하다"
+      },
+      {
+        "word": "curate",
+        "meaning": "엄선하다, 선별하다"
+      },
+      {
+        "word": "intuitive",
+        "meaning": "직관적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-10-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-10",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Coral reefs, among the most biologically diverse ecosystems on Earth, begin not as solid rock but as a partnership between a tiny marine animal called a coral polyp and a microscopic algae living within its tissue.\n(A) In exchange for shelter, the algae supply the polyp with a steady flow of energy captured through photosynthesis, energy that the polyp uses to grow and to build a hard calcium-based skeleton beneath itself.\n(B) This partnership begins when a coral polyp, a soft-bodied organism related to sea anemones, allows the algae to take up residence inside its own cells rather than treating them as intruders to be expelled.\n(C) Over countless generations, as thousands of individual polyps repeat this same process side by side, their combined skeletons accumulate into the enormous limestone structures recognized today as coral reefs.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 산호초가 산호충과 조류의 공생 관계에서 시작된다고 소개합니다. (B)는 'This partnership begins when...'으로 그 공생이 시작되는 방식을 설명하며 시작점을 제시합니다. (A)는 'In exchange for shelter'로 (B)에서 언급된 공생 관계의 대가로 조류가 에너지를 제공한다는 내용을 이어갑니다. (C)는 'Over countless generations'로 이 과정이 반복되어 결국 거대한 산호초 구조물이 형성된다는 결론을 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "polyp",
+        "meaning": "폴립, 산호충"
+      },
+      {
+        "word": "intruder",
+        "meaning": "침입자"
+      },
+      {
+        "word": "accumulate",
+        "meaning": "축적되다, 쌓이다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-10-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-10",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "For most of human history, the timing of sleep and wakefulness was governed almost entirely by the natural cycle of sunlight and darkness. ( ① ) The later discovery of an internal biological clock, known as the circadian rhythm, revealed that this timing is not simply a passive response to the environment. ( ② ) Nearly every cell in the human body, it turns out, contains molecular machinery that generates a rhythm of roughly twenty-four hours, even in the complete absence of external light cues. ( ③ ) Researchers confirmed this by placing volunteers in underground bunkers with no access to natural light or clocks for extended periods, observing that participants continued to fall asleep and wake up at fairly regular intervals. ( ④ ) This raised an obvious question: without any external cue, how precisely could the internal clock keep time on its own? ( ⑤ ) Because of this natural drift, the body requires a daily external signal to stay properly synchronized, and morning sunlight serves as the primary such cue, resetting the internal clock each day and keeping it aligned with the actual twenty-four-hour cycle of the outside world.",
+    "givenSentence": "In these experiments, however, the length of each participant's internal 'day' typically drifted to around twenty-four and a half hours, showing that the internal clock alone is not perfectly accurate.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "④ 뒤 문장은 '외부 신호 없이 내부 시계가 얼마나 정확하게 시간을 유지할 수 있는가'라는 질문을 제기합니다. 주어진 문장은 'In these experiments, however'로 그 실험 결과를 제시하며 내부 시계가 하루 약 24시간 30분으로 서서히 어긋난다는 것을 보여주어 질문에 답합니다. 이어지는 ⑤ 뒤 문장은 'Because of this natural drift'로 주어진 문장에서 언급된 어긋남(drift)을 가리키며 이를 보정하기 위한 아침 햇빛의 역할을 설명하므로, 주어진 문장은 ⑤에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "circadian",
+        "meaning": "일주기의, 생체리듬의"
+      },
+      {
+        "word": "drift",
+        "meaning": "서서히 어긋나다, 표류하다"
+      },
+      {
+        "word": "synchronized",
+        "meaning": "동기화된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-10-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-10",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "In 1906, the statistician Francis Galton attended a country fair where visitors were invited to guess the weight of an ox, with the closest guess winning a prize. Galton collected nearly eight hundred submitted guesses, expecting that most individual estimates would be wildly inaccurate, and many indeed were. However, when he calculated the average of all the guesses combined, the result came within a single pound of the ox's actual weight, far closer than almost any individual guess had been. Subsequent research across a wide range of domains, from predicting election outcomes to estimating the number of jellybeans in a jar, has repeatedly confirmed this pattern: aggregating many independent, imperfect judgments tends to cancel out individual errors, producing a collective estimate that is often more accurate than the judgment of any single expert. Importantly, researchers note that this effect depends on the guesses being made independently, since when people are allowed to see and be influenced by others' answers beforehand, the errors no longer cancel out and the group's collective accuracy tends to decline sharply.",
+    "choices": [
+      "the history of statistical methods developed at agricultural fairs",
+      "why experts are always less reliable than ordinary members of the public",
+      "how averaging many independent estimates can produce a surprisingly accurate collective judgment",
+      "the biological reasons why individual humans struggle to judge weight accurately",
+      "techniques used to predict election outcomes more precisely than opinion polls"
+    ],
+    "answerIndex": 2,
+    "explanation": "지문은 갤턴의 소 무게 맞히기 일화를 통해 다수의 독립적인 추정치를 평균 내면 개별 오차가 상쇄되어 놀랍도록 정확한 집단적 판단을 얻을 수 있다는 내용을 소개하고 있습니다. 따라서 이 글의 주제는 선택지 3과 일치합니다. 나머지 선택지는 통계학의 역사, 전문가 불신뢰, 생물학적 원인, 선거 예측 기법 등 지문의 핵심 주장과 다른 내용을 다룹니다.",
+    "vocab": [
+      {
+        "word": "aggregating",
+        "meaning": "합산하는, 종합하는"
+      },
+      {
+        "word": "domain",
+        "meaning": "영역, 분야"
+      },
+      {
+        "word": "collective",
+        "meaning": "집단적인, 공동의"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-10-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-10",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 11, a₇ = 27일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "190",
+      "200",
+      "210",
+      "220",
+      "230"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ - a₃ = 4d = 27 - 11 = 16이므로 공차 d = 4입니다. a₃ = a₁ + 2d = 11이므로 a₁ = 11 - 8 = 3입니다. 첫째항부터 제10항까지의 합은 S₁₀ = 10/2 × {2a₁ + 9d} = 5 × (6 + 36) = 5 × 42 = 210입니다.",
+    "concept": "등차수열의 두 항의 값을 이용해 공차와 첫째항을 구한 뒤, 합 공식 Sₙ = n/2{2a₁+(n-1)d}을 이용하여 계산한다."
+  },
+  {
+    "id": "math-2026-09-10-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-10",
+    "prompt": "함수 f(x) = x³ - 3x² - 9x + 5가 x = a에서 극솟값을 가질 때, a의 값은?",
+    "choices": [
+      "-1",
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answerIndex": 4,
+    "explanation": "f'(x) = 3x² - 6x - 9 = 3(x-3)(x+1)이므로 f'(x) = 0의 해는 x = 3, x = -1입니다. f''(x) = 6x - 6이므로 x = 3에서 f''(3) = 12 > 0이니 극솟값을 가지고, x = -1에서 f''(-1) = -12 < 0이니 극댓값을 가집니다. 따라서 극솟값을 가지는 a의 값은 3입니다.",
+    "concept": "삼차함수의 극값은 f'(x)=0의 해를 구한 뒤 이계도함수 f''(x)의 부호(또는 f'(x)의 부호 변화)를 확인하여 극댓값과 극솟값을 구분한다."
+  },
+  {
+    "id": "math-2026-09-10-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-10",
+    "prompt": "함수 f(x) = 4x³ - 2x일 때, ∫₀² f(x) dx의 값은?",
+    "choices": [
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 F(x) = x⁴ - x²입니다. F(2) = 16 - 4 = 12이고 F(0) = 0이므로, 정적분 값은 F(2) - F(0) = 12 - 0 = 12입니다.",
+    "concept": "정적분 ∫ₐᵇ f(x)dx는 미적분의 기본정리에 따라 부정적분 F(x)를 구한 뒤 F(b) - F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-10-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-10",
+    "prompt": "주머니에 흰 공 4개와 검은 공 6개가 들어 있다. 이 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 공이 모두 흰 공일 확률은?",
+    "choices": [
+      "1/15",
+      "2/15",
+      "1/9",
+      "1/5",
+      "2/9"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 공 10개 중 2개를 꺼내는 경우의 수는 ₁₀C₂ = 45입니다. 흰 공 4개 중 2개를 꺼내는 경우의 수는 ₄C₂ = 6입니다. 따라서 구하는 확률은 6/45 = 2/15입니다.",
+    "concept": "동시에 여러 개를 뽑는 확률은 조합을 이용하여 (사건이 일어나는 경우의 수)/(전체 경우의 수)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-10-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-10",
+    "prompt": "0 < θ < π/2이고 sinθ = 3/5일 때, tanθ의 값은?",
+    "choices": [
+      "3/5",
+      "4/5",
+      "3/4",
+      "4/3",
+      "5/4"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin²θ + cos²θ = 1이므로 cos²θ = 1 - 9/25 = 16/25입니다. 0 < θ < π/2에서 cosθ > 0이므로 cosθ = 4/5입니다. 따라서 tanθ = sinθ / cosθ = (3/5) / (4/5) = 3/4입니다.",
+    "concept": "sin²θ + cos²θ = 1을 이용해 cosθ 값을 구한 뒤, tanθ = sinθ/cosθ 공식을 이용하여 계산한다."
   }
 ]
