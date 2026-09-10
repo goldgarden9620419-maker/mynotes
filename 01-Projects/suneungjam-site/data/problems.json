@@ -3123,5 +3123,246 @@
     "answerIndex": 2,
     "explanation": "sin²θ + cos²θ = 1이므로 cos²θ = 1 - 9/25 = 16/25입니다. 0 < θ < π/2에서 cosθ > 0이므로 cosθ = 4/5입니다. 따라서 tanθ = sinθ / cosθ = (3/5) / (4/5) = 3/4입니다.",
     "concept": "sin²θ + cos²θ = 1을 이용해 cosθ 값을 구한 뒤, tanθ = sinθ/cosθ 공식을 이용하여 계산한다."
+  },
+  {
+    "id": "en-2026-09-11-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-11",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The Zeigarnik effect describes the tendency for people to remember unfinished tasks more vividly than completed ones. Psychologists first observed [u]that waiters in a busy restaurant recalled unpaid orders in remarkable detail[/u]①, yet quickly forgot the details once the bill was settled. This pattern occurs because an incomplete task creates a kind of mental tension, and the mind continues [u]to rehearse[/u]② the missing information until closure is reached. Some researchers have found that writing down a brief plan for finishing a task [u]reduce[/u]③ this tension almost as effectively as finishing the task itself, since the brain no longer needs to hold the information active. This insight has practical value: professionals who feel overwhelmed by a long list of unfinished projects are often advised [u]to jot down[/u]④ a short note about their next step before switching tasks. Such small notes, it turns out, are enough [u]to convince[/u]⑤ the mind that the matter has been provisionally handled.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③에서 주어는 동명사구 'writing down a brief plan for finishing a task'로 단수 취급되므로, 동사는 reduce가 아니라 reduces가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 observed의 목적어로 쓰인 명사절, ②는 'continue to 동사원형' 구문, ④는 'be advised to 동사원형' 구문, ⑤는 'enough to 동사원형' 결과를 나타내는 부정사입니다.",
+    "vocab": [
+      {
+        "word": "rehearse",
+        "meaning": "되뇌다, 반복 연습하다"
+      },
+      {
+        "word": "overwhelmed",
+        "meaning": "압도된, 부담을 느끼는"
+      },
+      {
+        "word": "provisionally",
+        "meaning": "임시로, 잠정적으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-11-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-11",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Chess grandmasters can glance at a real game position for only five seconds and later reconstruct nearly all the pieces correctly, a feat that seems to confirm exceptional visual memory. Yet when researchers showed the same experts board positions with pieces scattered at random, unrelated to any real game, their recall dropped to roughly the same level as beginners. This finding suggests that expert memory is not a general gift for retaining visual detail but instead depends on ______. Because grandmasters have spent thousands of hours studying real games, they perceive a board not as dozens of separate pieces but as a handful of recognizable configurations, each representing a strategy they have encountered before. When the arrangement no longer reflects any meaningful pattern, that shortcut disappears, and their advantage vanishes along with it.",
+    "choices": [
+      "the pure quantity of chess pieces they have memorized outright",
+      "recognizing familiar patterns built up through extensive experience",
+      "a natural biological advantage over less trained beginners",
+      "the amount of time allowed to study the board",
+      "confidence in their own visual memory abilities"
+    ],
+    "answerIndex": 1,
+    "explanation": "무작위로 배치된 판에서는 전문가의 기억력이 초보자 수준으로 떨어졌다는 것은, 전문가의 기억력이 일반적인 시각 기억 능력이 아니라 실제 게임에서 반복적으로 마주친 '익숙한 패턴'을 알아보는 능력에 달려 있음을 보여줍니다. 뒤이어 그랜드마스터가 판을 개별 기물이 아니라 익숙한 배치(구성)로 인식한다는 설명이 이를 뒷받침하므로 정답은 ②입니다.",
+    "vocab": [
+      {
+        "word": "reconstruct",
+        "meaning": "재구성하다"
+      },
+      {
+        "word": "scattered",
+        "meaning": "흩어진, 무작위로 배치된"
+      },
+      {
+        "word": "configuration",
+        "meaning": "배치, 구성"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-11-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-11",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Open-plan offices were originally introduced in the early twentieth century with the promise of increasing collaboration among employees.\n(A) In response, some companies have begun reintroducing partial walls and quiet rooms, attempting to combine openness with moments of privacy.\n(B) Yet several decades of research now suggest that removing walls does not automatically produce more conversation, and can even reduce it as employees retreat into headphones and instant messaging to preserve some sense of personal space.\n(C) This growing body of evidence has forced managers to reconsider whether the original promise of open offices was ever realistic in the first place.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 개방형 사무실이 협업 증진을 목표로 도입되었다는 통념을 제시합니다. (B)는 'Yet'으로 벽을 없애도 대화가 늘지 않고 오히려 줄어든다는 연구 결과로 반전시키고, (C)는 'This growing body of evidence'로 그 연구 결과를 받아 관리자들이 재고하게 되었다고 정리하며, (A)는 'In response'로 그 결과 일부 회사가 벽과 조용한 공간을 다시 도입했다는 대응을 설명합니다. 따라서 순서는 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "retreat",
+        "meaning": "물러나다, 피하다"
+      },
+      {
+        "word": "preserve",
+        "meaning": "지키다, 보존하다"
+      },
+      {
+        "word": "reconsider",
+        "meaning": "재고하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-11-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-11",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "This communication network, now often called the gut-brain axis, has since become one of the most closely studied topics in neuroscience.",
+    "passage": "For much of the twentieth century, the digestive system was regarded mainly as a site of nutrient absorption, with little relevance to mental health. ( ① ) Over the past two decades, however, researchers have discovered that trillions of bacteria living in the gut communicate constantly with the brain through nerve signals and chemical messengers. ( ② ) Several studies have shown that mice raised without any gut bacteria display unusually high levels of anxious behavior compared with mice that have a normal microbiome. ( ③ ) When the anxious mice were later given a transplant of bacteria from calm, healthy mice, their behavior shifted measurably toward the calmer pattern within weeks. ( ④ ) Such findings have led some scientists to describe the gut as a kind of second brain, one capable of shaping mood in ways that were long overlooked. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 'This communication network'가 바로 앞에서 언급된 '장내 세균이 신경 신호와 화학 물질을 통해 뇌와 소통한다'는 내용을 가리키며 이를 '장-뇌 축(gut-brain axis)'이라 명명하고 있습니다. 이는 ② 앞 문장(소통 방식 설명) 직후, 구체적인 쥐 실험 연구가 소개되기 전에 위치하는 것이 자연스러우므로 정답은 ②입니다.",
+    "vocab": [
+      {
+        "word": "microbiome",
+        "meaning": "미생물총, 마이크로바이옴"
+      },
+      {
+        "word": "transplant",
+        "meaning": "이식(하다)"
+      },
+      {
+        "word": "overlooked",
+        "meaning": "간과된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-11-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-11",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Online retailers often assume that offering customers as many product options as possible will maximize satisfaction and sales, since more choice appears to give shoppers greater freedom to find exactly what they want. Yet a series of studies examining consumer behavior has found the opposite effect once the number of options grows too large: shoppers facing dozens of nearly identical products frequently report feeling more anxious about making the wrong choice, spend longer comparing items without reaching a clear preference, and are more likely to abandon their purchase altogether than shoppers given a smaller, curated set of options. Researchers attribute this to the mental effort required to evaluate many similar alternatives, which can leave customers feeling regretful even after a purchase is completed, wondering whether one of the unchosen items might have been better. As a result, some of the most successful online stores have deliberately begun limiting the number of options shown on a single page, guiding customers toward a manageable set of choices rather than overwhelming them with every available variant.",
+    "choices": [
+      "how retailers use advertising to influence brand loyalty",
+      "why an excessive number of choices can undermine rather than improve customer satisfaction",
+      "the history of product variety in retail marketing",
+      "how online reviews affect a shopper's final decision",
+      "why curated stores tend to charge higher prices than large retailers"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 선택지가 많을수록 만족도가 높아질 것이라는 통념과 달리, 선택지가 지나치게 많아지면 오히려 불안감, 구매 포기, 구매 후 후회가 늘어난다는 연구 결과를 제시하고, 이에 따라 성공적인 온라인 상점들이 선택지 수를 의도적으로 제한한다는 내용을 다룹니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "curated",
+        "meaning": "엄선된, 선별된"
+      },
+      {
+        "word": "abandon",
+        "meaning": "포기하다, 그만두다"
+      },
+      {
+        "word": "deliberately",
+        "meaning": "의도적으로"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-11-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-11",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, a₁ + a₃의 값은?",
+    "choices": [
+      "12",
+      "14",
+      "15",
+      "17",
+      "20"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅ / a₂ = r³ = 48 / 6 = 8이므로 공비 r = 2입니다. a₂ = a₁r = 6이므로 a₁ = 3입니다. a₃ = a₁r² = 3 × 4 = 12이므로 a₁ + a₃ = 3 + 12 = 15입니다.",
+    "concept": "등비수열의 두 항의 비를 이용해 공비를 구한 뒤, aₙ = a₁r^(n-1) 공식으로 각 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-11-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-11",
+    "prompt": "함수 f(x) = x³ - 6x² + 9x + 2가 x = a에서 극댓값을 가질 때, 극댓값 f(a)의 값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² - 12x + 9 = 3(x-1)(x-3)이므로 f'(x) = 0의 해는 x = 1, x = 3입니다. f''(x) = 6x - 12이므로 f''(1) = -6 < 0이니 x = 1에서 극댓값을, f''(3) = 6 > 0이니 x = 3에서 극솟값을 가집니다. 따라서 a = 1이고, 극댓값은 f(1) = 1 - 6 + 9 + 2 = 6입니다.",
+    "concept": "삼차함수의 극값을 구할 때 f'(x)=0의 근을 찾고 f''(x)의 부호로 극대·극소를 판별한 뒤 해당 x값을 원함수에 대입한다."
+  },
+  {
+    "id": "math-2026-09-11-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-11",
+    "prompt": "함수 f(x) = 6x² - 4x + 1일 때, ∫₁³ f(x) dx의 값은?",
+    "choices": [
+      "34",
+      "36",
+      "38",
+      "40",
+      "42"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 F(x) = 2x³ - 2x² + x입니다. F(3) = 54 - 18 + 3 = 39이고 F(1) = 2 - 2 + 1 = 1이므로, 정적분 값은 F(3) - F(1) = 39 - 1 = 38입니다.",
+    "concept": "정적분은 미적분의 기본정리에 따라 부정적분 F(x)를 구한 뒤 F(b) - F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-11-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-11",
+    "prompt": "주머니에 빨간 공 5개와 파란 공 3개가 들어 있다. 이 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 파란 공이 정확히 2개 나올 확률은?",
+    "choices": [
+      "3/28",
+      "1/4",
+      "15/56",
+      "5/28",
+      "1/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 8개의 공 중 3개를 꺼내는 경우의 수는 ₈C₃ = 56입니다. 파란 공 3개 중 2개를 꺼내는 경우의 수는 ₃C₂ = 3이고, 나머지 1개는 빨간 공 5개 중에서 꺼내야 하므로 ₅C₁ = 5입니다. 따라서 구하는 확률은 (3×5)/56 = 15/56입니다.",
+    "concept": "조건을 만족하는 경우의 수를 조합으로 나누어 계산한 뒤, 전체 경우의 수로 나누어 확률을 구한다."
+  },
+  {
+    "id": "math-2026-09-11-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-11",
+    "prompt": "0 < θ < π/2이고 tanθ = 15/8일 때, cosθ의 값은?",
+    "choices": [
+      "8/17",
+      "15/17",
+      "17/8",
+      "8/15",
+      "17/15"
+    ],
+    "answerIndex": 0,
+    "explanation": "tanθ = 15/8이므로 직각삼각형에서 대변을 15, 밑변을 8이라 하면 빗변은 √(15² + 8²) = √(225+64) = √289 = 17입니다. 0 < θ < π/2에서 cosθ > 0이므로 cosθ = 8/17입니다. (검산: 1 + tan²θ = 1 + 225/64 = 289/64 = 1/cos²θ이므로 cos²θ = 64/289, cosθ = 8/17로 일치합니다.)",
+    "concept": "tanθ 값이 주어지면 직각삼각형의 변의 비 또는 1+tan²θ = 1/cos²θ 공식을 이용하여 cosθ를 구할 수 있다."
   }
 ]
