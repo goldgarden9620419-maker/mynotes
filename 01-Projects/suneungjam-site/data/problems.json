@@ -3364,5 +3364,246 @@
     "answerIndex": 0,
     "explanation": "tanθ = 15/8이므로 직각삼각형에서 대변을 15, 밑변을 8이라 하면 빗변은 √(15² + 8²) = √(225+64) = √289 = 17입니다. 0 < θ < π/2에서 cosθ > 0이므로 cosθ = 8/17입니다. (검산: 1 + tan²θ = 1 + 225/64 = 289/64 = 1/cos²θ이므로 cos²θ = 64/289, cosθ = 8/17로 일치합니다.)",
     "concept": "tanθ 값이 주어지면 직각삼각형의 변의 비 또는 1+tan²θ = 1/cos²θ 공식을 이용하여 cosθ를 구할 수 있다."
+  },
+  {
+    "id": "en-2026-09-12-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-12",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The spotlight effect refers to people's tendency to overestimate how much others notice their appearance or behavior. In one influential study, participants were asked [u]to wear[/u]① an embarrassing T-shirt into a room of strangers and then estimate how many people would recall the shirt. Participants consistently predicted that far more people [u]would remember[/u]② the shirt than actually did, believing that everyone's attention was focused on them. This bias occurs partly because people are highly aware of their own experience, which makes it [u]difficult[/u]③ to imagine how little space they occupy in someone else's mind. Interestingly, a related study found that individuals who [u]was asked[/u]④ to wear a shirt featuring an admired public figure overestimated positive attention in the same way, suggesting the effect applies to both embarrassing and flattering situations. Taken together, these findings suggest that people should feel [u]less anxious[/u]⑤ about being judged, since the audience they imagine is largely a projection of their own self-consciousness.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 주어는 복수 명사 'individuals'이므로 동사는 was가 아니라 were가 되어야 합니다 (individuals who were asked). 나머지는 모두 어법상 올바릅니다: ①은 'asked to 동사원형' 구문, ②는 시제 일치에 맞는 would remember, ③은 'make it + 형용사 + to부정사' 구문, ⑤는 'feel + 형용사' 구문입니다.",
+    "vocab": [
+      {
+        "word": "overestimate",
+        "meaning": "과대평가하다"
+      },
+      {
+        "word": "flattering",
+        "meaning": "돋보이게 하는, 아첨하는"
+      },
+      {
+        "word": "self-consciousness",
+        "meaning": "자의식"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-12-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-12",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Consumers generally assume that they will value a product mainly based on its price and quality, judged independently of how it was acquired. Yet a series of experiments testing furniture assembly found a striking pattern: participants who assembled a simple storage box themselves rated it as significantly more valuable and were willing to pay more for it than participants who received an identical, already-assembled box. Even when the finished products were indistinguishable, the assemblers consistently overvalued their own creation. Researchers argue that this effect arises because ______. When participants were given a task so difficult that they failed to complete it, or one so simple that it required almost no effort, the inflated valuation disappeared, indicating that a moderate amount of successful effort is essential to the effect. This suggests that the extra value people attach to self-made objects is not about the object itself but about the sense of accomplishment invested in it.",
+    "choices": [
+      "consumers expect handmade goods to cost more than factory-made items",
+      "people generally prefer products with a slightly imperfect, handmade appearance",
+      "the effort successfully invested in creating something becomes tied to their perception of its worth",
+      "assembling furniture themselves saves consumers a significant amount of money",
+      "self-assembled products are structurally more durable than pre-assembled ones"
+    ],
+    "answerIndex": 2,
+    "explanation": "실패할 만큼 어렵거나 노력이 거의 필요 없을 만큼 쉬운 과제에서는 가치 과대평가 현상이 사라졌다는 내용은, 이 효과가 '성공적으로 투입한 노력'이 대상에 대한 가치 인식과 결부되기 때문임을 보여줍니다. 따라서 빈칸에 가장 적절한 것은 ③입니다.",
+    "vocab": [
+      {
+        "word": "assemble",
+        "meaning": "조립하다"
+      },
+      {
+        "word": "indistinguishable",
+        "meaning": "구별할 수 없는"
+      },
+      {
+        "word": "inflated",
+        "meaning": "부풀려진, 과장된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-12-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-12",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Economists have long assumed that rational decision-makers evaluate choices based only on future costs and benefits, ignoring resources that have already been spent and cannot be recovered.\n(A) As a result, investors frequently hold onto failing stocks far longer than the evidence warrants, hoping to eventually recover money that is, in practical terms, already gone.\n(B) In practice, however, people routinely factor in these sunk costs, continuing to invest time or money into a failing project simply because they have already committed so much to it.\n(C) Recognizing this pattern, some financial advisors now recommend a simple exercise: imagine being offered the same investment for the first time today, and decide only based on that fresh perspective.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 합리적 의사결정자는 이미 회수 불가능한 비용(매몰비용)을 무시하고 판단해야 한다는 통념을 제시합니다. (B)는 'however'로 실제로는 사람들이 매몰비용을 계속 고려한다는 반전을 제시하고, (A)는 'As a result'로 그로 인해 투자자들이 실패하는 주식을 계속 보유하는 구체적 사례를 들며, (C)는 'Recognizing this pattern'으로 이러한 경향을 인지한 재무 상담가들의 대응을 설명합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "warrants",
+        "meaning": "정당화하다"
+      },
+      {
+        "word": "committed",
+        "meaning": "투입한, 전념한"
+      },
+      {
+        "word": "in practical terms",
+        "meaning": "실질적으로, 사실상"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-12-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-12",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "This suggests that yawning may function less as a simple response to fatigue and more as a subtle form of social communication.",
+    "passage": "For centuries, yawning was assumed to occur mainly because the brain needed more oxygen, a theory that seemed to explain why people yawn when tired or bored. ( ① ) Yet brain-imaging studies have since revealed that the urge to yawn is closely tied to activity in regions of the brain associated with empathy and social awareness, not merely oxygen levels. ( ② ) Supporting this idea, researchers have found that people are far more likely to yawn after watching another person yawn than after any physical cue such as low oxygen. ( ③ ) Even more strikingly, individuals who score higher on tests of empathy tend to catch yawns from others more readily than those who score lower. ( ④ ) Some scientists now propose that contagious yawning evolved as a way for early humans to synchronize alertness and rest within a group, much like coordinated behavior seen in other social animals. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 앞서 제시된 하품 전염과 공감 능력의 상관관계(②, ③)를 근거로 하품이 피로에 대한 단순 반응이 아니라 사회적 소통의 한 형태일 수 있음을 요약하는 문장입니다. 이는 구체적 연구 결과(③) 이후, 과학자들이 진화적 기능을 제안하는 문장(현재의 ④) 바로 앞에 들어가는 것이 자연스러우므로 정답은 ④입니다.",
+    "vocab": [
+      {
+        "word": "contagious",
+        "meaning": "전염되는"
+      },
+      {
+        "word": "empathy",
+        "meaning": "공감"
+      },
+      {
+        "word": "synchronize",
+        "meaning": "동기화하다, 맞추다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-12-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-12",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When note-taking on laptops became common in university lecture halls, many students assumed that being able to type faster than they could write would help them capture more information and therefore learn more effectively. However, a series of studies comparing students who typed their notes with those who wrote them by hand found the opposite pattern: despite recording fewer total words, longhand note-takers performed better on tests of conceptual understanding administered days later. Researchers attribute this difference to how each method forces the brain to process information. Because typing allows students to transcribe a lecture nearly word for word, it encourages passive copying rather than genuine comprehension. Handwriting, by contrast, is slower, which forces students to summarize and rephrase ideas in their own words as they write, a process that requires deeper cognitive engagement with the material. This deeper engagement, rather than the sheer volume of notes taken, appears to be what strengthens long-term retention of the underlying concepts.",
+    "choices": [
+      "how laptops have changed the physical environment of university lecture halls",
+      "why taking notes by hand tends to produce deeper understanding than typing does",
+      "the history of note-taking methods before the invention of computers",
+      "how test performance is affected by the length of a lecture",
+      "why students prefer laptops over notebooks for convenience"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 노트북으로 빠르게 타이핑하면 더 많이 학습할 것이라는 통념과 달리, 손으로 필기한 학생들이 개념 이해도 시험에서 더 좋은 성과를 보였다는 연구 결과를 제시하고, 이는 손 필기가 요구하는 요약·재구성 과정이 더 깊은 인지적 참여를 이끌기 때문이라고 설명합니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "transcribe",
+        "meaning": "그대로 옮겨 적다"
+      },
+      {
+        "word": "longhand",
+        "meaning": "손으로 쓴 필기"
+      },
+      {
+        "word": "retention",
+        "meaning": "기억 유지력"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-12-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-12",
+    "prompt": "등차수열 {a_n}에서 a_3 = 11, a_7 = 27일 때, a_15의 값은?",
+    "choices": [
+      "51",
+      "55",
+      "59",
+      "63",
+      "67"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 27-11 = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = 11이므로 a_1 = 11 - 8 = 3입니다. 따라서 a_n = 3 + 4(n-1) = 4n - 1이고, a_15 = 4×15 - 1 = 59입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d를 이용해, 두 항의 차로 공차를 구한 뒤 원하는 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-12-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-12",
+    "prompt": "함수 f(x) = x^3 - 3x^2 - 9x + 5가 x = a에서 극댓값을 가질 때, a의 값은?",
+    "choices": [
+      "-3",
+      "-1",
+      "0",
+      "1",
+      "3"
+    ],
+    "answerIndex": 1,
+    "explanation": "f'(x) = 3x^2 - 6x - 9 = 3(x-3)(x+1)이므로 f'(x) = 0의 해는 x = 3, x = -1입니다. f''(x) = 6x - 6이고, f''(-1) = -12 < 0이므로 x = -1에서 극댓값을 가지며, f''(3) = 12 > 0이므로 x = 3에서는 극솟값을 갖습니다. 따라서 a = -1입니다.",
+    "concept": "삼차함수의 극값은 f'(x) = 0의 해에서 나타나며, f''(x)의 부호(음수면 극대, 양수면 극소)로 극대·극소를 판별한다."
+  },
+  {
+    "id": "math-2026-09-12-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-12",
+    "prompt": "곡선 y = -x^2 + 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "16/3",
+      "64/3",
+      "32/3",
+      "8",
+      "12"
+    ],
+    "answerIndex": 2,
+    "explanation": "곡선과 x축의 교점은 -x^2+4x = -x(x-4) = 0에서 x = 0, 4입니다. 넓이는 ∫[0,4] (-x^2+4x) dx = [-x^3/3 + 2x^2] from 0 to 4 = (-64/3 + 32) - 0 = 32/3입니다.",
+    "concept": "이차함수와 x축으로 둘러싸인 넓이는 두 교점을 구간의 끝으로 하는 정적분 값으로 계산한다."
+  },
+  {
+    "id": "math-2026-09-12-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-12",
+    "prompt": "한 개의 주사위를 4번 던질 때, 6의 눈이 정확히 2번 나올 확률은?",
+    "choices": [
+      "5/216",
+      "25/1296",
+      "25/216",
+      "5/36",
+      "1/6"
+    ],
+    "answerIndex": 2,
+    "explanation": "6의 눈이 나올 확률은 1/6, 나오지 않을 확률은 5/6입니다. 4번 중 정확히 2번 나오는 경우의 수는 ₄C₂ = 6이므로, 구하는 확률은 6 × (1/6)^2 × (5/6)^2 = 6 × (1/36) × (25/36) = 150/1296 = 25/216입니다.",
+    "concept": "독립시행에서 특정 사건이 n번 중 r번 일어날 확률은 이항분포 공식 nCr × p^r × (1-p)^(n-r)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-12-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-12",
+    "prompt": "π < θ < 3π/2이고 sinθ = -3/5일 때, cosθ + tanθ의 값은?",
+    "choices": [
+      "-1/20",
+      "1/20",
+      "-7/20",
+      "7/20",
+      "-1/5"
+    ],
+    "answerIndex": 0,
+    "explanation": "sin²θ + cos²θ = 1이므로 cos²θ = 1 - 9/25 = 16/25입니다. π < θ < 3π/2 (제3사분면)에서는 cosθ < 0이므로 cosθ = -4/5입니다. tanθ = sinθ/cosθ = (-3/5)/(-4/5) = 3/4입니다. 따라서 cosθ + tanθ = -4/5 + 3/4 = -16/20 + 15/20 = -1/20입니다.",
+    "concept": "sin²θ+cos²θ=1과 각이 속한 사분면의 부호 조건을 이용해 cosθ를 구하고, tanθ=sinθ/cosθ로 계산한다."
   }
 ]
