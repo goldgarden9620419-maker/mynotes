@@ -3605,5 +3605,246 @@
     "answerIndex": 0,
     "explanation": "sin²θ + cos²θ = 1이므로 cos²θ = 1 - 9/25 = 16/25입니다. π < θ < 3π/2 (제3사분면)에서는 cosθ < 0이므로 cosθ = -4/5입니다. tanθ = sinθ/cosθ = (-3/5)/(-4/5) = 3/4입니다. 따라서 cosθ + tanθ = -4/5 + 3/4 = -16/20 + 15/20 = -1/20입니다.",
     "concept": "sin²θ+cos²θ=1과 각이 속한 사분면의 부호 조건을 이용해 cosθ를 구하고, tanθ=sinθ/cosθ로 계산한다."
+  },
+  {
+    "id": "en-2026-09-13-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-13",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The Zeigarnik effect refers to the tendency for people to remember uncompleted tasks more vividly than completed ones. In an early experiment, waiters were found [u]to recall[/u]① orders that were still open far better than orders that had already been paid for. Once the bill was settled, the memory of the order tended [u]to fade[/u]② quickly, as if the mental tension driving the memory had been released. Researchers suggested that an unfinished task creates a kind of psychological tension, and it is this tension [u]that keeps[/u]③ the information active in memory. Interestingly, later studies found that individuals who [u]were interrupted[/u]④ before finishing a task recalled it about twice as often as those who completed it without interruption. However, simply writing down a plan to finish the task later, even without actually completing it, [u]were found[/u]⑤ to reduce this heightened recall, suggesting that the tension can be resolved by intention alone.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 주어는 'simply writing down a plan to finish the task later'라는 동명사구로 단수 취급되므로 동사는 were found가 아니라 was found가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 'be found to부정사' 구문, ②은 'tend to부정사' 구문, ③는 강조 구문 'it is A that B'에서 단수 주어 tension에 맞는 keeps, ④은 복수 주어 individuals에 맞는 were입니다.",
+    "vocab": [
+      {
+        "word": "vividly",
+        "meaning": "생생하게"
+      },
+      {
+        "word": "settled",
+        "meaning": "정산된, 해결된"
+      },
+      {
+        "word": "heightened",
+        "meaning": "고조된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-13-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-13",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Marketing intuition often holds that offering consumers a wider array of options increases the likelihood that they will find something they like and ultimately make a purchase. Yet a study conducted at a gourmet food market told a different story: shoppers who encountered a display with two dozen varieties of jam stopped to sample more often than those who saw a display with only a handful, yet they were far less likely to actually buy any jam afterward. Follow-up interviews suggested that this happens because ______. Faced with too many alternatives, shoppers found it difficult to justify choosing one option over so many similar ones, and some abandoned the purchase entirely rather than risk regret over an option not chosen. When the assortment was later reduced to a handful of varieties, purchase rates rose sharply even though fewer flavors were available. This suggests that beyond a certain point, additional choice can undermine rather than support consumer decision-making.",
+    "choices": [
+      "consumers assume that a wider variety signals higher product quality",
+      "an overwhelming number of alternatives makes comparing and committing to one option more difficult and increases the fear of regret",
+      "shoppers prefer to sample many products before committing to any purchase",
+      "consumers become more price-sensitive when there are more options to compare",
+      "a larger display takes up more time to browse than shoppers are willing to spend"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 뒤에서 대안이 너무 많아지면 하나를 선택하는 것에 대한 정당화가 어려워지고, 선택하지 않은 옵션에 대한 후회를 두려워하여 구매를 포기했다는 내용이 이어지므로, 정답은 '과도하게 많은 대안이 하나를 비교하고 선택하는 것을 더 어렵게 만들고 후회에 대한 두려움을 증가시킨다'는 내용의 ②입니다.",
+    "vocab": [
+      {
+        "word": "array",
+        "meaning": "집합체, 다양한 종류"
+      },
+      {
+        "word": "assortment",
+        "meaning": "구색, 종류들"
+      },
+      {
+        "word": "undermine",
+        "meaning": "약화시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-13-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-13",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In the 1960s, psychologists began investigating why witnesses to an emergency sometimes fail to intervene, a puzzle that came to be known as the bystander effect.\n(A) This diffusion of responsibility, they noted, grows stronger as the number of onlookers increases, since each bystander assumes that someone else is equally capable of stepping in.\n(B) In a series of experiments testing this puzzle, researchers found that a person in genuine distress was, surprisingly, more likely to receive help when only a single bystander was present than when a crowd had gathered.\n(C) Analyzing these results, the researchers concluded that the mere presence of other people creates a diffusion of responsibility across the group, so that no single individual feels personally obligated to act.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 방관자 효과라는 현상을 소개합니다. (B)는 이를 검증한 실험에서 목격자가 한 명일 때 오히려 도움을 받을 확률이 높았다는 결과를 제시하고, (C)는 이 결과를 분석해 '책임의 분산(diffusion of responsibility)'이라는 개념으로 결론을 내리며, (A)는 'This diffusion of responsibility'로 (C)에서 언급된 책임의 분산이 목격자 수가 늘어날수록 강해진다고 부연합니다. 따라서 순서는 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "diffusion",
+        "meaning": "확산, 분산"
+      },
+      {
+        "word": "onlookers",
+        "meaning": "구경꾼들, 목격자들"
+      },
+      {
+        "word": "intervene",
+        "meaning": "개입하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-13-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-13",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "This suggests that the pain relief experienced was not merely imagined but accompanied by measurable biological changes.",
+    "passage": "For decades, doctors dismissed the placebo effect as little more than a patient's imagination, assuming that an inert pill could not produce any real physiological change. ( ① ) Yet brain-imaging studies conducted in the early 2000s challenged this assumption directly. ( ② ) Researchers gave participants with chronic pain an inactive sugar pill, telling them it was a powerful painkiller, and then scanned their brains while measuring reported pain levels. ( ③ ) The scans revealed a measurable drop in activity within brain regions associated with pain processing, alongside a release of the body's own natural painkilling chemicals. ( ④ ) Later experiments found that this effect weakened significantly when patients were told in advance that the pill was inactive, indicating that belief itself plays a central role in triggering the biological response. ( ⑤ ) These findings have pushed researchers to treat the placebo effect not as a nuisance to be eliminated from drug trials, but as a genuine phenomenon worth understanding in its own right.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 뇌 스캔 실험에서 나타난 생리적 변화(통증 처리 영역의 활동 감소와 천연 진통 화학물질 분비)가 단순한 상상이 아니라 실제 생물학적 변화를 동반했음을 요약합니다. 이는 스캔 결과를 설명하는 문장 바로 뒤, 그리고 이후 실험 결과를 설명하는 문장('Later experiments...') 앞에 위치해야 자연스러우므로 정답은 ④입니다.",
+    "vocab": [
+      {
+        "word": "inert",
+        "meaning": "비활성의"
+      },
+      {
+        "word": "physiological",
+        "meaning": "생리적인"
+      },
+      {
+        "word": "nuisance",
+        "meaning": "성가신 것, 골칫거리"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-13-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-13",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When experienced professionals are asked to explain a skill they have mastered, they often struggle to break it down into simple steps for beginners. Studies of chess grandmasters, for instance, found that although they could instantly recognize winning positions, they had considerable difficulty describing the specific reasoning behind their judgments, since much of their decision-making had become automatic and unconscious. This same pattern appears among veteran teachers and skilled tradespeople, who frequently omit basic steps when instructing novices simply because those steps no longer register as separate actions in their own minds. Psychologists refer to this phenomenon as the curse of knowledge: once a skill becomes deeply internalized, it becomes surprisingly difficult to imagine what it is like not to possess it. As a result, some of the most capable practitioners in a field make the least effective teachers, while those who acquired a skill more recently, and can still recall the individual steps consciously, are often better suited to guiding beginners.",
+    "choices": [
+      "why chess grandmasters take longer to make decisions than novice players",
+      "why deeply internalized expertise can make it harder to teach beginners effectively",
+      "the history of how teaching methods have changed across generations",
+      "how tradespeople acquire manual skills through repeated practice",
+      "why novice teachers are less confident than experienced ones"
+    ],
+    "answerIndex": 1,
+    "explanation": "이 글은 체스 그랜드마스터, 숙련된 교사, 기술자들의 사례를 통해 전문성이 깊이 내면화될수록 그 기술을 초보자에게 가르치기 어려워지는 '지식의 저주' 현상을 설명하고 있습니다. 따라서 이 글의 주제로 가장 적절한 것은 '깊이 내면화된 전문성이 오히려 초보자를 가르치는 것을 더 어렵게 만들 수 있는 이유'인 ②입니다.",
+    "vocab": [
+      {
+        "word": "internalized",
+        "meaning": "내면화된"
+      },
+      {
+        "word": "practitioners",
+        "meaning": "숙련자, 전문직 종사자"
+      },
+      {
+        "word": "register",
+        "meaning": "인식되다, 자각되다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-13-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-13",
+    "prompt": "등비수열 {a_n}에서 a_2 = 6, a_5 = 48일 때, a_8의 값은?",
+    "choices": [
+      "192",
+      "288",
+      "384",
+      "480",
+      "576"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_5/a_2 = r^3 = 48/6 = 8이므로 공비 r = 2입니다. a_2 = a_1 × r = 6이므로 a_1 = 3입니다. 따라서 a_8 = a_1 × r^7 = 3 × 128 = 384입니다.",
+    "concept": "등비수열의 일반항 a_n = a_1 × r^(n-1)을 이용해, 두 항의 비로 공비를 구한 뒤 원하는 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-13-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-13",
+    "prompt": "함수 f(x) = x^3 - 6x^2 + 9x + 2 위의 점 (4, f(4))에서의 접선의 기울기는?",
+    "choices": [
+      "3",
+      "6",
+      "9",
+      "12",
+      "15"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x^2 - 12x + 9이므로, x = 4에서의 접선의 기울기는 f'(4) = 3×16 - 48 + 9 = 9입니다.",
+    "concept": "함수의 그래프 위의 한 점에서의 접선의 기울기는 그 점에서의 미분계수 f'(a)와 같다."
+  },
+  {
+    "id": "math-2026-09-13-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-13",
+    "prompt": "곡선 y = x^2 - 2x와 직선 y = x로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "7/2",
+      "4",
+      "9/2",
+      "5",
+      "11/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "곡선과 직선의 교점은 x^2-2x=x, 즉 x(x-3)=0에서 x=0, 3입니다. 구간 [0,3]에서 직선이 곡선보다 위에 있으므로 넓이는 ∫[0,3](x-(x^2-2x))dx = ∫[0,3](3x-x^2)dx = [3x^2/2 - x^3/3] (0부터 3까지) = 13.5 - 9 = 9/2입니다.",
+    "concept": "두 곡선(직선)으로 둘러싸인 넓이는 위에 있는 함수에서 아래에 있는 함수를 뺀 식을 교점 구간에서 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-13-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-13",
+    "prompt": "주머니에 빨간 공 3개, 파란 공 5개가 들어있다. 이 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 공의 색이 서로 다를 확률은?",
+    "choices": [
+      "15/28",
+      "3/8",
+      "5/14",
+      "1/2",
+      "15/56"
+    ],
+    "answerIndex": 0,
+    "explanation": "공 8개 중 2개를 꺼내는 전체 경우의 수는 C(8,2) = 28입니다. 색이 서로 다르려면 빨간 공 1개와 파란 공 1개를 뽑아야 하므로 경우의 수는 3×5 = 15입니다. 따라서 확률은 15/28입니다.",
+    "concept": "동시에 꺼내는 조합의 확률은 (원하는 경우의 수)/(전체 경우의 수)로 계산하며, 색이 다른 경우의 수는 각 색에서 하나씩 뽑는 곱으로 구한다."
+  },
+  {
+    "id": "math-2026-09-13-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-13",
+    "prompt": "π/2 < θ < π이고 tanθ = -3/4일 때, sinθ + cosθ의 값은?",
+    "choices": [
+      "-1/5",
+      "1/5",
+      "-7/5",
+      "7/5",
+      "-1/2"
+    ],
+    "answerIndex": 0,
+    "explanation": "tanθ = -3/4이고 π/2<θ<π(제2사분면)에서는 sinθ>0, cosθ<0이므로, 3-4-5 직각삼각형의 비를 이용하면 sinθ=3/5, cosθ=-4/5입니다. 따라서 sinθ+cosθ = 3/5-4/5 = -1/5입니다.",
+    "concept": "tanθ의 부호와 각이 속한 사분면의 sin, cos 부호 조건을 이용해 sinθ, cosθ의 값을 구한 뒤 대입한다."
   }
 ]
