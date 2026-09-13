@@ -3846,5 +3846,238 @@
     "answerIndex": 0,
     "explanation": "tanθ = -3/4이고 π/2<θ<π(제2사분면)에서는 sinθ>0, cosθ<0이므로, 3-4-5 직각삼각형의 비를 이용하면 sinθ=3/5, cosθ=-4/5입니다. 따라서 sinθ+cosθ = 3/5-4/5 = -1/5입니다.",
     "concept": "tanθ의 부호와 각이 속한 사분면의 sin, cos 부호 조건을 이용해 sinθ, cosθ의 값을 구한 뒤 대입한다."
+  },
+  {
+    "id": "en-2026-09-14-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-14",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The IKEA effect describes the tendency for people to place a disproportionately high value on products they have partially created themselves. In one experiment, participants who assembled their own boxes rated them as valuable as products built by experts, even though objective observers rated the amateur constructions as inferior. Researchers argued that the labor invested in assembly created a sense of ownership, and it was this feeling of ownership [u]that led[/u]① participants to overvalue their own work. Interestingly, the effect disappeared when the assembly task was left incomplete or when the finished product was later disassembled, suggesting that a sense of completion is essential to triggering the inflated valuation. Follow-up studies found that participants who were told the task was difficult, rather than simple, tended [u]to feel[/u]② prouder of their finished product, which further intensified the effect. Even trivial acts of customization, such as choosing the color of a component, [u]have been shown[/u]③ to raise perceived value. However, when participants were paid to assemble the product for someone else rather than for themselves, the inflated valuation for that item [u]were found[/u]④ to disappear almost completely. This finding suggests that it is not effort alone but effort invested in something [u]that will belong[/u]⑤ to oneself that fuels the effect.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 주어는 'the inflated valuation for that item'으로 단수이므로 동사는 were found가 아니라 was found가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 강조구문 'it was A that B'에서 단수 주어 feeling에 맞는 led, ②은 'tend to부정사' 구문, ③는 복수 주어 acts에 맞는 have been shown, ⑤는 단수 선행사 something에 맞는 관계절 that will belong입니다.",
+    "vocab": [
+      {
+        "word": "disproportionately",
+        "meaning": "불균형하게, 과도하게"
+      },
+      {
+        "word": "inflated",
+        "meaning": "부풀려진, 과장된"
+      },
+      {
+        "word": "fuels",
+        "meaning": "(감정·효과 등을) 부추기다, 촉진하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-14-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-14",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When people are asked to estimate the frequency of a particular kind of event, they often rely not on statistical reasoning but on how easily relevant examples come to mind. This mental shortcut, known as the availability heuristic, can lead to systematic errors in judgment because ______. In one study, participants who were asked to estimate the likelihood of dying in a plane crash gave much higher estimates shortly after a widely reported crash had been in the news, even though the actual statistical risk had not changed at all. Similarly, people tend to overestimate the frequency of dramatic causes of death, such as shark attacks or lightning strikes, while underestimating far more common but less memorable causes, such as heart disease. Because vivid, emotionally charged, or recently encountered events are recalled more readily than mundane ones, the ease of recall gets mistaken for an accurate measure of how often something actually happens.",
+    "choices": [
+      "consumers assume that a wider variety signals higher product quality",
+      "events that are vivid, recent, or emotionally striking come to mind more easily, and this ease of recall is mistaken for how frequently the event actually occurs",
+      "statistical training reduces people's reliance on memorable examples when estimating risk",
+      "people who have personally experienced a rare event become less likely to fear it in the future",
+      "media coverage always accurately reflects the true statistical frequency of an event"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 뒤에서 비행기 추락 사고 직후 위험을 과대평가하거나, 상어의 공격처럼 극적인 사망 원인은 실제보다 과대평가하고 심장병처럼 흔하지만 인상적이지 않은 원인은 과소평가한다는 사례가 제시됩니다. 이는 생생하고 최근에 접한 사건일수록 쉽게 떠오르고, 그 떠오르기 쉬움이 실제 빈도로 착각된다는 설명과 일치하므로 정답은 ②입니다.",
+    "vocab": [
+      {
+        "word": "heuristic",
+        "meaning": "어림짐작, 발견적 사고법"
+      },
+      {
+        "word": "mundane",
+        "meaning": "평범한, 일상적인"
+      },
+      {
+        "word": "vivid",
+        "meaning": "생생한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-14-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-14",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In the 1960s, educational researchers conducted a study to examine whether a teacher's expectations could influence a student's academic performance, a phenomenon that would later be called the Pygmalion effect.\n(A) Consequently, the students who had been randomly labeled as having special potential exhibited significantly greater intellectual growth over the school year than their classmates, even though no actual difference had existed between the two groups at the outset.\n(B) At the beginning of the school year, researchers gave elementary school teachers a list of students who had purportedly scored exceptionally high on a test predicting future academic 'blooming,' though in reality the names had been chosen entirely at random.\n(C) The researchers concluded that teachers' elevated expectations led them to unwittingly offer these students more encouragement, more challenging material, and more opportunities to respond in class, thereby shaping the students' actual performance.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 피그말리온 효과를 소개합니다. (B)는 교사들에게 무작위로 선정된 학생 명단을 '우수 잠재력' 학생이라고 알려준 실험 설계를 설명하고, (A)는 'Consequently'로 이어 받아 그 학생들이 실제로 더 큰 성장을 보였다는 결과를 제시하며, (C)는 이를 분석해 교사의 기대가 무의식적으로 학생에 대한 격려와 기회로 이어졌다는 결론을 내립니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "purportedly",
+        "meaning": "…라고 알려진, 소문에 의하면"
+      },
+      {
+        "word": "unwittingly",
+        "meaning": "자기도 모르게, 무심코"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-14-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-14",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "This gap between perceived and actual competence was found to be largest among the weakest performers, who consistently overestimated their scores by the widest margin.",
+    "passage": "Psychologists have long been intrigued by the tendency of some individuals to overestimate their own abilities, especially in domains where they have little skill. ( ① ) In a series of studies, researchers asked participants to complete tests in logical reasoning, grammar, and humor, and then to estimate how well they had performed relative to others. ( ② ) Across all three domains, participants who scored in the bottom quartile consistently predicted that they had performed above average, often placing themselves near the 60th percentile. ( ③ ) By contrast, the highest-scoring participants tended to slightly underestimate their relative standing, apparently assuming that tasks they found easy must have been equally easy for everyone else. ( ④ ) Researchers proposed that poor performers lack not only the skill in question but also the very ability to accurately judge that skill, since recognizing a good answer requires much of the same competence needed to produce one. ( ⑤ ) This explanation, now known as the Dunning-Kruger effect, has since been used to describe overconfidence in fields ranging from job interviews to political debate.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '이 격차가 최하위권 수행자에게서 가장 크게 나타났다'는 내용으로, 하위 25% 참가자들이 자신을 60번째 백분위 근처로 평가했다는 결과(② 앞) 바로 뒤에서 그 결과를 구체화합니다. 이어지는 문장은 'By contrast, the highest-scoring participants...'로 상위권과 대조되므로, 주어진 문장은 하위권 결과 설명과 상위권 대조 사이인 ③에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "quartile",
+        "meaning": "사분위수"
+      },
+      {
+        "word": "competence",
+        "meaning": "능력, 역량"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-14-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-14",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When people are asked to predict how long a task will take, they consistently underestimate the time required, even when they have failed to meet similar deadlines in the past. Software developers, for instance, routinely project that a project will be finished within a few months, only to see it stretch on for a year or more, despite having experienced nearly identical delays on previous projects. Studies have shown that when individuals are asked to imagine their plan succeeding smoothly, they focus narrowly on the specific steps of the current task while ignoring the broader statistical record of how long comparable tasks have actually taken in the past. Even when people are explicitly reminded of past failures to meet deadlines, they frequently insist that this time will be different, citing details unique to the present project. Because planners tend to construct a best-case scenario rather than consult the outcomes of similar past efforts, actual completion times reliably exceed the initial estimate, a pattern documented across construction projects, academic writing, and everyday errands alike.",
+    "choices": [
+      "why software development projects take longer to complete than construction projects",
+      "why people consistently underestimate task completion times by focusing on best-case scenarios rather than past outcomes",
+      "how deadlines can be used to motivate employees to work more efficiently",
+      "the history of how time-management techniques have evolved in the workplace",
+      "how construction delays differ from delays in creative or academic work"
+    ],
+    "answerIndex": 1,
+    "explanation": "글은 소프트웨어 개발자들이 과거에 유사한 지연을 겪었음에도 불구하고 매번 일정을 낙관적으로 예측한다는 사례를 통해, 사람들이 과거의 통계적 기록보다 최상의 시나리오에 집중하기 때문에 과제 완료 시간을 지속적으로 과소평가한다는 내용을 다룹니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "citing",
+        "meaning": "인용하며, 언급하며"
+      },
+      {
+        "word": "comparable",
+        "meaning": "비교할 만한, 필적하는"
+      },
+      {
+        "word": "errands",
+        "meaning": "잡일, 심부름"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-14-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-14",
+    "prompt": "등차수열 {a_n}에서 a_3 = 11, a_7 = 27일 때, a_15의 값은?",
+    "choices": [
+      "51",
+      "55",
+      "59",
+      "63",
+      "67"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 27 - 11 = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = 11이므로 a_1 = 11 - 8 = 3입니다. 따라서 a_15 = a_1 + 14d = 3 + 56 = 59입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d를 이용해, 두 항의 차이로 공차를 구한 뒤 원하는 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-14-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-14",
+    "prompt": "함수 f(x) = x^3 - 3x^2 - 9x + 5가 극값을 가질 때, 극댓값과 극솟값의 합은?",
+    "choices": [
+      "32",
+      "-12",
+      "2",
+      "-32",
+      "12"
+    ],
+    "answerIndex": 1,
+    "explanation": "f'(x) = 3x^2 - 6x - 9 = 3(x-3)(x+1)이므로 극값을 가질 수 있는 x는 -1과 3입니다. x=-1의 좌우에서 f'(x)의 부호가 +에서 -로 바뀌므로 극댓값이고, f(-1) = -1 - 3 + 9 + 5 = 10입니다. x=3의 좌우에서 부호가 -에서 +로 바뀌므로 극솟값이고, f(3) = 27 - 27 - 27 + 5 = -22입니다. 따라서 극댓값과 극솟값의 합은 10 + (-22) = -12입니다.",
+    "concept": "삼차함수의 극값은 도함수가 0이 되는 지점에서 도함수의 부호가 바뀌는지를 확인하여 극대/극소를 판별해 구한다."
+  },
+  {
+    "id": "math-2026-09-14-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-14",
+    "prompt": "정적분 ∫[1,3] (3x^2 - 4x + 1) dx의 값은?",
+    "choices": [
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 F(x) = x^3 - 2x^2 + x입니다. F(3) = 27 - 18 + 3 = 12, F(1) = 1 - 2 + 1 = 0이므로, 정적분의 값은 F(3) - F(1) = 12 - 0 = 12입니다.",
+    "concept": "다항함수의 정적분은 각 항의 부정적분을 구한 뒤 대입값의 차 F(b) - F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-14-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-14",
+    "prompt": "1부터 9까지의 자연수가 하나씩 적힌 9장의 카드에서 임의로 3장을 동시에 뽑을 때, 뽑힌 카드에 적힌 수의 합이 짝수일 확률은?",
+    "choices": [
+      "1/2",
+      "11/21",
+      "5/12",
+      "4/9",
+      "3/7"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 C(9,3) = 84입니다. 1부터 9까지 중 홀수는 5개(1,3,5,7,9), 짝수는 4개(2,4,6,8)입니다. 세 수의 합이 짝수이려면 홀수의 개수가 0개 또는 2개여야 합니다. 홀수 0개(짝수 3개)인 경우의 수는 C(4,3) = 4이고, 홀수 2개·짝수 1개인 경우의 수는 C(5,2) × C(4,1) = 10 × 4 = 40입니다. 따라서 합이 짝수인 경우의 수는 4 + 40 = 44이고, 확률은 44/84 = 11/21입니다.",
+    "concept": "세 수의 합이 짝수가 되려면 홀수의 개수가 0개 또는 2개이어야 함을 이용해 경우의 수를 나누어 계산한다."
+  },
+  {
+    "id": "math-2026-09-14-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-14",
+    "prompt": "0 < α < π/2이고 sinα = 3/5, 0 < β < π/2이고 cosβ = 5/13일 때, sin(α+β)의 값은?",
+    "choices": [
+      "33/65",
+      "56/65",
+      "63/65",
+      "16/65",
+      "-33/65"
+    ],
+    "answerIndex": 2,
+    "explanation": "0 < α < π/2에서 sinα = 3/5이므로 cosα = 4/5입니다. 0 < β < π/2에서 cosβ = 5/13이므로 sinβ = 12/13입니다. 덧셈정리 sin(α+β) = sinαcosβ + cosαsinβ에 대입하면 (3/5)(5/13) + (4/5)(12/13) = 15/65 + 48/65 = 63/65입니다.",
+    "concept": "sin(α+β) = sinαcosβ + cosαsinβ 덧셈정리를 이용하여 각 삼각비의 값을 대입해 계산한다."
   }
 ]
