@@ -4079,5 +4079,246 @@
     "answerIndex": 2,
     "explanation": "0 < α < π/2에서 sinα = 3/5이므로 cosα = 4/5입니다. 0 < β < π/2에서 cosβ = 5/13이므로 sinβ = 12/13입니다. 덧셈정리 sin(α+β) = sinαcosβ + cosαsinβ에 대입하면 (3/5)(5/13) + (4/5)(12/13) = 15/65 + 48/65 = 63/65입니다.",
     "concept": "sin(α+β) = sinαcosβ + cosαsinβ 덧셈정리를 이용하여 각 삼각비의 값을 대입해 계산한다."
+  },
+  {
+    "id": "en-2026-09-15-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-15",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The anchoring effect describes the tendency for an initial piece of information to disproportionately influence subsequent judgments, even when the initial number is arbitrary and irrelevant to the decision at hand. In one classic experiment, participants were asked to spin a wheel [u]that had been[/u]① secretly rigged to stop on either a low number or a high number, and then estimate the percentage of African countries in the United Nations. Those who spun the high number gave estimates [u]far higher than[/u]② those who spun the low number, despite the number on the wheel having nothing to do with the actual question. Researchers concluded that once a number is presented, [u]it becomes[/u]③ a reference point from which people adjust insufficiently, resulting in final estimates that stay biased toward the initial figure. This effect has since been shown to influence real-world decisions, including how much people are willing to pay for a product after seeing an unrelated price displayed nearby, and how [u]severely juries recommend[/u]④ punishing a defendant after hearing an arbitrary sentencing number suggested by a prosecutor. Even professional appraisers and experienced negotiators, who believe their judgments to be based purely on expertise, [u]was found[/u]⑤ to be influenced by anchors they consciously recognized as irrelevant.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 주어는 'professional appraisers and experienced negotiators'로 and로 연결된 복수 주어이므로 동사는 was found가 아니라 were found가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 단수 명사 a wheel을 수식하는 관계절의 수동태 had been rigged, ②은 비교 구문 far higher than, ③는 단수 선행사 a number를 가리키는 it becomes, ④은 'how + 부사 + 주어(juries, 복수) + 동사(recommend, 복수)' 간접의문문 구조로 모두 정확합니다.",
+    "vocab": [
+      {
+        "word": "arbitrary",
+        "meaning": "임의의, 근거 없는"
+      },
+      {
+        "word": "appraisers",
+        "meaning": "감정평가사, 감정인"
+      },
+      {
+        "word": "defendant",
+        "meaning": "피고인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-15-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-15",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "After an event has occurred, people often feel that they knew all along how it was going to turn out, a phenomenon known as hindsight bias. This distortion occurs because ______. In one study, participants were asked before a major election to estimate the probability of each candidate winning, and their answers were carefully recorded. After the election concluded, the same participants were asked to recall their original predictions, and the vast majority significantly overestimated how confident they had been in the actual winner, even though the recorded answers showed otherwise. Similarly, physicians who learn the correct diagnosis of a difficult case after the fact often insist that the diagnosis was obvious from the initial symptoms, even though colleagues who examined the same symptoms without knowing the outcome found the case genuinely ambiguous.",
+    "choices": [
+      "people prefer to consult expert opinions over their own personal judgment",
+      "knowledge of an outcome is retroactively incorporated into memory, making the past seem more predictable than it actually felt beforehand",
+      "individuals become less confident in their judgments after witnessing an unexpected outcome",
+      "statistical training eliminates the tendency to reconstruct past beliefs inaccurately",
+      "people remember rare events more vividly than common, everyday ones"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 뒤의 사례들은 선거 결과를 안 뒤에 원래 예측을 실제보다 더 확신했던 것처럼 기억하거나, 진단명을 알고 난 후 처음부터 명백했다고 여기는 내용입니다. 이는 결과에 대한 지식이 사후에 기억 속으로 통합되어 과거가 실제보다 더 예측 가능했던 것처럼 느껴진다는 설명과 일치하므로 정답은 ②입니다.",
+    "vocab": [
+      {
+        "word": "retroactively",
+        "meaning": "소급하여, 거슬러서"
+      },
+      {
+        "word": "ambiguous",
+        "meaning": "모호한, 애매한"
+      },
+      {
+        "word": "distortion",
+        "meaning": "왜곡"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-15-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-15",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In the 1920s, psychologist Edward Thorndike investigated whether an overall favorable impression of a person could distort judgments of that person's separate, unrelated traits, a bias later termed the halo effect.\n(A) He found that officers who rated a soldier highly on one admirable trait, such as physical bearing, also rated that same soldier highly on entirely unrelated traits, such as intelligence and leadership, despite having no direct evidence for those separate qualities.\n(B) To test this, Thorndike asked military officers to rate soldiers under their command on a range of independent characteristics, including physique, intelligence, leadership, and character, based only on brief in-person observations.\n(C) From this pattern, Thorndike concluded that a single favorable impression generated a positive halo that officers then projected onto every other trait, rather than officers judging each quality on its own separate merits.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 하나의 전반적인 인상이 무관한 특성에 대한 평가를 왜곡할 수 있는지를 연구했다는 내용을 소개합니다. (B)는 'To test this'로 이어 받아 장교들에게 병사의 여러 독립적 특성을 평가하게 한 실험 설계를 설명하고, (A)는 'He found that'으로 그 결과 하나의 특성에서 높은 평가를 받은 병사가 무관한 특성에서도 높게 평가받았다는 결과를 제시하며, (C)는 이를 바탕으로 하나의 호의적 인상이 다른 모든 특성 평가에 투영되었다는 결론을 내립니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "bearing",
+        "meaning": "태도, 풍채"
+      },
+      {
+        "word": "distort",
+        "meaning": "왜곡하다"
+      },
+      {
+        "word": "physique",
+        "meaning": "체격"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-15-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-15",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "This tendency to weight the peak and the ending so heavily, while largely ignoring the duration of the experience, has since been named the peak-end rule.",
+    "passage": "Psychologists studying how people remember extended experiences, such as a vacation or a medical procedure, have found that overall evaluations are not simply an average of every moment felt during the event. ( ① ) Instead, people's retrospective judgments are disproportionately shaped by two specific points: the most intense moment of the experience, whether pleasant or painful, and the very last moments before it ends. ( ② ) In one well-known study, patients undergoing a colonoscopy reported their pain level every sixty seconds throughout the procedure, and researchers later asked them to rate how unpleasant the entire experience had been in retrospect. ( ③ ) Patients whose procedures ended with a period of lower pain, even if the overall duration was longer and the total amount of pain experienced was greater, rated the entire experience as less unpleasant than patients whose shorter procedures ended abruptly at a high pain level. ( ④ ) This pattern held even though the patients with the extended, gentler ending had objectively endured more cumulative discomfort overall. ( ⑤ ) The finding demonstrates that memory of an experience is constructed from its emotional peak and its ending, largely independent of how long the experience actually lasted.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '정점과 끝맺음을 그토록 크게 반영하는 이 경향에 peak-end rule이라는 이름이 붙었다'는 내용으로, 두 특정 지점(정점과 마지막 순간)이 회고적 평가를 좌우한다는 설명 바로 뒤, 그리고 대장내시경 연구라는 구체적 사례가 시작되기 전인 ②에 들어가야 자연스럽게 이어집니다.",
+    "vocab": [
+      {
+        "word": "retrospective",
+        "meaning": "회고적인"
+      },
+      {
+        "word": "cumulative",
+        "meaning": "누적된"
+      },
+      {
+        "word": "abruptly",
+        "meaning": "갑작스럽게"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-15-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-15",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Retailers and marketers have long observed that adding a third option to a set of two choices can dramatically shift which of the original two options consumers prefer, even when the added option itself is rarely chosen. In a classic study, participants chose between a smaller popcorn for a low price and a larger popcorn for a notably higher price, and most chose the smaller, cheaper option. However, when researchers introduced a third, medium-sized popcorn priced only slightly below the large option, many participants who had previously preferred the small popcorn switched to the large one, even though almost no one chose the medium option itself. Researchers explained that the medium option served only to make the large option look like a comparatively better deal, since a much bigger size for only a small price difference now appeared to be an obvious bargain. This inexpensive, rarely-chosen extra option, deliberately placed on a menu or price list to steer customers toward a specific, more profitable choice, has since become a standard tool in pricing strategy across industries from movie theaters to software subscriptions.",
+    "choices": [
+      "why consumers generally prefer the cheapest option available regardless of context",
+      "how a rarely-chosen third option can be added to a set of choices specifically to steer consumers toward a more expensive alternative",
+      "why larger portion sizes are always perceived as a better value than smaller ones",
+      "how movie theaters determine the ideal price for popcorn based on production cost",
+      "why consumers become confused when given too many options to choose from"
+    ],
+    "answerIndex": 1,
+    "explanation": "글은 거의 선택되지 않는 중간 크기 팝콘이라는 세 번째 선택지를 추가함으로써 소비자들이 원래 선호하던 저렴한 옵션 대신 더 비싼 옵션을 선택하도록 유도하는 사례를 설명하고, 이것이 가격 전략의 표준 기법이 되었다고 결론짓습니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "bargain",
+        "meaning": "특가, 유리한 거래"
+      },
+      {
+        "word": "deliberately",
+        "meaning": "의도적으로"
+      },
+      {
+        "word": "comparatively",
+        "meaning": "비교적으로"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-15-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-15",
+    "prompt": "등비수열 {a_n}에서 a_2 = 6, a_5 = 48일 때, a_8의 값은?",
+    "choices": [
+      "192",
+      "288",
+      "384",
+      "480",
+      "768"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_5 / a_2 = r^3 = 48/6 = 8이므로 공비 r = 2입니다. a_2 = a_1·r = 6이므로 a_1 = 3입니다. 따라서 a_8 = a_1·r^7 = 3 × 128 = 384입니다.",
+    "concept": "등비수열의 일반항 a_n = a_1·r^(n-1)을 이용해, 두 항의 비로 공비를 구한 뒤 원하는 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-15-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-15",
+    "prompt": "함수 f(x) = x^3 - 6x^2 + 9x + 2에 대해, 곡선 y = f(x) 위의 점 (0, f(0))에서의 접선의 기울기와 y절편의 합은?",
+    "choices": [
+      "7",
+      "9",
+      "11",
+      "13",
+      "15"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(0) = 2이므로 접점은 (0, 2)입니다. f'(x) = 3x^2 - 12x + 9이므로 f'(0) = 9, 즉 접선의 기울기는 9입니다. 접선의 방정식은 y = 9x + 2이고, 접점의 x좌표가 0이므로 y절편도 2입니다. 따라서 기울기와 y절편의 합은 9 + 2 = 11입니다.",
+    "concept": "곡선 위의 한 점에서의 접선의 기울기는 그 점에서의 도함수 값 f'(a)이며, 접선의 방정식 y - f(a) = f'(a)(x - a)을 이용해 y절편을 구한다."
+  },
+  {
+    "id": "math-2026-09-15-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-15",
+    "prompt": "곡선 y = -x^2 + 4x와 x축으로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "16/3",
+      "32/3",
+      "64/3",
+      "8/3",
+      "40/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "곡선과 x축의 교점은 -x^2 + 4x = -x(x-4) = 0에서 x = 0, x = 4입니다. 0 < x < 4에서 곡선이 x축보다 위에 있으므로 넓이는 ∫[0,4] (-x^2 + 4x) dx = [-x^3/3 + 2x^2] (0부터 4까지) = (-64/3 + 32) - 0 = 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 도형의 넓이는 두 교점을 구해 적분구간을 정한 뒤, 그 구간에서 정적분 ∫(위쪽 함수 - 아래쪽 함수) dx로 계산한다."
+  },
+  {
+    "id": "math-2026-09-15-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-15",
+    "prompt": "남학생 4명과 여학생 3명 중에서 임의로 3명을 뽑아 대표를 구성할 때, 적어도 1명이 여학생일 확률은?",
+    "choices": [
+      "4/35",
+      "27/35",
+      "31/35",
+      "3/5",
+      "1/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 7명 중 3명을 뽑는 경우의 수는 C(7,3) = 35입니다. 여사건인 '전원 남학생'인 경우의 수는 C(4,3) = 4이므로 그 확률은 4/35입니다. 따라서 적어도 1명이 여학생일 확률은 1 - 4/35 = 31/35입니다.",
+    "concept": "'적어도 1명'의 확률은 여사건(조건을 만족하지 않는 경우, 즉 전원 남학생)의 확률을 1에서 빼서 구한다."
+  },
+  {
+    "id": "math-2026-09-15-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-15",
+    "prompt": "삼각형 ABC에서 AB = 7, AC = 5, ∠A = 60°일 때, BC의 길이는?",
+    "choices": [
+      "√29",
+      "√34",
+      "√39",
+      "√44",
+      "7"
+    ],
+    "answerIndex": 2,
+    "explanation": "코사인법칙에 의해 BC^2 = AB^2 + AC^2 - 2·AB·AC·cosA = 49 + 25 - 2×7×5×(1/2) = 74 - 35 = 39입니다. 따라서 BC = √39입니다.",
+    "concept": "삼각형에서 두 변과 그 끼인각을 알 때, 코사인법칙 a^2 = b^2 + c^2 - 2bc·cosA를 이용해 나머지 변의 길이를 구한다."
   }
 ]
