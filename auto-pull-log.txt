@@ -1,0 +1,65 @@
+﻿**********************
+Windows PowerShell 기록 시작
+시작 시간: 20260911165903
+사용자 이름: DESKTOP-SDQ3K0P\AP
+RunAs 사용자: DESKTOP-SDQ3K0P\AP
+구성 이름: 
+Machine: DESKTOP-SDQ3K0P (Microsoft Windows NT 10.0.26200.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 27688
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 C:\Users\AP\Documents\mynotes\auto-pull-log.txt입니다.
+Fast-forward
+ ...1\264\354\212\244 \354\232\224\354\225\275.docx" | Bin 11288 -> 11232 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+PS>종료 오류(Copy-Item): "'C:\Users\AP\Desktop\오늘의 뉴스 요약.docx' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다."
+Copy-Item : 'C:\Users\AP\Desktop\오늘의 뉴스 요약.docx' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+위치 C:\Users\AP\Documents\mynotes\auto-pull.ps1:4 문자:1
++ Copy-Item "C:\Users\AP\Documents\mynotes\05-Routines\오늘의 뉴스 요약.docx"  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Copy-Item], IOException
+    + FullyQualifiedErrorId : System.IO.IOException,Microsoft.PowerShell.Commands.CopyItemCommand
+Copy-Item : 'C:\Users\AP\Desktop\오늘의 뉴스 요약.docx' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수
+ 없습니다.
+위치 C:\Users\AP\Documents\mynotes\auto-pull.ps1:4 문자:1
++ Copy-Item "C:\Users\AP\Documents\mynotes\05-Routines\오늘의 뉴스 요약.docx"  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Copy-Item], IOException
+    + FullyQualifiedErrorId : System.IO.IOException,Microsoft.PowerShell.Commands.CopyItemCommand
+
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20260911165905
+**********************
+**********************
+Windows PowerShell 기록 시작
+시작 시간: 20260913205641
+사용자 이름: DESKTOP-SDQ3K0P\AP
+RunAs 사용자: DESKTOP-SDQ3K0P\AP
+구성 이름: 
+Machine: DESKTOP-SDQ3K0P (Microsoft Windows NT 10.0.26200.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 22344
+PSVersion: 5.1.26100.9444
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9444
+BuildVersion: 10.0.26100.9444
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 C:\Users\AP\Documents\mynotes\auto-pull-log.txt입니다.
+
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20260913205644
+**********************
