@@ -4320,5 +4320,246 @@
     "answerIndex": 2,
     "explanation": "코사인법칙에 의해 BC^2 = AB^2 + AC^2 - 2·AB·AC·cosA = 49 + 25 - 2×7×5×(1/2) = 74 - 35 = 39입니다. 따라서 BC = √39입니다.",
     "concept": "삼각형에서 두 변과 그 끼인각을 알 때, 코사인법칙 a^2 = b^2 + c^2 - 2bc·cosA를 이용해 나머지 변의 길이를 구한다."
+  },
+  {
+    "id": "en-2026-09-16-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-16",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The human body operates according to an internal circadian clock that regulates sleep, alertness, and hormone release across a roughly twenty-four-hour cycle. This clock is primarily controlled by a cluster of neurons in the hypothalamus [u]known as[/u]① the suprachiasmatic nucleus, which receives direct input from light-sensitive cells in the retina. When morning light strikes the retina, signals [u]are sent[/u]② to this cluster, suppressing the production of melatonin and gradually increasing alertness. Researchers studying shift workers have found that individuals [u]whose schedules force them[/u]③ to sleep during daylight hours often experience a persistent mismatch between their internal clock and their external environment. This mismatch, sometimes called circadian misalignment, [u]have been linked[/u]④ to increased risks of metabolic disorders, cardiovascular disease, and mood disturbances. Because the suprachiasmatic nucleus responds so strongly to light, exposure to bright artificial light at night can delay the clock, [u]making it[/u]⑤ harder to fall asleep at a socially normal hour.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 주어는 단수 명사구인 'This mismatch'이므로 동사는 have been linked가 아니라 has been linked가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 단수 명사 a cluster of neurons를 수식하는 과거분사 known as, ②는 signals를 주어로 하는 수동태 are sent, ③은 individuals를 선행사로 하는 소유격 관계대명사절 whose schedules force them, ⑤는 앞 절 전체를 의미상 주어로 하는 분사구문 making it입니다.",
+    "vocab": [
+      {
+        "word": "misalignment",
+        "meaning": "불일치, 어긋남"
+      },
+      {
+        "word": "metabolic",
+        "meaning": "대사의"
+      },
+      {
+        "word": "suppress",
+        "meaning": "억제하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-16-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-16",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "People often develop a preference for things simply because they have encountered them repeatedly, a phenomenon known as the mere-exposure effect. This occurs because ______. In one experiment, participants were briefly shown a series of unfamiliar Chinese characters on a screen, some flashed only once and others flashed up to twenty-five times, all too quickly for participants to consciously recognize them. When later asked to rate how much they liked each character, participants consistently rated the characters they had seen more often as more pleasant, even though they had no conscious memory of having seen any particular character before. A similar pattern emerged in a separate study of advertising, where consumers exposed to a repeated but unrecognized product logo reported feeling more favorably toward the brand than consumers who had never encountered the logo at all.",
+    "choices": [
+      "repeated exposure to a stimulus makes that stimulus easier for the brain to process, and this increased ease of processing is experienced as a feeling of liking",
+      "people consciously remember every stimulus they have previously encountered, even briefly",
+      "unfamiliar stimuli are inherently more appealing than familiar ones",
+      "conscious recognition of a stimulus is necessary before any preference can form",
+      "repeated exposure causes people to become bored with and dislike a stimulus over time"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤의 사례들은 의식적으로 인식하지 못한 자극이라도 반복적으로 노출되면 더 선호하게 된다는 내용입니다. 이는 반복 노출이 자극에 대한 처리를 더 쉽게 만들고, 그 처리 용이성이 호감으로 경험된다는 ①과 일치하므로 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "phenomenon",
+        "meaning": "현상"
+      },
+      {
+        "word": "consciously",
+        "meaning": "의식적으로"
+      },
+      {
+        "word": "favorably",
+        "meaning": "호의적으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-16-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-16",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In 1928, the Scottish bacteriologist Alexander Fleming returned to his laboratory after a month-long vacation to examine a stack of petri dishes he had left uncleaned before departing.\n(A) Curiously, in the area immediately surrounding the mold, the bacterial colonies had failed to grow at all, as though something released by the mold itself were preventing their growth.\n(B) Sorting through the dishes, he noticed that one culture of Staphylococcus bacteria had become contaminated with a blue-green mold, an accident he initially assumed had ruined the experiment.\n(C) Recognizing the significance of this observation, Fleming isolated the substance responsible and named it penicillin, laying the foundation for the development of the first widely used antibiotic.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 플레밍이 휴가 후 실험실로 돌아와 방치된 페트리 접시들을 살펴보았다는 내용입니다. (B)는 그중 한 배양 접시가 푸른곰팡이에 오염된 것을 발견했다는 내용으로 자연스럽게 이어지고, (A)는 'the mold'로 (B)의 곰팡이를 받아 그 주변에서 세균이 자라지 못했다는 관찰 결과를 제시하며, (C)는 이 관찰의 중요성을 인식하고 페니실린을 분리해 명명했다는 결론으로 마무리됩니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "bacteriologist",
+        "meaning": "세균학자"
+      },
+      {
+        "word": "contaminated",
+        "meaning": "오염된"
+      },
+      {
+        "word": "isolate",
+        "meaning": "분리하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-16-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-16",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet when these same birds were tested in a planetarium under an artificially rotated night sky, their sense of direction shifted to align with the new, artificial position of the stars rather than true geographic north.",
+    "passage": "Many species of migratory birds travel thousands of miles between breeding and wintering grounds, often navigating with remarkable precision even when flying over featureless ocean or during moonless nights. ( ① ) For decades, researchers debated how birds accomplish this feat without any visible landmarks to guide them, proposing explanations ranging from a magnetic sense to reliance on the position of the sun. ( ② ) One influential set of experiments focused on indigo buntings, small songbirds that migrate at night and appear to use the stars for orientation. ( ③ ) Researchers raised young buntings in a planetarium and allowed them to observe the night sky rotating around a fixed point, much as the real sky appears to rotate around the North Star. ( ④ ) This indicated that the birds had learned to orient themselves not by memorizing specific star patterns, but by identifying the fixed point around which the entire sky appeared to rotate. ( ⑤ ) The finding suggested that celestial navigation in birds depends on an innate ability to detect rotational patterns in the sky, refined through early experience rather than fixed at birth.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 인공적으로 회전시킨 밤하늘 아래에서 새들의 방향 감각이 실제 북쪽이 아닌 인공적인 별의 위치에 맞춰 바뀌었다는 실험 결과입니다. 이는 플라네타리움에서 어린 되새를 기르며 회전하는 밤하늘을 관찰하게 했다는 설명(③ 뒤) 직후, 그리고 이 결과를 해석하는 'This indicated that...' 문장 바로 앞인 ④에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "migratory",
+        "meaning": "이주하는, 이동하는"
+      },
+      {
+        "word": "celestial",
+        "meaning": "천체의"
+      },
+      {
+        "word": "innate",
+        "meaning": "타고난, 선천적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-16-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-16",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "People consistently overestimate the extent to which others notice and remember their appearance, behavior, and minor mistakes in social situations, a bias researchers call the spotlight effect. In one study, college students were asked to wear a T-shirt printed with an image of a celebrity considered embarrassing by their peers, then walk into a room full of other students. Before entering, the students wearing the shirt were asked to estimate what percentage of the people in the room would notice and remember the image on their shirt. Their estimates were, on average, nearly twice as high as the percentage of observers who, when surveyed afterward, actually recalled seeing the shirt at all. Researchers explain that because people are so focused on their own appearance and actions, they mistakenly assume that this same information occupies a similarly prominent place in the minds of everyone around them, when in fact other people are typically absorbed in their own concerns and pay far less attention to any single individual than that individual assumes.",
+    "choices": [
+      "why people tend to dress more conservatively when meeting strangers for the first time",
+      "how people's excessive focus on their own appearance leads them to overestimate how much others actually notice and remember about them",
+      "why observers are generally unable to recall specific details about strangers they meet only briefly",
+      "how wearing unfamiliar clothing changes a person's confidence in social situations",
+      "why college students are more self-conscious than older adults in public settings"
+    ],
+    "answerIndex": 1,
+    "explanation": "글은 사람들이 자신의 외모와 행동에 지나치게 집중한 나머지, 다른 사람들도 그 정보에 비슷하게 주목하고 기억할 것이라고 착각하여 실제보다 더 많이 눈에 띈다고 과대평가하는 스포트라이트 효과를 설명합니다. 따라서 주제로 가장 적절한 것은 ②입니다.",
+    "vocab": [
+      {
+        "word": "overestimate",
+        "meaning": "과대평가하다"
+      },
+      {
+        "word": "prominent",
+        "meaning": "두드러진, 눈에 띄는"
+      },
+      {
+        "word": "absorbed",
+        "meaning": "몰두한, 열중한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-16-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-16",
+    "prompt": "등차수열 {a_n}에서 a_3 = 11, a_7 = 27일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "190",
+      "200",
+      "210",
+      "220",
+      "230"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 27 - 11 = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = a_1 + 8 = 11이므로 a_1 = 3입니다. 따라서 S_10 = 10/2 × (2×3 + 9×4) = 5 × (6+36) = 5 × 42 = 210입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d와 첫째항부터 제n항까지의 합 공식 S_n = n/2 × (2a_1 + (n-1)d)를 이용한다."
+  },
+  {
+    "id": "math-2026-09-16-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-16",
+    "prompt": "함수 f(x) = x^3 - 3x^2 - 9x + 5가 x = a에서 극솟값 b를 가질 때, a + b의 값은?",
+    "choices": [
+      "-22",
+      "-19",
+      "-16",
+      "-13",
+      "-10"
+    ],
+    "answerIndex": 1,
+    "explanation": "f'(x) = 3x^2 - 6x - 9 = 3(x-3)(x+1)이므로 f'(x) = 0의 해는 x = 3, x = -1입니다. f''(x) = 6x - 6이므로 f''(3) = 12 > 0, f''(-1) = -12 < 0입니다. 따라서 x = 3에서 극솟값을 가지며, f(3) = 27 - 27 - 27 + 5 = -22입니다. 즉 a = 3, b = -22이므로 a + b = -19입니다.",
+    "concept": "삼차함수의 극값은 f'(x) = 0의 해 중 f''(x)의 부호로 판별하며, f''(x) > 0이면 극소, f''(x) < 0이면 극대이다."
+  },
+  {
+    "id": "math-2026-09-16-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-16",
+    "prompt": "곡선 y = x^2 - 2x와 직선 y = x로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "7/2",
+      "4",
+      "9/2",
+      "5",
+      "11/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "교점은 x^2 - 2x = x, 즉 x^2 - 3x = 0에서 x = 0, x = 3입니다. 0 < x < 3에서 직선 y = x가 곡선 y = x^2 - 2x보다 위에 있으므로 넓이는 ∫[0,3] {x - (x^2-2x)} dx = ∫[0,3] (3x - x^2) dx = [3x^2/2 - x^3/3] (0부터 3까지) = (27/2 - 9) - 0 = 9/2입니다.",
+    "concept": "두 곡선(또는 곡선과 직선)으로 둘러싸인 도형의 넓이는 교점을 구해 적분구간을 정하고, 그 구간에서 위쪽 함수에서 아래쪽 함수를 뺀 값을 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-16-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-16",
+    "prompt": "주머니에 빨간 공 5개와 파란 공 3개, 총 8개의 공이 들어있다. 이 중에서 임의로 4개를 동시에 꺼낼 때, 꺼낸 공 중 빨간 공이 정확히 2개일 확률은?",
+    "choices": [
+      "2/7",
+      "3/7",
+      "4/7",
+      "5/14",
+      "1/2"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 8개 중 4개를 꺼내는 경우의 수는 C(8,4) = 70입니다. 빨간 공 2개와 파란 공 2개를 꺼내는 경우의 수는 C(5,2) × C(3,2) = 10 × 3 = 30입니다. 따라서 구하는 확률은 30/70 = 3/7입니다.",
+    "concept": "특정 개수를 뽑는 경우의 수는 각 종류에서 필요한 개수만큼 독립적으로 조합을 구해 곱한 뒤, 전체 경우의 수로 나누어 확률을 구한다."
+  },
+  {
+    "id": "math-2026-09-16-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-16",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin^2x - cosx - 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "2π",
+      "5π/2",
+      "3π",
+      "7π/2",
+      "4π"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin^2x = 1 - cos^2x를 대입하면 2(1-cos^2x) - cosx - 1 = 0, 즉 -2cos^2x - cosx + 1 = 0이고 양변에 -1을 곱하면 2cos^2x + cosx - 1 = 0입니다. 이를 인수분해하면 (2cosx - 1)(cosx + 1) = 0이므로 cosx = 1/2 또는 cosx = -1입니다. 0 ≤ x < 2π에서 cosx = 1/2인 해는 x = π/3, 5π/3이고, cosx = -1인 해는 x = π입니다. 따라서 모든 해의 합은 π/3 + 5π/3 + π = 3π입니다.",
+    "concept": "sin^2x = 1 - cos^2x 관계를 이용해 삼각방정식을 cosx에 대한 이차방정식으로 변형한 뒤 인수분해로 해를 구하고, 주어진 정의역 내의 모든 해를 확인한다."
   }
 ]
