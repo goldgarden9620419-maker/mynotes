@@ -4561,5 +4561,246 @@
     "answerIndex": 2,
     "explanation": "sin^2x = 1 - cos^2x를 대입하면 2(1-cos^2x) - cosx - 1 = 0, 즉 -2cos^2x - cosx + 1 = 0이고 양변에 -1을 곱하면 2cos^2x + cosx - 1 = 0입니다. 이를 인수분해하면 (2cosx - 1)(cosx + 1) = 0이므로 cosx = 1/2 또는 cosx = -1입니다. 0 ≤ x < 2π에서 cosx = 1/2인 해는 x = π/3, 5π/3이고, cosx = -1인 해는 x = π입니다. 따라서 모든 해의 합은 π/3 + 5π/3 + π = 3π입니다.",
     "concept": "sin^2x = 1 - cos^2x 관계를 이용해 삼각방정식을 cosx에 대한 이차방정식으로 변형한 뒤 인수분해로 해를 구하고, 주어진 정의역 내의 모든 해를 확인한다."
+  },
+  {
+    "id": "en-2026-09-17-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-17",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Octopuses are famous for their ability to change color and texture in a fraction of a second, a skill [u]made possible[/u]① by specialized skin cells called chromatophores. Each chromatophore contains a sac of pigment [u]surrounded by[/u]② tiny muscles that, when contracted, stretch the sac and expose more color to the surface. Because these muscles are controlled directly by the nervous system rather than by hormones, an octopus [u]are able[/u]③ to shift its appearance almost instantly in response to a passing predator or a sudden change in its surroundings. Beneath the chromatophores lie additional layers of cells [u]called[/u]④ iridophores and leucophores, which reflect light and produce iridescent or white hues that further refine the disguise. Remarkably, octopuses accomplish this rapid, precise camouflage despite [u]being[/u]⑤ colorblind, relying instead on specialized photoreceptors distributed across their skin to sense light.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③에서 주어는 단수 명사구 'an octopus'이므로 동사는 are able이 아니라 is able이 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 a skill을 수식하는 과거분사 made possible, ②는 a sac of pigment를 수식하는 과거분사 surrounded by, ④는 cells를 수식하는 과거분사 called, ⑤는 전치사 despite 뒤에 오는 동명사 being입니다.",
+    "vocab": [
+      {
+        "word": "camouflage",
+        "meaning": "위장"
+      },
+      {
+        "word": "iridescent",
+        "meaning": "무지갯빛의"
+      },
+      {
+        "word": "photoreceptor",
+        "meaning": "광수용체"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-17-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-17",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Psychologists have long observed that people tend to remember interrupted or unfinished tasks far more vividly than tasks they have already completed, a pattern known as the Zeigarnik effect. This happens because ______. In an early demonstration, waiters in a busy restaurant were found to recall the details of orders that were still being prepared with striking accuracy, yet once a dish had been delivered and paid for, the same orders faded from memory within minutes. Later laboratory studies replicated this pattern under more controlled conditions: participants asked to complete a series of simple puzzles, some of which were deliberately interrupted before they could finish, remembered the interrupted puzzles nearly twice as often as the puzzles they had been allowed to complete. Researchers have suggested that this tendency may partly explain why unresolved arguments or unfinished projects can linger persistently in a person's thoughts long after the original circumstances have changed.",
+    "choices": [
+      "an incomplete task creates a lingering state of mental tension that keeps it active in memory until it is finally resolved or completed",
+      "completed tasks require more mental effort to encode than incomplete ones do",
+      "people deliberately try to forget tasks they have already finished",
+      "unfinished tasks are usually less complex than completed ones, making them easier to recall",
+      "memory naturally favors the most recent event regardless of whether it was completed"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 다음 내용은 조리 중인 주문은 생생히 기억하다가 완료되면 곧 잊히고, 중단된 퍼즐이 완료된 퍼즐보다 두 배 가까이 더 잘 기억되었다는 실험 결과입니다. 이는 과제가 끝나지 않으면 심리적 긴장 상태가 계속 유지되어 기억에 남는다는 설명과 일치하므로 정답은 ①입니다. 나머지 선택지는 제시된 실험 결과로 뒷받침되지 않습니다.",
+    "vocab": [
+      {
+        "word": "linger",
+        "meaning": "남아 있다, 오래 지속되다"
+      },
+      {
+        "word": "encode",
+        "meaning": "부호화하다, (기억으로) 저장하다"
+      },
+      {
+        "word": "striking",
+        "meaning": "인상적인, 두드러진"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-17-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-17",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In the 1940s, Percy Spencer, an engineer working with radar technology at Raytheon, noticed something strange while standing near an active magnetron, the vacuum tube used to generate microwaves for radar systems.\n(A) Puzzled by this, he began testing the device deliberately, placing popcorn kernels near the magnetron and watching them pop within moments, followed by an egg that exploded when it was heated too quickly.\n(B) A chocolate bar in his pocket had begun to melt, even though he had not felt any noticeable heat coming from the machine itself.\n(C) Convinced that the microwaves themselves were responsible for cooking the food, Spencer built a metal box to contain the radiation and patented what would become the first microwave oven.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 스펜서가 마그네트론 옆에 서 있다가 이상한 점을 알아차렸다는 내용입니다. (B)는 그 이상한 점이 주머니 속 초콜릿이 녹은 것이었다는 구체적 설명으로 자연스럽게 이어지고, (A)는 'Puzzled by this'로 (B)의 상황을 받아 직접 팝콘과 달걀로 실험을 해보았다는 내용이 이어지며, (C)는 이 실험 결과에 확신을 얻어 전자레인지를 특허로 등록했다는 결론으로 마무리됩니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "magnetron",
+        "meaning": "마그네트론(전자레인지의 핵심 부품)"
+      },
+      {
+        "word": "radiation",
+        "meaning": "복사, 방사선"
+      },
+      {
+        "word": "patent",
+        "meaning": "특허를 받다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-17-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-17",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet when water temperatures rise even slightly above this narrow range for an extended period, the coral expels the algae altogether, leaving behind a stark white skeleton with no means of producing its own food.",
+    "passage": "Coral reefs, though they may appear to be simple rock-like structures, are actually built by tiny animals called coral polyps living in a close partnership with microscopic algae. ( ① ) These algae live within the tissue of the coral, using sunlight to produce sugars through photosynthesis, most of which they share directly with their coral host in exchange for shelter and access to sunlight. ( ② ) This relationship is also responsible for the vivid colors that make healthy reefs so visually striking, since the pigments inside the algae give the otherwise transparent coral tissue its color. ( ③ ) The partnership, however, depends on a fairly narrow range of water temperature, and the coral can tolerate only small deviations before the relationship becomes unstable. ( ④ ) This process, known as coral bleaching, does not kill the coral immediately, but it leaves the animal severely weakened and vulnerable to starvation and disease. ( ⑤ ) If the water does not cool again within a matter of weeks, the coral is likely to die, eroding the reef structure that countless marine species depend on for survival.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 수온이 좁은 적정 범위를 벗어나면 산호가 조류를 아예 내보내 하얗게 변한다는 내용입니다. 이는 관계가 좁은 온도 범위에 의존한다는 설명(③ 뒤) 바로 다음, 그리고 그 현상을 'This process, known as coral bleaching'으로 받는 문장 바로 앞인 ④에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "photosynthesis",
+        "meaning": "광합성"
+      },
+      {
+        "word": "vulnerable",
+        "meaning": "취약한"
+      },
+      {
+        "word": "erode",
+        "meaning": "침식시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-17-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-17",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Consumers often assign surprisingly high value to items they have partially built or assembled themselves, even when the finished product is objectively no better than a version purchased ready-made, a tendency researchers have labeled the IKEA effect. In a series of experiments, participants who assembled their own furniture, folded their own origami figures, or built simple storage boxes from kits were later asked to bid on their own creations alongside professionally made equivalents. Despite obvious flaws in craftsmanship, most participants were willing to pay significantly more for the item they had made themselves than for the version made by an expert, and they rated their own work as comparably attractive to the professional version, a judgment that outside observers did not share. Researchers explain that the physical and mental effort invested in creating something appears to become fused with a person's sense of accomplishment, so that the labor itself, rather than the object's actual quality, drives the inflated sense of value.",
+    "choices": [
+      "how the effort people put into creating something themselves leads them to overvalue what they have made, regardless of its actual quality",
+      "why professionally made furniture is generally considered more attractive than homemade alternatives",
+      "how outside observers judge homemade items more harshly than the people who made them",
+      "why people prefer to buy ready-made furniture rather than assemble it themselves",
+      "how the price of a product influences a consumer's perception of its quality"
+    ],
+    "answerIndex": 0,
+    "explanation": "글은 사람들이 직접 조립하거나 만든 물건에 실제 품질과 무관하게 더 높은 가치를 부여하는 'IKEA 효과'를 설명하며, 이는 투입된 노력이 성취감과 결합되어 가치 판단을 왜곡시키기 때문이라고 결론짓습니다. 따라서 글의 주제로 가장 적절한 것은 ①입니다.",
+    "vocab": [
+      {
+        "word": "craftsmanship",
+        "meaning": "기술, 솜씨"
+      },
+      {
+        "word": "fused",
+        "meaning": "융합된"
+      },
+      {
+        "word": "inflated",
+        "meaning": "부풀려진, 과장된"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-17-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-17",
+    "prompt": "등비수열 {a_n}에서 a_2 = 6, a_5 = 48일 때, 첫째항부터 제6항까지의 합은?",
+    "choices": [
+      "177",
+      "183",
+      "189",
+      "195",
+      "201"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_5 / a_2 = r^3 = 48 / 6 = 8이므로 공비 r = 2입니다. a_2 = a_1 r = 6이므로 a_1 = 3입니다. 따라서 S_6 = a_1(r^6 - 1)/(r - 1) = 3 × (64 - 1)/(2 - 1) = 3 × 63 = 189입니다.",
+    "concept": "등비수열의 일반항 a_n = a_1 r^(n-1)과 첫째항부터 제n항까지의 합 공식 S_n = a_1(r^n - 1)/(r - 1) (r ≠ 1)을 이용한다."
+  },
+  {
+    "id": "math-2026-09-17-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-17",
+    "prompt": "곡선 y = x^3 - 3x + 1 위의 점 (2, 3)에서의 접선의 방정식이 y = ax + b일 때, a + b의 값은?",
+    "choices": [
+      "-12",
+      "-9",
+      "-6",
+      "-3",
+      "0"
+    ],
+    "answerIndex": 2,
+    "explanation": "y' = 3x^2 - 3이므로 x = 2에서의 미분계수는 f'(2) = 3(4) - 3 = 9입니다. 접선의 방정식은 y - 3 = 9(x - 2), 즉 y = 9x - 15입니다. 따라서 a = 9, b = -15이므로 a + b = -6입니다.",
+    "concept": "곡선 위의 점에서의 접선의 기울기는 그 점에서의 미분계수 f'(x)이며, 접선의 방정식은 y - f(a) = f'(a)(x - a)로 구한다."
+  },
+  {
+    "id": "math-2026-09-17-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-17",
+    "prompt": "곡선 y = -x^2 + 4x와 x축으로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "26/3",
+      "28/3",
+      "30/3",
+      "32/3",
+      "34/3"
+    ],
+    "answerIndex": 3,
+    "explanation": "곡선과 x축의 교점은 -x^2 + 4x = 0, 즉 x(4 - x) = 0에서 x = 0, x = 4입니다. 0 < x < 4에서 곡선이 x축보다 위에 있으므로 넓이는 ∫[0,4] (-x^2 + 4x) dx = [-x^3/3 + 2x^2] (0부터 4까지) = (-64/3 + 32) - 0 = 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 도형의 넓이는 교점을 구해 적분구간을 정하고, 그 구간에서 곡선의 값을 정적분하여 구한다(구간 내내 곡선이 x축 위에 있는 경우)."
+  },
+  {
+    "id": "math-2026-09-17-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-17",
+    "prompt": "두 개의 주사위를 동시에 던질 때, 나온 눈의 합이 8 이상일 확률은?",
+    "choices": [
+      "1/3",
+      "7/18",
+      "5/12",
+      "4/9",
+      "1/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "두 주사위를 던질 때 나오는 모든 경우의 수는 6 × 6 = 36가지입니다. 눈의 합이 8 이상인 경우는 합이 8일 때 5가지, 9일 때 4가지, 10일 때 3가지, 11일 때 2가지, 12일 때 1가지로 총 15가지입니다. 따라서 구하는 확률은 15/36 = 5/12입니다.",
+    "concept": "두 주사위를 던질 때 나오는 모든 경우의 수는 6×6=36가지이며, 조건을 만족하는 경우의 수를 세어 전체 경우의 수로 나누어 확률을 구한다."
+  },
+  {
+    "id": "math-2026-09-17-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-17",
+    "prompt": "삼각형 ABC에서 AB = 7, BC = 5, cos B = 1/7일 때, AC의 길이는?",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answerIndex": 2,
+    "explanation": "코사인법칙에 의해 AC^2 = AB^2 + BC^2 - 2 × AB × BC × cos B = 49 + 25 - 2 × 7 × 5 × (1/7) = 74 - 10 = 64입니다. 따라서 AC = 8입니다.",
+    "concept": "삼각형에서 두 변의 길이와 그 끼인각의 코사인 값을 알 때, 코사인법칙 c^2 = a^2 + b^2 - 2ab cos C를 이용하여 나머지 변의 길이를 구한다."
   }
 ]
