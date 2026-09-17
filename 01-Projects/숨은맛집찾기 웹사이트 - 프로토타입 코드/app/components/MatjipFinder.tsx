@@ -41,7 +41,7 @@ const NAVER_BLOG_URL = "https://blog.naver.com/gold-jw0419";
 // 운영자가 직접 다녀와서 네이버 블로그에 후기를 올린 곳.
 // url이 비어 있으면 블로그 홈으로 연결된다. 새 글 발행할 때마다 여기에 한 줄씩 추가.
 const REVIEWED_PLACES: { match: string; url: string }[] = [
-  { match: "동네짬뽕", url: "" },
+  { match: "동네짬뽕", url: "https://blog.naver.com/gold-jw0419/224402086316" },
   { match: "신천궁전떡볶이", url: "" },
   { match: "갈비만", url: "" },
 ];
