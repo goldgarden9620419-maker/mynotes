@@ -4802,5 +4802,246 @@
     "answerIndex": 2,
     "explanation": "코사인법칙에 의해 AC^2 = AB^2 + BC^2 - 2 × AB × BC × cos B = 49 + 25 - 2 × 7 × 5 × (1/7) = 74 - 10 = 64입니다. 따라서 AC = 8입니다.",
     "concept": "삼각형에서 두 변의 길이와 그 끼인각의 코사인 값을 알 때, 코사인법칙 c^2 = a^2 + b^2 - 2ab cos C를 이용하여 나머지 변의 길이를 구한다."
+  },
+  {
+    "id": "en-2026-09-18-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-18",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "When a forager honeybee discovers a rich source of nectar, it returns to the hive and performs a remarkable ritual known as the waggle dance, a behavior [u]first described[/u]① by the biologist Karl von Frisch in the mid-twentieth century. During the dance, the bee moves in a figure-eight pattern while vigorously shaking its abdomen, a motion [u]that encodes[/u]② both the direction and the distance of the food source relative to the sun. Other worker bees, clustering closely around the dancer, [u]is able[/u]③ to interpret these signals purely through touch and vibration, since the hive is far too dark for vision to play any role. Remarkably, the angle of the waggle run relative to the vertical surface of the honeycomb corresponds precisely to the angle between the food source and the sun, a code [u]shared[/u]④ across nearly all honeybee species studied so far. Scientists have even built robotic bees [u]capable of[/u]⑤ reproducing this dance, successfully directing live bees toward artificial feeding stations.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③에서 주어는 복수 명사구 'Other worker bees'이므로 동사는 is able이 아니라 are able이 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 a behavior를 수식하는 과거분사 first described, ②는 a motion을 선행사로 하는 주격 관계대명사절의 단수 동사 encodes, ④는 a code를 수식하는 과거분사 shared, ⑤는 형용사 capable 뒤에 오는 전치사 of와 동명사 reproducing입니다.",
+    "vocab": [
+      {
+        "word": "forager",
+        "meaning": "채집하는 동물, 먹이를 찾는 개체"
+      },
+      {
+        "word": "vigorously",
+        "meaning": "격렬하게, 활기차게"
+      },
+      {
+        "word": "vibration",
+        "meaning": "진동"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-18-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-18",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Psychologists have found that people tend to develop more favorable attitudes toward unfamiliar things simply through repeated exposure to them, even when they cannot consciously recall having encountered the object before, a phenomenon known as the mere exposure effect. This suggests that ______. In one experiment, participants were briefly shown a series of unfamiliar characters flashed on a screen for only a few milliseconds, far too quickly for conscious recognition. When later asked to rate how much they liked a set of characters that included both the previously flashed ones and entirely new ones, participants consistently rated the previously flashed characters more favorably, despite being unable to identify which characters they had actually seen before. Similar results have emerged in studies involving unfamiliar melodies and foreign words, suggesting that the effect is not limited to a single sensory domain.",
+    "choices": [
+      "familiarity itself, even without conscious awareness, can increase a person's liking for something",
+      "people consciously prefer things they can clearly remember encountering before",
+      "unfamiliar objects are generally more appealing than familiar ones",
+      "conscious recognition of a stimulus is required before any preference can form",
+      "liking for an object decreases the more frequently a person is exposed to it"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤의 실험에서 참가자들은 자신이 본 적이 있는지조차 의식적으로 알지 못했음에도, 이전에 잠깐 노출되었던 문자를 더 호의적으로 평가했습니다. 이는 의식적 자각 없이도 단순한 노출만으로 호감이 커질 수 있다는 설명과 일치하므로 정답은 ①입니다. 나머지 선택지는 실험 결과와 반대되거나 근거가 없습니다.",
+    "vocab": [
+      {
+        "word": "phenomenon",
+        "meaning": "현상"
+      },
+      {
+        "word": "exposure",
+        "meaning": "노출"
+      },
+      {
+        "word": "domain",
+        "meaning": "영역, 분야"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-18-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-18",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "As autumn approaches and daylight hours grow shorter, deciduous trees begin preparing to shed their leaves for the winter months.\n(A) With chlorophyll no longer being replenished, the green pigment gradually breaks down and fades, revealing yellow and orange pigments called carotenoids that were present in the leaf all along but had been masked by the dominant green.\n(B) The first sign of this preparation is a reduction in the production of chlorophyll, the pigment responsible for capturing sunlight and giving leaves their green color during the growing season.\n(C) In some species, sugars trapped in the leaves during this process are converted into red and purple pigments called anthocyanins, producing the vivid crimson displays associated with certain maples and oaks.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 나무가 겨울을 대비해 잎을 떨어뜨릴 준비를 시작한다는 내용입니다. (B)는 그 준비의 첫 신호가 엽록소 생산 감소라는 구체적 설명으로 이어지고, (A)는 엽록소가 더 이상 보충되지 않아 분해되면서 카로티노이드가 드러난다는 다음 단계를 설명하며, (C)는 일부 수종에서 당분이 안토시아닌으로 전환되어 붉은 단풍이 생긴다는 내용으로 마무리됩니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "deciduous",
+        "meaning": "낙엽성의"
+      },
+      {
+        "word": "chlorophyll",
+        "meaning": "엽록소"
+      },
+      {
+        "word": "anthocyanins",
+        "meaning": "안토시아닌(붉은색·보라색 색소)"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-18-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-18",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Unlike these man-made surfaces, however, natural landscapes handle solar energy quite differently.",
+    "passage": "Cities are typically several degrees warmer than the surrounding countryside, a phenomenon known as the urban heat island effect. ( ① ) This temperature difference arises largely because concrete, asphalt, and other dark building materials absorb solar radiation during the day and release it slowly as heat throughout the night. ( ② ) Vegetation and exposed soil reflect more sunlight and release stored moisture through evaporation, a process that naturally cools the surrounding air. ( ③ ) As a result, nighttime temperatures in a city center can remain five degrees or more above those recorded in nearby fields on the very same night. ( ④ ) This persistent warmth is not merely uncomfortable; it also increases energy demand for air conditioning and can worsen health risks during heat waves, particularly for elderly residents. ( ⑤ ) Recognizing this danger, many cities have begun planting rooftop gardens and installing lighter-colored pavement specifically designed to reflect rather than absorb sunlight.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '이러한 인공 표면과 달리 자연 경관은 태양 에너지를 다르게 처리한다'는 내용으로, 콘크리트·아스팔트 같은 인공 재료를 설명한 문장 바로 뒤, 그리고 식생과 토양이 햇빛을 반사하고 수분을 증발시켜 냉각 효과를 낸다는 문장 바로 앞인 ②에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "radiation",
+        "meaning": "복사(열)"
+      },
+      {
+        "word": "evaporation",
+        "meaning": "증발"
+      },
+      {
+        "word": "pavement",
+        "meaning": "포장도로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-18-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-18",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "People consistently overestimate the extent to which others notice their appearance, mistakes, and behavior in social situations, a bias researchers call the spotlight effect. In one study, college students were asked to wear a shirt featuring an embarrassing image before entering a room full of their peers, then asked to estimate how many people in the room had noticed the shirt. Their estimates were, on average, nearly twice as high as the number of peers who could actually recall seeing it when questioned afterward. A related experiment found the same pattern held even for far less noticeable changes, such as a new haircut or a small stain on clothing: the person making the change consistently believed it was far more noticeable than it actually was to observers. Researchers attribute this gap to the fact that individuals are so absorbed in their own appearance and actions that they mistakenly assume other people are paying just as much attention, when in reality most observers are absorbed in their own concerns.",
+    "choices": [
+      "people tend to greatly overestimate how much other people actually notice and remember about them",
+      "embarrassing clothing choices are remembered longer than ordinary ones",
+      "individuals should pay closer attention to the appearance of those around them",
+      "minor changes in appearance are more noticeable than major ones",
+      "people become less self-conscious as they grow older"
+    ],
+    "answerIndex": 0,
+    "explanation": "글은 사람들이 자신의 외모나 실수, 행동을 다른 사람들이 실제보다 훨씬 더 많이 알아차린다고 착각하는 'spotlight effect'를 설명합니다. 실험 결과 모두 이러한 과대평가 경향을 뒷받침하므로 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "overestimate",
+        "meaning": "과대평가하다"
+      },
+      {
+        "word": "absorbed",
+        "meaning": "몰두한, 열중한"
+      },
+      {
+        "word": "stain",
+        "meaning": "얼룩"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-18-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-18",
+    "prompt": "등차수열 {a_n}에서 a_3 = 10, a_7 = 26일 때, a_15의 값은?",
+    "choices": [
+      "50",
+      "54",
+      "58",
+      "62",
+      "66"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = 10이므로 a_1 = 2입니다. 따라서 a_15 = a_1 + 14d = 2 + 56 = 58입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d를 이용하여 주어진 조건을 연립방정식으로 세워 첫째항과 공차를 구한다."
+  },
+  {
+    "id": "math-2026-09-18-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-18",
+    "prompt": "함수 f(x) = x^3 - 6x^2 + 9x + 2가 x = a에서 극댓값을 가질 때, 그 극댓값은?",
+    "choices": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "10"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x^2 - 12x + 9 = 3(x-1)(x-3)이므로 극값 후보는 x = 1, 3입니다. f''(x) = 6x - 12에서 f''(1) = -6 < 0이므로 x = 1에서 극댓값을 가집니다. f(1) = 1 - 6 + 9 + 2 = 6이므로 극댓값은 6입니다.",
+    "concept": "삼차함수의 극값은 f'(x) = 0의 해를 구한 뒤 f''(x)의 부호(또는 f'(x)의 부호 변화)로 극대·극소를 판별하여 구한다."
+  },
+  {
+    "id": "math-2026-09-18-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-18",
+    "prompt": "두 곡선 y = x^2 과 y = 2x 로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "2/3",
+      "1",
+      "4/3",
+      "5/3",
+      "2"
+    ],
+    "answerIndex": 2,
+    "explanation": "두 곡선의 교점은 x^2 = 2x, 즉 x(x-2) = 0에서 x = 0, x = 2입니다. 0 < x < 2에서 2x가 x^2보다 위에 있으므로 넓이는 ∫[0,2] (2x - x^2) dx = [x^2 - x^3/3] (0부터 2까지) = (4 - 8/3) - 0 = 4/3입니다.",
+    "concept": "두 곡선으로 둘러싸인 도형의 넓이는 교점을 구해 적분구간을 정하고, 그 구간에서 위에 있는 함수에서 아래에 있는 함수를 뺀 식을 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-18-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-18",
+    "prompt": "한 개의 동전을 5번 던질 때, 앞면이 나오는 횟수를 확률변수 X라 하자. P(X=3)의 값은?",
+    "choices": [
+      "1/8",
+      "5/16",
+      "3/8",
+      "1/2",
+      "5/8"
+    ],
+    "answerIndex": 1,
+    "explanation": "동전을 5번 던져 앞면이 나오는 횟수 X는 이항분포 B(5, 1/2)를 따릅니다. P(X=3) = C(5,3) × (1/2)^3 × (1/2)^2 = 10 × (1/32) = 10/32 = 5/16입니다.",
+    "concept": "동전을 n번 던져 앞면이 나오는 횟수 X는 이항분포 B(n, 1/2)를 따르며, P(X=k) = C(n,k) p^k (1-p)^(n-k)로 구한다."
+  },
+  {
+    "id": "math-2026-09-18-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-18",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2sin^2θ - 3cosθ - 3 = 0을 만족하는 θ의 개수는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin^2θ = 1 - cos^2θ를 대입하면 2(1-cos^2θ) - 3cosθ - 3 = 0, 즉 -2cos^2θ - 3cosθ - 1 = 0이 되고, 양변에 -1을 곱하면 2cos^2θ + 3cosθ + 1 = 0입니다. 이를 인수분해하면 (2cosθ+1)(cosθ+1) = 0이므로 cosθ = -1/2 또는 cosθ = -1입니다. 0 ≤ θ < 2π에서 cosθ = -1/2인 θ는 2π/3, 4π/3의 2개, cosθ = -1인 θ는 π의 1개이므로 총 3개입니다.",
+    "concept": "sin^2θ + cos^2θ = 1을 이용해 방정식을 cosθ에 대한 이차방정식으로 변형한 뒤 인수분해하여 근의 개수를 구한다."
   }
 ]
