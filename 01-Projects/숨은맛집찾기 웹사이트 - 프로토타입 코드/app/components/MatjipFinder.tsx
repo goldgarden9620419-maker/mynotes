@@ -36,6 +36,24 @@ const RADIUS_OPTIONS = [
 ] as const;
 
 const BLOG_URL = "https://diary21462.tistory.com/";
+const NAVER_BLOG_URL = "https://blog.naver.com/gold-jw0419";
+
+// 운영자가 직접 다녀와서 네이버 블로그에 후기를 올린 곳.
+// url이 비어 있으면 블로그 홈으로 연결된다. 새 글 발행할 때마다 여기에 한 줄씩 추가.
+const REVIEWED_PLACES: { match: string; url: string }[] = [
+  { match: "동네짬뽕", url: "" },
+  { match: "신천궁전떡볶이", url: "" },
+  { match: "갈비만", url: "" },
+];
+
+function reviewedPostUrl(name: string) {
+  const normalized = name.replace(/\s/g, "");
+  const hit = REVIEWED_PLACES.find((r) =>
+    normalized.includes(r.match.replace(/\s/g, ""))
+  );
+  if (!hit) return null;
+  return hit.url || NAVER_BLOG_URL;
+}
 
 // 구글 지도는 한국 정부 규제로 자동차/도보 "길찾기"(경로 계산) 자체를 지원하지 않아서
 // (대중교통만 계산됨), 한국에서 실제로 동작하는 카카오맵 앱으로 길찾기를 연결한다.
@@ -625,6 +643,16 @@ export default function MatjipFinder() {
                         </div>
                       </div>
                       <div className="mt-2 text-xs text-muted">{p.address}</div>
+                      {reviewedPostUrl(p.name) && (
+                        <a
+                          href={reviewedPostUrl(p.name)!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 flex items-center justify-center gap-1.5 rounded-xl bg-accent/10 px-3 py-2 text-xs font-semibold text-accent transition hover:bg-accent/20"
+                        >
+                          ✍️ 운영자가 직접 다녀온 솔직 후기 보기
+                        </a>
+                      )}
                       <div className="mt-3 flex gap-2">
                         <a
                           href={

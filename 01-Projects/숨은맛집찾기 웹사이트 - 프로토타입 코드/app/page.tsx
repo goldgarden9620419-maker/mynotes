@@ -29,6 +29,17 @@ export default function Home() {
 
       <footer className="mb-16 flex flex-col items-center gap-2 text-center text-xs text-muted">
         <p>© 2026 숨은맛집찾기 · 위치 정보는 브라우저에서만 사용되며 저장되지 않습니다.</p>
+        <p>
+          운영자가 직접 다녀온 대구 맛집 후기 —{" "}
+          <a
+            href="https://blog.naver.com/gold-jw0419"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-accent hover:underline"
+          >
+            맛없으면말할게 : 대구 맛집기록
+          </a>
+        </p>
         <div className="flex gap-4">
           <Link href="/privacy-policy" className="hover:text-accent hover:underline">
             개인정보처리방침
