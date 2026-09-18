@@ -44,7 +44,10 @@ def _make_stub_template(path):
                     value="=SUM('설정및분류'!$C$6:$C$12)*'요약'!$B$13")
 
     wb.create_sheet("정기지출분석")
-    wb.create_sheet("계좌내역통합_RAW")
+    ws = wb.create_sheet("계좌내역통합_RAW")
+    # 옛 수동 붙여넣기용 잔여 수식 (자동화에서는 정리 대상)
+    ws.cell(row=50, column=1, value="=IF('주간계좌_붙여넣기'!B8=\"\",\"\",1)")
+    wb.create_sheet("주간계좌_붙여넣기")
     ws = wb.create_sheet("설정및분류")
     for i in range(7):
         ws.cell(row=6 + i, column=3, value=0)
@@ -146,6 +149,9 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     raw = wb["계좌내역통합_RAW"]
     assert raw["C2"].value == "국민은행"
     assert raw["F2"].value == 50000
+    # 수동 붙여넣기 시트 제거 + 잔여 참조 수식 정리
+    assert "주간계좌_붙여넣기" not in wb.sheetnames
+    assert raw["A50"].value is None
     # 지출계획 취합 시트가 새로 생성되어 자동 반영된다
     assert "지출계획_취합" in wb.sheetnames
     exp = wb["지출계획_취합"]
