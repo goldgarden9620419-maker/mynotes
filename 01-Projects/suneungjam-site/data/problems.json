@@ -5043,5 +5043,254 @@
     "answerIndex": 2,
     "explanation": "sin^2θ = 1 - cos^2θ를 대입하면 2(1-cos^2θ) - 3cosθ - 3 = 0, 즉 -2cos^2θ - 3cosθ - 1 = 0이 되고, 양변에 -1을 곱하면 2cos^2θ + 3cosθ + 1 = 0입니다. 이를 인수분해하면 (2cosθ+1)(cosθ+1) = 0이므로 cosθ = -1/2 또는 cosθ = -1입니다. 0 ≤ θ < 2π에서 cosθ = -1/2인 θ는 2π/3, 4π/3의 2개, cosθ = -1인 θ는 π의 1개이므로 총 3개입니다.",
     "concept": "sin^2θ + cos^2θ = 1을 이용해 방정식을 cosθ에 대한 이차방정식으로 변형한 뒤 인수분해하여 근의 개수를 구한다."
+  },
+  {
+    "id": "en-2026-09-19-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-19",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "For decades, scientists puzzled over why yawning appears to spread so easily from one person to another, a phenomenon [u]known[/u]① as contagious yawning. Early researchers assumed the behavior was uniquely human, a subtle by-product of empathy that [u]allow[/u]② individuals to synchronize emotional states within a group. However, later observations revealed that chimpanzees, dogs, and even some birds exhibit similar contagious responses, a finding [u]that challenged[/u]③ the assumption that the trait was exclusively linked to advanced human cognition. Researchers eventually proposed that contagious yawning [u]may serve[/u]④ as a primitive social signal, helping members of a group [u]stay alert[/u]⑤ to environmental changes by synchronizing periods of rest and vigilance.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "②에서 선행사는 단수 명사 'empathy'이므로 관계대명사절의 동사는 allow가 아니라 allows가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 a phenomenon을 수식하는 과거분사 known, ③은 a finding을 선행사로 하는 주격 관계대명사절의 동사 that challenged, ④는 조동사 may 뒤의 동사원형 serve, ⑤는 help 뒤에 오는 목적격보어 자리의 원형부정사 stay alert입니다.",
+    "vocab": [
+      {
+        "word": "contagious",
+        "meaning": "전염성의"
+      },
+      {
+        "word": "empathy",
+        "meaning": "공감"
+      },
+      {
+        "word": "vigilance",
+        "meaning": "경계, 조심"
+      },
+      {
+        "word": "synchronize",
+        "meaning": "동시에 발생시키다, 동기화하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-19-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-19",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Consumer researchers have long observed that offering people more options does not necessarily make them happier with their eventual choice; in fact, beyond a certain point, it can do the opposite. This suggests that ______. In a well-known study, researchers set up a tasting booth in a grocery store, alternating between displaying six flavors of jam and twenty-four flavors of jam. Although the larger display attracted more browsers, shoppers who saw only six flavors were considerably more likely to actually purchase a jar, and later reported greater satisfaction with their selection than those who had faced the larger array. Follow-up studies found that an overwhelming number of alternatives can increase the mental effort required to compare options, leaving people more anxious about whether they made the right choice and more prone to regret afterward.",
+    "choices": [
+      "an abundance of choices can reduce, rather than increase, a person's satisfaction with the decision they ultimately make",
+      "people always prefer having as many options as possible when making decisions",
+      "the number of options available has no effect on how satisfied a person feels afterward",
+      "shoppers are more likely to buy something when given a wider variety of choices",
+      "the effort required to compare products always leads to better final decisions"
+    ],
+    "answerIndex": 0,
+    "explanation": "잼 실험에서 선택지가 더 많았던 집단은 구경하는 사람은 많았지만 실제 구매율과 선택에 대한 만족도는 더 낮았고, 후속 연구는 선택지가 많을수록 비교에 드는 노력이 늘어 불안과 후회가 커진다는 것을 보여줍니다. 이는 선택지가 많아질수록 오히려 만족도가 떨어질 수 있다는 ①과 일치합니다. 나머지 선택지는 지문의 실험 결과와 반대되거나 근거가 없습니다.",
+    "vocab": [
+      {
+        "word": "array",
+        "meaning": "집합, 배열"
+      },
+      {
+        "word": "prone",
+        "meaning": "~하기 쉬운, ~하는 경향이 있는"
+      },
+      {
+        "word": "browse",
+        "meaning": "둘러보다, 구경하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-19-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-19",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Bats that hunt at night rely on a remarkable biological sonar system to navigate through complete darkness and locate their prey.\n(A) These returning echoes are then processed by the bat's highly specialized auditory system, which calculates the precise location, distance, and even the texture of an object based on tiny differences in timing and frequency.\n(B) The bat begins by emitting a rapid sequence of high-frequency sound pulses, far beyond the range of human hearing, which travel outward until they strike an object and bounce back as echoes.\n(C) This remarkable precision allows bats to detect prey as small as a single mosquito and to avoid obstacles as fine as a strand of wire, all while flying at considerable speed through cluttered environments.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 박쥐가 생물학적 음파 탐지 시스템으로 어둠 속을 탐색한다는 내용입니다. (B)는 박쥐가 고주파 음파를 내보내 물체에 부딪혀 메아리로 되돌아온다는 과정을 설명하고, (A)는 그 메아리가 청각 시스템에 의해 처리되어 위치와 거리 등을 계산한다는 다음 단계를 설명하며, (C)는 그러한 정밀함 덕분에 작은 먹이도 탐지하고 장애물도 피할 수 있다는 결과로 마무리됩니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "auditory",
+        "meaning": "청각의"
+      },
+      {
+        "word": "strand",
+        "meaning": "가닥, 줄"
+      },
+      {
+        "word": "cluttered",
+        "meaning": "어수선한, 뒤죽박죽인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-19-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-19",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Farmers and distributors have long exploited this natural process to speed up the ripening of fruit that was picked before it was fully ripe.",
+    "passage": "Certain fruits, such as apples and bananas, release a plant hormone called ethylene as they ripen. ( ① ) This gas signals nearby cells within the same fruit to accelerate the ripening process, causing starches to convert into sugars and the fruit to soften. ( ② ) Remarkably, ethylene released by one piece of fruit can also diffuse through the surrounding air and trigger ripening in nearby fruits, even ones of a different type. ( ③ ) By placing unripe fruit in a sealed container alongside a ripe banana or apple, they can dramatically shorten the time it takes for the fruit to reach peak ripeness. ( ④ ) This same principle explains why a single spoiled piece of fruit in a bowl can cause the rest to ripen and spoil more quickly than expected. ( ⑤ ) For this reason, some commercial fruit warehouses carefully ventilate their storage rooms to control ethylene levels and extend the shelf life of their produce.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '농부와 유통업자들이 이 자연적인 과정을 이용해 왔다'는 내용으로, 여기서 'this natural process'는 한 과일에서 나온 에틸렌이 주변 과일의 숙성을 촉진한다는 바로 앞 문장의 내용을 가리킵니다. 또한 주어진 문장의 'they'는 뒤이어 나오는 '밀폐 용기에 덜 익은 과일과 잘 익은 과일을 함께 두는' 주체와 자연스럽게 연결되므로, ③에 들어가는 것이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "ethylene",
+        "meaning": "에틸렌"
+      },
+      {
+        "word": "diffuse",
+        "meaning": "확산되다, 퍼지다"
+      },
+      {
+        "word": "ventilate",
+        "meaning": "환기하다"
+      },
+      {
+        "word": "produce",
+        "meaning": "농산물"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-19-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-19",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many people believe that switching rapidly between multiple tasks, such as answering emails while working on a report, allows them to accomplish more in less time. However, cognitive psychologists have found that this belief is largely mistaken. Each time a person shifts attention from one task to another, the brain must disengage from the rules and goals of the first task and reload those of the second, a process that takes a measurable amount of time even when the switch feels instantaneous. Experiments using simple sorting tasks have shown that participants who alternate between two types of problems complete significantly fewer items, and make more errors, than participants who work through one type of problem at a time before moving to the next. The cumulative effect of these small delays, researchers argue, means that people who constantly multitask often take longer overall to finish their work than those who focus on one task until it is complete, despite feeling as though they are being more productive.",
+    "choices": [
+      "frequently switching between tasks tends to slow overall performance rather than improve it",
+      "working on a single task for too long can lead to boredom and reduced focus",
+      "people who multitask report higher levels of stress than those who do not",
+      "modern technology has made it easier for people to manage multiple tasks at once",
+      "the brain requires long periods of rest to recover from mental fatigue"
+    ],
+    "answerIndex": 0,
+    "explanation": "글은 여러 작업을 빠르게 전환하는 것이 실제로는 더 적은 성과와 더 많은 오류로 이어진다는 인지심리학 연구를 소개하며, 잦은 작업 전환이 오히려 전체적인 수행 속도를 늦춘다고 설명합니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "disengage",
+        "meaning": "벗어나다, 손을 떼다"
+      },
+      {
+        "word": "cumulative",
+        "meaning": "누적되는"
+      },
+      {
+        "word": "instantaneous",
+        "meaning": "순간적인, 즉각적인"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-19-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-19",
+    "prompt": "등비수열 {a_n}에서 a_2 = 6, a_5 = 48일 때, a_8의 값은?",
+    "choices": [
+      "192",
+      "288",
+      "384",
+      "448",
+      "512"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_5 / a_2 = r^3 = 48/6 = 8이므로 공비 r = 2입니다. a_2 = a_1 r = 6이므로 a_1 = 3입니다. 따라서 a_8 = a_1 r^7 = 3 × 128 = 384입니다.",
+    "concept": "등비수열의 일반항 a_n = a_1 r^(n-1)을 이용하여 조건으로부터 공비와 첫째항을 먼저 구한다."
+  },
+  {
+    "id": "math-2026-09-19-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-19",
+    "prompt": "함수 f(x) = x^3 - 3x^2 - 9x + 5의 극솟값은?",
+    "choices": [
+      "-22",
+      "-20",
+      "-18",
+      "-16",
+      "-14"
+    ],
+    "answerIndex": 0,
+    "explanation": "f'(x) = 3x^2 - 6x - 9 = 3(x-3)(x+1)이므로 극값 후보는 x = -1, 3입니다. f''(x) = 6x - 6에서 f''(3) = 12 > 0이므로 x = 3에서 극솟값을 가집니다. f(3) = 27 - 27 - 27 + 5 = -22이므로 극솟값은 -22입니다.",
+    "concept": "삼차함수의 극값은 f'(x) = 0의 해를 구한 뒤 f''(x)의 부호로 극대·극소를 판별하여 구한다."
+  },
+  {
+    "id": "math-2026-09-19-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-19",
+    "prompt": "곡선 y = -x^2 + 4x 와 x축으로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "8/3",
+      "16/3",
+      "32/3",
+      "40/3",
+      "64/3"
+    ],
+    "answerIndex": 2,
+    "explanation": "곡선과 x축의 교점은 -x^2 + 4x = 0, 즉 x(4-x) = 0에서 x = 0, 4입니다. 0 < x < 4에서 -x^2+4x ≥ 0이므로 넓이는 ∫[0,4] (-x^2+4x) dx = [-x^3/3 + 2x^2] (0부터 4까지) = (-64/3 + 32) - 0 = 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 넓이는 교점을 구간의 양 끝으로 하여, 그 구간에서 함수를 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-19-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-19",
+    "prompt": "주머니 속에 흰 공 4개와 검은 공 2개가 들어 있다. 이 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 공이 모두 흰 공일 확률은?",
+    "choices": [
+      "1/5",
+      "2/5",
+      "1/3",
+      "3/5",
+      "2/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 공 6개 중 2개를 꺼내는 경우의 수는 C(6,2) = 15입니다. 그중 흰 공 4개에서 2개를 꺼내는 경우의 수는 C(4,2) = 6이므로, 구하는 확률은 6/15 = 2/5입니다.",
+    "concept": "동시에 꺼내는 경우의 확률은 (원하는 조합의 수)/(전체 조합의 수)로 구하며, 조합의 수는 조합 공식 C(n,r)로 계산한다."
+  },
+  {
+    "id": "math-2026-09-19-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-19",
+    "prompt": "함수 f(x) = 2sin(2x - π/3) + 1의 최댓값을 M, 최솟값을 m이라 할 때, M + m의 값은?",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answerIndex": 2,
+    "explanation": "-1 ≤ sin(2x - π/3) ≤ 1이므로 2sin(2x - π/3)은 -2부터 2까지의 값을 가지며, 여기에 1을 더한 f(x)는 -1부터 3까지의 값을 가집니다. 따라서 M = 3, m = -1이므로 M + m = 2입니다.",
+    "concept": "sin 함수의 최댓값과 최솟값은 -1 ≤ sinθ ≤ 1을 이용하여, 진폭(계수)과 평행이동(상수항)을 함께 고려해 구한다."
   }
 ]
