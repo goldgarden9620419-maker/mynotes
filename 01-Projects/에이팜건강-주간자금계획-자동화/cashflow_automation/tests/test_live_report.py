@@ -113,6 +113,12 @@ def _fake_report(base: date) -> dict:
              "반영상태": "정상반영",
              "확인사항": "승인대기 상태(정책상 반영)"},
         ],
+        "apalm_expenses": [
+            {"일자": date(2026, 9, 23), "출처": "팀 지출계획",
+             "팀명": "경영지원팀", "거래처": "㈜에이팜",
+             "지출내용": "외상대 지급", "예상금액": 5000000,
+             "지급방법": "계좌송금"},
+        ],
     }
 
 
@@ -169,6 +175,15 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert exp["Q7"].value == "승인대기 상태(정책상 반영)"
     assert exp["A8"].value is None
     assert exp.freeze_panes == "A6"
+    # 에이팜 지출예정 시트: 취합 시트 바로 다음, 상세 + 합계
+    names = wb.sheetnames
+    assert names.index("에이팜 지출예정") == names.index("지출계획_취합") + 1
+    ap = wb["에이팜 지출예정"]
+    assert ap["A5"].value == "일자"
+    assert _d(ap["A6"].value) == date(2026, 9, 23)
+    assert ap["E6"].value == "㈜에이팜"
+    assert ap["G6"].value == 5000000
+    assert ap["E7"].value == "합계" and ap["G7"].value == 5000000
     wb.close()
 
 

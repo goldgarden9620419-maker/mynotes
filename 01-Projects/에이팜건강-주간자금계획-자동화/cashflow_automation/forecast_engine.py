@@ -18,7 +18,8 @@ from typing import Optional
 
 from common import (
     BANK_REFLECT_OK, PAY_METHOD_AUTO, PAY_METHOD_CARD, PAY_METHOD_TRANSFER,
-    normalize_text, parse_amount, parse_date, weekday_ko, week_monday,
+    REFLECT_OK, normalize_text, parse_amount, parse_date, weekday_ko,
+    week_monday,
 )
 from bank_classifier import CLASS_ONLINE_SALES
 
@@ -464,6 +465,58 @@ def filter_duplicate_adjustments(adjustments: list[dict],
                     break
         (skipped if dup else kept).append(adj)
     return kept, skipped
+
+
+APALM_KEYWORD = "에이팜"
+_OWN_COMPANY = "에이팜건강"
+
+
+def mentions_apalm(*texts) -> bool:
+    """㈜에이팜 관련 항목인지 판별. 자사명(에이팜건강)은 제외한다."""
+    for t in texts:
+        s = str(t or "").replace(" ", "")
+        if APALM_KEYWORD in s.replace(_OWN_COMPANY, ""):
+            return True
+    return False
+
+
+def collect_apalm_expenses(masked_rows: list[dict],
+                           adjustments: list[dict]) -> list[dict]:
+    """에이팜 관련 지출예정을 '에이팜 지출예정' 시트용으로 모은다.
+
+    4주일별계획 비고에서는 뺀 항목들이며, 금액은 자금계획에 그대로
+    반영된다. 팀 지출계획과 정기지출 자동 추정 양쪽에서 수집한다.
+    """
+    out = []
+    for r in masked_rows:
+        if r.get("반영상태") != REFLECT_OK or r.get("confidential"):
+            continue
+        if not mentions_apalm(r.get("거래처"), r.get("지출내용")):
+            continue
+        out.append({"일자": r.get("자금계획 반영일"),
+                    "출처": "팀 지출계획",
+                    "팀명": r.get("팀명") or "",
+                    "거래처": r.get("거래처") or "",
+                    "지출내용": r.get("지출내용") or "",
+                    "예상금액": r.get("예상금액") or 0.0,
+                    "지급방법": r.get("지급방법") or ""})
+    for adj in adjustments:
+        amount = adj.get("조정지출") or 0.0
+        content = adj.get("내용") or ""
+        if amount <= 0 or "자동 초안" not in content:
+            continue
+        if not mentions_apalm(content):
+            continue
+        m = re.search(r":\s*(.+?)\s*신뢰도", content)
+        out.append({"일자": adj.get("일자"),
+                    "출처": "정기지출 추정",
+                    "팀명": "",
+                    "거래처": (m.group(1) if m else content).strip(),
+                    "지출내용": content,
+                    "예상금액": amount,
+                    "지급방법": ""})
+    out.sort(key=lambda r: (r["일자"] or date.max, -r["예상금액"]))
+    return out
 
 
 def build_daily_plan(countable_plans: list[dict], base_date: date,
