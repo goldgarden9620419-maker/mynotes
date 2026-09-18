@@ -111,6 +111,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
 
         # 4) 팀 지출계획 취합·통합 (9~13, 19번 항목)
         team_data = team_loader.load_all_teams(cfg)
+        if team_data.get("consolidated_file"):
+            log.info("팀 지출계획: 통일 취합 파일 사용 (%s)",
+                     team_data["consolidated_file"])
         issues.extend(team_data["issues"])
         plan = team_loader.build_integrated_plan(
             team_data["rows"], card_calc.settlement_date,

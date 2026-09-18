@@ -64,18 +64,32 @@ def bank_files(cfg, bank: str) -> list[Path]:
 
 def validate_inputs(cfg) -> ValidationResult:
     """필수 입력파일 검사. 상세 내용 검사는 로더가 담당한다."""
+    from team_loader import find_consolidated_file
+
     result = ValidationResult()
 
-    for team, path in cfg.team_files():
-        if not path.exists():
-            result.missing_teams.append(team["name"])
-            continue
-        result.input_files.append(path)
-        if path.suffix.lower() == ".xlsx" and not _xlsx_openable(path):
+    # 통일 취합 파일이 있으면 그 파일 하나가 전 팀 입력을 대신한다
+    consolidated = find_consolidated_file(cfg.folder("confidential_admin"))
+    if consolidated is not None:
+        result.input_files.append(consolidated)
+        if not _xlsx_openable(consolidated):
             result.corrupted.append({"구분": "손상된 파일",
-                                     "팀명": team["name"],
-                                     "내용": f"파일을 열 수 없습니다: {path.name}",
-                                     "원본파일": path.name})
+                                     "팀명": "취합",
+                                     "내용": "파일을 열 수 없습니다: "
+                                            f"{consolidated.name}",
+                                     "원본파일": consolidated.name})
+    else:
+        for team, path in cfg.team_files():
+            if not path.exists():
+                result.missing_teams.append(team["name"])
+                continue
+            result.input_files.append(path)
+            if path.suffix.lower() == ".xlsx" and not _xlsx_openable(path):
+                result.corrupted.append({"구분": "손상된 파일",
+                                         "팀명": team["name"],
+                                         "내용": "파일을 열 수 없습니다: "
+                                                f"{path.name}",
+                                         "원본파일": path.name})
 
     for bank in BANKS:
         files = bank_files(cfg, bank)
