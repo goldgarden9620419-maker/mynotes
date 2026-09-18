@@ -94,6 +94,21 @@ def _draft_content(name: str, confidence: str) -> str:
     return f"{_DRAFT_PREFIX}{name} 신뢰도 {confidence or '중'}"
 
 
+def _ensure_draft_dropdown(ws) -> bool:
+    """반영 열(E)에 '반영/제외' 드롭다운을 보장한다. 추가 시 True."""
+    for dv in ws.data_validations.dataValidation:
+        if dv.formula1 and "반영" in str(dv.formula1):
+            return False
+    from openpyxl.worksheet.datavalidation import DataValidation
+    dv = DataValidation(type="list", formula1='"반영,제외"',
+                        allow_blank=True)
+    dv.error = "'반영' 또는 '제외'만 입력할 수 있습니다."
+    dv.showErrorMessage = True
+    ws.add_data_validation(dv)
+    dv.add("E2:E500")
+    return True
+
+
 def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
     from openpyxl import Workbook
     wb = Workbook()
@@ -112,6 +127,7 @@ def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
                    r.get("메모") or ""])
     for col, width in zip("ABCDEF", (12, 26, 14, 8, 8, 24)):
         ws.column_dimensions[col].width = width
+    _ensure_draft_dropdown(ws)
     draft_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(draft_path)
     wb.close()
@@ -215,7 +231,8 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
                 existing.add((name, y, m))
                 added += 1
             y, m = (y + 1, 1) if m == 12 else (y, m + 1)
-    if added or pruned:
+    dv_added = _ensure_draft_dropdown(ws)  # 이관 초기 파일에도 드롭다운 보장
+    if added or pruned or dv_added:
         wb.save(draft_path)
     wb.close()
     return added, pruned
