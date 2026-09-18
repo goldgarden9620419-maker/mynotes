@@ -114,6 +114,96 @@ def weekday_online_averages(history_rows: list[dict], base_date: date,
 # 정기지출 분석 (24번 항목)
 # ---------------------------------------------------------------------------
 
+OVERRIDE_SHEET_NAME = "정기지출분류"
+_NATURE_VALUES = ("정기", "변동", "제외")
+
+
+def load_recurring_overrides(base_workbook: Path) -> dict[str, dict]:
+    """기준파일 '정기지출분류' 시트: 정기지출명 → {분류, 성격}.
+
+    성격은 정기(기본)/변동/제외. 변동·제외는 13주 자동 추정에서 뺀다
+    (예: 외상대 지급처럼 매월 나가지만 금액이 구매량에 따라 변하는 지출).
+    사용자가 이 시트를 수정하면 다음 실행부터 반영된다.
+    """
+    overrides: dict[str, dict] = {}
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(base_workbook, data_only=True, read_only=True)
+    except Exception:
+        return overrides
+    try:
+        if OVERRIDE_SHEET_NAME not in wb.sheetnames:
+            return overrides
+        ws = wb[OVERRIDE_SHEET_NAME]
+        for row in ws.iter_rows(min_row=2, max_col=3, values_only=True):
+            name = normalize_text(row[0] if len(row) > 0 else None)
+            if not name:
+                continue
+            cls = normalize_text(row[1] if len(row) > 1 else None)
+            nature = normalize_text(row[2] if len(row) > 2 else None)
+            if nature and nature not in _NATURE_VALUES:
+                nature = ""
+            overrides[name] = {"분류": cls, "성격": nature or "정기"}
+        return overrides
+    finally:
+        wb.close()
+
+
+def apply_recurring_overrides(recurring_items: list[dict],
+                              overrides: dict[str, dict]) -> None:
+    """정기지출 목록에 사용자 분류·성격을 적용한다 (제자리 수정)."""
+    for item in recurring_items:
+        ov = overrides.get(item.get("정기지출명", ""))
+        if ov:
+            if ov.get("분류"):
+                item["분류"] = ov["분류"]
+            item["성격"] = ov.get("성격") or "정기"
+        elif "외상" in (item.get("분류") or ""):
+            item["성격"] = "변동"  # 외상대 지급은 기본적으로 변동 취급
+        else:
+            item.setdefault("성격", "정기")
+
+
+def ensure_recurring_override_sheet(base_workbook: Path,
+                                    recurring_items: list[dict]) -> int:
+    """기준파일에 '정기지출분류' 시트를 만들고 새 항목을 추가한다.
+
+    기존 행(사용자 수정 포함)은 건드리지 않는다. 추가된 행 수를 돌려준다.
+    """
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(base_workbook)
+    except Exception:
+        return 0
+    try:
+        if OVERRIDE_SHEET_NAME in wb.sheetnames:
+            ws = wb[OVERRIDE_SHEET_NAME]
+        else:
+            ws = wb.create_sheet(OVERRIDE_SHEET_NAME)
+            ws.append(["정기지출명", "분류", "성격"])
+            ws.append(["(안내) 성격: 정기=매월 자동 추정 반영 / "
+                       "변동=외상대 등 금액 변동(추정 제외) / 제외",
+                       "", ""])
+        existing = {normalize_text(row[0])
+                    for row in ws.iter_rows(min_row=2, max_col=1,
+                                            values_only=True)
+                    if row and row[0]}
+        added = 0
+        for item in recurring_items:
+            name = item.get("정기지출명", "")
+            if not name or name in existing:
+                continue
+            ws.append([name, item.get("분류") or "",
+                       item.get("성격") or "정기"])
+            existing.add(name)
+            added += 1
+        if added:
+            wb.save(base_workbook)
+        return added
+    finally:
+        wb.close()
+
+
 def _recurring_name_key(row: dict) -> str:
     text = normalize_text(row.get("기재내용·상대방")) \
         or normalize_text(row.get("적요"))
@@ -201,12 +291,90 @@ def _plan_amounts_by_date(plans: list[dict]) -> dict[date, dict[str, float]]:
     return result
 
 
+def actual_daily_flows(history_rows: list[dict],
+                       base_date: date) -> tuple[dict, Optional[date]]:
+    """기준일 이후 실제 외부 입출금을 일자별로 집계한다.
+
+    반환: ({일자: {"온라인입금","기타입금","출금"}}, 마지막 실적일)
+    내부이체는 총잔액에 영향이 없으므로 제외한다.
+    """
+    flows: dict[date, dict[str, float]] = {}
+    last: Optional[date] = None
+    for r in history_rows:
+        d = r.get("거래일")
+        if d is None or d < base_date or r.get("내부이체"):
+            continue
+        f = flows.setdefault(d, {"온라인입금": 0.0, "기타입금": 0.0,
+                                 "출금": 0.0})
+        amount_in = r.get("입금액") or 0.0
+        amount_out = r.get("출금액") or 0.0
+        if amount_in:
+            key = ("온라인입금" if r.get("자동분류") == CLASS_ONLINE_SALES
+                   else "기타입금")
+            f[key] += amount_in
+        if amount_out:
+            f["출금"] += amount_out
+        if last is None or d > last:
+            last = d
+    return flows, last
+
+
+def filter_duplicate_adjustments(adjustments: list[dict],
+                                 countable_plans: list[dict],
+                                 window_days: int = 5,
+                                 tolerance: float = 0.25,
+                                 name_threshold: int = 60
+                                 ) -> tuple[list[dict], list[dict]]:
+    """팀 지출계획과 겹치는 '자동 초안' 추정 조정을 제외한다.
+
+    같은 지출이 정기지출 추정(주간조정)과 팀 제출 계획 양쪽에서
+    이중 반영되는 것을 막는다. 금액만 비슷한 우연 일치를 배제하기 위해
+    이름 유사도(거래처·지출내용)가 임계값 이상일 때만 중복으로 본다.
+    사용자가 직접 넣은 조정(내용에 '자동 초안'이 없는 행)은 건드리지 않는다.
+    반환: (남긴 조정, 제외한 조정)
+    """
+    from rapidfuzz import fuzz
+
+    kept, skipped = [], []
+    plans = []
+    for p in countable_plans:
+        d = p.get("자금계획 반영일")
+        amt = p.get("예상금액") or 0.0
+        if d is None or amt <= 0:
+            continue
+        name = " ".join(str(p.get(k) or "") for k in ("거래처", "지출내용"))
+        plans.append((d, amt, name.lower()))
+    for adj in adjustments:
+        amount = adj.get("조정지출") or 0.0
+        content = adj.get("내용") or ""
+        dup = False
+        if "자동 초안" in content and amount > 0:
+            m = re.search(r":\s*(.+?)\s*신뢰도", content)
+            adj_name = (m.group(1) if m else content).lower()
+            for d, plan_amt, plan_name in plans:
+                if abs((d - adj["일자"]).days) > window_days:
+                    continue
+                if abs(plan_amt - amount) > max(plan_amt, amount) * tolerance:
+                    continue
+                if fuzz.partial_ratio(adj_name, plan_name) >= name_threshold:
+                    dup = True
+                    break
+        (skipped if dup else kept).append(adj)
+    return kept, skipped
+
+
 def build_daily_plan(countable_plans: list[dict], base_date: date,
                      opening_balance: float, weekday_avg: dict[int, float],
                      rate: float, adjustments: list[dict],
                      minimum_balance: float = 0,
-                     days: int = 28) -> list[dict]:
-    """4주(28일) 일별 자금계획."""
+                     days: int = 28,
+                     actual_flows: Optional[dict] = None,
+                     actual_until: Optional[date] = None) -> list[dict]:
+    """4주(28일) 일별 자금계획.
+
+    actual_until까지의 날짜는 예측 대신 실제 입출금(실적)으로 채운다.
+    opening_balance는 base_date 시작 시점 잔액이어야 한다.
+    """
     by_date = _plan_amounts_by_date(countable_plans)
     adj_by_date: dict[date, dict] = defaultdict(
         lambda: {"입금": 0.0, "지출": 0.0, "내용": []})
@@ -221,11 +389,24 @@ def build_daily_plan(countable_plans: list[dict], base_date: date,
     balance = opening_balance
     for i in range(days):
         d = base_date + timedelta(days=i)
-        online = weekday_avg.get(d.weekday(), 0.0) * rate
-        adj = adj_by_date.get(d, {"입금": 0.0, "지출": 0.0, "내용": []})
-        planned = by_date.get(d, {"송금": 0.0, "카드": 0.0, "자동이체": 0.0})
-        etc_out = adj["지출"]
-        inflow = online + adj["입금"]
+        is_actual = (actual_until is not None and d <= actual_until)
+        if is_actual:
+            f = (actual_flows or {}).get(
+                d, {"온라인입금": 0.0, "기타입금": 0.0, "출금": 0.0})
+            online = f["온라인입금"]
+            adj_in = f["기타입금"]
+            planned = {"송금": 0.0, "카드": 0.0, "자동이체": 0.0}
+            etc_out = f["출금"]
+            note = "실적(실제 입출금 반영)"
+        else:
+            online = weekday_avg.get(d.weekday(), 0.0) * rate
+            adj = adj_by_date.get(d, {"입금": 0.0, "지출": 0.0, "내용": []})
+            adj_in = adj["입금"]
+            planned = by_date.get(d, {"송금": 0.0, "카드": 0.0,
+                                      "자동이체": 0.0})
+            etc_out = adj["지출"]
+            note = "; ".join(adj["내용"])
+        inflow = online + adj_in
         outflow = planned["송금"] + planned["카드"] + planned["자동이체"] + etc_out
         net = inflow - outflow
         opening = balance
@@ -239,7 +420,7 @@ def build_daily_plan(countable_plans: list[dict], base_date: date,
         rows.append({
             "일자": d, "요일": weekday_ko(d),
             "온라인 예상입금": online,
-            "확정·기타입금": adj["입금"],
+            "확정·기타입금": adj_in,
             "팀별 송금예정": planned["송금"],
             "카드결제": planned["카드"],
             "자동이체": planned["자동이체"],
@@ -248,7 +429,8 @@ def build_daily_plan(countable_plans: list[dict], base_date: date,
             "기초잔액": opening,
             "기말잔액": balance,
             "상태": state,
-            "비고": "; ".join(adj["내용"]),
+            "비고": note,
+            "실적": is_actual,
         })
     return rows
 
@@ -357,15 +539,26 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                    rates: list[float], default_rate: float,
                    minimum_balance: float = 0,
                    history_weeks: int = 12) -> dict:
-    """전체 예측 결과와 반영률별 시나리오를 만든다."""
+    """전체 예측 결과와 반영률별 시나리오를 만든다.
+
+    opening_balance는 '현재(최신 거래내역 기준) 총잔액'이다.
+    기준일~마지막 실적일 구간은 실제 입출금으로 채우므로,
+    일별 계획의 시작잔액은 실적 순증감을 되돌린 기준일 시작잔액을 쓴다.
+    """
     weekday_avg = weekday_online_averages(history_rows, base_date,
                                           history_weeks)
+    actual_flows, actual_until = actual_daily_flows(history_rows, base_date)
+    net_actual = sum(f["온라인입금"] + f["기타입금"] - f["출금"]
+                     for f in actual_flows.values())
+    start_balance = opening_balance - net_actual
     scenarios = {}
     main = None
     for rate in sorted(set(list(rates) + [default_rate])):
-        daily = build_daily_plan(countable_plans, base_date, opening_balance,
+        daily = build_daily_plan(countable_plans, base_date, start_balance,
                                  weekday_avg, rate, adjustments,
-                                 minimum_balance)
+                                 minimum_balance,
+                                 actual_flows=actual_flows,
+                                 actual_until=actual_until)
         weekly = build_weekly_plan(countable_plans, base_date, daily,
                                    weekday_avg, rate, recurring_items,
                                    adjustments, minimum_balance)
@@ -396,6 +589,8 @@ def build_forecast(countable_plans: list[dict], base_date: date,
         "scenario": main["scenario"] if main else {},
         "rate_scenarios": scenarios,
         "opening_balance": opening_balance,
+        "start_balance": start_balance,
+        "actual_until": actual_until,
         "minimum_balance": minimum_balance,
     }
 
