@@ -105,13 +105,18 @@ def verify_live_workbook(path: Path, base_date: date) -> bool:
         return False
     try:
         daily = wb["4주일별계획"]
-        c6 = str(daily["C6"].value or "")
+        # 실적으로 채워진 지난 날짜는 값이므로, 미래 행 중 하나라도
+        # 반영률 수식(INDEX×$B$13)이 살아 있으면 수식 보존으로 본다
+        formula_ok = any(
+            "INDEX" in str(daily.cell(row=r, column=3).value or "")
+            and "$B$13" in str(daily.cell(row=r, column=3).value or "")
+            for r in range(6, 34))
         a6 = daily["A6"].value
         a6_date = a6.date() if isinstance(a6, datetime) else a6
         weekly = wb["13주주별계획"]
         c6w = str(weekly["C6"].value or "")
         summary = wb["요약"]
-        return ("INDEX" in c6 and "$B$13" in c6
+        return (formula_ok
                 and a6_date == base_date
                 and f"DATE({base_date.year},{base_date.month},{base_date.day})"
                 in c6w
@@ -171,6 +176,13 @@ def _fill_daily(ws, forecast: dict, base_date: date) -> None:
         if str(ws.cell(row=5, column=c).value or "").strip() == "비고":
             note_col = c
             break
+    # 실적 구간이 있으면 시작잔액을 '기준일 시작' 잔액 값으로 고정한다
+    # (현재잔액에는 이미 이번 주 실적이 반영돼 있어 이중계산 방지)
+    if forecast.get("actual_until") is not None \
+            and forecast.get("start_balance") is not None:
+        i6 = _set(ws, 6, 9, round(forecast["start_balance"]))
+        if i6 is not None:
+            i6.number_format = "#,##0"
     for i in range(28):
         row = 6 + i
         d = base_date + timedelta(days=i)
@@ -186,6 +198,11 @@ def _fill_daily(ws, forecast: dict, base_date: date) -> None:
                     src.get("팀별 송금예정") or None,
                     src.get("카드결제") or None,
                     etc or None]
+        # 지난 날짜(실적)는 온라인입금도 실제 값으로 고정한다
+        if src and src.get("실적"):
+            c3 = _set(ws, row, 3, round(src.get("온라인 예상입금") or 0))
+            if c3 is not None:
+                c3.number_format = "#,##0"
         for c, v in zip((4, 5, 6, 7), vals):
             _set(ws, row, c, round(v) if v else None)
         # 그날 반영된 지출 내역 요약 (없으면 이전 실행 잔여값 정리)
@@ -279,8 +296,9 @@ def _fill_expense(wb, rows: list[dict]) -> None:
 
 
 def _fill_recurring(ws, recurring: list[dict]) -> None:
+    _set(ws, 5, 11, "성격")  # 기준파일 '정기지출분류' 시트에서 수정 가능
     for i in range(6, max(len(recurring) + 20, 90)):
-        for c in range(1, 11):
+        for c in range(1, 12):
             _set(ws, i, c, None)
     for i, it in enumerate(recurring, start=6):
         values = [it.get("은행"), it.get("정기지출명"),
@@ -290,7 +308,8 @@ def _fill_recurring(ws, recurring: list[dict]) -> None:
                   round(it.get("최소 월지출") or 0),
                   round(it.get("최대 월지출") or 0),
                   f"매월 {it.get('대표 지급일')}일 전후",
-                  _CONF_LABEL.get(it.get("신뢰도"), it.get("신뢰도"))]
+                  _CONF_LABEL.get(it.get("신뢰도"), it.get("신뢰도")),
+                  it.get("성격") or "정기"]
         for c, v in enumerate(values, start=1):
             cell = _set(ws, i, c, v)
             if cell is not None and c in (6, 7, 8):

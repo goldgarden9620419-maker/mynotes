@@ -150,6 +150,17 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             merged_history, base_date,
             cfg.get("recurring", "lookback_months", default=6),
             cfg.get("recurring", "min_months", default=4))
+        # 기준파일 '정기지출분류' 시트의 사용자 분류·성격을 반영한다
+        # (성격 변동·제외는 13주 자동 추정에서 뺀다; 예: 외상대 지급)
+        overrides = forecast_engine.load_recurring_overrides(
+            cfg.base_workbook_path())
+        forecast_engine.apply_recurring_overrides(recurring, overrides)
+        added = forecast_engine.ensure_recurring_override_sheet(
+            cfg.base_workbook_path(), recurring)
+        if added:
+            log.info("정기지출분류 시트에 새 항목 %d개 추가 (기준파일)", added)
+        recurring_projectable = [i for i in recurring
+                                 if i.get("성격", "정기") == "정기"]
 
         # 7) 잔액과 예정·실제 대조 (20번 항목)
         balances, total_balance = bank_loader.summarize_balances(kept)
@@ -176,11 +187,21 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                            "원본파일": row.get("비고", "")})
 
         # 8) 4주·13주 자금계획 (21~23번 항목)
+        # 팀 지출계획과 겹치는 '자동 초안' 추정은 이중 반영 방지를 위해 제외
+        adjustments, dup_adjust = forecast_engine.filter_duplicate_adjustments(
+            adjustments, plan["countable"])
+        for adj in dup_adjust:
+            issues.append({
+                "구분": "추정 중복 제외",
+                "내용": f"{adj['일자']} {adj.get('내용', '')} "
+                       f"{(adj.get('조정지출') or 0):,.0f}원 — "
+                       "팀 지출계획에 같은 건이 있어 자동 추정에서 제외",
+                "원본파일": "기준파일 주간조정"})
         rates = cfg.get("forecast", "receipt_rates",
                         default=[0.6, 0.7, 0.8, 0.9, 1.0])
         forecast = forecast_engine.build_forecast(
             plan["countable"], base_date, total_balance, merged_history,
-            adjustments, recurring, rates,
+            adjustments, recurring_projectable, rates,
             cfg.get("forecast", "default_receipt_rate", default=0.8),
             cfg.get("forecast", "minimum_cash_balance", default=0),
             cfg.get("forecast", "online_history_weeks", default=12))
@@ -369,6 +390,8 @@ def _annotate_daily_notes(daily_rows: list[dict], masked_rows: list[dict],
             label = f"{subject} {amount:,.0f}"
         by_date.setdefault(d, []).append(label)
     for row in daily_rows:
+        if row.get("실적"):
+            continue  # 지난 날짜는 실제 입출금 실적 표시를 유지한다
         labels = by_date.get(row.get("일자")) or []
         text = ", ".join(labels[:max_items])
         if len(labels) > max_items:
