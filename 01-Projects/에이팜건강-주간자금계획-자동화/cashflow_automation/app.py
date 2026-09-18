@@ -32,6 +32,7 @@ import excel_report
 import file_validator
 import forecast_engine
 import live_report
+import management_report
 import payment_matcher
 import pdf_report
 import team_loader
@@ -285,6 +286,37 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         apalm_expenses = forecast_engine.collect_apalm_expenses(
             integrated_masked, adjustments, apalm_marked)
         _annotate_daily_notes(forecast["daily"], integrated_masked)
+        # 경영보고용: 이번 주(월~일) 지출 예정 목록 (대외비는 분류·총액)
+        # 이미 실적으로 확정된 지난 날짜는 제외하고 남은 예정만 담는다
+        week_end = base_date + timedelta(days=6)
+        week_start = base_date
+        actual_until = forecast.get("actual_until")
+        if actual_until is not None and actual_until >= week_start:
+            week_start = actual_until + timedelta(days=1)
+        week_expenses = []
+        for r0 in integrated_masked:
+            if r0.get("반영상태") != REFLECT_OK:
+                continue
+            d = r0.get("자금계획 반영일")
+            if isinstance(d, datetime):
+                d = d.date()
+            if d is None or not (week_start <= d <= week_end):
+                continue
+            subject = " ".join(x for x in (r0.get("거래처"),
+                                           r0.get("지출내용")) if x)
+            week_expenses.append({"일자": d, "구분": r0.get("팀명") or "",
+                                  "내용": subject,
+                                  "금액": r0.get("예상금액") or 0,
+                                  "지급방법": r0.get("지급방법") or ""})
+        for adj in adjustments:
+            amt = adj.get("조정지출") or 0
+            d = adj.get("일자")
+            if amt <= 0 or d is None or not (week_start <= d <= week_end):
+                continue
+            week_expenses.append({"일자": d, "구분": "자동추정",
+                                  "내용": adj.get("내용") or "",
+                                  "금액": amt, "지급방법": ""})
+        week_expenses.sort(key=lambda x: (x["일자"], -x["금액"]))
         report = {
             "meta": {
                 "company": cfg.get("company_name", default="(주)에이팜건강"),
@@ -298,6 +330,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             "integrated_masked": integrated_masked,
             "account_scenario": account_scenario,
             "apalm_expenses": apalm_expenses,
+            "week_expenses": week_expenses,
+            "stability_target": cfg.get("forecast", "minimum_cash_balance",
+                                        default=0),
             "match_results": matched["results"],
             "unplanned": matched["unplanned"],
             "recurring": recurring,
@@ -323,12 +358,21 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
 
         workspace = backup_manager.TempWorkspace(cfg)
         outputs = []
-        if cfg.get("options", "create_excel", default=True):
+        if cfg.get("options", "create_excel", default=False):
             excel_report.create_report_workbook(
                 report, workspace.path(excel_name))
             if not excel_report.verify_workbook(workspace.path(excel_name)):
                 raise RuntimeError("결과 Excel 재열기 검증 실패")
             outputs.append(excel_name)
+        # 대화형 경영보고 (고정서식 주간자금계획 파일을 대신함)
+        if cfg.get("options", "create_management_report", default=True):
+            mgmt_name = f"주간자금계획_경영보고_{stamp}.xlsx"
+            management_report.create_management_workbook(
+                report, workspace.path(mgmt_name))
+            if not management_report.verify_management_workbook(
+                    workspace.path(mgmt_name)):
+                raise RuntimeError("경영보고 파일 재열기 검증 실패")
+            outputs.append(mgmt_name)
         excel_report.create_issue_workbook(issues, workspace.path(issue_name))
         if not excel_report.verify_workbook(workspace.path(issue_name),
                                             ["확인필요"]):

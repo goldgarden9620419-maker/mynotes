@@ -9,7 +9,8 @@ import app as app_module
 from common import (
     STATUS_SUCCESS, STATUS_WAITING_FILES, now_local, week_monday,
 )
-from excel_report import EXPECTED_SHEETS, verify_workbook
+from excel_report import verify_workbook
+from management_report import verify_management_workbook
 from state_manager import StateManager
 from tests.conftest import make_full_inputs, nh_tx, write_bank_csv
 
@@ -35,8 +36,8 @@ def test_전체_파이프라인_성공(env):
     reviews = list(out_dir.glob("확인필요_*.xlsx"))
     assert len(excels) == 1 and len(pdfs) == 1 and len(reviews) == 1
 
-    # 결과파일 재열기 검증 (31번 항목)
-    assert verify_workbook(excels[0], EXPECTED_SHEETS)
+    # 결과파일 재열기 검증 (31번 항목) — 경영보고(대화형)가 기본 결과물
+    assert verify_management_workbook(excels[0])
 
     # 상태 저장 확인 (5번 항목)
     assert state.state["last_run_status"] == STATUS_SUCCESS
@@ -44,11 +45,11 @@ def test_전체_파이프라인_성공(env):
     assert state.state["last_output_file"].startswith("주간자금계획_")
     assert state.state["input_signature"]
 
-    # 대외비 상세는 통합 시트에 노출되지 않는다 (15번 항목)
+    # 대외비 상세는 경영보고에 노출되지 않는다 (15번 항목)
     wb = load_workbook(excels[0], read_only=True)
     try:
         texts = []
-        for row in wb["팀지출계획_통합"].iter_rows(values_only=True):
+        for row in wb["주간보고"].iter_rows(values_only=True):
             texts.extend(str(v) for v in row if v is not None)
         joined = " ".join(texts)
         assert "가상급여처리" not in joined
@@ -74,11 +75,12 @@ def test_같은_주차_중복_실행_방지(env):
     # — 최신본만 05_결과에 남고, 이전 파일은 지난자료로 보존된다
     forced = _run(cfg, state, force=True)
     assert forced.status == STATUS_SUCCESS
-    excels = sorted(cfg.folder("output").glob("주간자금계획_2026*.xlsx"))
+    excels = sorted(cfg.folder("output")
+                    .glob("주간자금계획_경영보고_*.xlsx"))
     assert len(excels) == 1
     assert excels[0].stem.endswith("_2")  # 새 실행분 (이름 충돌 회피)
     archived = sorted((cfg.folder("archive") / "지난결과")
-                      .glob("주간자금계획_2026*.xlsx"))
+                      .glob("주간자금계획_경영보고_*.xlsx"))
     assert len(archived) == 1 and not archived[0].stem.endswith("_2")
 
 
