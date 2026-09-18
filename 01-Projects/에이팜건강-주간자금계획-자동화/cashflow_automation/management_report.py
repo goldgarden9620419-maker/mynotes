@@ -221,6 +221,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, _EXP_TOTAL, 4, "합계", bold=True, align="center")
     _put(ws, _EXP_TOTAL, 5, f"=SUM(E{_EXP_FIRST}:E{_EXP_LAST})",
          bold=True, fmt="#,##0")
+    # 머리글에 자동 필터 — 지급일·구분별로 골라 볼 수 있다
+    ws.auto_filter.ref = f"A{_EXP_COLS}:F{_EXP_LAST}"
 
     # ④ 안정을 위한 필요 추가 입금 (향후 4주) ------------------------------
     _section(ws, _TARGET_HEAD, "④ 안정을 위한 필요 추가 입금 (향후 4주)")
