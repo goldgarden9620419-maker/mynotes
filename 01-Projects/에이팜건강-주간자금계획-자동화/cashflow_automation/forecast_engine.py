@@ -97,6 +97,69 @@ def _draft_content(name: str, confidence: str) -> str:
     return f"{_DRAFT_PREFIX}{name} 신뢰도 {confidence or '중'}"
 
 
+def _style_draft_sheet(ws) -> None:
+    """자동추정 시트를 보기 좋은 표로 꾸민다 (매 실행 재적용).
+
+    남색 머리글, 얇은 테두리, 일자·금액 서식, 머리글 필터, 틀 고정,
+    그리고 반영 열이 '제외'인 행은 회색 처리(조건부서식이라 드롭다운을
+    바꾸면 즉시 색이 바뀐다).
+    """
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+    from openpyxl.formatting.rule import FormulaRule
+
+    thin = Border(*(Side(style="thin", color="BBBBBB"),) * 4)
+    for c in range(1, len(_DRAFT_HEADERS) + 1):
+        cell = ws.cell(row=1, column=c)
+        cell.fill = PatternFill("solid", start_color="1F4E79")
+        cell.font = Font(name="맑은 고딕", bold=True, color="FFFFFF",
+                         size=10)
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+        cell.border = thin
+    last = max(ws.max_row, 2)
+    for r in range(2, last + 1):
+        if ws.cell(row=r, column=2).value is None \
+                and ws.cell(row=r, column=1).value is None:
+            continue
+        for c in range(1, len(_DRAFT_HEADERS) + 1):
+            cell = ws.cell(row=r, column=c)
+            cell.border = thin
+            cell.font = Font(name="맑은 고딕", size=10)
+            if c == 1:
+                cell.number_format = "yyyy-mm-dd"
+            elif c == 3:
+                cell.number_format = "#,##0"
+            if c in (4, 5):
+                cell.alignment = Alignment(horizontal="center")
+    ws.auto_filter.ref = f"A1:F{last}"
+    ws.freeze_panes = "A2"
+    has_gray = any(
+        r.formula and "제외" in str(r.formula[0])
+        for rules in ws.conditional_formatting for r in rules.rules)
+    if not has_gray:
+        ws.conditional_formatting.add(
+            "A2:F500",
+            FormulaRule(formula=['$E2="제외"'],
+                        fill=PatternFill("solid", start_color="E0E0E0")))
+
+
+def _sort_draft_rows(ws) -> None:
+    """데이터 행을 일자순(같은 날은 금액 큰 순)으로 다시 쓴다."""
+    rows = []
+    for r in range(2, ws.max_row + 1):
+        values = [ws.cell(row=r, column=c).value
+                  for c in range(1, len(_DRAFT_HEADERS) + 1)]
+        if any(v is not None and str(v).strip() != "" for v in values):
+            rows.append(values)
+    rows.sort(key=lambda v: (parse_date(v[0]) or date.max,
+                             -(parse_amount(v[2]) or 0)))
+    for i, values in enumerate(rows, start=2):
+        for c, v in enumerate(values, start=1):
+            ws.cell(row=i, column=c, value=v)
+    for r in range(len(rows) + 2, ws.max_row + 1):
+        for c in range(1, len(_DRAFT_HEADERS) + 1):
+            ws.cell(row=r, column=c, value=None)
+
+
 def _ensure_draft_dropdown(ws) -> bool:
     """반영 열(E)에 '반영/제외' 드롭다운을 보장한다. 추가 시 True."""
     for dv in ws.data_validations.dataValidation:
@@ -258,10 +321,11 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
                 existing.add((name, y, m))
                 added += 1
             y, m = (y + 1, 1) if m == 12 else (y, m + 1)
-    dv_added = _ensure_draft_dropdown(ws)  # 이관 초기 파일에도 드롭다운 보장
-    alias_added = _ensure_alias_sheet(wb)
-    if added or pruned or dv_added or alias_added:
-        wb.save(draft_path)
+    _ensure_draft_dropdown(ws)  # 이관 초기 파일에도 드롭다운 보장
+    _ensure_alias_sheet(wb)
+    _sort_draft_rows(ws)        # 일자순 정렬로 보기 좋게
+    _style_draft_sheet(ws)      # 표 서식 재적용
+    wb.save(draft_path)
     wb.close()
     return added, pruned
 
