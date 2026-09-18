@@ -269,18 +269,32 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             outputs.append(pdf_name)
 
         # 라이브 양식(수식 유지, 반영률 즉시 재계산) — 템플릿이 있을 때만
-        live_template = cfg.folder("base_workbook") / cfg.get(
-            "options", "live_template_name",
-            default=live_report.LIVE_TEMPLATE_NAME)
-        if cfg.get("options", "create_live_workbook", default=True) \
-                and live_template.exists():
-            live_name = f"주간자금계획_라이브_{stamp}.xlsx"
-            live_report.fill_live_workbook(live_template, report,
-                                           workspace.path(live_name))
-            if not live_report.verify_live_workbook(
-                    workspace.path(live_name), base_date):
-                raise RuntimeError("라이브 자금계획 수식·날짜 검증 실패")
-            outputs.append(live_name)
+        template_name = cfg.get("options", "live_template_name",
+                                default=live_report.LIVE_TEMPLATE_NAME)
+        live_template = cfg.folder("base_workbook") / template_name
+        if not live_template.exists():
+            # 확장자 숨김 상태에서 이름을 바꿔 '….xlsx.xlsx'가 된 경우 등
+            # 이름이 같은 접두어로 시작하는 xlsx를 관대하게 찾는다
+            stem = template_name.rsplit(".xlsx", 1)[0]
+            candidates = sorted(
+                cfg.folder("base_workbook").glob(f"{stem}*.xlsx"),
+                key=lambda p: p.stat().st_mtime, reverse=True)
+            if candidates:
+                live_template = candidates[0]
+                log.info("라이브 템플릿을 유사한 이름으로 찾음: %s",
+                         live_template.name)
+        if cfg.get("options", "create_live_workbook", default=True):
+            if live_template.exists():
+                live_name = f"주간자금계획_라이브_{stamp}.xlsx"
+                live_report.fill_live_workbook(live_template, report,
+                                               workspace.path(live_name))
+                if not live_report.verify_live_workbook(
+                        workspace.path(live_name), base_date):
+                    raise RuntimeError("라이브 자금계획 수식·날짜 검증 실패")
+                outputs.append(live_name)
+            else:
+                log.warning("라이브 템플릿이 없어 라이브 파일을 건너뜁니다. "
+                            "여기에 넣어주세요: %s", live_template)
 
         moved = workspace.commit(outputs, unique_path)
         review_copy = None
