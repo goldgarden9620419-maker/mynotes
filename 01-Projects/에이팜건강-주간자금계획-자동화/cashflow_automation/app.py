@@ -161,15 +161,22 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("recurring", "lookback_months", default=6),
             cfg.get("recurring", "min_months", default=4))
         # 직전 라이브 결과물에서 사용자의 분류·성격 수정을 수확해 저장한다
+        # 단, 기준파일이 결과물보다 최신이면(프로그램 업데이트 pull 직후 등)
+        # 낡은 결과물의 값으로 기준파일을 되돌리지 않도록 수확을 생략한다
         prev_lives = sorted(
             cfg.folder("output").glob("주간자금계획_라이브_*.xlsx"))
-        if prev_lives:
+        base_wb_path = cfg.base_workbook_path()
+        if prev_lives and (not base_wb_path.exists()
+                           or prev_lives[-1].stat().st_mtime
+                           >= base_wb_path.stat().st_mtime):
             harvested = forecast_engine.harvest_recurring_edits(prev_lives[-1])
             applied = forecast_engine.update_override_sheet(
-                cfg.base_workbook_path(), harvested)
+                base_wb_path, harvested)
             if applied:
                 log.info("정기지출분석 사용자 수정 %d건을 정기지출분류에 반영",
                          applied)
+        elif prev_lives:
+            log.info("기준파일이 결과물보다 최신이라 정기지출분석 수확 생략")
         # 기준파일 '정기지출분류' 시트의 사용자 분류·성격을 반영한다
         # (성격 변동·제외는 13주 자동 추정에서 뺀다; 예: 외상대 지급)
         overrides = forecast_engine.load_recurring_overrides(
@@ -181,6 +188,16 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             log.info("정기지출분류 시트에 새 항목 %d개 추가 (기준파일)", added)
         recurring_projectable = [i for i in recurring
                                  if i.get("성격", "정기") == "정기"]
+        # 성격 변동·제외 항목의 '자동 초안' 지출 추정은 쓰지 않는다
+        # (예: 외상매입금 — 팀 지출예정 파일 금액으로만 반영)
+        adjustments, var_dropped = \
+            forecast_engine.filter_adjustments_by_overrides(
+                adjustments, overrides)
+        if var_dropped:
+            log.info("성격 변동·제외 정기지출의 자동 초안 %d건 제외 (%s)",
+                     len(var_dropped),
+                     ", ".join((a.get("내용") or "")[:30]
+                               for a in var_dropped[:3]))
 
         # 7) 잔액과 예정·실제 대조 (20번 항목)
         balances, total_balance = bank_loader.summarize_balances(kept)

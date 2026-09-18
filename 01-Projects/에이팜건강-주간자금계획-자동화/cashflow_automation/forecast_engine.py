@@ -467,6 +467,31 @@ def filter_duplicate_adjustments(adjustments: list[dict],
     return kept, skipped
 
 
+def filter_adjustments_by_overrides(adjustments: list[dict],
+                                    overrides: dict[str, dict]
+                                    ) -> tuple[list[dict], list[dict]]:
+    """성격이 변동·제외인 정기지출의 '자동 초안' 지출 조정을 걸러낸다.
+
+    금액이 매번 달라지는 항목(예: 외상매입금)은 팀 지출예정 파일에
+    입력된 금액으로만 반영하고, 과거 평균 기반 추정은 쓰지 않는다.
+    성격을 '정기'로 되돌리면 추정이 다시 반영된다.
+    반환: (남긴 조정, 제외한 조정)
+    """
+    excluded_names = {normalize_text(name) for name, ov in overrides.items()
+                      if ov.get("성격") in ("변동", "제외")}
+    if not excluded_names:
+        return adjustments, []
+    kept, dropped = [], []
+    for adj in adjustments:
+        content = adj.get("내용") or ""
+        name = ""
+        if "자동 초안" in content and (adj.get("조정지출") or 0) > 0:
+            m = re.search(r":\s*(.+?)\s*신뢰도", content)
+            name = normalize_text(m.group(1) if m else "")
+        (dropped if name and name in excluded_names else kept).append(adj)
+    return kept, dropped
+
+
 APALM_KEYWORD = "에이팜"
 _OWN_COMPANY = "에이팜건강"
 APALM_EXCLUDED_STATUS = "에이팜 별도관리"
