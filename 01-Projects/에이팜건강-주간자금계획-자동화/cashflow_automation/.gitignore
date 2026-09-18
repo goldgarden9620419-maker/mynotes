@@ -1,7 +1,8 @@
+# 로컬 실행 환경은 동기화하지 않는다 (수천 개 파일, 용량 큼)
+.venv/
 __pycache__/
 *.pyc
-.pytest_cache/
+install.ok
 build/
 dist/
 *.spec
-venv/
