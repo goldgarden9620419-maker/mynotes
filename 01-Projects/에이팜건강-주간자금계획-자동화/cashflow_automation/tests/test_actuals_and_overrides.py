@@ -253,6 +253,24 @@ def test_비고에서_에이팜_제외():
     assert "OO인쇄" in note and "SKB" in note
 
 
+def test_요일평균은_최근주에_가중치():
+    """새로 올린 주의 실적이 예상 입금액에 더 크게 반영된다."""
+    base = date(2026, 9, 21)  # 월요일
+    history = [
+        # 1주 전 월요일: 2백만 / 4주 전 월요일: 1백만
+        _tx(date(2026, 9, 14), in_amt=2_000_000, cls="온라인매출입금"),
+        _tx(date(2026, 8, 24), in_amt=1_000_000, cls="온라인매출입금"),
+    ]
+    plain = fe.weekday_online_averages(history, base, 12, recency_halflife=0)
+    weighted = fe.weekday_online_averages(history, base, 12)
+    # 단순 평균: 3백만 / 월요일 4회 = 75만
+    assert round(plain[0]) == 750_000
+    # 가중 평균은 최근 주(2백만) 쪽으로 끌려 올라간다
+    assert weighted[0] > plain[0]
+    # 다른 요일은 실적이 없으므로 0
+    assert weighted[1] == 0.0
+
+
 def test_성격_변동이면_자동초안_추정_제외():
     """외상매입금처럼 금액이 변하는 항목은 자동 초안 추정을 쓰지 않는다."""
     adjustments = [

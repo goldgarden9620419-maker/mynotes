@@ -36,9 +36,9 @@ def _plan(due: date, amount: float, method=PAY_METHOD_TRANSFER) -> dict:
 
 def test_요일별_평균():
     avg = weekday_online_averages(_online_history(), BASE)
-    assert avg[0] == 1000000  # 월요일
-    assert avg[4] == 1000000  # 금요일
-    assert avg[5] == 0        # 토요일
+    assert round(avg[0]) == 1000000  # 월요일 (가중 평균, 균일 데이터면 동일)
+    assert round(avg[4]) == 1000000  # 금요일
+    assert avg[5] == 0               # 토요일
 
 
 def test_4주_잔액_계산():

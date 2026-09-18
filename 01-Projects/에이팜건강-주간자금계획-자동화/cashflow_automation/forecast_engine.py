@@ -85,8 +85,16 @@ def load_adjustments(base_workbook: Path) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 def weekday_online_averages(history_rows: list[dict], base_date: date,
-                            weeks: int = 12) -> dict[int, float]:
-    """최근 N주의 요일별 온라인 매출 입금 평균."""
+                            weeks: int = 12,
+                            recency_halflife: float = 4.0
+                            ) -> dict[int, float]:
+    """최근 N주의 요일별 온라인 매출 입금 가중 평균.
+
+    recency_halflife(주 단위 반감기, 기본 4주)만큼 지난 주의 가중치가
+    절반이 되도록 최근 실적에 더 큰 비중을 준다 — 매주 새 입출금
+    파일을 올리면 최신 주가 곧바로 예상 입금액에 반영된다.
+    0 이하면 가중 없이 단순 평균.
+    """
     start = base_date - timedelta(days=weeks * 7)
     daily: dict[date, float] = defaultdict(float)
     for row in history_rows:
@@ -102,11 +110,16 @@ def weekday_online_averages(history_rows: list[dict], base_date: date,
 
     data_start = max(start, min(daily))
     sums = defaultdict(float)
-    counts = defaultdict(int)
+    counts = defaultdict(float)
     d = data_start
     while d < base_date:
-        sums[d.weekday()] += daily.get(d, 0.0)
-        counts[d.weekday()] += 1
+        if recency_halflife > 0:
+            age_weeks = (base_date - d).days / 7.0
+            weight = 0.5 ** (age_weeks / recency_halflife)
+        else:
+            weight = 1.0
+        sums[d.weekday()] += daily.get(d, 0.0) * weight
+        counts[d.weekday()] += weight
         d += timedelta(days=1)
     return {i: (sums[i] / counts[i] if counts[i] else 0.0) for i in range(7)}
 
@@ -835,7 +848,8 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                    adjustments: list[dict], recurring_items: list[dict],
                    rates: list[float], default_rate: float,
                    minimum_balance: float = 0,
-                   history_weeks: int = 12) -> dict:
+                   history_weeks: int = 12,
+                   recency_halflife: float = 4.0) -> dict:
     """전체 예측 결과와 반영률별 시나리오를 만든다.
 
     opening_balance는 '현재(최신 거래내역 기준) 총잔액'이다.
@@ -843,7 +857,7 @@ def build_forecast(countable_plans: list[dict], base_date: date,
     일별 계획의 시작잔액은 실적 순증감을 되돌린 기준일 시작잔액을 쓴다.
     """
     weekday_avg = weekday_online_averages(history_rows, base_date,
-                                          history_weeks)
+                                          history_weeks, recency_halflife)
     actual_flows, actual_until = actual_daily_flows(history_rows, base_date)
     net_actual = sum(f["온라인입금"] + f["기타입금"] - f["출금"]
                      for f in actual_flows.values())

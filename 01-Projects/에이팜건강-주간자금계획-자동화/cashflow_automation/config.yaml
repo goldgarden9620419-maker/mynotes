@@ -45,6 +45,7 @@ forecast:
   receipt_rates: [0.6, 0.7, 0.8, 0.9, 1.0]
   minimum_cash_balance: 0       # 이 금액 미만이면 '주의' 표시
   online_history_weeks: 12
+  online_recency_halflife: 4     # 최근 주 가중(반감기, 주). 0이면 단순 평균
   include_unconfirmed: true     # 승인대기·미확정도 지급일자 기준 반영
 
 matching:
