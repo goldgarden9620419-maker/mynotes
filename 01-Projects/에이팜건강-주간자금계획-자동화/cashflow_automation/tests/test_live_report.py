@@ -152,6 +152,8 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     # 수동 붙여넣기 시트 제거 + 잔여 참조 수식 정리
     assert "주간계좌_붙여넣기" not in wb.sheetnames
     assert raw["A50"].value is None
+    # 정기지출분석은 사용자 편집용이라 맨 끝 시트에 둔다
+    assert wb.sheetnames[-1] == "정기지출분석"
     # 지출계획 취합 시트가 새로 생성되어 자동 반영된다
     assert "지출계획_취합" in wb.sheetnames
     exp = wb["지출계획_취합"]
