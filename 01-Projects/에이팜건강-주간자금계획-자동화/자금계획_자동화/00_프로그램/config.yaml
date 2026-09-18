@@ -63,4 +63,5 @@ options:
   backup_input_files: true
   open_output_folder_after_manual_run: true
   keep_only_latest_outputs: true   # 05_결과에 최신 실행분만 유지
+  keep_only_latest_bank_files: true   # 은행 폴더에 계좌별 최신 파일만 유지
 base_workbook_name: 에이팜건강_자금계획_기준파일.xlsx
