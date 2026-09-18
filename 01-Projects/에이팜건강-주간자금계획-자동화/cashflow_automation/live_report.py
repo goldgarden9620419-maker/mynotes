@@ -86,6 +86,10 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_recurring(wb["정기지출분석"], report.get("recurring", []))
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []))
 
+    # 은행 파일을 폴더에서 자동으로 읽으므로 수동 붙여넣기 시트는 제거한다
+    if "주간계좌_붙여넣기" in wb.sheetnames:
+        wb.remove(wb["주간계좌_붙여넣기"])
+
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
@@ -329,13 +333,9 @@ def _fill_raw(ws, bank_rows: list[dict]) -> None:
             elif c in (5, 6, 7, 14):
                 cell.number_format = "#,##0"
         r += 1
-    # 이전 실행의 잔여 행 정리
-    end = max(ws.max_row, r)
-    for rr in range(r, end + 1):
-        row_empty = True
+    # 이전 실행의 잔여 행·템플릿의 옛 붙여넣기용 수식을 끝까지 정리한다
+    # (중간 빈 구간에서 멈추면 아래쪽 잔여 수식이 살아남아 #REF! 위험)
+    for rr in range(r, ws.max_row + 1):
         for c in range(1, 15):
             if ws.cell(row=rr, column=c).value is not None:
                 _set(ws, rr, c, None)
-                row_empty = False
-        if row_empty and rr > r + 5:
-            break
