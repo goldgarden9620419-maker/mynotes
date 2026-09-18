@@ -86,6 +86,29 @@ def _fake_report(base: date) -> dict:
                        "취급점": "", "자동분류": "", "내부이체": False,
                        "정기지출후보": False, "현금유출입": 50000.0,
                        "반영상태": "정상반영"}],
+        "integrated_masked": [
+            {"요청ID": "디자인-20260918-001", "팀명": "디자인팀",
+             "신청자": "김담당", "품의승인": "승인",
+             "지급예정일": date(2026, 9, 25),
+             "자금계획 반영일": date(2026, 10, 23),
+             "거래처": "OO인쇄", "지출내용": "리플렛 인쇄",
+             "예상금액": 25000, "지급방법": "법인카드",
+             "카드구분": "국민카드", "확정여부": "확정",
+             "진행상태": "신규", "최종수정일": date(2026, 9, 18),
+             "원본파일": "디자인팀_지출계획.xlsx",
+             "반영상태": "정상반영", "확인사항": ""},
+            {"요청ID": "경영-대외비-집계", "팀명": "경영지원팀",
+             "신청자": "", "품의승인": "승인대기",
+             "지급예정일": date(2026, 9, 23),
+             "자금계획 반영일": date(2026, 9, 23),
+             "거래처": "기타 대외비 지출", "지출내용": "(대외비 집계)",
+             "예상금액": 632250, "지급방법": "계좌송금",
+             "카드구분": "", "확정여부": "미확정",
+             "진행상태": "신규", "최종수정일": datetime(2026, 9, 18, 10, 0),
+             "원본파일": "경영지원팀_대외비_지출계획.xlsx",
+             "반영상태": "정상반영",
+             "확인사항": "승인대기 상태(정책상 반영)"},
+        ],
     }
 
 
@@ -119,6 +142,39 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     raw = wb["계좌내역통합_RAW"]
     assert raw["C2"].value == "국민은행"
     assert raw["F2"].value == 50000
+    # 지출계획 취합 시트가 새로 생성되어 자동 반영된다
+    assert "지출계획_취합" in wb.sheetnames
+    exp = wb["지출계획_취합"]
+    assert exp["A5"].value == "요청ID"
+    assert exp["A6"].value == "디자인-20260918-001"
+    assert exp["I6"].value == 25000            # 예상금액
+    assert exp["I6"].number_format == "#,##0"
+    def _d(v):  # openpyxl은 날짜를 datetime으로 읽는다
+        return v.date() if isinstance(v, datetime) else v
+    assert _d(exp["E6"].value) == date(2026, 9, 25)  # 지급예정일
+    assert exp["A7"].value == "경영-대외비-집계"
+    assert _d(exp["N7"].value) == date(2026, 9, 18)  # datetime→date 변환
+    assert exp["Q7"].value == "승인대기 상태(정책상 반영)"
+    assert exp["A8"].value is None
+    assert exp.freeze_panes == "A6"
+    wb.close()
+
+
+def test_지출시트_재실행시_잔여행_정리(tmp_path):
+    """행이 줄어든 다음 주 실행에서 이전 잔여 데이터가 남지 않는다."""
+    template = tmp_path / "템플릿.xlsx"
+    _make_stub_template(template)
+    out1 = tmp_path / "결과1.xlsx"
+    fill_live_workbook(template, _fake_report(NEW_MONDAY), out1)
+    report2 = _fake_report(NEW_MONDAY)
+    report2["integrated_masked"] = report2["integrated_masked"][:1]
+    out2 = tmp_path / "결과2.xlsx"
+    fill_live_workbook(out1, report2, out2)
+    wb = load_workbook(out2)
+    exp = wb["지출계획_취합"]
+    assert exp["A6"].value == "디자인-20260918-001"
+    assert exp["A7"].value is None
+    assert exp["I7"].value is None
     wb.close()
 
 

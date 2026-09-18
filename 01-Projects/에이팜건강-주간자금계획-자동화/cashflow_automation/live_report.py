@@ -33,6 +33,18 @@ def _set(ws, row: int, col: int, value):
     return cell
 
 LIVE_TEMPLATE_NAME = "자금계획_라이브템플릿.xlsx"
+EXPENSE_SHEET = "지출계획_취합"
+
+_EXPENSE_COLUMNS = [
+    ("요청ID", "요청ID", 18), ("팀명", "팀명", 12), ("신청자", "신청자", 9),
+    ("품의승인", "품의승인", 10), ("지급예정일", "지급예정일", 12),
+    ("자금계획 반영일", "자금계획 반영일", 13), ("거래처", "거래처", 16),
+    ("지출내용", "지출내용", 24), ("예상금액", "예상금액", 13),
+    ("지급방법", "지급방법", 10), ("카드구분", "카드구분", 10),
+    ("확정여부", "확정여부", 9), ("진행상태", "진행상태", 9),
+    ("최종수정일", "최종수정일", 12), ("원본파일", "원본파일", 24),
+    ("반영상태", "반영상태", 12), ("확인사항", "확인사항", 28),
+]
 
 _CONF_LABEL = {"상": "높음", "중": "중간", "하": "낮음"}
 _MONEY_WON = '#,##0"원"'
@@ -70,6 +82,7 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_summary(wb["요약"], report, base_date, stats)
     _fill_daily(wb["4주일별계획"], forecast, base_date)
     _fill_weekly(wb["13주주별계획"], forecast, base_date)
+    _fill_expense(wb, report.get("integrated_masked", []))
     _fill_recurring(wb["정기지출분석"], report.get("recurring", []))
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []))
 
@@ -187,6 +200,70 @@ def _fill_weekly(ws, forecast: dict, base_date: date) -> None:
             for c, v in ((4, wr.get("확정기타입금")), (5, wr.get("송금예정")),
                          (6, wr.get("카드결제")), (7, etc)):
                 _set(ws, r, c, round(v) if v else None)
+
+
+def _fill_expense(wb, rows: list[dict]) -> None:
+    """팀 지출계획 취합을 별도 시트로 자동 반영 (매주 전체 갱신).
+
+    대외비 행은 분류·총액 집계로만 표시된다(상세 미노출).
+    """
+    from openpyxl.styles import Alignment, Font, PatternFill
+
+    if EXPENSE_SHEET in wb.sheetnames:
+        ws = wb[EXPENSE_SHEET]
+    else:
+        try:
+            index = wb.sheetnames.index("13주주별계획") + 1
+        except ValueError:
+            index = len(wb.sheetnames)
+        ws = wb.create_sheet(EXPENSE_SHEET, index)
+
+    title = _set(ws, 2, 1, "팀 지출계획 취합 (자동 반영)")
+    if title is not None:
+        title.font = Font(name="맑은 고딕", bold=True, size=13,
+                          color="1F4E79")
+    note = _set(ws, 3, 1,
+                "매 실행마다 팀 제출 파일에서 자동 갱신됩니다. "
+                "대외비는 분류·총액만 표시됩니다.")
+    if note is not None:
+        note.font = Font(name="맑은 고딕", size=9, color="808080")
+
+    from openpyxl.utils import get_column_letter
+    for c, (header, _key, width) in enumerate(_EXPENSE_COLUMNS, start=1):
+        cell = _set(ws, 5, c, header)
+        if cell is not None:
+            cell.fill = PatternFill("solid", start_color="1F4E79")
+            cell.font = Font(name="맑은 고딕", color="FFFFFF", bold=True,
+                             size=10)
+            cell.alignment = Alignment(horizontal="center")
+        ws.column_dimensions[get_column_letter(c)].width = width
+
+    r = 6
+    for row in rows:
+        for c, (_header, key, _width) in enumerate(_EXPENSE_COLUMNS, start=1):
+            value = row.get(key)
+            if isinstance(value, datetime):
+                value = value.date()
+            cell = _set(ws, r, c, value)
+            if cell is None:
+                continue
+            cell.font = Font(name="맑은 고딕", size=10)
+            if key == "예상금액":
+                cell.number_format = "#,##0"
+            elif isinstance(value, date):
+                cell.number_format = "yyyy-mm-dd"
+        r += 1
+    # 이전 실행의 잔여 행 정리
+    end = max(ws.max_row, r)
+    for rr in range(r, end + 1):
+        row_empty = True
+        for c in range(1, len(_EXPENSE_COLUMNS) + 1):
+            if ws.cell(row=rr, column=c).value is not None:
+                _set(ws, rr, c, None)
+                row_empty = False
+        if row_empty and rr > r + 5:
+            break
+    ws.freeze_panes = "A6"
 
 
 def _fill_recurring(ws, recurring: list[dict]) -> None:
