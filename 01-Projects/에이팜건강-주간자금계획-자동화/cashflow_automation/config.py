@@ -79,6 +79,8 @@ DEFAULT_CONFIG: dict = {
         "create_pdf_summary": True,
         "create_live_workbook": True,
         "live_template_name": "자금계획_라이브템플릿.xlsx",
+        # 결과 폴더에는 최신 실행분만 유지 (이전 버전은 99_지난자료/지난결과)
+        "keep_only_latest_outputs": True,
         "backup_input_files": True,
         "open_output_folder_after_manual_run": True,
     },

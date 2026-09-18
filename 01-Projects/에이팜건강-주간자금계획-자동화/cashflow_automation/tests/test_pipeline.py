@@ -71,11 +71,15 @@ def test_같은_주차_중복_실행_방지(env):
     again = _run(cfg, state)
     assert again.status == "SKIPPED"
     # 강제 재실행 시에도 기존 결과물은 덮어쓰지 않는다 (28번 항목)
+    # — 최신본만 05_결과에 남고, 이전 파일은 지난자료로 보존된다
     forced = _run(cfg, state, force=True)
     assert forced.status == STATUS_SUCCESS
     excels = sorted(cfg.folder("output").glob("주간자금계획_2026*.xlsx"))
-    assert len(excels) == 2
-    assert excels[1].stem.endswith("_2")
+    assert len(excels) == 1
+    assert excels[0].stem.endswith("_2")  # 새 실행분 (이름 충돌 회피)
+    archived = sorted((cfg.folder("archive") / "지난결과")
+                      .glob("주간자금계획_2026*.xlsx"))
+    assert len(archived) == 1 and not archived[0].stem.endswith("_2")
 
 
 def test_필수파일_누락과_재시도(env):
@@ -152,3 +156,23 @@ def test_손상파일_재열기_검증_실패(tmp_path):
     bad = tmp_path / "깨진파일.xlsx"
     bad.write_bytes(b"this is not an xlsx file")
     assert not verify_workbook(bad, ["확인필요"])
+
+
+def test_재실행시_이전_결과는_지난자료로_이동(env):
+    """같은 주에 여러 번 실행해도 05_결과에는 최신 실행분만 남는다."""
+    cfg = env
+    make_full_inputs(cfg, NOW)
+    state = StateManager(cfg.state_dir)
+    assert _run(cfg, state, mode="manual").status == STATUS_SUCCESS
+    assert _run(cfg, state, mode="manual",
+                force=True).status == STATUS_SUCCESS
+
+    out_dir = cfg.folder("output")
+    assert len(list(out_dir.glob("주간자금계획_*.xlsx"))) == 1
+    assert len(list(out_dir.glob("주간자금계획_대표보고_*.pdf"))) == 1
+    assert len(list(out_dir.glob("확인필요_*.xlsx"))) == 1
+    # 이전 실행분은 삭제되지 않고 지난자료로 이동
+    archive = cfg.folder("archive") / "지난결과"
+    assert len(list(archive.glob("주간자금계획_*"))) >= 2
+    # 06_확인필요 폴더도 최신 복사본 하나만 유지
+    assert len(list(cfg.folder("review").glob("확인필요_*.xlsx"))) <= 1
