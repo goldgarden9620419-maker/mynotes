@@ -20,7 +20,7 @@ from openpyxl.utils import get_column_letter
 
 from common import WEEKDAY_KO
 from excel_report import account_label
-from live_report import outline_week_box
+from live_report import exec_window, outline_week_box
 
 SHEET_NAME = "주간보고"
 
@@ -105,7 +105,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, 1, 1, f"주간 자금 경영보고 — {meta.get('company', '')}",
          bold=True, size=14, color=_NAVY)
     _put(ws, 2, 1, f"기준주 {base_date} (월) ~ {week_end} (일) · "
-                   f"작성 {meta.get('run_at', '')} · 붉은 상자 = 이번 주",
+                   f"작성 {meta.get('run_at', '')} · "
+                   f"붉은 상자 = 실행일~차주 금요일",
          size=9, color="555555")
     _put(ws, 3, 1, "노란 칸(입금 반영률·목표 최저잔액·지출 지급일·금액)을 "
                    "고치면 아래 모든 수치가 즉시 다시 계산됩니다.",
@@ -130,7 +131,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
          fmt="#,##0", border=True)
 
     # ② 향후 4주 일별 자금 흐름 --------------------------------------------
-    _section(ws, 12, "② 향후 4주 일별 자금 흐름 (붉은 상자 = 이번 주)")
+    _section(ws, 12, "② 향후 4주 일별 자금 흐름 "
+                     "(붉은 상자 = 실행일~차주 금요일)")
     _put(ws, 12, 5, "입금 반영률", bold=True, color="FFFFFF")
     _put(ws, 12, 6, rate, fill=_EDIT_FILL, fmt="0%", align="center",
          border=True)
@@ -176,8 +178,12 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     ws.conditional_formatting.add(
         f"E{_DAY_FIRST}:E{_DAY_LAST}",
         CellIsRule(operator="lessThan", formula=["0"], fill=_RED_FILL))
-    # 이번 주(기준주) 7일을 하나의 붉은 상자로 묶는다
-    outline_week_box(ws, _DAY_FIRST, _DAY_FIRST + 6, 1, 6)
+    # 실행일~차주 금요일 구간을 하나의 붉은 상자로 묶는다
+    w_start, w_end = exec_window(meta.get("run_date") or base_date)
+    first = _DAY_FIRST + max(0, min((w_start - base_date).days,
+                                    _DAY_COUNT - 1))
+    last = _DAY_FIRST + max(0, min((w_end - base_date).days, _DAY_COUNT - 1))
+    outline_week_box(ws, first, last, 1, 6)
     _put(ws, _SUM_ROW, 1, "4주 최저 잔액", bold=True)
     _put(ws, _SUM_ROW, 3, f"=MIN(E{_DAY_FIRST}:E{_DAY_LAST})", bold=True,
          fmt="#,##0")
