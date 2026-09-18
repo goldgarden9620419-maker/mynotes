@@ -102,6 +102,38 @@ def test_제외_표시는_반영하지_않는다(tmp_path):
     assert all(d["일자"] != first[0].value for d in drafts)
 
 
+def test_별칭_등록시_같은달_취합입력이면_금액무관_제외(tmp_path):
+    """카드대금처럼 금액이 변하는 정기지출: 별칭으로 이중 반영을 막는다."""
+    adjustments = [
+        # 이름이 달라 기존 유사도 규칙으로는 못 잡고, 금액도 25% 넘게 다름
+        {"일자": date(2026, 9, 23), "조정입금": 0.0, "조정지출": 6_066_502.0,
+         "내용": "정기지출 추정(자동 초안): NH기업카드 신뢰도 중"},
+        # 별칭 없음 → 기존 규칙 그대로 유지(이름 불일치라 반영 유지)
+        {"일자": date(2026, 9, 23), "조정입금": 0.0, "조정지출": 1_000_000.0,
+         "내용": "정기지출 추정(자동 초안): 한화생 신뢰도 중"},
+    ]
+    plans = [{"자금계획 반영일": date(2026, 9, 23),
+              "예상금액": 10_000_000.0, "거래처": "농협카드",
+              "지출내용": "8월 카드대금"}]
+    aliases = {"NH기업카드": ["농협카드"]}
+    kept, skipped = fe.filter_duplicate_adjustments(
+        adjustments, plans, aliases=aliases)
+    assert len(skipped) == 1 and "NH기업카드" in skipped[0]["내용"]
+    assert len(kept) == 1 and "한화생" in kept[0]["내용"]
+    # 다른 달의 취합 입력은 제외 근거가 아니다
+    plans_oct = [dict(plans[0], **{"자금계획 반영일": date(2026, 10, 23)})]
+    kept2, skipped2 = fe.filter_duplicate_adjustments(
+        adjustments, plans_oct, aliases=aliases)
+    assert not skipped2 and len(kept2) == 2
+
+
+def test_별칭_시트_생성과_로드(tmp_path):
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    fe.refresh_auto_draft_file(draft, [], BASE)
+    aliases = fe.load_draft_aliases(draft)
+    assert aliases.get("NH기업카드") == ["농협카드"]   # 기본 예시 행
+
+
 def test_반영열_드롭다운(tmp_path):
     """반영 열(E)에 '반영/제외' 드롭다운이 생성·유지된다."""
     draft = tmp_path / "자동추정_지출목록.xlsx"

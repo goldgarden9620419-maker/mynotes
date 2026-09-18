@@ -86,8 +86,11 @@ def load_adjustments(base_workbook: Path) -> list[dict]:
 
 AUTO_DRAFT_FILE = "자동추정_지출목록.xlsx"
 AUTO_DRAFT_SHEET = "자동추정"
+ALIAS_SHEET = "별칭"
 _DRAFT_PREFIX = "정기지출 추정(자동 초안): "
 _DRAFT_HEADERS = ["일자", "정기지출명", "예상금액", "신뢰도", "반영", "메모"]
+# 은행 기록명과 취합파일 표기가 다른 대표 사례 (시트 생성 시 예시로 넣음)
+_ALIAS_SEED = [("NH기업카드", "농협카드")]
 
 
 def _draft_content(name: str, confidence: str) -> str:
@@ -109,6 +112,27 @@ def _ensure_draft_dropdown(ws) -> bool:
     return True
 
 
+def _ensure_alias_sheet(wb) -> bool:
+    """'별칭' 시트를 보장한다. 새로 만들었으면 True.
+
+    은행 기록명(자동추정 이름)과 취합파일 거래처 표기가 다를 때
+    여기 연결해 두면, 같은 달에 취합 입력이 있는 자동추정은 금액
+    차이와 무관하게 자동 제외된다 (카드대금처럼 금액이 변하는 정기
+    지출용).
+    """
+    if ALIAS_SHEET in wb.sheetnames:
+        return False
+    ws = wb.create_sheet(ALIAS_SHEET)
+    ws.append(["정기지출명", "별칭(쉼표로 여러 개)"])
+    for name, alias in _ALIAS_SEED:
+        ws.append([name, alias])
+    ws["D1"] = ("같은 달에 취합 지출예정 파일에 별칭과 비슷한 항목이 있으면 "
+                "해당 자동추정은 금액과 무관하게 제외됩니다.")
+    ws.column_dimensions["A"].width = 24
+    ws.column_dimensions["B"].width = 30
+    return True
+
+
 def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
     from openpyxl import Workbook
     wb = Workbook()
@@ -119,6 +143,8 @@ def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
                    "'제외'로 바꾸면 다음 실행부터 그대로 적용됩니다.")
     guide["A3"] = ("새로 발견되는 정기지출은 매 실행 때 자동으로 추가되고, "
                    "이미 있는 행(사용자 수정 포함)은 건드리지 않습니다.")
+    guide["A4"] = ("'별칭' 시트: 은행 기록명과 취합파일 표기가 다르면 연결해 "
+                   "두세요 — 같은 달 취합 입력이 있으면 자동추정이 제외됩니다.")
     ws = wb.create_sheet(AUTO_DRAFT_SHEET)
     ws.append(_DRAFT_HEADERS)
     for r in sorted(rows, key=lambda x: (x["일자"], -x["예상금액"])):
@@ -128,6 +154,7 @@ def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
     for col, width in zip("ABCDEF", (12, 26, 14, 8, 8, 24)):
         ws.column_dimensions[col].width = width
     _ensure_draft_dropdown(ws)
+    _ensure_alias_sheet(wb)
     draft_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(draft_path)
     wb.close()
@@ -232,10 +259,37 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
                 added += 1
             y, m = (y + 1, 1) if m == 12 else (y, m + 1)
     dv_added = _ensure_draft_dropdown(ws)  # 이관 초기 파일에도 드롭다운 보장
-    if added or pruned or dv_added:
+    alias_added = _ensure_alias_sheet(wb)
+    if added or pruned or dv_added or alias_added:
         wb.save(draft_path)
     wb.close()
     return added, pruned
+
+
+def load_draft_aliases(draft_path: Path) -> dict[str, list[str]]:
+    """'별칭' 시트: 정기지출명(정규화) → 별칭 목록."""
+    aliases: dict[str, list[str]] = {}
+    draft_path = Path(draft_path)
+    if not draft_path.exists():
+        return aliases
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(draft_path, data_only=True, read_only=True)
+    except Exception:
+        return aliases
+    try:
+        if ALIAS_SHEET not in wb.sheetnames:
+            return aliases
+        for row in wb[ALIAS_SHEET].iter_rows(min_row=2, max_col=2,
+                                             values_only=True):
+            name = normalize_text(row[0] if len(row) > 0 else None)
+            raw = str(row[1] or "") if len(row) > 1 else ""
+            if not name or not raw.strip():
+                continue
+            aliases[name] = [a.strip() for a in raw.split(",") if a.strip()]
+        return aliases
+    finally:
+        wb.close()
 
 
 def load_auto_drafts(draft_path: Path, base_date: Optional[date] = None,
@@ -642,18 +696,23 @@ def filter_duplicate_adjustments(adjustments: list[dict],
                                  countable_plans: list[dict],
                                  window_days: int = 5,
                                  tolerance: float = 0.25,
-                                 name_threshold: int = 60
+                                 name_threshold: int = 60,
+                                 aliases: dict[str, list[str]] | None = None
                                  ) -> tuple[list[dict], list[dict]]:
     """팀 지출계획과 겹치는 '자동 초안' 추정 조정을 제외한다.
 
-    같은 지출이 정기지출 추정(주간조정)과 팀 제출 계획 양쪽에서
-    이중 반영되는 것을 막는다. 금액만 비슷한 우연 일치를 배제하기 위해
-    이름 유사도(거래처·지출내용)가 임계값 이상일 때만 중복으로 본다.
+    같은 지출이 정기지출 추정과 팀 제출 계획 양쪽에서 이중 반영되는
+    것을 막는다. 금액만 비슷한 우연 일치를 배제하기 위해 이름
+    유사도(거래처·지출내용)가 임계값 이상일 때만 중복으로 본다.
+    별칭(aliases)이 등록된 항목은 같은 달의 취합 입력과 이름이
+    이어지면 금액 차이와 무관하게 제외한다 — 카드대금처럼 시기는
+    정기지만 금액이 매월 변하는 지출용.
     사용자가 직접 넣은 조정(내용에 '자동 초안'이 없는 행)은 건드리지 않는다.
     반환: (남긴 조정, 제외한 조정)
     """
     from rapidfuzz import fuzz
 
+    aliases = aliases or {}
     kept, skipped = [], []
     plans = []
     for p in countable_plans:
@@ -669,15 +728,27 @@ def filter_duplicate_adjustments(adjustments: list[dict],
         dup = False
         if "자동 초안" in content and amount > 0:
             m = re.search(r":\s*(.+?)\s*신뢰도", content)
-            adj_name = (m.group(1) if m else content).lower()
+            adj_name = (m.group(1) if m else content).strip()
+            names = [adj_name.lower()] + [
+                a.lower() for a in aliases.get(normalize_text(adj_name), [])]
+            has_alias = len(names) > 1
             for d, plan_amt, plan_name in plans:
+                same_month = (d.year, d.month) == (adj["일자"].year,
+                                                   adj["일자"].month)
+                name_hit = any(fuzz.partial_ratio(n, plan_name)
+                               >= name_threshold for n in names)
+                if not name_hit:
+                    continue
+                # 별칭 등록 항목: 같은 달 취합 입력이면 금액 무관 제외
+                if has_alias and same_month:
+                    dup = True
+                    break
                 if abs((d - adj["일자"]).days) > window_days:
                     continue
                 if abs(plan_amt - amount) > max(plan_amt, amount) * tolerance:
                     continue
-                if fuzz.partial_ratio(adj_name, plan_name) >= name_threshold:
-                    dup = True
-                    break
+                dup = True
+                break
         (skipped if dup else kept).append(adj)
     return kept, skipped
 
