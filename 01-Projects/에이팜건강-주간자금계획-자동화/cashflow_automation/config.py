@@ -75,7 +75,8 @@ DEFAULT_CONFIG: dict = {
         "min_months": 4,
     },
     "options": {
-        "create_excel": True,
+        "create_excel": False,
+        "create_management_report": True,
         "create_pdf_summary": True,
         "create_live_workbook": True,
         "live_template_name": "자금계획_라이브템플릿.xlsx",

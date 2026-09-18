@@ -59,7 +59,8 @@ recurring:
   lookback_months: 6
   min_months: 4
 options:
-  create_excel: true
+  create_excel: false
+  create_management_report: true
   create_pdf_summary: true
   backup_input_files: true
   open_output_folder_after_manual_run: true
