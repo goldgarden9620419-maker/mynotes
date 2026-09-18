@@ -81,6 +81,191 @@ def load_adjustments(base_workbook: Path) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# 자동추정 지출 목록 (별도 파일로 관리)
+# ---------------------------------------------------------------------------
+
+AUTO_DRAFT_FILE = "자동추정_지출목록.xlsx"
+AUTO_DRAFT_SHEET = "자동추정"
+_DRAFT_PREFIX = "정기지출 추정(자동 초안): "
+_DRAFT_HEADERS = ["일자", "정기지출명", "예상금액", "신뢰도", "반영", "메모"]
+
+
+def _draft_content(name: str, confidence: str) -> str:
+    return f"{_DRAFT_PREFIX}{name} 신뢰도 {confidence or '중'}"
+
+
+def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
+    from openpyxl import Workbook
+    wb = Workbook()
+    guide = wb.active
+    guide.title = "안내"
+    guide["A1"] = "자동추정 지출 목록 — 은행 이력에서 추정한 정기지출입니다."
+    guide["A2"] = ("'자동추정' 시트에서 일자·예상금액을 고치거나 반영 열을 "
+                   "'제외'로 바꾸면 다음 실행부터 그대로 적용됩니다.")
+    guide["A3"] = ("새로 발견되는 정기지출은 매 실행 때 자동으로 추가되고, "
+                   "이미 있는 행(사용자 수정 포함)은 건드리지 않습니다.")
+    ws = wb.create_sheet(AUTO_DRAFT_SHEET)
+    ws.append(_DRAFT_HEADERS)
+    for r in sorted(rows, key=lambda x: (x["일자"], -x["예상금액"])):
+        ws.append([r["일자"], r["정기지출명"], round(r["예상금액"]),
+                   r.get("신뢰도") or "", r.get("반영") or "반영",
+                   r.get("메모") or ""])
+    for col, width in zip("ABCDEF", (12, 26, 14, 8, 8, 24)):
+        ws.column_dimensions[col].width = width
+    draft_path.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(draft_path)
+    wb.close()
+
+
+def migrate_auto_drafts(base_workbook: Path, draft_path: Path,
+                        overrides: dict[str, dict]) -> int:
+    """기준파일 주간조정의 '자동 초안' 지출 행을 목록 파일로 이관한다.
+
+    목록 파일이 이미 있으면 아무것도 하지 않는다. 이관 후 주간조정
+    시트에는 수동 조정과 입금 추정만 남는다. 성격이 변동·제외인
+    항목은 목록에 '제외'로 표시해 둔다.
+    """
+    draft_path = Path(draft_path)
+    if draft_path.exists():
+        return 0
+    drafts = []
+    for a in load_adjustments(base_workbook):
+        content = a.get("내용") or ""
+        if "자동 초안" not in content or (a.get("조정지출") or 0) <= 0:
+            continue
+        m = re.search(r":\s*(.+?)\s*신뢰도\s*(\S*)", content)
+        name = (m.group(1) if m else content).strip()
+        conf = (m.group(2) if m else "").strip()
+        ov = overrides.get(normalize_text(name), {})
+        flag = "제외" if ov.get("성격") in ("변동", "제외") else "반영"
+        drafts.append({"일자": a["일자"], "정기지출명": name,
+                       "예상금액": a["조정지출"], "신뢰도": conf,
+                       "반영": flag, "메모": ""})
+    _create_draft_workbook(draft_path, drafts)
+    # 주간조정 시트에서 자동 초안 행 제거 (수동 조정·입금 추정은 유지)
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(base_workbook)
+        for name in wb.sheetnames:
+            if normalize_text(name) == ADJUST_SHEET_NAME:
+                ws = wb[name]
+                for r in range(ws.max_row, 1, -1):
+                    row_text = " ".join(str(c.value or "")
+                                        for c in ws[r])
+                    if "자동 초안" in row_text:
+                        ws.delete_rows(r)
+                wb.save(base_workbook)
+                break
+        wb.close()
+    except Exception:
+        pass  # 제거 실패해도 이중 반영은 실행부에서 걸러진다
+    return len(drafts)
+
+
+def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
+                            base_date: date,
+                            horizon_days: int = 27) -> tuple[int, int]:
+    """정기지출 분석 결과로 목록 파일을 갱신한다.
+
+    같은 (정기지출명, 연·월) 행이 없으면 4주(기준일+27일) 안에서만
+    추가하고 — 5주차 이후는 13주 계획이 정기지출을 직접 배분하므로
+    여기 넣으면 이중 반영된다 — 이미 있는 행은 사용자 수정 보존을
+    위해 건드리지 않는다. 기준일 이전의 지난 행은 정리한다.
+    반환: (추가 건수, 정리 건수)
+    """
+    from openpyxl import load_workbook
+    draft_path = Path(draft_path)
+    if not draft_path.exists():
+        _create_draft_workbook(draft_path, [])
+    wb = load_workbook(draft_path)
+    if AUTO_DRAFT_SHEET not in wb.sheetnames:
+        ws = wb.create_sheet(AUTO_DRAFT_SHEET)
+        ws.append(_DRAFT_HEADERS)
+    else:
+        ws = wb[AUTO_DRAFT_SHEET]
+    existing: set[tuple] = set()
+    pruned = 0
+    for r in range(ws.max_row, 1, -1):
+        name = normalize_text(ws.cell(row=r, column=2).value)
+        d = parse_date(ws.cell(row=r, column=1).value)
+        if not name and d is None:
+            continue
+        if d is not None and d < base_date:
+            ws.delete_rows(r)
+            pruned += 1
+            continue
+        if name and d is not None:
+            existing.add((name, d.year, d.month))
+    added = 0
+    end = base_date + timedelta(days=horizon_days)
+    for item in recurring_items:
+        name = normalize_text(item.get("정기지출명"))
+        day = item.get("대표 지급일")
+        amount = item.get("평균 월지출") or 0
+        if not name or not day or amount <= 0:
+            continue
+        y, m = base_date.year, base_date.month
+        while True:
+            d = date(y, m, min(int(day), calendar.monthrange(y, m)[1]))
+            if d > end:
+                break
+            if base_date <= d and (name, y, m) not in existing:
+                ws.append([d, item.get("정기지출명"), round(amount),
+                           item.get("신뢰도") or "", "반영", ""])
+                existing.add((name, y, m))
+                added += 1
+            y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    if added or pruned:
+        wb.save(draft_path)
+    wb.close()
+    return added, pruned
+
+
+def load_auto_drafts(draft_path: Path, base_date: Optional[date] = None,
+                     horizon_days: int = 27) -> tuple[list[dict], int]:
+    """목록 파일에서 반영 대상 자동추정을 조정 형식으로 읽는다.
+
+    base_date가 주어지면 4주(기준일+27일) 구간의 행만 반영한다 —
+    그 밖의 미래 행은 해당 주가 오면 자동으로 반영된다.
+    반환: (조정 목록, 제외 건수)
+    """
+    draft_path = Path(draft_path)
+    result: list[dict] = []
+    excluded = 0
+    if not draft_path.exists():
+        return result, excluded
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(draft_path, data_only=True, read_only=True)
+    except Exception:
+        return result, excluded
+    try:
+        if AUTO_DRAFT_SHEET not in wb.sheetnames:
+            return result, excluded
+        end = (base_date + timedelta(days=horizon_days)
+               if base_date is not None else None)
+        for row in wb[AUTO_DRAFT_SHEET].iter_rows(min_row=2, max_col=5,
+                                                  values_only=True):
+            d = parse_date(row[0] if len(row) > 0 else None)
+            name = normalize_text(row[1] if len(row) > 1 else None)
+            amount = parse_amount(row[2] if len(row) > 2 else None) or 0.0
+            conf = normalize_text(row[3] if len(row) > 3 else None)
+            flag = normalize_text(row[4] if len(row) > 4 else None)
+            if d is None or not name or amount <= 0:
+                continue
+            if end is not None and d > end:
+                continue  # 4주 밖 미래 행은 그 주가 오면 반영된다
+            if flag.startswith("제외"):
+                excluded += 1
+                continue
+            result.append({"일자": d, "조정입금": 0.0, "조정지출": amount,
+                           "내용": _draft_content(name, conf)})
+        return result, excluded
+    finally:
+        wb.close()
+
+
+# ---------------------------------------------------------------------------
 # 온라인 입금 요일 평균 (21번 항목)
 # ---------------------------------------------------------------------------
 
