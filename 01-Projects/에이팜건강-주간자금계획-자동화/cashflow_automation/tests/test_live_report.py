@@ -215,6 +215,31 @@ def test_지출시트_재실행시_잔여행_정리(tmp_path):
     wb.close()
 
 
+def _current_week_rules(ws):
+    return [rule for rules in ws.conditional_formatting
+            for rule in rules.rules
+            if rule.formula and "WEEKDAY(TODAY()" in rule.formula[0]]
+
+
+def test_이번주_붉은_테두리_조건부서식(tmp_path):
+    """4주일별계획에 조회 시점의 이번 주 행을 표시하는 규칙이 붙는다."""
+    template = tmp_path / "템플릿.xlsx"
+    _make_stub_template(template)
+    out1 = tmp_path / "결과1.xlsx"
+    fill_live_workbook(template, _fake_report(NEW_MONDAY), out1)
+    wb = load_workbook(out1)
+    rules = _current_week_rules(wb["4주일별계획"])
+    assert len(rules) == 1
+    assert "TODAY()" in rules[0].formula[0]
+    wb.close()
+    # 이전 결과물을 템플릿으로 재실행해도 규칙이 중복되지 않는다
+    out2 = tmp_path / "결과2.xlsx"
+    fill_live_workbook(out1, _fake_report(NEW_MONDAY), out2)
+    wb = load_workbook(out2)
+    assert len(_current_week_rules(wb["4주일별계획"])) == 1
+    wb.close()
+
+
 def test_라이브양식_검증은_이전주면_실패(tmp_path):
     template = tmp_path / "템플릿.xlsx"
     _make_stub_template(template)

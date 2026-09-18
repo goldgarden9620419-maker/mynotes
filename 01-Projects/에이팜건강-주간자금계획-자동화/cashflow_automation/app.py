@@ -241,7 +241,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             adjustments, recurring_projectable, rates,
             cfg.get("forecast", "default_receipt_rate", default=0.8),
             cfg.get("forecast", "minimum_cash_balance", default=0),
-            cfg.get("forecast", "online_history_weeks", default=12))
+            cfg.get("forecast", "online_history_weeks", default=12),
+            cfg.get("forecast", "online_recency_halflife", default=4))
         # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위)
         account_scenario = forecast_engine.build_account_scenario(
             forecast["daily"], balances, merged_history,
