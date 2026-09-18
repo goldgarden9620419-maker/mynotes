@@ -113,11 +113,12 @@ def load_team_file(path: Path, team: dict) -> tuple[list[dict], list[dict]]:
                          "원본파일": path.name}]
         header_row, mapping = header
         found_cols = set(mapping.values())
+        # 확정여부는 더 이상 필수가 아니다: 2026-09-18 정책상 승인 여부와
+        # 무관하게 지급일 기준으로 반영하며, 통일 취합양식에는 열 자체가 없다.
         missing_cols = [c for c in REQUIRED_TEAM_COLUMNS
-                        if c not in found_cols and c != "비고"]
-        # 품의승인 열이 있으면 확정여부를 대신한다
-        if "확정여부" in missing_cols and "품의승인" in found_cols:
-            missing_cols.remove("확정여부")
+                        if c not in found_cols and c not in ("비고", "확정여부")]
+        default_confirmed = ("확정여부" not in found_cols
+                             and "품의승인" not in found_cols)
         if missing_cols:
             issues.append({"구분": "필수 열 누락", "팀명": team["name"],
                            "내용": "누락 열: " + ", ".join(missing_cols),
@@ -130,7 +131,8 @@ def load_team_file(path: Path, team: dict) -> tuple[list[dict], list[dict]]:
                    for col, std in mapping.items()}
             if all(v is None or str(v).strip() == "" for v in raw.values()):
                 continue
-            row = _normalize_row(raw, team, path.name, file_mtime, r)
+            row = _normalize_row(raw, team, path.name, file_mtime, r,
+                                 default_confirmed=default_confirmed)
             rows.append(row)
         return rows, issues
     finally:
@@ -138,7 +140,8 @@ def load_team_file(path: Path, team: dict) -> tuple[list[dict], list[dict]]:
 
 
 def _normalize_row(raw: dict, team: dict, filename: str,
-                   file_mtime: float, row_order: int) -> dict:
+                   file_mtime: float, row_order: int,
+                   default_confirmed: bool = False) -> dict:
     row = {
         "요청ID": normalize_text(raw.get("요청ID")),
         "팀코드": normalize_text(raw.get("팀코드")) or team["code"],
@@ -176,6 +179,12 @@ def _normalize_row(raw: dict, team: dict, filename: str,
         else:
             row["확정여부"] = "미확정"
             row["확인사항"] = f"품의승인 값 해석 불가({approval})"
+    # 통일 취합양식(확정여부·품의승인 열 없음): 정책상 전 건을
+    # 지급일 기준으로 반영하므로 확정 취급한다 (취소 건만 제외됨)
+    if default_confirmed and not row["확정여부"] and not row["품의승인"]:
+        row["확정여부"] = "확정"
+        if not row["진행상태"]:
+            row["진행상태"] = "신규"
     # 요청ID가 비어있으면 구성요소로 재생성 시도
     if not row["요청ID"]:
         row["요청ID"] = make_request_id(row["팀코드"], row["최초등록일"],
@@ -208,11 +217,132 @@ def validate_row(row: dict) -> list[str]:
 # 전체 팀 취합 + 통합 데이터 생성
 # ---------------------------------------------------------------------------
 
-def load_all_teams(cfg) -> dict:
-    """모든 팀 파일을 읽는다.
+def _header_columns(path: Path) -> Optional[set]:
+    """파일 헤더에서 인식된 표준 열 이름 집합. 실패 시 None."""
+    try:
+        wb = load_workbook(path, data_only=True, read_only=False)
+    except Exception:
+        return None
+    try:
+        ws = _find_sheet(wb)
+        header = _header_map_from_table(ws) or _header_map_by_scan(ws)
+        return set(header[1].values()) if header else None
+    finally:
+        wb.close()
 
-    반환: {"rows": [...], "issues": [...], "missing_teams": [...]}
+
+def is_consolidated_form(path: Path) -> bool:
+    """전 팀 통일 취합 양식(2026-09-18~)인지 판별한다.
+
+    특징: 신청자 열이 있고, 확정여부·품의승인 열이 없다
+    (정책상 승인 여부와 무관하게 지급일 기준 반영).
     """
+    cols = _header_columns(Path(path))
+    return bool(cols and "신청자" in cols
+                and "확정여부" not in cols and "품의승인" not in cols)
+
+
+def find_consolidated_file(folder) -> Optional[Path]:
+    """취합 폴더에서 통일 취합 양식인 가장 최근 xlsx를 찾는다.
+
+    기존 경영지원 전용 양식(확정여부/품의승인 열 보유)은 제외되므로,
+    새 양식이 들어오기 전까지는 팀별 파일 방식이 그대로 유지된다.
+    """
+    folder = Path(folder)
+    if not folder.exists():
+        return None
+    files = sorted((p for p in folder.glob("*.xlsx")
+                    if not p.name.startswith("~$")),
+                   key=lambda p: p.stat().st_mtime, reverse=True)
+    for path in files:
+        if is_consolidated_form(path):
+            return path
+    return None
+
+
+def _team_for_row(raw: dict) -> Optional[dict]:
+    """행의 팀코드·팀명으로 TEAMS 항목을 찾는다."""
+    code = normalize_text(raw.get("팀코드"))
+    name = normalize_text(raw.get("팀명"))
+    for team in TEAMS:
+        if code and code == team["code"]:
+            return team
+        if name and name in (team["name"], team["name"][:-1], team["code"]):
+            return team
+    return None
+
+
+def load_consolidated_file(path: Path):
+    """전 팀 통일 취합 파일(2026-09-18 양식~) 하나를 읽는다.
+
+    각 행의 팀코드·팀명으로 소속 팀을 정하고, 경영지원 행만
+    대외비로 처리한다. 반환: (rows, issues, 포함된 팀명 집합).
+    헤더를 인식하지 못하면 None (호출부가 팀별 방식으로 폴백).
+    """
+    path = Path(path)
+    issues: list[dict] = []
+    try:
+        wb = load_workbook(path, data_only=True, read_only=False)
+    except Exception:
+        return None
+    try:
+        ws = _find_sheet(wb)
+        header = _header_map_from_table(ws) or _header_map_by_scan(ws)
+        if header is None:
+            return None
+        header_row, mapping = header
+        found_cols = set(mapping.values())
+        default_confirmed = ("확정여부" not in found_cols
+                             and "품의승인" not in found_cols)
+        file_mtime = path.stat().st_mtime
+        rows: list[dict] = []
+        present: set[str] = set()
+        for r in range(header_row + 1, ws.max_row + 1):
+            raw = {std: ws.cell(row=r, column=col).value
+                   for col, std in mapping.items()}
+            if all(v is None or str(v).strip() == "" for v in raw.values()):
+                continue
+            team = _team_for_row(raw)
+            if team is None:
+                shown = (normalize_text(raw.get("팀명"))
+                         or normalize_text(raw.get("팀코드")) or "미기재")
+                issues.append({"구분": "팀 인식 불가", "팀명": shown,
+                               "내용": f"{r}행 팀명·팀코드({shown})를 알 수 "
+                                      "없어 일반팀으로 처리했습니다",
+                               "원본파일": path.name})
+                team = {"name": shown, "code": shown, "confidential": False}
+            row = _normalize_row(raw, team, path.name, file_mtime, r,
+                                 default_confirmed=default_confirmed)
+            rows.append(row)
+            present.add(team["name"])
+        return rows, issues, present
+    finally:
+        wb.close()
+
+
+def load_all_teams(cfg) -> dict:
+    """팀 지출계획을 읽는다.
+
+    취합 폴더(02_경영지원_대외비)에 파일이 있으면 최신 파일 하나를
+    전 팀 통일 취합본으로 읽고, 팀별 개별 파일은 읽지 않는다.
+    취합 파일이 없거나 읽지 못하면 기존 팀별 파일 방식으로 읽는다.
+    반환: {"rows", "issues", "missing_teams", "consolidated_file"}
+    """
+    consolidated = find_consolidated_file(cfg.folder("confidential_admin"))
+    if consolidated is not None:
+        loaded = load_consolidated_file(consolidated)
+        if loaded is not None:
+            rows, issues, present = loaded
+            for team in TEAMS:
+                if team["name"] not in present:
+                    issues.append({"구분": "취합 미포함 팀",
+                                   "팀명": team["name"],
+                                   "내용": "취합 파일에 항목이 없습니다 "
+                                          "(지출 없음이면 무시)",
+                                   "원본파일": consolidated.name})
+            return {"rows": rows, "issues": issues, "missing_teams": [],
+                    "consolidated_file": consolidated.name}
+
     all_rows: list[dict] = []
     issues: list[dict] = []
     missing_teams: list[str] = []
@@ -222,7 +352,8 @@ def load_all_teams(cfg) -> dict:
         if not path.exists():
             missing_teams.append(team["name"])
         all_rows.extend(rows)
-    return {"rows": all_rows, "issues": issues, "missing_teams": missing_teams}
+    return {"rows": all_rows, "issues": issues, "missing_teams": missing_teams,
+            "consolidated_file": None}
 
 
 def build_integrated_plan(rows: list[dict],
