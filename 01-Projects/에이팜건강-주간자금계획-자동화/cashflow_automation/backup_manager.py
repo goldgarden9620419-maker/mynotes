@@ -121,6 +121,54 @@ def archive_superseded_outputs(cfg, keep_output_names,
     return moved
 
 
+def archive_superseded_bank_files(cfg, bank_rows: list[dict]) -> int:
+    """계좌별 최신 거래일을 담은 은행 파일만 남기고 이전 파일을 옮긴다.
+
+    어떤 파일의 모든 계좌가 다른 파일에서 더 최신 거래일로 대체되면
+    그 파일을 99_지난자료/지난입력파일/<은행>/ 으로 이동한다 (삭제 아님).
+    과거 거래는 bank_history.csv 이력으로 계속 보존된다.
+    """
+    file_meta: dict[tuple, dict] = {}
+    for r in bank_rows:
+        fn = r.get("원본파일")
+        bank = r.get("은행")
+        acct = r.get("계좌") or ""
+        d = r.get("거래일")
+        if not fn or fn == "history" or not bank or d is None:
+            continue
+        accounts = file_meta.setdefault((bank, fn), {})
+        if acct not in accounts or d > accounts[acct]:
+            accounts[acct] = d
+
+    acct_latest: dict[tuple, object] = {}
+    for (bank, _fn), accounts in file_meta.items():
+        for acct, d in accounts.items():
+            key = (bank, acct)
+            if key not in acct_latest or d > acct_latest[key]:
+                acct_latest[key] = d
+
+    moved = 0
+    for (bank, fn), accounts in file_meta.items():
+        if not all(acct_latest[(bank, acct)] > d
+                   for acct, d in accounts.items()):
+            continue  # 이 파일이 어느 계좌든 최신이면 남긴다
+        src = cfg.bank_dir(bank) / fn
+        if not src.exists():
+            continue
+        target_dir = cfg.folder("archive") / "지난입력파일" / bank
+        target_dir.mkdir(parents=True, exist_ok=True)
+        target = target_dir / fn
+        if target.exists():
+            stamp = datetime.now().strftime("%H%M%S")
+            target = target_dir / f"{src.stem}_{stamp}{src.suffix}"
+        try:
+            shutil.move(str(src), str(target))
+            moved += 1
+        except OSError:
+            continue
+    return moved
+
+
 def archive_old_outputs(cfg, keep_days: int = 35) -> int:
     """오래된 결과물을 99_지난자료로 이동한다. 기존 결과물은 지우지 않는다."""
     output_dir = cfg.folder("output")

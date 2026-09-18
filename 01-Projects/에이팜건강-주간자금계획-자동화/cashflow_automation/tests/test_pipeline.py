@@ -196,3 +196,46 @@ def test_일별_비고_지출내역_요약():
     assert "와우프레스 25,000" in daily[0]["비고"]
     assert "기타 대외비 지출 632,250" in daily[0]["비고"]
     assert "취소된거래처" not in (daily[1]["비고"] or "")
+
+
+def test_은행폴더_계좌별_최신파일만_유지(tmp_path):
+    """모든 계좌가 더 최신 파일로 대체된 은행 파일만 지난자료로 이동한다."""
+    from datetime import date
+    import backup_manager
+
+    class _Cfg:
+        def __init__(self, base):
+            self.base = base
+
+        def bank_dir(self, bank):
+            return self.base / "03" / bank
+
+        def folder(self, name):
+            return self.base / {"archive": "99"}[name]
+
+    cfg = _Cfg(tmp_path)
+    for bank, names in (("농협", ["구파일.csv", "신파일.csv"]),
+                        ("국민은행", ["주계좌_최신.xls", "네이버_구.xls"])):
+        d = cfg.bank_dir(bank)
+        d.mkdir(parents=True)
+        for n in names:
+            (d / n).write_text("x")
+
+    rows = [
+        # 농협 한 계좌: 구파일(9/13) < 신파일(9/18) → 구파일 이동
+        {"은행": "농협", "계좌": "A", "거래일": date(2026, 9, 13),
+         "원본파일": "구파일.csv"},
+        {"은행": "농협", "계좌": "A", "거래일": date(2026, 9, 18),
+         "원본파일": "신파일.csv"},
+        # 국민 두 계좌: 서로 다른 계좌라 둘 다 최신 → 유지
+        {"은행": "국민은행", "계좌": "B", "거래일": date(2026, 9, 18),
+         "원본파일": "주계좌_최신.xls"},
+        {"은행": "국민은행", "계좌": "C", "거래일": date(2026, 9, 15),
+         "원본파일": "네이버_구.xls"},
+    ]
+    moved = backup_manager.archive_superseded_bank_files(cfg, rows)
+    assert moved == 1
+    assert not (cfg.bank_dir("농협") / "구파일.csv").exists()
+    assert (cfg.bank_dir("농협") / "신파일.csv").exists()
+    assert (cfg.bank_dir("국민은행") / "네이버_구.xls").exists()
+    assert (cfg.folder("archive") / "지난입력파일" / "농협" / "구파일.csv").exists()

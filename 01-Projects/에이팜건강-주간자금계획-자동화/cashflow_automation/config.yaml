@@ -68,6 +68,7 @@ options:
   create_live_workbook: true          # 수식 유지 라이브 양식 생성
   live_template_name: "자금계획_라이브템플릿.xlsx"  # 04_기준파일 안에 배치
   keep_only_latest_outputs: true      # 05_결과에 최신 실행분만 유지
+  keep_only_latest_bank_files: true   # 은행 폴더에 계좌별 최신 파일만 유지
   backup_input_files: true
   open_output_folder_after_manual_run: true
 

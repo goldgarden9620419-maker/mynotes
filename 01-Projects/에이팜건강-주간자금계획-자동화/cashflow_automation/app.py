@@ -341,6 +341,13 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 {review_copy.name} if review_copy is not None else ())
             if swept:
                 log.info("이전 결과 %d개를 99_지난자료/지난결과로 이동", swept)
+        # 은행 폴더에도 계좌별 최신 파일만 남긴다 (이력은 CSV로 보존)
+        if cfg.get("options", "keep_only_latest_bank_files", default=True):
+            swept_banks = backup_manager.archive_superseded_bank_files(
+                cfg, bank_data["rows"])
+            if swept_banks:
+                log.info("이전 은행 파일 %d개를 99_지난자료/지난입력파일로 이동",
+                         swept_banks)
 
         status = STATUS_PARTIAL if validation.missing_required else STATUS_SUCCESS
         excel_out = next((p.name for p in moved
