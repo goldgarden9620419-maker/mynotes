@@ -305,18 +305,41 @@ def actual_daily_flows(history_rows: list[dict],
         if d is None or d < base_date or r.get("내부이체"):
             continue
         f = flows.setdefault(d, {"온라인입금": 0.0, "기타입금": 0.0,
-                                 "출금": 0.0})
+                                 "출금": 0.0, "입금내역": [], "지출내역": []})
         amount_in = r.get("입금액") or 0.0
         amount_out = r.get("출금액") or 0.0
+        name = (normalize_text(r.get("기재내용·상대방"))
+                or normalize_text(r.get("적요")) or "")
         if amount_in:
-            key = ("온라인입금" if r.get("자동분류") == CLASS_ONLINE_SALES
-                   else "기타입금")
-            f[key] += amount_in
+            if r.get("자동분류") == CLASS_ONLINE_SALES:
+                f["온라인입금"] += amount_in
+            else:
+                f["기타입금"] += amount_in
+                f["입금내역"].append((amount_in, name))
         if amount_out:
             f["출금"] += amount_out
+            f["지출내역"].append((amount_out, name))
         if last is None or d > last:
             last = d
     return flows, last
+
+
+def _actual_note(f: dict) -> str:
+    """실적일 비고: 주요 지출·기타입금 내역을 짧게 나열한다."""
+    parts = ["실적"]
+    outs = sorted(f.get("지출내역") or [], reverse=True)
+    if outs:
+        head = ", ".join(f"{n or '(무기재)'} {a:,.0f}" for a, n in outs[:3])
+        if len(outs) > 3:
+            head += f" 외 {len(outs) - 3}건"
+        parts.append("지출: " + head)
+    ins = sorted(f.get("입금내역") or [], reverse=True)
+    if ins:
+        head = ", ".join(f"{n or '(무기재)'} {a:,.0f}" for a, n in ins[:2])
+        if len(ins) > 2:
+            head += f" 외 {len(ins) - 2}건"
+        parts.append("기타입금: " + head)
+    return " | ".join(parts)
 
 
 def filter_duplicate_adjustments(adjustments: list[dict],
@@ -397,7 +420,7 @@ def build_daily_plan(countable_plans: list[dict], base_date: date,
             adj_in = f["기타입금"]
             planned = {"송금": 0.0, "카드": 0.0, "자동이체": 0.0}
             etc_out = f["출금"]
-            note = "실적(실제 입출금 반영)"
+            note = _actual_note(f)
         else:
             online = weekday_avg.get(d.weekday(), 0.0) * rate
             adj = adj_by_date.get(d, {"입금": 0.0, "지출": 0.0, "내용": []})

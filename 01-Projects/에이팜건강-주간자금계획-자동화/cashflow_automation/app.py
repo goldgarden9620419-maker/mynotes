@@ -128,12 +128,15 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         bank_data = bank_loader.load_all_banks(cfg)
         issues.extend(bank_data["issues"])
         kept, dup_rows = duplicate_checker.remove_duplicates(bank_data["rows"])
-        for dup in dup_rows:
-            issues.append({"구분": "중복 은행거래", "은행": dup.get("은행"),
-                           "내용": f"{dup.get('거래일')} "
-                                  f"출금 {dup.get('출금액', 0):,.0f} / "
-                                  f"입금 {dup.get('입금액', 0):,.0f}",
-                           "원본파일": dup.get("원본파일", "")})
+        if dup_rows:
+            # 파일 기간이 겹치면 중복은 설계상 정상이므로 은행별 요약 1줄만 남긴다
+            from collections import Counter
+            dup_by_bank = Counter(d.get("은행", "") for d in dup_rows)
+            summary = ", ".join(f"{b} {n}건" for b, n in dup_by_bank.items())
+            issues.append({"구분": "중복 은행거래(자동 제외)",
+                           "내용": f"파일 기간 겹침으로 {len(dup_rows)}건 자동"
+                                  f" 제외 ({summary}) — 조치 불필요",
+                           "원본파일": ""})
         rules = bank_classifier.load_rules(
             cfg.state_dir / cfg.get("bank", "classify_rules_file",
                                     default="classify_rules.json"))
