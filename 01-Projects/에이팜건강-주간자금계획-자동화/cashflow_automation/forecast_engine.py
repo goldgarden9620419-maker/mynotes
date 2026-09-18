@@ -632,6 +632,73 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
     return rows
 
 
+def build_account_scenario(daily_rows: list[dict], balances: dict,
+                           history_rows: list[dict],
+                           actual_until: Optional[date] = None) -> dict:
+    """계좌별 일별 잔액 시나리오 (인출 우선순위: 우리은행→농협→국민은행).
+
+    지출은 전액 우리은행에서 집행하고, 부족분은 농협→국민 순으로
+    우리은행에 이체해 채우는 것으로 가정한다. 입금은 최근 이력의
+    계좌별 외부입금 비중대로 배분한다.
+    반환: {"accounts": [(은행, 계좌) 우선순위 순], "rows": [...]}
+    """
+    _PRIORITY = {"우리은행": 0, "농협": 1, "국민은행": 2}
+    accounts = sorted(balances.keys(),
+                      key=lambda k: (_PRIORITY.get(k[0], 9),
+                                     -(balances.get(k) or 0)))
+    if not accounts:
+        return {"accounts": [], "rows": []}
+
+    inflow_by_acct = {k: 0.0 for k in accounts}
+    for r in history_rows:
+        if r.get("내부이체") or (r.get("입금액") or 0) <= 0:
+            continue
+        key = (r.get("은행"), r.get("계좌") or "")
+        if key in inflow_by_acct:
+            inflow_by_acct[key] += r["입금액"]
+    total_in = sum(inflow_by_acct.values())
+    shares = ({k: v / total_in for k, v in inflow_by_acct.items()}
+              if total_in > 0 else {k: 1 / len(accounts) for k in accounts})
+
+    bal = {k: float(balances.get(k) or 0) for k in accounts}
+    woori = accounts[0]
+    rows = []
+    for day in daily_rows:
+        d = day["일자"]
+        if day.get("실적"):
+            rows.append({"일자": d, "요일": day.get("요일"), "실적": True,
+                         "잔액": dict(bal) if d == actual_until else None,
+                         "이체": {}, "비고": "실적 구간"})
+            continue
+        inflow = ((day.get("온라인 예상입금") or 0)
+                  + (day.get("확정·기타입금") or 0))
+        outflow = ((day.get("팀별 송금예정") or 0)
+                   + (day.get("카드결제") or 0)
+                   + (day.get("자동이체") or 0)
+                   + (day.get("기타지출") or 0))
+        for k in accounts:
+            bal[k] += inflow * shares[k]
+        transfers: dict = {}
+        note = ""
+        need = outflow - bal[woori]
+        bal[woori] -= outflow
+        if need > 0:
+            for k in accounts[1:]:
+                if need <= 0:
+                    break
+                move = min(bal[k], need) if bal[k] > 0 else 0.0
+                if move > 0:
+                    bal[k] -= move
+                    bal[woori] += move
+                    transfers[k] = transfers.get(k, 0.0) + move
+                    need -= move
+            if need > 0:
+                note = f"전 계좌 소진 — 부족 {need:,.0f}원"
+        rows.append({"일자": d, "요일": day.get("요일"), "실적": False,
+                     "잔액": dict(bal), "이체": transfers, "비고": note})
+    return {"accounts": accounts, "rows": rows}
+
+
 # ---------------------------------------------------------------------------
 # 반영률 시나리오 (21번 항목)
 # ---------------------------------------------------------------------------
@@ -670,6 +737,9 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                          if r["상태"] == STATE_SHORTAGE), None)
         scenario = {
             "rate": rate,
+            # 실행 주(월~금)의 일별 기말잔액 — 대표 보고용
+            "금주일별": [(r["일자"], r["기말잔액"], r["상태"]) for r in daily
+                      if r["일자"] < base_date + timedelta(days=5)],
             "4주 온라인입금": sum(r["온라인 예상입금"] for r in daily),
             "4주 기말잔액": daily[-1]["기말잔액"] if daily else 0.0,
             "4주 최저잔액": min_row["기말잔액"] if min_row else 0.0,

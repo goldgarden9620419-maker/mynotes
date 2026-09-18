@@ -129,3 +129,35 @@ def test_정기지출분석_수정_수확_반영(tmp_path):
     assert items[0]["성격"] == "변동"
     # 같은 값 재수확은 변경 0건 (사용자 수정 보존)
     assert fe.update_override_sheet(base, edits) == 0
+
+
+def test_계좌별_시나리오_인출_우선순위():
+    """우리은행 부족분은 농협→국민 순으로 이체해 채운다."""
+    daily = [{"일자": date(2026, 9, 21), "요일": "월", "실적": False,
+              "온라인 예상입금": 0.0, "확정·기타입금": 0.0,
+              "팀별 송금예정": 0.0, "카드결제": 0.0, "자동이체": 0.0,
+              "기타지출": 300.0}]
+    balances = {("우리은행", "W"): 100.0, ("농협", "N"): 150.0,
+                ("국민은행", "K"): 1000.0}
+    sc = fe.build_account_scenario(daily, balances, [])
+    assert sc["accounts"][0] == ("우리은행", "W")
+    row = sc["rows"][0]
+    # 부족 200 = 농협 150 + 국민 50
+    assert row["이체"] == {("농협", "N"): 150.0, ("국민은행", "K"): 50.0}
+    assert round(row["잔액"][("우리은행", "W")]) == 0
+    assert round(row["잔액"][("농협", "N")]) == 0
+    assert round(row["잔액"][("국민은행", "K")]) == 950
+    assert row["비고"] == ""
+
+    # 전 계좌 소진 시 부족 경고
+    daily2 = [dict(daily[0], 기타지출=2000.0)]
+    sc2 = fe.build_account_scenario(daily2, balances, [])
+    assert "부족" in sc2["rows"][0]["비고"]
+
+
+def test_금주일별_시나리오_생성():
+    base = date(2026, 9, 21)  # 월요일
+    fc = fe.build_forecast([], base, 1_000_000, [], [], [], [0.8, 0.9], 0.8)
+    days = fc["rate_scenarios"][0.9]["금주일별"]
+    assert len(days) == 5
+    assert days[0][0] == base and days[-1][0] == date(2026, 9, 25)

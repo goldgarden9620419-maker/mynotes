@@ -218,6 +218,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("forecast", "default_receipt_rate", default=0.8),
             cfg.get("forecast", "minimum_cash_balance", default=0),
             cfg.get("forecast", "online_history_weeks", default=12))
+        # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위)
+        account_scenario = forecast_engine.build_account_scenario(
+            forecast["daily"], balances, merged_history,
+            forecast.get("actual_until"))
         for row in forecast["daily"]:
             if row["상태"] == forecast_engine.STATE_SHORTAGE:
                 issues.append({"구분": "음수 예상잔액",
@@ -264,6 +268,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             "balances": balances,
             "total_balance": total_balance,
             "integrated_masked": integrated_masked,
+            "account_scenario": account_scenario,
             "match_results": matched["results"],
             "unplanned": matched["unplanned"],
             "recurring": recurring,
