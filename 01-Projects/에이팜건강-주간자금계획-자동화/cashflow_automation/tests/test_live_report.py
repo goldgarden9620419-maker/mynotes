@@ -58,7 +58,8 @@ def _fake_report(base: date) -> dict:
         d = base + timedelta(days=i)
         daily.append({"일자": d, "확정·기타입금": 0, "팀별 송금예정": 0,
                       "카드결제": 500000 if i == 3 else 0,
-                      "자동이체": 0, "기타지출": 100000 if i == 0 else 0})
+                      "자동이체": 0, "기타지출": 100000 if i == 0 else 0,
+                      "비고": "서울보증보험 632,250" if i == 2 else ""})
     weekly = [{"확정기타입금": 0, "송금예정": 0, "카드결제": 0,
                "자동이체": 0, "기타지출": 0} for _ in range(13)]
     weekly[5]["기타지출"] = 700000
@@ -129,6 +130,9 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     # 지출 값 기록 (1일차 기타지출, 4일차 카드)
     assert daily["G6"].value == 100000
     assert daily["F9"].value == 500000
+    # 비고란에 그날 지출 내역 요약 (3일차), 없는 날은 비움
+    assert daily["K8"].value == "서울보증보험 632,250"
+    assert daily["K6"].value is None
     weekly = wb["13주주별계획"]
     # 1주차 SUMIFS가 새 날짜로 재작성
     assert "DATE(2026,9,21)" in weekly["C6"].value
