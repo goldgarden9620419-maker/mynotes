@@ -53,7 +53,7 @@ def test_품의승인_열_인식(tmp_path):
     assert by_serial[1]["요청ID"] == "경영-20260918-001"
 
     plan = team_loader.build_integrated_plan(rows)
-    # 승인된 1건만 합계 반영
+    # 기본(명세) 모드: 승인된 1건만 합계 반영
     assert len(plan["countable"]) == 1
     assert plan["countable"][0]["일련번호"] == 2
     # 승인대기·반려는 확인필요에 표시되고 대외비 거래처는 노출하지 않는다
@@ -61,3 +61,19 @@ def test_품의승인_열_인식(tmp_path):
     assert len(pending) == 2
     assert all("서울보증보험" not in i["내용"] for i in pending)
     assert all("기타 대외비 지출" in i["내용"] for i in pending)
+
+
+def test_승인대기_포함_정책(tmp_path):
+    """2026-09-18 사용자 결정: 확정여부 무관, 지급일자 기준 반영."""
+    path = tmp_path / "취합본.xlsx"
+    _write(path, [_row(1, "승인대기"), _row(2, "승인"), _row(3, "반려")])
+    team = next(t for t in TEAMS if t["name"] == "경영지원팀")
+    rows, _ = team_loader.load_team_file(path, team)
+    plan = team_loader.build_integrated_plan(rows, include_unconfirmed=True)
+    # 취소 건이 없으므로 3건 전부 반영
+    assert len(plan["countable"]) == 3
+    assert all(r["반영상태"] == "정상반영" for r in plan["countable"])
+    # 반영됐다는 사실은 확인필요에 정보성으로 표시된다
+    included = [i for i in plan["issues"] if i["구분"] == "승인대기(반영됨)"]
+    assert len(included) == 2
+    assert all("서울보증보험" not in i["내용"] for i in included)

@@ -56,6 +56,8 @@ DEFAULT_CONFIG: dict = {
         "receipt_rates": [0.6, 0.7, 0.8, 0.9, 1.0],
         "minimum_cash_balance": 0,
         "online_history_weeks": 12,
+        # 2026-09-18 사용자 결정: 승인대기·미확정도 지급일자 기준 반영
+        "include_unconfirmed": True,
     },
     "matching": {
         "date_window_days": 3,

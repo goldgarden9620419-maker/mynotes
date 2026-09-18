@@ -226,10 +226,13 @@ def load_all_teams(cfg) -> dict:
 
 
 def build_integrated_plan(rows: list[dict],
-                          card_date_fn: Optional[Callable] = None) -> dict:
+                          card_date_fn: Optional[Callable] = None,
+                          include_unconfirmed: bool = False) -> dict:
     """요청ID 중복 정리 → 반영상태 결정 → 자금계획 반영일 계산.
 
     card_date_fn(사용일: date, 카드구분: str) -> Optional[date]
+    include_unconfirmed: True면 미확정·승인대기 건도 지급일자 기준으로
+    합계에 반영한다(취소 건만 제외). 확인필요 목록에는 계속 표시된다.
     반환: {"integrated": 전체 행(중복 포함), "countable": 반영 행,
            "issues": 확인필요 목록}
     """
@@ -239,30 +242,48 @@ def build_integrated_plan(rows: list[dict],
     for row in selected:
         problems = validate_row(row)
         status = decide_reflect_status(row)
-        if problems:
-            # 취소 건은 어차피 합계 제외이므로 정보누락으로 바꾸지 않는다
-            if status == REFLECT_OK:
-                status = REFLECT_MISSING_INFO
-            row["확인사항"] = "; ".join(problems)
-            for p in problems:
-                issues.append({"구분": p.split("(")[0], "팀명": row.get("팀명"),
-                               "요청ID": row.get("요청ID"),
-                               "내용": p, "원본파일": row.get("원본파일")})
-        row["반영상태"] = status
+
         if status == REFLECT_UNCONFIRMED:
-            # 미확정(승인대기 포함)은 합계 제외 + 확인필요 표시 (12번 항목)
             reason = row.get("품의승인") or row.get("확정여부") or "미확정"
             if row.get("confidential"):
                 subject = classify_confidential(row.get("지출내용", ""),
                                                 row.get("대외비구분", ""))
             else:
                 subject = row.get("거래처", "")
-            issues.append({"구분": "미확정(승인대기)", "팀명": row.get("팀명"),
-                           "요청ID": row.get("요청ID"),
-                           "내용": f"{reason} 상태라 합계 미반영: {subject} "
-                                  f"{(row.get('예상금액') or 0):,.0f}원 "
-                                  f"(예정일 {row.get('지급예정일')})",
-                           "원본파일": row.get("원본파일")})
+            if include_unconfirmed:
+                # 정책: 확정여부와 무관하게 지급일자 기준 반영
+                status = REFLECT_OK
+                note = f"{reason} 상태(정책상 반영)"
+                row["확인사항"] = (row["확인사항"] + "; " + note).strip("; ")
+                issues.append({"구분": "승인대기(반영됨)",
+                               "팀명": row.get("팀명"),
+                               "요청ID": row.get("요청ID"),
+                               "내용": f"{reason} 상태이나 자금계획에 반영: "
+                                      f"{subject} "
+                                      f"{(row.get('예상금액') or 0):,.0f}원 "
+                                      f"(예정일 {row.get('지급예정일')})",
+                               "원본파일": row.get("원본파일")})
+            else:
+                # 미확정은 합계 제외 + 확인필요 표시 (12번 항목)
+                issues.append({"구분": "미확정(승인대기)",
+                               "팀명": row.get("팀명"),
+                               "요청ID": row.get("요청ID"),
+                               "내용": f"{reason} 상태라 합계 미반영: {subject} "
+                                      f"{(row.get('예상금액') or 0):,.0f}원 "
+                                      f"(예정일 {row.get('지급예정일')})",
+                               "원본파일": row.get("원본파일")})
+
+        if problems:
+            # 취소 건은 어차피 합계 제외이므로 정보누락으로 바꾸지 않는다
+            if status == REFLECT_OK:
+                status = REFLECT_MISSING_INFO
+            row["확인사항"] = ("; ".join(problems) + "; "
+                           + row["확인사항"]).strip("; ")
+            for p in problems:
+                issues.append({"구분": p.split("(")[0], "팀명": row.get("팀명"),
+                               "요청ID": row.get("요청ID"),
+                               "내용": p, "원본파일": row.get("원본파일")})
+        row["반영상태"] = status
         _apply_plan_date(row, card_date_fn, issues)
 
     for dup in duplicates:

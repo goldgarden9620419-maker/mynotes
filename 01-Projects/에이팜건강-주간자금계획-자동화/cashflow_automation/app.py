@@ -113,7 +113,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         team_data = team_loader.load_all_teams(cfg)
         issues.extend(team_data["issues"])
         plan = team_loader.build_integrated_plan(
-            team_data["rows"], card_calc.settlement_date)
+            team_data["rows"], card_calc.settlement_date,
+            include_unconfirmed=cfg.get("forecast", "include_unconfirmed",
+                                        default=True))
         issues.extend(plan["issues"])
         log.info("팀 지출계획 %d건 (반영 %d건, 확인필요 %d건, 미제출 팀 %d)",
                  len(team_data["rows"]), len(plan["countable"]),
