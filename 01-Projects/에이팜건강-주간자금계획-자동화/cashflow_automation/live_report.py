@@ -383,21 +383,23 @@ def _fill_expense(wb, rows: list[dict]) -> None:
     ws.freeze_panes = "A6"
 
 
-APALM_SHEET = "에이팜 지출예정"
+APALM_SHEET = "에이팜 지출계획"
 
 _APALM_COLUMNS = [
     ("일자", "일자", 12), ("요일", "요일", 6), ("출처", "출처", 12),
-    ("팀명", "팀명", 12), ("거래처", "거래처", 20),
-    ("지출내용", "지출내용", 32), ("예상금액", "예상금액", 14),
-    ("지급방법", "지급방법", 10),
+    ("자금계획 반영", "반영", 15), ("팀명", "팀명", 12),
+    ("거래처", "거래처", 18), ("지출내용", "지출내용", 28),
+    ("예상금액", "예상금액", 14), ("지급방법", "지급방법", 10),
+    ("비고", "비고", 14),
 ]
 
 
 def _fill_apalm_expense(wb, rows: list[dict]) -> None:
-    """에이팜 관련 지출예정 전용 시트 (4주일별계획 비고에서 분리).
+    """에이팜 지출계획 전용 시트.
 
-    금액은 자금계획(4주·13주)에는 그대로 반영되고, 상세 내역만
-    이 시트에서 따로 보여준다.
+    비고에 '에이팜'이 적힌 팀 지출계획은 자금계획에서 뺀 별도관리
+    건(미반영)으로, 이름으로 인식된 자동 추정 등은 자금계획에 포함된
+    참고 건(반영)으로 함께 보여준다.
     """
     from openpyxl.styles import Alignment, Font, PatternFill
     from openpyxl.utils import get_column_letter
@@ -411,13 +413,14 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
             index = len(wb.sheetnames)
         ws = wb.create_sheet(APALM_SHEET, index)
 
-    title = _set(ws, 2, 1, "에이팜 지출예정 내역 (자동 반영)")
+    title = _set(ws, 2, 1, "에이팜 지출계획 (자동 반영)")
     if title is not None:
         title.font = Font(name="맑은 고딕", bold=True, size=13,
                           color="1F4E79")
     note = _set(ws, 3, 1,
-                "에이팜 관련 지출은 4주일별계획 비고에는 표시하지 않고 "
-                "이 시트에서만 확인합니다. 금액은 자금계획에 정상 반영됩니다.")
+                "지출계획 비고에 '에이팜'으로 표시한 건은 자금계획(4주·13주)에 "
+                "반영하지 않고 여기서만 관리합니다. '반영' 표시 건은 자금계획에 "
+                "포함된 에이팜 관련 참고 항목입니다.")
     if note is not None:
         note.font = Font(name="맑은 고딕", size=9, color="808080")
 
@@ -430,8 +433,10 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
             cell.alignment = Alignment(horizontal="center")
         ws.column_dimensions[get_column_letter(c)].width = width
 
+    excluded_fill = PatternFill("solid", start_color="FFF2CC")
     r = 6
     for row in rows:
+        excluded = str(row.get("반영") or "").startswith("미반영")
         for c, (_header, key, _width) in enumerate(_APALM_COLUMNS, start=1):
             if key == "요일":
                 d = row.get("일자")
@@ -444,24 +449,34 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
             if cell is None:
                 continue
             cell.font = Font(name="맑은 고딕", size=10)
+            if excluded:
+                cell.fill = excluded_fill
             if key == "예상금액":
                 cell.number_format = "#,##0"
             elif isinstance(value, date):
                 cell.number_format = "yyyy-mm-dd"
         r += 1
     if rows:
-        _set(ws, r, 5, "합계")
-        total = _set(ws, r, 7, round(sum(x.get("예상금액") or 0
-                                         for x in rows)))
-        for c in (5, 7):
-            cell = ws.cell(row=r, column=c)
-            if not isinstance(cell, MergedCell):
-                cell.font = Font(name="맑은 고딕", size=10, bold=True)
-        if total is not None:
-            total.number_format = "#,##0"
-        r += 1
+        sums = [("합계(자금계획 미반영)",
+                 sum(x.get("예상금액") or 0 for x in rows
+                     if str(x.get("반영") or "").startswith("미반영"))),
+                ("합계(자금계획 반영)",
+                 sum(x.get("예상금액") or 0 for x in rows
+                     if not str(x.get("반영") or "").startswith("미반영")))]
+        for label, amount in sums:
+            if not amount:
+                continue
+            _set(ws, r, 7, label)
+            total = _set(ws, r, 8, round(amount))
+            for c in (7, 8):
+                cell = ws.cell(row=r, column=c)
+                if not isinstance(cell, MergedCell):
+                    cell.font = Font(name="맑은 고딕", size=10, bold=True)
+            if total is not None:
+                total.number_format = "#,##0"
+            r += 1
     else:
-        empty = _set(ws, r, 1, "이번 실행에 반영된 에이팜 지출예정이 없습니다.")
+        empty = _set(ws, r, 1, "이번 실행에 정리할 에이팜 지출계획이 없습니다.")
         if empty is not None:
             empty.font = Font(name="맑은 고딕", size=10, color="808080")
         r += 1

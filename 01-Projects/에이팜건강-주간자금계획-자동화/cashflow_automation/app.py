@@ -120,6 +120,13 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             include_unconfirmed=cfg.get("forecast", "include_unconfirmed",
                                         default=True))
         issues.extend(plan["issues"])
+        # 비고에 '에이팜'이 적힌 행은 자금계획 집계·대조에서 뺀다
+        # (라이브 파일 '에이팜 지출계획' 시트에서 별도 확인)
+        apalm_marked = forecast_engine.split_apalm_marked(plan)
+        if apalm_marked:
+            log.info("에이팜 별도관리 %d건 %s원 — 자금계획 미반영",
+                     len(apalm_marked),
+                     f"{sum(r.get('예상금액') or 0 for r in apalm_marked):,.0f}")
         log.info("팀 지출계획 %d건 (반영 %d건, 확인필요 %d건, 미제출 팀 %d)",
                  len(team_data["rows"]), len(plan["countable"]),
                  len(plan["issues"]), len(team_data["missing_teams"]))
@@ -258,7 +265,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             plan["integrated"])
         # 에이팜 관련 지출은 4주일별계획 비고 대신 전용 시트로 분리
         apalm_expenses = forecast_engine.collect_apalm_expenses(
-            integrated_masked, adjustments)
+            integrated_masked, adjustments, apalm_marked)
         _annotate_daily_notes(forecast["daily"], integrated_masked)
         report = {
             "meta": {

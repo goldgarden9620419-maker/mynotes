@@ -182,10 +182,54 @@ def test_에이팜_판별과_지출예정_수집():
          "내용": "정기지출 추정(자동 초안): SKB 신뢰도 상"},
     ]
     rows = fe.collect_apalm_expenses(masked, adjustments)
-    assert [(r["출처"], r["거래처"]) for r in rows] == [
-        ("팀 지출계획", "㈜에이팜"), ("정기지출 추정", "㈜에이팜")]
+    assert [(r["출처"], r["거래처"], r["반영"]) for r in rows] == [
+        ("팀 지출계획", "㈜에이팜", "반영"),
+        ("정기지출 추정", "㈜에이팜", "반영")]
     assert rows[0]["예상금액"] == 5_000_000.0
     assert rows[1]["예상금액"] == 3_000_000.0
+
+
+def test_비고_에이팜_표시는_자금계획에서_제외():
+    """비고에 '에이팜'이 적힌 지출계획은 집계에서 빠지고 별도관리된다."""
+    rows = [
+        {"반영상태": "정상반영", "자금계획 반영일": date(2026, 9, 30),
+         "팀명": "경영지원팀", "거래처": "서원회계법인", "지출내용": "기장료",
+         "예상금액": 330_000.0, "지급방법": "계좌송금", "비고": "에이팜"},
+        {"반영상태": "정상반영", "자금계획 반영일": date(2026, 9, 21),
+         "팀명": "건강사업팀", "거래처": "네이버SA&GFA", "지출내용": "광고비",
+         "예상금액": 3_498_000.0, "지급방법": "계좌송금",
+         "비고": "화/수 2일치 금액"},
+    ]
+    plan = {"countable": list(rows), "integrated": rows}
+    marked = fe.split_apalm_marked(plan)
+    assert [r["거래처"] for r in marked] == ["서원회계법인"]
+    assert marked[0]["반영상태"] == fe.APALM_EXCLUDED_STATUS
+    assert [r["거래처"] for r in plan["countable"]] == ["네이버SA&GFA"]
+    # 취합(integrated)에는 별도관리 상태로 남는다
+    assert rows[0]["반영상태"] == fe.APALM_EXCLUDED_STATUS
+
+    # 별도관리 건은 원본 상세 그대로 '미반영'으로 수집된다
+    out = fe.collect_apalm_expenses(plan["countable"], [], marked)
+    assert len(out) == 1
+    assert out[0]["반영"] == "미반영(별도 관리)"
+    assert out[0]["거래처"] == "서원회계법인"
+    assert out[0]["비고"] == "에이팜"
+
+    # 경영지원팀(대외비) 행도 상세를 싣되, 급여·세금보험류 분류만 가린다
+    conf = [{"반영상태": fe.APALM_EXCLUDED_STATUS, "confidential": True,
+             "자금계획 반영일": date(2026, 9, 30), "팀명": "경영지원팀",
+             "거래처": "가가사무기", "지출내용": "복합기 임대",
+             "예상금액": 280_000.0, "대외비구분": "", "비고": "에이팜"},
+            {"반영상태": fe.APALM_EXCLUDED_STATUS, "confidential": True,
+             "자금계획 반영일": date(2026, 9, 25), "팀명": "경영지원팀",
+             "거래처": "메트라이프", "지출내용": "정기보험",
+             "예상금액": 2_497_000.0, "대외비구분": "세금·보험(대외비)",
+             "비고": "에이팜"}]
+    out = fe.collect_apalm_expenses([], [], conf)
+    by_amt = {r["예상금액"]: r for r in out}
+    assert by_amt[280_000.0]["거래처"] == "가가사무기"      # 일반 내용은 노출
+    assert by_amt[2_497_000.0]["거래처"] == "(대외비)"      # 민감 분류는 가림
+    assert by_amt[2_497_000.0]["지출내용"] == "세금·보험(대외비)"
 
 
 def test_비고에서_에이팜_제외():
