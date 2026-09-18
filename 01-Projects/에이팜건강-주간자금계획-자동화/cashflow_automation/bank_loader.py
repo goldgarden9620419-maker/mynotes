@@ -76,15 +76,19 @@ def _detect_header(rows: list[list[Any]]) -> Optional[tuple[int, dict[int, str]]
 
 
 def _find_account_hint(rows: list[list[Any]], header_idx: int) -> str:
-    """헤더 위쪽에서 '계좌번호: xxx' 형태의 안내를 찾는다."""
-    pattern = re.compile(r"(\d{3,4}[- ]?\d{2,4}[- ]?\d{4,8}[- ]?\d{0,4})")
+    """헤더 위쪽에서 '계좌번호: xxx' 형태의 안내를 찾는다.
+
+    은행에 따라 '계좌번호' 라벨과 번호가 다른 셀에 있으므로
+    행 전체를 이어붙여 검색한다.
+    """
+    pattern = re.compile(r"(\d{4,8}(?:[- ]\d{2,6}){1,3}|\d{10,14})")
     for row in rows[:header_idx]:
-        for value in row:
-            text = normalize_text(value)
-            if "계좌" in text:
-                m = pattern.search(text)
-                if m:
-                    return m.group(1)
+        row_text = " ".join(normalize_text(v) for v in row if v not in
+                            (None, ""))
+        if "계좌" in row_text:
+            m = pattern.search(row_text)
+            if m:
+                return m.group(1).strip()
     return ""
 
 
@@ -172,10 +176,15 @@ def _normalize_bank_row(values: dict, bank: str, filename: str,
     tx_date = parse_date(values.get("거래일")) or (
         tx_datetime.date() if tx_datetime else None)
     if tx_datetime is None and tx_date is None:
-        raw_date = values.get("거래일") or values.get("거래일시")
-        if normalize_text(raw_date):
-            return {"_잘못된날짜": True}
-        return None  # 빈 행/합계 행
+        raw_date = normalize_text(values.get("거래일")
+                                  or values.get("거래일시"))
+        if not raw_date:
+            return None  # 빈 행
+        # '총 862건', '합계' 같은 요약 행은 거래가 아니다
+        if raw_date.startswith("총") or "합계" in raw_date \
+                or raw_date.endswith("건"):
+            return None
+        return {"_잘못된날짜": True}
     if tx_datetime is None and values.get("거래시간") is not None:
         t = normalize_text(values.get("거래시간"))
         m = re.match(r"(\d{1,2}):(\d{2})(?::(\d{2}))?", t)

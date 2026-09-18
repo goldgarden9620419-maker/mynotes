@@ -7,7 +7,7 @@
 """
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 from typing import Optional
 
 from rapidfuzz import fuzz
@@ -75,13 +75,17 @@ def _score(plan: dict, tx: dict, name_threshold: float,
 
 def match_payments(plans: list[dict], bank_rows: list[dict],
                    base_date: date, window_days: int = 3,
-                   name_threshold: float = 70) -> dict:
+                   name_threshold: float = 70,
+                   unplanned_days: int = 14) -> dict:
     """대조 수행.
 
     plans: 반영상태가 정상반영/지급완료인 행(대외비 포함, 내부용).
     bank_rows: 중복 제거·분류 완료된 표준 은행 행.
+    unplanned_days: '계획없는출금'으로 표시할 최근 기간(과거 이력이
+    길게 들어와도 지난 거래를 전부 확인필요로 만들지 않는다).
     반환: {"results": [...], "unplanned": [...]}
     """
+    unplanned_since = base_date - timedelta(days=unplanned_days)
     withdrawals = [tx for tx in bank_rows
                    if tx.get("반영상태") == BANK_REFLECT_OK
                    and not tx.get("내부이체")
@@ -120,6 +124,8 @@ def match_payments(plans: list[dict], bank_rows: list[dict],
     unplanned = []
     for idx, tx in enumerate(withdrawals):
         if idx in used_tx:
+            continue
+        if tx.get("거래일") is None or tx["거래일"] < unplanned_since:
             continue
         cls = tx.get("자동분류") or ""
         # 자동분류로 성격이 확인된 정기 성격의 출금은 계획없는출금에서 제외

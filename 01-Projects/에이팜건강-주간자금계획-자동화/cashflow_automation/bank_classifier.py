@@ -41,7 +41,9 @@ DEFAULT_RULES = {
         "월말분류": CONF_CAT_PAYROLL,
         "그외분류": CLASS_REVIEW,
     },
-    "internal_keywords": ["에이팜건강", "(주)에이팜건강"],
+    # '에이팜건'은 은행 표기가 잘린 경우('국민네이버 에이팜건' 등),
+    # 'apha'는 영문 계좌별칭(apharm) 잘림까지 잡기 위한 키워드다.
+    "internal_keywords": ["에이팜건강", "(주)에이팜건강", "에이팜건", "apha"],
 }
 
 

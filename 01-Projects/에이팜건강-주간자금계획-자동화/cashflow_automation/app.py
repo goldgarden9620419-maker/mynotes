@@ -151,7 +151,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         matched = payment_matcher.match_payments(
             match_targets, kept, now.date(),
             cfg.get("matching", "date_window_days", default=3),
-            cfg.get("matching", "name_similarity_threshold", default=70))
+            cfg.get("matching", "name_similarity_threshold", default=70),
+            cfg.get("bank", "recent_days", default=14))
         for row in matched["results"]:
             if row["대조결과"] in ("수동확인필요",):
                 issues.append({"구분": "수동 대조 필요",
