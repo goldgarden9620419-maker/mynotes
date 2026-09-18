@@ -16,7 +16,7 @@ if errorlevel 1 (
 
 echo [1/3] 필요한 라이브러리를 설치합니다...
 python -m pip install --upgrade pip >nul
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 if errorlevel 1 (
     echo [오류] 라이브러리 설치에 실패했습니다. 네트워크를 확인하세요.
     pause
