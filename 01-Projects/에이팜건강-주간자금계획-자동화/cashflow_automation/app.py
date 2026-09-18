@@ -311,6 +311,13 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         # 10) 이력 저장·지난자료 정리·상태 기록
         bank_loader.save_history(history_path, merged_history)
         backup_manager.archive_old_outputs(cfg)
+        # 결과 폴더에는 이번 실행분만 남긴다 (이전 버전은 99_지난자료/지난결과)
+        if cfg.get("options", "keep_only_latest_outputs", default=True):
+            swept = backup_manager.archive_superseded_outputs(
+                cfg, {p.name for p in moved},
+                {review_copy.name} if review_copy is not None else ())
+            if swept:
+                log.info("이전 결과 %d개를 99_지난자료/지난결과로 이동", swept)
 
         status = STATUS_PARTIAL if validation.missing_required else STATUS_SUCCESS
         excel_out = next((p.name for p in moved

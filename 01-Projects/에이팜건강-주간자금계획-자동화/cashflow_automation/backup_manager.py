@@ -80,6 +80,47 @@ class TempWorkspace:
             pass
 
 
+_OUTPUT_PREFIXES = ("주간자금계획", "확인필요")
+
+
+def _sweep_to_archive(src_dir, archive_dir, keep_names) -> int:
+    """keep_names에 없는 결과 파일을 archive_dir로 옮긴다."""
+    moved = 0
+    if not src_dir.exists():
+        return 0
+    for path in src_dir.iterdir():
+        if not path.is_file() or not path.name.startswith(_OUTPUT_PREFIXES):
+            continue
+        if path.name in keep_names:
+            continue
+        archive_dir.mkdir(parents=True, exist_ok=True)
+        target = archive_dir / path.name
+        if target.exists():
+            stamp = datetime.now().strftime("%H%M%S")
+            target = archive_dir / f"{path.stem}_{stamp}{path.suffix}"
+        try:
+            shutil.move(str(path), str(target))
+            moved += 1
+        except OSError:
+            continue
+    return moved
+
+
+def archive_superseded_outputs(cfg, keep_output_names,
+                               keep_review_names=()) -> int:
+    """05_결과·06_확인필요에는 최신 실행 결과만 남긴다.
+
+    이전 실행 파일은 지우지 않고 99_지난자료/지난결과로 이동한다
+    (같은 주에 여러 번 실행해도 결과 폴더가 어지럽지 않도록).
+    """
+    archive_dir = cfg.folder("archive") / "지난결과"
+    moved = _sweep_to_archive(cfg.folder("output"), archive_dir,
+                              set(keep_output_names))
+    moved += _sweep_to_archive(cfg.folder("review"), archive_dir,
+                               set(keep_review_names))
+    return moved
+
+
 def archive_old_outputs(cfg, keep_days: int = 35) -> int:
     """오래된 결과물을 99_지난자료로 이동한다. 기존 결과물은 지우지 않는다."""
     output_dir = cfg.folder("output")
