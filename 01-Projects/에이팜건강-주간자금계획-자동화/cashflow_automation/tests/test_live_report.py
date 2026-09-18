@@ -215,38 +215,51 @@ def test_지출시트_재실행시_잔여행_정리(tmp_path):
     wb.close()
 
 
-def _assert_week_box(ws):
-    """기준주(6~12행)가 하나의 붉은 외곽 상자로 묶였는지 확인."""
-    assert ws["A6"].border.top.style == "medium"
-    assert ws["A6"].border.left.style == "medium"
-    assert ws["K6"].border.top.style == "medium"
-    assert ws["K12"].border.right.style == "medium"
-    assert ws["F12"].border.bottom.style == "medium"
+def _side(cell, name):
+    s = getattr(cell.border, name, None)
+    return s.style if s is not None else None
+
+
+def _assert_exec_box(ws, first_row, last_row):
+    """실행일~차주 금요일 구간이 하나의 붉은 외곽 상자인지 확인."""
+    assert _side(ws.cell(row=first_row, column=1), "top") == "medium"
+    assert _side(ws.cell(row=first_row, column=1), "left") == "medium"
+    assert _side(ws.cell(row=first_row, column=11), "top") == "medium"
+    assert _side(ws.cell(row=last_row, column=11), "right") == "medium"
+    assert _side(ws.cell(row=last_row, column=6), "bottom") == "medium"
     # 상자 내부는 격자가 아니다 (셀별 테두리 아님)
-    assert ws["C9"].border.top.style != "medium"
-    assert ws["C9"].border.left.style != "medium"
-    # 2주차 이후는 표시가 없다
-    assert ws["A13"].border.left.style != "medium"
+    mid = (first_row + last_row) // 2
+    assert _side(ws.cell(row=mid, column=3), "top") != "medium"
+    assert _side(ws.cell(row=mid, column=3), "left") != "medium"
+    # 구간 밖은 표시가 없다
+    assert _side(ws.cell(row=last_row + 1, column=1), "left") != "medium"
+    if first_row > 6:
+        assert _side(ws.cell(row=first_row - 1, column=1), "left") != "medium"
     # 예전 TODAY() 조건부서식은 남아있지 않다
     assert not [rule for rules in ws.conditional_formatting
                 for rule in rules.rules
                 if rule.formula and "WEEKDAY(TODAY()" in rule.formula[0]]
 
 
-def test_기준주_붉은_상자(tmp_path):
-    """지출예정 파일의 기준주(1주차)가 붉은 외곽 상자로 표시된다."""
+def test_실행일_차주금요일_붉은_상자(tmp_path):
+    """붉은 상자는 실행일부터 차주 금요일까지를 하나로 묶는다."""
     template = tmp_path / "템플릿.xlsx"
     _make_stub_template(template)
+    # 월요일(9/21) 실행 → 9/21 ~ 차주 금요일 10/2 (6~17행)
     out1 = tmp_path / "결과1.xlsx"
     fill_live_workbook(template, _fake_report(NEW_MONDAY), out1)
     wb = load_workbook(out1)
-    _assert_week_box(wb["4주일별계획"])
+    _assert_exec_box(wb["4주일별계획"], 6, 17)
+    # 비고란은 자동 줄바꿈
+    assert wb["4주일별계획"]["K8"].alignment.wrap_text
     wb.close()
-    # 이전 결과물을 템플릿으로 재실행해도 상자는 같은 위치에 하나뿐이다
+    # 목요일(9/24) 실행 → 9/24 ~ 10/2 (9~17행), 재실행에도 상자는 하나
+    report2 = _fake_report(NEW_MONDAY)
+    report2["meta"]["run_date"] = NEW_MONDAY + timedelta(days=3)
     out2 = tmp_path / "결과2.xlsx"
-    fill_live_workbook(out1, _fake_report(NEW_MONDAY), out2)
+    fill_live_workbook(out1, report2, out2)
     wb = load_workbook(out2)
-    _assert_week_box(wb["4주일별계획"])
+    _assert_exec_box(wb["4주일별계획"], 9, 17)
     wb.close()
 
 

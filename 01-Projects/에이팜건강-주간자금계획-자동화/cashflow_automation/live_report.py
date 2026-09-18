@@ -81,7 +81,8 @@ def fill_live_workbook(template_path: Path, report: dict,
 
     _fill_config(wb["설정및분류"], forecast)
     _fill_summary(wb["요약"], report, base_date, stats)
-    _fill_daily(wb["4주일별계획"], forecast, base_date)
+    _fill_daily(wb["4주일별계획"], forecast, base_date,
+                meta.get("run_date"))
     _fill_weekly(wb["13주주별계획"], forecast, base_date)
     _fill_account_scenario(wb, report.get("account_scenario"))
     _fill_expense(wb, report.get("integrated_masked", []))
@@ -175,7 +176,8 @@ def _fill_summary(ws, report: dict, base_date: date, stats: dict) -> None:
                 _set(ws, r, c, None)
 
 
-def _fill_daily(ws, forecast: dict, base_date: date) -> None:
+def _fill_daily(ws, forecast: dict, base_date: date,
+                run_date: Optional[date] = None) -> None:
     daily_by_date = {r["일자"]: r for r in forecast.get("daily", [])}
     # 비고 열 위치는 머리글(5행)에서 찾는다 (기본 K열)
     note_col = 11
@@ -213,8 +215,17 @@ def _fill_daily(ws, forecast: dict, base_date: date) -> None:
         for c, v in zip((4, 5, 6, 7), vals):
             _set(ws, row, c, round(v) if v else None)
         # 그날 반영된 지출 내역 요약 (없으면 이전 실행 잔여값 정리)
-        _set(ws, row, note_col, (src or {}).get("비고") or None)
-    _outline_base_week(ws, note_col)
+        ncell = _set(ws, row, note_col, (src or {}).get("비고") or None)
+        if ncell is not None:
+            # 긴 내역은 셀 안에서 자동 줄바꿈 + 행 높이 자동 조정
+            from openpyxl.styles import Alignment
+            ncell.alignment = Alignment(horizontal="left", vertical="top",
+                                        wrap_text=True)
+            rd = ws.row_dimensions.get(row)
+            if rd is not None:
+                rd.height = None
+                rd.customHeight = False
+    _outline_exec_window(ws, note_col, base_date, run_date)
 
 
 def outline_week_box(ws, first_row: int, last_row: int,
@@ -240,13 +251,22 @@ def outline_week_box(ws, first_row: int, last_row: int,
         _edge(r, last_col, right=True)
 
 
-def _outline_base_week(ws, note_col: int) -> None:
-    """취합 지출예정 파일의 기준주(1주차, 6~12행)를 붉은 상자로 표시.
+def exec_window(run_date: date) -> tuple[date, date]:
+    """붉은 상자 구간: 실행일부터 차주(다음 주) 금요일까지."""
+    from common import week_monday
+    end = week_monday(run_date) + timedelta(days=7 + 4)
+    return run_date, end
 
-    기준주는 매 실행 때 A6 날짜와 함께 갱신되므로 상자 위치는 항상
-    지출예정 파일이 다루는 그 주를 가리킨다. 예전 버전이 넣어둔
-    TODAY() 조건부서식(셀별 격자)은 제거한다.
+
+def _outline_exec_window(ws, note_col: int, base_date: date,
+                         run_date: Optional[date]) -> None:
+    """실행일~차주 금요일 구간을 붉은 상자로 표시.
+
+    예: 목요일(9/18) 실행이면 9/18~다음 주 금요일(9/25)을 묶는다.
+    예전 버전이 넣어둔 TODAY() 조건부서식(셀별 격자)은 제거한다.
     """
+    from copy import copy
+
     stale = [cf for cf in list(ws.conditional_formatting)
              if any(r.formula and "WEEKDAY(TODAY()" in r.formula[0]
                     for r in cf.rules)]
@@ -255,7 +275,28 @@ def _outline_base_week(ws, note_col: int) -> None:
             del ws.conditional_formatting._cf_rules[cf]
         except KeyError:
             pass
-    outline_week_box(ws, 6, 12, 1, max(note_col, 11))
+    last_col = max(note_col, 11)
+    # 이전 실행이 남긴 붉은 테두리를 먼저 지운다 (재실행 대비)
+    for r in range(6, 34):
+        for c in range(1, last_col + 1):
+            cell = ws.cell(row=r, column=c)
+            b = cell.border
+            dirty = False
+            for name in ("top", "bottom", "left", "right"):
+                s = getattr(b, name, None)
+                if s is not None and s.style == "medium" \
+                        and s.color is not None \
+                        and str(s.color.rgb or "").endswith("C00000"):
+                    if not dirty:
+                        b = copy(b)
+                        dirty = True
+                    setattr(b, name, None)
+            if dirty:
+                cell.border = b
+    start, end = exec_window(run_date or base_date)
+    first = 6 + max(0, min((start - base_date).days, 27))
+    last = 6 + max(0, min((end - base_date).days, 27))
+    outline_week_box(ws, first, last, 1, last_col)
 
 
 def _fill_weekly(ws, forecast: dict, base_date: date) -> None:

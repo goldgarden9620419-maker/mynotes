@@ -64,13 +64,16 @@ def test_경영보고_생성과_수식(tmp_path):
     assert str(ws["E14"].value).startswith("=$H$13")
     assert ws["A41"].value.date() == date(2026, 10, 18)  # 28일째
     assert str(ws["C42"].value).startswith("=MIN(E14:E41")
-    # 이번 주(첫 7일)는 하나의 붉은 상자 (격자 아님)
-    assert ws["A14"].border.top.style == "medium"
-    assert ws["A14"].border.left.style == "medium"
-    assert ws["F20"].border.bottom.style == "medium"
-    assert ws["F20"].border.right.style == "medium"
-    assert ws["C17"].border.left.style != "medium"
-    assert ws["A21"].border.left.style != "medium"   # 2주차부터는 없음
+    # 실행일(월 9/21)~차주 금요일(10/2) 구간이 하나의 붉은 상자 (격자 아님)
+    def _side(cell, name):
+        s = getattr(cell.border, name, None)
+        return s.style if s is not None else None
+    assert _side(ws["A14"], "top") == "medium"
+    assert _side(ws["A14"], "left") == "medium"
+    assert _side(ws["F25"], "bottom") == "medium"
+    assert _side(ws["F25"], "right") == "medium"
+    assert _side(ws["C17"], "left") != "medium"
+    assert _side(ws["A26"], "left") != "medium"   # 구간 밖은 없음
     # ③ 4주 지출예정 표: 항목·합계 (10/14 건도 포함)
     assert ws["A47"].value is not None and ws["E47"].value == 500000
     assert ws["D48"].value == "대외비 급여·인건비(대외비)"
