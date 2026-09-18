@@ -78,6 +78,7 @@ def test_경영보고_생성과_수식(tmp_path):
     assert ws["A47"].value is not None and ws["E47"].value == 500000
     assert ws["D48"].value == "대외비 급여·인건비(대외비)"
     assert "SUM(" in str(ws["E141"].value)
+    assert ws.auto_filter.ref == "A46:F140"   # 지급일별 필터
     # ④ 필요 추가 입금: 목표잔액 셀 참조 MAX 수식 (80/90/100 3행)
     assert ws["A146"].value == 0.8 and ws["A148"].value == 1.0
     assert "MAX(0,$B$144" in str(ws["E146"].value)

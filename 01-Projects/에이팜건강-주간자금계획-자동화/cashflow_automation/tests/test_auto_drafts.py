@@ -100,3 +100,21 @@ def test_제외_표시는_반영하지_않는다(tmp_path):
     drafts, excluded = fe.load_auto_drafts(draft)
     assert excluded == 1
     assert all(d["일자"] != first[0].value for d in drafts)
+
+
+def test_반영열_드롭다운(tmp_path):
+    """반영 열(E)에 '반영/제외' 드롭다운이 생성·유지된다."""
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    fe.refresh_auto_draft_file(
+        draft, [{"정기지출명": "SKB", "대표 지급일": 15,
+                 "평균 월지출": 220_000.0, "신뢰도": "상"}], BASE)
+    wb = load_workbook(draft)
+    dvs = wb[fe.AUTO_DRAFT_SHEET].data_validations.dataValidation
+    assert any("반영" in str(dv.formula1) for dv in dvs)
+    wb.close()
+    # 재갱신해도 드롭다운이 중복 생성되지 않는다
+    fe.refresh_auto_draft_file(draft, [], BASE)
+    wb = load_workbook(draft)
+    dvs = wb[fe.AUTO_DRAFT_SHEET].data_validations.dataValidation
+    assert sum(1 for dv in dvs if "반영" in str(dv.formula1)) == 1
+    wb.close()
