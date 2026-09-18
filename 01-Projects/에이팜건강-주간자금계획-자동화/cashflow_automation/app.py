@@ -256,6 +256,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                   and base_date <= p["자금계획 반영일"] <= horizon_end]
         integrated_masked = team_loader.mask_confidential_rows(
             plan["integrated"])
+        # 에이팜 관련 지출은 4주일별계획 비고 대신 전용 시트로 분리
+        apalm_expenses = forecast_engine.collect_apalm_expenses(
+            integrated_masked, adjustments)
         _annotate_daily_notes(forecast["daily"], integrated_masked)
         report = {
             "meta": {
@@ -269,6 +272,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             "total_balance": total_balance,
             "integrated_masked": integrated_masked,
             "account_scenario": account_scenario,
+            "apalm_expenses": apalm_expenses,
             "match_results": matched["results"],
             "unplanned": matched["unplanned"],
             "recurring": recurring,
@@ -410,6 +414,10 @@ def _annotate_daily_notes(daily_rows: list[dict], masked_rows: list[dict],
         if r.get("confidential"):
             label = f"{r.get('지출내용') or '대외비'} {amount:,.0f}"
         else:
+            # 에이팜 관련은 '에이팜 지출예정' 시트에서만 상세를 보여준다
+            if forecast_engine.mentions_apalm(r.get("거래처"),
+                                              r.get("지출내용")):
+                continue
             subject = (r.get("거래처") or r.get("지출내용")
                        or r.get("팀명") or "")
             label = f"{subject} {amount:,.0f}"
@@ -434,6 +442,8 @@ def _compact_recurring_note(note: str) -> str:
             name = p.split(":", 1)[1].strip() if ":" in p else p
             for grade in (" 신뢰도 상", " 신뢰도 중", " 신뢰도 하"):
                 name = name.replace(grade, "")
+            if forecast_engine.mentions_apalm(name):
+                continue  # 에이팜 관련은 '에이팜 지출예정' 시트로 분리
             names.append(name)
         else:
             other.append(p)

@@ -85,6 +85,7 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_weekly(wb["13주주별계획"], forecast, base_date)
     _fill_account_scenario(wb, report.get("account_scenario"))
     _fill_expense(wb, report.get("integrated_masked", []))
+    _fill_apalm_expense(wb, report.get("apalm_expenses", []))
     _fill_recurring(wb["정기지출분석"], report.get("recurring", []))
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []))
 
@@ -374,6 +375,101 @@ def _fill_expense(wb, rows: list[dict]) -> None:
     for rr in range(r, end + 1):
         row_empty = True
         for c in range(1, len(_EXPENSE_COLUMNS) + 1):
+            if ws.cell(row=rr, column=c).value is not None:
+                _set(ws, rr, c, None)
+                row_empty = False
+        if row_empty and rr > r + 5:
+            break
+    ws.freeze_panes = "A6"
+
+
+APALM_SHEET = "에이팜 지출예정"
+
+_APALM_COLUMNS = [
+    ("일자", "일자", 12), ("요일", "요일", 6), ("출처", "출처", 12),
+    ("팀명", "팀명", 12), ("거래처", "거래처", 20),
+    ("지출내용", "지출내용", 32), ("예상금액", "예상금액", 14),
+    ("지급방법", "지급방법", 10),
+]
+
+
+def _fill_apalm_expense(wb, rows: list[dict]) -> None:
+    """에이팜 관련 지출예정 전용 시트 (4주일별계획 비고에서 분리).
+
+    금액은 자금계획(4주·13주)에는 그대로 반영되고, 상세 내역만
+    이 시트에서 따로 보여준다.
+    """
+    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.utils import get_column_letter
+
+    if APALM_SHEET in wb.sheetnames:
+        ws = wb[APALM_SHEET]
+    else:
+        try:
+            index = wb.sheetnames.index(EXPENSE_SHEET) + 1
+        except ValueError:
+            index = len(wb.sheetnames)
+        ws = wb.create_sheet(APALM_SHEET, index)
+
+    title = _set(ws, 2, 1, "에이팜 지출예정 내역 (자동 반영)")
+    if title is not None:
+        title.font = Font(name="맑은 고딕", bold=True, size=13,
+                          color="1F4E79")
+    note = _set(ws, 3, 1,
+                "에이팜 관련 지출은 4주일별계획 비고에는 표시하지 않고 "
+                "이 시트에서만 확인합니다. 금액은 자금계획에 정상 반영됩니다.")
+    if note is not None:
+        note.font = Font(name="맑은 고딕", size=9, color="808080")
+
+    for c, (header, _key, width) in enumerate(_APALM_COLUMNS, start=1):
+        cell = _set(ws, 5, c, header)
+        if cell is not None:
+            cell.fill = PatternFill("solid", start_color="1F4E79")
+            cell.font = Font(name="맑은 고딕", color="FFFFFF", bold=True,
+                             size=10)
+            cell.alignment = Alignment(horizontal="center")
+        ws.column_dimensions[get_column_letter(c)].width = width
+
+    r = 6
+    for row in rows:
+        for c, (_header, key, _width) in enumerate(_APALM_COLUMNS, start=1):
+            if key == "요일":
+                d = row.get("일자")
+                value = WEEKDAY_KO[d.weekday()] if isinstance(d, date) else ""
+            else:
+                value = row.get(key)
+            if isinstance(value, datetime):
+                value = value.date()
+            cell = _set(ws, r, c, value)
+            if cell is None:
+                continue
+            cell.font = Font(name="맑은 고딕", size=10)
+            if key == "예상금액":
+                cell.number_format = "#,##0"
+            elif isinstance(value, date):
+                cell.number_format = "yyyy-mm-dd"
+        r += 1
+    if rows:
+        _set(ws, r, 5, "합계")
+        total = _set(ws, r, 7, round(sum(x.get("예상금액") or 0
+                                         for x in rows)))
+        for c in (5, 7):
+            cell = ws.cell(row=r, column=c)
+            if not isinstance(cell, MergedCell):
+                cell.font = Font(name="맑은 고딕", size=10, bold=True)
+        if total is not None:
+            total.number_format = "#,##0"
+        r += 1
+    else:
+        empty = _set(ws, r, 1, "이번 실행에 반영된 에이팜 지출예정이 없습니다.")
+        if empty is not None:
+            empty.font = Font(name="맑은 고딕", size=10, color="808080")
+        r += 1
+    # 이전 실행의 잔여 행 정리
+    end = max(ws.max_row, r)
+    for rr in range(r, end + 1):
+        row_empty = True
+        for c in range(1, len(_APALM_COLUMNS) + 1):
             if ws.cell(row=rr, column=c).value is not None:
                 _set(ws, rr, c, None)
                 row_empty = False
