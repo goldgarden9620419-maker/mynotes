@@ -161,6 +161,12 @@ def _fill_summary(ws, report: dict, base_date: date, stats: dict) -> None:
 
 def _fill_daily(ws, forecast: dict, base_date: date) -> None:
     daily_by_date = {r["일자"]: r for r in forecast.get("daily", [])}
+    # 비고 열 위치는 머리글(5행)에서 찾는다 (기본 K열)
+    note_col = 11
+    for c in range(1, 21):
+        if str(ws.cell(row=5, column=c).value or "").strip() == "비고":
+            note_col = c
+            break
     for i in range(28):
         row = 6 + i
         d = base_date + timedelta(days=i)
@@ -178,6 +184,8 @@ def _fill_daily(ws, forecast: dict, base_date: date) -> None:
                     etc or None]
         for c, v in zip((4, 5, 6, 7), vals):
             _set(ws, row, c, round(v) if v else None)
+        # 그날 반영된 지출 내역 요약 (없으면 이전 실행 잔여값 정리)
+        _set(ws, row, note_col, (src or {}).get("비고") or None)
 
 
 def _fill_weekly(ws, forecast: dict, base_date: date) -> None:
