@@ -1,14 +1,10 @@
-# (주)에이팜건강 주간 자금계획 자동화 — 실행 필수 라이브러리
+# Runtime requirements (ASCII only: Korean-Windows pip decodes with cp949)
 openpyxl>=3.1
-xlrd>=2.0          # 구형 .xls 은행 파일
+xlrd>=2.0
 PyYAML>=6.0
 APScheduler>=3.10,<4
-rapidfuzz>=3.0     # 거래처·적요 유사도 대조
-reportlab>=4.0     # 대표 보고용 PDF
-pystray>=0.19      # 시스템 트레이
-Pillow>=10.0       # 트레이 아이콘
-tzdata>=2024.1     # Windows에서 Asia/Seoul 시간대
-
-# 개발·빌드 전용
-pytest>=8.0
-pyinstaller>=6.0
+rapidfuzz>=3.0
+reportlab>=4.0
+pystray>=0.19
+Pillow>=10.0
+tzdata>=2024.1

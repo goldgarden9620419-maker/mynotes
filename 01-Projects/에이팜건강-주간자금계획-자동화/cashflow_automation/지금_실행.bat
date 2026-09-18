@@ -28,21 +28,29 @@ if not defined PY (
     exit /b 1
 )
 
+set PYTHONUTF8=1
+
 rem --- 가상환경 준비 (최초 1회만 몇 분 걸림) ---
 if not exist "%~dp0.venv\Scripts\python.exe" (
-    echo [준비] 가상환경을 만들고 필요한 패키지를 설치합니다. 잠시 기다려 주세요...
+    echo [준비] 가상환경을 만듭니다...
     %PY% -m venv "%~dp0.venv"
     if errorlevel 1 (
         echo [오류] 가상환경 생성에 실패했습니다.
         pause
         exit /b 1
     )
+)
+rem 설치 성공 마커가 없으면(최초 또는 이전 설치 실패) 패키지를 설치한다
+if not exist "%~dp0.venv\install.ok" (
+    echo [준비] 필요한 패키지를 설치합니다. 잠시 기다려 주세요...
     "%~dp0.venv\Scripts\python.exe" -m pip install -q -r "%~dp0requirements.txt"
     if errorlevel 1 (
-        echo [오류] 패키지 설치에 실패했습니다. 인터넷 연결을 확인하세요.
+        echo [오류] 패키지 설치에 실패했습니다. 인터넷 연결을 확인한 뒤
+        echo        이 파일을 다시 실행하면 설치를 이어서 시도합니다.
         pause
         exit /b 1
     )
+    echo ok> "%~dp0.venv\install.ok"
 )
 
 echo [실행] 폴더를 검색해 최신 입력파일로 자금계획을 생성합니다...
