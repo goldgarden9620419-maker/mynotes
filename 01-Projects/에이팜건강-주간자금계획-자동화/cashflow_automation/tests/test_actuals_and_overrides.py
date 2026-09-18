@@ -253,6 +253,30 @@ def test_비고에서_에이팜_제외():
     assert "OO인쇄" in note and "SKB" in note
 
 
+def test_성격_변동이면_자동초안_추정_제외():
+    """외상매입금처럼 금액이 변하는 항목은 자동 초안 추정을 쓰지 않는다."""
+    adjustments = [
+        {"일자": date(2026, 9, 28), "조정입금": 0.0, "조정지출": 1_369_025.0,
+         "내용": "정기지출 추정(자동 초안): 국민주식회사 에이팜 신뢰도 하"},
+        {"일자": date(2026, 9, 30), "조정입금": 0.0, "조정지출": 100_000.0,
+         "내용": "정기지출 추정(자동 초안): SKB 신뢰도 상"},
+        # 입금 추정과 수동 조정은 건드리지 않는다
+        {"일자": date(2026, 9, 30), "조정입금": 10_021_867.0, "조정지출": 0.0,
+         "내용": "관계사 외상대 입금 추정(주식회사에이팜, 말일)"},
+    ]
+    overrides = {"국민주식회사 에이팜": {"분류": "외상매입금", "성격": "변동"},
+                 "SKB": {"분류": "통신비", "성격": "정기"}}
+    kept, dropped = fe.filter_adjustments_by_overrides(adjustments, overrides)
+    assert len(dropped) == 1 and "에이팜" in dropped[0]["내용"]
+    assert {a["내용"][:2] for a in kept} == {"정기", "관계"}
+
+    # 성격을 '정기'로 되돌리면 다시 반영된다
+    overrides["국민주식회사 에이팜"]["성격"] = "정기"
+    kept2, dropped2 = fe.filter_adjustments_by_overrides(
+        adjustments, overrides)
+    assert not dropped2 and len(kept2) == 3
+
+
 def test_금주일별_시나리오_생성():
     base = date(2026, 9, 21)  # 월요일
     fc = fe.build_forecast([], base, 1_000_000, [], [], [], [0.8, 0.9], 0.8)
