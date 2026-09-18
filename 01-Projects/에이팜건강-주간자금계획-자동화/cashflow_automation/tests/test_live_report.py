@@ -215,28 +215,38 @@ def test_지출시트_재실행시_잔여행_정리(tmp_path):
     wb.close()
 
 
-def _current_week_rules(ws):
-    return [rule for rules in ws.conditional_formatting
-            for rule in rules.rules
-            if rule.formula and "WEEKDAY(TODAY()" in rule.formula[0]]
+def _assert_week_box(ws):
+    """기준주(6~12행)가 하나의 붉은 외곽 상자로 묶였는지 확인."""
+    assert ws["A6"].border.top.style == "medium"
+    assert ws["A6"].border.left.style == "medium"
+    assert ws["K6"].border.top.style == "medium"
+    assert ws["K12"].border.right.style == "medium"
+    assert ws["F12"].border.bottom.style == "medium"
+    # 상자 내부는 격자가 아니다 (셀별 테두리 아님)
+    assert ws["C9"].border.top.style != "medium"
+    assert ws["C9"].border.left.style != "medium"
+    # 2주차 이후는 표시가 없다
+    assert ws["A13"].border.left.style != "medium"
+    # 예전 TODAY() 조건부서식은 남아있지 않다
+    assert not [rule for rules in ws.conditional_formatting
+                for rule in rules.rules
+                if rule.formula and "WEEKDAY(TODAY()" in rule.formula[0]]
 
 
-def test_이번주_붉은_테두리_조건부서식(tmp_path):
-    """4주일별계획에 조회 시점의 이번 주 행을 표시하는 규칙이 붙는다."""
+def test_기준주_붉은_상자(tmp_path):
+    """지출예정 파일의 기준주(1주차)가 붉은 외곽 상자로 표시된다."""
     template = tmp_path / "템플릿.xlsx"
     _make_stub_template(template)
     out1 = tmp_path / "결과1.xlsx"
     fill_live_workbook(template, _fake_report(NEW_MONDAY), out1)
     wb = load_workbook(out1)
-    rules = _current_week_rules(wb["4주일별계획"])
-    assert len(rules) == 1
-    assert "TODAY()" in rules[0].formula[0]
+    _assert_week_box(wb["4주일별계획"])
     wb.close()
-    # 이전 결과물을 템플릿으로 재실행해도 규칙이 중복되지 않는다
+    # 이전 결과물을 템플릿으로 재실행해도 상자는 같은 위치에 하나뿐이다
     out2 = tmp_path / "결과2.xlsx"
     fill_live_workbook(out1, _fake_report(NEW_MONDAY), out2)
     wb = load_workbook(out2)
-    assert len(_current_week_rules(wb["4주일별계획"])) == 1
+    _assert_week_box(wb["4주일별계획"])
     wb.close()
 
 
