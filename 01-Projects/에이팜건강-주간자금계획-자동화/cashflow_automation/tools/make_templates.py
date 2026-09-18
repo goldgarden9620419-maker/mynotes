@@ -162,7 +162,7 @@ def create_team_template(path: Path, team: dict) -> Path:
         "법인카드를 선택하면 카드구분도 선택하고,\n"
         "지급예정일에는 '카드 사용일'을 입력하세요."))
     ws.add_data_validation(_dv(
-        ["우리카드", "국민카드"], rng("카드구분"), "카드구분",
+        ["국민카드", "우리카드", "농협카드"], rng("카드구분"), "카드구분",
         "지급방법이 법인카드일 때만 선택합니다."))
     ws.add_data_validation(_dv(
         CONFIRM_VALUES, rng("확정여부"), "확정여부",
