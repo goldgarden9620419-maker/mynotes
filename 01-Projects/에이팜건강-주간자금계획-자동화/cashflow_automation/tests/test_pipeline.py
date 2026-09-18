@@ -176,3 +176,23 @@ def test_재실행시_이전_결과는_지난자료로_이동(env):
     assert len(list(archive.glob("주간자금계획_*"))) >= 2
     # 06_확인필요 폴더도 최신 복사본 하나만 유지
     assert len(list(cfg.folder("review").glob("확인필요_*.xlsx"))) <= 1
+
+
+def test_일별_비고_지출내역_요약():
+    """4주일별계획 비고란: 반영일 기준 지출 내역이 요약된다."""
+    from datetime import date
+    daily = [{"일자": date(2026, 9, 23), "비고": ""},
+             {"일자": date(2026, 9, 24), "비고": ""}]
+    masked = [
+        {"반영상태": "정상반영", "자금계획 반영일": date(2026, 9, 23),
+         "거래처": "와우프레스", "팀명": "디자인팀", "예상금액": 25000},
+        {"반영상태": "정상반영", "자금계획 반영일": date(2026, 9, 23),
+         "confidential": True, "지출내용": "기타 대외비 지출",
+         "예상금액": 632250},
+        {"반영상태": "취소", "자금계획 반영일": date(2026, 9, 24),
+         "거래처": "취소된거래처", "예상금액": 99999},
+    ]
+    app_module._annotate_daily_notes(daily, masked)
+    assert "와우프레스 25,000" in daily[0]["비고"]
+    assert "기타 대외비 지출 632,250" in daily[0]["비고"]
+    assert "취소된거래처" not in (daily[1]["비고"] or "")

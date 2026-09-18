@@ -13,13 +13,13 @@ from __future__ import annotations
 import argparse
 import sys
 import traceback
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from common import (
-    APP_VERSION, BANK_REFLECT_OK, REFLECT_PAID, STATUS_FAILED, STATUS_PARTIAL,
-    STATUS_SUCCESS, STATUS_WAITING_FILES, iso_week_key, now_local, unique_path,
-    week_monday,
+    APP_VERSION, BANK_REFLECT_OK, REFLECT_OK, REFLECT_PAID, STATUS_FAILED,
+    STATUS_PARTIAL, STATUS_SUCCESS, STATUS_WAITING_FILES, iso_week_key,
+    now_local, unique_path, week_monday,
 )
 from config import Config
 from state_manager import LockError, RunLock, StateManager
@@ -216,6 +216,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         next4w = [p for p in plan["countable"]
                   if p.get("자금계획 반영일")
                   and base_date <= p["자금계획 반영일"] <= horizon_end]
+        integrated_masked = team_loader.mask_confidential_rows(
+            plan["integrated"])
+        _annotate_daily_notes(forecast["daily"], integrated_masked)
         report = {
             "meta": {
                 "company": cfg.get("company_name", default="(주)에이팜건강"),
@@ -226,8 +229,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             },
             "balances": balances,
             "total_balance": total_balance,
-            "integrated_masked": team_loader.mask_confidential_rows(
-                plan["integrated"]),
+            "integrated_masked": integrated_masked,
             "match_results": matched["results"],
             "unplanned": matched["unplanned"],
             "recurring": recurring,
@@ -341,6 +343,60 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         return RunResult(STATUS_FAILED, str(exc))
     finally:
         lock.release()
+
+
+def _annotate_daily_notes(daily_rows: list[dict], masked_rows: list[dict],
+                          max_items: int = 3) -> None:
+    """4주일별계획 비고란용: 그날 반영된 지출 내역 요약을 daily 행에 넣는다.
+
+    대외비 행은 분류·금액만 표시한다(집계행이라 거래처가 이미 가려짐).
+    """
+    by_date: dict = {}
+    for r in masked_rows:
+        if r.get("반영상태") != REFLECT_OK:
+            continue
+        d = r.get("자금계획 반영일")
+        if isinstance(d, datetime):
+            d = d.date()
+        if d is None:
+            continue
+        amount = r.get("예상금액") or 0
+        if r.get("confidential"):
+            label = f"{r.get('지출내용') or '대외비'} {amount:,.0f}"
+        else:
+            subject = (r.get("거래처") or r.get("지출내용")
+                       or r.get("팀명") or "")
+            label = f"{subject} {amount:,.0f}"
+        by_date.setdefault(d, []).append(label)
+    for row in daily_rows:
+        labels = by_date.get(row.get("일자")) or []
+        text = ", ".join(labels[:max_items])
+        if len(labels) > max_items:
+            text += f" 외 {len(labels) - max_items}건"
+        existing = _compact_recurring_note(row.get("비고") or "")
+        row["비고"] = "; ".join(p for p in (text, existing) if p)
+
+
+def _compact_recurring_note(note: str) -> str:
+    """'정기지출 추정(자동 초안): X 신뢰도 상' 나열을 짧게 줄인다."""
+    parts = [p.strip() for p in note.split(";") if p.strip()]
+    names, other = [], []
+    for p in parts:
+        if p.startswith("정기지출 추정"):
+            name = p.split(":", 1)[1].strip() if ":" in p else p
+            for grade in (" 신뢰도 상", " 신뢰도 중", " 신뢰도 하"):
+                name = name.replace(grade, "")
+            names.append(name)
+        else:
+            other.append(p)
+    out = []
+    if names:
+        head = ", ".join(names[:4])
+        if len(names) > 4:
+            head += f" 외 {len(names) - 4}건"
+        out.append(f"자동추정: {head}")
+    out.extend(other)
+    return "; ".join(out)
 
 
 def _card_rules_display(card_calc: CardPaymentCalculator) -> list[dict]:
