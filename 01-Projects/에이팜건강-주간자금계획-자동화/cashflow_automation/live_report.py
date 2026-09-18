@@ -214,34 +214,48 @@ def _fill_daily(ws, forecast: dict, base_date: date) -> None:
             _set(ws, row, c, round(v) if v else None)
         # 그날 반영된 지출 내역 요약 (없으면 이전 실행 잔여값 정리)
         _set(ws, row, note_col, (src or {}).get("비고") or None)
-    _mark_current_week(ws, note_col)
+    _outline_base_week(ws, note_col)
 
 
-# 파일을 여는 날 기준 '이번 주(월~일)' 행 판별 (엑셀이 열 때마다 재계산)
-_CURRENT_WEEK_FORMULA = ('AND($A6<>"",'
-                         '$A6>=TODAY()-WEEKDAY(TODAY(),2)+1,'
-                         '$A6<TODAY()-WEEKDAY(TODAY(),2)+8)')
+def outline_week_box(ws, first_row: int, last_row: int,
+                     first_col: int, last_col: int) -> None:
+    """지정 구역을 하나의 붉은 외곽 테두리 상자로 묶는다 (격자 아님)."""
+    from copy import copy
+    from openpyxl.styles import Side
 
-
-def _mark_current_week(ws, note_col: int) -> None:
-    """조회 시점의 이번 주 행에 붉은 테두리를 씌우는 조건부서식.
-
-    TODAY() 기반이라 저장된 파일을 나중에 열어도 그날 기준의 주가
-    표시된다. 같은 규칙이 이미 있으면 다시 추가하지 않는다.
-    """
-    from openpyxl.formatting.rule import FormulaRule
-    from openpyxl.styles import Border, Side
-    from openpyxl.utils import get_column_letter
-
-    for rules in ws.conditional_formatting:
-        for rule in rules.rules:
-            if rule.formula and "WEEKDAY(TODAY()" in rule.formula[0]:
-                return  # 이미 적용됨 (재실행 템플릿)
     red = Side(style="medium", color="C00000")
-    cell_range = f"A6:{get_column_letter(max(note_col, 11))}33"
-    ws.conditional_formatting.add(cell_range, FormulaRule(
-        formula=[_CURRENT_WEEK_FORMULA],
-        border=Border(top=red, bottom=red, left=red, right=red)))
+
+    def _edge(row, col, **sides):
+        cell = ws.cell(row=row, column=col)
+        b = copy(cell.border)
+        for name in sides:
+            setattr(b, name, red)
+        cell.border = b
+
+    for c in range(first_col, last_col + 1):
+        _edge(first_row, c, top=True)
+        _edge(last_row, c, bottom=True)
+    for r in range(first_row, last_row + 1):
+        _edge(r, first_col, left=True)
+        _edge(r, last_col, right=True)
+
+
+def _outline_base_week(ws, note_col: int) -> None:
+    """취합 지출예정 파일의 기준주(1주차, 6~12행)를 붉은 상자로 표시.
+
+    기준주는 매 실행 때 A6 날짜와 함께 갱신되므로 상자 위치는 항상
+    지출예정 파일이 다루는 그 주를 가리킨다. 예전 버전이 넣어둔
+    TODAY() 조건부서식(셀별 격자)은 제거한다.
+    """
+    stale = [cf for cf in list(ws.conditional_formatting)
+             if any(r.formula and "WEEKDAY(TODAY()" in r.formula[0]
+                    for r in cf.rules)]
+    for cf in stale:
+        try:
+            del ws.conditional_formatting._cf_rules[cf]
+        except KeyError:
+            pass
+    outline_week_box(ws, 6, 12, 1, max(note_col, 11))
 
 
 def _fill_weekly(ws, forecast: dict, base_date: date) -> None:

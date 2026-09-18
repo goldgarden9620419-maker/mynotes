@@ -286,9 +286,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         apalm_expenses = forecast_engine.collect_apalm_expenses(
             integrated_masked, adjustments, apalm_marked)
         _annotate_daily_notes(forecast["daily"], integrated_masked)
-        # 경영보고용: 이번 주(월~일) 지출 예정 목록 (대외비는 분류·총액)
-        # 이미 실적으로 확정된 지난 날짜는 제외하고 남은 예정만 담는다
-        week_end = base_date + timedelta(days=6)
+        # 경영보고용: 자금계획에 반영된 향후 4주 지출예정 목록
+        # (대외비는 분류·총액). 실적으로 확정된 지난 날짜는 제외한다
+        week_end = base_date + timedelta(days=27)
         week_start = base_date
         actual_until = forecast.get("actual_until")
         if actual_until is not None and actual_until >= week_start:

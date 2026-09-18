@@ -2,10 +2,11 @@
 """주간 자금 경영보고 워크북 (대화형).
 
 기존 고정서식 주간자금계획 파일을 대신하는 보고용 엑셀.
-현재 자금 현황 → 이번 주 일별 흐름(부족 여부) → 지출 예정 표 →
-안정을 위한 필요 추가 입금 → 건강사업팀 전달 메모 순서로 한 시트에
-담고, 노란 칸(반영률·목표잔액·지출 지급일·금액)을 고치면 수식으로
-즉시 재계산되게 만든다.
+현재 자금 현황 → 향후 4주 일별 흐름(부족 여부) → 반영된 지출예정
+전체 표 → 안정을 위한 필요 추가 입금 → 건강사업팀 전달 메모 순서로
+한 시트에 담고, 노란 칸(반영률·목표잔액·지출 지급일·금액)을 고치면
+수식으로 즉시 재계산되게 만든다. 첫 주(취합 지출예정 파일 기준주)는
+붉은 외곽 상자로 표시한다.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ from openpyxl.utils import get_column_letter
 
 from common import WEEKDAY_KO
 from excel_report import account_label
+from live_report import outline_week_box
 
 SHEET_NAME = "주간보고"
 
@@ -29,11 +31,26 @@ _ACT_FILL = PatternFill("solid", start_color="EFEFEF")    # 실적 구간
 _RED_FILL = PatternFill("solid", start_color="FFC7CE")
 _THIN = Border(*(Side(style="thin", color="BBBBBB"),) * 4)
 
+# 일별 흐름 표: 기준일부터 4주(28일)
+_DAY_FIRST, _DAY_COUNT = 14, 28
+_DAY_LAST = _DAY_FIRST + _DAY_COUNT - 1          # 41
+_SUM_ROW = _DAY_LAST + 1                         # 42: 최저·기말
+_VERDICT_ROW = _SUM_ROW + 1                      # 43: 판정문
+
 # 지출 예정 표의 데이터 행 범위 (SUMIFS가 참조하는 고정 구간)
-_EXP_FIRST, _EXP_LAST = 26, 88
-_DAY_FIRST = 14  # 일별 흐름 표 첫 데이터 행 (7일)
+_EXP_HEAD = _VERDICT_ROW + 2                     # 45: 섹션 띠
+_EXP_COLS = _EXP_HEAD + 1                        # 46: 열 머리글
+_EXP_FIRST, _EXP_LAST = _EXP_COLS + 1, 140       # 47..140
+_EXP_TOTAL = _EXP_LAST + 1                       # 141
+
+_TARGET_HEAD = _EXP_TOTAL + 2                    # 143
+_TARGET_ROW = _TARGET_HEAD + 1                   # 144: 목표 최저잔액
+_SC_COLS = _TARGET_ROW + 1                       # 145
+_SC_FIRST = _SC_COLS + 1                         # 146..148
+
 _RATE_CELL = "$F$12"
-_TARGET_CELL = "$B$92"
+_TARGET_CELL = f"$B${_TARGET_ROW}"
+_START_CELL = "$H$13"
 
 
 def _font(bold=False, size=10, color="000000"):
@@ -88,7 +105,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, 1, 1, f"주간 자금 경영보고 — {meta.get('company', '')}",
          bold=True, size=14, color=_NAVY)
     _put(ws, 2, 1, f"기준주 {base_date} (월) ~ {week_end} (일) · "
-                   f"작성 {meta.get('run_at', '')}", size=9, color="555555")
+                   f"작성 {meta.get('run_at', '')} · 붉은 상자 = 이번 주",
+         size=9, color="555555")
     _put(ws, 3, 1, "노란 칸(입금 반영률·목표 최저잔액·지출 지급일·금액)을 "
                    "고치면 아래 모든 수치가 즉시 다시 계산됩니다.",
          size=9, color="B36B00")
@@ -111,8 +129,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, total_row, 3, f"=SUM(C6:C{total_row - 1})", bold=True,
          fmt="#,##0", border=True)
 
-    # ② 이번 주 일별 자금 흐름 ---------------------------------------------
-    _section(ws, 12, "② 이번 주 일별 자금 흐름")
+    # ② 향후 4주 일별 자금 흐름 --------------------------------------------
+    _section(ws, 12, "② 향후 4주 일별 자금 흐름 (붉은 상자 = 이번 주)")
     _put(ws, 12, 5, "입금 반영률", bold=True, color="FFFFFF")
     _put(ws, 12, 6, rate, fill=_EDIT_FILL, fmt="0%", align="center",
          border=True)
@@ -122,7 +140,7 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
              align="center", border=True)
     _put(ws, 13, 8, round(start_balance), fmt="#,##0")  # H13: 시작잔액(숨김)
 
-    for i in range(7):
+    for i in range(_DAY_COUNT):
         row = _DAY_FIRST + i
         d = base_date + timedelta(days=i)
         src = daily_by_date.get(d, {})
@@ -153,29 +171,30 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
                  fmt="#,##0", border=True)
             _put(ws, row, 6, f'=IF(E{row}<0,"부족","")', color="C00000",
                  align="center", border=True)
-        prev = "$H$13" if i == 0 else f"E{row - 1}"
+        prev = _START_CELL if i == 0 else f"E{row - 1}"
         _put(ws, row, 5, f"={prev}+C{row}-D{row}", fmt="#,##0", border=True)
-    day_last = _DAY_FIRST + 6
     ws.conditional_formatting.add(
-        f"E{_DAY_FIRST}:E{day_last}",
+        f"E{_DAY_FIRST}:E{_DAY_LAST}",
         CellIsRule(operator="lessThan", formula=["0"], fill=_RED_FILL))
-    _put(ws, 21, 1, "주중 최저 잔액", bold=True)
-    _put(ws, 21, 3, f"=MIN(E{_DAY_FIRST}:E{day_last})", bold=True,
+    # 이번 주(기준주) 7일을 하나의 붉은 상자로 묶는다
+    outline_week_box(ws, _DAY_FIRST, _DAY_FIRST + 6, 1, 6)
+    _put(ws, _SUM_ROW, 1, "4주 최저 잔액", bold=True)
+    _put(ws, _SUM_ROW, 3, f"=MIN(E{_DAY_FIRST}:E{_DAY_LAST})", bold=True,
          fmt="#,##0")
-    _put(ws, 21, 4, "주말(일) 예상 기말잔액", bold=True, align="left")
-    _put(ws, 21, 5, f"=E{day_last}", bold=True, fmt="#,##0")
-    _put(ws, 22, 1,
-         f'=IF(C21>=0,"이번 주 부족분 없음 — 계획대로 집행 가능합니다.",'
-         f'"이번 주 최대 부족 "&TEXT(-C21,"#,##0")&"원 — '
-         f'지출 일정 조정 또는 자금 조치가 필요합니다.")', bold=True)
+    _put(ws, _SUM_ROW, 4, "4주 예상 기말잔액", bold=True, align="left")
+    _put(ws, _SUM_ROW, 5, f"=E{_DAY_LAST}", bold=True, fmt="#,##0")
+    _put(ws, _VERDICT_ROW, 1,
+         f'=IF(C{_SUM_ROW}>=0,"향후 4주 부족분 없음 — 계획대로 집행 '
+         f'가능합니다.","향후 4주 최대 부족 "&TEXT(-C{_SUM_ROW},"#,##0")'
+         f'&"원 — 지출 일정 조정 또는 자금 조치가 필요합니다.")', bold=True)
 
-    # ③ 이번 주 지출 예정 (수정 가능) --------------------------------------
-    _section(ws, 24, "③ 이번 주 지출 예정 — 지급일·금액을 고치면 ②가 "
-                     "다시 계산됩니다")
+    # ③ 반영된 지출예정 전체 (수정 가능) -----------------------------------
+    _section(ws, _EXP_HEAD, "③ 반영된 지출예정 (남은 4주) — 지급일·금액을 "
+                            "고치면 ②가 다시 계산됩니다")
     for c, head in enumerate(("지급일", "요일", "구분", "내용", "금액",
                               "지급방법"), start=1):
-        _put(ws, 25, c, head, bold=True, color="FFFFFF", fill=_HEAD_FILL,
-             align="center", border=True)
+        _put(ws, _EXP_COLS, c, head, bold=True, color="FFFFFF",
+             fill=_HEAD_FILL, align="center", border=True)
     row = _EXP_FIRST
     for item in report.get("week_expenses", []):
         if row > _EXP_LAST:
@@ -193,23 +212,24 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         _put(ws, row, 6, item.get("지급방법") or "", align="center",
              border=True)
         row += 1
-    _put(ws, _EXP_LAST + 1, 4, "합계", bold=True, align="center")
-    _put(ws, _EXP_LAST + 1, 5, f"=SUM(E{_EXP_FIRST}:E{_EXP_LAST})",
+    _put(ws, _EXP_TOTAL, 4, "합계", bold=True, align="center")
+    _put(ws, _EXP_TOTAL, 5, f"=SUM(E{_EXP_FIRST}:E{_EXP_LAST})",
          bold=True, fmt="#,##0")
 
     # ④ 안정을 위한 필요 추가 입금 (향후 4주) ------------------------------
-    _section(ws, 91, "④ 안정을 위한 필요 추가 입금 (향후 4주)")
-    _put(ws, 92, 1, "목표 최저잔액", bold=True)
-    _put(ws, 92, 2, report.get("stability_target") or 0, fill=_EDIT_FILL,
-         fmt="#,##0", border=True)
-    _put(ws, 92, 4, "예: 0원(적자 없음) 또는 안전하게 유지하고 싶은 잔액을 "
-                    "입력하세요.", size=9, color="808080", align="left")
+    _section(ws, _TARGET_HEAD, "④ 안정을 위한 필요 추가 입금 (향후 4주)")
+    _put(ws, _TARGET_ROW, 1, "목표 최저잔액", bold=True)
+    _put(ws, _TARGET_ROW, 2, report.get("stability_target") or 0,
+         fill=_EDIT_FILL, fmt="#,##0", border=True)
+    _put(ws, _TARGET_ROW, 4, "예: 0원(적자 없음) 또는 안전하게 유지하고 "
+                             "싶은 잔액을 입력하세요.", size=9,
+         color="808080", align="left")
     for c, head in enumerate(("반영률", "4주 기말잔액", "4주 최저잔액",
                               "자금부족 예상일", "필요 추가 입금"), start=1):
-        _put(ws, 93, c, head, bold=True, color="FFFFFF", fill=_HEAD_FILL,
-             align="center", border=True)
+        _put(ws, _SC_COLS, c, head, bold=True, color="FFFFFF",
+             fill=_HEAD_FILL, align="center", border=True)
     scenarios = forecast.get("rate_scenarios", {})
-    r = 94
+    r = _SC_FIRST
     base_need_row = None
     for sc_rate in (0.8, 0.9, 1.0):
         sc = scenarios.get(sc_rate)
@@ -271,8 +291,8 @@ def verify_management_workbook(path: Path) -> bool:
         if SHEET_NAME not in wb.sheetnames:
             return False
         ws = wb[SHEET_NAME]
-        return (str(ws["C21"].value or "").startswith("=MIN")
-                and "SUM(" in str(ws[f"E{_EXP_LAST + 1}"].value or "")
+        return (str(ws[f"C{_SUM_ROW}"].value or "").startswith("=MIN")
+                and "SUM(" in str(ws[f"E{_EXP_TOTAL}"].value or "")
                 and str(ws[f"E{_DAY_FIRST}"].value or "").startswith("="))
     except Exception:
         return False

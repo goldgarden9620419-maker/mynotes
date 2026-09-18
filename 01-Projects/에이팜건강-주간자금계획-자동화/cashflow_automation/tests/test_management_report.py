@@ -40,7 +40,7 @@ def _report():
             {"일자": date(2026, 9, 22), "구분": "물류팀",
              "내용": "한진택배 택배비", "금액": 500_000,
              "지급방법": "계좌송금"},
-            {"일자": date(2026, 9, 24), "구분": "경영지원팀",
+            {"일자": date(2026, 10, 14), "구분": "경영지원팀",
              "내용": "대외비 급여·인건비(대외비)", "금액": 3_000_000,
              "지급방법": "계좌송금"},
         ],
@@ -57,18 +57,28 @@ def test_경영보고_생성과_수식(tmp_path):
     ws = wb["주간보고"]
     # ① 총잔액 합계 수식
     assert str(ws["C8"].value).startswith("=SUM(")
-    # ② 일별 표: 미래일 입금은 반영률 셀 참조, 지출은 SUMIFS
+    # ② 4주(28일) 일별 표: 반영률 셀 참조 + 지출 SUMIFS + 시작잔액 연결
     assert "$F$12" in str(ws["C14"].value)
     assert "SUMIFS" in str(ws["D14"].value)
-    assert str(ws["E14"].value).startswith("=$H$13")   # 시작잔액 연결
-    # ③ 지출 표: 항목·합계
-    assert ws["A26"].value is not None and ws["E26"].value == 500000
-    assert ws["D27"].value == "대외비 급여·인건비(대외비)"
-    assert "SUM(" in str(ws["E89"].value)
+    assert "$E$47" in str(ws["D14"].value)      # 지출 표 구간 참조
+    assert str(ws["E14"].value).startswith("=$H$13")
+    assert ws["A41"].value.date() == date(2026, 10, 18)  # 28일째
+    assert str(ws["C42"].value).startswith("=MIN(E14:E41")
+    # 이번 주(첫 7일)는 하나의 붉은 상자 (격자 아님)
+    assert ws["A14"].border.top.style == "medium"
+    assert ws["A14"].border.left.style == "medium"
+    assert ws["F20"].border.bottom.style == "medium"
+    assert ws["F20"].border.right.style == "medium"
+    assert ws["C17"].border.left.style != "medium"
+    assert ws["A21"].border.left.style != "medium"   # 2주차부터는 없음
+    # ③ 4주 지출예정 표: 항목·합계 (10/14 건도 포함)
+    assert ws["A47"].value is not None and ws["E47"].value == 500000
+    assert ws["D48"].value == "대외비 급여·인건비(대외비)"
+    assert "SUM(" in str(ws["E141"].value)
     # ④ 필요 추가 입금: 목표잔액 셀 참조 MAX 수식 (80/90/100 3행)
-    assert ws["A94"].value == 0.8 and ws["A96"].value == 1.0
-    assert "MAX(0,$B$92" in str(ws["E94"].value)
+    assert ws["A146"].value == 0.8 and ws["A148"].value == 1.0
+    assert "MAX(0,$B$144" in str(ws["E146"].value)
     # ⑤ 전달 메모 수식
-    memo = str(ws["A100"].value)
+    memo = str(ws["A152"].value)
     assert memo.startswith("=IF(") and "건강사업팀" in memo
     wb.close()
