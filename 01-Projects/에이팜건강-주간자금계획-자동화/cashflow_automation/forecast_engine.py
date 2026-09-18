@@ -469,6 +469,7 @@ def filter_duplicate_adjustments(adjustments: list[dict],
 
 APALM_KEYWORD = "에이팜"
 _OWN_COMPANY = "에이팜건강"
+APALM_EXCLUDED_STATUS = "에이팜 별도관리"
 
 
 def mentions_apalm(*texts) -> bool:
@@ -480,26 +481,72 @@ def mentions_apalm(*texts) -> bool:
     return False
 
 
-def collect_apalm_expenses(masked_rows: list[dict],
-                           adjustments: list[dict]) -> list[dict]:
-    """에이팜 관련 지출예정을 '에이팜 지출예정' 시트용으로 모은다.
+def split_apalm_marked(plan: dict) -> list[dict]:
+    """비고에 '에이팜'이 적힌 팀 지출계획을 자금계획 집계에서 뺀다.
 
-    4주일별계획 비고에서는 뺀 항목들이며, 금액은 자금계획에 그대로
-    반영된다. 팀 지출계획과 정기지출 자동 추정 양쪽에서 수집한다.
+    해당 행의 반영상태를 '에이팜 별도관리'로 바꾸고 countable에서
+    제거한다(취합 시트에는 그 상태로 남는다). 뺀 행 목록을 돌려준다.
     """
+    marked = []
+    for r in plan.get("countable", []):
+        if mentions_apalm(r.get("비고")):
+            r["반영상태"] = APALM_EXCLUDED_STATUS
+            marked.append(r)
+    if marked:
+        plan["countable"] = [r for r in plan["countable"]
+                             if r.get("반영상태") != APALM_EXCLUDED_STATUS]
+    return marked
+
+
+_CONF_SENSITIVE = ("급여", "인건비", "퇴직", "세금", "보험")
+
+
+def collect_apalm_expenses(masked_rows: list[dict],
+                           adjustments: list[dict],
+                           marked_rows: Optional[list[dict]] = None
+                           ) -> list[dict]:
+    """에이팜 관련 지출을 '에이팜 지출계획' 시트용으로 모은다.
+
+    비고에 '에이팜'이 적힌 행(marked_rows)은 자금계획에서 뺀 별도관리
+    건(미반영)으로 원본 상세를 싣는다 — 단, 급여·퇴직·세금보험류
+    대외비 분류는 분류명·금액만 노출한다. 이름으로 인식된 행과
+    정기지출 자동 추정은 자금계획에 포함된 참고 건(반영)이다.
+    """
+    from common import classify_confidential
+
     out = []
+    for r in marked_rows or []:
+        vendor = r.get("거래처") or ""
+        detail = r.get("지출내용") or ""
+        if r.get("confidential"):
+            category = classify_confidential(detail, r.get("대외비구분", ""))
+            if any(k in category for k in _CONF_SENSITIVE):
+                vendor, detail = "(대외비)", category
+        out.append({"일자": r.get("자금계획 반영일") or r.get("지급예정일"),
+                    "출처": "팀 지출계획",
+                    "반영": "미반영(별도 관리)",
+                    "팀명": r.get("팀명") or "",
+                    "거래처": vendor,
+                    "지출내용": detail,
+                    "예상금액": r.get("예상금액") or 0.0,
+                    "지급방법": r.get("지급방법") or "",
+                    "비고": r.get("비고") or ""})
     for r in masked_rows:
-        if r.get("반영상태") != REFLECT_OK or r.get("confidential"):
+        if r.get("confidential"):
+            continue
+        if r.get("반영상태") != REFLECT_OK:
             continue
         if not mentions_apalm(r.get("거래처"), r.get("지출내용")):
             continue
-        out.append({"일자": r.get("자금계획 반영일"),
+        out.append({"일자": r.get("자금계획 반영일") or r.get("지급예정일"),
                     "출처": "팀 지출계획",
+                    "반영": "반영",
                     "팀명": r.get("팀명") or "",
                     "거래처": r.get("거래처") or "",
                     "지출내용": r.get("지출내용") or "",
                     "예상금액": r.get("예상금액") or 0.0,
-                    "지급방법": r.get("지급방법") or ""})
+                    "지급방법": r.get("지급방법") or "",
+                    "비고": r.get("비고") or ""})
     for adj in adjustments:
         amount = adj.get("조정지출") or 0.0
         content = adj.get("내용") or ""
@@ -510,11 +557,13 @@ def collect_apalm_expenses(masked_rows: list[dict],
         m = re.search(r":\s*(.+?)\s*신뢰도", content)
         out.append({"일자": adj.get("일자"),
                     "출처": "정기지출 추정",
+                    "반영": "반영",
                     "팀명": "",
                     "거래처": (m.group(1) if m else content).strip(),
                     "지출내용": content,
                     "예상금액": amount,
-                    "지급방법": ""})
+                    "지급방법": "",
+                    "비고": ""})
     out.sort(key=lambda r: (r["일자"] or date.max, -r["예상금액"]))
     return out
 

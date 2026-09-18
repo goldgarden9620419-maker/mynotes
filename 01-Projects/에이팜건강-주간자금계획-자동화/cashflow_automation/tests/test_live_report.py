@@ -115,9 +115,13 @@ def _fake_report(base: date) -> dict:
         ],
         "apalm_expenses": [
             {"일자": date(2026, 9, 23), "출처": "팀 지출계획",
-             "팀명": "경영지원팀", "거래처": "㈜에이팜",
-             "지출내용": "외상대 지급", "예상금액": 5000000,
-             "지급방법": "계좌송금"},
+             "반영": "미반영(별도 관리)", "팀명": "경영지원팀",
+             "거래처": "서원회계법인", "지출내용": "기장료",
+             "예상금액": 330000, "지급방법": "계좌송금", "비고": "에이팜"},
+            {"일자": date(2026, 9, 28), "출처": "정기지출 추정",
+             "반영": "반영", "팀명": "", "거래처": "㈜에이팜",
+             "지출내용": "정기지출 추정(자동 초안): ㈜에이팜 신뢰도 상",
+             "예상금액": 5000000, "지급방법": "", "비고": ""},
         ],
     }
 
@@ -175,15 +179,21 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert exp["Q7"].value == "승인대기 상태(정책상 반영)"
     assert exp["A8"].value is None
     assert exp.freeze_panes == "A6"
-    # 에이팜 지출예정 시트: 취합 시트 바로 다음, 상세 + 합계
+    # 에이팜 지출계획 시트: 취합 시트 바로 다음, 미반영/반영 구분 + 합계
     names = wb.sheetnames
-    assert names.index("에이팜 지출예정") == names.index("지출계획_취합") + 1
-    ap = wb["에이팜 지출예정"]
+    assert names.index("에이팜 지출계획") == names.index("지출계획_취합") + 1
+    ap = wb["에이팜 지출계획"]
     assert ap["A5"].value == "일자"
     assert _d(ap["A6"].value) == date(2026, 9, 23)
-    assert ap["E6"].value == "㈜에이팜"
-    assert ap["G6"].value == 5000000
-    assert ap["E7"].value == "합계" and ap["G7"].value == 5000000
+    assert ap["D6"].value == "미반영(별도 관리)"
+    assert ap["F6"].value == "서원회계법인"
+    assert ap["H6"].value == 330000
+    assert ap["J6"].value == "에이팜"
+    assert ap["D7"].value == "반영" and ap["F7"].value == "㈜에이팜"
+    assert ap["G8"].value == "합계(자금계획 미반영)"
+    assert ap["H8"].value == 330000
+    assert ap["G9"].value == "합계(자금계획 반영)"
+    assert ap["H9"].value == 5000000
     wb.close()
 
 
