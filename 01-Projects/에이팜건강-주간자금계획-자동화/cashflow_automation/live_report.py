@@ -90,6 +90,10 @@ def fill_live_workbook(template_path: Path, report: dict,
     if "주간계좌_붙여넣기" in wb.sheetnames:
         wb.remove(wb["주간계좌_붙여넣기"])
 
+    # 정기지출분석은 사용자가 분류·성격을 편집하는 시트라 맨 끝에 둔다
+    idx = wb.sheetnames.index("정기지출분석")
+    wb.move_sheet("정기지출분석", offset=len(wb.sheetnames) - 1 - idx)
+
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)

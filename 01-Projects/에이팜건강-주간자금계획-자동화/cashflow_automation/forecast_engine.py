@@ -149,6 +149,86 @@ def load_recurring_overrides(base_workbook: Path) -> dict[str, dict]:
         wb.close()
 
 
+def harvest_recurring_edits(live_workbook: Path) -> dict[str, dict]:
+    """직전 라이브 결과물의 '정기지출분석' 시트에서 사용자 수정을 읽는다.
+
+    사용자가 결과 파일에서 분류(3열)·성격(11열)을 고치면 다음 실행 때
+    이 함수가 수확해 기준파일 '정기지출분류'에 저장한다.
+    '성격확인필요'는 미입력 표시이므로 무시한다.
+    """
+    edits: dict[str, dict] = {}
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(live_workbook, data_only=True, read_only=True)
+    except Exception:
+        return edits
+    try:
+        if "정기지출분석" not in wb.sheetnames:
+            return edits
+        ws = wb["정기지출분석"]
+        for row in ws.iter_rows(min_row=6, max_col=11, values_only=True):
+            name = normalize_text(row[1] if len(row) > 1 else None)
+            if not name:
+                continue
+            cls = normalize_text(row[2] if len(row) > 2 else None)
+            nature = normalize_text(row[10] if len(row) > 10 else None)
+            if cls == "성격확인필요":
+                cls = ""
+            if nature not in _NATURE_VALUES:
+                nature = ""
+            if cls or nature:
+                edits[name] = {"분류": cls, "성격": nature}
+        return edits
+    finally:
+        wb.close()
+
+
+def update_override_sheet(base_workbook: Path, edits: dict) -> int:
+    """수확한 분류·성격 수정을 기준파일 '정기지출분류' 시트에 반영한다.
+
+    변경된 셀 수를 돌려준다 (같은 값이면 건드리지 않음).
+    """
+    if not edits:
+        return 0
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(base_workbook)
+    except Exception:
+        return 0
+    try:
+        if OVERRIDE_SHEET_NAME in wb.sheetnames:
+            ws = wb[OVERRIDE_SHEET_NAME]
+        else:
+            ws = wb.create_sheet(OVERRIDE_SHEET_NAME)
+            ws.append(["정기지출명", "분류", "성격"])
+        rows_by_name = {}
+        for row in ws.iter_rows(min_row=2, max_col=3):
+            name = normalize_text(row[0].value)
+            if name:
+                rows_by_name[name] = row
+        changed = 0
+        for name, ov in edits.items():
+            row = rows_by_name.get(name)
+            if row is not None:
+                if ov.get("분류") and \
+                        normalize_text(row[1].value) != ov["분류"]:
+                    row[1].value = ov["분류"]
+                    changed += 1
+                if ov.get("성격") and \
+                        normalize_text(row[2].value) != ov["성격"]:
+                    row[2].value = ov["성격"]
+                    changed += 1
+            else:
+                ws.append([name, ov.get("분류") or "",
+                           ov.get("성격") or "정기"])
+                changed += 1
+        if changed:
+            wb.save(base_workbook)
+        return changed
+    finally:
+        wb.close()
+
+
 def apply_recurring_overrides(recurring_items: list[dict],
                               overrides: dict[str, dict]) -> None:
     """정기지출 목록에 사용자 분류·성격을 적용한다 (제자리 수정)."""

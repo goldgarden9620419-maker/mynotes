@@ -89,3 +89,43 @@ def test_정기지출분류_시트_왕복(tmp_path):
     assert items[1]["성격"] == "제외"
     # 이미 있는 항목은 다시 추가하지 않는다 (사용자 수정 보존)
     assert fe.ensure_recurring_override_sheet(p, items) == 0
+
+
+def test_정기지출분석_수정_수확_반영(tmp_path):
+    """결과 파일의 분류·성격 수정이 기준파일 정기지출분류로 흘러간다."""
+    from openpyxl import Workbook
+
+    # 사용자가 편집한 라이브 결과물 흉내
+    live = tmp_path / "주간자금계획_라이브_20260921_0910.xlsx"
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "정기지출분석"
+    for c, h in enumerate(["은행", "정기지출명", "분류"], start=1):
+        ws.cell(row=5, column=c, value=h)
+    ws.cell(row=5, column=11, value="성격")
+    ws.cell(row=6, column=2, value="기업콜마비앤에이치")
+    ws.cell(row=6, column=3, value="외상대 지급")      # 사용자가 입력
+    ws.cell(row=6, column=11, value="변동")            # 사용자가 입력
+    ws.cell(row=7, column=2, value="세이브더칠드런")
+    ws.cell(row=7, column=3, value="성격확인필요")      # 미입력 → 무시
+    wb.save(live)
+    wb.close()
+
+    edits = fe.harvest_recurring_edits(live)
+    assert edits["기업콜마비앤에이치"] == {"분류": "외상대 지급", "성격": "변동"}
+    assert "세이브더칠드런" not in edits
+
+    # 기준파일에 반영 → 다음 실행의 오버라이드로 적용
+    base = tmp_path / "기준.xlsx"
+    wb = Workbook()
+    wb.active.title = "카드결제기준"
+    wb.save(base)
+    wb.close()
+    assert fe.update_override_sheet(base, edits) >= 1
+    ov = fe.load_recurring_overrides(base)
+    items = [{"정기지출명": "기업콜마비앤에이치", "분류": ""}]
+    fe.apply_recurring_overrides(items, ov)
+    assert items[0]["분류"] == "외상대 지급"
+    assert items[0]["성격"] == "변동"
+    # 같은 값 재수확은 변경 0건 (사용자 수정 보존)
+    assert fe.update_override_sheet(base, edits) == 0
