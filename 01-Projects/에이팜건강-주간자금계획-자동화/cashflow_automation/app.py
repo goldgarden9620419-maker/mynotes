@@ -189,6 +189,29 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             log.info("정기지출분류 시트에 새 항목 %d개 추가 (기준파일)", added)
         recurring_projectable = [i for i in recurring
                                  if i.get("성격", "정기") == "정기"]
+        # 자동추정은 별도 목록 파일(04_기준파일/자동추정_지출목록.xlsx)로
+        # 관리한다: 첫 실행 때 주간조정의 자동 초안을 이관하고, 매 실행
+        # 정기지출 분석으로 새 항목을 추가한 뒤(사용자 수정 보존),
+        # '반영' 행만 자금계획에 넣는다
+        draft_path = (cfg.folder("base_workbook")
+                      / forecast_engine.AUTO_DRAFT_FILE)
+        migrated = forecast_engine.migrate_auto_drafts(
+            cfg.base_workbook_path(), draft_path, overrides)
+        if migrated:
+            log.info("자동추정 %d건을 %s(으)로 이관", migrated,
+                     forecast_engine.AUTO_DRAFT_FILE)
+        draft_added, draft_pruned = forecast_engine.refresh_auto_draft_file(
+            draft_path, recurring_projectable, base_date)
+        if draft_added or draft_pruned:
+            log.info("자동추정 목록 갱신: 신규 %d건, 지난 항목 정리 %d건",
+                     draft_added, draft_pruned)
+        auto_drafts, draft_excluded = forecast_engine.load_auto_drafts(
+            draft_path, base_date)
+        adjustments = [a for a in adjustments
+                       if "자동 초안" not in (a.get("내용") or "")]
+        adjustments += auto_drafts
+        log.info("자동추정 목록 %d건 반영 (제외 %d건)",
+                 len(auto_drafts), draft_excluded)
         # 성격 변동·제외 항목의 '자동 초안' 지출 추정은 쓰지 않는다
         # (예: 외상매입금 — 팀 지출예정 파일 금액으로만 반영)
         adjustments, var_dropped = \
