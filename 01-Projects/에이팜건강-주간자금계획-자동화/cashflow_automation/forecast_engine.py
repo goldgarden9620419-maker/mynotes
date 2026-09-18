@@ -298,7 +298,8 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
         period = f"{w_start.strftime('%m/%d')}~{w_end.strftime('%m/%d')}"
         if w < 4 and daily_rows:
             in_week = [r for r in daily_rows if w_start <= r["일자"] <= w_end]
-            income = sum(r["온라인 예상입금"] + r["확정·기타입금"] for r in in_week)
+            online = sum(r["온라인 예상입금"] for r in in_week)
+            adj_in = sum(r["확정·기타입금"] for r in in_week)
             transfer = sum(r["팀별 송금예정"] for r in in_week)
             card = sum(r["카드결제"] for r in in_week)
             auto = sum(r["자동이체"] for r in in_week)
@@ -306,7 +307,8 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
             if balance is None and in_week:
                 balance = in_week[0]["기초잔액"]
         else:
-            income = weekly_online_full
+            online = weekly_online_full
+            adj_in = 0.0
             transfer = card = auto = etc = 0.0
             d = w_start
             while d <= w_end:
@@ -321,9 +323,10 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
                     etc += rec["기타"]
                 adj = adj_by_date.get(d)
                 if adj:
-                    income += adj["입금"]
+                    adj_in += adj["입금"]
                     etc += adj["지출"]
                 d += timedelta(days=1)
+        income = online + adj_in
         net = income - (transfer + card + auto + etc)
         opening = balance if balance is not None else 0.0
         closing = opening + net
@@ -336,7 +339,8 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
             state = STATE_OK
         rows.append({
             "주차": label, "기간": period,
-            "예상입금": income, "송금예정": transfer, "카드결제": card,
+            "예상입금": income, "온라인입금": online, "확정기타입금": adj_in,
+            "송금예정": transfer, "카드결제": card,
             "자동이체": auto, "기타지출": etc, "순현금흐름": net,
             "기말잔액": closing, "상태": state,
         })

@@ -64,7 +64,7 @@ EXE로 빌드하면 `cashflow_automation.exe` 실행이 `python app.py`와 같�
 | card_payment.py | 카드결제기준 시트 기반 결제일 계산 |
 | payment_matcher.py | 예정 지출 ↔ 실제 출금 대조 |
 | forecast_engine.py | 요일별 입금 예측, 4주 일별·13주 주별, 정기지출 |
-| excel_report.py | 결과 Excel 11개 시트 + 확인필요 파일 |
+| excel_report.py | 결과 Excel(사용자 기존 자금계획 양식 8시트 + 지출 4시트) + 확인필요 파일 |
 | pdf_report.py | 대표 보고용 PDF |
 | backup_manager.py | 입력 백업, 임시폴더, 손상파일 격리, 지난자료 |
 | tools/make_templates.py | 팀 제출양식·기준파일 생성 스크립트 |

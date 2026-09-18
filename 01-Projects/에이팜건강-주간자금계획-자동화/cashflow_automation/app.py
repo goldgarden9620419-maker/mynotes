@@ -17,8 +17,9 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from common import (
-    APP_VERSION, REFLECT_PAID, STATUS_FAILED, STATUS_PARTIAL, STATUS_SUCCESS,
-    STATUS_WAITING_FILES, iso_week_key, now_local, unique_path, week_monday,
+    APP_VERSION, BANK_REFLECT_OK, REFLECT_PAID, STATUS_FAILED, STATUS_PARTIAL,
+    STATUS_SUCCESS, STATUS_WAITING_FILES, iso_week_key, now_local, unique_path,
+    week_monday,
 )
 from config import Config
 from state_manager import LockError, RunLock, StateManager
@@ -183,7 +184,28 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                "내용": f"{row['일자']} 예상 기말잔액 "
                                       f"{row['기말잔액']:,.0f}원",
                                "원본파일": ""})
-        # 9) 결과물 생성 (25~28번 항목) — 임시폴더에 만들고 검증 후 이동
+        # 9) 결과물 생성 — 임시폴더에 만들고 검증 후 이동
+        # 요약 시트용 통계 (기존 자금계획 양식 항목)
+        last_dates: dict[tuple, object] = {}
+        for row in kept:
+            if row.get("반영상태") != BANK_REFLECT_OK:
+                continue
+            key = (row["은행"], row.get("계좌") or "")
+            d = row.get("거래일")
+            if d and (key not in last_dates or d > last_dates[key]):
+                last_dates[key] = d
+        history_stats = {
+            "외부입금": sum(r.get("입금액") or 0 for r in merged_history
+                        if not r.get("내부이체")),
+            "외부출금": sum(r.get("출금액") or 0 for r in merged_history
+                        if not r.get("내부이체")),
+            "온라인입금": sum(r.get("입금액") or 0 for r in merged_history
+                         if r.get("자동분류") == "온라인매출입금"),
+            "주평균온라인": sum(forecast.get("weekday_avg", {}).values()),
+        }
+        account_labels = {key: excel_report.account_label(*key)
+                          for key in balances}
+
         horizon_end = base_date + timedelta(days=27)
         next4w = [p for p in plan["countable"]
                   if p.get("자금계획 반영일")
@@ -207,8 +229,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             "issues": issues,
             "forecast": forecast,
             "card_rules": _card_rules_display(card_calc),
-            "config_summary": _config_summary(cfg),
             "classify_rules": rules,
+            "history_stats": history_stats,
+            "account_last_dates": last_dates,
+            "account_labels": account_labels,
             "missing_teams": team_data["missing_teams"],
             "next4w_confirmed_out": sum(p.get("예상금액") or 0
                                         for p in next4w),
@@ -298,26 +322,6 @@ def _spec_text(spec) -> str:
     names = {0: "당월", -1: "전월", -2: "전전월"}
     offset, day = spec
     return f"{names.get(offset, offset)} {'말일' if day is None else str(day) + '일'}"
-
-
-def _config_summary(cfg: Config) -> list[tuple]:
-    return [
-        ("회사명", cfg.get("company_name", default="")),
-        ("실행 일정", f"매주 {cfg.get('schedule', 'day_of_week', default='mon')} "
-                    f"{cfg.get('schedule', 'hour', default=9)}시 "
-                    f"{cfg.get('schedule', 'minute', default=10)}분 "
-                    f"({cfg.get('timezone', default='Asia/Seoul')})"),
-        ("기본 입금 반영률",
-         f"{cfg.get('forecast', 'default_receipt_rate', default=0.8):.0%}"),
-        ("최소 필요잔액",
-         f"{cfg.get('forecast', 'minimum_cash_balance', default=0):,}원"),
-        ("대조 허용 일수",
-         f"±{cfg.get('matching', 'date_window_days', default=3)}일"),
-        ("거래처 유사도 기준",
-         cfg.get("matching", "name_similarity_threshold", default=70)),
-        ("자료 폴더", str(cfg.base_dir)),
-        ("프로그램 버전", APP_VERSION),
-    ]
 
 
 # ---------------------------------------------------------------------------
