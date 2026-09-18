@@ -161,15 +161,22 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("recurring", "lookback_months", default=6),
             cfg.get("recurring", "min_months", default=4))
         # 직전 라이브 결과물에서 사용자의 분류·성격 수정을 수확해 저장한다
+        # 단, 기준파일이 결과물보다 최신이면(프로그램 업데이트 pull 직후 등)
+        # 낡은 결과물의 값으로 기준파일을 되돌리지 않도록 수확을 생략한다
         prev_lives = sorted(
             cfg.folder("output").glob("주간자금계획_라이브_*.xlsx"))
-        if prev_lives:
+        base_wb_path = cfg.base_workbook_path()
+        if prev_lives and (not base_wb_path.exists()
+                           or prev_lives[-1].stat().st_mtime
+                           >= base_wb_path.stat().st_mtime):
             harvested = forecast_engine.harvest_recurring_edits(prev_lives[-1])
             applied = forecast_engine.update_override_sheet(
-                cfg.base_workbook_path(), harvested)
+                base_wb_path, harvested)
             if applied:
                 log.info("정기지출분석 사용자 수정 %d건을 정기지출분류에 반영",
                          applied)
+        elif prev_lives:
+            log.info("기준파일이 결과물보다 최신이라 정기지출분석 수확 생략")
         # 기준파일 '정기지출분류' 시트의 사용자 분류·성격을 반영한다
         # (성격 변동·제외는 13주 자동 추정에서 뺀다; 예: 외상대 지급)
         overrides = forecast_engine.load_recurring_overrides(
