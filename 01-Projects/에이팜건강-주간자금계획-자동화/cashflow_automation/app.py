@@ -31,6 +31,7 @@ import duplicate_checker
 import excel_report
 import file_validator
 import forecast_engine
+import live_report
 import payment_matcher
 import pdf_report
 import team_loader
@@ -261,6 +262,20 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         if cfg.get("options", "create_pdf_summary", default=True):
             pdf_report.create_pdf_summary(report, workspace.path(pdf_name))
             outputs.append(pdf_name)
+
+        # 라이브 양식(수식 유지, 반영률 즉시 재계산) — 템플릿이 있을 때만
+        live_template = cfg.folder("base_workbook") / cfg.get(
+            "options", "live_template_name",
+            default=live_report.LIVE_TEMPLATE_NAME)
+        if cfg.get("options", "create_live_workbook", default=True) \
+                and live_template.exists():
+            live_name = f"주간자금계획_라이브_{stamp}.xlsx"
+            live_report.fill_live_workbook(live_template, report,
+                                           workspace.path(live_name))
+            if not live_report.verify_live_workbook(
+                    workspace.path(live_name), base_date):
+                raise RuntimeError("라이브 자금계획 수식·날짜 검증 실패")
+            outputs.append(live_name)
 
         moved = workspace.commit(outputs, unique_path)
         review_copy = None

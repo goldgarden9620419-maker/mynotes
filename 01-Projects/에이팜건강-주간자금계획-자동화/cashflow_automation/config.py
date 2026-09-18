@@ -75,6 +75,8 @@ DEFAULT_CONFIG: dict = {
     "options": {
         "create_excel": True,
         "create_pdf_summary": True,
+        "create_live_workbook": True,
+        "live_template_name": "자금계획_라이브템플릿.xlsx",
         "backup_input_files": True,
         "open_output_folder_after_manual_run": True,
     },
