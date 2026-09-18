@@ -43,7 +43,7 @@ const NAVER_BLOG_URL = "https://blog.naver.com/gold-jw0419";
 const REVIEWED_PLACES: { match: string; url: string }[] = [
   { match: "동네짬뽕", url: "https://blog.naver.com/gold-jw0419/224402086316" },
   { match: "신천궁전떡볶이", url: "https://blog.naver.com/gold-jw0419/224402686462" },
-  { match: "갈비만", url: "" },
+  { match: "갈비만", url: "https://blog.naver.com/gold-jw0419/224414821964" },
 ];
 
 function reviewedPostUrl(name: string) {
