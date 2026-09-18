@@ -181,6 +181,16 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             log.info("정기지출분류 시트에 새 항목 %d개 추가 (기준파일)", added)
         recurring_projectable = [i for i in recurring
                                  if i.get("성격", "정기") == "정기"]
+        # 성격 변동·제외 항목의 '자동 초안' 지출 추정은 쓰지 않는다
+        # (예: 외상매입금 — 팀 지출예정 파일 금액으로만 반영)
+        adjustments, var_dropped = \
+            forecast_engine.filter_adjustments_by_overrides(
+                adjustments, overrides)
+        if var_dropped:
+            log.info("성격 변동·제외 정기지출의 자동 초안 %d건 제외 (%s)",
+                     len(var_dropped),
+                     ", ".join((a.get("내용") or "")[:30]
+                               for a in var_dropped[:3]))
 
         # 7) 잔액과 예정·실제 대조 (20번 항목)
         balances, total_balance = bank_loader.summarize_balances(kept)
