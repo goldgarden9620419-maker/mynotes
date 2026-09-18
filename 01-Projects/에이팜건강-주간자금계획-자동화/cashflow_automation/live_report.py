@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, time as dtime, timedelta
 from pathlib import Path
+from typing import Optional
 
 from openpyxl import load_workbook
 from openpyxl.cell.cell import MergedCell
@@ -82,6 +83,7 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_summary(wb["요약"], report, base_date, stats)
     _fill_daily(wb["4주일별계획"], forecast, base_date)
     _fill_weekly(wb["13주주별계획"], forecast, base_date)
+    _fill_account_scenario(wb, report.get("account_scenario"))
     _fill_expense(wb, report.get("integrated_masked", []))
     _fill_recurring(wb["정기지출분석"], report.get("recurring", []))
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []))
@@ -233,6 +235,87 @@ def _fill_weekly(ws, forecast: dict, base_date: date) -> None:
             for c, v in ((4, wr.get("확정기타입금")), (5, wr.get("송금예정")),
                          (6, wr.get("카드결제")), (7, etc)):
                 _set(ws, r, c, round(v) if v else None)
+
+
+ACCOUNT_SCENARIO_SHEET = "계좌별시나리오"
+
+
+def _fill_account_scenario(wb, scenario: Optional[dict]) -> None:
+    """계좌별 일별 잔액 시나리오 시트 (우리→농협→국민 인출 우선순위)."""
+    if not scenario or not scenario.get("accounts"):
+        return
+    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.utils import get_column_letter
+
+    if ACCOUNT_SCENARIO_SHEET in wb.sheetnames:
+        ws = wb[ACCOUNT_SCENARIO_SHEET]
+    else:
+        try:
+            index = wb.sheetnames.index("4주일별계획") + 1
+        except ValueError:
+            index = len(wb.sheetnames)
+        ws = wb.create_sheet(ACCOUNT_SCENARIO_SHEET, index)
+
+    accounts = scenario["accounts"]
+    title = _set(ws, 2, 1, "계좌별 일별 잔액 시나리오 (자동 반영)")
+    if title is not None:
+        title.font = Font(name="맑은 고딕", bold=True, size=13,
+                          color="1F4E79")
+    note = _set(ws, 3, 1,
+                "인출 우선순위: 우리은행 → 농협 → 국민은행. 부족분은 이체 열의 "
+                "금액만큼 우리은행으로 옮겨 집행하는 가정입니다 "
+                "(입금은 계좌별 최근 비중대로 배분, 기본 반영률 기준).")
+    if note is not None:
+        note.font = Font(name="맑은 고딕", size=9, color="808080")
+
+    headers = (["일자", "요일"]
+               + [account_label(b, a) + " 잔액" for b, a in accounts]
+               + ["총잔액", "농협→우리 이체", "국민→우리 이체", "비고"])
+    widths = [11, 6] + [15] * len(accounts) + [15, 14, 14, 22]
+    for c, header in enumerate(headers, start=1):
+        cell = _set(ws, 5, c, header)
+        if cell is not None:
+            cell.fill = PatternFill("solid", start_color="1F4E79")
+            cell.font = Font(name="맑은 고딕", color="FFFFFF", bold=True,
+                             size=10)
+            cell.alignment = Alignment(horizontal="center")
+        ws.column_dimensions[get_column_letter(c)].width = widths[c - 1]
+
+    r = 6
+    for row in scenario["rows"]:
+        d = row["일자"]
+        acell = _set(ws, r, 1, datetime.combine(d, dtime()))
+        if acell is not None:
+            acell.number_format = "yyyy-mm-dd"
+        _set(ws, r, 2, row.get("요일"))
+        balances = row.get("잔액")
+        values = []
+        if balances is None:
+            values = [None] * (len(accounts) + 1)
+        else:
+            values = [round(balances.get(k, 0)) for k in accounts]
+            values.append(round(sum(balances.get(k, 0) for k in accounts)))
+        nh = sum(v for k, v in (row.get("이체") or {}).items()
+                 if k[0] == "농협")
+        kb = sum(v for k, v in (row.get("이체") or {}).items()
+                 if k[0] == "국민은행")
+        values += [round(nh) or None, round(kb) or None]
+        for i, v in enumerate(values, start=3):
+            cell = _set(ws, r, i, v)
+            if cell is not None:
+                cell.number_format = "#,##0"
+                cell.font = Font(name="맑은 고딕", size=10)
+        ncell = _set(ws, r, 3 + len(values), row.get("비고") or None)
+        if ncell is not None:
+            ncell.font = Font(name="맑은 고딕", size=9,
+                              color="C00000" if row.get("비고") else "808080")
+        r += 1
+    # 잔여 행 정리
+    for rr in range(r, ws.max_row + 1):
+        for c in range(1, len(headers) + 1):
+            if ws.cell(row=rr, column=c).value is not None:
+                _set(ws, rr, c, None)
+    ws.freeze_panes = "A6"
 
 
 def _fill_expense(wb, rows: list[dict]) -> None:

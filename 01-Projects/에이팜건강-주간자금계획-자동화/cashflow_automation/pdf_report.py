@@ -120,32 +120,46 @@ def create_pdf_summary(report: dict, out_path: Path) -> Path:
         story.append(Spacer(1, 3 * mm))
         story.append(Paragraph(note, style))
 
-    story.append(Paragraph("주별 잔액 전망 (13주)", section))
-    weekly_rows = [["주차", "기간", "예상입금", "지출합계", "기말잔액", "상태"]]
-    for w in forecast.get("weekly", []):
-        out_total = (w["송금예정"] + w["카드결제"] + w["자동이체"] + w["기타지출"])
-        weekly_rows.append([
-            w["주차"], w["기간"], _fmt_money(w["예상입금"]),
-            _fmt_money(out_total), _fmt_money(w["기말잔액"]), w["상태"]])
-    wt = Table(weekly_rows, colWidths=[16 * mm, 28 * mm, 32 * mm, 32 * mm,
-                                       34 * mm, 18 * mm])
-    wt.setStyle(table_style)
-    for i, w in enumerate(forecast.get("weekly", []), start=1):
-        if w["상태"] == "자금부족":
-            wt.setStyle(TableStyle([("BACKGROUND", (0, i), (-1, i),
-                                     colors.HexColor("#FFC7CE"))]))
-        elif w["상태"] == "주의":
-            wt.setStyle(TableStyle([("BACKGROUND", (0, i), (-1, i),
-                                     colors.HexColor("#FFEB9C"))]))
-    story.append(wt)
+    # 보고 기준 반영률: 80% / 90% / 100%
+    report_rates = [r for r in (0.8, 0.9, 1.0)
+                    if r in forecast.get("rate_scenarios", {})]
+    scenarios = forecast.get("rate_scenarios", {})
 
-    story.append(Paragraph("입금 반영률 시나리오", section))
-    sc_rows = [["반영률", "4주 기말잔액", "4주 최저잔액", "13주 기말잔액"]]
-    for rate, sc in sorted(forecast.get("rate_scenarios", {}).items()):
+    story.append(Paragraph("금주 일별 잔액 전망 (월~금)", section))
+    day_rows = [["일자"] + [f"반영률 {int(r * 100)}% 기말잔액"
+                          for r in report_rates]]
+    base_days = (scenarios.get(report_rates[0], {}).get("금주일별", [])
+                 if report_rates else [])
+    shortage_cells = []
+    for i, (d, _bal, _state) in enumerate(base_days, start=1):
+        row = [f"{_fmt_date(d)} ({'월화수목금토일'[d.weekday()]})"]
+        for j, rate in enumerate(report_rates, start=1):
+            days = scenarios[rate].get("금주일별", [])
+            bal = days[i - 1][1] if len(days) >= i else None
+            row.append(_fmt_money(bal))
+            if bal is not None and bal < 0:
+                shortage_cells.append((j, i))
+        day_rows.append(row)
+    dt_widths = [46 * mm] + [38 * mm] * max(len(report_rates), 1)
+    dt = Table(day_rows, colWidths=dt_widths)
+    dt.setStyle(table_style)
+    for col, row in shortage_cells:
+        dt.setStyle(TableStyle([("BACKGROUND", (col, row), (col, row),
+                                 colors.HexColor("#FFC7CE"))]))
+    story.append(dt)
+    story.append(Spacer(1, 2 * mm))
+    story.append(Paragraph(
+        "· 실적이 반영된 날짜는 세 반영률의 잔액이 동일합니다 "
+        "(실제 입출금 확정치).", small))
+
+    story.append(Paragraph("입금 반영률 시나리오 (80·90·100%)", section))
+    sc_rows = [["반영률", "4주 기말잔액", "4주 최저잔액", "자금부족 예상일"]]
+    for rate in report_rates:
+        sc = scenarios.get(rate, {})
         sc_rows.append([f"{int(round(rate * 100))}%",
                         _fmt_money(sc.get("4주 기말잔액")),
                         _fmt_money(sc.get("4주 최저잔액")),
-                        _fmt_money(sc.get("13주 기말잔액"))])
+                        _fmt_date(sc.get("자금부족 예상일")) or "없음"])
     st = Table(sc_rows, colWidths=[25 * mm, 45 * mm, 45 * mm, 45 * mm])
     st.setStyle(table_style)
     story.append(st)
