@@ -453,6 +453,9 @@ def _fill_expense(wb, rows: list[dict]) -> None:
             elif isinstance(value, date):
                 cell.number_format = "yyyy-mm-dd"
         r += 1
+    # 머리글 자동 필터 — 반영일·팀명·반영상태 등으로 골라 볼 수 있다
+    ws.auto_filter.ref = (f"A5:{get_column_letter(len(_EXPENSE_COLUMNS))}"
+                          f"{max(r - 1, 6)}")
     # 이전 실행의 잔여 행 정리
     end = max(ws.max_row, r)
     for rr in range(r, end + 1):

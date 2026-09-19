@@ -134,6 +134,33 @@ def test_별칭_시트_생성과_로드(tmp_path):
     assert aliases.get("NH기업카드") == ["농협카드"]   # 기본 예시 행
 
 
+def test_표_서식과_일자순_정렬(tmp_path):
+    """갱신 때마다 일자순 정렬 + 표 서식 + 제외 회색 조건부서식."""
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    fe.refresh_auto_draft_file(
+        draft, [{"정기지출명": "SKB", "대표 지급일": 15,
+                 "평균 월지출": 220_000.0, "신뢰도": "상"}], BASE)
+    # 순서 뒤죽박죽 행 추가 후 재갱신 → 정렬 확인
+    wb = load_workbook(draft)
+    ws = wb[fe.AUTO_DRAFT_SHEET]
+    ws.append([date(2026, 9, 22), "코웨이", 113_398, "상", "반영", ""])
+    wb.save(draft)
+    wb.close()
+    fe.refresh_auto_draft_file(draft, [], BASE)
+    wb = load_workbook(draft)
+    ws = wb[fe.AUTO_DRAFT_SHEET]
+    dates = [ws.cell(row=r, column=1).value for r in (2, 3)]
+    assert dates[0].date() == date(2026, 9, 22)      # 9/22이 10/15보다 먼저
+    assert dates[1].date() == date(2026, 10, 15)
+    # 머리글 남색 + 필터 + 틀 고정 + 제외 회색 규칙
+    assert ws.cell(row=1, column=1).fill.start_color.rgb.endswith("1F4E79")
+    assert ws.auto_filter.ref.startswith("A1:F")
+    assert ws.freeze_panes == "A2"
+    assert any("제외" in str(r.formula[0])
+               for rules in ws.conditional_formatting for r in rules.rules)
+    wb.close()
+
+
 def test_반영열_드롭다운(tmp_path):
     """반영 열(E)에 '반영/제외' 드롭다운이 생성·유지된다."""
     draft = tmp_path / "자동추정_지출목록.xlsx"

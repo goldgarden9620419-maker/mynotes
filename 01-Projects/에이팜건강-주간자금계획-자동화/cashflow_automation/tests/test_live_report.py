@@ -179,6 +179,7 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert exp["Q7"].value == "승인대기 상태(정책상 반영)"
     assert exp["A8"].value is None
     assert exp.freeze_panes == "A6"
+    assert exp.auto_filter.ref == "A5:Q7"   # 머리글 필터 (데이터 2행)
     # 에이팜 지출계획 시트: 취합 시트 바로 다음, 미반영/반영 구분 + 합계
     names = wb.sheetnames
     assert names.index("에이팜 지출계획") == names.index("지출계획_취합") + 1
