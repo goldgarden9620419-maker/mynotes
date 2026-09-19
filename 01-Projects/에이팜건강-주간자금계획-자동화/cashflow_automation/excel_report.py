@@ -421,6 +421,15 @@ def add_recurring_controls(ws, last_row: int,
         bulk_dv.showErrorMessage = True
         ws.add_data_validation(bulk_dv)
         bulk_dv.add(RECURRING_BULK_CELL)
+        # 전체 일괄이 켜져 있으면 개별·분류별 선택이 무시됨을 실시간 경고
+        warn = ws["L4"]
+        if not isinstance(warn, MergedCell):
+            warn.value = (f'=IF({RECURRING_BULK_CELL.replace("K", "$K$")}'
+                          f'="{RECURRING_BULK_KEEP}","",'
+                          '"← 전체 일괄이 켜져 있어 아래 개별·분류별 선택은 '
+                          '무시됩니다. 지난 선택으로 되돌리려면 '
+                          f'\'{RECURRING_BULK_KEEP}\'을 고르세요")')
+            warn.font = Font(name=_FONT, bold=True, size=9, color="C00000")
 
     if not categories:
         return
