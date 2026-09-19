@@ -1603,7 +1603,7 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
                       key=lambda k: (_PRIORITY.get(k[0], 9),
                                      -(balances.get(k) or 0)))
     if not accounts:
-        return {"accounts": [], "shares": {}, "rows": []}
+        return {"accounts": [], "shares": {}, "opening": {}, "rows": []}
 
     inflow_by_acct = {k: 0.0 for k in accounts}
     for r in history_rows:
@@ -1617,6 +1617,7 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
               if total_in > 0 else {k: 1 / len(accounts) for k in accounts})
 
     bal = {k: float(balances.get(k) or 0) for k in accounts}
+    opening = dict(bal)          # 예측 시작 시점의 계좌별 잔액
     woori = accounts[0]
     rows = []
     for day in daily_rows:
@@ -1655,7 +1656,8 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
         rows.append({"일자": d, "요일": day.get("요일"), "실적": False,
                      "잔액": dict(bal), "입금": deposits, "지출": outflow,
                      "이체": transfers, "비고": note})
-    return {"accounts": accounts, "shares": shares, "rows": rows}
+    return {"accounts": accounts, "shares": shares, "opening": opening,
+            "rows": rows}
 
 
 # ---------------------------------------------------------------------------

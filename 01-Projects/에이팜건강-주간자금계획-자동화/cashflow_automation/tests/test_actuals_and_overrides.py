@@ -360,6 +360,7 @@ def test_계좌별_시나리오_인출_우선순위():
     sc3 = fe.build_account_scenario(daily3, balances, hist)
     assert sc3["shares"][("우리은행", "W")] == 0.3
     assert sc3["shares"][("농협", "N")] == 0.0
+    assert sc3["opening"][("우리은행", "W")] == 100.0   # 수식 출발 잔액
     row3 = sc3["rows"][0]
     assert round(row3["입금"][("우리은행", "W")]) == 300
     assert round(row3["입금"][("국민은행", "K")]) == 700
