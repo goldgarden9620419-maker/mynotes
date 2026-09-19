@@ -854,6 +854,36 @@ def create_recurring_review_workbook(recurring: list[dict],
     _write_table(ws, _RECURRING_COLUMNS, _recurring_display(recurring))
     add_recurring_controls(ws, 5 + len(recurring),
                            categories=_recurring_categories(recurring))
+    # '적용할 성격' 선택지 안내 (P열 안내 상자)
+    guide_rows = [
+        ("적용할 성격 안내", True),
+        ("변경 안 함 — 지금 값을 그대로 둡니다 (아무것도 바꾸지 않음)",
+         False),
+        ("정기 — 평균 월지출을 자동 추정해 자금계획 후보로 올립니다 "
+         "(자동추정_지출목록에 등재. 실제 반영 여부는 그 파일의 반영/제외로"
+         " 결정)", False),
+        ("비정기 — 자동 추정을 하지 않습니다. 팀 지출예정 파일에 적힌 "
+         "금액만 자금계획에 반영 (금주 '정기지출 체크' 대조는 계속 함)",
+         False),
+        ("제외 — 자동 추정도, 정기지출 체크 대조도 하지 않습니다 "
+         "(관리 대상에서 완전 제외)", False),
+        ("우선순위 — K4 전체 일괄 > N열 분류별 일괄 > K열 개별 행 "
+         "(넓은 쪽이 이깁니다)", False),
+    ]
+    ws.column_dimensions["P"].width = 62
+    for i, (text, head) in enumerate(guide_rows, start=5):
+        cell = ws.cell(row=i, column=16, value=text)
+        if head:
+            cell.fill = _HEADER_FILL
+            cell.font = _HEADER_FONT
+            cell.alignment = Alignment(horizontal="center",
+                                       vertical="center")
+        else:
+            cell.font = Font(name=_FONT, size=9, color="404040")
+            cell.fill = PatternFill("solid", start_color="F5F5F5")
+            cell.alignment = Alignment(horizontal="left", vertical="center",
+                                       wrap_text=True)
+        cell.border = _BORDER
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
