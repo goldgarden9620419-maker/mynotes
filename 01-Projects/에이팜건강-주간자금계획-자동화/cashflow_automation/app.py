@@ -161,23 +161,32 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             merged_history, base_date,
             cfg.get("recurring", "lookback_months", default=6),
             cfg.get("recurring", "min_months", default=4))
-        # 직전 라이브 결과물에서 사용자의 분류·성격 수정을 수확해 저장한다
-        # 단, 기준파일이 결과물보다 최신이면(프로그램 업데이트 pull 직후 등)
-        # 낡은 결과물의 값으로 기준파일을 되돌리지 않도록 수확을 생략한다
+        # 지난 정기지출분석 검토 파일(06_확인필요)과 예전 버전 라이브의
+        # 사용자 분류·성격 수정을 수확해 저장한다. 단, 기준파일이 그 파일보다
+        # 최신이면(프로그램 업데이트 pull 직후 등) 낡은 값으로 기준파일을
+        # 되돌리지 않도록 수확을 생략한다
+        base_wb_path = cfg.base_workbook_path()
+        harvest_sources = []
         prev_lives = sorted(
             cfg.folder("output").glob("주간자금계획_라이브_*.xlsx"))
-        base_wb_path = cfg.base_workbook_path()
-        if prev_lives and (not base_wb_path.exists()
-                           or prev_lives[-1].stat().st_mtime
-                           >= base_wb_path.stat().st_mtime):
-            harvested = forecast_engine.harvest_recurring_edits(prev_lives[-1])
+        if prev_lives:
+            harvest_sources.append(prev_lives[-1])
+        prev_recurs = sorted(
+            cfg.folder("review").glob("정기지출분석_*.xlsx"),
+            key=lambda p: p.stat().st_mtime)
+        if prev_recurs:
+            harvest_sources.append(prev_recurs[-1])
+        for src in harvest_sources:
+            if base_wb_path.exists() \
+                    and src.stat().st_mtime < base_wb_path.stat().st_mtime:
+                log.info("기준파일이 %s 보다 최신이라 정기지출분석 수확 생략",
+                         src.name)
+                continue
             applied = forecast_engine.update_override_sheet(
-                base_wb_path, harvested)
+                base_wb_path, forecast_engine.harvest_recurring_edits(src))
             if applied:
-                log.info("정기지출분석 사용자 수정 %d건을 정기지출분류에 반영",
-                         applied)
-        elif prev_lives:
-            log.info("기준파일이 결과물보다 최신이라 정기지출분석 수확 생략")
+                log.info("정기지출분석 사용자 수정 %d건을 정기지출분류에 "
+                         "반영 (%s)", applied, src.name)
         # 확인필요 2단계: 확인 완료된 파일을 먼저 찾는다 — 그 안의
         # 정기지출분석 수정(분류·성격, K4 일괄 변경)은 이번 결과 생성에
         # 바로 반영한다 (라이브 수확보다 나중이라 확인 파일이 우선한다)

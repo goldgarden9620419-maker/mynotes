@@ -238,8 +238,9 @@ def test_확인후_결과생성_2단계(env):
     assert len(list(out.glob("주간자금계획_경영보고_*.xlsx"))) == 1
     assert len(list(out.glob("주간자금계획_대표보고_*.pdf"))) == 1
     assert not list(out.glob("확인필요_*.xlsx"))
-    # 확인된 확인필요 파일은 그대로 남는다
+    # 확인된 검토 쌍(확인필요·정기지출분석)은 그대로 남는다
     assert reviews[0].exists()
+    assert recur_file.exists()
     # 확인 파일의 정기지출분석 수정이 이번 실행에서 기준파일로 반영됐다
     import forecast_engine as fe
     ov = fe.load_recurring_overrides(cfg.base_workbook_path())

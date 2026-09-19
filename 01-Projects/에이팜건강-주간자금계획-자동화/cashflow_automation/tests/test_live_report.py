@@ -162,18 +162,8 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     # 수동 붙여넣기 시트 제거 + 잔여 참조 수식 정리
     assert "주간계좌_붙여넣기" not in wb.sheetnames
     assert raw["A50"].value is None
-    # 정기지출분석은 사용자 편집용이라 맨 끝 시트에 둔다
-    assert wb.sheetnames[-1] == "정기지출분석"
-    # 머리글 필터 + 성격 드롭다운 + K4 전체/N열 분류별 일괄이 붙는다
-    rec = wb["정기지출분석"]
-    assert rec.auto_filter.ref == "A5:K6"          # 자료 1행
-    assert rec["K4"].value == "변경 안 함"
-    assert rec["M6"].value == "4대보험"            # 분류별 일괄 블록
-    assert rec["N6"].value == "변경 안 함"
-    rec_dvs = [str(dv.formula1)
-               for dv in rec.data_validations.dataValidation]
-    assert any("전체 비정기" in f for f in rec_dvs)
-    assert any("정기,비정기,제외" in f for f in rec_dvs)
+    # 분류·성격 검토는 별도 정기지출분석 파일에서 하므로 라이브에서 제거
+    assert "정기지출분석" not in wb.sheetnames
     # 지출계획 취합 시트가 새로 생성되어 자동 반영된다
     assert "지출계획_취합" in wb.sheetnames
     exp = wb["지출계획_취합"]

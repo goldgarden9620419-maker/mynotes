@@ -67,7 +67,8 @@ def fill_live_workbook(template_path: Path, report: dict,
     if not template_path.exists():
         raise LiveTemplateError(f"라이브 템플릿이 없습니다: {template_path}")
     wb = load_workbook(template_path)
-    required = {"요약", "4주일별계획", "13주주별계획", "정기지출분석",
+    # 정기지출분석은 별도 검토 파일로 옮겨져 템플릿에 없어도 된다
+    required = {"요약", "4주일별계획", "13주주별계획",
                 "계좌내역통합_RAW", "설정및분류"}
     missing = required - set(wb.sheetnames)
     if missing:
@@ -87,16 +88,16 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_account_scenario(wb, report.get("account_scenario"))
     _fill_expense(wb, report.get("integrated_masked", []))
     _fill_apalm_expense(wb, report.get("apalm_expenses", []))
-    _fill_recurring(wb["정기지출분석"], report.get("recurring", []))
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []))
 
     # 은행 파일을 폴더에서 자동으로 읽으므로 수동 붙여넣기 시트는 제거한다
     if "주간계좌_붙여넣기" in wb.sheetnames:
         wb.remove(wb["주간계좌_붙여넣기"])
 
-    # 정기지출분석은 사용자가 분류·성격을 편집하는 시트라 맨 끝에 둔다
-    idx = wb.sheetnames.index("정기지출분석")
-    wb.move_sheet("정기지출분석", offset=len(wb.sheetnames) - 1 - idx)
+    # 분류·성격 검토는 확인 단계의 별도 정기지출분석 파일에서만 한다
+    # (2026-09-20 사용자 요청) — 라이브에는 시트를 담지 않는다
+    if "정기지출분석" in wb.sheetnames:
+        wb.remove(wb["정기지출분석"])
 
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -602,34 +603,6 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
         if row_empty and rr > r + 5:
             break
     ws.freeze_panes = "A6"
-
-
-def _fill_recurring(ws, recurring: list[dict]) -> None:
-    _set(ws, 5, 11, "성격")  # 기준파일 '정기지출분류' 시트에서 수정 가능
-    for i in range(6, max(len(recurring) + 20, 90)):
-        for c in range(1, 12):
-            _set(ws, i, c, None)
-    from common import RECURRING_NATURE_DISPLAY
-    for i, it in enumerate(recurring, start=6):
-        nature = it.get("성격") or "정기"
-        values = [it.get("은행"), it.get("정기지출명"),
-                  it.get("분류") or "성격확인필요",
-                  it.get("발생개월수"), it.get("거래건수"),
-                  round(it.get("평균 월지출") or 0),
-                  round(it.get("최소 월지출") or 0),
-                  round(it.get("최대 월지출") or 0),
-                  f"매월 {it.get('대표 지급일')}일 전후",
-                  _CONF_LABEL.get(it.get("신뢰도"), it.get("신뢰도")),
-                  RECURRING_NATURE_DISPLAY.get(nature, nature)]
-        for c, v in enumerate(values, start=1):
-            cell = _set(ws, i, c, v)
-            if cell is not None and c in (6, 7, 8):
-                cell.number_format = _MONEY_WON
-    # 필터 + 성격 드롭다운 + 일괄 변경(K4 전체 / N열 분류별) —
-    # 여기서 고치면 다음 실행 때 수확·반영된다
-    from excel_report import _recurring_categories, add_recurring_controls
-    add_recurring_controls(ws, 5 + len(recurring),
-                           categories=_recurring_categories(recurring))
 
 
 def _fill_raw(ws, bank_rows: list[dict]) -> None:
