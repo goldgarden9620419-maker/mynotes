@@ -178,6 +178,9 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
     formulas = [str(dv.formula1) for dv in ws.data_validations.dataValidation]
     assert any("전체 비정기" in f for f in formulas)
     assert any("정기,비정기,제외" in f for f in formulas)
+    # 전체 일괄이 켜지면 나타나는 실시간 경고 (L4)
+    assert str(ws["L4"].value).startswith('=IF($K$4=')
+    assert "무시됩니다" in str(ws["L4"].value)
     # 개별 수정: SKB만 '비정기'로 직접 입력 (수식 대신 값)
     ws["K6"] = "비정기"
     wb.save(out)
