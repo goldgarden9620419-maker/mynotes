@@ -384,21 +384,30 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
         ws = wb.create_sheet(ACCOUNT_SCENARIO_SHEET, index)
 
     accounts = scenario["accounts"]
+    shares = scenario.get("shares") or {}
     title = _set(ws, 2, 1, "계좌별 일별 잔액 시나리오 (자동 반영)")
     if title is not None:
         title.font = Font(name="맑은 고딕", bold=True, size=13,
                           color="1F4E79")
+    share_txt = " · ".join(f"{account_label(b, a)} "
+                           f"{shares.get((b, a), 0):.1%}"
+                           for b, a in accounts) if shares else ""
     note = _set(ws, 3, 1,
                 "인출 우선순위: 우리은행 → 농협 → 국민은행. 부족분은 이체 열의 "
-                "금액만큼 우리은행으로 옮겨 집행하는 가정입니다 "
-                "(입금은 계좌별 최근 비중대로 배분, 기본 반영률 기준).")
+                "금액만큼 우리은행으로 옮겨 집행하는 가정입니다. "
+                "예상입금(온라인+확정·기타)은 최근 외부입금 비중대로 각 "
+                "계좌에 나눠 더합니다"
+                + (f" — 입금 배분 비중: {share_txt}." if share_txt else "."))
     if note is not None:
         note.font = Font(name="맑은 고딕", size=9, color="808080")
 
     headers = (["일자", "요일"]
                + [account_label(b, a) + " 잔액" for b, a in accounts]
-               + ["총잔액", "농협→우리 이체", "국민→우리 이체", "비고"])
-    widths = [11, 6] + [15] * len(accounts) + [15, 14, 14, 22]
+               + ["총잔액", "예상입금 합계"]
+               + [account_label(b, a) + " 입금" for b, a in accounts]
+               + ["농협→우리 이체", "국민→우리 이체", "비고"])
+    widths = ([11, 6] + [15] * len(accounts) + [15, 14]
+              + [14] * len(accounts) + [14, 14, 22])
     for c, header in enumerate(headers, start=1):
         cell = _set(ws, 5, c, header)
         if cell is not None:
@@ -427,6 +436,13 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
         else:
             values = [round(balances.get(k, 0)) for k in accounts]
             values.append(round(sum(balances.get(k, 0) for k in accounts)))
+        # 그날 예상입금이 계좌별로 얼마씩 더해졌는지 (실적 구간은 비움)
+        deps = row.get("입금") or {}
+        if deps:
+            values.append(round(sum(deps.values())) or None)
+            values += [round(deps.get(k, 0)) or None for k in accounts]
+        else:
+            values += [None] * (len(accounts) + 1)
         nh = sum(v for k, v in (row.get("이체") or {}).items()
                  if k[0] == "농협")
         kb = sum(v for k, v in (row.get("이체") or {}).items()
