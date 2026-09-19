@@ -229,6 +229,11 @@ def _fill_daily(ws, forecast: dict, base_date: date,
             c3 = _set(ws, row, 3, round(src.get("온라인 예상입금") or 0))
             if c3 is not None:
                 c3.number_format = "#,##0"
+        elif d in holidays:
+            # 공휴일 예상입금 0 고정 (0 × 반영률 = 0이라 상호작용 무해)
+            c3 = _set(ws, row, 3, 0)
+            if c3 is not None:
+                c3.number_format = "#,##0"
         for c, v in zip((4, 5, 6, 7), vals):
             _set(ws, row, c, round(v) if v else None)
         # 그날 반영된 지출 내역 요약 (없으면 이전 실행 잔여값 정리)

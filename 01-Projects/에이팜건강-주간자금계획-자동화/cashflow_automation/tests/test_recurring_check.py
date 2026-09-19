@@ -73,6 +73,26 @@ def test_공휴일_시트_생성과_로드(tmp_path):
     assert fe.load_holidays(base)[date(2026, 11, 3)] == "임시공휴일"
 
 
+def test_공휴일은_예상입금_0(tmp_path):
+    """공휴일은 일별 예상입금 0, 5주차 이후 주별 입금도 그만큼 감소."""
+    history = []
+    for w in range(1, 13):
+        d = BASE - timedelta(weeks=w)          # 과거 월요일마다 입금 이력
+        history.append({"거래일": d, "입금액": 1_000_000.0, "출금액": 0.0,
+                        "자동분류": "온라인매출입금", "내부이체": False,
+                        "반영상태": "정상반영"})
+    holidays = {BASE + timedelta(days=3): "추석 연휴",     # 9/24 (목)
+                BASE + timedelta(weeks=5): "가상 공휴일"}  # 6주차 월요일
+    fc = fe.build_forecast([], BASE, 1_000_000, history, [], [],
+                           [1.0], 1.0, holidays=holidays)
+    by_date = {r["일자"]: r for r in fc["daily"]}
+    assert by_date[BASE + timedelta(days=3)]["온라인 예상입금"] == 0
+    assert by_date[BASE]["온라인 예상입금"] > 0            # 평일(월) 정상
+    weekly = fc["weekly"]
+    # 6주차(공휴일 월요일 포함)는 7주차보다 월요일 평균만큼 입금이 적다
+    assert weekly[6]["예상입금"] - weekly[5]["예상입금"] > 0
+
+
 def test_주말실행이면_대표보고_일별전망은_차주(tmp_path):
     """display_week_start를 차주 월요일로 주면 금주일별이 차주 월~금."""
     fc = fe.build_forecast([], BASE, 1_000_000, [], [], [], [0.8], 0.8,

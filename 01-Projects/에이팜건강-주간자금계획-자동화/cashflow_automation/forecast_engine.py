@@ -1225,7 +1225,8 @@ def build_daily_plan(countable_plans: list[dict], base_date: date,
                      minimum_balance: float = 0,
                      days: int = 28,
                      actual_flows: Optional[dict] = None,
-                     actual_until: Optional[date] = None) -> list[dict]:
+                     actual_until: Optional[date] = None,
+                     holidays: Optional[dict] = None) -> list[dict]:
     """4주(28일) 일별 자금계획.
 
     actual_until까지의 날짜는 예측 대신 실제 입출금(실적)으로 채운다.
@@ -1255,7 +1256,11 @@ def build_daily_plan(countable_plans: list[dict], base_date: date,
             etc_out = f["출금"]
             note = _actual_note(f)
         else:
-            online = weekday_avg.get(d.weekday(), 0.0) * rate
+            # 공휴일은 은행·정산이 쉬므로 예상입금 0 (2026-09-20 사용자 결정)
+            if holidays and d in holidays:
+                online = 0.0
+            else:
+                online = weekday_avg.get(d.weekday(), 0.0) * rate
             adj = adj_by_date.get(d, {"입금": 0.0, "지출": 0.0, "내용": []})
             adj_in = adj["입금"]
             planned = by_date.get(d, {"송금": 0.0, "카드": 0.0,
@@ -1296,7 +1301,8 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
                       rate: float, recurring_items: list[dict],
                       adjustments: list[dict],
                       minimum_balance: float = 0,
-                      weeks: int = 13) -> list[dict]:
+                      weeks: int = 13,
+                      holidays: Optional[dict] = None) -> list[dict]:
     """13주 주별 자금계획. base_date는 월요일이어야 한다."""
     base_monday = week_monday(base_date)
     by_date = _plan_amounts_by_date(countable_plans)
@@ -1346,6 +1352,13 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
                 balance = in_week[0]["기초잔액"]
         else:
             online = weekly_online_full
+            if holidays:
+                # 공휴일이 낀 주는 그 요일 평균만큼 입금을 뺀다 (입금 0)
+                online -= sum(
+                    weekday_avg.get((w_start + timedelta(days=i)).weekday(),
+                                    0.0) * rate
+                    for i in range(7)
+                    if (w_start + timedelta(days=i)) in holidays)
             adj_in = 0.0
             transfer = card = auto = etc = 0.0
             d = w_start
@@ -1463,7 +1476,8 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                    minimum_balance: float = 0,
                    history_weeks: int = 12,
                    recency_halflife: float = 4.0,
-                   display_week_start: Optional[date] = None) -> dict:
+                   display_week_start: Optional[date] = None,
+                   holidays: Optional[dict] = None) -> dict:
     """전체 예측 결과와 반영률별 시나리오를 만든다.
 
     opening_balance는 '현재(최신 거래내역 기준) 총잔액'이다.
@@ -1485,10 +1499,12 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                                  weekday_avg, rate, adjustments,
                                  minimum_balance,
                                  actual_flows=actual_flows,
-                                 actual_until=actual_until)
+                                 actual_until=actual_until,
+                                 holidays=holidays)
         weekly = build_weekly_plan(countable_plans, base_date, daily,
                                    weekday_avg, rate, recurring_items,
-                                   adjustments, minimum_balance)
+                                   adjustments, minimum_balance,
+                                   holidays=holidays)
         min_row = min(daily, key=lambda r: r["기말잔액"]) if daily else None
         shortage = next((r["일자"] for r in daily
                          if r["상태"] == STATE_SHORTAGE), None)

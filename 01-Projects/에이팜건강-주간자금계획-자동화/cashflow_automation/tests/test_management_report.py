@@ -91,6 +91,9 @@ def test_경영보고_생성과_수식(tmp_path):
     # ⑤ 전달 메모 수식
     memo = str(ws["A152"].value)
     assert memo.startswith("=IF(") and "건강사업팀" in memo
+    # 공휴일 예상입금 0: 숨김 요일평균(G)이 0 → 입금 수식도 0
+    assert ws["G17"].value == 0 and ws["G18"].value == 0    # 추석 9/24~25
+    assert ws["G15"].value == 1_000_000                     # 평일은 평균
     # 주말·공휴일 일자는 붉은 글자 (9/24 추석=row17, 9/26 토=row19)
     assert str(ws["A17"].font.color.rgb).endswith("C00000")
     assert str(ws["B17"].font.color.rgb).endswith("C00000")
