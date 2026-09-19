@@ -373,6 +373,12 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     색으로 구분해 '전날 잔액 + ② − ③ − ④ = 오늘 잔액'이 왼쪽부터
     그대로 읽히게 한다. 지난 실적 일자는 숨기고 마지막 실적일(출발
     잔액)만 남긴다. 자동 생성 시트이므로 매번 새로 그린다.
+
+    예측 행은 값이 아니라 수식으로 쓴다: ②·③이 4주일별계획의 입금
+    (요약!B13 반영률 수식)·지출 셀을 참조하고, 이체·잔액은 MIN/MAX
+    수식으로 연쇄 계산되므로 요약 시트에서 반영률을 바꾸면 이 표도
+    즉시 다시 계산된다. 수식 훼손 방지를 위해 시트를 암호 없이
+    보호한다(행·열 숨기기 해제는 허용).
     """
     if not scenario or not scenario.get("accounts"):
         return
@@ -417,8 +423,10 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     note = _set(ws, 3, 1,
                 "읽는 법: 오늘 총잔액 = 전날 총잔액 + ② 입금 합계 − ③ 지출. "
                 "지출은 전액 우리은행에서 집행하고, 모자라면 ④처럼 농협 → "
-                "국민 순으로 우리은행에 이체해 채웁니다. 지난 실적 일자 "
-                "행은 숨겨져 있습니다(마지막 실적일 잔액에서 출발)."
+                "국민 순으로 우리은행에 이체해 채웁니다. '요약' 시트의 입금 "
+                "반영률(B13)을 바꾸면 이 표도 즉시 다시 계산됩니다. 지난 "
+                "실적 일자 행은 숨김(마지막 실적일 잔액에서 출발), 실수 "
+                "방지를 위해 시트 보호(암호 없음)."
                 + (f" ② 배분 비중(최근 입금 실적): {share_txt}"
                    if share_txt else ""))
     if note is not None:
@@ -480,10 +488,30 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     out_fill = PatternFill("solid", start_color="FCE4D6")
     tr_fill = PatternFill("solid", start_color="F8CBAD")
     red = Font(name="맑은 고딕", size=10, color="C00000")
+    num_bal = "#,##0;[Red]-#,##0"
+    num_flow = "#,##0;[Red]-#,##0;"          # 0은 빈칸으로
     rows = scenario["rows"]
     last_act = max((i for i, rw in enumerate(rows) if rw.get("실적")),
                    default=None)
+    opening = scenario.get("opening") or {}
+    daily = "'4주일별계획'!"                 # 행 번호가 이 시트와 같다
+    col_l = get_column_letter
 
+    def _num(rr, cc, value, fmt, bold=False):
+        cell = _set(ws, rr, cc, value)
+        if cell is not None:
+            cell.number_format = fmt
+            cell.font = Font(name="맑은 고딕", size=10, bold=bold)
+        return cell
+
+    # 이체 계산용 숨김 열(비고 오른쪽): 인출 우선순위 순 계좌별 이체액
+    helper_cols = {k: col_note + j for j, k in enumerate(accounts[1:], 1)}
+    for c in helper_cols.values():
+        ws.column_dimensions[col_l(c)].hidden = True
+    nh_cols = [c for (b, _a), c in helper_cols.items() if b == "농협"]
+    kb_cols = [c for (b, _a), c in helper_cols.items() if b == "국민은행"]
+
+    first_forecast = True
     r = 6
     for i, row in enumerate(rows):
         d = row["일자"]
@@ -497,37 +525,68 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
             for cell in (acell, wcell):
                 if cell is not None:
                     cell.font = red
-        balances = row.get("잔액")
-        deps = row.get("입금") or {}
-        out = row.get("지출")
-        nh = sum(v for k, v in (row.get("이체") or {}).items()
-                 if k[0] == "농협")
-        kb = sum(v for k, v in (row.get("이체") or {}).items()
-                 if k[0] == "국민은행")
-        values = ([None] * (n + 1) if balances is None else
-                  [round(sum(balances.get(k, 0) for k in accounts))]
-                  + [round(balances.get(k, 0)) for k in accounts])
-        values += ([None] * (n + 1) if not deps else
-                   [round(sum(deps.values())) or None]
-                   + [round(deps.get(k, 0)) or None for k in accounts])
-        values += [None if out is None else (round(out) or None),
-                   round(nh) or None, round(kb) or None]
-        for j, v in enumerate(values, start=col_total):
-            cell = _set(ws, r, j, v)
-            if cell is None:
-                continue
-            cell.number_format = "#,##0;[Red]-#,##0"
-            cell.font = Font(name="맑은 고딕", size=10,
-                             bold=(j == col_total))
-        note_txt = row.get("비고") or None
-        if note_txt == "실적 구간":
-            note_txt = ("여기까지 실적 — 이 잔액에서 출발"
-                        if i == last_act else "실적 구간")
-        ncell = _set(ws, r, col_note, note_txt)
-        if ncell is not None:
-            warn = bool(row.get("비고")) and not row.get("실적")
-            ncell.font = Font(name="맑은 고딕", size=9,
-                              color="C00000" if warn else gray)
+
+        if row.get("실적"):
+            balances = row.get("잔액")
+            if balances is not None:
+                _num(r, col_total,
+                     round(sum(balances.get(k, 0) for k in accounts)),
+                     num_bal, bold=True)
+                for idx, k in enumerate(accounts):
+                    _num(r, 4 + idx, round(balances.get(k, 0)), num_bal)
+            ncell = _set(ws, r, col_note,
+                         "여기까지 실적 — 이 잔액에서 출발"
+                         if i == last_act else "실적 구간")
+            if ncell is not None:
+                ncell.font = Font(name="맑은 고딕", size=9, color=gray)
+        else:
+            # 예측 행은 전부 수식: 요약!B13(반영률)을 바꾸면 4주일별계획
+            # 입금 수식을 거쳐 이 표의 입금·이체·잔액이 즉시 재계산된다
+            prev = ({k: f"{float(opening.get(k) or 0):.2f}"
+                     for k in accounts} if first_forecast else
+                    {k: f"{col_l(4 + idx)}{r - 1}"
+                     for idx, k in enumerate(accounts)})
+            first_forecast = False
+            in_cell = {k: f"{col_l(col_in_sum + 1 + idx)}{r}"
+                       for idx, k in enumerate(accounts)}
+            out_ref = f"{col_l(col_out)}{r}"
+            w = accounts[0]
+            need = f"MAX(0,{out_ref}-{prev[w]}-{in_cell[w]})"
+            _num(r, col_in_sum, f"={daily}C{r}+{daily}D{r}", num_flow)
+            for idx, k in enumerate(accounts):
+                _num(r, col_in_sum + 1 + idx,
+                     f"={col_l(col_in_sum)}{r}*{shares.get(k, 0):.6f}",
+                     num_flow)
+            _num(r, col_out, f"={daily}E{r}+{daily}F{r}+{daily}G{r}",
+                 num_flow)
+            done = []
+            for k in accounts[1:]:
+                minus = "".join(f"-{col_l(c)}{r}" for c in done)
+                _num(r, helper_cols[k],
+                     f"=MIN(MAX(0,{prev[k]}+{in_cell[k]}),{need}{minus})",
+                     num_flow)
+                done.append(helper_cols[k])
+            for cc, cols in ((col_tr, nh_cols), (col_tr + 1, kb_cols)):
+                _num(r, cc,
+                     ("=" + "+".join(f"{col_l(c)}{r}" for c in cols))
+                     if cols else None, num_flow)
+            plus = "".join(f"+{col_l(c)}{r}"
+                           for c in helper_cols.values())
+            _num(r, 4, f"={prev[w]}+{in_cell[w]}-{out_ref}{plus}", num_bal)
+            for idx, k in enumerate(accounts):
+                if idx:
+                    _num(r, 4 + idx,
+                         f"={prev[k]}+{in_cell[k]}"
+                         f"-{col_l(helper_cols[k])}{r}", num_bal)
+            _num(r, col_total, f"=SUM({col_l(4)}{r}:{col_l(3 + n)}{r})",
+                 num_bal, bold=True)
+            wl = col_l(4)
+            ncell = _set(ws, r, col_note,
+                         f'=IF({wl}{r}<-0.5,"전 계좌 소진 — 부족 "'
+                         f'&TEXT(-{wl}{r},"#,##0")&"원","")')
+            if ncell is not None:
+                ncell.font = Font(name="맑은 고딕", size=9, color="C00000")
+
         # 블록별 배경색·테두리로 구간을 구분
         for c in range(1, col_note + 1):
             cell = ws.cell(row=r, column=c)
@@ -542,6 +601,11 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
                 cell.fill = tr_fill
         r += 1
     ws.freeze_panes = "D6"   # 일자·요일·총잔액 고정
+    # 실수로 수식을 지우지 않게 암호 없는 시트 보호 (행·열 숨기기
+    # 해제와 셀 선택은 그대로 가능)
+    from openpyxl.worksheet.protection import SheetProtection
+    ws.protection = SheetProtection(sheet=True, formatRows=False,
+                                    formatColumns=False)
 
 
 def _fill_expense(wb, rows: list[dict],

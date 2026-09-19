@@ -281,6 +281,7 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     rep["account_scenario"] = {
         "accounts": acc,
         "shares": {acc[0]: 0.7, acc[1]: 0.3},
+        "opening": {acc[0]: 800_000.0, acc[1]: 200_000.0},
         "rows": [
             {"일자": NEW_MONDAY, "요일": "월", "실적": True, "잔액": None,
              "입금": {}, "지출": None, "이체": {}, "비고": "실적 구간"},
@@ -316,15 +317,28 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     assert not ws.row_dimensions[7].hidden
     assert ws.cell(row=7, column=3).value == 1_000_000     # 출발 총잔액
     assert "출발" in str(ws.cell(row=7, column=12).value)
-    # 예측 행: 총잔액·입금 합계·계좌별 배분·지출·이체가 다 보인다
-    assert ws.cell(row=8, column=3).value == 1_500_000
-    assert ws.cell(row=8, column=6).value == 1_000_000
-    assert ws.cell(row=8, column=7).value == 700_000
-    assert ws.cell(row=8, column=8).value == 300_000
-    assert ws.cell(row=8, column=9).value == 200_000
-    assert ws.cell(row=8, column=10).value == 50_000
-    # 일자·요일·총잔액 고정
+    # 예측 행은 수식: 요약!B13(반영률)을 바꾸면 즉시 재계산된다
+    # (입금은 4주일별계획의 반영률 수식을 참조, 이체·잔액은 MIN/MAX 연쇄)
+    assert ws.cell(row=8, column=6).value \
+        == "='4주일별계획'!C8+'4주일별계획'!D8"          # ② 합계
+    assert ws.cell(row=8, column=7).value == "=F8*0.700000"
+    assert ws.cell(row=8, column=8).value == "=F8*0.300000"
+    assert ws.cell(row=8, column=9).value \
+        == "='4주일별계획'!E8+'4주일별계획'!F8+'4주일별계획'!G8"  # ③
+    # 이체 계산용 숨김 열(M) + 표시 열(J=농협→우리)
+    assert ws.column_dimensions["M"].hidden
+    assert ws.cell(row=8, column=13).value \
+        == "=MIN(MAX(0,200000.00+H8),MAX(0,I8-800000.00-G8))"
+    assert ws.cell(row=8, column=10).value == "=M8"
+    assert ws.cell(row=8, column=11).value is None         # 국민 계좌 없음
+    # ① 잔액: 첫 예측 행은 출발 잔액 리터럴에서 시작
+    assert ws.cell(row=8, column=4).value == "=800000.00+G8-I8+M8"
+    assert ws.cell(row=8, column=5).value == "=200000.00+H8-M8"
+    assert ws.cell(row=8, column=3).value == "=SUM(D8:E8)"
+    assert "부족" in str(ws.cell(row=8, column=12).value)  # 경고 수식
+    # 일자·요일·총잔액 고정 + 수식 보호(암호 없음)
     assert ws.freeze_panes == "D6"
+    assert ws.protection.sheet
     wb.close()
 
 
