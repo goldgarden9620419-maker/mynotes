@@ -17,9 +17,9 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from common import (
-    APP_VERSION, BANK_REFLECT_OK, REFLECT_OK, REFLECT_PAID, STATUS_FAILED,
-    STATUS_PARTIAL, STATUS_REVIEW_WAIT, STATUS_SUCCESS, STATUS_WAITING_FILES,
-    iso_week_key, now_local, unique_path, week_monday,
+    APP_VERSION, BANK_REFLECT_OK, MATCH_NOT_FOUND, REFLECT_OK, REFLECT_PAID,
+    STATUS_FAILED, STATUS_PARTIAL, STATUS_REVIEW_WAIT, STATUS_SUCCESS,
+    STATUS_WAITING_FILES, iso_week_key, now_local, unique_path, week_monday,
 )
 from config import Config
 from state_manager import LockError, RunLock, StateManager
@@ -260,6 +260,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("matching", "date_window_days", default=3),
             cfg.get("matching", "name_similarity_threshold", default=70),
             cfg.get("bank", "recent_days", default=14))
+        mask_conf = cfg.get("options", "mask_confidential", default=True)
+        today = now.date()
         for row in matched["results"]:
             if row["대조결과"] in ("수동확인필요",):
                 issues.append({"구분": "수동 대조 필요",
@@ -267,6 +269,26 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                "요청ID": row.get("요청ID"),
                                "내용": row.get("비고") or "대조결과 수동확인필요",
                                "원본파일": ""})
+                continue
+            # 지급예정일이 지났는데 실제 출금을 찾지 못한 예정 지출
+            # → 안 나간 건이므로 확인필요에 표시 (미래 예정 건은 정상)
+            if row.get("대조결과") == MATCH_NOT_FOUND:
+                d = row.get("지급예정일")
+                if d is None or d >= today:
+                    continue
+                subject = row.get("거래처") or ""
+                if mask_conf and row.get("confidential"):
+                    subject = row.get("_conf_category") or "대외비"
+                issues.append({
+                    "구분": "예정지출 미출금",
+                    "팀명": row.get("팀명"),
+                    "요청ID": row.get("요청ID"),
+                    "일자": d,
+                    "내용": f"{subject} — 지급예정일이 지났는데 실제 출금을 "
+                           "찾지 못함. 지연 지급이면 새 취합 파일에 새 "
+                           "지급일로 다시 올리세요",
+                    "금액": row.get("예정금액"),
+                    "원본파일": ""})
         for row in matched["unplanned"]:
             issues.append({"구분": "계획 없는 실제출금",
                            "은행": row.get("은행"),
@@ -338,8 +360,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                   if p.get("자금계획 반영일")
                   and base_date <= p["자금계획 반영일"] <= horizon_end]
         integrated_masked = team_loader.mask_confidential_rows(
-            plan["integrated"],
-            enabled=cfg.get("options", "mask_confidential", default=True))
+            plan["integrated"], enabled=mask_conf)
         # 에이팜 관련 지출은 4주일별계획 비고 대신 전용 시트로 분리
         apalm_expenses = forecast_engine.collect_apalm_expenses(
             integrated_masked, adjustments, apalm_marked)

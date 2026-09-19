@@ -302,6 +302,37 @@ def test_확인감시_틱이_저장을_감지한다(env):
     assert state.state["last_run_status"] == STATUS_SUCCESS
 
 
+def test_예정지출_미출금은_확인필요에_표시(env):
+    """지급예정일이 지났는데 출금이 없는 예정 건 → '예정지출 미출금'."""
+    from tests.conftest import fill_all_team_files, team_row
+    cfg = env
+    make_full_inputs(cfg, NOW)
+    base = week_monday(NOW.date())
+    reg = base - timedelta(days=3)
+    fill_all_team_files(cfg, {
+        "물류팀": [
+            team_row("물류", "물류팀", 1, reg, base - timedelta(days=2),
+                     "미출금거래처", "지난주 예정 지출", 777000),
+            team_row("물류", "물류팀", 2, reg, base + timedelta(days=2),
+                     "한진택배", "택배비", 500000),
+        ],
+    })
+    state = StateManager(cfg.state_dir)
+    assert _run(cfg, state, mode="manual").status == STATUS_SUCCESS
+
+    review = next(cfg.folder("review").glob("확인필요_*.xlsx"))
+    wb = load_workbook(review)
+    ws = wb["확인필요"]
+    rows = [[ws.cell(row=r, column=c).value for c in (1, 6, 7)]
+            for r in range(5, ws.max_row + 1)]
+    wb.close()
+    hits = [r for r in rows if r[0] == "예정지출 미출금"]
+    assert hits and any("미출금거래처" in str(r[1]) for r in hits)
+    assert any(r[2] == 777000 for r in hits)
+    # 미래 예정 건은 미출금으로 뜨지 않는다
+    assert not any("한진택배" in str(r[1]) for r in hits)
+
+
 def test_대외비_가림_해제시_상세_표시(env):
     """mask_confidential=False: 대외비도 거래처·신청자 상세로 노출."""
     cfg = env
