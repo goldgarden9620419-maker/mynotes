@@ -343,6 +343,7 @@ def test_계좌별_시나리오_인출_우선순위():
     assert round(row["잔액"][("우리은행", "W")]) == 0
     assert round(row["잔액"][("농협", "N")]) == 0
     assert round(row["잔액"][("국민은행", "K")]) == 950
+    assert row["지출"] == 300.0          # 당일 지출도 행에 기록
     assert row["비고"] == ""
 
     # 전 계좌 소진 시 부족 경고
