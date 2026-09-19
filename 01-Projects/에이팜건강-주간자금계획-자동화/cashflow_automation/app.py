@@ -195,13 +195,17 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         # '반영' 행만 자금계획에 넣는다
         draft_path = (cfg.folder("base_workbook")
                       / forecast_engine.AUTO_DRAFT_FILE)
+        draft_mode_default = cfg.get("forecast", "auto_draft_default",
+                                     default="개별 관리")
         migrated = forecast_engine.migrate_auto_drafts(
-            cfg.base_workbook_path(), draft_path, overrides)
+            cfg.base_workbook_path(), draft_path, overrides,
+            draft_mode_default)
         if migrated:
             log.info("자동추정 %d건을 %s(으)로 이관", migrated,
                      forecast_engine.AUTO_DRAFT_FILE)
         draft_added, draft_pruned = forecast_engine.refresh_auto_draft_file(
-            draft_path, recurring_projectable, base_date)
+            draft_path, recurring_projectable, base_date,
+            default_mode=draft_mode_default)
         if draft_added or draft_pruned:
             log.info("자동추정 목록 갱신: 신규 %d건, 지난 항목 정리 %d건",
                      draft_added, draft_pruned)
@@ -249,9 +253,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
 
         # 8) 4주·13주 자금계획 (21~23번 항목)
         # 팀 지출계획과 겹치는 '자동 초안' 추정은 이중 반영 방지를 위해 제외
+        draft_aliases = forecast_engine.load_draft_aliases(draft_path)
         adjustments, dup_adjust = forecast_engine.filter_duplicate_adjustments(
-            adjustments, plan["countable"],
-            aliases=forecast_engine.load_draft_aliases(draft_path))
+            adjustments, plan["countable"], aliases=draft_aliases)
         for adj in dup_adjust:
             issues.append({
                 "구분": "추정 중복 제외",
@@ -341,6 +345,24 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                   "내용": adj.get("내용") or "",
                                   "금액": amt, "지급방법": ""})
         week_expenses.sort(key=lambda x: (x["일자"], -x["금액"]))
+        # 금주(실행일~차주 금요일) 도래 정기지출 — 팀 지출예정 제출 대조
+        chk_start, chk_end = live_report.exec_window(now.date())
+        recurring_check = forecast_engine.weekly_recurring_check(
+            forecast_engine.load_auto_draft_rows(draft_path,
+                                                 chk_start, chk_end),
+            plan["countable"], draft_aliases, chk_start, chk_end,
+            variable_items=[i for i in recurring
+                            if i.get("성격") == "변동"])
+        missing_chk = [c for c in recurring_check if c["누락"]]
+        log.info("금주 정기지출 체크(%s~%s): %d건 중 누락 의심 %d건",
+                 chk_start, chk_end, len(recurring_check), len(missing_chk))
+        for c in missing_chk:
+            issues.append({
+                "구분": "정기지출 누락 의심",
+                "내용": f"{c['예정일']} {c['항목']} "
+                       f"약 {c['예상금액']:,.0f}원 — 팀 지출예정 파일에서 "
+                       "찾지 못함 (재제출 요청 필요)",
+                "원본파일": forecast_engine.AUTO_DRAFT_FILE})
         report = {
             "meta": {
                 "company": cfg.get("company_name", default="(주)에이팜건강"),
@@ -356,6 +378,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             "account_scenario": account_scenario,
             "apalm_expenses": apalm_expenses,
             "week_expenses": week_expenses,
+            "recurring_check": recurring_check,
             "stability_target": cfg.get("forecast", "minimum_cash_balance",
                                         default=0),
             "match_results": matched["results"],
