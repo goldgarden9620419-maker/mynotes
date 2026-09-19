@@ -80,15 +80,19 @@ def fill_live_workbook(template_path: Path, report: dict,
     base_date: date = meta["base_date"]
     stats = report.get("history_stats", {})
 
+    holidays = report.get("holidays") or {}
     _fill_config(wb["설정및분류"], forecast)
     _fill_summary(wb["요약"], report, base_date, stats)
     _fill_daily(wb["4주일별계획"], forecast, base_date,
-                meta.get("run_date"), holidays=report.get("holidays"))
+                meta.get("run_date"), holidays=holidays)
     _fill_weekly(wb["13주주별계획"], forecast, base_date)
-    _fill_account_scenario(wb, report.get("account_scenario"))
-    _fill_expense(wb, report.get("integrated_masked", []))
-    _fill_apalm_expense(wb, report.get("apalm_expenses", []))
-    _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []))
+    _fill_account_scenario(wb, report.get("account_scenario"),
+                           holidays=holidays)
+    _fill_expense(wb, report.get("integrated_masked", []), holidays=holidays)
+    _fill_apalm_expense(wb, report.get("apalm_expenses", []),
+                        holidays=holidays)
+    _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []),
+              holidays=holidays)
 
     # 은행 파일을 폴더에서 자동으로 읽으므로 수동 붙여넣기 시트는 제거한다
     if "주간계좌_붙여넣기" in wb.sheetnames:
@@ -350,10 +354,12 @@ def _fill_weekly(ws, forecast: dict, base_date: date) -> None:
 ACCOUNT_SCENARIO_SHEET = "계좌별시나리오"
 
 
-def _fill_account_scenario(wb, scenario: Optional[dict]) -> None:
+def _fill_account_scenario(wb, scenario: Optional[dict],
+                           holidays: Optional[dict] = None) -> None:
     """계좌별 일별 잔액 시나리오 시트 (우리→농협→국민 인출 우선순위)."""
     if not scenario or not scenario.get("accounts"):
         return
+    from excel_report import is_offday
     from openpyxl.styles import Alignment, Font, PatternFill
     from openpyxl.utils import get_column_letter
 
@@ -391,13 +397,18 @@ def _fill_account_scenario(wb, scenario: Optional[dict]) -> None:
             cell.alignment = Alignment(horizontal="center")
         ws.column_dimensions[get_column_letter(c)].width = widths[c - 1]
 
+    red = Font(name="맑은 고딕", size=10, color="C00000")
     r = 6
     for row in scenario["rows"]:
         d = row["일자"]
         acell = _set(ws, r, 1, datetime.combine(d, dtime()))
         if acell is not None:
             acell.number_format = "yyyy-mm-dd"
-        _set(ws, r, 2, row.get("요일"))
+        wcell = _set(ws, r, 2, row.get("요일"))
+        if is_offday(d, holidays):
+            for cell in (acell, wcell):
+                if cell is not None:
+                    cell.font = red
         balances = row.get("잔액")
         values = []
         if balances is None:
@@ -428,12 +439,14 @@ def _fill_account_scenario(wb, scenario: Optional[dict]) -> None:
     ws.freeze_panes = "A6"
 
 
-def _fill_expense(wb, rows: list[dict]) -> None:
+def _fill_expense(wb, rows: list[dict],
+                  holidays: Optional[dict] = None) -> None:
     """팀 지출계획 취합을 별도 시트로 자동 반영 (매주 전체 갱신).
 
     대외비 행은 분류·총액 집계로만 표시된다(상세 미노출).
     """
     from openpyxl.styles import Alignment, Font, PatternFill
+    from excel_report import is_offday
 
     if EXPENSE_SHEET in wb.sheetnames:
         ws = wb[EXPENSE_SHEET]
@@ -478,6 +491,9 @@ def _fill_expense(wb, rows: list[dict]) -> None:
                 cell.number_format = "#,##0"
             elif isinstance(value, date):
                 cell.number_format = "yyyy-mm-dd"
+                if is_offday(value, holidays):
+                    cell.font = Font(name="맑은 고딕", size=10,
+                                     color="C00000")
         r += 1
     # 머리글 자동 필터 — 반영일·팀명·반영상태 등으로 골라 볼 수 있다
     ws.auto_filter.ref = (f"A5:{get_column_letter(len(_EXPENSE_COLUMNS))}"
@@ -506,7 +522,8 @@ _APALM_COLUMNS = [
 ]
 
 
-def _fill_apalm_expense(wb, rows: list[dict]) -> None:
+def _fill_apalm_expense(wb, rows: list[dict],
+                        holidays: Optional[dict] = None) -> None:
     """에이팜 지출계획 전용 시트.
 
     비고에 '에이팜'이 적힌 팀 지출계획은 자금계획에서 뺀 별도관리
@@ -515,6 +532,7 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
     """
     from openpyxl.styles import Alignment, Font, PatternFill
     from openpyxl.utils import get_column_letter
+    from excel_report import is_offday
 
     if APALM_SHEET in wb.sheetnames:
         ws = wb[APALM_SHEET]
@@ -549,6 +567,8 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
     r = 6
     for row in rows:
         excluded = str(row.get("반영") or "").startswith("미반영")
+        row_d = row.get("일자")
+        row_off = isinstance(row_d, date) and is_offday(row_d, holidays)
         for c, (_header, key, _width) in enumerate(_APALM_COLUMNS, start=1):
             if key == "요일":
                 d = row.get("일자")
@@ -560,7 +580,10 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
             cell = _set(ws, r, c, value)
             if cell is None:
                 continue
-            cell.font = Font(name="맑은 고딕", size=10)
+            if row_off and key in ("일자", "요일"):
+                cell.font = Font(name="맑은 고딕", size=10, color="C00000")
+            else:
+                cell.font = Font(name="맑은 고딕", size=10)
             if excluded:
                 cell.fill = excluded_fill
             if key == "예상금액":
@@ -605,7 +628,11 @@ def _fill_apalm_expense(wb, rows: list[dict]) -> None:
     ws.freeze_panes = "A6"
 
 
-def _fill_raw(ws, bank_rows: list[dict]) -> None:
+def _fill_raw(ws, bank_rows: list[dict],
+              holidays: Optional[dict] = None) -> None:
+    from openpyxl.styles import Font
+    from excel_report import is_offday
+    red = Font(name="맑은 고딕", size=10, color="C00000")
     rows = [r for r in bank_rows if r.get("반영상태") != "중복제외"]
     rows.sort(key=lambda r: (r.get("거래일") or date.min,
                              r.get("거래일시") or datetime.min))
@@ -630,6 +657,7 @@ def _fill_raw(ws, bank_rows: list[dict]) -> None:
             "Y" if t.get("정기지출후보") else "N",
             round(t.get("현금유출입") or 0),
         ]
+        off = tx_date is not None and is_offday(tx_date, holidays)
         for c, v in enumerate(values, start=1):
             cell = _set(ws, r, c, v)
             if cell is None:
@@ -640,6 +668,8 @@ def _fill_raw(ws, bank_rows: list[dict]) -> None:
                 cell.number_format = "yyyy-mm-dd"
             elif c in (5, 6, 7, 14):
                 cell.number_format = "#,##0"
+            if off and c in (1, 2):
+                cell.font = red
         r += 1
     # 이전 실행의 잔여 행·템플릿의 옛 붙여넣기용 수식을 끝까지 정리한다
     # (중간 빈 구간에서 멈추면 아래쪽 잔여 수식이 살아남아 #REF! 위험)

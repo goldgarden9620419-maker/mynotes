@@ -133,12 +133,15 @@ def _fill_recurring_check(wb, report: dict) -> None:
                              start=1):
         _put(ws, head_row, c, head, bold=True, color="FFFFFF",
              fill=_HEAD_FILL, align="center", border=True)
+    holidays = report.get("holidays") or {}
     r = head_row + 1
     for chk in checks:
         d = chk.get("예정일")
-        _put(ws, r, 1, d, fmt="yyyy-mm-dd", border=True)
+        off = d is not None and (d.weekday() >= 5 or d in holidays)
+        day_color = "C00000" if off else "000000"
+        _put(ws, r, 1, d, fmt="yyyy-mm-dd", border=True, color=day_color)
         _put(ws, r, 2, WEEKDAY_KO[d.weekday()] if d else "",
-             align="center", border=True)
+             align="center", border=True, color=day_color)
         _put(ws, r, 3, chk.get("항목") or "", border=True)
         _put(ws, r, 4, round(chk.get("예상금액") or 0), fmt="#,##0",
              border=True)
@@ -305,11 +308,15 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         if row > _EXP_LAST:
             break
         d = item.get("일자")
+        # 주말·공휴일 지급일은 붉은 글자 (직접 고친 날짜는 색 유지)
+        off = isinstance(d, date) and (d.weekday() >= 5 or d in holidays)
+        day_color = "C00000" if off else "000000"
         _put(ws, row, 1,
              datetime.combine(d, dtime()) if isinstance(d, date) else d,
-             fmt="yyyy-mm-dd", fill=_EDIT_FILL, border=True)
+             fmt="yyyy-mm-dd", fill=_EDIT_FILL, border=True, color=day_color)
         _put(ws, row, 2, f'=IF(A{row}="","",MID("월화수목금토일",'
-                         f'WEEKDAY(A{row},2),1))', align="center", border=True)
+                         f'WEEKDAY(A{row},2),1))', align="center", border=True,
+             color=day_color)
         _put(ws, row, 3, item.get("구분") or "", border=True)
         _put(ws, row, 4, item.get("내용") or "", border=True, align="left")
         _put(ws, row, 5, round(item.get("금액") or 0), fmt="#,##0",
