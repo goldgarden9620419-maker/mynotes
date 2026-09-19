@@ -50,7 +50,8 @@ _SC_COLS = _TARGET_ROW + 1                       # 145
 _SC_FIRST = _SC_COLS + 1                         # 146..148
 
 _RATE_CELL = "$F$12"
-_TARGET_CELL = f"$B${_TARGET_ROW}"
+# 목표 최저잔액 입력칸 — B열(요일용, 좁음)을 피해 C열에 둔다
+_TARGET_CELL = f"$C${_TARGET_ROW}"
 _START_CELL = "$H$13"
 
 
@@ -108,7 +109,7 @@ def _fill_recurring_check(wb, report: dict) -> None:
     win_start, win_end = exec_window(run_date)
 
     ws = wb.create_sheet(CHECK_SHEET)
-    for c, w in zip(range(1, 8), (12, 6, 28, 14, 12, 22, 30)):
+    for c, w in zip(range(1, 8), (12, 6, 28, 14, 12, 27, 30)):
         ws.column_dimensions[get_column_letter(c)].width = w
     _put(ws, 1, 1, "금주 정기지출 체크 — 팀 지출예정 제출 확인",
          bold=True, size=13, color=_NAVY)
@@ -177,7 +178,7 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     wb = Workbook()
     ws = wb.active
     ws.title = SHEET_NAME
-    for c, w in zip(range(1, 9), (13, 6, 15, 40, 15, 12, 12, 12)):
+    for c, w in zip(range(1, 9), (13, 6, 15, 40, 16, 13, 12, 12)):
         ws.column_dimensions[get_column_letter(c)].width = w
     ws.column_dimensions["G"].hidden = True
     ws.column_dimensions["H"].hidden = True
@@ -346,13 +347,16 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     # ④ 안정을 위한 필요 추가 입금 (향후 4주) ------------------------------
     _section(ws, _TARGET_HEAD, "④ 안정을 위한 필요 추가 입금 (향후 4주)")
     _put(ws, _TARGET_ROW, 1, "목표 최저잔액", bold=True)
-    _put(ws, _TARGET_ROW, 2, report.get("stability_target") or 0,
+    # 금액 칸은 좁은 B열(요일용)을 피해 C열부터 쓴다 — B열에 두면
+    # 8자리 금액이 #####로 가려진다 (2026-09-20 사용자 보고)
+    _put(ws, _TARGET_ROW, 3, report.get("stability_target") or 0,
          fill=_EDIT_FILL, fmt="#,##0", border=True)
     _put(ws, _TARGET_ROW, 4, "예: 0원(적자 없음) 또는 안전하게 유지하고 "
                              "싶은 잔액을 입력하세요.", size=9,
          color="808080", align="left")
-    for c, head in enumerate(("반영률", "4주 기말잔액", "4주 최저잔액",
-                              "자금부족 예상일", "필요 추가 입금"), start=1):
+    for c, head in ((1, "반영률"), (2, None), (3, "4주 기말잔액"),
+                    (4, "4주 최저잔액"), (5, "자금부족 예상일"),
+                    (6, "필요 추가 입금")):
         _put(ws, _SC_COLS, c, head, bold=True, color="FFFFFF",
              fill=_HEAD_FILL, align="center", border=True)
     scenarios = forecast.get("rate_scenarios", {})
@@ -365,19 +369,19 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         if base_need_row is None:
             base_need_row = r
         _put(ws, r, 1, sc_rate, fmt="0%", align="center", border=True)
-        _put(ws, r, 2, round(sc.get("4주 기말잔액") or 0), fmt="#,##0",
+        _put(ws, r, 3, round(sc.get("4주 기말잔액") or 0), fmt="#,##0",
              border=True)
-        _put(ws, r, 3, round(sc.get("4주 최저잔액") or 0), fmt="#,##0",
+        _put(ws, r, 4, round(sc.get("4주 최저잔액") or 0), fmt="#,##0",
              border=True)
         shortage = sc.get("자금부족 예상일")
-        _put(ws, r, 4, str(shortage) if shortage else "없음", align="center",
+        _put(ws, r, 5, str(shortage) if shortage else "없음", align="center",
              border=True)
-        _put(ws, r, 5, f"=MAX(0,{_TARGET_CELL}-C{r})", fmt="#,##0",
+        _put(ws, r, 6, f"=MAX(0,{_TARGET_CELL}-D{r})", fmt="#,##0",
              border=True, bold=True)
         r += 1
-    need = f"E{base_need_row}" if base_need_row else "0"
+    need = f"F{base_need_row}" if base_need_row else "0"
     _put(ws, r, 1, "주당 추가 입금 목표", bold=True)
-    _put(ws, r, 2, f"=ROUND({need}/4,0)", bold=True, fmt="#,##0")
+    _put(ws, r, 3, f"=ROUND({need}/4,0)", bold=True, fmt="#,##0")
     _put(ws, r, 4, "영업일당(주 5일 기준)", bold=True, align="left")
     _put(ws, r, 5, f"=ROUND({need}/20,0)", bold=True, fmt="#,##0")
 
