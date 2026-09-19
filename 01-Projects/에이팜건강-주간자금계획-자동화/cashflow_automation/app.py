@@ -237,18 +237,25 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                       / forecast_engine.AUTO_DRAFT_FILE)
         draft_mode_default = cfg.get("forecast", "auto_draft_default",
                                      default="개별 관리")
-        migrated = forecast_engine.migrate_auto_drafts(
-            cfg.base_workbook_path(), draft_path, overrides,
-            draft_mode_default)
-        if migrated:
-            log.info("자동추정 %d건을 %s(으)로 이관", migrated,
-                     forecast_engine.AUTO_DRAFT_FILE)
-        draft_added, draft_pruned = forecast_engine.refresh_auto_draft_file(
-            draft_path, recurring_projectable, base_date,
-            default_mode=draft_mode_default)
-        if draft_added or draft_pruned:
-            log.info("자동추정 목록 갱신: 신규 %d건, 지난 항목 정리 %d건",
-                     draft_added, draft_pruned)
+        # 확인 단계에서 목록 파일을 자동으로 열어 주므로, Excel이 잡고
+        # 있어 저장이 막혀도 실행은 계속한다 (저장된 내용 그대로 사용)
+        try:
+            migrated = forecast_engine.migrate_auto_drafts(
+                cfg.base_workbook_path(), draft_path, overrides,
+                draft_mode_default)
+            if migrated:
+                log.info("자동추정 %d건을 %s(으)로 이관", migrated,
+                         forecast_engine.AUTO_DRAFT_FILE)
+            draft_added, draft_pruned = \
+                forecast_engine.refresh_auto_draft_file(
+                    draft_path, recurring_projectable, base_date,
+                    default_mode=draft_mode_default)
+            if draft_added or draft_pruned:
+                log.info("자동추정 목록 갱신: 신규 %d건, 지난 항목 정리 %d건",
+                         draft_added, draft_pruned)
+        except OSError:
+            log.warning("자동추정_지출목록이 사용 중(Excel에 열림)이라 "
+                        "목록 갱신을 건너뜁니다 — 저장된 내용으로 계속 진행")
         auto_drafts, draft_excluded = forecast_engine.load_auto_drafts(
             draft_path, base_date)
         adjustments = [a for a in adjustments
@@ -524,14 +531,19 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                     keep_names.add(recur_path.name)
                 backup_manager.archive_superseded_reviews(cfg, keep_names)
                 bank_loader.save_history(history_path, merged_history)
+                # 자동추정_지출목록도 함께 열어 반영/제외를 이 단계에서
+                # 바꿀 수 있게 한다 (2026-09-20 사용자 요청). 확인 완료
+                # 저장 전에 고치면 이번 결과에 반영된다.
+                if draft_path.exists():
+                    _open_file(draft_path)
                 for p in stage_files:
                     _open_file(p)
                 state.mark_result(now, STATUS_REVIEW_WAIT,
                                   input_signature=input_sig)
-                log.info("확인필요 %d건 검토 대기 — 확인필요·정기지출분석 "
-                         "파일을 검토한 뒤 %s 에서 '확인 완료'(B2)를 "
-                         "'예'로 바꾸고 저장하면 결과 파일이 "
-                         "만들어집니다 (프로그램이 켜져 있으면 10분 안에 자동)",
+                log.info("확인필요 %d건 검토 대기 — 자동추정_지출목록·"
+                         "확인필요·정기지출분석 파일을 검토한 뒤 %s 에서 "
+                         "'확인 완료'(B2)를 '예'로 바꾸고 저장하면 결과 "
+                         "파일이 만들어집니다 (켜져 있으면 10분 안에 자동)",
                          len(issues), review_path.name)
                 return RunResult(
                     STATUS_REVIEW_WAIT,
