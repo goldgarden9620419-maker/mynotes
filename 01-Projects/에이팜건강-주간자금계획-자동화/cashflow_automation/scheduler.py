@@ -19,8 +19,10 @@ from apscheduler.triggers.interval import IntervalTrigger
 
 import app as app_module
 import file_validator
+import excel_report
 from common import (
-    STATUS_SUCCESS, STATUS_WAITING_FILES, iso_week_key, now_local,
+    STATUS_REVIEW_WAIT, STATUS_SUCCESS, STATUS_WAITING_FILES, iso_week_key,
+    now_local,
 )
 
 
@@ -109,6 +111,9 @@ class AutomationService:
                 self.open_output_folder()
         elif result.status == STATUS_WAITING_FILES:
             self.notify("필수자료 대기", result.message)
+        elif result.status == STATUS_REVIEW_WAIT:
+            # 확인필요 파일은 실행부가 이미 화면에 열어 두었다
+            self.notify("확인필요 검토 대기", result.message)
         elif result.status == "FAILED":
             self.notify("실행 실패", result.message)
 
@@ -162,6 +167,17 @@ class AutomationService:
                     if now > self._retry_end_time(now):
                         # 재시도 마감 이후에는 1시간에 한 번만 기록
                         self._quiet_until = now + timedelta(hours=1)
+            return
+
+        if status == STATUS_REVIEW_WAIT \
+                and self.state.state.get("last_run_week") == week:
+            # 사용자가 확인필요 파일에 '확인 완료'를 저장했는지 살펴보고,
+            # 완료됐으면 결과 생성 단계를 이어서 실행한다
+            signature = file_validator.current_input_signature(self.cfg)
+            if excel_report.find_confirmed_review(
+                    self.cfg.folder("review"), week, signature) is not None:
+                self.log.info("확인 완료가 감지되어 결과 생성을 시작합니다.")
+                self.run_job(mode="retry")
             return
 
         if status == STATUS_SUCCESS \

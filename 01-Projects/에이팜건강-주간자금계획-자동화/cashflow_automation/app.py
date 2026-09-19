@@ -18,8 +18,8 @@ from pathlib import Path
 
 from common import (
     APP_VERSION, BANK_REFLECT_OK, REFLECT_OK, REFLECT_PAID, STATUS_FAILED,
-    STATUS_PARTIAL, STATUS_SUCCESS, STATUS_WAITING_FILES, iso_week_key,
-    now_local, unique_path, week_monday,
+    STATUS_PARTIAL, STATUS_REVIEW_WAIT, STATUS_SUCCESS, STATUS_WAITING_FILES,
+    iso_week_key, now_local, unique_path, week_monday,
 )
 from config import Config
 from state_manager import LockError, RunLock, StateManager
@@ -404,6 +404,43 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         pdf_name = f"주간자금계획_대표보고_{stamp}.pdf"
         issue_name = f"확인필요_{stamp}.xlsx"
 
+        # 확인필요 파일은 06_확인필요 폴더에만 둔다 (05_결과는 결과물만).
+        # confirm_before_results가 켜져 있으면 2단계로 실행한다:
+        # ① 확인필요만 만들어 열어 보여주고 대기 → 사용자가 '확인 완료'를
+        # '예'로 저장 → ② 다음 실행(10분 주기 자동 감지 포함)이 결과 생성
+        review_dir = cfg.folder("review")
+        review_dir.mkdir(parents=True, exist_ok=True)
+        input_sig = file_validator.current_input_signature(cfg)
+        review_path = None
+        if cfg.get("options", "confirm_before_results", default=False):
+            review_path = excel_report.find_confirmed_review(
+                review_dir, week_key, input_sig)
+            if review_path is None:
+                review_path = unique_path(review_dir / issue_name)
+                excel_report.create_issue_workbook(
+                    issues, review_path, week_key=week_key,
+                    signature=input_sig)
+                if not excel_report.verify_workbook(review_path, ["확인필요"]):
+                    raise RuntimeError("확인필요 파일 재열기 검증 실패")
+                backup_manager.archive_superseded_reviews(
+                    cfg, {review_path.name})
+                bank_loader.save_history(history_path, merged_history)
+                _open_file(review_path)
+                state.mark_result(now, STATUS_REVIEW_WAIT,
+                                  input_signature=input_sig)
+                log.info("확인필요 %d건 검토 대기 — %s 에서 '확인 완료'(B2)를 "
+                         "'예'로 바꾸고 저장한 뒤 다시 실행하면 결과 파일이 "
+                         "만들어집니다 (프로그램이 켜져 있으면 10분 안에 자동)",
+                         len(issues), review_path.name)
+                return RunResult(
+                    STATUS_REVIEW_WAIT,
+                    f"확인필요 {len(issues)}건 검토 대기 — "
+                    f"{review_path.name}의 '확인 완료'를 '예'로 바꾸면 "
+                    "결과 3개가 만들어집니다",
+                    [review_path], len(issues))
+            log.info("확인 완료 확인됨(%s) — 결과 파일을 만듭니다",
+                     review_path.name)
+
         workspace = backup_manager.TempWorkspace(cfg)
         outputs = []
         if cfg.get("options", "create_excel", default=False):
@@ -421,11 +458,14 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                     workspace.path(mgmt_name)):
                 raise RuntimeError("경영보고 파일 재열기 검증 실패")
             outputs.append(mgmt_name)
-        excel_report.create_issue_workbook(issues, workspace.path(issue_name))
-        if not excel_report.verify_workbook(workspace.path(issue_name),
-                                            ["확인필요"]):
-            raise RuntimeError("확인필요 파일 재열기 검증 실패")
-        outputs.append(issue_name)
+        if review_path is None:
+            # 확인 생략 모드: 결과와 함께 확인필요를 06_확인필요에 기록
+            review_path = unique_path(review_dir / issue_name)
+            excel_report.create_issue_workbook(issues, review_path,
+                                               week_key=week_key,
+                                               signature=input_sig)
+            if not excel_report.verify_workbook(review_path, ["확인필요"]):
+                raise RuntimeError("확인필요 파일 재열기 검증 실패")
         if cfg.get("options", "create_pdf_summary", default=True):
             pdf_report.create_pdf_summary(report, workspace.path(pdf_name))
             outputs.append(pdf_name)
@@ -459,16 +499,6 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                             "여기에 넣어주세요: %s", live_template)
 
         moved = workspace.commit(outputs, unique_path)
-        review_copy = None
-        if issues:
-            # 확인필요 파일은 06_확인필요 폴더에도 복사본을 둔다
-            review_dir = cfg.folder("review")
-            review_dir.mkdir(parents=True, exist_ok=True)
-            src = next((p for p in moved if p.name.startswith("확인필요")), None)
-            if src is not None:
-                import shutil
-                review_copy = unique_path(review_dir / src.name)
-                shutil.copy2(src, review_copy)
 
         # 10) 이력 저장·지난자료 정리·상태 기록
         bank_loader.save_history(history_path, merged_history)
@@ -476,8 +506,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         # 결과 폴더에는 이번 실행분만 남긴다 (이전 버전은 99_지난자료/지난결과)
         if cfg.get("options", "keep_only_latest_outputs", default=True):
             swept = backup_manager.archive_superseded_outputs(
-                cfg, {p.name for p in moved},
-                {review_copy.name} if review_copy is not None else ())
+                cfg, {p.name for p in moved}, {review_path.name})
             if swept:
                 log.info("이전 결과 %d개를 99_지난자료/지난결과로 이동", swept)
         # 은행 폴더에도 계좌별 최신 파일만 남긴다 (이력은 CSV로 보존)
@@ -510,6 +539,16 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         return RunResult(STATUS_FAILED, str(exc))
     finally:
         lock.release()
+
+
+def _open_file(path) -> None:
+    """확인필요 파일을 사용자에게 바로 보여준다 (Windows 전용, 실패 무시)."""
+    import os
+    try:
+        if os.name == "nt":
+            os.startfile(str(path))  # type: ignore[attr-defined]
+    except Exception:
+        pass
 
 
 def _annotate_daily_notes(daily_rows: list[dict], masked_rows: list[dict],

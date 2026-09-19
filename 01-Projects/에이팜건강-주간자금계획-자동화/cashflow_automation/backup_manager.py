@@ -116,9 +116,15 @@ def archive_superseded_outputs(cfg, keep_output_names,
     archive_dir = cfg.folder("archive") / "지난결과"
     moved = _sweep_to_archive(cfg.folder("output"), archive_dir,
                               set(keep_output_names))
-    moved += _sweep_to_archive(cfg.folder("review"), archive_dir,
-                               set(keep_review_names))
+    moved += archive_superseded_reviews(cfg, keep_review_names)
     return moved
+
+
+def archive_superseded_reviews(cfg, keep_names=()) -> int:
+    """06_확인필요 폴더에 지정한 파일만 남기고 지난 것은 보관으로 옮긴다."""
+    archive_dir = cfg.folder("archive") / "지난결과"
+    return _sweep_to_archive(cfg.folder("review"), archive_dir,
+                             set(keep_names))
 
 
 def archive_superseded_bank_files(cfg, bank_rows: list[dict]) -> int:

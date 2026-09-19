@@ -69,6 +69,7 @@ recurring:
 options:
   create_excel: false            # 고정서식 파일은 경영보고로 대체
   create_management_report: true  # 대화형 주간 경영보고
+  confirm_before_results: true    # 확인필요 검토('확인 완료'=예) 후 결과 생성
   create_pdf_summary: true
   create_live_workbook: true          # 수식 유지 라이브 양식 생성
   live_template_name: "자금계획_라이브템플릿.xlsx"  # 04_기준파일 안에 배치

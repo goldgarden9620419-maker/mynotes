@@ -80,6 +80,8 @@ DEFAULT_CONFIG: dict = {
     "options": {
         "create_excel": False,
         "create_management_report": True,
+        # True면 2단계 실행: 확인필요 검토('확인 완료'=예) 후에만 결과 생성
+        "confirm_before_results": False,
         "create_pdf_summary": True,
         "create_live_workbook": True,
         "live_template_name": "자금계획_라이브템플릿.xlsx",
