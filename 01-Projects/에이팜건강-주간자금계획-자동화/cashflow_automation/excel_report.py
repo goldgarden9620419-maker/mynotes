@@ -824,6 +824,28 @@ def recurring_review_name(review_name: str) -> str:
     return review_name.replace("확인필요", RECURRING_REVIEW_PREFIX, 1)
 
 
+def _link_nature_formulas(ws, n_rows: int, n_cats: int) -> None:
+    """표의 성격(K열)을 일괄 컨트롤(K4·N열)과 수식으로 연결한다.
+
+    분류별 일괄(N)이나 전체 일괄(K4)을 고르면 표의 성격 칸이 엑셀에서
+    즉시 바뀌어 보인다. 칸에 값을 직접 입력하면 그 행은 수식 대신
+    입력값이 남는다. 프로그램의 최종 반영 우선순위(전체 > 분류별 >
+    개별)는 수확 단계에서 동일하게 적용되므로 표시와 결과가 일치한다.
+    """
+    last_cat = 5 + max(n_cats, 1)
+    cat_m = f"$M$6:$M${last_cat}"
+    cat_n = f"$N$6:$N${last_cat}"
+    for r in range(6, 6 + n_rows):
+        cell = ws.cell(row=r, column=11)
+        base = cell.value or "정기"
+        pick = f"INDEX({cat_n},MATCH($C{r},{cat_m},0))"
+        cell.value = (
+            f'=IF($K$4="전체 정기","정기",'
+            f'IF($K$4="전체 비정기","비정기",'
+            f'IFERROR(IF({pick}="{RECURRING_BULK_KEEP}","{base}",{pick}),'
+            f'"{base}")))')
+
+
 def create_recurring_review_workbook(recurring: list[dict],
                                      out_path: Path,
                                      week_key: str = "") -> Path:
@@ -843,7 +865,8 @@ def create_recurring_review_workbook(recurring: list[dict],
     guide.value = (f"정기지출의 분류·성격을 검토하세요{week}. 성격은 "
                    "정기/비정기/제외 — 개별 행(K열), 분류별 일괄(N열), "
                    "전체 일괄(K4) 순으로 넓게 적용할 수 있습니다(넓은 쪽 "
-                   "우선). 고친 뒤 저장하고, 확인필요 파일의 '확인 완료'"
+                   "우선). N열·K4를 고르면 표의 성격 칸이 즉시 바뀌어 "
+                   "보입니다. 고친 뒤 저장하고, 확인필요 파일의 '확인 완료'"
                    "(B2)를 '예'로 저장하면 이번 결과에 바로 반영됩니다.")
     guide.font = Font(name=_FONT, bold=True, size=10, color="B36B00")
     guide.alignment = Alignment(horizontal="left", vertical="center",
@@ -853,8 +876,9 @@ def create_recurring_review_workbook(recurring: list[dict],
            "정기 = 평균 금액 자동 추정 대상 / 비정기 = 팀 지출예정 파일 "
            "금액으로만 반영 / 제외 = 추정·정기지출 체크 모두 안 함")
     _write_table(ws, _RECURRING_COLUMNS, _recurring_display(recurring))
-    add_recurring_controls(ws, 5 + len(recurring),
-                           categories=_recurring_categories(recurring))
+    categories = _recurring_categories(recurring)
+    add_recurring_controls(ws, 5 + len(recurring), categories=categories)
+    _link_nature_formulas(ws, len(recurring), len(categories))
     # '적용할 성격' 선택지 안내 (P열 안내 상자)
     guide_rows = [
         ("적용할 성격 안내", True),

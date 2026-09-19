@@ -159,7 +159,10 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
     # 머리글(5행) 필터 + K4 전체 일괄 + 분류별 일괄 블록(M·N열)
     assert ws.auto_filter.ref == "A5:K8"
     assert ws["K4"].value == "변경 안 함"
-    assert ws["K8"].value == "비정기"                 # 변동은 비정기로 표시
+    # 성격 칸은 일괄 컨트롤과 수식으로 연결 (엑셀에서 즉시 반영되어 보임)
+    assert str(ws["K6"].value).startswith("=IF($K$4")
+    assert "MATCH($C6" in str(ws["K6"].value)
+    assert '"비정기"' in str(ws["K8"].value)          # 변동은 비정기로 표시
     assert ws["M5"].value == "분류별 일괄"
     assert [ws[f"M{r}"].value for r in (6, 7)] == ["통신비", "렌탈료"]
     assert ws["N6"].value == "변경 안 함"
@@ -171,13 +174,14 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
     formulas = [str(dv.formula1) for dv in ws.data_validations.dataValidation]
     assert any("전체 비정기" in f for f in formulas)
     assert any("정기,비정기,제외" in f for f in formulas)
-    # 개별 수정: SKB만 '비정기'로
+    # 개별 수정: SKB만 '비정기'로 직접 입력 (수식 대신 값)
     ws["K6"] = "비정기"
     wb.save(out)
     wb.close()
     edits = fe.harvest_recurring_edits(out)
     assert edits["SKB"]["성격"] == "변동"             # 비정기 → 내부 변동
-    assert edits["KT"]["성격"] == "정기"
+    # 수식 그대로인 행은 '변경 없음'으로 읽힌다 (기준파일 값 유지)
+    assert edits["KT"]["성격"] == ""
 
     # 분류별 일괄: 통신비 전체를 '제외' → 개별 값보다 우선
     wb = load_workbook(out)
@@ -187,7 +191,7 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
     edits = fe.harvest_recurring_edits(out)
     assert edits["SKB"]["성격"] == "제외"
     assert edits["KT"]["성격"] == "제외"
-    assert edits["코웨이"]["성격"] == "변동"          # 다른 분류는 그대로
+    assert edits["코웨이"]["성격"] == ""              # 다른 분류는 그대로
 
     # 전체 일괄(K4)은 분류별보다도 우선한다
     wb = load_workbook(out)
