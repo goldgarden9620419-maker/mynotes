@@ -5292,5 +5292,254 @@
     "answerIndex": 2,
     "explanation": "-1 ≤ sin(2x - π/3) ≤ 1이므로 2sin(2x - π/3)은 -2부터 2까지의 값을 가지며, 여기에 1을 더한 f(x)는 -1부터 3까지의 값을 가집니다. 따라서 M = 3, m = -1이므로 M + m = 2입니다.",
     "concept": "sin 함수의 최댓값과 최솟값은 -1 ≤ sinθ ≤ 1을 이용하여, 진폭(계수)과 평행이동(상수항)을 함께 고려해 구한다."
+  },
+  {
+    "id": "en-2026-09-20-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-20",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Nearly every organism on Earth, from bacteria to humans, possesses an internal biological clock [u]known[/u]① as the circadian rhythm, which regulates cycles of activity and rest across roughly twenty-four hours. This clock is primarily synchronized by exposure to light, a cue [u]that resets[/u]② the timing of hormone release each day. When people spend prolonged periods indoors under artificial lighting, the signals [u]reaching[/u]③ the brain's master clock become weaker and less consistent, causing sleep patterns to gradually drift. Researchers have found that even brief exposure to bright natural light in the morning [u]are able to[/u]④ realign a disrupted circadian rhythm within just a few days. Because of this sensitivity to light, experts recommend [u]limiting[/u]⑤ screen use in the hours before bedtime to prevent delayed sleep onset.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 주어는 단수 명사구 'even brief exposure to bright natural light in the morning'이므로 동사는 are able to가 아니라 is able to가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 an internal biological clock을 수식하는 과거분사 known, ②은 a cue를 선행사로 하는 주격 관계대명사절의 단수동사 resets, ③는 the signals를 수식하는 현재분사 reaching, ⑤는 recommend 뒤에 오는 동명사 limiting입니다.",
+    "vocab": [
+      {
+        "word": "circadian",
+        "meaning": "생체 리듬의, 24시간 주기의"
+      },
+      {
+        "word": "synchronize",
+        "meaning": "동시에 발생시키다, 동기화하다"
+      },
+      {
+        "word": "prolonged",
+        "meaning": "장기적인, 지속된"
+      },
+      {
+        "word": "onset",
+        "meaning": "시작, 개시"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-20-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-20",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Medical researchers have long known that a treatment with no active ingredient can still produce measurable improvements in patients, a phenomenon known as the placebo effect. Recent studies suggest that ______. In one experiment, patients with chronic pain were given pills that were explicitly labeled as containing no medication, yet told that placebos have been shown to reduce symptoms through mind-body mechanisms. Surprisingly, these patients still reported significant reductions in pain, even though they knew the pills were inert. Brain imaging further revealed that the act of taking a pill, combined with the expectation of relief, activated regions associated with the body's natural pain-relief systems, regardless of the patient's belief that the treatment itself was fake.",
+    "choices": [
+      "even openly telling patients that a pill is fake does not necessarily eliminate its capacity to relieve symptoms",
+      "patients who believe strongly in a treatment always recover faster than skeptical patients",
+      "the placebo effect only works when patients are unaware that they are receiving an inactive treatment",
+      "brain imaging technology has proven that all pain is fundamentally psychological in origin",
+      "doctors must deceive patients in order for any medical treatment to be effective"
+    ],
+    "answerIndex": 0,
+    "explanation": "지문은 위약이 가짜라는 사실을 환자에게 명시적으로 알렸음에도 불구하고 통증이 감소했다는 실험을 소개하며, 이는 치료 의식 자체에 대한 기대가 실제 생리적 반응을 유발할 수 있음을 보여줍니다. 따라서 정답은 ①입니다. 나머지는 지문 내용과 반대되거나 근거가 없습니다.",
+    "vocab": [
+      {
+        "word": "inert",
+        "meaning": "비활성의, 아무 작용도 하지 않는"
+      },
+      {
+        "word": "chronic",
+        "meaning": "만성적인"
+      },
+      {
+        "word": "physiological",
+        "meaning": "생리적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-20-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-20",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "When a forager honeybee discovers a rich source of nectar, it returns to the hive and performs a peculiar series of movements known as the waggle dance to share this discovery with its nestmates.\n(A) By repeating the dance in a specific direction and for a particular duration, the bee conveys both the angle of the food source relative to the sun and its approximate distance from the hive.\n(B) During the dance, the bee moves in a figure-eight pattern while vigorously shaking its abdomen along the central portion of the path.\n(C) Other bees that observe the dance can then use this encoded information to fly directly to the food source without having to search randomly, dramatically increasing the efficiency of the colony's foraging efforts.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 정찰벌이 꿀 공급원을 발견하면 벌집으로 돌아와 8자 모양의 춤으로 정보를 공유한다는 내용입니다. (B)는 그 춤이 몸통을 흔들며 8자 모양으로 움직이는 모습을 구체적으로 설명하고, (A)는 춤을 반복하는 방향과 시간을 통해 태양 대비 각도와 거리 정보를 전달한다는 것을 설명하며, (C)는 다른 벌들이 이 암호화된 정보를 이용해 먹이를 찾아간다는 결과로 마무리됩니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "forager",
+        "meaning": "먹이를 찾아다니는 개체, 채집자"
+      },
+      {
+        "word": "nectar",
+        "meaning": "꿀, 화밀"
+      },
+      {
+        "word": "encode",
+        "meaning": "암호화하다, 부호화하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-20-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-20",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Without these natural checks, the plant was free to spread across millions of acres, smothering native forests and telephone poles alike.",
+    "passage": "In the early twentieth century, the kudzu vine was imported to the United States from Asia and widely planted to control soil erosion on hillsides. ( ① ) Farmers and government agencies praised its rapid growth, which allowed it to cover bare ground within a single growing season. ( ② ) In its native range, however, kudzu's growth is naturally kept in check by a variety of insects, fungi, and grazing animals that had evolved alongside it for centuries. ( ③ ) None of these natural predators or diseases existed in the vine's new environment. ( ④ ) Today, removing established kudzu requires years of repeated cutting or herbicide application, since even a small fragment of root left in the soil can regenerate an entire vine. ( ⑤ ) As a result, kudzu has become a cautionary example of how a species introduced for a beneficial purpose can become an ecological and economic burden.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 '이러한 자연적 억제 요인이 없어 이 식물이 수백만 에이커에 걸쳐 자유롭게 퍼져나가 토착 숲과 전신주를 뒤덮었다'는 내용입니다. 여기서 'these natural checks'는 바로 앞 문장에서 언급된, 원산지에서 칡을 억제하던 곤충·균류·초식동물 같은 천적이 새로운 환경에는 존재하지 않았다는 내용을 가리킵니다. 또한 주어진 문장의 결과로 뒤이어 '오늘날 이미 자리 잡은 칡을 제거하려면...'이라는 문장이 자연스럽게 이어지므로, ④에 들어가는 것이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "erosion",
+        "meaning": "침식"
+      },
+      {
+        "word": "grazing",
+        "meaning": "방목, 풀을 뜯어 먹음"
+      },
+      {
+        "word": "smother",
+        "meaning": "뒤덮다, 질식시키다"
+      },
+      {
+        "word": "regenerate",
+        "meaning": "재생하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-20-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-20",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Students who cram all their studying into a single, intensive session before an exam often feel confident that they have mastered the material, yet cognitive scientists have repeatedly found that this feeling of confidence is misleading. When information is reviewed only once and then left alone, it fades from memory relatively quickly, regardless of how thoroughly it seemed to be understood at the time. By contrast, studies comparing different study schedules have consistently shown that spreading the same amount of review across several shorter sessions, spaced days or even weeks apart, produces substantially better long-term retention than a single marathon session of equal total length. Each time a learner revisits material after a delay, the brain must work slightly harder to retrieve it, and this extra retrieval effort appears to strengthen the memory trace more effectively than passive, repeated exposure in one sitting. As a result, students who distribute their review sessions over time consistently outperform those who cram, even when both groups report similar levels of confidence immediately after studying.",
+    "choices": [
+      "spreading study sessions out over time leads to stronger long-term memory retention than concentrating all review into one session",
+      "students who feel confident about material immediately after studying have usually learned it effectively",
+      "reviewing material only once is sufficient as long as the review session is long enough",
+      "the amount of total time spent studying matters more than how that time is scheduled",
+      "retrieving information from memory is always easier than encoding it for the first time"
+    ],
+    "answerIndex": 0,
+    "explanation": "글은 벼락치기처럼 한 번에 몰아서 공부하는 것보다 같은 양의 복습을 여러 번에 나누어 시간 간격을 두고 하는 것이 장기 기억에 훨씬 효과적이라는 인지과학 연구를 설명합니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "cram",
+        "meaning": "벼락치기 공부를 하다"
+      },
+      {
+        "word": "retrieval",
+        "meaning": "(기억의) 인출, 회수"
+      },
+      {
+        "word": "distribute",
+        "meaning": "분산시키다, 나누다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-20-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-20",
+    "prompt": "등차수열 {a_n}에서 a_3 = 11, a_7 = 27일 때, a_10의 값은?",
+    "choices": [
+      "31",
+      "35",
+      "39",
+      "43",
+      "47"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 27 - 11 = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = 11이므로 a_1 = 11 - 8 = 3입니다. 따라서 a_10 = a_1 + 9d = 3 + 36 = 39입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d를 이용하여 두 항의 차로부터 공차를 구한 뒤 첫째항을 구한다."
+  },
+  {
+    "id": "math-2026-09-20-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-20",
+    "prompt": "곡선 y = x^3 - 2x^2 + 3 위의 점 (1, 2)에서 그은 접선이 y축과 만나는 점의 y좌표는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 2,
+    "explanation": "y' = 3x^2 - 4x이므로 x=1에서의 접선의 기울기는 3(1)^2 - 4(1) = -1입니다. 점 (1,2)를 지나고 기울기가 -1인 접선의 방정식은 y - 2 = -1(x-1), 즉 y = -x+3입니다. x=0을 대입하면 y=3이므로 y축과 만나는 점의 y좌표는 3입니다.",
+    "concept": "곡선 위의 한 점에서의 접선의 기울기는 그 점에서의 미분계수이며, 점과 기울기를 이용해 접선의 방정식을 구할 수 있다."
+  },
+  {
+    "id": "math-2026-09-20-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-20",
+    "prompt": "두 곡선 y = x^2 과 y = 2x 로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "2/3",
+      "4/3",
+      "8/3",
+      "10/3",
+      "4"
+    ],
+    "answerIndex": 1,
+    "explanation": "두 곡선의 교점은 x^2 = 2x, 즉 x(x-2)=0에서 x = 0, 2입니다. 0<x<2에서 2x ≥ x^2이므로 넓이는 ∫[0,2] (2x - x^2) dx = [x^2 - x^3/3] (0부터 2까지) = (4 - 8/3) - 0 = 4/3입니다.",
+    "concept": "두 곡선으로 둘러싸인 넓이는 교점을 구간의 양 끝으로 하여, 두 함수의 차를 그 구간에서 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-20-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-20",
+    "prompt": "두 개의 주사위를 동시에 던질 때, 나온 눈의 수의 합이 5의 배수가 될 확률은?",
+    "choices": [
+      "1/6",
+      "7/36",
+      "2/9",
+      "5/18",
+      "1/4"
+    ],
+    "answerIndex": 1,
+    "explanation": "두 주사위의 눈의 합이 될 수 있는 모든 경우는 36가지입니다. 합이 5가 되는 경우는 (1,4),(2,3),(3,2),(4,1)로 4가지, 합이 10이 되는 경우는 (4,6),(5,5),(6,4)로 3가지이므로 5의 배수가 되는 경우는 총 7가지입니다. 따라서 확률은 7/36입니다.",
+    "concept": "두 주사위를 던질 때 나오는 모든 경우의 수는 36가지이며, 조건을 만족하는 경우의 수를 세어 전체 경우의 수로 나누어 확률을 구한다."
+  },
+  {
+    "id": "math-2026-09-20-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-20",
+    "prompt": "삼각형 ABC에서 A = 60°, b = 4, c = 6일 때, 변 a의 길이는?",
+    "choices": [
+      "2√5",
+      "2√6",
+      "2√7",
+      "3√3",
+      "4√2"
+    ],
+    "answerIndex": 2,
+    "explanation": "코사인법칙에 의해 a^2 = b^2 + c^2 - 2bc cosA = 4^2 + 6^2 - 2×4×6×cos60° = 16+36-48×(1/2) = 52-24=28입니다. 따라서 a = √28 = 2√7입니다.",
+    "concept": "삼각형의 두 변의 길이와 그 끼인각을 알 때, 나머지 한 변의 길이는 코사인법칙 a^2 = b^2+c^2-2bc cosA로 구한다."
   }
 ]
