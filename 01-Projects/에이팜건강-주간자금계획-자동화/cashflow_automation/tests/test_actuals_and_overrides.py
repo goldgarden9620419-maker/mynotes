@@ -163,6 +163,11 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
     assert ws["M5"].value == "분류별 일괄"
     assert [ws[f"M{r}"].value for r in (6, 7)] == ["통신비", "렌탈료"]
     assert ws["N6"].value == "변경 안 함"
+    # '적용할 성격' 선택지 안내 상자 (P열)
+    assert ws["P5"].value == "적용할 성격 안내"
+    guide = " ".join(str(ws[f"P{r}"].value) for r in range(6, 11))
+    for word in ("변경 안 함", "정기 —", "비정기 —", "제외 —", "우선순위"):
+        assert word in guide
     formulas = [str(dv.formula1) for dv in ws.data_validations.dataValidation]
     assert any("전체 비정기" in f for f in formulas)
     assert any("정기,비정기,제외" in f for f in formulas)

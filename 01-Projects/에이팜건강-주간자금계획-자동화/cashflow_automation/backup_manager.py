@@ -80,7 +80,7 @@ class TempWorkspace:
             pass
 
 
-_OUTPUT_PREFIXES = ("주간자금계획", "확인필요")
+_OUTPUT_PREFIXES = ("주간자금계획", "확인필요", "정기지출분석")
 
 
 def _sweep_to_archive(src_dir, archive_dir, keep_names) -> int:
