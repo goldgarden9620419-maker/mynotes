@@ -336,7 +336,8 @@ def migrate_auto_drafts(base_workbook: Path, draft_path: Path,
 def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
                             base_date: date,
                             horizon_days: int = 27,
-                            default_mode: str = "개별 관리"
+                            default_mode: str = "개별 관리",
+                            holidays: Optional[dict] = None
                             ) -> tuple[int, int]:
     """정기지출 분석 결과로 목록 파일을 갱신한다.
 
@@ -371,6 +372,12 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
             ws.delete_rows(r)
             pruned += 1
             continue
+        # 주말·공휴일에 걸린 예정일은 다음 영업일로 옮긴다
+        if d is not None:
+            adj = adjust_to_business_day(d, holidays)
+            if adj != d:
+                ws.cell(row=r, column=1, value=adj)
+                d = adj
         if name and d is not None:
             existing.add((name, d.year, d.month))
     added = 0
@@ -383,13 +390,15 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
             continue
         y, m = base_date.year, base_date.month
         while True:
-            d = date(y, m, min(int(day), calendar.monthrange(y, m)[1]))
+            d = adjust_to_business_day(
+                date(y, m, min(int(day), calendar.monthrange(y, m)[1])),
+                holidays)
             if d > end:
                 break
-            if base_date <= d and (name, y, m) not in existing:
+            if base_date <= d and (name, d.year, d.month) not in existing:
                 ws.append([d, item.get("정기지출명"), round(amount),
                            item.get("신뢰도") or "", new_flag, ""])
-                existing.add((name, y, m))
+                existing.add((name, d.year, d.month))
                 added += 1
             y, m = (y + 1, 1) if m == 12 else (y, m + 1)
     _apply_bulk_mode(wb, ws, mode)
@@ -638,7 +647,8 @@ def weekly_recurring_check(draft_rows: list[dict],
                            aliases: dict[str, list[str]] | None,
                            start: date, end: date,
                            variable_items: list[dict] | None = None,
-                           name_threshold: int = 60) -> list[dict]:
+                           name_threshold: int = 60,
+                           holidays: Optional[dict] = None) -> list[dict]:
     """실행 구간(start~end)에 도래하는 정기지출의 팀 제출 여부를 대조한다.
 
     자동추정 목록의 행(반영·제외)과 성격 '변동' 정기지출(목록에 없는
@@ -677,7 +687,9 @@ def weekly_recurring_check(draft_rows: list[dict],
             continue
         y, m = start.year, start.month
         while (y, m) <= (end.year, end.month):
-            d = date(y, m, min(int(day), calendar.monthrange(y, m)[1]))
+            d = adjust_to_business_day(
+                date(y, m, min(int(day), calendar.monthrange(y, m)[1])),
+                holidays)
             key = (normalize_text(name), y, m)
             if start <= d <= end and key not in seen:
                 entries.append({"예정일": d, "항목": name,
@@ -852,6 +864,31 @@ def load_holidays(base_workbook: Path) -> dict[date, str]:
         return result
     finally:
         wb.close()
+
+
+def adjust_to_business_day(d: date, holidays: Optional[dict] = None) -> date:
+    """주말(토·일)·공휴일 정기지출 예정일을 다음 영업일로 옮긴다.
+
+    다음 영업일이 달을 넘기면(월말이 연휴인 경우) 그 달 마지막
+    영업일로 앞당긴다 — 월 단위 정기지출이 다른 달로 밀리지 않게.
+    (2026-09-20 사용자 요청)
+    """
+    holidays = holidays or {}
+
+    def _off(x: date) -> bool:
+        return x.weekday() >= 5 or x in holidays
+
+    if not _off(d):
+        return d
+    nxt = d
+    while _off(nxt):
+        nxt += timedelta(days=1)
+    if nxt.month == d.month and nxt.year == d.year:
+        return nxt
+    prev = d
+    while _off(prev):
+        prev -= timedelta(days=1)
+    return prev
 
 
 def load_recurring_overrides(base_workbook: Path) -> dict[str, dict]:
@@ -1463,7 +1500,9 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
         amount = item.get("평균 월지출") or 0.0
         y, m = base_monday.year, base_monday.month
         for _ in range(weeks // 4 + 2):
-            settle = date(y, m, min(day, calendar.monthrange(y, m)[1]))
+            settle = adjust_to_business_day(
+                date(y, m, min(day, calendar.monthrange(y, m)[1])),
+                holidays)
             if base_monday <= settle < horizon_end:
                 bucket = "카드" if "카드" in (item.get("분류") or "") else "기타"
                 recurring_by_date[settle][bucket] += amount
