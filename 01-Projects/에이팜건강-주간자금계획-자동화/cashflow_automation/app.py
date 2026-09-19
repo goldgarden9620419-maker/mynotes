@@ -250,7 +250,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         # 8) 4주·13주 자금계획 (21~23번 항목)
         # 팀 지출계획과 겹치는 '자동 초안' 추정은 이중 반영 방지를 위해 제외
         adjustments, dup_adjust = forecast_engine.filter_duplicate_adjustments(
-            adjustments, plan["countable"])
+            adjustments, plan["countable"],
+            aliases=forecast_engine.load_draft_aliases(draft_path))
         for adj in dup_adjust:
             issues.append({
                 "구분": "추정 중복 제외",
