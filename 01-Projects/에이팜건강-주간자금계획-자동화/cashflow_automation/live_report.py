@@ -103,6 +103,10 @@ def fill_live_workbook(template_path: Path, report: dict,
     if "정기지출분석" in wb.sheetnames:
         wb.remove(wb["정기지출분석"])
 
+    # 13주 주별계획은 매주 확인할 필요가 없어 숨긴다 (2026-09-20 사용자
+    # 요청). 자료·수식은 그대로라 필요하면 시트 숨기기 해제로 볼 수 있다
+    wb["13주주별계획"].sheet_state = "hidden"
+
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
@@ -250,8 +254,15 @@ def _fill_daily(ws, forecast: dict, base_date: date,
                                         wrap_text=True)
             rd = ws.row_dimensions.get(row)
             if rd is not None:
-                rd.height = None
-                rd.customHeight = False
+                rd.height = None    # 높이 자동(customHeight 해제)
+    # 은행 내역으로 확인이 끝난 지난 일자(실적 구간)는 행을 숨긴다 —
+    # 조회일 이후의 자금계획에 집중 (2026-09-20 사용자 요청).
+    # 자료·수식은 그대로라 필요하면 행 숨기기 해제로 볼 수 있다
+    actual_until = forecast.get("actual_until")
+    for i in range(28):
+        d = base_date + timedelta(days=i)
+        ws.row_dimensions[6 + i].hidden = bool(
+            actual_until is not None and d <= actual_until)
     _outline_exec_window(ws, note_col, base_date, run_date)
 
 
