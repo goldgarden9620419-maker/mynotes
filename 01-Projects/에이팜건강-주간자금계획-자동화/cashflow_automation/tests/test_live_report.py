@@ -273,7 +273,7 @@ def test_실행일_차주금요일_붉은_상자(tmp_path):
 
 
 def test_계좌별시나리오_입금배분_표시(tmp_path):
-    """예상입금이 계좌별로 얼마씩 배분되는지 열과 비중 안내로 보인다."""
+    """블록(잔액·입금·지출·이체) 구분 + 지난 실적 숨김 + 배분액 표시."""
     template = tmp_path / "템플릿.xlsx"
     _make_stub_template(template)
     rep = _fake_report(NEW_MONDAY)
@@ -282,32 +282,49 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
         "accounts": acc,
         "shares": {acc[0]: 0.7, acc[1]: 0.3},
         "rows": [
-            {"일자": NEW_MONDAY, "요일": "월", "실적": True,
-             "잔액": None, "입금": {}, "이체": {}, "비고": "실적 구간"},
+            {"일자": NEW_MONDAY, "요일": "월", "실적": True, "잔액": None,
+             "입금": {}, "지출": None, "이체": {}, "비고": "실적 구간"},
             {"일자": NEW_MONDAY + timedelta(days=1), "요일": "화",
+             "실적": True,
+             "잔액": {acc[0]: 800_000.0, acc[1]: 200_000.0},
+             "입금": {}, "지출": None, "이체": {}, "비고": "실적 구간"},
+            {"일자": NEW_MONDAY + timedelta(days=2), "요일": "수",
              "실적": False,
              "잔액": {acc[0]: 1_000_000.0, acc[1]: 500_000.0},
              "입금": {acc[0]: 700_000.0, acc[1]: 300_000.0},
-             "이체": {}, "비고": ""},
+             "지출": 200_000.0, "이체": {acc[1]: 50_000.0}, "비고": ""},
         ],
     }
     out = tmp_path / "결과.xlsx"
     fill_live_workbook(template, rep, out)
     wb = load_workbook(out)
     ws = wb["계좌별시나리오"]
-    # 머리글: 잔액·총잔액 다음에 입금 배분 블록
-    assert ws.cell(row=5, column=5).value == "총잔액"
-    assert ws.cell(row=5, column=6).value == "예상입금 합계"
-    assert str(ws.cell(row=5, column=7).value).endswith("입금")
-    assert str(ws.cell(row=5, column=8).value).startswith("농협")
-    # 안내문에 배분 비중이 나온다
-    assert "70.0%" in str(ws.cell(row=3, column=1).value)
-    assert "30.0%" in str(ws.cell(row=3, column=1).value)
-    # 실적 구간은 비우고, 예측 행에는 합계·계좌별 배분액이 기록된다
-    assert ws.cell(row=6, column=6).value is None
-    assert ws.cell(row=7, column=6).value == 1_000_000
-    assert ws.cell(row=7, column=7).value == 700_000
-    assert ws.cell(row=7, column=8).value == 300_000
+    # 열 배치(계좌 2개): C 총잔액, D~E 잔액, F 합계, G~H 입금,
+    # I 지출, J~K 이체, L 비고
+    assert ws.cell(row=5, column=3).value == "총잔액"
+    assert str(ws.cell(row=5, column=4).value).startswith("우리")
+    assert ws.cell(row=5, column=6).value == "합계"
+    assert ws.cell(row=5, column=9).value == "우리은행 집행"
+    assert ws.cell(row=5, column=10).value == "농협→우리"
+    # 블록 띠(4행)와 읽는 법·비중 안내(3행)
+    assert str(ws.cell(row=4, column=3).value).startswith("①")
+    assert str(ws.cell(row=4, column=6).value).startswith("②")
+    note = str(ws.cell(row=3, column=1).value)
+    assert "읽는 법" in note and "70%" in note and "30%" in note
+    # 지난 실적 행은 숨기고, 마지막 실적일(출발 잔액)만 남긴다
+    assert ws.row_dimensions[6].hidden
+    assert not ws.row_dimensions[7].hidden
+    assert ws.cell(row=7, column=3).value == 1_000_000     # 출발 총잔액
+    assert "출발" in str(ws.cell(row=7, column=12).value)
+    # 예측 행: 총잔액·입금 합계·계좌별 배분·지출·이체가 다 보인다
+    assert ws.cell(row=8, column=3).value == 1_500_000
+    assert ws.cell(row=8, column=6).value == 1_000_000
+    assert ws.cell(row=8, column=7).value == 700_000
+    assert ws.cell(row=8, column=8).value == 300_000
+    assert ws.cell(row=8, column=9).value == 200_000
+    assert ws.cell(row=8, column=10).value == 50_000
+    # 일자·요일·총잔액 고정
+    assert ws.freeze_panes == "D6"
     wb.close()
 
 

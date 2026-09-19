@@ -367,60 +367,128 @@ ACCOUNT_SCENARIO_SHEET = "계좌별시나리오"
 
 def _fill_account_scenario(wb, scenario: Optional[dict],
                            holidays: Optional[dict] = None) -> None:
-    """계좌별 일별 잔액 시나리오 시트 (우리→농협→국민 인출 우선순위)."""
+    """계좌별 일별 잔액 시나리오 시트 (우리→농협→국민 인출 우선순위).
+
+    ① 잔액 → ② 당일 예상입금 배분 → ③ 지출 → ④ 부족분 이체 블록을
+    색으로 구분해 '전날 잔액 + ② − ③ − ④ = 오늘 잔액'이 왼쪽부터
+    그대로 읽히게 한다. 지난 실적 일자는 숨기고 마지막 실적일(출발
+    잔액)만 남긴다. 자동 생성 시트이므로 매번 새로 그린다.
+    """
     if not scenario or not scenario.get("accounts"):
         return
     from excel_report import is_offday
-    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.styles import (Alignment, Border, Font, PatternFill,
+                                 Side)
     from openpyxl.utils import get_column_letter
 
     if ACCOUNT_SCENARIO_SHEET in wb.sheetnames:
-        ws = wb[ACCOUNT_SCENARIO_SHEET]
+        index = wb.sheetnames.index(ACCOUNT_SCENARIO_SHEET)
+        wb.remove(wb[ACCOUNT_SCENARIO_SHEET])
     else:
         try:
             index = wb.sheetnames.index("4주일별계획") + 1
         except ValueError:
             index = len(wb.sheetnames)
-        ws = wb.create_sheet(ACCOUNT_SCENARIO_SHEET, index)
+    ws = wb.create_sheet(ACCOUNT_SCENARIO_SHEET, index)
 
     accounts = scenario["accounts"]
     shares = scenario.get("shares") or {}
+    n = len(accounts)
+    # 열 배치: 일자·요일 | ① 총잔액+계좌별 잔액 | ② 입금 합계+계좌별
+    # 배분 | ③ 지출 | ④ 이체 2열 | 비고
+    col_total = 3
+    col_in_sum = col_total + 1 + n
+    col_out = col_in_sum + 1 + n
+    col_tr = col_out + 1
+    col_note = col_tr + 2
+
+    navy, green = "1F4E79", "548235"
+    orange, d_orange, gray = "ED7D31", "C55A11", "808080"
+    thin = Side(style="thin", color="D9D9D9")
+    box = Border(left=thin, right=thin, top=thin, bottom=thin)
+    white_bold = dict(name="맑은 고딕", bold=True, size=9, color="FFFFFF")
+
+    share_txt = " · ".join(f"{account_label(b, a)} "
+                           f"{shares.get((b, a), 0):.0%}"
+                           for b, a in accounts) if shares else ""
     title = _set(ws, 2, 1, "계좌별 일별 잔액 시나리오 (자동 반영)")
     if title is not None:
-        title.font = Font(name="맑은 고딕", bold=True, size=13,
-                          color="1F4E79")
-    share_txt = " · ".join(f"{account_label(b, a)} "
-                           f"{shares.get((b, a), 0):.1%}"
-                           for b, a in accounts) if shares else ""
+        title.font = Font(name="맑은 고딕", bold=True, size=13, color=navy)
     note = _set(ws, 3, 1,
-                "인출 우선순위: 우리은행 → 농협 → 국민은행. 부족분은 이체 열의 "
-                "금액만큼 우리은행으로 옮겨 집행하는 가정입니다. "
-                "예상입금(온라인+확정·기타)은 최근 외부입금 비중대로 각 "
-                "계좌에 나눠 더합니다"
-                + (f" — 입금 배분 비중: {share_txt}." if share_txt else "."))
+                "읽는 법: 오늘 총잔액 = 전날 총잔액 + ② 입금 합계 − ③ 지출. "
+                "지출은 전액 우리은행에서 집행하고, 모자라면 ④처럼 농협 → "
+                "국민 순으로 우리은행에 이체해 채웁니다. 지난 실적 일자 "
+                "행은 숨겨져 있습니다(마지막 실적일 잔액에서 출발)."
+                + (f" ② 배분 비중(최근 입금 실적): {share_txt}"
+                   if share_txt else ""))
     if note is not None:
-        note.font = Font(name="맑은 고딕", size=9, color="808080")
+        note.font = Font(name="맑은 고딕", size=9, color=gray)
 
-    headers = (["일자", "요일"]
-               + [account_label(b, a) + " 잔액" for b, a in accounts]
-               + ["총잔액", "예상입금 합계"]
-               + [account_label(b, a) + " 입금" for b, a in accounts]
-               + ["농협→우리 이체", "국민→우리 이체", "비고"])
-    widths = ([11, 6] + [15] * len(accounts) + [15, 14]
-              + [14] * len(accounts) + [14, 14, 22])
-    for c, header in enumerate(headers, start=1):
-        cell = _set(ws, 5, c, header)
+    def _band(c1, c2, text, color):
+        for c in range(c1, c2 + 1):
+            cell = ws.cell(row=4, column=c)
+            cell.fill = PatternFill("solid", start_color=color)
+            cell.border = box
+        head = _set(ws, 4, c1, text)
+        if head is not None:
+            head.font = Font(**white_bold)
+            head.alignment = Alignment(horizontal="left", vertical="center")
+        if c2 > c1:
+            ws.merge_cells(start_row=4, start_column=c1,
+                           end_row=4, end_column=c2)
+
+    _band(col_total, col_total + n, "① 잔액 (총잔액 · 계좌별)", navy)
+    _band(col_in_sum, col_in_sum + n,
+          "② 오늘 들어오는 돈 — 예상입금 배분", green)
+    _band(col_out, col_out, "③ 지출", orange)
+    _band(col_tr, col_tr + 1, "④ 부족분 이체", d_orange)
+
+    # 머리글 2행: 일자·요일·비고는 4~5행 세로 병합
+    heads = ([(1, "일자", navy), (2, "요일", navy)]
+             + [(col_total, "총잔액", navy)]
+             + [(col_total + 1 + i, account_label(b, a), navy)
+                for i, (b, a) in enumerate(accounts)]
+             + [(col_in_sum, "합계", green)]
+             + [(col_in_sum + 1 + i, account_label(b, a), green)
+                for i, (b, a) in enumerate(accounts)]
+             + [(col_out, "우리은행 집행", orange)]
+             + [(col_tr, "농협→우리", d_orange),
+                (col_tr + 1, "국민→우리", d_orange)]
+             + [(col_note, "비고", gray)])
+    widths = {1: 11, 2: 5, col_total: 15, col_in_sum: 13, col_out: 13,
+              col_tr: 12, col_tr + 1: 12, col_note: 22}
+    for c, text, color in heads:
+        row0 = 4 if c in (1, 2, col_note) else 5
+        cell = _set(ws, row0, c, text)
         if cell is not None:
-            cell.fill = PatternFill("solid", start_color="1F4E79")
-            cell.font = Font(name="맑은 고딕", color="FFFFFF", bold=True,
-                             size=10)
-            cell.alignment = Alignment(horizontal="center")
-        ws.column_dimensions[get_column_letter(c)].width = widths[c - 1]
+            cell.font = Font(**white_bold)
+            cell.alignment = Alignment(horizontal="center",
+                                       vertical="center")
+        for rr in (4, 5):
+            hc = ws.cell(row=rr, column=c)
+            if rr >= row0:
+                hc.fill = PatternFill("solid", start_color=color)
+            hc.border = box
+        if row0 == 4:
+            ws.merge_cells(start_row=4, start_column=c,
+                           end_row=5, end_column=c)
+        ws.column_dimensions[get_column_letter(c)].width = \
+            widths.get(c, 14)
 
+    total_fill = PatternFill("solid", start_color="D9E2F1")
+    in_fill = PatternFill("solid", start_color="E2EFDA")
+    out_fill = PatternFill("solid", start_color="FCE4D6")
+    tr_fill = PatternFill("solid", start_color="F8CBAD")
     red = Font(name="맑은 고딕", size=10, color="C00000")
+    rows = scenario["rows"]
+    last_act = max((i for i, rw in enumerate(rows) if rw.get("실적")),
+                   default=None)
+
     r = 6
-    for row in scenario["rows"]:
+    for i, row in enumerate(rows):
         d = row["일자"]
+        # 지난 실적 일자는 숨김 — 마지막 실적일(출발 잔액)만 남긴다
+        ws.row_dimensions[r].hidden = last_act is not None and i < last_act
         acell = _set(ws, r, 1, datetime.combine(d, dtime()))
         if acell is not None:
             acell.number_format = "yyyy-mm-dd"
@@ -430,40 +498,50 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
                 if cell is not None:
                     cell.font = red
         balances = row.get("잔액")
-        values = []
-        if balances is None:
-            values = [None] * (len(accounts) + 1)
-        else:
-            values = [round(balances.get(k, 0)) for k in accounts]
-            values.append(round(sum(balances.get(k, 0) for k in accounts)))
-        # 그날 예상입금이 계좌별로 얼마씩 더해졌는지 (실적 구간은 비움)
         deps = row.get("입금") or {}
-        if deps:
-            values.append(round(sum(deps.values())) or None)
-            values += [round(deps.get(k, 0)) or None for k in accounts]
-        else:
-            values += [None] * (len(accounts) + 1)
+        out = row.get("지출")
         nh = sum(v for k, v in (row.get("이체") or {}).items()
                  if k[0] == "농협")
         kb = sum(v for k, v in (row.get("이체") or {}).items()
                  if k[0] == "국민은행")
-        values += [round(nh) or None, round(kb) or None]
-        for i, v in enumerate(values, start=3):
-            cell = _set(ws, r, i, v)
-            if cell is not None:
-                cell.number_format = "#,##0"
-                cell.font = Font(name="맑은 고딕", size=10)
-        ncell = _set(ws, r, 3 + len(values), row.get("비고") or None)
+        values = ([None] * (n + 1) if balances is None else
+                  [round(sum(balances.get(k, 0) for k in accounts))]
+                  + [round(balances.get(k, 0)) for k in accounts])
+        values += ([None] * (n + 1) if not deps else
+                   [round(sum(deps.values())) or None]
+                   + [round(deps.get(k, 0)) or None for k in accounts])
+        values += [None if out is None else (round(out) or None),
+                   round(nh) or None, round(kb) or None]
+        for j, v in enumerate(values, start=col_total):
+            cell = _set(ws, r, j, v)
+            if cell is None:
+                continue
+            cell.number_format = "#,##0;[Red]-#,##0"
+            cell.font = Font(name="맑은 고딕", size=10,
+                             bold=(j == col_total))
+        note_txt = row.get("비고") or None
+        if note_txt == "실적 구간":
+            note_txt = ("여기까지 실적 — 이 잔액에서 출발"
+                        if i == last_act else "실적 구간")
+        ncell = _set(ws, r, col_note, note_txt)
         if ncell is not None:
+            warn = bool(row.get("비고")) and not row.get("실적")
             ncell.font = Font(name="맑은 고딕", size=9,
-                              color="C00000" if row.get("비고") else "808080")
+                              color="C00000" if warn else gray)
+        # 블록별 배경색·테두리로 구간을 구분
+        for c in range(1, col_note + 1):
+            cell = ws.cell(row=r, column=c)
+            cell.border = box
+            if c == col_total:
+                cell.fill = total_fill
+            elif col_in_sum <= c <= col_in_sum + n:
+                cell.fill = in_fill
+            elif c == col_out:
+                cell.fill = out_fill
+            elif c in (col_tr, col_tr + 1):
+                cell.fill = tr_fill
         r += 1
-    # 잔여 행 정리
-    for rr in range(r, ws.max_row + 1):
-        for c in range(1, len(headers) + 1):
-            if ws.cell(row=rr, column=c).value is not None:
-                _set(ws, rr, c, None)
-    ws.freeze_panes = "A6"
+    ws.freeze_panes = "D6"   # 일자·요일·총잔액 고정
 
 
 def _fill_expense(wb, rows: list[dict],
