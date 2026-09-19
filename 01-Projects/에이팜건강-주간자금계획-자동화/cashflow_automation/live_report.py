@@ -623,6 +623,9 @@ def _fill_recurring(ws, recurring: list[dict]) -> None:
             cell = _set(ws, i, c, v)
             if cell is not None and c in (6, 7, 8):
                 cell.number_format = _MONEY_WON
+    # 머리글 필터 + 성격 드롭다운 + K4 일괄 변경 (다음 실행 때 수확·반영)
+    from excel_report import add_recurring_controls
+    add_recurring_controls(ws, 5 + len(recurring))
 
 
 def _fill_raw(ws, bank_rows: list[dict]) -> None:

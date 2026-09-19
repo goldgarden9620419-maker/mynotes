@@ -759,23 +759,29 @@ def load_recurring_overrides(base_workbook: Path) -> dict[str, dict]:
         wb.close()
 
 
-def harvest_recurring_edits(live_workbook: Path) -> dict[str, dict]:
-    """직전 라이브 결과물의 '정기지출분석' 시트에서 사용자 수정을 읽는다.
+def harvest_recurring_edits(workbook_path: Path) -> dict[str, dict]:
+    """'정기지출분석' 시트에서 사용자 수정을 읽는다 (라이브·확인필요 공용).
 
-    사용자가 결과 파일에서 분류(3열)·성격(11열)을 고치면 다음 실행 때
-    이 함수가 수확해 기준파일 '정기지출분류'에 저장한다.
-    '성격확인필요'는 미입력 표시이므로 무시한다.
+    사용자가 분류(3열)·성격(11열)을 고치면 이 함수가 수확해 기준파일
+    '정기지출분류'에 저장한다. '성격확인필요'는 미입력 표시이므로 무시한다.
+    K4 '성격 일괄 변경'이 '전체 정기'/'전체 변동'이면 개별 값 대신
+    전 항목에 그 성격을 적용한다.
     """
+    from common import RECURRING_BULK_MODES
     edits: dict[str, dict] = {}
     try:
         from openpyxl import load_workbook
-        wb = load_workbook(live_workbook, data_only=True, read_only=True)
+        wb = load_workbook(workbook_path, data_only=True, read_only=True)
     except Exception:
         return edits
     try:
         if "정기지출분석" not in wb.sheetnames:
             return edits
         ws = wb["정기지출분석"]
+        bulk_row = next(ws.iter_rows(min_row=4, max_row=4, min_col=11,
+                                     max_col=11, values_only=True), (None,))
+        bulk_nature = RECURRING_BULK_MODES.get(
+            normalize_text(bulk_row[0] if bulk_row else None), "")
         for row in ws.iter_rows(min_row=6, max_col=11, values_only=True):
             name = normalize_text(row[1] if len(row) > 1 else None)
             if not name:
@@ -786,6 +792,8 @@ def harvest_recurring_edits(live_workbook: Path) -> dict[str, dict]:
                 cls = ""
             if nature not in _NATURE_VALUES:
                 nature = ""
+            if bulk_nature:
+                nature = bulk_nature
             if cls or nature:
                 edits[name] = {"분류": cls, "성격": nature}
         return edits

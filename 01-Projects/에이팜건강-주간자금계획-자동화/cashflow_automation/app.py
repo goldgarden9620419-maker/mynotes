@@ -178,6 +178,28 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                          applied)
         elif prev_lives:
             log.info("기준파일이 결과물보다 최신이라 정기지출분석 수확 생략")
+        # 확인필요 2단계: 확인 완료된 파일을 먼저 찾는다 — 그 안의
+        # 정기지출분석 수정(분류·성격, K4 일괄 변경)은 이번 결과 생성에
+        # 바로 반영한다 (라이브 수확보다 나중이라 확인 파일이 우선한다)
+        review_dir = cfg.folder("review")
+        review_dir.mkdir(parents=True, exist_ok=True)
+        input_sig = file_validator.current_input_signature(cfg)
+        confirm_mode = cfg.get("options", "confirm_before_results",
+                               default=False)
+        confirmed_review = None
+        review_directives = []
+        if confirm_mode:
+            confirmed_review = excel_report.find_confirmed_review(
+                review_dir, week_key, input_sig)
+        if confirmed_review is not None:
+            review_directives = excel_report.load_review_directives(
+                confirmed_review)
+            rev_applied = forecast_engine.update_override_sheet(
+                base_wb_path,
+                forecast_engine.harvest_recurring_edits(confirmed_review))
+            if rev_applied:
+                log.info("확인필요의 정기지출분석 수정 %d건을 정기지출분류에"
+                         " 반영", rev_applied)
         # 기준파일 '정기지출분류' 시트의 사용자 분류·성격을 반영한다
         # (성격 변동·제외는 13주 자동 추정에서 뺀다; 예: 외상대 지급)
         overrides = forecast_engine.load_recurring_overrides(
@@ -232,21 +254,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                      ", ".join((a.get("내용") or "")[:30]
                                for a in var_dropped[:3]))
 
-        # 확인필요 2단계: 확인 완료된 파일이 있으면 그 안의 '처리' 지시
-        # (정기지출 누락 → 계획에 반영/반영 안 함)를 읽어 반영한다
-        review_dir = cfg.folder("review")
-        review_dir.mkdir(parents=True, exist_ok=True)
-        input_sig = file_validator.current_input_signature(cfg)
-        confirm_mode = cfg.get("options", "confirm_before_results",
-                               default=False)
-        confirmed_review = None
-        review_directives = []
-        if confirm_mode:
-            confirmed_review = excel_report.find_confirmed_review(
-                review_dir, week_key, input_sig)
-            if confirmed_review is not None:
-                review_directives = excel_report.load_review_directives(
-                    confirmed_review)
+        # 확인 완료된 확인필요 파일의 '처리' 지시
+        # (정기지출 누락 → 계획에 반영/반영 안 함)를 반영한다
         if review_directives:
             adjustments += [
                 {"일자": d["일자"], "조정입금": 0.0, "조정지출": d["금액"],
@@ -484,8 +493,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 review_path = unique_path(review_dir / issue_name)
                 excel_report.create_issue_workbook(
                     issues, review_path, week_key=week_key,
-                    signature=input_sig)
-                if not excel_report.verify_workbook(review_path, ["확인필요"]):
+                    signature=input_sig, recurring=recurring)
+                expected = ["확인필요"] + (["정기지출분석"] if recurring
+                                       else [])
+                if not excel_report.verify_workbook(review_path, expected):
                     raise RuntimeError("확인필요 파일 재열기 검증 실패")
                 backup_manager.archive_superseded_reviews(
                     cfg, {review_path.name})
@@ -528,7 +539,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             review_path = unique_path(review_dir / issue_name)
             excel_report.create_issue_workbook(issues, review_path,
                                                week_key=week_key,
-                                               signature=input_sig)
+                                               signature=input_sig,
+                                               recurring=recurring)
             if not excel_report.verify_workbook(review_path, ["확인필요"]):
                 raise RuntimeError("확인필요 파일 재열기 검증 실패")
         if cfg.get("options", "create_pdf_summary", default=True):

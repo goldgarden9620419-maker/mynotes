@@ -189,6 +189,13 @@ def test_확인후_결과생성_2단계(env):
     cfg.data.setdefault("options", {})["confirm_before_results"] = True
     make_full_inputs(cfg, NOW)
     state = StateManager(cfg.state_dir)
+    # 확인 파일의 정기지출분석 수정이 흘러갈 기준파일 (운영에선 항상 존재)
+    from openpyxl import Workbook
+    base_wb = Workbook()
+    base_wb.active.title = "카드결제기준"
+    cfg.base_workbook_path().parent.mkdir(parents=True, exist_ok=True)
+    base_wb.save(cfg.base_workbook_path())
+    base_wb.close()
 
     # 1단계: 확인필요만 만들어지고 결과물은 없다
     first = _run(cfg, state, mode="manual")
@@ -205,9 +212,15 @@ def test_확인후_결과생성_2단계(env):
     ok, week, sig = review_confirmed(reviews[0])
     assert not ok and week == "2026-W39" and sig
 
-    # 사용자가 '확인 완료'를 '예'로 저장
+    # 사용자가 '확인 완료'를 '예'로 저장 + 정기지출분석 시트의 성격 수정
+    # (짧은 이력의 테스트라 시트가 없으므로 사용자가 고친 모양으로 만든다)
     wb = load_workbook(reviews[0])
     wb["확인필요"]["B2"] = "예"
+    rec = wb.create_sheet("정기지출분석")
+    rec.cell(row=5, column=2, value="정기지출명")
+    rec.cell(row=5, column=11, value="성격")
+    rec.cell(row=6, column=2, value="SKB")
+    rec.cell(row=6, column=11, value="변동")
     wb.save(reviews[0])
     wb.close()
 
@@ -220,6 +233,10 @@ def test_확인후_결과생성_2단계(env):
     assert not list(out.glob("확인필요_*.xlsx"))
     # 확인된 확인필요 파일은 그대로 남는다
     assert reviews[0].exists()
+    # 확인 파일의 정기지출분석 수정이 이번 실행에서 기준파일로 반영됐다
+    import forecast_engine as fe
+    ov = fe.load_recurring_overrides(cfg.base_workbook_path())
+    assert ov["SKB"]["성격"] == "변동"
 
 
 def test_확인대기_주기검사가_완료를_감지한다(env):
