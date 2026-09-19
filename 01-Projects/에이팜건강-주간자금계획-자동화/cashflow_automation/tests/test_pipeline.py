@@ -7,7 +7,8 @@ from openpyxl import load_workbook
 
 import app as app_module
 from common import (
-    STATUS_SUCCESS, STATUS_WAITING_FILES, now_local, week_monday,
+    STATUS_REVIEW_WAIT, STATUS_SUCCESS, STATUS_WAITING_FILES, now_local,
+    week_monday,
 )
 from excel_report import verify_workbook
 from management_report import verify_management_workbook
@@ -33,8 +34,10 @@ def test_전체_파이프라인_성공(env):
     out_dir = cfg.folder("output")
     excels = list(out_dir.glob("주간자금계획_*.xlsx"))
     pdfs = list(out_dir.glob("주간자금계획_대표보고_*.pdf"))
-    reviews = list(out_dir.glob("확인필요_*.xlsx"))
-    assert len(excels) == 1 and len(pdfs) == 1 and len(reviews) == 1
+    assert len(excels) == 1 and len(pdfs) == 1
+    # 확인필요는 05_결과가 아니라 06_확인필요 폴더에만 둔다
+    assert not list(out_dir.glob("확인필요_*.xlsx"))
+    assert len(list(cfg.folder("review").glob("확인필요_*.xlsx"))) == 1
 
     # 결과파일 재열기 검증 (31번 항목) — 경영보고(대화형)가 기본 결과물
     assert verify_management_workbook(excels[0])
@@ -172,12 +175,80 @@ def test_재실행시_이전_결과는_지난자료로_이동(env):
     out_dir = cfg.folder("output")
     assert len(list(out_dir.glob("주간자금계획_*.xlsx"))) == 1
     assert len(list(out_dir.glob("주간자금계획_대표보고_*.pdf"))) == 1
-    assert len(list(out_dir.glob("확인필요_*.xlsx"))) == 1
+    assert not list(out_dir.glob("확인필요_*.xlsx"))   # 06 폴더에만 둔다
     # 이전 실행분은 삭제되지 않고 지난자료로 이동
     archive = cfg.folder("archive") / "지난결과"
     assert len(list(archive.glob("주간자금계획_*"))) >= 2
-    # 06_확인필요 폴더도 최신 복사본 하나만 유지
-    assert len(list(cfg.folder("review").glob("확인필요_*.xlsx"))) <= 1
+    # 06_확인필요 폴더도 최신 파일 하나만 유지
+    assert len(list(cfg.folder("review").glob("확인필요_*.xlsx"))) == 1
+
+
+def test_확인후_결과생성_2단계(env):
+    """confirm_before_results: 확인필요 검토('확인 완료'=예) 후에만 결과 생성."""
+    cfg = env
+    cfg.data.setdefault("options", {})["confirm_before_results"] = True
+    make_full_inputs(cfg, NOW)
+    state = StateManager(cfg.state_dir)
+
+    # 1단계: 확인필요만 만들어지고 결과물은 없다
+    first = _run(cfg, state, mode="manual")
+    assert first.status == STATUS_REVIEW_WAIT
+    assert "확인 완료" in first.message
+    assert not list(cfg.folder("output").glob("주간자금계획_*"))
+    reviews = list(cfg.folder("review").glob("확인필요_*.xlsx"))
+    assert len(reviews) == 1
+    state.reload()
+    assert state.state["last_run_status"] == STATUS_REVIEW_WAIT
+
+    # 컨트롤이 들어 있다 (B2 드롭다운, 기본 '아니오')
+    from excel_report import review_confirmed
+    ok, week, sig = review_confirmed(reviews[0])
+    assert not ok and week == "2026-W39" and sig
+
+    # 사용자가 '확인 완료'를 '예'로 저장
+    wb = load_workbook(reviews[0])
+    wb["확인필요"]["B2"] = "예"
+    wb.save(reviews[0])
+    wb.close()
+
+    # 2단계: 다시 실행하면 결과 3종이 만들어진다
+    done = _run(cfg, state, mode="manual")
+    assert done.status == STATUS_SUCCESS, done.message
+    out = cfg.folder("output")
+    assert len(list(out.glob("주간자금계획_경영보고_*.xlsx"))) == 1
+    assert len(list(out.glob("주간자금계획_대표보고_*.pdf"))) == 1
+    assert not list(out.glob("확인필요_*.xlsx"))
+    # 확인된 확인필요 파일은 그대로 남는다
+    assert reviews[0].exists()
+
+
+def test_확인대기_주기검사가_완료를_감지한다(env):
+    """REVIEW_WAIT 상태에서 '확인 완료' 저장을 10분 주기 검사가 잡는다."""
+    cfg = env
+    cfg.data.setdefault("options", {})["confirm_before_results"] = True
+    now = now_local(cfg.timezone_name)
+    make_full_inputs(cfg, now)
+    state = StateManager(cfg.state_dir)
+    from scheduler import AutomationService
+    service = AutomationService(cfg, state, LOG)
+
+    assert service.run_job(mode="auto").status == STATUS_REVIEW_WAIT
+
+    # 미확인 상태의 주기 검사: 아무 일도 없다
+    service._periodic_check()
+    state.reload()
+    assert state.state["last_run_status"] == STATUS_REVIEW_WAIT
+
+    # '확인 완료' 저장 후 주기 검사 → 결과 생성
+    review = next(cfg.folder("review").glob("확인필요_*.xlsx"))
+    wb = load_workbook(review)
+    wb["확인필요"]["B2"] = "예"
+    wb.save(review)
+    wb.close()
+    service._periodic_check()
+    state.reload()
+    assert state.state["last_run_status"] == STATUS_SUCCESS
+    assert list(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
 
 
 def test_일별_비고_지출내역_요약():

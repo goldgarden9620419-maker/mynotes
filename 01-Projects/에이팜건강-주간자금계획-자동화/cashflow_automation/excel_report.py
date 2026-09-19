@@ -629,16 +629,97 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
     return out_path
 
 
-def create_issue_workbook(issues: list[dict], out_path: Path) -> Path:
+REVIEW_SHEET = "확인필요"
+_REVIEW_CONFIRM_CELL = "B2"    # 예/아니오 드롭다운
+_REVIEW_WEEK_CELL = "G2"       # 숨김: 주차 키
+_REVIEW_SIG_CELL = "H2"        # 숨김: 입력자료 서명
+
+
+def create_issue_workbook(issues: list[dict], out_path: Path,
+                          week_key: str = "", signature: str = "") -> Path:
+    """확인필요 워크북. week_key/signature가 있으면 '확인 완료' 컨트롤을
+    붙인다 — 검토 후 B2를 '예'로 바꿔 저장하면 다음 실행이 결과를 만든다."""
     wb = Workbook()
     ws = wb.active
-    ws.title = "확인필요"
-    _write_table(ws, _ISSUE_COLUMNS, issues, start_row=1)
+    ws.title = REVIEW_SHEET
+    start = 1
+    if week_key or signature:
+        start = 4
+        ws.merge_cells("A1:F1")
+        guide = ws["A1"]
+        guide.value = ("아래 항목을 검토한 뒤 '확인 완료'(B2)를 '예'로 바꾸고 "
+                       "저장하세요. 다시 실행하면(프로그램이 켜져 있으면 10분 "
+                       "안에 자동) 결과 파일 3개가 만들어집니다.")
+        guide.font = Font(name="맑은 고딕", bold=True, size=10,
+                          color="B36B00")
+        guide.alignment = Alignment(horizontal="left", vertical="center",
+                                    wrap_text=True)
+        ws.row_dimensions[1].height = 30
+        label = ws["A2"]
+        label.value = "확인 완료"
+        label.font = Font(name="맑은 고딕", bold=True, size=10)
+        confirm = ws[_REVIEW_CONFIRM_CELL]
+        confirm.value = "아니오"
+        confirm.fill = PatternFill("solid", start_color="FFF2CC")
+        confirm.font = Font(name="맑은 고딕", bold=True, size=10)
+        confirm.alignment = Alignment(horizontal="center")
+        from openpyxl.worksheet.datavalidation import DataValidation
+        dv = DataValidation(type="list", formula1='"아니오,예"',
+                            allow_blank=True)
+        dv.error = "'예' 또는 '아니오'만 입력할 수 있습니다."
+        dv.showErrorMessage = True
+        ws.add_data_validation(dv)
+        dv.add(_REVIEW_CONFIRM_CELL)
+        week_note = ws["C2"]
+        week_note.value = f"(주차 {week_key})"
+        week_note.font = Font(name="맑은 고딕", size=9, color="888888")
+        ws[_REVIEW_WEEK_CELL] = week_key
+        ws[_REVIEW_SIG_CELL] = signature
+        ws.column_dimensions["G"].hidden = True
+        ws.column_dimensions["H"].hidden = True
+    _write_table(ws, _ISSUE_COLUMNS, issues, start_row=start)
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
     wb.close()
     return out_path
+
+
+def review_confirmed(path: Path) -> tuple[bool, str, str]:
+    """확인필요 파일의 (확인 완료 여부, 주차, 입력 서명)을 읽는다."""
+    try:
+        wb = load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return False, "", ""
+    try:
+        if REVIEW_SHEET not in wb.sheetnames:
+            return False, "", ""
+        ws = wb[REVIEW_SHEET]
+        ok = str(ws[_REVIEW_CONFIRM_CELL].value or "").strip().startswith("예")
+        week = str(ws[_REVIEW_WEEK_CELL].value or "").strip()
+        sig = str(ws[_REVIEW_SIG_CELL].value or "").strip()
+        return ok, week, sig
+    except Exception:
+        return False, "", ""
+    finally:
+        wb.close()
+
+
+def find_confirmed_review(review_dir: Path, week_key: str,
+                          signature: str = "") -> Path | None:
+    """이번 주차·현재 입력자료에 대해 '확인 완료'된 확인필요 파일을 찾는다.
+
+    확인 후 입력파일이 바뀌면 서명이 달라져 다시 확인 단계로 돌아간다.
+    """
+    review_dir = Path(review_dir)
+    if not review_dir.exists():
+        return None
+    for p in sorted(review_dir.glob("확인필요_*.xlsx"),
+                    key=lambda x: x.stat().st_mtime, reverse=True):
+        ok, week, sig = review_confirmed(p)
+        if ok and week == week_key and (not signature or sig == signature):
+            return p
+    return None
 
 
 def verify_workbook(path: Path, expected_sheets: list[str] | None = None) -> bool:
