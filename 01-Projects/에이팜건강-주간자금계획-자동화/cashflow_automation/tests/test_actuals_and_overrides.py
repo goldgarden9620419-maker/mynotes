@@ -169,11 +169,14 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
     assert '"비정기"' in str(ws["K8"].value)          # 변동은 비정기로 표시
     assert ws["M5"].value == "분류별 일괄"
     assert [ws[f"M{r}"].value for r in (6, 7)] == ["통신비", "렌탈료"]
-    assert ws["N6"].value == "변경 안 함"
+    # N열은 각 분류의 '현재 성격'을 보여준다 (지난 적용 상태 유지)
+    assert ws["N6"].value == "정기"                   # 통신비: 둘 다 정기
+    assert ws["N7"].value == "비정기"                 # 렌탈료: 변동 1건
+    assert ws.column_dimensions["O"].hidden           # 기준값 열은 숨김
     # '적용할 성격' 선택지 안내 상자 (P열)
     assert ws["P5"].value == "적용할 성격 안내"
     guide = " ".join(str(ws[f"P{r}"].value) for r in range(6, 11))
-    for word in ("변경 안 함", "정기 —", "비정기 —", "제외 —", "우선순위"):
+    for word in ("혼합", "정기 —", "비정기 —", "제외 —", "우선순위"):
         assert word in guide
     formulas = [str(dv.formula1) for dv in ws.data_validations.dataValidation]
     assert any("전체 비정기" in f for f in formulas)

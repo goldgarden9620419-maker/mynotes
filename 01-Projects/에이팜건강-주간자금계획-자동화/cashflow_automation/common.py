@@ -118,7 +118,9 @@ RECURRING_BULK_MODES = {"전체 정기": "정기",
 RECURRING_NATURE_ALIAS = {"비정기": "변동"}
 RECURRING_NATURE_DISPLAY = {"변동": "비정기"}
 RECURRING_CAT_NAME_COL = 13   # M: 분류명
-RECURRING_CAT_PICK_COL = 14   # N: 그 분류 전체에 적용할 성격
+RECURRING_CAT_PICK_COL = 14   # N: 그 분류의 성격 (바꾸면 전체 적용)
+RECURRING_CAT_BASE_COL = 15   # O(숨김): 생성 시점의 기준값 — N이 이와
+                              # 다를 때만 분류별 일괄로 적용한다
 
 # 확인 파일(확인필요_*.xlsx)은 한 워크북에 4개 시트로 구성된다:
 # 안내(확인 완료 컨트롤) → 자동추정_지출목록 → 확인필요 → 정기지출분석
