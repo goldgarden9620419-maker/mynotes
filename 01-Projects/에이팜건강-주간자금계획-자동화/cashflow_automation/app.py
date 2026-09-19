@@ -289,13 +289,18 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 "원본파일": "기준파일 주간조정"})
         rates = cfg.get("forecast", "receipt_rates",
                         default=[0.6, 0.7, 0.8, 0.9, 1.0])
+        # 대표보고 '일별 잔액 전망(월~금)': 주말 실행이면 차주를 보여준다
+        display_monday = week_monday(now.date())
+        if now.date().weekday() >= 5:       # 토·일
+            display_monday += timedelta(days=7)
         forecast = forecast_engine.build_forecast(
             plan["countable"], base_date, total_balance, merged_history,
             adjustments, recurring_projectable, rates,
             cfg.get("forecast", "default_receipt_rate", default=0.8),
             cfg.get("forecast", "minimum_cash_balance", default=0),
             cfg.get("forecast", "online_history_weeks", default=12),
-            cfg.get("forecast", "online_recency_halflife", default=4))
+            cfg.get("forecast", "online_recency_halflife", default=4),
+            display_week_start=display_monday)
         # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위)
         account_scenario = forecast_engine.build_account_scenario(
             forecast["daily"], balances, merged_history,

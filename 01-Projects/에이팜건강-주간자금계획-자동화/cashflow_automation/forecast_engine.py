@@ -1394,12 +1394,15 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                    rates: list[float], default_rate: float,
                    minimum_balance: float = 0,
                    history_weeks: int = 12,
-                   recency_halflife: float = 4.0) -> dict:
+                   recency_halflife: float = 4.0,
+                   display_week_start: Optional[date] = None) -> dict:
     """전체 예측 결과와 반영률별 시나리오를 만든다.
 
     opening_balance는 '현재(최신 거래내역 기준) 총잔액'이다.
     기준일~마지막 실적일 구간은 실제 입출금으로 채우므로,
     일별 계획의 시작잔액은 실적 순증감을 되돌린 기준일 시작잔액을 쓴다.
+    display_week_start는 대표보고 '일별 잔액 전망(월~금)'의 시작 월요일 —
+    주말 실행이면 차주 월요일을 넘겨 다가오는 주를 보여준다. 없으면 기준주.
     """
     weekday_avg = weekday_online_averages(history_rows, base_date,
                                           history_weeks, recency_halflife)
@@ -1421,11 +1424,13 @@ def build_forecast(countable_plans: list[dict], base_date: date,
         min_row = min(daily, key=lambda r: r["기말잔액"]) if daily else None
         shortage = next((r["일자"] for r in daily
                          if r["상태"] == STATE_SHORTAGE), None)
+        week_start = display_week_start or base_date
         scenario = {
             "rate": rate,
-            # 실행 주(월~금)의 일별 기말잔액 — 대표 보고용
+            # 다가오는 주(월~금)의 일별 기말잔액 — 대표 보고용
             "금주일별": [(r["일자"], r["기말잔액"], r["상태"]) for r in daily
-                      if r["일자"] < base_date + timedelta(days=5)],
+                      if week_start <= r["일자"]
+                      < week_start + timedelta(days=5)],
             "4주 온라인입금": sum(r["온라인 예상입금"] for r in daily),
             "4주 기말잔액": daily[-1]["기말잔액"] if daily else 0.0,
             "4주 최저잔액": min_row["기말잔액"] if min_row else 0.0,

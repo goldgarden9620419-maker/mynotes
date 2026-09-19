@@ -74,6 +74,19 @@ def _put(ws, row, col, value, *, bold=False, size=10, color="000000",
     return cell
 
 
+def _setup_print(ws, last_row: int, last_col: int = 6) -> None:
+    """A4 세로 한 장 폭에 맞는 인쇄 설정 (프린트 시 빈칸 없이 깔끔하게)."""
+    from openpyxl.worksheet.page import PageMargins
+    from openpyxl.worksheet.properties import PageSetupProperties
+    ws.print_area = f"A1:{get_column_letter(last_col)}{last_row}"
+    ws.page_setup.orientation = "portrait"
+    ws.page_setup.paperSize = 9          # A4
+    ws.page_setup.fitToWidth = 1
+    ws.page_setup.fitToHeight = 0
+    ws.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
+    ws.page_margins = PageMargins(left=0.35, right=0.35, top=0.5, bottom=0.5)
+
+
 def _section(ws, row, text):
     for c in range(1, 7):
         cell = ws.cell(row=row, column=c)
@@ -143,6 +156,7 @@ def _fill_recurring_check(wb, report: dict) -> None:
         r += 1
     ws.auto_filter.ref = f"A{head_row}:G{max(r - 1, head_row + 1)}"
     ws.freeze_panes = f"A{head_row + 1}"
+    _setup_print(ws, max(r - 1, head_row + 1), last_col=7)
 
 
 def create_management_workbook(report: dict, out_path: Path) -> Path:
@@ -358,6 +372,12 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     memo.alignment = Alignment(horizontal="left", vertical="top",
                                wrap_text=True)
     ws.freeze_panes = "A4"
+
+    # 인쇄 최적화: 지출표의 빈 예비행은 3행만 남기고 숨긴다 (수식 구간
+    # $47:$140은 유지 — 필요하면 행 숨기기 해제 후 추가 입력 가능)
+    for hr in range(row + 3, _EXP_LAST + 1):
+        ws.row_dimensions[hr].hidden = True
+    _setup_print(ws, memo_row + 4)
 
     _fill_recurring_check(wb, report)
 

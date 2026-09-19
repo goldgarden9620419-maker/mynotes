@@ -89,6 +89,13 @@ def test_경영보고_생성과_수식(tmp_path):
     # ⑤ 전달 메모 수식
     memo = str(ws["A152"].value)
     assert memo.startswith("=IF(") and "건강사업팀" in memo
+    # 인쇄: A4 세로 폭 맞춤 + 빈 지출행 숨김 (자료 2행 + 예비 3행만 표시)
+    assert ws.page_setup.orientation == "portrait"
+    assert int(ws.page_setup.fitToWidth or 0) == 1
+    assert "$A$1" in str(ws.print_area) and "$F$" in str(ws.print_area)
+    assert not ws.row_dimensions[49].hidden      # 예비행 (47+2건 뒤 3행)
+    assert ws.row_dimensions[52].hidden          # 그 밖의 빈 행은 숨김
+    assert ws.row_dimensions[140].hidden
     wb.close()
 
 
