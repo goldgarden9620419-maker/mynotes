@@ -373,14 +373,25 @@ def _recurring_display(items: list[dict]) -> list[dict]:
     return out
 
 
-def _recurring_categories(items: list[dict]) -> list[str]:
-    """표시되는 분류 값 목록 (등장 순서, 중복 제거)."""
-    seen: list[str] = []
+def _recurring_categories(items: list[dict]) -> list[tuple[str, str]]:
+    """(분류, 현재 성격) 목록 — 등장 순서, 중복 제거.
+
+    분류 안 행들의 성격이 모두 같으면 그 표시값(정기/비정기/제외),
+    섞여 있으면 '혼합'. N열에 이 현재값을 그대로 보여줘, 지난번에
+    적용한 상태가 다음 실행에도 유지되어 보이게 한다.
+    """
+    order: list[str] = []
+    natures: dict[str, set] = {}
     for it in items:
         cat = str(it.get("분류") or "").strip() or "성격확인필요"
-        if cat not in seen:
-            seen.append(cat)
-    return seen
+        if cat not in natures:
+            order.append(cat)
+            natures[cat] = set()
+        nat = it.get("성격") or "정기"
+        natures[cat].add(RECURRING_NATURE_DISPLAY.get(nat, nat))
+    return [(cat,
+             next(iter(natures[cat])) if len(natures[cat]) == 1 else "혼합")
+            for cat in order]
 
 
 def add_recurring_controls(ws, last_row: int,
@@ -433,8 +444,11 @@ def add_recurring_controls(ws, last_row: int,
 
     if not categories:
         return
-    # 분류별 일괄 블록 (M·N열): 분류 하나를 통째로 정기/비정기/제외로
+    # 분류별 일괄 블록 (M·N열): N에는 그 분류의 '현재 성격'이 보이고,
+    # 값을 바꾸면 분류 전체에 적용된다 (숨김 O열이 기준값 — N이 O와
+    # 다를 때만 적용하므로, 그대로 두면 아무것도 바뀌지 않는다)
     m, n = RECURRING_CAT_NAME_COL, RECURRING_CAT_PICK_COL
+    from common import RECURRING_CAT_BASE_COL
     for c, header in ((m, "분류별 일괄"), (n, "적용할 성격")):
         cell = ws.cell(row=5, column=c, value=header)
         if not isinstance(cell, MergedCell):
@@ -445,26 +459,26 @@ def add_recurring_controls(ws, last_row: int,
             cell.border = _BORDER
     ws.column_dimensions[get_column_letter(m)].width = 20
     ws.column_dimensions[get_column_letter(n)].width = 12
-    cat_dv = DataValidation(
-        type="list",
-        formula1=f'"{RECURRING_BULK_KEEP},정기,비정기,제외"',
-        allow_blank=True)
-    cat_dv.error = "변경 안 함, 정기, 비정기, 제외 중에서만 " \
-                   "고를 수 있습니다."
+    ws.column_dimensions[get_column_letter(RECURRING_CAT_BASE_COL)]\
+        .hidden = True
+    cat_dv = DataValidation(type="list", formula1='"정기,비정기,제외"',
+                            allow_blank=True)
+    cat_dv.error = "정기, 비정기, 제외 중에서만 고를 수 있습니다."
     cat_dv.showErrorMessage = True
     ws.add_data_validation(cat_dv)
-    for r, cat in enumerate(categories, start=6):
+    for r, (cat, state) in enumerate(categories, start=6):
         name_cell = ws.cell(row=r, column=m, value=cat)
         if not isinstance(name_cell, MergedCell):
             name_cell.font = _BODY_FONT
             name_cell.border = _BORDER
-        pick = ws.cell(row=r, column=n, value=RECURRING_BULK_KEEP)
+        pick = ws.cell(row=r, column=n, value=state)
         if not isinstance(pick, MergedCell):
             pick.fill = PatternFill("solid", start_color="FFF2CC")
             pick.font = _BODY_FONT
             pick.alignment = Alignment(horizontal="center")
             pick.border = _BORDER
             cat_dv.add(pick.coordinate)
+        ws.cell(row=r, column=RECURRING_CAT_BASE_COL, value=state)
 
 
 # ---------------------------------------------------------------------------
@@ -935,9 +949,10 @@ def _build_review_guide_sheet(ws, week_key: str, signature: str,
     if has_recurring:
         steps.append(("정기지출분석",
                       "정기지출의 분류·성격(정기/비정기/제외)을 확인·수정"
-                      "합니다. N열 분류별 일괄, K4 전체 일괄을 고르면 표의 "
-                      "성격이 즉시 바뀌어 보입니다. 시트 오른쪽 '적용할 "
-                      "성격 안내' 상자를 참고하세요."))
+                      "합니다. N열에는 분류별 현재 성격이 그대로 보이므로 "
+                      "지난번 적용 상태가 유지됩니다 — 바꿀 분류만 고르면 "
+                      "표의 성격이 즉시 바뀌어 보입니다. 시트 오른쪽 "
+                      "'적용할 성격 안내' 상자를 참고하세요."))
     steps.append(("안내 (이 시트)",
                   "검토가 끝나면 위 '확인 완료'(B2)를 '예'로 바꾸고 "
                   "저장하세요. 실행창이 떠 있으면 저장하는 순간 결과가 "
@@ -1163,14 +1178,16 @@ def _link_nature_formulas(ws, n_rows: int, n_cats: int) -> None:
     last_cat = 5 + max(n_cats, 1)
     cat_m = f"$M$6:$M${last_cat}"
     cat_n = f"$N$6:$N${last_cat}"
+    cat_o = f"$O$6:$O${last_cat}"
     for r in range(6, 6 + n_rows):
         cell = ws.cell(row=r, column=11)
         base = cell.value or "정기"
         pick = f"INDEX({cat_n},MATCH($C{r},{cat_m},0))"
+        origin = f"INDEX({cat_o},MATCH($C{r},{cat_m},0))"
         cell.value = (
             f'=IF($K$4="전체 정기","정기",'
             f'IF($K$4="전체 비정기","비정기",'
-            f'IFERROR(IF({pick}="{RECURRING_BULK_KEEP}","{base}",{pick}),'
+            f'IFERROR(IF({pick}={origin},"{base}",{pick}),'
             f'"{base}")))')
 
 
@@ -1183,12 +1200,12 @@ def _fill_recurring_review_sheet(ws, recurring: list[dict],
     """
     ws.merge_cells("A1:I1")
     guide = ws["A1"]
-    guide.value = ("정기지출의 분류·성격을 검토하세요. 성격은 "
-                   "정기/비정기/제외 — 개별 행(K열), 분류별 일괄(N열), "
-                   "전체 일괄(K4) 순으로 넓게 적용할 수 있습니다(넓은 쪽 "
-                   "우선). N열·K4를 고르면 표의 성격 칸이 즉시 바뀌어 "
-                   "보입니다. 고친 뒤 저장하고, '안내' 시트의 '확인 완료'"
-                   "(B2)를 '예'로 저장하면 이번 결과에 바로 반영됩니다.")
+    guide.value = ("정기지출의 분류·성격을 검토하세요. N열에는 각 분류의 "
+                   "현재 성격이 그대로 보입니다('혼합'=행마다 다름) — "
+                   "지난번에 적용한 상태가 유지되므로 바꿀 분류만 고르면 "
+                   "됩니다. 적용 우선순위: K4 전체 일괄 > N열 분류별 > "
+                   "K열 개별 행. 고친 뒤 저장하고, '안내' 시트의 '확인 "
+                   "완료'(B2)를 '예'로 저장하면 이번 결과에 바로 반영됩니다.")
     guide.font = Font(name=_FONT, bold=True, size=10, color="B36B00")
     guide.alignment = Alignment(horizontal="left", vertical="center",
                                 wrap_text=True)
@@ -1208,8 +1225,9 @@ def _fill_recurring_review_sheet(ws, recurring: list[dict],
     # '적용할 성격' 선택지 안내 (P열 안내 상자)
     guide_rows = [
         ("적용할 성격 안내", True),
-        ("변경 안 함 — 지금 값을 그대로 둡니다 (아무것도 바꾸지 않음)",
-         False),
+        ("N열에는 그 분류의 현재 성격이 보입니다 — 그대로 두면 아무것도 "
+         "바뀌지 않고, 값을 바꾼 분류만 전체 적용됩니다. '혼합'은 행마다 "
+         "성격이 다르다는 표시입니다.", False),
         ("정기 — 평균 월지출을 자동 추정해 자금계획 후보로 올립니다 "
          "(자동추정_지출목록에 등재. 실제 반영 여부는 그 파일의 반영/제외로"
          " 결정)", False),

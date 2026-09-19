@@ -928,8 +928,8 @@ def harvest_recurring_edits(workbook_path: Path) -> dict[str, dict]:
     성격 적용 우선순위: K4 전체 일괄 > 분류별 일괄(M·N열) > 개별 행.
     '비정기'는 '변동'과 같은 값으로 읽는다.
     """
-    from common import (RECURRING_BULK_MODES, RECURRING_CAT_NAME_COL,
-                        RECURRING_CAT_PICK_COL)
+    from common import (RECURRING_BULK_MODES, RECURRING_CAT_BASE_COL,
+                        RECURRING_CAT_NAME_COL, RECURRING_CAT_PICK_COL)
     edits: dict[str, dict] = {}
     try:
         from openpyxl import load_workbook
@@ -946,7 +946,7 @@ def harvest_recurring_edits(workbook_path: Path) -> dict[str, dict]:
             normalize_text(bulk_row[0] if bulk_row else None), "")
         cat_nature: dict[str, str] = {}
         rows = list(ws.iter_rows(min_row=6,
-                                 max_col=RECURRING_CAT_PICK_COL,
+                                 max_col=RECURRING_CAT_BASE_COL,
                                  values_only=True))
         for row in rows:
             cat = normalize_text(row[RECURRING_CAT_NAME_COL - 1]
@@ -955,7 +955,12 @@ def harvest_recurring_edits(workbook_path: Path) -> dict[str, dict]:
             pick = _normalize_nature(row[RECURRING_CAT_PICK_COL - 1]
                                      if len(row) >= RECURRING_CAT_PICK_COL
                                      else None)
-            if cat and pick:
+            # N열은 현재 성격을 보여주므로, 기준값(숨김 O열)과 다르게
+            # 바꾼 분류만 일괄 적용한다 ('혼합'은 기준 없음으로 취급)
+            base = _normalize_nature(row[RECURRING_CAT_BASE_COL - 1]
+                                     if len(row) >= RECURRING_CAT_BASE_COL
+                                     else None)
+            if cat and pick and pick != base:
                 cat_nature[cat] = pick
         for row in rows:
             name = normalize_text(row[1] if len(row) > 1 else None)
