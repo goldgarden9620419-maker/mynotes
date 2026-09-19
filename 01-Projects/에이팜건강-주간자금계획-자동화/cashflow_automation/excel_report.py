@@ -19,7 +19,8 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
 from common import (CONFIDENTIAL_MASK, RECURRING_BULK_CELL,
-                    RECURRING_BULK_KEEP, RECURRING_BULK_MODES)
+                    RECURRING_BULK_KEEP, RECURRING_CAT_NAME_COL,
+                    RECURRING_CAT_PICK_COL, RECURRING_NATURE_DISPLAY)
 
 EXPECTED_SHEETS = ["요약", "업데이트운영", "4주일별계획", "13주주별계획",
                    "정기지출분석", "주간계좌_붙여넣기", "계좌내역통합_RAW",
@@ -355,18 +356,28 @@ def _recurring_display(items: list[dict]) -> list[dict]:
                                             it.get("신뢰도"))
         if not d.get("분류"):
             d["분류"] = "성격확인필요"
-        if not d.get("성격"):
-            d["성격"] = "정기"
+        d["성격"] = RECURRING_NATURE_DISPLAY.get(
+            d.get("성격") or "정기", d.get("성격") or "정기")
         out.append(d)
     return out
 
 
-def add_recurring_controls(ws, last_row: int) -> None:
-    """정기지출분석 시트에 머리글 필터·성격 드롭다운·일괄 변경 셀을 단다.
+def _recurring_categories(items: list[dict]) -> list[str]:
+    """표시되는 분류 값 목록 (등장 순서, 중복 제거)."""
+    seen: list[str] = []
+    for it in items:
+        cat = str(it.get("분류") or "").strip() or "성격확인필요"
+        if cat not in seen:
+            seen.append(cat)
+    return seen
 
-    머리글 5행 / 자료 6행~ / 성격 K열 배치를 전제로 한다.
-    K4에서 '전체 정기'/'전체 변동'을 고르면 다음 반영 때 전 행에 적용된다
-    (개별 행 수정보다 우선).
+
+def add_recurring_controls(ws, last_row: int,
+                           categories: list[str] | None = None) -> None:
+    """정기지출분석 시트에 필터·성격 드롭다운·일괄 변경 컨트롤을 단다.
+
+    머리글 5행 / 자료 6행~ / 성격 K열 / 분류별 일괄 M·N열 배치 전제.
+    적용 우선순위: K4 전체 일괄 > 분류별 일괄(N열) > 개별 행(K열).
     """
     from openpyxl.cell.cell import MergedCell
     from openpyxl.worksheet.datavalidation import DataValidation
@@ -374,9 +385,9 @@ def add_recurring_controls(ws, last_row: int) -> None:
     last_row = max(last_row, 6)
     ws.auto_filter.ref = f"A5:K{last_row}"
 
-    nature_dv = DataValidation(type="list", formula1='"정기,변동,제외"',
+    nature_dv = DataValidation(type="list", formula1='"정기,비정기,제외"',
                                allow_blank=True)
-    nature_dv.error = "'정기', '변동', '제외'만 입력할 수 있습니다."
+    nature_dv.error = "'정기', '비정기', '제외'만 입력할 수 있습니다."
     nature_dv.showErrorMessage = True
     ws.add_data_validation(nature_dv)
     nature_dv.add(f"K6:K{last_row}")
@@ -392,13 +403,48 @@ def add_recurring_controls(ws, last_row: int) -> None:
         bulk.fill = PatternFill("solid", start_color="FFF2CC")
         bulk.font = Font(name=_FONT, bold=True, size=10)
         bulk.alignment = Alignment(horizontal="center")
-        choices = ",".join([RECURRING_BULK_KEEP, *RECURRING_BULK_MODES])
+        choices = f"{RECURRING_BULK_KEEP},전체 정기,전체 비정기"
         bulk_dv = DataValidation(type="list", formula1=f'"{choices}"',
                                  allow_blank=True)
         bulk_dv.error = f"{choices} 중에서만 고를 수 있습니다."
         bulk_dv.showErrorMessage = True
         ws.add_data_validation(bulk_dv)
         bulk_dv.add(RECURRING_BULK_CELL)
+
+    if not categories:
+        return
+    # 분류별 일괄 블록 (M·N열): 분류 하나를 통째로 정기/비정기/제외로
+    m, n = RECURRING_CAT_NAME_COL, RECURRING_CAT_PICK_COL
+    for c, header in ((m, "분류별 일괄"), (n, "적용할 성격")):
+        cell = ws.cell(row=5, column=c, value=header)
+        if not isinstance(cell, MergedCell):
+            cell.fill = _HEADER_FILL
+            cell.font = _HEADER_FONT
+            cell.alignment = Alignment(horizontal="center",
+                                       vertical="center")
+            cell.border = _BORDER
+    ws.column_dimensions[get_column_letter(m)].width = 20
+    ws.column_dimensions[get_column_letter(n)].width = 12
+    cat_dv = DataValidation(
+        type="list",
+        formula1=f'"{RECURRING_BULK_KEEP},정기,비정기,제외"',
+        allow_blank=True)
+    cat_dv.error = "변경 안 함, 정기, 비정기, 제외 중에서만 " \
+                   "고를 수 있습니다."
+    cat_dv.showErrorMessage = True
+    ws.add_data_validation(cat_dv)
+    for r, cat in enumerate(categories, start=6):
+        name_cell = ws.cell(row=r, column=m, value=cat)
+        if not isinstance(name_cell, MergedCell):
+            name_cell.font = _BODY_FONT
+            name_cell.border = _BORDER
+        pick = ws.cell(row=r, column=n, value=RECURRING_BULK_KEEP)
+        if not isinstance(pick, MergedCell):
+            pick.fill = PatternFill("solid", start_color="FFF2CC")
+            pick.font = _BODY_FONT
+            pick.alignment = Alignment(horizontal="center")
+            pick.border = _BORDER
+            cat_dv.add(pick.coordinate)
 
 
 # ---------------------------------------------------------------------------
@@ -685,18 +731,13 @@ ACTION_SKIP = "반영 안 함"
 
 
 def create_issue_workbook(issues: list[dict], out_path: Path,
-                          week_key: str = "", signature: str = "",
-                          recurring: list[dict] | None = None) -> Path:
+                          week_key: str = "", signature: str = "") -> Path:
     """확인필요 워크북. week_key/signature가 있으면 '확인 완료' 컨트롤을
     붙인다 — 검토 후 B2를 '예'로 바꿔 저장하면 다음 실행이 결과를 만든다.
 
     '정기지출 누락 의심' 행에는 '처리' 열(계획에 반영/반영 안 함)이 생겨
     항목별로 지시할 수 있다 — '계획에 반영'을 고르면 결과 생성 때 그
     날짜 지출로 자금계획에 들어간다.
-
-    recurring을 주면 '정기지출분석' 시트를 함께 담는다 — 분류·성격
-    (정기/변동/제외, K4 일괄 변경 포함)을 여기서 고치고 확인 완료하면
-    이번 결과 생성에 바로 반영된다.
     """
     wb = Workbook()
     ws = wb.active
@@ -708,9 +749,9 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         ws.merge_cells("A1:H1")
         guide = ws["A1"]
         guide.value = ("아래 항목을 검토하세요. '정기지출 누락 의심'은 '처리' "
-                       "열에서 계획에 반영/반영 안 함을 고르세요. "
-                       "'정기지출분석' 시트에서 분류·성격(정기/변동)도 고칠 "
-                       "수 있습니다(K4에서 일괄 변경). 끝나면 "
+                       "열에서 계획에 반영/반영 안 함을 고르세요. 함께 열리는 "
+                       "'정기지출분석' 파일에서 분류·성격(정기/비정기/제외)도 "
+                       "확인·수정하세요. 끝나면 "
                        "'확인 완료'(B2)를 '예'로 바꿔 저장하세요 — 다시 "
                        "실행하면(켜져 있으면 10분 안에 자동) 결과 3개가 "
                        "만들어집니다.")
@@ -767,13 +808,52 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
             ws.cell(row=r, column=_ITEM_COL, value=issue.get("지시항목"))
         for col in ("J", "K"):
             ws.column_dimensions[col].hidden = True
-    if recurring:
-        rec = wb.create_sheet("정기지출분석")
-        _title(rec, "월 정기지출 분석 — 확인 단계",
-               "분류(C)·성격(K: 정기/변동/제외)을 고치면 '확인 완료' 후 "
-               "이번 결과에 바로 반영됩니다. K4에서 전체 일괄 변경도 됩니다.")
-        _write_table(rec, _RECURRING_COLUMNS, _recurring_display(recurring))
-        add_recurring_controls(rec, 5 + len(recurring))
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(out_path)
+    wb.close()
+    return out_path
+
+
+RECURRING_REVIEW_PREFIX = "정기지출분석"
+
+
+def recurring_review_name(review_name: str) -> str:
+    """확인필요 파일명에서 짝이 되는 정기지출분석 파일명을 만든다."""
+    return review_name.replace("확인필요", RECURRING_REVIEW_PREFIX, 1)
+
+
+def create_recurring_review_workbook(recurring: list[dict],
+                                     out_path: Path,
+                                     week_key: str = "") -> Path:
+    """확인 단계용 별도 '정기지출분석' 파일.
+
+    확인필요 파일과 함께 열려, 분류·성격(정기/비정기/제외)을 검토·수정하는
+    전용 파일이다. 수정 후 저장하고 확인필요 파일의 '확인 완료'(B2)를
+    '예'로 저장하면 이번 결과 생성에 바로 반영된다.
+    성격 적용 우선순위: K4 전체 일괄 > 분류별 일괄(N열) > 개별 행(K열).
+    """
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "정기지출분석"
+    ws.merge_cells("A1:I1")
+    guide = ws["A1"]
+    week = f" (주차 {week_key})" if week_key else ""
+    guide.value = (f"정기지출의 분류·성격을 검토하세요{week}. 성격은 "
+                   "정기/비정기/제외 — 개별 행(K열), 분류별 일괄(N열), "
+                   "전체 일괄(K4) 순으로 넓게 적용할 수 있습니다(넓은 쪽 "
+                   "우선). 고친 뒤 저장하고, 확인필요 파일의 '확인 완료'"
+                   "(B2)를 '예'로 저장하면 이번 결과에 바로 반영됩니다.")
+    guide.font = Font(name=_FONT, bold=True, size=10, color="B36B00")
+    guide.alignment = Alignment(horizontal="left", vertical="center",
+                                wrap_text=True)
+    ws.row_dimensions[1].height = 34
+    _title(ws, "월 정기지출 분석 — 확인 단계",
+           "정기 = 평균 금액 자동 추정 대상 / 비정기 = 팀 지출예정 파일 "
+           "금액으로만 반영 / 제외 = 추정·정기지출 체크 모두 안 함")
+    _write_table(ws, _RECURRING_COLUMNS, _recurring_display(recurring))
+    add_recurring_controls(ws, 5 + len(recurring),
+                           categories=_recurring_categories(recurring))
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)

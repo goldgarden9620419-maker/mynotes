@@ -212,17 +212,24 @@ def test_확인후_결과생성_2단계(env):
     ok, week, sig = review_confirmed(reviews[0])
     assert not ok and week == "2026-W39" and sig
 
-    # 사용자가 '확인 완료'를 '예'로 저장 + 정기지출분석 시트의 성격 수정
-    # (짧은 이력의 테스트라 시트가 없으므로 사용자가 고친 모양으로 만든다)
+    # 사용자가 '확인 완료'를 '예'로 저장 + 별도 정기지출분석 검토 파일 수정
+    # (짧은 이력의 테스트라 파일이 없으므로 사용자가 고친 모양으로 만든다)
     wb = load_workbook(reviews[0])
     wb["확인필요"]["B2"] = "예"
-    rec = wb.create_sheet("정기지출분석")
+    wb.save(reviews[0])
+    wb.close()
+    from excel_report import recurring_review_name
+    from openpyxl import Workbook
+    recur_file = reviews[0].with_name(recurring_review_name(reviews[0].name))
+    rwb = Workbook()
+    rec = rwb.active
+    rec.title = "정기지출분석"
     rec.cell(row=5, column=2, value="정기지출명")
     rec.cell(row=5, column=11, value="성격")
     rec.cell(row=6, column=2, value="SKB")
-    rec.cell(row=6, column=11, value="변동")
-    wb.save(reviews[0])
-    wb.close()
+    rec.cell(row=6, column=11, value="비정기")     # 사용자 용어 = 내부 '변동'
+    rwb.save(recur_file)
+    rwb.close()
 
     # 2단계: 다시 실행하면 결과 3종이 만들어진다
     done = _run(cfg, state, mode="manual")
