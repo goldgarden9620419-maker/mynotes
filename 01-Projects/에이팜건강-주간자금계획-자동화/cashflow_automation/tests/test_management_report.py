@@ -59,6 +59,10 @@ def test_경영보고_생성과_수식(tmp_path):
     assert str(ws["C8"].value).startswith("=SUM(")
     # ② 4주(28일) 일별 표: 반영률 셀 참조 + 지출 SUMIFS + 시작잔액 연결
     assert "$F$12" in str(ws["C14"].value)
+    # 반영률(F12)은 드롭다운으로 고른다 (60~100%)
+    rate_dvs = [dv for dv in ws.data_validations.dataValidation
+                if "80%" in str(dv.formula1)]
+    assert rate_dvs and "F12" in str(rate_dvs[0].sqref)
     assert "SUMIFS" in str(ws["D14"].value)
     assert "$E$47" in str(ws["D14"].value)      # 지출 표 구간 참조
     assert str(ws["E14"].value).startswith("=$H$13")
