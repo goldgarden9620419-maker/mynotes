@@ -241,6 +241,13 @@ def test_확인후_결과생성_2단계(env):
     # 확인된 검토 쌍(확인필요·정기지출분석)은 그대로 남는다
     assert reviews[0].exists()
     assert recur_file.exists()
+
+    # 결과가 만들어진 뒤 다시 실행하면(입력 그대로, 이전 확인 완료 파일이
+    # 남아 있어도) 재사용하지 않고 항상 새 확인 단계부터 시작한다
+    again = _run(cfg, state, mode="manual", force=True)
+    assert again.status == STATUS_REVIEW_WAIT, again.message
+    state.reload()
+    assert state.state["last_run_status"] == STATUS_REVIEW_WAIT
     # 확인 파일의 정기지출분석 수정이 이번 실행에서 기준파일로 반영됐다
     import forecast_engine as fe
     ov = fe.load_recurring_overrides(cfg.base_workbook_path())
