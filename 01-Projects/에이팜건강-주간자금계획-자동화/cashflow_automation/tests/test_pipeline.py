@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """전체 파이프라인 통합 테스트 (필수파일 누락·재시도·중복실행·재열기 검증)."""
 import logging
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from openpyxl import load_workbook
 
@@ -249,6 +249,40 @@ def test_확인대기_주기검사가_완료를_감지한다(env):
     state.reload()
     assert state.state["last_run_status"] == STATUS_SUCCESS
     assert list(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
+
+
+def test_확인필요_처리지시_라운드트립(tmp_path):
+    """일자·내용·금액 분리 표기 + '처리'(계획에 반영) 지시 읽기."""
+    import excel_report as er
+    issues = [
+        {"구분": "계획 없는 실제출금", "은행": "농협",
+         "일자": date(2026, 9, 17), "내용": "결제대행사",
+         "금액": 123456, "원본파일": "농협.csv"},
+        {"구분": "정기지출 누락 의심", "일자": date(2026, 9, 23),
+         "내용": "METLIFE — 팀 지출예정 파일에서 찾지 못함",
+         "금액": 7641812, "원본파일": "자동추정_지출목록.xlsx",
+         "지시항목": "METLIFE"},
+    ]
+    path = tmp_path / "확인필요_test.xlsx"
+    er.create_issue_workbook(issues, path, week_key="2026-W39",
+                             signature="sig")
+    assert er.load_review_directives(path) == []   # 아직 지시 없음
+
+    wb = load_workbook(path)
+    ws = wb["확인필요"]
+    # 계획 없는 실제출금: 일자(E)·내용(F)·금액(G) 분리 표기
+    assert ws["E5"].value.date() == date(2026, 9, 17)
+    assert ws["F5"].value == "결제대행사" and ws["G5"].value == 123456
+    assert ws["I5"].value is None            # 누락 아닌 행엔 처리 칸 없음
+    # 누락 의심 행: 처리 기본 '반영 안 함'
+    assert ws["I6"].value == "반영 안 함"
+    ws["I6"] = "계획에 반영"
+    ws["G6"] = 8_000_000                     # 금액을 고치면 고친 값으로 반영
+    wb.save(path)
+    wb.close()
+
+    assert er.load_review_directives(path) == [
+        {"일자": date(2026, 9, 23), "금액": 8_000_000.0, "항목": "METLIFE"}]
 
 
 def test_일별_비고_지출내역_요약():

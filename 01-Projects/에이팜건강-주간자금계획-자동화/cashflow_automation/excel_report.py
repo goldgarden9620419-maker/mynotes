@@ -515,7 +515,8 @@ _MATCH_COLUMNS = [
 _ISSUE_COLUMNS = [
     ("구분", "구분", 18, "text"), ("팀명", "팀명", 13, "text"),
     ("은행", "은행", 10, "text"), ("요청ID", "요청ID", 18, "text"),
-    ("내용", "내용", 50, "text"), ("원본파일", "원본파일", 26, "text"),
+    ("일자", "일자", 11, "date"), ("내용", "내용", 42, "text"),
+    ("금액", "금액", 13, "money"), ("원본파일", "원본파일", 24, "text"),
 ]
 
 _CARD_COLUMNS = [
@@ -631,30 +632,42 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
 
 REVIEW_SHEET = "확인필요"
 _REVIEW_CONFIRM_CELL = "B2"    # 예/아니오 드롭다운
-_REVIEW_WEEK_CELL = "G2"       # 숨김: 주차 키
-_REVIEW_SIG_CELL = "H2"        # 숨김: 입력자료 서명
+_REVIEW_WEEK_CELL = "J2"       # 숨김: 주차 키
+_REVIEW_SIG_CELL = "K2"        # 숨김: 입력자료 서명
+_ACTION_COL = 9                # I: 처리 (정기지출 누락 → 계획에 반영 여부)
+_ITEM_COL = 10                 # J(숨김): 정기지출명 (지시 대상 식별)
+ACTION_INCLUDE = "계획에 반영"
+ACTION_SKIP = "반영 안 함"
 
 
 def create_issue_workbook(issues: list[dict], out_path: Path,
                           week_key: str = "", signature: str = "") -> Path:
     """확인필요 워크북. week_key/signature가 있으면 '확인 완료' 컨트롤을
-    붙인다 — 검토 후 B2를 '예'로 바꿔 저장하면 다음 실행이 결과를 만든다."""
+    붙인다 — 검토 후 B2를 '예'로 바꿔 저장하면 다음 실행이 결과를 만든다.
+
+    '정기지출 누락 의심' 행에는 '처리' 열(계획에 반영/반영 안 함)이 생겨
+    항목별로 지시할 수 있다 — '계획에 반영'을 고르면 결과 생성 때 그
+    날짜 지출로 자금계획에 들어간다.
+    """
     wb = Workbook()
     ws = wb.active
     ws.title = REVIEW_SHEET
     start = 1
     if week_key or signature:
         start = 4
-        ws.merge_cells("A1:F1")
+        from openpyxl.worksheet.datavalidation import DataValidation
+        ws.merge_cells("A1:H1")
         guide = ws["A1"]
-        guide.value = ("아래 항목을 검토한 뒤 '확인 완료'(B2)를 '예'로 바꾸고 "
-                       "저장하세요. 다시 실행하면(프로그램이 켜져 있으면 10분 "
-                       "안에 자동) 결과 파일 3개가 만들어집니다.")
+        guide.value = ("아래 항목을 검토하세요. '정기지출 누락 의심'은 '처리' "
+                       "열에서 계획에 반영/반영 안 함을 고르고, 끝나면 "
+                       "'확인 완료'(B2)를 '예'로 바꿔 저장하세요 — 다시 "
+                       "실행하면(켜져 있으면 10분 안에 자동) 결과 3개가 "
+                       "만들어집니다.")
         guide.font = Font(name="맑은 고딕", bold=True, size=10,
                           color="B36B00")
         guide.alignment = Alignment(horizontal="left", vertical="center",
                                     wrap_text=True)
-        ws.row_dimensions[1].height = 30
+        ws.row_dimensions[1].height = 34
         label = ws["A2"]
         label.value = "확인 완료"
         label.font = Font(name="맑은 고딕", bold=True, size=10)
@@ -663,7 +676,6 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         confirm.fill = PatternFill("solid", start_color="FFF2CC")
         confirm.font = Font(name="맑은 고딕", bold=True, size=10)
         confirm.alignment = Alignment(horizontal="center")
-        from openpyxl.worksheet.datavalidation import DataValidation
         dv = DataValidation(type="list", formula1='"아니오,예"',
                             allow_blank=True)
         dv.error = "'예' 또는 '아니오'만 입력할 수 있습니다."
@@ -675,14 +687,77 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         week_note.font = Font(name="맑은 고딕", size=9, color="888888")
         ws[_REVIEW_WEEK_CELL] = week_key
         ws[_REVIEW_SIG_CELL] = signature
-        ws.column_dimensions["G"].hidden = True
-        ws.column_dimensions["H"].hidden = True
     _write_table(ws, _ISSUE_COLUMNS, issues, start_row=start)
+    if start > 1:
+        # '처리' 열(G) + 숨김 데이터 열(H:일자, I:금액, J:항목)
+        head = ws.cell(row=start, column=_ACTION_COL, value="처리")
+        head.fill = _HEADER_FILL
+        head.font = _HEADER_FONT
+        head.alignment = Alignment(horizontal="center", vertical="center")
+        head.border = _BORDER
+        ws.column_dimensions[get_column_letter(_ACTION_COL)].width = 14
+        from openpyxl.worksheet.datavalidation import DataValidation
+        action_dv = DataValidation(
+            type="list", formula1=f'"{ACTION_INCLUDE},{ACTION_SKIP}"',
+            allow_blank=True)
+        action_dv.error = f"'{ACTION_INCLUDE}' 또는 '{ACTION_SKIP}'만 " \
+                          "입력할 수 있습니다."
+        action_dv.showErrorMessage = True
+        ws.add_data_validation(action_dv)
+        for r, issue in enumerate(issues, start=start + 1):
+            if not issue.get("지시항목"):
+                continue
+            cell = ws.cell(row=r, column=_ACTION_COL, value=ACTION_SKIP)
+            cell.fill = PatternFill("solid", start_color="FFF2CC")
+            cell.font = _BODY_FONT
+            cell.alignment = Alignment(horizontal="center")
+            cell.border = _BORDER
+            action_dv.add(cell.coordinate)
+            ws.cell(row=r, column=_ITEM_COL, value=issue.get("지시항목"))
+        for col in ("J", "K"):
+            ws.column_dimensions[col].hidden = True
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
     wb.close()
     return out_path
+
+
+def load_review_directives(path: Path) -> list[dict]:
+    """확인 완료된 확인필요 파일에서 '계획에 반영' 지시를 읽는다.
+
+    반환 행: {일자, 금액, 항목} — 정기지출 누락 의심 항목 중 사용자가
+    '처리' 열(I)을 '계획에 반영'으로 고른 것. 일자(E)·금액(G)을 표에서
+    고쳐 두면 고친 값으로 반영된다.
+    """
+    from common import parse_amount, parse_date
+    result: list[dict] = []
+    try:
+        wb = load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return result
+    try:
+        if REVIEW_SHEET not in wb.sheetnames:
+            return result
+        ws = wb[REVIEW_SHEET]
+        for row in ws.iter_rows(min_row=5, max_col=_ITEM_COL,
+                                values_only=True):
+            action = str(row[_ACTION_COL - 1] or "").strip() \
+                if len(row) >= _ACTION_COL else ""
+            if action != ACTION_INCLUDE:
+                continue
+            d = parse_date(row[4] if len(row) > 4 else None)       # E: 일자
+            amount = parse_amount(row[6] if len(row) > 6 else None) or 0.0
+            name = str(row[_ITEM_COL - 1] or "").strip() \
+                if len(row) >= _ITEM_COL else ""
+            if d is None or amount <= 0 or not name:
+                continue
+            result.append({"일자": d, "금액": amount, "항목": name})
+        return result
+    except Exception:
+        return result
+    finally:
+        wb.close()
 
 
 def review_confirmed(path: Path) -> tuple[bool, str, str]:

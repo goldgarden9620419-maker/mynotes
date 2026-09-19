@@ -227,6 +227,30 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                      ", ".join((a.get("내용") or "")[:30]
                                for a in var_dropped[:3]))
 
+        # 확인필요 2단계: 확인 완료된 파일이 있으면 그 안의 '처리' 지시
+        # (정기지출 누락 → 계획에 반영/반영 안 함)를 읽어 반영한다
+        review_dir = cfg.folder("review")
+        review_dir.mkdir(parents=True, exist_ok=True)
+        input_sig = file_validator.current_input_signature(cfg)
+        confirm_mode = cfg.get("options", "confirm_before_results",
+                               default=False)
+        confirmed_review = None
+        review_directives = []
+        if confirm_mode:
+            confirmed_review = excel_report.find_confirmed_review(
+                review_dir, week_key, input_sig)
+            if confirmed_review is not None:
+                review_directives = excel_report.load_review_directives(
+                    confirmed_review)
+        if review_directives:
+            adjustments += [
+                {"일자": d["일자"], "조정입금": 0.0, "조정지출": d["금액"],
+                 "내용": f"확인필요 지시 반영: {d['항목']} (정기지출 누락 보완)"}
+                for d in review_directives]
+            log.info("확인필요 지시 '계획에 반영' %d건 적용 (%s)",
+                     len(review_directives),
+                     ", ".join(d["항목"] for d in review_directives[:5]))
+
         # 7) 잔액과 예정·실제 대조 (20번 항목)
         balances, total_balance = bank_loader.summarize_balances(kept)
         match_targets = plan["countable"] + [
@@ -246,9 +270,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         for row in matched["unplanned"]:
             issues.append({"구분": "계획 없는 실제출금",
                            "은행": row.get("은행"),
-                           "내용": f"{row.get('실제출금일')} "
-                                  f"{row.get('실제금액', 0):,.0f}원 "
-                                  f"{row.get('거래처', '')}",
+                           "일자": row.get("실제출금일"),
+                           "내용": row.get("거래처", ""),
+                           "금액": row.get("실제금액", 0),
                            "원본파일": row.get("비고", "")})
 
         # 8) 4주·13주 자금계획 (21~23번 항목)
@@ -341,7 +365,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             d = adj.get("일자")
             if amt <= 0 or d is None or not (week_start <= d <= week_end):
                 continue
-            week_expenses.append({"일자": d, "구분": "자동추정",
+            gubun = ("확인반영" if "확인필요 지시" in (adj.get("내용") or "")
+                     else "자동추정")
+            week_expenses.append({"일자": d, "구분": gubun,
                                   "내용": adj.get("내용") or "",
                                   "금액": amt, "지급방법": ""})
         week_expenses.sort(key=lambda x: (x["일자"], -x["금액"]))
@@ -353,16 +379,25 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             plan["countable"], draft_aliases, chk_start, chk_end,
             variable_items=[i for i in recurring
                             if i.get("성격") == "변동"])
+        # 확인필요 지시로 이미 계획에 넣은 항목은 누락이 아니다
+        directive_keys = {(d["항목"], d["일자"]) for d in review_directives}
+        for c in recurring_check:
+            if c["누락"] and (c["항목"], c["예정일"]) in directive_keys:
+                c["누락"] = False
+                c["판정"] = "확인필요 지시로 반영"
         missing_chk = [c for c in recurring_check if c["누락"]]
         log.info("금주 정기지출 체크(%s~%s): %d건 중 누락 의심 %d건",
                  chk_start, chk_end, len(recurring_check), len(missing_chk))
         for c in missing_chk:
             issues.append({
                 "구분": "정기지출 누락 의심",
-                "내용": f"{c['예정일']} {c['항목']} "
-                       f"약 {c['예상금액']:,.0f}원 — 팀 지출예정 파일에서 "
-                       "찾지 못함 (재제출 요청 필요)",
-                "원본파일": forecast_engine.AUTO_DRAFT_FILE})
+                "일자": c["예정일"],
+                "내용": f"{c['항목']} — 팀 지출예정 파일에서 찾지 못함. "
+                       "'처리' 열에서 계획에 반영/반영 안 함 선택 "
+                       "(일자·금액을 고치면 고친 값으로 반영)",
+                "금액": c["예상금액"],
+                "원본파일": forecast_engine.AUTO_DRAFT_FILE,
+                "지시항목": c["항목"]})
         report = {
             "meta": {
                 "company": cfg.get("company_name", default="(주)에이팜건강"),
@@ -406,15 +441,11 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
 
         # 확인필요 파일은 06_확인필요 폴더에만 둔다 (05_결과는 결과물만).
         # confirm_before_results가 켜져 있으면 2단계로 실행한다:
-        # ① 확인필요만 만들어 열어 보여주고 대기 → 사용자가 '확인 완료'를
-        # '예'로 저장 → ② 다음 실행(10분 주기 자동 감지 포함)이 결과 생성
-        review_dir = cfg.folder("review")
-        review_dir.mkdir(parents=True, exist_ok=True)
-        input_sig = file_validator.current_input_signature(cfg)
-        review_path = None
-        if cfg.get("options", "confirm_before_results", default=False):
-            review_path = excel_report.find_confirmed_review(
-                review_dir, week_key, input_sig)
+        # ① 확인필요만 만들어 열어 보여주고 대기 → 사용자가 '처리' 지시와
+        # '확인 완료'='예'를 저장 → ② 다음 실행(10분 주기 자동 감지 포함)이
+        # 지시를 반영해 결과 생성
+        review_path = confirmed_review
+        if confirm_mode:
             if review_path is None:
                 review_path = unique_path(review_dir / issue_name)
                 excel_report.create_issue_workbook(
