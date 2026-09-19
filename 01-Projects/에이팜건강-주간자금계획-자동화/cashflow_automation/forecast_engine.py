@@ -91,10 +91,72 @@ _DRAFT_PREFIX = "정기지출 추정(자동 초안): "
 _DRAFT_HEADERS = ["일자", "정기지출명", "예상금액", "신뢰도", "반영", "메모"]
 # 은행 기록명과 취합파일 표기가 다른 대표 사례 (시트 생성 시 예시로 넣음)
 _ALIAS_SEED = [("NH기업카드", "농협카드")]
+GUIDE_SHEET = "안내"
+BULK_MODES = ("개별 관리", "전체 반영", "전체 제외")
+_BULK_ROW = 6            # 안내 시트: A6 라벨, B6 선택, D6 적용 기록
 
 
 def _draft_content(name: str, confidence: str) -> str:
     return f"{_DRAFT_PREFIX}{name} 신뢰도 {confidence or '중'}"
+
+
+def _ensure_bulk_control(wb, default_mode: str = "개별 관리") -> str:
+    """안내 시트의 '일괄 설정' 칸(반영/제외 일괄 스위치)을 보장한다.
+
+    B6에 '전체 반영'/'전체 제외'를 선택해 두면 다음 실행 때 자동추정
+    시트의 모든 행에 한 번에 적용된다(적용 기록은 D6). 반환: 현재 모드.
+    """
+    from openpyxl.styles import Font, PatternFill
+    from openpyxl.worksheet.datavalidation import DataValidation
+
+    ws = (wb[GUIDE_SHEET] if GUIDE_SHEET in wb.sheetnames
+          else wb.create_sheet(GUIDE_SHEET, 0))
+    label = ws.cell(row=_BULK_ROW, column=1)
+    mode_cell = ws.cell(row=_BULK_ROW, column=2)
+    if not normalize_text(label.value):
+        label.value = "일괄 설정"
+        label.font = Font(name="맑은 고딕", bold=True, size=10)
+        ws.cell(row=_BULK_ROW + 1, column=1,
+                value="'전체 반영' 또는 '전체 제외'를 선택해 두면 다음 실행 때 "
+                      "자동추정 시트의 모든 행에 한 번에 적용됩니다. "
+                      "적용된 뒤 개별 행을 다시 바꾸는 것은 자유입니다.")
+    if not normalize_text(mode_cell.value):
+        mode_cell.value = default_mode
+    mode_cell.fill = PatternFill("solid", start_color="FFF2CC")
+    mode_cell.font = Font(name="맑은 고딕", bold=True, size=10)
+    if not any("전체" in str(dv.formula1 or "")
+               for dv in ws.data_validations.dataValidation):
+        dv = DataValidation(type="list",
+                            formula1='"개별 관리,전체 반영,전체 제외"',
+                            allow_blank=True)
+        dv.error = "개별 관리 / 전체 반영 / 전체 제외 중 하나만 고를 수 있습니다."
+        dv.showErrorMessage = True
+        ws.add_data_validation(dv)
+        dv.add(mode_cell.coordinate)
+    mode = normalize_text(mode_cell.value)
+    return mode if mode in BULK_MODES else "개별 관리"
+
+
+def _apply_bulk_mode(wb, ws, mode: str) -> int:
+    """일괄 설정이 바뀌었으면 모든 행의 반영 열에 적용한다. 반환: 변경 행 수."""
+    from openpyxl.styles import Font
+
+    guide = wb[GUIDE_SHEET]
+    applied_cell = guide.cell(row=_BULK_ROW, column=4)
+    applied = str(applied_cell.value or "")
+    changed = 0
+    if mode in ("전체 반영", "전체 제외") and mode not in applied:
+        flag = "반영" if mode == "전체 반영" else "제외"
+        for r in range(2, ws.max_row + 1):
+            if ws.cell(row=r, column=1).value is None \
+                    and ws.cell(row=r, column=2).value is None:
+                continue
+            if ws.cell(row=r, column=5).value != flag:
+                ws.cell(row=r, column=5, value=flag)
+                changed += 1
+    applied_cell.value = f"(마지막 적용: {mode})"
+    applied_cell.font = Font(name="맑은 고딕", size=9, color="888888")
+    return changed
 
 
 def _style_draft_sheet(ws) -> None:
@@ -196,11 +258,12 @@ def _ensure_alias_sheet(wb) -> bool:
     return True
 
 
-def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
+def _create_draft_workbook(draft_path: Path, rows: list[dict],
+                           default_mode: str = "개별 관리") -> None:
     from openpyxl import Workbook
     wb = Workbook()
     guide = wb.active
-    guide.title = "안내"
+    guide.title = GUIDE_SHEET
     guide["A1"] = "자동추정 지출 목록 — 은행 이력에서 추정한 정기지출입니다."
     guide["A2"] = ("'자동추정' 시트에서 일자·예상금액을 고치거나 반영 열을 "
                    "'제외'로 바꾸면 다음 실행부터 그대로 적용됩니다.")
@@ -208,6 +271,7 @@ def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
                    "이미 있는 행(사용자 수정 포함)은 건드리지 않습니다.")
     guide["A4"] = ("'별칭' 시트: 은행 기록명과 취합파일 표기가 다르면 연결해 "
                    "두세요 — 같은 달 취합 입력이 있으면 자동추정이 제외됩니다.")
+    _ensure_bulk_control(wb, default_mode)
     ws = wb.create_sheet(AUTO_DRAFT_SHEET)
     ws.append(_DRAFT_HEADERS)
     for r in sorted(rows, key=lambda x: (x["일자"], -x["예상금액"])):
@@ -224,7 +288,8 @@ def _create_draft_workbook(draft_path: Path, rows: list[dict]) -> None:
 
 
 def migrate_auto_drafts(base_workbook: Path, draft_path: Path,
-                        overrides: dict[str, dict]) -> int:
+                        overrides: dict[str, dict],
+                        default_mode: str = "개별 관리") -> int:
     """기준파일 주간조정의 '자동 초안' 지출 행을 목록 파일로 이관한다.
 
     목록 파일이 이미 있으면 아무것도 하지 않는다. 이관 후 주간조정
@@ -247,7 +312,7 @@ def migrate_auto_drafts(base_workbook: Path, draft_path: Path,
         drafts.append({"일자": a["일자"], "정기지출명": name,
                        "예상금액": a["조정지출"], "신뢰도": conf,
                        "반영": flag, "메모": ""})
-    _create_draft_workbook(draft_path, drafts)
+    _create_draft_workbook(draft_path, drafts, default_mode)
     # 주간조정 시트에서 자동 초안 행 제거 (수동 조정·입금 추정은 유지)
     try:
         from openpyxl import load_workbook
@@ -270,25 +335,31 @@ def migrate_auto_drafts(base_workbook: Path, draft_path: Path,
 
 def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
                             base_date: date,
-                            horizon_days: int = 27) -> tuple[int, int]:
+                            horizon_days: int = 27,
+                            default_mode: str = "개별 관리"
+                            ) -> tuple[int, int]:
     """정기지출 분석 결과로 목록 파일을 갱신한다.
 
     같은 (정기지출명, 연·월) 행이 없으면 4주(기준일+27일) 안에서만
     추가하고 — 5주차 이후는 13주 계획이 정기지출을 직접 배분하므로
     여기 넣으면 이중 반영된다 — 이미 있는 행은 사용자 수정 보존을
     위해 건드리지 않는다. 기준일 이전의 지난 행은 정리한다.
+    안내 시트의 '일괄 설정'이 바뀌어 있으면 모든 행의 반영 열에
+    한 번에 적용한다 (이후 개별 수정은 다시 보존).
     반환: (추가 건수, 정리 건수)
     """
     from openpyxl import load_workbook
     draft_path = Path(draft_path)
     if not draft_path.exists():
-        _create_draft_workbook(draft_path, [])
+        _create_draft_workbook(draft_path, [], default_mode)
     wb = load_workbook(draft_path)
     if AUTO_DRAFT_SHEET not in wb.sheetnames:
         ws = wb.create_sheet(AUTO_DRAFT_SHEET)
         ws.append(_DRAFT_HEADERS)
     else:
         ws = wb[AUTO_DRAFT_SHEET]
+    mode = _ensure_bulk_control(wb, default_mode)
+    new_flag = "제외" if mode == "전체 제외" else "반영"
     existing: set[tuple] = set()
     pruned = 0
     for r in range(ws.max_row, 1, -1):
@@ -317,10 +388,11 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
                 break
             if base_date <= d and (name, y, m) not in existing:
                 ws.append([d, item.get("정기지출명"), round(amount),
-                           item.get("신뢰도") or "", "반영", ""])
+                           item.get("신뢰도") or "", new_flag, ""])
                 existing.add((name, y, m))
                 added += 1
             y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    _apply_bulk_mode(wb, ws, mode)
     _ensure_draft_dropdown(ws)  # 이관 초기 파일에도 드롭다운 보장
     _ensure_alias_sheet(wb)
     _sort_draft_rows(ws)        # 일자순 정렬로 보기 좋게
@@ -398,6 +470,142 @@ def load_auto_drafts(draft_path: Path, base_date: Optional[date] = None,
         return result, excluded
     finally:
         wb.close()
+
+
+def load_auto_draft_rows(draft_path: Path,
+                         start: Optional[date] = None,
+                         end: Optional[date] = None) -> list[dict]:
+    """목록 파일의 모든 행(반영·제외 포함)을 상태와 함께 읽는다."""
+    draft_path = Path(draft_path)
+    rows: list[dict] = []
+    if not draft_path.exists():
+        return rows
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(draft_path, data_only=True, read_only=True)
+    except Exception:
+        return rows
+    try:
+        if AUTO_DRAFT_SHEET not in wb.sheetnames:
+            return rows
+        for row in wb[AUTO_DRAFT_SHEET].iter_rows(min_row=2, max_col=5,
+                                                  values_only=True):
+            d = parse_date(row[0] if len(row) > 0 else None)
+            name = normalize_text(row[1] if len(row) > 1 else None)
+            amount = parse_amount(row[2] if len(row) > 2 else None) or 0.0
+            conf = normalize_text(row[3] if len(row) > 3 else None)
+            flag = normalize_text(row[4] if len(row) > 4 else None)
+            if d is None or not name or amount <= 0:
+                continue
+            if (start is not None and d < start) \
+                    or (end is not None and d > end):
+                continue
+            rows.append({"일자": d, "정기지출명": name, "예상금액": amount,
+                         "신뢰도": conf,
+                         "반영": "제외" if flag.startswith("제외") else "반영"})
+        return rows
+    finally:
+        wb.close()
+
+
+# 금주 정기지출 체크의 판정 문구
+CHECK_MISSING = "누락 의심 — 팀 재제출 요청"
+CHECK_TEAM_OK = "팀 계획 반영"
+CHECK_ACTUAL = "실제 금액 반영 (자동추정 제외)"
+CHECK_AUTO = "자동 반영 (평균 금액)"
+
+
+def weekly_recurring_check(draft_rows: list[dict],
+                           countable_plans: list[dict],
+                           aliases: dict[str, list[str]] | None,
+                           start: date, end: date,
+                           variable_items: list[dict] | None = None,
+                           name_threshold: int = 60) -> list[dict]:
+    """실행 구간(start~end)에 도래하는 정기지출의 팀 제출 여부를 대조한다.
+
+    자동추정 목록의 행(반영·제외)과 성격 '변동' 정기지출(목록에 없는
+    달 포함)을 대상으로, 같은 달 팀 지출예정(취합)에 이름이 이어지는
+    입력이 있는지 본다. '제외'·'변동'인데 팀 입력이 없으면 누락 의심 —
+    팀에 지출예정 재제출을 요청할 항목이다.
+    """
+    from rapidfuzz import fuzz
+
+    aliases = aliases or {}
+    plans = []
+    for p in countable_plans:
+        d = p.get("자금계획 반영일")
+        amt = p.get("예상금액") or 0.0
+        if d is None or amt <= 0:
+            continue
+        name = " ".join(str(p.get(k) or "") for k in ("거래처", "지출내용"))
+        plans.append((d, amt, name.lower()))
+
+    entries = []
+    seen: set[tuple] = set()
+    for row in draft_rows:
+        d = row.get("일자")
+        if d is None or not (start <= d <= end):
+            continue
+        entries.append({"예정일": d, "항목": row.get("정기지출명") or "",
+                        "예상금액": row.get("예상금액") or 0.0,
+                        "관리상태": row.get("반영") or "반영"})
+        seen.add((normalize_text(row.get("정기지출명")), d.year, d.month))
+    # 성격 '변동' 항목은 목록에서 지워져도 매월 도래하므로 직접 만든다
+    for item in (variable_items or []):
+        name = item.get("정기지출명") or ""
+        day = item.get("대표 지급일")
+        amount = item.get("평균 월지출") or 0.0
+        if not name or not day:
+            continue
+        y, m = start.year, start.month
+        while (y, m) <= (end.year, end.month):
+            d = date(y, m, min(int(day), calendar.monthrange(y, m)[1]))
+            key = (normalize_text(name), y, m)
+            if start <= d <= end and key not in seen:
+                entries.append({"예정일": d, "항목": name,
+                                "예상금액": amount, "관리상태": "변동"})
+                seen.add(key)
+            y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+
+    entries = sorted(entries, key=lambda x: (x["예정일"], -x["예상금액"]))
+    # 취합 입력 한 건은 정기지출 한 항목만 커버한다 — 유사도가 높은
+    # 짝부터 배정해, 같은 달 카드대금 한 건이 여러 카드 추정을 모두
+    # '제출됨'으로 만드는 착시를 막는다
+    pairs = []
+    for i, e in enumerate(entries):
+        names = [str(e["항목"]).lower()] + [
+            a.lower() for a in aliases.get(normalize_text(e["항목"]), [])]
+        for j, (d, _amt, plan_name) in enumerate(plans):
+            if (d.year, d.month) != (e["예정일"].year, e["예정일"].month):
+                continue
+            score = max(fuzz.partial_ratio(n, plan_name) for n in names)
+            if score >= name_threshold:
+                pairs.append((score, i, j))
+    pairs.sort(key=lambda p: -p[0])
+    hit_by_entry: dict[int, int] = {}
+    used_plans: set[int] = set()
+    for score, i, j in pairs:
+        if i in hit_by_entry or j in used_plans:
+            continue
+        hit_by_entry[i] = j
+        used_plans.add(j)
+
+    results = []
+    for i, e in enumerate(entries):
+        hit = plans[hit_by_entry[i]] if i in hit_by_entry else None
+        auto = e["관리상태"] == "반영"
+        if hit:
+            verdict = CHECK_ACTUAL if auto else CHECK_TEAM_OK
+        elif auto:
+            verdict = CHECK_AUTO
+        else:
+            verdict = CHECK_MISSING
+        results.append({**e,
+                        "팀제출일": hit[0] if hit else None,
+                        "팀제출금액": hit[1] if hit else None,
+                        "누락": verdict == CHECK_MISSING,
+                        "판정": verdict})
+    return results
 
 
 # ---------------------------------------------------------------------------

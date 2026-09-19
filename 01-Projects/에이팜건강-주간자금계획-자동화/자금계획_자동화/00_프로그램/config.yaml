@@ -44,6 +44,7 @@ forecast:
   minimum_cash_balance: 0
   online_history_weeks: 12
   online_recency_halflife: 4
+  auto_draft_default: 전체 제외
 matching:
   date_window_days: 3
   name_similarity_threshold: 70

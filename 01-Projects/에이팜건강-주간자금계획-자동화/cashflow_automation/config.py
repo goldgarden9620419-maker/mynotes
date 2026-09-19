@@ -58,6 +58,9 @@ DEFAULT_CONFIG: dict = {
         "online_history_weeks": 12,
         # 2026-09-18 사용자 결정: 승인대기·미확정도 지급일자 기준 반영
         "include_unconfirmed": True,
+        # 자동추정 목록을 새로 만들 때의 일괄 설정 초기값
+        # (개별 관리 / 전체 반영 / 전체 제외)
+        "auto_draft_default": "개별 관리",
     },
     "matching": {
         "date_window_days": 3,

@@ -47,6 +47,9 @@ forecast:
   online_history_weeks: 12
   online_recency_halflife: 4     # 최근 주 가중(반감기, 주). 0이면 단순 평균
   include_unconfirmed: true     # 승인대기·미확정도 지급일자 기준 반영
+  # 2026-09-19 사용자 결정: 자동추정은 전부 제외, 팀 지출예정 파일 기준
+  auto_draft_default: 전체 제외
+
 
 matching:
   date_window_days: 3           # 지급예정일 전후 허용 일수
