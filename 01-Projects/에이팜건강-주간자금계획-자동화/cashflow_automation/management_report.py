@@ -233,14 +233,19 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
              align="center", border=True)
     _put(ws, 13, 8, round(start_balance), fmt="#,##0")  # H13: 시작잔액(숨김)
 
+    holidays = report.get("holidays") or {}
     for i in range(_DAY_COUNT):
         row = _DAY_FIRST + i
         d = base_date + timedelta(days=i)
         src = daily_by_date.get(d, {})
         is_actual = actual_until is not None and d <= actual_until
+        # 주말·공휴일은 일자·요일을 붉은 글자로 (2026-09-20 사용자 요청)
+        day_color = "C00000" if (d.weekday() >= 5 or d in holidays) \
+            else "000000"
         _put(ws, row, 1, datetime.combine(d, dtime()), fmt="yyyy-mm-dd",
-             border=True)
-        _put(ws, row, 2, WEEKDAY_KO[d.weekday()], align="center", border=True)
+             border=True, color=day_color)
+        _put(ws, row, 2, WEEKDAY_KO[d.weekday()], align="center", border=True,
+             color=day_color)
         # 숨김 도우미: G=요일별 온라인 평균, H=확정·기타입금(수식 참조용)
         _put(ws, row, 7, round(weekday_avg.get(d.weekday(), 0)), fmt="#,##0")
         _put(ws, row, 8, round(src.get("확정·기타입금") or 0), fmt="#,##0")

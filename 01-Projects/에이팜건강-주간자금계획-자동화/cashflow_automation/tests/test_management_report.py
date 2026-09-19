@@ -36,6 +36,8 @@ def _report():
                       "자금부족 예상일": None},
             },
         },
+        "holidays": {date(2026, 9, 24): "추석 연휴",
+                     date(2026, 9, 25): "추석"},
         "week_expenses": [
             {"일자": date(2026, 9, 22), "구분": "물류팀",
              "내용": "한진택배 택배비", "금액": 500_000,
@@ -89,6 +91,12 @@ def test_경영보고_생성과_수식(tmp_path):
     # ⑤ 전달 메모 수식
     memo = str(ws["A152"].value)
     assert memo.startswith("=IF(") and "건강사업팀" in memo
+    # 주말·공휴일 일자는 붉은 글자 (9/24 추석=row17, 9/26 토=row19)
+    assert str(ws["A17"].font.color.rgb).endswith("C00000")
+    assert str(ws["B17"].font.color.rgb).endswith("C00000")
+    assert str(ws["A19"].font.color.rgb).endswith("C00000")
+    assert not str(ws["A15"].font.color.rgb                  # 화요일은 검정
+                   if ws["A15"].font.color else "").endswith("C00000")
     # 인쇄: A4 세로 폭 맞춤 + 빈 지출행 숨김 (자료 2행 + 예비 3행만 표시)
     assert ws.page_setup.orientation == "portrait"
     assert int(ws.page_setup.fitToWidth or 0) == 1
