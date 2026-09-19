@@ -131,50 +131,66 @@ def test_정기지출분석_수정_수확_반영(tmp_path):
     assert fe.update_override_sheet(base, edits) == 0
 
 
-def test_확인필요_정기지출분석_시트와_일괄변경_왕복(tmp_path):
-    """확인필요 파일의 정기지출분석 시트: 필터·드롭다운·K4 일괄 변경이
-    붙고, 수정(개별·일괄)이 수확돼 기준파일 정기지출분류로 흘러간다."""
+def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
+    """별도 정기지출분석 검토 파일: 필터·드롭다운·K4 전체 일괄·N열
+    분류별 일괄이 붙고, 수정이 수확돼 기준파일 정기지출분류로 흘러간다.
+    우선순위: 전체 일괄 > 분류별 일괄 > 개별 행. '비정기'='변동'."""
     from openpyxl import load_workbook
     import excel_report as er
 
-    out = tmp_path / "확인필요_20260921_0910.xlsx"
+    assert er.recurring_review_name("확인필요_20260921_0910.xlsx") \
+        == "정기지출분석_20260921_0910.xlsx"
+    out = tmp_path / "정기지출분석_20260921_0910.xlsx"
     recurring = [
         {"은행": "우리은행", "정기지출명": "SKB", "분류": "통신비",
          "발생개월수": 6, "거래건수": 6, "평균 월지출": 220000.0,
          "대표 지급일": 25, "신뢰도": "상", "성격": "정기"},
+        {"은행": "우리은행", "정기지출명": "KT", "분류": "통신비",
+         "발생개월수": 6, "거래건수": 6, "평균 월지출": 90000.0,
+         "대표 지급일": 26, "신뢰도": "상", "성격": "정기"},
         {"은행": "농협", "정기지출명": "코웨이", "분류": "렌탈료",
          "발생개월수": 6, "거래건수": 6, "평균 월지출": 113398.0,
-         "대표 지급일": 28, "신뢰도": "상", "성격": "정기"},
+         "대표 지급일": 28, "신뢰도": "상", "성격": "변동"},
     ]
-    er.create_issue_workbook([], out, week_key="2026-W39",
-                             signature="sig", recurring=recurring)
+    er.create_recurring_review_workbook(recurring, out, week_key="2026-W39")
 
     wb = load_workbook(out)
     ws = wb["정기지출분석"]
-    # 머리글(5행) 필터 + K4 일괄 변경 셀 + 성격 드롭다운
-    assert ws.auto_filter.ref == "A5:K7"
+    # 머리글(5행) 필터 + K4 전체 일괄 + 분류별 일괄 블록(M·N열)
+    assert ws.auto_filter.ref == "A5:K8"
     assert ws["K4"].value == "변경 안 함"
+    assert ws["K8"].value == "비정기"                 # 변동은 비정기로 표시
+    assert ws["M5"].value == "분류별 일괄"
+    assert [ws[f"M{r}"].value for r in (6, 7)] == ["통신비", "렌탈료"]
+    assert ws["N6"].value == "변경 안 함"
     formulas = [str(dv.formula1) for dv in ws.data_validations.dataValidation]
-    assert any("전체 변동" in f for f in formulas)
-    assert any("정기,변동,제외" in f for f in formulas)
-    assert ws["K6"].value == "정기"
-    # 사용자가 SKB만 '변동'으로 수정
-    ws["K6"] = "변동"
+    assert any("전체 비정기" in f for f in formulas)
+    assert any("정기,비정기,제외" in f for f in formulas)
+    # 개별 수정: SKB만 '비정기'로
+    ws["K6"] = "비정기"
     wb.save(out)
     wb.close()
-
     edits = fe.harvest_recurring_edits(out)
-    assert edits["SKB"]["성격"] == "변동"
-    assert edits["코웨이"]["성격"] == "정기"
+    assert edits["SKB"]["성격"] == "변동"             # 비정기 → 내부 변동
+    assert edits["KT"]["성격"] == "정기"
 
-    # K4 일괄 변경은 개별 값보다 우선한다
+    # 분류별 일괄: 통신비 전체를 '제외' → 개별 값보다 우선
     wb = load_workbook(out)
-    wb["정기지출분석"]["K4"] = "전체 변동"
+    wb["정기지출분석"]["N6"] = "제외"
     wb.save(out)
     wb.close()
     edits = fe.harvest_recurring_edits(out)
-    assert edits["SKB"]["성격"] == "변동"
-    assert edits["코웨이"]["성격"] == "변동"
+    assert edits["SKB"]["성격"] == "제외"
+    assert edits["KT"]["성격"] == "제외"
+    assert edits["코웨이"]["성격"] == "변동"          # 다른 분류는 그대로
+
+    # 전체 일괄(K4)은 분류별보다도 우선한다
+    wb = load_workbook(out)
+    wb["정기지출분석"]["K4"] = "전체 비정기"
+    wb.save(out)
+    wb.close()
+    edits = fe.harvest_recurring_edits(out)
+    assert all(e["성격"] == "변동" for e in edits.values())
 
     # 기준파일 반영 → 다음 오버라이드로 적용
     from openpyxl import Workbook
