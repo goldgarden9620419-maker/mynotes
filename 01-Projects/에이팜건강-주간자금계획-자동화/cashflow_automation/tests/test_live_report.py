@@ -69,7 +69,9 @@ def _fake_report(base: date) -> dict:
     return {
         "meta": {"base_date": base},
         "forecast": {"weekday_avg": {i: 1000000 for i in range(5)},
-                     "daily": daily, "weekly": weekly},
+                     "daily": daily, "weekly": weekly,
+                     "actual_until": base + timedelta(days=1),
+                     "start_balance": 5000000},
         "total_balance": 12345678,
         "history_stats": {"외부입금": 1, "외부출금": 2, "온라인입금": 3,
                           "주평균온라인": 4},
@@ -164,6 +166,12 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert raw["A50"].value is None
     # 분류·성격 검토는 별도 정기지출분석 파일에서 하므로 라이브에서 제거
     assert "정기지출분석" not in wb.sheetnames
+    # 13주 주별계획은 매주 볼 필요가 없어 숨김 (자료·수식은 유지)
+    assert wb["13주주별계획"].sheet_state == "hidden"
+    # 은행 내역으로 확인된 지난 일자(월·화)는 숨기고 그 뒤부터 보인다
+    assert daily.row_dimensions[6].hidden
+    assert daily.row_dimensions[7].hidden
+    assert not daily.row_dimensions[8].hidden
     # 지출계획 취합 시트가 새로 생성되어 자동 반영된다
     assert "지출계획_취합" in wb.sheetnames
     exp = wb["지출계획_취합"]
