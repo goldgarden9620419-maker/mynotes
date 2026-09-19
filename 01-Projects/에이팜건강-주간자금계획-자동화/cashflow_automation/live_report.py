@@ -609,7 +609,9 @@ def _fill_recurring(ws, recurring: list[dict]) -> None:
     for i in range(6, max(len(recurring) + 20, 90)):
         for c in range(1, 12):
             _set(ws, i, c, None)
+    from common import RECURRING_NATURE_DISPLAY
     for i, it in enumerate(recurring, start=6):
+        nature = it.get("성격") or "정기"
         values = [it.get("은행"), it.get("정기지출명"),
                   it.get("분류") or "성격확인필요",
                   it.get("발생개월수"), it.get("거래건수"),
@@ -618,14 +620,16 @@ def _fill_recurring(ws, recurring: list[dict]) -> None:
                   round(it.get("최대 월지출") or 0),
                   f"매월 {it.get('대표 지급일')}일 전후",
                   _CONF_LABEL.get(it.get("신뢰도"), it.get("신뢰도")),
-                  it.get("성격") or "정기"]
+                  RECURRING_NATURE_DISPLAY.get(nature, nature)]
         for c, v in enumerate(values, start=1):
             cell = _set(ws, i, c, v)
             if cell is not None and c in (6, 7, 8):
                 cell.number_format = _MONEY_WON
-    # 머리글 필터 + 성격 드롭다운 + K4 일괄 변경 (다음 실행 때 수확·반영)
-    from excel_report import add_recurring_controls
-    add_recurring_controls(ws, 5 + len(recurring))
+    # 필터 + 성격 드롭다운 + 일괄 변경(K4 전체 / N열 분류별) —
+    # 여기서 고치면 다음 실행 때 수확·반영된다
+    from excel_report import _recurring_categories, add_recurring_controls
+    add_recurring_controls(ws, 5 + len(recurring),
+                           categories=_recurring_categories(recurring))
 
 
 def _fill_raw(ws, bank_rows: list[dict]) -> None:

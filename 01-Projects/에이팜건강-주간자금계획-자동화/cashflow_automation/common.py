@@ -105,12 +105,20 @@ STATUS_PARTIAL = "PARTIAL"
 STATUS_CANCELLED = "CANCELLED"
 STATUS_REVIEW_WAIT = "REVIEW_WAIT"   # 확인필요 검토 대기 (결과 생성 전 단계)
 
-# 정기지출분석 시트 공통 배치: 머리글 5행, 자료 6행~, 성격 K열(11).
-# K4는 '성격 일괄 변경' 드롭다운 — 확인필요·라이브 양쪽에서 같은 위치라
-# 한 수확 함수(harvest_recurring_edits)가 두 파일을 모두 읽는다.
+# 정기지출분석 시트 공통 배치: 머리글 5행, 자료 6행~, 성격 K열(11),
+# 분류별 일괄 블록 M·N열(13·14). K4는 '성격 일괄 변경' 드롭다운.
+# 정기지출분석 파일·라이브 시트가 같은 배치라 한 수확 함수
+# (harvest_recurring_edits)가 두 파일을 모두 읽는다.
+# 우선순위: 전체 일괄(K4) > 분류별 일괄(N열) > 개별 행(K열).
+# 사용자 용어 '비정기'는 내부 '변동'과 같은 값으로 취급한다.
 RECURRING_BULK_CELL = "K4"
 RECURRING_BULK_KEEP = "변경 안 함"
-RECURRING_BULK_MODES = {"전체 정기": "정기", "전체 변동": "변동"}
+RECURRING_BULK_MODES = {"전체 정기": "정기",
+                        "전체 비정기": "변동", "전체 변동": "변동"}
+RECURRING_NATURE_ALIAS = {"비정기": "변동"}
+RECURRING_NATURE_DISPLAY = {"변동": "비정기"}
+RECURRING_CAT_NAME_COL = 13   # M: 분류명
+RECURRING_CAT_PICK_COL = 14   # N: 그 분류 전체에 적용할 성격
 
 # 은행 표준 열 (16번 항목)
 BANK_STD_COLUMNS = [

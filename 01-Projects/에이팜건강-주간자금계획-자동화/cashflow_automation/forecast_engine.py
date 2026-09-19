@@ -660,6 +660,14 @@ OVERRIDE_SHEET_NAME = "정기지출분류"
 _NATURE_VALUES = ("정기", "변동", "제외")
 
 
+def _normalize_nature(value) -> str:
+    """성격 값 정규화 — 사용자 용어 '비정기'는 내부 '변동'으로 통일."""
+    from common import RECURRING_NATURE_ALIAS
+    text = normalize_text(value)
+    text = RECURRING_NATURE_ALIAS.get(text, text)
+    return text if text in _NATURE_VALUES else ""
+
+
 HOLIDAY_SHEET = "공휴일"
 # 시트 최초 생성 시 채워 주는 공휴일 (사용자가 해마다 추가·수정)
 _HOLIDAY_SEED = [
@@ -750,9 +758,7 @@ def load_recurring_overrides(base_workbook: Path) -> dict[str, dict]:
             if not name:
                 continue
             cls = normalize_text(row[1] if len(row) > 1 else None)
-            nature = normalize_text(row[2] if len(row) > 2 else None)
-            if nature and nature not in _NATURE_VALUES:
-                nature = ""
+            nature = _normalize_nature(row[2] if len(row) > 2 else None)
             overrides[name] = {"분류": cls, "성격": nature or "정기"}
         return overrides
     finally:
@@ -760,14 +766,15 @@ def load_recurring_overrides(base_workbook: Path) -> dict[str, dict]:
 
 
 def harvest_recurring_edits(workbook_path: Path) -> dict[str, dict]:
-    """'정기지출분석' 시트에서 사용자 수정을 읽는다 (라이브·확인필요 공용).
+    """'정기지출분석' 시트에서 사용자 수정을 읽는다 (검토 파일·라이브 공용).
 
     사용자가 분류(3열)·성격(11열)을 고치면 이 함수가 수확해 기준파일
     '정기지출분류'에 저장한다. '성격확인필요'는 미입력 표시이므로 무시한다.
-    K4 '성격 일괄 변경'이 '전체 정기'/'전체 변동'이면 개별 값 대신
-    전 항목에 그 성격을 적용한다.
+    성격 적용 우선순위: K4 전체 일괄 > 분류별 일괄(M·N열) > 개별 행.
+    '비정기'는 '변동'과 같은 값으로 읽는다.
     """
-    from common import RECURRING_BULK_MODES
+    from common import (RECURRING_BULK_MODES, RECURRING_CAT_NAME_COL,
+                        RECURRING_CAT_PICK_COL)
     edits: dict[str, dict] = {}
     try:
         from openpyxl import load_workbook
@@ -782,16 +789,28 @@ def harvest_recurring_edits(workbook_path: Path) -> dict[str, dict]:
                                      max_col=11, values_only=True), (None,))
         bulk_nature = RECURRING_BULK_MODES.get(
             normalize_text(bulk_row[0] if bulk_row else None), "")
-        for row in ws.iter_rows(min_row=6, max_col=11, values_only=True):
+        cat_nature: dict[str, str] = {}
+        rows = list(ws.iter_rows(min_row=6,
+                                 max_col=RECURRING_CAT_PICK_COL,
+                                 values_only=True))
+        for row in rows:
+            cat = normalize_text(row[RECURRING_CAT_NAME_COL - 1]
+                                 if len(row) >= RECURRING_CAT_NAME_COL
+                                 else None)
+            pick = _normalize_nature(row[RECURRING_CAT_PICK_COL - 1]
+                                     if len(row) >= RECURRING_CAT_PICK_COL
+                                     else None)
+            if cat and pick:
+                cat_nature[cat] = pick
+        for row in rows:
             name = normalize_text(row[1] if len(row) > 1 else None)
             if not name:
                 continue
-            cls = normalize_text(row[2] if len(row) > 2 else None)
-            nature = normalize_text(row[10] if len(row) > 10 else None)
-            if cls == "성격확인필요":
-                cls = ""
-            if nature not in _NATURE_VALUES:
-                nature = ""
+            cls_raw = normalize_text(row[2] if len(row) > 2 else None)
+            cls = "" if cls_raw == "성격확인필요" else cls_raw
+            nature = _normalize_nature(row[10] if len(row) > 10 else None)
+            if cls_raw in cat_nature:
+                nature = cat_nature[cls_raw]
             if bulk_nature:
                 nature = bulk_nature
             if cls or nature:
