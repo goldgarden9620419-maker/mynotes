@@ -65,6 +65,7 @@ options:
   confirm_before_results: true
   confirm_wait_minutes: 30
   mask_confidential: false
+  archive_retention_days: 14
   create_pdf_summary: true
   backup_input_files: true
   open_output_folder_after_manual_run: true

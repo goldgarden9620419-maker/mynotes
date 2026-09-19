@@ -175,6 +175,33 @@ def archive_superseded_bank_files(cfg, bank_rows: list[dict]) -> int:
     return moved
 
 
+def purge_old_archive(cfg, keep_days: int = 14) -> int:
+    """99_지난자료에서 보관 기간이 지난 파일을 삭제한다 (빈 폴더 정리 포함).
+
+    지난자료는 잘못 옮겨진 파일을 되찾기 위한 임시 보관소이므로,
+    keep_days가 지난 파일은 지워 폴더가 계속 커지지 않게 한다
+    (2026-09-20 사용자 요청). keep_days=0이면 정리하지 않는다.
+    """
+    if keep_days <= 0:
+        return 0
+    archive_dir = cfg.folder("archive")
+    if not archive_dir.exists():
+        return 0
+    cutoff = datetime.now() - timedelta(days=keep_days)
+    removed = 0
+    for path in sorted(archive_dir.rglob("*"), reverse=True):
+        try:
+            if path.is_file():
+                if datetime.fromtimestamp(path.stat().st_mtime) < cutoff:
+                    path.unlink()
+                    removed += 1
+            elif path.is_dir() and not any(path.iterdir()):
+                path.rmdir()
+        except OSError:
+            continue
+    return removed
+
+
 def archive_old_outputs(cfg, keep_days: int = 35) -> int:
     """오래된 결과물을 99_지난자료로 이동한다. 기존 결과물은 지우지 않는다."""
     output_dir = cfg.folder("output")
