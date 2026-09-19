@@ -176,9 +176,16 @@ def _fill_summary(ws, report: dict, base_date: date, stats: dict) -> None:
                 _set(ws, r, c, None)
 
 
+ETC_HEADER = "조정·추정 지출"   # 자동이체 + 주간조정·자동추정·확인지시 합
+
+
 def _fill_daily(ws, forecast: dict, base_date: date,
                 run_date: Optional[date] = None) -> None:
     daily_by_date = {r["일자"]: r for r in forecast.get("daily", [])}
+    # G열 머리글을 정확한 이름으로 (2026-09-20 사용자 요청: 기타지출 → 조정·추정 지출)
+    if str(ws.cell(row=5, column=7).value or "").strip() in ("기타지출",
+                                                             ETC_HEADER):
+        _set(ws, 5, 7, ETC_HEADER)
     # 비고 열 위치는 머리글(5행)에서 찾는다 (기본 K열)
     note_col = 11
     for c in range(1, 21):
@@ -301,6 +308,9 @@ def _outline_exec_window(ws, note_col: int, base_date: date,
 
 def _fill_weekly(ws, forecast: dict, base_date: date) -> None:
     weekly = forecast.get("weekly", [])
+    if str(ws.cell(row=5, column=7).value or "").strip() in ("기타지출",
+                                                             ETC_HEADER):
+        _set(ws, 5, 7, ETC_HEADER)
     for w in range(13):
         r = 6 + w
         w_start = base_date + timedelta(weeks=w)
