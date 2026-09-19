@@ -660,6 +660,74 @@ OVERRIDE_SHEET_NAME = "정기지출분류"
 _NATURE_VALUES = ("정기", "변동", "제외")
 
 
+HOLIDAY_SHEET = "공휴일"
+# 시트 최초 생성 시 채워 주는 공휴일 (사용자가 해마다 추가·수정)
+_HOLIDAY_SEED = [
+    (date(2026, 9, 24), "추석 연휴"),
+    (date(2026, 9, 25), "추석"),
+    (date(2026, 9, 26), "추석 연휴"),
+    (date(2026, 10, 3), "개천절"),
+    (date(2026, 10, 5), "개천절 대체공휴일"),
+    (date(2026, 10, 9), "한글날"),
+    (date(2026, 12, 25), "성탄절"),
+    (date(2027, 1, 1), "신정"),
+]
+
+
+def ensure_holiday_sheet(base_workbook: Path) -> int:
+    """기준파일에 '공휴일' 시트를 만들고 기본 공휴일을 채운다.
+
+    이미 있으면 건드리지 않는다(사용자 관리). 추가된 행 수를 돌려준다.
+    """
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(base_workbook)
+    except Exception:
+        return 0
+    try:
+        if HOLIDAY_SHEET in wb.sheetnames:
+            return 0
+        ws = wb.create_sheet(HOLIDAY_SHEET)
+        ws.append(["일자", "이름"])
+        ws.append(["(안내) 해마다 설날·추석·임시공휴일 등을 여기에 추가하세요. "
+                   "일자·요일이 결과물에서 붉은 글자로 표시됩니다.", ""])
+        for d, name in _HOLIDAY_SEED:
+            ws.append([d, name])
+        ws.column_dimensions["A"].width = 14
+        ws.column_dimensions["B"].width = 24
+        for row in ws.iter_rows(min_row=3, max_col=1):
+            row[0].number_format = "yyyy-mm-dd"
+        wb.save(base_workbook)
+        return len(_HOLIDAY_SEED)
+    finally:
+        wb.close()
+
+
+def load_holidays(base_workbook: Path) -> dict[date, str]:
+    """'공휴일' 시트: 일자 → 이름."""
+    result: dict[date, str] = {}
+    base_workbook = Path(base_workbook)
+    if not base_workbook.exists():
+        return result
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(base_workbook, data_only=True, read_only=True)
+    except Exception:
+        return result
+    try:
+        if HOLIDAY_SHEET not in wb.sheetnames:
+            return result
+        for row in wb[HOLIDAY_SHEET].iter_rows(min_row=2, max_col=2,
+                                               values_only=True):
+            d = parse_date(row[0] if len(row) > 0 else None)
+            if d is None:
+                continue
+            result[d] = normalize_text(row[1] if len(row) > 1 else "")
+        return result
+    finally:
+        wb.close()
+
+
 def load_recurring_overrides(base_workbook: Path) -> dict[str, dict]:
     """기준파일 '정기지출분류' 시트: 정기지출명 → {분류, 성격}.
 

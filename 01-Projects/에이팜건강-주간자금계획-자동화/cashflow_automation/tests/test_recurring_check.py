@@ -49,6 +49,30 @@ def test_전체제외_기본값이면_생성부터_제외(tmp_path):
     wb.close()
 
 
+def test_공휴일_시트_생성과_로드(tmp_path):
+    """기준파일 '공휴일' 시트: 최초 생성 시 기본 공휴일을 채우고,
+    이미 있으면 사용자 관리분을 그대로 읽는다."""
+    from openpyxl import Workbook
+    base = tmp_path / "기준.xlsx"
+    wb = Workbook()
+    wb.active.title = "카드결제기준"
+    wb.save(base)
+    wb.close()
+
+    assert fe.ensure_holiday_sheet(base) > 0
+    assert fe.ensure_holiday_sheet(base) == 0      # 재실행 시 안 건드림
+    holidays = fe.load_holidays(base)
+    assert holidays[date(2026, 9, 25)] == "추석"
+    assert date(2026, 10, 9) in holidays
+
+    # 사용자가 임시공휴일을 추가하면 그대로 읽힌다
+    wb = load_workbook(base)
+    wb[fe.HOLIDAY_SHEET].append([date(2026, 11, 3), "임시공휴일"])
+    wb.save(base)
+    wb.close()
+    assert fe.load_holidays(base)[date(2026, 11, 3)] == "임시공휴일"
+
+
 def test_주말실행이면_대표보고_일별전망은_차주(tmp_path):
     """display_week_start를 차주 월요일로 주면 금주일별이 차주 월~금."""
     fc = fe.build_forecast([], BASE, 1_000_000, [], [], [], [0.8], 0.8,

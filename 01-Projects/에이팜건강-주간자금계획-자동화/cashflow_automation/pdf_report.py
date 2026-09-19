@@ -142,8 +142,16 @@ def create_pdf_summary(report: dict, out_path: Path) -> Path:
     day_rows = [["일자"] + [f"반영률 {int(r * 100)}% 기말잔액"
                           for r in report_rates]]
     shortage_cells = []
+    holidays = report.get("holidays") or {}
+    offday_rows = []
     for i, (d, _bal, _state) in enumerate(base_days, start=1):
-        row = [f"{_fmt_date(d)} ({'월화수목금토일'[d.weekday()]})"]
+        name = holidays.get(d, "")
+        day_label = f"{_fmt_date(d)} ({'월화수목금토일'[d.weekday()]})"
+        if name:
+            day_label += f" {name}"
+        if d.weekday() >= 5 or d in holidays:
+            offday_rows.append(i)
+        row = [day_label]
         for j, rate in enumerate(report_rates, start=1):
             days = scenarios[rate].get("금주일별", [])
             bal = days[i - 1][1] if len(days) >= i else None
@@ -157,6 +165,9 @@ def create_pdf_summary(report: dict, out_path: Path) -> Path:
     for col, row in shortage_cells:
         dt.setStyle(TableStyle([("BACKGROUND", (col, row), (col, row),
                                  colors.HexColor("#FFC7CE"))]))
+    for r in offday_rows:      # 주말·공휴일 일자는 붉은 글자
+        dt.setStyle(TableStyle([("TEXTCOLOR", (0, r), (0, r),
+                                 colors.HexColor("#C00000"))]))
     story.append(dt)
     story.append(Spacer(1, 2 * mm))
     story.append(Paragraph(

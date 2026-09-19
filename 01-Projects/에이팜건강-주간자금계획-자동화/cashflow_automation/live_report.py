@@ -82,7 +82,7 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_config(wb["설정및분류"], forecast)
     _fill_summary(wb["요약"], report, base_date, stats)
     _fill_daily(wb["4주일별계획"], forecast, base_date,
-                meta.get("run_date"))
+                meta.get("run_date"), holidays=report.get("holidays"))
     _fill_weekly(wb["13주주별계획"], forecast, base_date)
     _fill_account_scenario(wb, report.get("account_scenario"))
     _fill_expense(wb, report.get("integrated_masked", []))
@@ -180,7 +180,10 @@ ETC_HEADER = "조정·추정 지출"   # 자동이체 + 주간조정·자동추�
 
 
 def _fill_daily(ws, forecast: dict, base_date: date,
-                run_date: Optional[date] = None) -> None:
+                run_date: Optional[date] = None,
+                holidays: Optional[dict] = None) -> None:
+    from openpyxl.styles import Font
+    holidays = holidays or {}
     daily_by_date = {r["일자"]: r for r in forecast.get("daily", [])}
     # G열 머리글을 정확한 이름으로 (2026-09-20 사용자 요청: 기타지출 → 조정·추정 지출)
     if str(ws.cell(row=5, column=7).value or "").strip() in ("기타지출",
@@ -205,7 +208,14 @@ def _fill_daily(ws, forecast: dict, base_date: date,
         acell = _set(ws, row, 1, datetime.combine(d, dtime()))
         if acell is not None:
             acell.number_format = "yyyy-mm-dd"
-        _set(ws, row, 2, WEEKDAY_KO[d.weekday()])
+        wcell = _set(ws, row, 2, WEEKDAY_KO[d.weekday()])
+        # 주말·공휴일은 일자·요일을 붉은 글자로
+        if d.weekday() >= 5 or d in holidays:
+            for cell in (acell, wcell):
+                if cell is not None:
+                    cell.font = Font(name=cell.font.name or "맑은 고딕",
+                                     size=cell.font.sz or 10,
+                                     bold=cell.font.b, color="C00000")
         src = daily_by_date.get(d)
         vals = [None, None, None, None]
         if src:

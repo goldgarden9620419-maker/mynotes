@@ -187,6 +187,11 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.base_workbook_path(), recurring)
         if added:
             log.info("정기지출분류 시트에 새 항목 %d개 추가 (기준파일)", added)
+        # 공휴일 시트: 주말·공휴일을 결과물에서 붉은 글자로 표시하기 위함
+        if forecast_engine.ensure_holiday_sheet(cfg.base_workbook_path()):
+            log.info("기준파일에 '공휴일' 시트 생성 (기본 공휴일 채움 — "
+                     "해마다 추가하세요)")
+        holidays = forecast_engine.load_holidays(cfg.base_workbook_path())
         recurring_projectable = [i for i in recurring
                                  if i.get("성격", "정기") == "정기"]
         # 자동추정은 별도 목록 파일(04_기준파일/자동추정_지출목록.xlsx)로
@@ -442,6 +447,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             "week_expenses": week_expenses,
             "recurring_check": recurring_check,
             "receipt_rates": rates,
+            "holidays": holidays,
             "stability_target": cfg.get("forecast", "minimum_cash_balance",
                                         default=0),
             "match_results": matched["results"],
