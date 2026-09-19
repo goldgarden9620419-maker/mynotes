@@ -1624,7 +1624,8 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
         if day.get("실적"):
             rows.append({"일자": d, "요일": day.get("요일"), "실적": True,
                          "잔액": dict(bal) if d == actual_until else None,
-                         "입금": {}, "이체": {}, "비고": "실적 구간"})
+                         "입금": {}, "지출": None, "이체": {},
+                         "비고": "실적 구간"})
             continue
         inflow = ((day.get("온라인 예상입금") or 0)
                   + (day.get("확정·기타입금") or 0))
@@ -1652,7 +1653,7 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
             if need > 0:
                 note = f"전 계좌 소진 — 부족 {need:,.0f}원"
         rows.append({"일자": d, "요일": day.get("요일"), "실적": False,
-                     "잔액": dict(bal), "입금": deposits,
+                     "잔액": dict(bal), "입금": deposits, "지출": outflow,
                      "이체": transfers, "비고": note})
     return {"accounts": accounts, "shares": shares, "rows": rows}
 
