@@ -469,12 +469,23 @@ def _apply_plan_date(row: dict, card_date_fn, issues: list[dict]) -> None:
 # 대외비 마스킹
 # ---------------------------------------------------------------------------
 
-def mask_confidential_rows(integrated: list[dict]) -> list[dict]:
+def mask_confidential_rows(integrated: list[dict],
+                           enabled: bool = True) -> list[dict]:
     """통합 시트 표시용: 대외비 행을 분류·총액 집계로 치환한다.
 
     일반 행은 그대로 두고, 대외비 행은 (분류, 반영일, 지급방법, 반영상태)
     단위 합계 행으로 바꾼다. 거래처·지출내용·비고는 노출하지 않는다.
+
+    enabled=False면(결과물을 대표이사·관리자만 보는 운영 —
+    2026-09-19 사용자 결정) 대외비 행도 개별 행 그대로, 거래처·지출내용·
+    신청자를 전부 표시한다.
     """
+    if not enabled:
+        shown = list(integrated)
+        shown.sort(key=lambda r: (r.get("자금계획 반영일")
+                                  or r.get("지급예정일") or date.max,
+                                  str(r.get("요청ID") or "")))
+        return shown
     normal = [r for r in integrated if not r.get("confidential")]
     conf = [r for r in integrated if r.get("confidential")]
     grouped: dict[tuple, dict] = {}

@@ -84,6 +84,9 @@ DEFAULT_CONFIG: dict = {
         "confirm_before_results": False,
         # '지금 실행' 창이 확인 완료 저장을 기다리는 최대 시간(분, 0=대기 안 함)
         "confirm_wait_minutes": 30,
+        # 대외비 가림: False면 결과물에 대외비 상세(거래처·내용·신청자)를
+        # 그대로 표시 (결과물을 대표이사·관리자만 볼 때)
+        "mask_confidential": True,
         "create_pdf_summary": True,
         "create_live_workbook": True,
         "live_template_name": "자금계획_라이브템플릿.xlsx",

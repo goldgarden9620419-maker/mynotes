@@ -302,6 +302,35 @@ def test_확인감시_틱이_저장을_감지한다(env):
     assert state.state["last_run_status"] == STATUS_SUCCESS
 
 
+def test_대외비_가림_해제시_상세_표시(env):
+    """mask_confidential=False: 대외비도 거래처·신청자 상세로 노출."""
+    cfg = env
+    cfg.data.setdefault("options", {})["mask_confidential"] = False
+    make_full_inputs(cfg, NOW)
+    state = StateManager(cfg.state_dir)
+    assert _run(cfg, state).status == STATUS_SUCCESS
+
+    out = next(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
+    wb = load_workbook(out, read_only=True)
+    try:
+        texts = " ".join(str(v)
+                         for row in wb["주간보고"].iter_rows(values_only=True)
+                         for v in row if v is not None)
+    finally:
+        wb.close()
+    assert "가상급여처리" in texts        # 대외비 거래처가 그대로 보인다
+
+    # 통합 행에도 개별 대외비 행이 유지된다 (집계행 아님)
+    import team_loader
+    rows = [{"confidential": True, "거래처": "엠에스바이오텍",
+             "지출내용": "외상매입금", "신청자": "김정원",
+             "예상금액": 20_000_000, "반영상태": "정상반영",
+             "자금계획 반영일": date(2026, 9, 23), "요청ID": "경영-1"}]
+    shown = team_loader.mask_confidential_rows(rows, enabled=False)
+    assert shown[0]["거래처"] == "엠에스바이오텍"
+    assert shown[0]["신청자"] == "김정원"
+
+
 def test_확인필요_처리지시_라운드트립(tmp_path):
     """일자·내용·금액 분리 표기 + '처리'(계획에 반영) 지시 읽기."""
     import excel_report as er

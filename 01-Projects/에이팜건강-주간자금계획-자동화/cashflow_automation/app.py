@@ -333,7 +333,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                   if p.get("자금계획 반영일")
                   and base_date <= p["자금계획 반영일"] <= horizon_end]
         integrated_masked = team_loader.mask_confidential_rows(
-            plan["integrated"])
+            plan["integrated"],
+            enabled=cfg.get("options", "mask_confidential", default=True))
         # 에이팜 관련 지출은 4주일별계획 비고 대신 전용 시트로 분리
         apalm_expenses = forecast_engine.collect_apalm_expenses(
             integrated_masked, adjustments, apalm_marked)
@@ -621,11 +622,14 @@ def _open_file(path) -> None:
 
 
 def _annotate_daily_notes(daily_rows: list[dict], masked_rows: list[dict],
-                          max_items: int = 3) -> None:
+                          max_items: int = 6) -> None:
     """4주일별계획 비고란용: 그날 반영된 지출 내역 요약을 daily 행에 넣는다.
 
-    대외비 행은 분류·금액만 표시한다(집계행이라 거래처가 이미 가려짐).
+    금액 큰 순으로 나열해 큰 지출이 '외 N건'에 묻히지 않게 한다.
+    대외비 가림이 켜져 있으면 집계행이라 분류·금액만 보이고, 꺼져
+    있으면(대표·관리자 전용 운영) 거래처가 그대로 보인다.
     """
+    from common import CONFIDENTIAL_MASK
     by_date: dict = {}
     for r in masked_rows:
         if r.get("반영상태") != REFLECT_OK:
@@ -636,21 +640,24 @@ def _annotate_daily_notes(daily_rows: list[dict], masked_rows: list[dict],
         if d is None:
             continue
         amount = r.get("예상금액") or 0
-        if r.get("confidential"):
+        vendor = r.get("거래처") or ""
+        if r.get("confidential") and vendor in ("", CONFIDENTIAL_MASK):
+            # 가림이 켜진 집계행: 분류·금액만
             label = f"{r.get('지출내용') or '대외비'} {amount:,.0f}"
         else:
             # 에이팜 관련은 '에이팜 지출예정' 시트에서만 상세를 보여준다
             if forecast_engine.mentions_apalm(r.get("거래처"),
                                               r.get("지출내용")):
                 continue
-            subject = (r.get("거래처") or r.get("지출내용")
-                       or r.get("팀명") or "")
+            subject = (vendor or r.get("지출내용") or r.get("팀명") or "")
             label = f"{subject} {amount:,.0f}"
-        by_date.setdefault(d, []).append(label)
+        by_date.setdefault(d, []).append((amount, label))
     for row in daily_rows:
         if row.get("실적"):
             continue  # 지난 날짜는 실제 입출금 실적 표시를 유지한다
-        labels = by_date.get(row.get("일자")) or []
+        pairs = sorted(by_date.get(row.get("일자")) or [],
+                       key=lambda p: -p[0])
+        labels = [p[1] for p in pairs]
         text = ", ".join(labels[:max_items])
         if len(labels) > max_items:
             text += f" 외 {len(labels) - max_items}건"
