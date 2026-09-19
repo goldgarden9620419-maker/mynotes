@@ -200,6 +200,19 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, 12, 5, "입금 반영률", bold=True, color="FFFFFF")
     _put(ws, 12, 6, rate, fill=_EDIT_FILL, fmt="0%", align="center",
          border=True)
+    # 라이브 파일처럼 드롭다운으로 반영률을 고른다 (고르면 즉시 재계산)
+    from openpyxl.worksheet.datavalidation import DataValidation
+    rate_options = sorted(report.get("receipt_rates")
+                          or [0.6, 0.7, 0.8, 0.9, 1.0])
+    rate_dv = DataValidation(
+        type="list",
+        formula1='"' + ",".join(f"{int(round(r * 100))}%"
+                                for r in rate_options) + '"',
+        allow_blank=True)
+    rate_dv.error = "목록에 있는 반영률만 선택할 수 있습니다."
+    rate_dv.showErrorMessage = True
+    ws.add_data_validation(rate_dv)
+    rate_dv.add(_RATE_CELL.replace("$", ""))
     for c, head in enumerate(("일자", "요일", "입금", "지출", "예상잔액",
                               "상태"), start=1):
         _put(ws, 13, c, head, bold=True, color="FFFFFF", fill=_HEAD_FILL,
