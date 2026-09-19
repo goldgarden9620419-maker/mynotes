@@ -752,8 +752,116 @@ ACTION_INCLUDE = "계획에 반영"
 ACTION_SKIP = "반영 안 함"
 
 
+# 지난 확인 이후 새로 생긴 항목의 강조색 (주황)
+NEW_ITEM_FILL = PatternFill("solid", start_color="FFE699")
+
+
+def _norm_sig(values) -> tuple:
+    """비교용 정규화: 날짜는 ISO 문자열, 금액은 반올림 정수로 통일."""
+    out = []
+    for v in values:
+        if isinstance(v, datetime):
+            v = v.date()
+        if isinstance(v, date):
+            out.append(v.isoformat())
+        elif isinstance(v, (int, float)):
+            out.append(str(int(round(v))))
+        else:
+            out.append(str(v or "").strip())
+    return tuple(out)
+
+
+def _issue_sig(issue: dict) -> tuple:
+    return _norm_sig(issue.get(k) for k in
+                     ("구분", "팀명", "은행", "요청ID", "일자", "내용",
+                      "금액", "원본파일"))
+
+
+def review_snapshot(path: Path) -> dict | None:
+    """지난 확인 파일에서 '무엇을 보여줬는지'를 읽는다 (새 항목 감지용).
+
+    반환: {"issues": {서명…} 또는 None(시트 없음), "recurring": {이름…},
+    "draft": {(일자, 이름)…}} — 시트가 없던 항목은 None으로 두어
+    비교(강조)를 건너뛴다.
+    """
+    from common import DRAFT_REVIEW_SHEET
+    try:
+        wb = load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return None
+    try:
+        snap: dict = {"issues": None, "recurring": None, "draft": None}
+        if REVIEW_SHEET in wb.sheetnames:
+            rows = []
+            seen_head = False
+            for row in wb[REVIEW_SHEET].iter_rows(max_col=8,
+                                                  values_only=True):
+                if not seen_head:
+                    seen_head = str(row[0] or "").strip() == "구분"
+                    continue
+                if any(v is not None for v in row):
+                    rows.append(_norm_sig(row))
+            snap["issues"] = set(rows)
+        if "정기지출분석" in wb.sheetnames:
+            names = set()
+            seen_head = False
+            for row in wb["정기지출분석"].iter_rows(max_col=2,
+                                                values_only=True):
+                val = row[1] if len(row) > 1 else None
+                if not seen_head:
+                    seen_head = str(val or "").strip() == "정기지출명"
+                    continue
+                name = str(val or "").strip()
+                if name:
+                    names.add(name)
+            snap["recurring"] = names
+        if DRAFT_REVIEW_SHEET in wb.sheetnames:
+            keys = set()
+            seen_head = False
+            for row in wb[DRAFT_REVIEW_SHEET].iter_rows(max_col=2,
+                                                        values_only=True):
+                if not seen_head:
+                    seen_head = str(row[0] or "").strip() == "일자"
+                    continue
+                if row[0] is not None or (len(row) > 1 and row[1]):
+                    keys.add(_norm_sig(row[:2]))
+            snap["draft"] = keys
+        return snap
+    except Exception:
+        return None
+    finally:
+        wb.close()
+
+
+def diff_new_items(issues: list[dict], recurring: list[dict] | None,
+                   draft_table: dict | None,
+                   snap: dict | None) -> dict:
+    """지난 확인 파일에 없던 새 항목을 찾는다.
+
+    지난 파일에 해당 시트가 없었으면(형식 전환 등) 그 종류는 비교하지
+    않는다. 반환: {"issues": {서명}, "recurring": {이름},
+    "draft": {(일자, 이름)}, "count": 합계}
+    """
+    marks = {"issues": set(), "recurring": set(), "draft": set()}
+    if snap:
+        if snap.get("issues") is not None:
+            marks["issues"] = {_issue_sig(i) for i in issues} \
+                - snap["issues"]
+        if snap.get("recurring") is not None and recurring:
+            marks["recurring"] = {str(r.get("정기지출명") or "").strip()
+                                  for r in recurring} - snap["recurring"]
+        if snap.get("draft") is not None and draft_table:
+            marks["draft"] = {_norm_sig(r[:2])
+                              for r in draft_table.get("rows", [])} \
+                - snap["draft"]
+    marks["count"] = (len(marks["issues"]) + len(marks["recurring"])
+                      + len(marks["draft"]))
+    return marks
+
+
 def _build_review_guide_sheet(ws, week_key: str, signature: str,
-                              has_draft: bool, has_recurring: bool) -> None:
+                              has_draft: bool, has_recurring: bool,
+                              new_marks: dict | None = None) -> None:
     """확인 파일 첫 시트 '안내': 사용법 설명 + '확인 완료' 컨트롤."""
     from common import REVIEW_GUIDE_SHEET
     from openpyxl.worksheet.datavalidation import DataValidation
@@ -789,6 +897,28 @@ def _build_review_guide_sheet(ws, week_key: str, signature: str,
     ws[_REVIEW_SIG_CELL] = signature
     for col in ("J", "K"):
         ws.column_dimensions[col].hidden = True
+
+    # 지난 확인 이후 새로 생긴 항목 알림 (3행)
+    if new_marks is not None:
+        note3 = ws.cell(row=3, column=1)
+        n = new_marks.get("count", 0)
+        if n:
+            parts = []
+            if new_marks.get("issues"):
+                parts.append(f"확인필요 {len(new_marks['issues'])}건")
+            if new_marks.get("recurring"):
+                parts.append(f"정기지출분석 {len(new_marks['recurring'])}건")
+            if new_marks.get("draft"):
+                parts.append(f"자동추정 {len(new_marks['draft'])}건")
+            note3.value = (f"⚠ 지난 확인 이후 새로 생긴 항목이 {n}건 "
+                           f"있습니다 ({' · '.join(parts)}) — 각 시트에 "
+                           "주황색 행으로 표시했으니 꼭 확인해 주세요!")
+            note3.font = Font(name=_FONT, bold=True, size=11,
+                              color="C00000")
+        else:
+            note3.value = ("지난 확인 이후 새로 생긴 항목은 없습니다 — "
+                           "이전에 확인하신 상태 그대로입니다.")
+            note3.font = Font(name=_FONT, size=10, color="1E7145")
 
     steps = []
     if has_draft:
@@ -848,7 +978,8 @@ def _build_review_guide_sheet(ws, week_key: str, signature: str,
 
 
 def _build_draft_review_sheet(ws, draft_table: dict,
-                              holidays: dict | None = None) -> None:
+                              holidays: dict | None = None,
+                              new_keys: set | None = None) -> None:
     """'자동추정_지출목록' 시트: 반영/제외 검토 (원본 목록 파일에 역반영)."""
     from common import DRAFT_REVIEW_HEAD_ROW, DRAFT_REVIEW_MODE_CELL
     from openpyxl.worksheet.datavalidation import DataValidation
@@ -899,6 +1030,7 @@ def _build_draft_review_sheet(ws, draft_table: dict,
     r = DRAFT_REVIEW_HEAD_ROW
     for d, name, amount, conf, flag, memo in draft_table.get("rows", []):
         r += 1
+        is_new = bool(new_keys) and _norm_sig((d, name)) in new_keys
         values = (d, name, round(amount or 0), conf, flag, memo)
         for c, v in enumerate(values, start=1):
             cell = ws.cell(row=r, column=c, value=v)
@@ -910,7 +1042,9 @@ def _build_draft_review_sheet(ws, draft_table: dict,
                     cell.font = RED_DATE_FONT
             elif c == 3:
                 cell.number_format = _MONEY
-            if flag == "제외":
+            if is_new:
+                cell.fill = NEW_ITEM_FILL       # 새 항목 강조 (주황)
+            elif flag == "제외":
                 cell.fill = excluded_fill
         flag_dv.add(ws.cell(row=r, column=5).coordinate)
     last = max(r, DRAFT_REVIEW_HEAD_ROW + 1)
@@ -922,7 +1056,8 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                           week_key: str = "", signature: str = "",
                           recurring: list[dict] | None = None,
                           draft_table: dict | None = None,
-                          holidays: dict | None = None) -> Path:
+                          holidays: dict | None = None,
+                          new_marks: dict | None = None) -> Path:
     """확인 파일 하나에 검토 시트를 확인 순서대로 담는다.
 
     시트: ① 안내(사용법 + '확인 완료' 컨트롤) ② 자동추정_지출목록
@@ -938,10 +1073,11 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
     if control:
         _build_review_guide_sheet(wb.active, week_key, signature,
                                   draft_table is not None,
-                                  bool(recurring))
+                                  bool(recurring), new_marks=new_marks)
         if draft_table is not None:
-            _build_draft_review_sheet(wb.create_sheet(DRAFT_REVIEW_SHEET),
-                                      draft_table, holidays)
+            _build_draft_review_sheet(
+                wb.create_sheet(DRAFT_REVIEW_SHEET), draft_table, holidays,
+                new_keys=(new_marks or {}).get("draft"))
         ws = wb.create_sheet(REVIEW_SHEET)
     else:
         ws = wb.active
@@ -990,9 +1126,17 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
             action_dv.add(cell.coordinate)
             ws.cell(row=r, column=_ITEM_COL, value=issue.get("지시항목"))
         ws.column_dimensions["J"].hidden = True
+        # 지난 확인 이후 새로 생긴 확인필요 항목은 주황색으로 강조
+        new_issue_sigs = (new_marks or {}).get("issues") or set()
+        if new_issue_sigs:
+            for r, issue in enumerate(issues, start=start + 1):
+                if _issue_sig(issue) in new_issue_sigs:
+                    for c in range(1, 9):
+                        ws.cell(row=r, column=c).fill = NEW_ITEM_FILL
         if recurring:
-            _fill_recurring_review_sheet(wb.create_sheet("정기지출분석"),
-                                         recurring)
+            _fill_recurring_review_sheet(
+                wb.create_sheet("정기지출분석"), recurring,
+                new_names=(new_marks or {}).get("recurring"))
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
@@ -1030,10 +1174,12 @@ def _link_nature_formulas(ws, n_rows: int, n_cats: int) -> None:
             f'"{base}")))')
 
 
-def _fill_recurring_review_sheet(ws, recurring: list[dict]) -> None:
+def _fill_recurring_review_sheet(ws, recurring: list[dict],
+                                 new_names: set | None = None) -> None:
     """'정기지출분석' 시트: 분류·성격(정기/비정기/제외) 검토·수정.
 
     성격 적용 우선순위: K4 전체 일괄 > 분류별 일괄(N열) > 개별 행(K열).
+    new_names에 든 새 정기지출은 행 전체를 주황색으로 강조한다.
     """
     ws.merge_cells("A1:I1")
     guide = ws["A1"]
@@ -1054,6 +1200,11 @@ def _fill_recurring_review_sheet(ws, recurring: list[dict]) -> None:
     categories = _recurring_categories(recurring)
     add_recurring_controls(ws, 5 + len(recurring), categories=categories)
     _link_nature_formulas(ws, len(recurring), len(categories))
+    if new_names:
+        for r, it in enumerate(recurring, start=6):
+            if str(it.get("정기지출명") or "").strip() in new_names:
+                for c in range(1, 12):
+                    ws.cell(row=r, column=c).fill = NEW_ITEM_FILL
     # '적용할 성격' 선택지 안내 (P열 안내 상자)
     guide_rows = [
         ("적용할 성격 안내", True),
