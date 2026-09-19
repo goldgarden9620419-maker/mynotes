@@ -107,6 +107,38 @@ def test_경영보고_생성과_수식(tmp_path):
     assert not ws.row_dimensions[49].hidden      # 예비행 (47+2건 뒤 3행)
     assert ws.row_dimensions[52].hidden          # 그 밖의 빈 행은 숨김
     assert ws.row_dimensions[140].hidden
+    # ② 실행일(9/21)~차주 금요일(10/2)만 표시 — 이후 일자 행은 숨김
+    assert not ws.row_dimensions[14].hidden      # 9/21 (실행일)
+    assert not ws.row_dimensions[25].hidden      # 10/2 (차주 금요일)
+    assert ws.row_dimensions[26].hidden          # 10/3부터 숨김
+    assert ws.row_dimensions[41].hidden
+    # ③ 창 밖 지급일 행 숨김: 9/22는 표시, 10/14는 숨김 (합계에는 포함)
+    assert not ws.row_dimensions[47].hidden
+    assert ws.row_dimensions[48].hidden
+    wb.close()
+
+
+def test_경영보고_실행일_기준_지난_일자_숨김(tmp_path):
+    """주중(수 9/23) 실행이면 월·화 행이 숨고 창은 9/23~10/2."""
+    rep = _report()
+    rep["meta"]["run_date"] = date(2026, 9, 23)
+    out = tmp_path / "주간자금계획_경영보고_midweek.xlsx"
+    mr.create_management_workbook(rep, out)
+    assert mr.verify_management_workbook(out)
+
+    wb = load_workbook(out)
+    ws = wb["주간보고"]
+    assert ws.row_dimensions[14].hidden          # 9/21 (지난 일자)
+    assert ws.row_dimensions[15].hidden          # 9/22
+    assert not ws.row_dimensions[16].hidden      # 9/23 (실행일)
+    assert not ws.row_dimensions[25].hidden      # 10/2 (차주 금요일)
+    assert ws.row_dimensions[26].hidden          # 10/3부터 숨김
+    # 붉은 상자도 실행일 행(16)에서 시작
+    top = ws["A16"].border.top
+    assert top is not None and top.style == "medium"
+    # ③ 지난 지급일(9/22) 행도 숨김
+    assert ws.row_dimensions[47].hidden
+    assert ws.row_dimensions[48].hidden          # 10/14 (창 밖)
     wb.close()
 
 

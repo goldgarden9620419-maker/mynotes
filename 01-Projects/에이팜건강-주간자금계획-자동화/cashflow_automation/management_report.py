@@ -187,7 +187,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
          bold=True, size=14, color=_NAVY)
     _put(ws, 2, 1, f"기준주 {base_date} (월) ~ {week_end} (일) · "
                    f"작성 {meta.get('run_at', '')} · "
-                   f"붉은 상자 = 실행일~차주 금요일",
+                   f"실행일~차주 금요일만 표시 (그 밖의 일자 행은 숨김 — "
+                   f"행 숨기기 해제로 열람 가능)",
          size=9, color="555555")
     _put(ws, 3, 1, "노란 칸(입금 반영률·목표 최저잔액·지출 지급일·금액)을 "
                    "고치면 아래 모든 수치가 즉시 다시 계산됩니다.",
@@ -213,7 +214,7 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
 
     # ② 향후 4주 일별 자금 흐름 --------------------------------------------
     _section(ws, 12, "② 향후 4주 일별 자금 흐름 "
-                     "(붉은 상자 = 실행일~차주 금요일)")
+                     "(실행일~차주 금요일만 표시 · 계산은 4주 전체)")
     _put(ws, 12, 5, "입금 반영률", bold=True, color="FFFFFF")
     _put(ws, 12, 6, rate, fill=_EDIT_FILL, fmt="0%", align="center",
          border=True)
@@ -237,9 +238,17 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, 13, 8, round(start_balance), fmt="#,##0")  # H13: 시작잔액(숨김)
 
     holidays = report.get("holidays") or {}
+    # 실행일~차주 금요일 밖의 일자 행은 숨긴다 (2026-09-19 사용자 요청).
+    # 값·수식은 그대로 두므로 4주 합계·시나리오는 전체 기간으로 계산된다.
+    w_start, w_end = exec_window(meta.get("run_date") or base_date)
+    table_end = base_date + timedelta(days=_DAY_COUNT - 1)
+    hide_window = w_start <= table_end and w_end >= base_date
+
     for i in range(_DAY_COUNT):
         row = _DAY_FIRST + i
         d = base_date + timedelta(days=i)
+        if hide_window:
+            ws.row_dimensions[row].hidden = not (w_start <= d <= w_end)
         src = daily_by_date.get(d, {})
         is_actual = actual_until is not None and d <= actual_until
         # 주말·공휴일은 일자·요일을 붉은 글자로 (2026-09-20 사용자 요청)
@@ -281,7 +290,6 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         f"E{_DAY_FIRST}:E{_DAY_LAST}",
         CellIsRule(operator="lessThan", formula=["0"], fill=_RED_FILL))
     # 실행일~차주 금요일 구간을 하나의 붉은 상자로 묶는다
-    w_start, w_end = exec_window(meta.get("run_date") or base_date)
     first = _DAY_FIRST + max(0, min((w_start - base_date).days,
                                     _DAY_COUNT - 1))
     last = _DAY_FIRST + max(0, min((w_end - base_date).days, _DAY_COUNT - 1))
@@ -297,8 +305,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
          f'&"원 — 지출 일정 조정 또는 자금 조치가 필요합니다.")', bold=True)
 
     # ③ 반영된 지출예정 전체 (수정 가능) -----------------------------------
-    _section(ws, _EXP_HEAD, "③ 반영된 지출예정 (남은 4주) — 지급일·금액을 "
-                            "고치면 ②가 다시 계산됩니다")
+    _section(ws, _EXP_HEAD, "③ 반영된 지출예정 (실행일~차주 금요일 표시) — "
+                            "지급일·금액을 고치면 ②가 다시 계산됩니다")
     for c, head in enumerate(("지급일", "요일", "구분", "내용", "금액",
                               "지급방법"), start=1):
         _put(ws, _EXP_COLS, c, head, bold=True, color="FFFFFF",
@@ -308,6 +316,10 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         if row > _EXP_LAST:
             break
         d = item.get("일자")
+        # 창 밖 지급일 행도 숨긴다 — 값은 남아 ②·합계 계산에는 그대로 반영
+        if hide_window and isinstance(d, date):
+            dd = d.date() if isinstance(d, datetime) else d
+            ws.row_dimensions[row].hidden = not (w_start <= dd <= w_end)
         # 주말·공휴일 지급일은 붉은 글자 (직접 고친 날짜는 색 유지)
         off = isinstance(d, date) and (d.weekday() >= 5 or d in holidays)
         day_color = "C00000" if off else "000000"
@@ -324,7 +336,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         _put(ws, row, 6, item.get("지급방법") or "", align="center",
              border=True)
         row += 1
-    _put(ws, _EXP_TOTAL, 4, "합계", bold=True, align="center")
+    _put(ws, _EXP_TOTAL, 4, "합계(숨긴 행 포함 4주 전체)", bold=True,
+         align="center")
     _put(ws, _EXP_TOTAL, 5, f"=SUM(E{_EXP_FIRST}:E{_EXP_LAST})",
          bold=True, fmt="#,##0")
     # 머리글에 자동 필터 — 지급일·구분별로 골라 볼 수 있다
