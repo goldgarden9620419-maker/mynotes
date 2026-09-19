@@ -402,6 +402,124 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
     return added, pruned
 
 
+def read_draft_table(draft_path: Path) -> dict:
+    """자동추정 목록 파일의 현재 일괄 모드와 전체 행을 읽는다.
+
+    확인 파일의 '자동추정_지출목록' 시트를 만들 때 쓴다.
+    반환: {"mode": 현재 일괄 설정, "rows": [(일자, 이름, 금액, 신뢰도,
+    반영, 메모), ...]}
+    """
+    result = {"mode": "개별 관리", "rows": []}
+    draft_path = Path(draft_path)
+    if not draft_path.exists():
+        return result
+    try:
+        from openpyxl import load_workbook
+        wb = load_workbook(draft_path, data_only=True, read_only=True)
+    except Exception:
+        return result
+    try:
+        if GUIDE_SHEET in wb.sheetnames:
+            mode_row = next(wb[GUIDE_SHEET].iter_rows(
+                min_row=_BULK_ROW, max_row=_BULK_ROW, min_col=2, max_col=2,
+                values_only=True), (None,))
+            mode = normalize_text(mode_row[0] if mode_row else None)
+            if mode in BULK_MODES:
+                result["mode"] = mode
+        if AUTO_DRAFT_SHEET not in wb.sheetnames:
+            return result
+        for row in wb[AUTO_DRAFT_SHEET].iter_rows(min_row=2, max_col=6,
+                                                  values_only=True):
+            d = parse_date(row[0] if len(row) > 0 else None)
+            name = normalize_text(row[1] if len(row) > 1 else None)
+            if d is None and not name:
+                continue
+            result["rows"].append(
+                (d, name, parse_amount(row[2] if len(row) > 2 else None),
+                 normalize_text(row[3] if len(row) > 3 else None),
+                 normalize_text(row[4] if len(row) > 4 else None) or "반영",
+                 normalize_text(row[5] if len(row) > 5 else None)))
+        return result
+    finally:
+        wb.close()
+
+
+def apply_review_draft_edits(review_path: Path, draft_path: Path) -> int:
+    """확인 파일의 '자동추정_지출목록' 시트 수정을 목록 파일에 반영한다.
+
+    확인 단계에서 사용자가 고친 일자·금액·반영/제외와 '일괄 설정'을
+    원본 목록 파일(04_기준파일/자동추정_지출목록.xlsx)에 되쓴다.
+    바뀐 것이 없으면 저장하지 않는다. 반환: 반영 건수(모드 변경 포함).
+    """
+    from common import (DRAFT_REVIEW_HEAD_ROW, DRAFT_REVIEW_MODE_CELL,
+                        DRAFT_REVIEW_SHEET)
+    from openpyxl import load_workbook
+
+    review_path = Path(review_path)
+    draft_path = Path(draft_path)
+    if not review_path.exists() or not draft_path.exists():
+        return 0
+    try:
+        rv = load_workbook(review_path, data_only=True, read_only=True)
+    except Exception:
+        return 0
+    try:
+        if DRAFT_REVIEW_SHEET not in rv.sheetnames:
+            return 0
+        ws = rv[DRAFT_REVIEW_SHEET]
+        mode_row = next(ws.iter_rows(min_row=2, max_row=2, min_col=2,
+                                     max_col=2, values_only=True), (None,))
+        new_mode = normalize_text(mode_row[0] if mode_row else None)
+        new_rows = []
+        for row in ws.iter_rows(min_row=DRAFT_REVIEW_HEAD_ROW + 1,
+                                max_col=6, values_only=True):
+            d = parse_date(row[0] if len(row) > 0 else None)
+            name = normalize_text(row[1] if len(row) > 1 else None)
+            if d is None and not name:
+                continue
+            new_rows.append(
+                (d, name, parse_amount(row[2] if len(row) > 2 else None),
+                 normalize_text(row[3] if len(row) > 3 else None),
+                 normalize_text(row[4] if len(row) > 4 else None) or "반영",
+                 normalize_text(row[5] if len(row) > 5 else None)))
+    finally:
+        rv.close()
+
+    current = read_draft_table(draft_path)
+    mode_changed = new_mode in BULK_MODES and new_mode != current["mode"]
+    rows_changed = new_rows != current["rows"]
+    if not mode_changed and not rows_changed:
+        return 0
+
+    wb = load_workbook(draft_path)
+    try:
+        changed = 0
+        if mode_changed:
+            _ensure_bulk_control(wb, new_mode)
+            wb[GUIDE_SHEET].cell(row=_BULK_ROW, column=2, value=new_mode)
+            changed += 1
+        if rows_changed:
+            if AUTO_DRAFT_SHEET in wb.sheetnames:
+                ws = wb[AUTO_DRAFT_SHEET]
+                if ws.max_row > 1:
+                    ws.delete_rows(2, ws.max_row - 1)
+            else:
+                ws = wb.create_sheet(AUTO_DRAFT_SHEET)
+                ws.append(_DRAFT_HEADERS)
+            old = {r[:2]: r for r in current["rows"]}
+            for r in new_rows:
+                ws.append(list(r))
+                if old.get(r[:2]) != r:
+                    changed += 1
+            _ensure_draft_dropdown(ws)
+            _sort_draft_rows(ws)
+            _style_draft_sheet(ws)
+        wb.save(draft_path)
+        return changed
+    finally:
+        wb.close()
+
+
 def load_draft_aliases(draft_path: Path) -> dict[str, list[str]]:
     """'별칭' 시트: 정기지출명(정규화) → 별칭 목록."""
     aliases: dict[str, list[str]] = {}

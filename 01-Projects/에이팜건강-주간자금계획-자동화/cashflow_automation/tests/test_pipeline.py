@@ -207,29 +207,30 @@ def test_확인후_결과생성_2단계(env):
     state.reload()
     assert state.state["last_run_status"] == STATUS_REVIEW_WAIT
 
-    # 컨트롤이 들어 있다 (B2 드롭다운, 기본 '아니오')
+    # 확인 파일 하나에 검토 시트가 순서대로 담긴다 — 첫 시트가 '안내'
+    wb = load_workbook(reviews[0])
+    assert wb.sheetnames[0] == "안내"
+    assert wb.sheetnames[1] == "자동추정_지출목록"
+    assert "확인필요" in wb.sheetnames
+    # 안내 시트: 사용법 표 + 확인 완료 컨트롤 (B2 드롭다운, 기본 '아니오')
+    assert "확인 단계 안내" in str(wb["안내"]["A1"].value)
+    assert wb["안내"]["B2"].value == "아니오"
+    wb.close()
     from excel_report import review_confirmed
     ok, week, sig = review_confirmed(reviews[0])
     assert not ok and week == "2026-W39" and sig
 
-    # 사용자가 '확인 완료'를 '예'로 저장 + 별도 정기지출분석 검토 파일 수정
-    # (짧은 이력의 테스트라 파일이 없으므로 사용자가 고친 모양으로 만든다)
+    # 사용자가 시트들을 검토·수정하고 '안내' 시트에서 확인 완료를 저장
+    # (짧은 이력의 테스트라 정기지출분석 시트는 고친 모양으로 만든다)
     wb = load_workbook(reviews[0])
-    wb["확인필요"]["B2"] = "예"
-    wb.save(reviews[0])
-    wb.close()
-    from excel_report import recurring_review_name
-    from openpyxl import Workbook
-    recur_file = reviews[0].with_name(recurring_review_name(reviews[0].name))
-    rwb = Workbook()
-    rec = rwb.active
-    rec.title = "정기지출분석"
+    wb["안내"]["B2"] = "예"
+    rec = wb.create_sheet("정기지출분석")
     rec.cell(row=5, column=2, value="정기지출명")
     rec.cell(row=5, column=11, value="성격")
     rec.cell(row=6, column=2, value="SKB")
     rec.cell(row=6, column=11, value="비정기")     # 사용자 용어 = 내부 '변동'
-    rwb.save(recur_file)
-    rwb.close()
+    wb.save(reviews[0])
+    wb.close()
 
     # 2단계: 다시 실행하면 결과 3종이 만들어진다
     done = _run(cfg, state, mode="manual")
@@ -238,9 +239,8 @@ def test_확인후_결과생성_2단계(env):
     assert len(list(out.glob("주간자금계획_경영보고_*.xlsx"))) == 1
     assert len(list(out.glob("주간자금계획_대표보고_*.pdf"))) == 1
     assert not list(out.glob("확인필요_*.xlsx"))
-    # 확인된 검토 쌍(확인필요·정기지출분석)은 그대로 남는다
+    # 확인된 검토 파일은 그대로 남는다
     assert reviews[0].exists()
-    assert recur_file.exists()
 
     # 결과가 만들어진 뒤 다시 실행하면(입력 그대로, 이전 확인 완료 파일이
     # 남아 있어도) 재사용하지 않고 항상 새 확인 단계부터 시작한다
@@ -274,7 +274,7 @@ def test_확인대기_주기검사가_완료를_감지한다(env):
     # '확인 완료' 저장 후 주기 검사 → 결과 생성
     review = next(cfg.folder("review").glob("확인필요_*.xlsx"))
     wb = load_workbook(review)
-    wb["확인필요"]["B2"] = "예"
+    wb["안내"]["B2"] = "예"
     wb.save(review)
     wb.close()
     service._periodic_check()
@@ -300,7 +300,7 @@ def test_실행창_확인대기가_저장을_즉시_감지(env):
     cfg.data["options"]["confirm_wait_minutes"] = 5
     review = next(cfg.folder("review").glob("확인필요_*.xlsx"))
     wb = load_workbook(review)
-    wb["확인필요"]["B2"] = "예"
+    wb["안내"]["B2"] = "예"
     wb.save(review)
     wb.close()
     res = app_module._wait_for_confirmation(cfg, state, LOG,
@@ -326,7 +326,7 @@ def test_확인감시_틱이_저장을_감지한다(env):
 
     review = next(cfg.folder("review").glob("확인필요_*.xlsx"))
     wb = load_workbook(review)
-    wb["확인필요"]["B2"] = "예"
+    wb["안내"]["B2"] = "예"
     wb.save(review)
     wb.close()
     service._review_watch_tick()

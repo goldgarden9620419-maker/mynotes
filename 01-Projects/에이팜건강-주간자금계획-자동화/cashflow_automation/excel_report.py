@@ -48,6 +48,14 @@ _STATE_FILLS = {"자금부족": _FILL_SHORTAGE, "주의": _FILL_WARN,
 
 _CONFIDENCE_LABEL = {"상": "높음", "중": "중간", "하": "낮음"}
 
+# 주말·공휴일 날짜는 어느 시트에서든 붉은 글자로 (2026-09-20 사용자 요청)
+RED_DATE_FONT = Font(name=_FONT, size=10, color="C00000")
+
+
+def is_offday(d, holidays=None) -> bool:
+    """주말(토·일) 또는 공휴일이면 참 — 날짜 붉은 글자 표시용."""
+    return d.weekday() >= 5 or bool(holidays and d in holidays)
+
 
 def _title(ws, title: str, note: str = "") -> None:
     cell = ws.cell(row=2, column=1, value=title)
@@ -57,7 +65,8 @@ def _title(ws, title: str, note: str = "") -> None:
 
 
 def _write_table(ws, columns: list[tuple], rows: list[dict],
-                 start_row: int = 5, state_key: str | None = None) -> None:
+                 start_row: int = 5, state_key: str | None = None,
+                 holidays: dict | None = None) -> None:
     """columns: (헤더, dict키, 폭, 형식). 형식: text/money/date/int"""
     for c, (header, _key, width, _kind) in enumerate(columns, start=1):
         cell = ws.cell(row=start_row, column=c, value=header)
@@ -81,6 +90,8 @@ def _write_table(ws, columns: list[tuple], rows: list[dict],
                 cell.number_format = _MONEY
             elif kind == "date" and isinstance(value, date):
                 cell.number_format = _DATE
+                if is_offday(value, holidays):
+                    cell.font = RED_DATE_FONT
             elif kind == "int":
                 cell.number_format = "0"
             if fill is not None:
@@ -662,7 +673,7 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
            f"조정·추정 지출에는 자동이체와 주간조정·자동추정·확인지시 지출이 포함됩니다.")
     _write_table(ws, _DAILY_COLUMNS,
                  _daily_display(report["forecast"].get("daily", [])),
-                 state_key="상태")
+                 state_key="상태", holidays=report.get("holidays"))
 
     ws = wb.create_sheet("13주주별계획")
     _title(ws, "향후 13주 주별 자금계획",
@@ -685,7 +696,7 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
 
     ws = wb.create_sheet("계좌내역통합_RAW")
     _write_table(ws, _RAW_COLUMNS, _raw_display(report.get("bank_rows", [])),
-                 start_row=1)
+                 start_row=1, holidays=report.get("holidays"))
 
     _sheet_config(wb.create_sheet("설정및분류"), report)
 
@@ -693,7 +704,7 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
     _title(ws, "팀 지출계획 통합",
            "요청ID 기준 최신자료만 반영. 대외비는 분류·총액만 표시됩니다.")
     _write_table(ws, _PLAN_COLUMNS, report.get("integrated_masked", []),
-                 state_key="반영상태")
+                 state_key="반영상태", holidays=report.get("holidays"))
 
     ws = wb.create_sheet("예정실제대조")
     _title(ws, "지급예정 ↔ 실제출금 대조",
@@ -701,12 +712,14 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
            "표시합니다.")
     match_rows = _mask_match_rows(report.get("match_results", []),
                                   report.get("unplanned", []))
-    _write_table(ws, _MATCH_COLUMNS, match_rows, state_key="대조결과")
+    _write_table(ws, _MATCH_COLUMNS, match_rows, state_key="대조결과",
+                 holidays=report.get("holidays"))
 
     ws = wb.create_sheet("확인필요")
     _title(ws, "확인필요 목록",
            "오류 건을 임의로 삭제하거나 0원으로 처리하지 않습니다.")
-    _write_table(ws, _ISSUE_COLUMNS, report.get("issues", []))
+    _write_table(ws, _ISSUE_COLUMNS, report.get("issues", []),
+                 holidays=report.get("holidays"))
 
     ws = wb.create_sheet("카드결제기준")
     _title(ws, "법인카드 결제일 기준",
@@ -730,59 +743,217 @@ ACTION_INCLUDE = "계획에 반영"
 ACTION_SKIP = "반영 안 함"
 
 
-def create_issue_workbook(issues: list[dict], out_path: Path,
-                          week_key: str = "", signature: str = "") -> Path:
-    """확인필요 워크북. week_key/signature가 있으면 '확인 완료' 컨트롤을
-    붙인다 — 검토 후 B2를 '예'로 바꿔 저장하면 다음 실행이 결과를 만든다.
+def _build_review_guide_sheet(ws, week_key: str, signature: str,
+                              has_draft: bool, has_recurring: bool) -> None:
+    """확인 파일 첫 시트 '안내': 사용법 설명 + '확인 완료' 컨트롤."""
+    from common import REVIEW_GUIDE_SHEET
+    from openpyxl.worksheet.datavalidation import DataValidation
 
-    '정기지출 누락 의심' 행에는 '처리' 열(계획에 반영/반영 안 함)이 생겨
-    항목별로 지시할 수 있다 — '계획에 반영'을 고르면 결과 생성 때 그
-    날짜 지출로 자금계획에 들어간다.
+    ws.title = REVIEW_GUIDE_SHEET
+    for col, w in (("A", 6), ("B", 20), ("C", 84)):
+        ws.column_dimensions[col].width = w
+
+    title = ws.cell(row=1, column=1, value="주간 자금계획 — 확인 단계 안내")
+    title.font = Font(name=_FONT, bold=True, size=14, color="1F4E79")
+
+    label = ws["A2"]
+    label.value = "확인 완료"
+    label.font = Font(name=_FONT, bold=True, size=11)
+    confirm = ws[_REVIEW_CONFIRM_CELL]
+    confirm.value = "아니오"
+    confirm.fill = PatternFill("solid", start_color="FFF2CC")
+    confirm.font = Font(name=_FONT, bold=True, size=11)
+    confirm.alignment = Alignment(horizontal="center")
+    confirm.border = _BORDER
+    dv = DataValidation(type="list", formula1='"아니오,예"',
+                        allow_blank=True)
+    dv.error = "'예' 또는 '아니오'만 입력할 수 있습니다."
+    dv.showErrorMessage = True
+    ws.add_data_validation(dv)
+    dv.add(_REVIEW_CONFIRM_CELL)
+    note = ws["C2"]
+    note.value = (f"(주차 {week_key})  모든 시트를 검토한 뒤 왼쪽 B2를 "
+                  "'예'로 바꾸고 저장하세요 — 결과 3개(경영보고·대표보고 "
+                  "PDF·라이브)가 곧바로 만들어집니다.")
+    note.font = Font(name=_FONT, size=10, color="B36B00")
+    ws[_REVIEW_WEEK_CELL] = week_key
+    ws[_REVIEW_SIG_CELL] = signature
+    for col in ("J", "K"):
+        ws.column_dimensions[col].hidden = True
+
+    steps = []
+    if has_draft:
+        steps.append(("자동추정_지출목록",
+                      "자동 추정 후보의 반영/제외·일자·금액을 확인합니다. "
+                      "'반영'인 행만 자금계획에 들어갑니다. 전체를 한 번에 "
+                      "바꾸려면 시트 위 '일괄 설정'(B2)을 고르세요. 고친 "
+                      "내용은 원본 목록 파일에도 자동 반영됩니다."))
+    steps.append(("확인필요",
+                  "사람 확인이 필요한 항목입니다. '정기지출 누락 의심'은 "
+                  "'처리' 열에서 계획에 반영/반영 안 함을 고르세요 — 일자·"
+                  "금액 칸을 고치면 고친 값으로 들어갑니다. '예정지출 "
+                  "미출금'·'계획 없는 실제출금'은 확인용(조치 불필요)."))
+    if has_recurring:
+        steps.append(("정기지출분석",
+                      "정기지출의 분류·성격(정기/비정기/제외)을 확인·수정"
+                      "합니다. N열 분류별 일괄, K4 전체 일괄을 고르면 표의 "
+                      "성격이 즉시 바뀌어 보입니다. 시트 오른쪽 '적용할 "
+                      "성격 안내' 상자를 참고하세요."))
+    steps.append(("안내 (이 시트)",
+                  "검토가 끝나면 위 '확인 완료'(B2)를 '예'로 바꾸고 "
+                  "저장하세요. 저장하는 순간 결과가 만들어집니다 (실행창을 "
+                  "닫았으면 30초~10분 안에 자동)."))
+
+    head_row = 4
+    for c, head in enumerate(("순서", "시트", "하는 일"), start=1):
+        cell = ws.cell(row=head_row, column=c, value=head)
+        cell.fill = _HEADER_FILL
+        cell.font = _HEADER_FONT
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+        cell.border = _BORDER
+    for i, (sheet, desc) in enumerate(steps, start=1):
+        r = head_row + i
+        num = ws.cell(row=r, column=1, value=f"{i}")
+        num.font = Font(name=_FONT, bold=True, size=11, color="1F4E79")
+        num.alignment = Alignment(horizontal="center", vertical="center")
+        num.border = _BORDER
+        name = ws.cell(row=r, column=2, value=sheet)
+        name.font = Font(name=_FONT, bold=True, size=10)
+        name.alignment = Alignment(vertical="center")
+        name.border = _BORDER
+        body = ws.cell(row=r, column=3, value=desc)
+        body.font = Font(name=_FONT, size=10)
+        body.alignment = Alignment(horizontal="left", vertical="center",
+                                   wrap_text=True)
+        body.border = _BORDER
+        ws.row_dimensions[r].height = 44
+    tip_row = head_row + len(steps) + 2
+    tip = ws.cell(row=tip_row, column=1,
+                  value="※ 고친 내용은 전부 이번 결과에 바로 반영됩니다. "
+                        "날짜가 주말(토·일)·공휴일이면 붉은 글자로 "
+                        "표시됩니다. 확인 후 팀·은행 입력파일을 새로 "
+                        "바꾸면 다시 검토 단계부터 시작합니다.")
+    tip.font = Font(name=_FONT, size=9, color="808080")
+
+
+def _build_draft_review_sheet(ws, draft_table: dict,
+                              holidays: dict | None = None) -> None:
+    """'자동추정_지출목록' 시트: 반영/제외 검토 (원본 목록 파일에 역반영)."""
+    from common import DRAFT_REVIEW_HEAD_ROW, DRAFT_REVIEW_MODE_CELL
+    from openpyxl.worksheet.datavalidation import DataValidation
+
+    ws.merge_cells("A1:F1")
+    guide = ws["A1"]
+    guide.value = ("자동 추정 후보 목록입니다. '반영'인 행만 자금계획에 "
+                   "들어갑니다. 반영/제외·일자·금액을 고치고 저장하세요 — "
+                   "확인 완료 후 원본 목록 파일에도 자동 반영됩니다. 전체를 "
+                   "한 번에 바꾸려면 '일괄 설정'(B2)을 고르세요.")
+    guide.font = Font(name=_FONT, bold=True, size=10, color="B36B00")
+    guide.alignment = Alignment(horizontal="left", vertical="center",
+                                wrap_text=True)
+    ws.row_dimensions[1].height = 30
+    label = ws["A2"]
+    label.value = "일괄 설정"
+    label.font = Font(name=_FONT, bold=True, size=10)
+    mode = ws[DRAFT_REVIEW_MODE_CELL]
+    mode.value = draft_table.get("mode") or "개별 관리"
+    mode.fill = PatternFill("solid", start_color="FFF2CC")
+    mode.font = Font(name=_FONT, bold=True, size=10)
+    mode.alignment = Alignment(horizontal="center")
+    mode.border = _BORDER
+    mode_dv = DataValidation(
+        type="list", formula1='"개별 관리,전체 반영,전체 제외"',
+        allow_blank=True)
+    mode_dv.error = "개별 관리, 전체 반영, 전체 제외 중에서만 " \
+                    "고를 수 있습니다."
+    mode_dv.showErrorMessage = True
+    ws.add_data_validation(mode_dv)
+    mode_dv.add(DRAFT_REVIEW_MODE_CELL)
+
+    headers = ("일자", "정기지출명", "예상금액", "신뢰도", "반영", "메모")
+    for c, (head, w) in enumerate(zip(headers, (12, 24, 14, 9, 9, 24)),
+                                  start=1):
+        cell = ws.cell(row=DRAFT_REVIEW_HEAD_ROW, column=c, value=head)
+        cell.fill = _HEADER_FILL
+        cell.font = _HEADER_FONT
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+        cell.border = _BORDER
+        ws.column_dimensions[get_column_letter(c)].width = w
+    flag_dv = DataValidation(type="list", formula1='"반영,제외"',
+                             allow_blank=True)
+    flag_dv.error = "'반영' 또는 '제외'만 입력할 수 있습니다."
+    flag_dv.showErrorMessage = True
+    ws.add_data_validation(flag_dv)
+    excluded_fill = PatternFill("solid", start_color="EFEFEF")
+    r = DRAFT_REVIEW_HEAD_ROW
+    for d, name, amount, conf, flag, memo in draft_table.get("rows", []):
+        r += 1
+        values = (d, name, round(amount or 0), conf, flag, memo)
+        for c, v in enumerate(values, start=1):
+            cell = ws.cell(row=r, column=c, value=v)
+            cell.border = _BORDER
+            cell.font = _BODY_FONT
+            if c == 1 and isinstance(v, date):
+                cell.number_format = _DATE
+                if is_offday(v, holidays):
+                    cell.font = RED_DATE_FONT
+            elif c == 3:
+                cell.number_format = _MONEY
+            if flag == "제외":
+                cell.fill = excluded_fill
+        flag_dv.add(ws.cell(row=r, column=5).coordinate)
+    last = max(r, DRAFT_REVIEW_HEAD_ROW + 1)
+    ws.auto_filter.ref = f"A{DRAFT_REVIEW_HEAD_ROW}:F{last}"
+    ws.freeze_panes = f"A{DRAFT_REVIEW_HEAD_ROW + 1}"
+
+
+def create_issue_workbook(issues: list[dict], out_path: Path,
+                          week_key: str = "", signature: str = "",
+                          recurring: list[dict] | None = None,
+                          draft_table: dict | None = None,
+                          holidays: dict | None = None) -> Path:
+    """확인 파일 하나에 검토 시트를 확인 순서대로 담는다.
+
+    시트: ① 안내(사용법 + '확인 완료' 컨트롤) ② 자동추정_지출목록
+    (draft_table 제공 시 — 반영/제외·일괄 설정, 확인 완료 후 원본 목록
+    파일에 역반영) ③ 확인필요(처리 지시) ④ 정기지출분석(recurring 제공
+    시 — 분류·성격). week_key/signature가 없으면 확인필요 표 하나만
+    만든다(기록용).
     """
+    from common import DRAFT_REVIEW_SHEET
+
     wb = Workbook()
-    ws = wb.active
-    ws.title = REVIEW_SHEET
+    control = bool(week_key or signature)
+    if control:
+        _build_review_guide_sheet(wb.active, week_key, signature,
+                                  draft_table is not None,
+                                  bool(recurring))
+        if draft_table is not None:
+            _build_draft_review_sheet(wb.create_sheet(DRAFT_REVIEW_SHEET),
+                                      draft_table, holidays)
+        ws = wb.create_sheet(REVIEW_SHEET)
+    else:
+        ws = wb.active
+        ws.title = REVIEW_SHEET
     start = 1
-    if week_key or signature:
+    if control:
         start = 4
-        from openpyxl.worksheet.datavalidation import DataValidation
         ws.merge_cells("A1:H1")
         guide = ws["A1"]
-        guide.value = ("아래 항목을 검토하세요. '정기지출 누락 의심'은 '처리' "
-                       "열에서 계획에 반영/반영 안 함을 고르세요. 함께 열리는 "
-                       "'정기지출분석' 파일에서 분류·성격(정기/비정기/제외)을, "
-                       "'자동추정_지출목록'에서 반영/제외를 확인·수정하세요 "
-                       "(확인 완료 전에 저장하면 이번 결과에 반영). 끝나면 "
-                       "'확인 완료'(B2)를 '예'로 바꿔 저장하세요 — 다시 "
-                       "실행하면(켜져 있으면 10분 안에 자동) 결과 3개가 "
-                       "만들어집니다.")
+        guide.value = ("사람 확인이 필요한 항목입니다. '정기지출 누락 의심'은 "
+                       "'처리' 열에서 계획에 반영/반영 안 함을 고르세요 — "
+                       "일자·금액 칸을 고치면 고친 값으로 들어갑니다. 검토가 "
+                       "끝나면 '안내' 시트의 '확인 완료'(B2)를 '예'로 바꾸고 "
+                       "저장하세요.")
         guide.font = Font(name="맑은 고딕", bold=True, size=10,
                           color="B36B00")
         guide.alignment = Alignment(horizontal="left", vertical="center",
                                     wrap_text=True)
         ws.row_dimensions[1].height = 34
-        label = ws["A2"]
-        label.value = "확인 완료"
-        label.font = Font(name="맑은 고딕", bold=True, size=10)
-        confirm = ws[_REVIEW_CONFIRM_CELL]
-        confirm.value = "아니오"
-        confirm.fill = PatternFill("solid", start_color="FFF2CC")
-        confirm.font = Font(name="맑은 고딕", bold=True, size=10)
-        confirm.alignment = Alignment(horizontal="center")
-        dv = DataValidation(type="list", formula1='"아니오,예"',
-                            allow_blank=True)
-        dv.error = "'예' 또는 '아니오'만 입력할 수 있습니다."
-        dv.showErrorMessage = True
-        ws.add_data_validation(dv)
-        dv.add(_REVIEW_CONFIRM_CELL)
-        week_note = ws["C2"]
-        week_note.value = f"(주차 {week_key})"
-        week_note.font = Font(name="맑은 고딕", size=9, color="888888")
-        ws[_REVIEW_WEEK_CELL] = week_key
-        ws[_REVIEW_SIG_CELL] = signature
-    _write_table(ws, _ISSUE_COLUMNS, issues, start_row=start)
-    if start > 1:
-        # '처리' 열(G) + 숨김 데이터 열(H:일자, I:금액, J:항목)
+    _write_table(ws, _ISSUE_COLUMNS, issues, start_row=start,
+                 holidays=holidays)
+    if control:
+        # '처리' 열(I) + 숨김 데이터 열(J: 지시 항목)
         head = ws.cell(row=start, column=_ACTION_COL, value="처리")
         head.fill = _HEADER_FILL
         head.font = _HEADER_FONT
@@ -807,8 +978,10 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
             cell.border = _BORDER
             action_dv.add(cell.coordinate)
             ws.cell(row=r, column=_ITEM_COL, value=issue.get("지시항목"))
-        for col in ("J", "K"):
-            ws.column_dimensions[col].hidden = True
+        ws.column_dimensions["J"].hidden = True
+        if recurring:
+            _fill_recurring_review_sheet(wb.create_sheet("정기지출분석"),
+                                         recurring)
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     wb.save(out_path)
@@ -846,27 +1019,18 @@ def _link_nature_formulas(ws, n_rows: int, n_cats: int) -> None:
             f'"{base}")))')
 
 
-def create_recurring_review_workbook(recurring: list[dict],
-                                     out_path: Path,
-                                     week_key: str = "") -> Path:
-    """확인 단계용 별도 '정기지출분석' 파일.
+def _fill_recurring_review_sheet(ws, recurring: list[dict]) -> None:
+    """'정기지출분석' 시트: 분류·성격(정기/비정기/제외) 검토·수정.
 
-    확인필요 파일과 함께 열려, 분류·성격(정기/비정기/제외)을 검토·수정하는
-    전용 파일이다. 수정 후 저장하고 확인필요 파일의 '확인 완료'(B2)를
-    '예'로 저장하면 이번 결과 생성에 바로 반영된다.
     성격 적용 우선순위: K4 전체 일괄 > 분류별 일괄(N열) > 개별 행(K열).
     """
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "정기지출분석"
     ws.merge_cells("A1:I1")
     guide = ws["A1"]
-    week = f" (주차 {week_key})" if week_key else ""
-    guide.value = (f"정기지출의 분류·성격을 검토하세요{week}. 성격은 "
+    guide.value = ("정기지출의 분류·성격을 검토하세요. 성격은 "
                    "정기/비정기/제외 — 개별 행(K열), 분류별 일괄(N열), "
                    "전체 일괄(K4) 순으로 넓게 적용할 수 있습니다(넓은 쪽 "
                    "우선). N열·K4를 고르면 표의 성격 칸이 즉시 바뀌어 "
-                   "보입니다. 고친 뒤 저장하고, 확인필요 파일의 '확인 완료'"
+                   "보입니다. 고친 뒤 저장하고, '안내' 시트의 '확인 완료'"
                    "(B2)를 '예'로 저장하면 이번 결과에 바로 반영됩니다.")
     guide.font = Font(name=_FONT, bold=True, size=10, color="B36B00")
     guide.alignment = Alignment(horizontal="left", vertical="center",
@@ -909,11 +1073,6 @@ def create_recurring_review_workbook(recurring: list[dict],
             cell.alignment = Alignment(horizontal="left", vertical="center",
                                        wrap_text=True)
         cell.border = _BORDER
-    out_path = Path(out_path)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
-    wb.close()
-    return out_path
 
 
 def load_review_directives(path: Path) -> list[dict]:
@@ -954,19 +1113,29 @@ def load_review_directives(path: Path) -> list[dict]:
 
 
 def review_confirmed(path: Path) -> tuple[bool, str, str]:
-    """확인필요 파일의 (확인 완료 여부, 주차, 입력 서명)을 읽는다."""
+    """확인 파일의 (확인 완료 여부, 주차, 입력 서명)을 읽는다.
+
+    컨트롤은 '안내' 시트 B2에 있다. 예전 형식(확인필요 시트에 컨트롤)
+    파일도 계속 읽을 수 있게 두 시트를 차례로 본다.
+    """
+    from common import REVIEW_GUIDE_SHEET
     try:
         wb = load_workbook(path, data_only=True, read_only=True)
     except Exception:
         return False, "", ""
     try:
-        if REVIEW_SHEET not in wb.sheetnames:
-            return False, "", ""
-        ws = wb[REVIEW_SHEET]
-        ok = str(ws[_REVIEW_CONFIRM_CELL].value or "").strip().startswith("예")
-        week = str(ws[_REVIEW_WEEK_CELL].value or "").strip()
-        sig = str(ws[_REVIEW_SIG_CELL].value or "").strip()
-        return ok, week, sig
+        for name in (REVIEW_GUIDE_SHEET, REVIEW_SHEET):
+            if name not in wb.sheetnames:
+                continue
+            ws = wb[name]
+            week = str(ws[_REVIEW_WEEK_CELL].value or "").strip()
+            sig = str(ws[_REVIEW_SIG_CELL].value or "").strip()
+            if not week and not sig:
+                continue
+            ok = str(ws[_REVIEW_CONFIRM_CELL].value
+                     or "").strip().startswith("예")
+            return ok, week, sig
+        return False, "", ""
     except Exception:
         return False, "", ""
     finally:

@@ -181,6 +181,11 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             key=lambda p: p.stat().st_mtime)
         if prev_recurs:
             harvest_sources.append(prev_recurs[-1])
+        prev_reviews = sorted(
+            cfg.folder("review").glob("확인필요_*.xlsx"),
+            key=lambda p: p.stat().st_mtime)
+        if prev_reviews:
+            harvest_sources.append(prev_reviews[-1])
         for src in harvest_sources:
             if base_wb_path.exists() \
                     and src.stat().st_mtime < base_wb_path.stat().st_mtime:
@@ -208,16 +213,19 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         if confirmed_review is not None:
             review_directives = excel_report.load_review_directives(
                 confirmed_review)
-            # 짝이 되는 정기지출분석 파일의 분류·성격 수정을 반영한다
-            recur_review = confirmed_review.with_name(
+            # 확인 파일의 정기지출분석 시트 수정(분류·성격)을 반영한다.
+            # 예전 형식(별도 정기지출분석 파일)도 계속 읽는다.
+            rev_edits = forecast_engine.harvest_recurring_edits(
+                confirmed_review)
+            legacy = confirmed_review.with_name(
                 excel_report.recurring_review_name(confirmed_review.name))
-            if recur_review.exists():
-                rev_applied = forecast_engine.update_override_sheet(
-                    base_wb_path,
-                    forecast_engine.harvest_recurring_edits(recur_review))
-                if rev_applied:
-                    log.info("정기지출분석 검토 파일의 수정 %d건을 "
-                             "정기지출분류에 반영", rev_applied)
+            if not rev_edits and legacy.exists():
+                rev_edits = forecast_engine.harvest_recurring_edits(legacy)
+            rev_applied = forecast_engine.update_override_sheet(
+                base_wb_path, rev_edits)
+            if rev_applied:
+                log.info("확인 파일의 정기지출분석 수정 %d건을 "
+                         "정기지출분류에 반영", rev_applied)
         # 기준파일 '정기지출분류' 시트의 사용자 분류·성격을 반영한다
         # (성격 변동·제외는 13주 자동 추정에서 뺀다; 예: 외상대 지급)
         overrides = forecast_engine.load_recurring_overrides(
@@ -242,6 +250,17 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                       / forecast_engine.AUTO_DRAFT_FILE)
         draft_mode_default = cfg.get("forecast", "auto_draft_default",
                                      default="개별 관리")
+        # 확인 파일의 '자동추정_지출목록' 시트 수정을 원본 목록에 반영한다
+        if confirmed_review is not None:
+            try:
+                draft_changed = forecast_engine.apply_review_draft_edits(
+                    confirmed_review, draft_path)
+                if draft_changed:
+                    log.info("확인 파일의 자동추정 목록 수정 %d건을 "
+                             "원본 목록에 반영", draft_changed)
+            except OSError:
+                log.warning("자동추정_지출목록이 사용 중이라 확인 파일의 "
+                            "목록 수정을 반영하지 못했습니다")
         # 확인 단계에서 목록 파일을 자동으로 열어 주므로, Excel이 잡고
         # 있어 저장이 막혀도 실행은 계속한다 (저장된 내용 그대로 사용)
         try:
@@ -507,55 +526,42 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         pdf_name = f"주간자금계획_대표보고_{stamp}.pdf"
         issue_name = f"확인필요_{stamp}.xlsx"
 
-        # 확인필요 파일은 06_확인필요 폴더에만 둔다 (05_결과는 결과물만).
+        # 확인 파일은 06_확인필요 폴더에만 둔다 (05_결과는 결과물만).
         # confirm_before_results가 켜져 있으면 2단계로 실행한다:
-        # ① 확인필요만 만들어 열어 보여주고 대기 → 사용자가 '처리' 지시와
-        # '확인 완료'='예'를 저장 → ② 다음 실행(10분 주기 자동 감지 포함)이
-        # 지시를 반영해 결과 생성
+        # ① 확인 파일 하나(안내·자동추정_지출목록·확인필요·정기지출분석
+        # 시트)를 만들어 열어 보여주고 대기 → 사용자가 검토 후 '안내'
+        # 시트의 '확인 완료'='예'를 저장 → ② 다음 실행(10분 주기 자동
+        # 감지 포함)이 수정 내용을 반영해 결과 생성
         review_path = confirmed_review
         if confirm_mode:
             if review_path is None:
                 review_path = unique_path(review_dir / issue_name)
+                draft_table = forecast_engine.read_draft_table(draft_path)
                 excel_report.create_issue_workbook(
                     issues, review_path, week_key=week_key,
-                    signature=input_sig)
-                if not excel_report.verify_workbook(review_path, ["확인필요"]):
-                    raise RuntimeError("확인필요 파일 재열기 검증 실패")
-                # 정기지출분석은 별도 검토 파일로 함께 만들어 연다
-                stage_files = [review_path]
-                keep_names = {review_path.name}
-                if recurring:
-                    recur_path = review_path.with_name(
-                        excel_report.recurring_review_name(review_path.name))
-                    excel_report.create_recurring_review_workbook(
-                        recurring, recur_path, week_key=week_key)
-                    if not excel_report.verify_workbook(recur_path,
-                                                        ["정기지출분석"]):
-                        raise RuntimeError("정기지출분석 파일 재열기 검증 실패")
-                    stage_files.append(recur_path)
-                    keep_names.add(recur_path.name)
-                backup_manager.archive_superseded_reviews(cfg, keep_names)
+                    signature=input_sig, recurring=recurring,
+                    draft_table=draft_table, holidays=holidays)
+                expected = (["안내", "자동추정_지출목록", "확인필요"]
+                            + (["정기지출분석"] if recurring else []))
+                if not excel_report.verify_workbook(review_path, expected):
+                    raise RuntimeError("확인 파일 재열기 검증 실패")
+                backup_manager.archive_superseded_reviews(
+                    cfg, {review_path.name})
                 bank_loader.save_history(history_path, merged_history)
-                # 자동추정_지출목록도 함께 열어 반영/제외를 이 단계에서
-                # 바꿀 수 있게 한다 (2026-09-20 사용자 요청). 확인 완료
-                # 저장 전에 고치면 이번 결과에 반영된다.
-                if draft_path.exists():
-                    _open_file(draft_path)
-                for p in stage_files:
-                    _open_file(p)
+                _open_file(review_path)
                 state.mark_result(now, STATUS_REVIEW_WAIT,
                                   input_signature=input_sig)
-                log.info("확인필요 %d건 검토 대기 — 자동추정_지출목록·"
-                         "확인필요·정기지출분석 파일을 검토한 뒤 %s 에서 "
-                         "'확인 완료'(B2)를 '예'로 바꾸고 저장하면 결과 "
-                         "파일이 만들어집니다 (켜져 있으면 10분 안에 자동)",
-                         len(issues), review_path.name)
+                log.info("확인필요 %d건 검토 대기 — %s 의 시트들(안내·"
+                         "자동추정_지출목록·확인필요·정기지출분석)을 검토한 "
+                         "뒤 '안내' 시트의 '확인 완료'(B2)를 '예'로 바꾸고 "
+                         "저장하면 결과 파일이 만들어집니다 (켜져 있으면 "
+                         "10분 안에 자동)", len(issues), review_path.name)
                 return RunResult(
                     STATUS_REVIEW_WAIT,
-                    f"확인필요 {len(issues)}건 검토 대기 — 정기지출분석 "
-                    f"파일까지 확인한 뒤 {review_path.name}의 '확인 완료'를 "
-                    "'예'로 바꾸면 결과 3개가 만들어집니다",
-                    stage_files, len(issues))
+                    f"확인필요 {len(issues)}건 검토 대기 — "
+                    f"{review_path.name}의 시트들을 확인한 뒤 '안내' 시트 "
+                    "'확인 완료'를 '예'로 바꾸면 결과 3개가 만들어집니다",
+                    [review_path], len(issues))
             log.info("확인 완료 확인됨(%s) — 결과 파일을 만듭니다",
                      review_path.name)
 
@@ -581,8 +587,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             review_path = unique_path(review_dir / issue_name)
             excel_report.create_issue_workbook(issues, review_path,
                                                week_key=week_key,
-                                               signature=input_sig)
-            if not excel_report.verify_workbook(review_path, ["확인필요"]):
+                                               signature=input_sig,
+                                               holidays=holidays)
+            expected = ["안내", "확인필요"]
+            if not excel_report.verify_workbook(review_path, expected):
                 raise RuntimeError("확인필요 파일 재열기 검증 실패")
         if cfg.get("options", "create_pdf_summary", default=True):
             pdf_report.create_pdf_summary(report, workspace.path(pdf_name))

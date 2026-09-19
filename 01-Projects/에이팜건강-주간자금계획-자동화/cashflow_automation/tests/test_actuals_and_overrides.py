@@ -132,7 +132,7 @@ def test_정기지출분석_수정_수확_반영(tmp_path):
 
 
 def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
-    """별도 정기지출분석 검토 파일: 필터·드롭다운·K4 전체 일괄·N열
+    """확인 파일의 정기지출분석 시트: 필터·드롭다운·K4 전체 일괄·N열
     분류별 일괄이 붙고, 수정이 수확돼 기준파일 정기지출분류로 흘러간다.
     우선순위: 전체 일괄 > 분류별 일괄 > 개별 행. '비정기'='변동'."""
     from openpyxl import load_workbook
@@ -140,7 +140,7 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
 
     assert er.recurring_review_name("확인필요_20260921_0910.xlsx") \
         == "정기지출분석_20260921_0910.xlsx"
-    out = tmp_path / "정기지출분석_20260921_0910.xlsx"
+    out = tmp_path / "확인필요_20260921_0910.xlsx"
     recurring = [
         {"은행": "우리은행", "정기지출명": "SKB", "분류": "통신비",
          "발생개월수": 6, "거래건수": 6, "평균 월지출": 220000.0,
@@ -152,9 +152,13 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
          "발생개월수": 6, "거래건수": 6, "평균 월지출": 113398.0,
          "대표 지급일": 28, "신뢰도": "상", "성격": "변동"},
     ]
-    er.create_recurring_review_workbook(recurring, out, week_key="2026-W39")
+    er.create_issue_workbook([], out, week_key="2026-W39", signature="sig",
+                             recurring=recurring)
 
     wb = load_workbook(out)
+    # 시트 순서: 안내(컨트롤) → 확인필요 → 정기지출분석
+    assert wb.sheetnames[0] == "안내"
+    assert wb.sheetnames[-1] == "정기지출분석"
     ws = wb["정기지출분석"]
     # 머리글(5행) 필터 + K4 전체 일괄 + 분류별 일괄 블록(M·N열)
     assert ws.auto_filter.ref == "A5:K8"
@@ -211,6 +215,48 @@ def test_정기지출분석_검토파일과_일괄변경_왕복(tmp_path):
     assert fe.update_override_sheet(base, edits) >= 2
     fe.apply_recurring_overrides(recurring, fe.load_recurring_overrides(base))
     assert all(i["성격"] == "변동" for i in recurring)
+
+
+def test_자동추정_시트_수정_원본목록_역반영(tmp_path):
+    """확인 파일의 자동추정_지출목록 시트에서 고친 반영/제외·일괄 설정이
+    원본 목록 파일(자동추정_지출목록.xlsx)에 되쓰인다."""
+    from datetime import date as _date
+    from openpyxl import load_workbook
+    import excel_report as er
+
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    recur = [{"정기지출명": "SKB", "대표 지급일": 25,
+              "평균 월지출": 220_000.0, "신뢰도": "상"},
+             {"정기지출명": "코웨이", "대표 지급일": 28,
+              "평균 월지출": 113_398.0, "신뢰도": "상"}]
+    fe.refresh_auto_draft_file(draft, recur, _date(2026, 9, 21))
+
+    table = fe.read_draft_table(draft)
+    assert table["mode"] == "개별 관리" and len(table["rows"]) == 2
+
+    out = tmp_path / "확인필요_20260921_0910.xlsx"
+    er.create_issue_workbook([], out, week_key="2026-W39", signature="sig",
+                             draft_table=table)
+    wb = load_workbook(out)
+    ws = wb["자동추정_지출목록"]
+    assert ws["B2"].value == "개별 관리"          # 일괄 설정 드롭다운
+    assert ws["B5"].value in ("SKB", "코웨이")    # 자료 5행~
+    # 사용자가 SKB를 '제외'로, 일괄 설정을 '전체 제외'로 변경
+    for r in range(5, 7):
+        if ws.cell(row=r, column=2).value == "SKB":
+            ws.cell(row=r, column=5, value="제외")
+    ws["B2"] = "전체 제외"
+    wb.save(out)
+    wb.close()
+
+    assert fe.apply_review_draft_edits(out, draft) >= 2
+    # 같은 내용 재반영은 0건 (변경 없음)
+    assert fe.apply_review_draft_edits(out, draft) == 0
+    assert fe.read_draft_table(draft)["mode"] == "전체 제외"
+    # 다음 갱신 때 일괄 모드가 전 행에 적용된다
+    fe.refresh_auto_draft_file(draft, recur, _date(2026, 9, 21))
+    drafts, excluded = fe.load_auto_drafts(draft, _date(2026, 9, 21))
+    assert not drafts and excluded == 2
 
 
 def test_계좌별_시나리오_인출_우선순위():

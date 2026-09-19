@@ -120,6 +120,13 @@ RECURRING_NATURE_DISPLAY = {"변동": "비정기"}
 RECURRING_CAT_NAME_COL = 13   # M: 분류명
 RECURRING_CAT_PICK_COL = 14   # N: 그 분류 전체에 적용할 성격
 
+# 확인 파일(확인필요_*.xlsx)은 한 워크북에 4개 시트로 구성된다:
+# 안내(확인 완료 컨트롤) → 자동추정_지출목록 → 확인필요 → 정기지출분석
+REVIEW_GUIDE_SHEET = "안내"
+DRAFT_REVIEW_SHEET = "자동추정_지출목록"
+DRAFT_REVIEW_MODE_CELL = "B2"    # 자동추정 시트의 '일괄 설정' 드롭다운
+DRAFT_REVIEW_HEAD_ROW = 4        # 머리글 4행, 자료 5행~
+
 # 은행 표준 열 (16번 항목)
 BANK_STD_COLUMNS = [
     "거래일시", "거래일", "은행", "계좌", "출금액", "입금액", "거래후잔액",
