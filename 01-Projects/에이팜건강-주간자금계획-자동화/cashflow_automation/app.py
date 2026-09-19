@@ -572,6 +572,43 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         lock.release()
 
 
+def _wait_for_confirmation(cfg, state, log, allow_partial: bool = False,
+                           poll_seconds: float = 5.0,
+                           now=None) -> RunResult:
+    """'지금 실행' 창에서 확인 완료 저장을 기다렸다가 곧바로 결과를 만든다.
+
+    확인필요 파일에서 '확인 완료'(B2)를 '예'로 바꾸고 저장하는 순간
+    감지해 결과 3종을 생성한다. 제한 시간이 지나면 그대로 종료해도
+    상주 프로그램의 감시(30초 간격)와 10분 주기 검사가 이어받는다.
+    """
+    import time
+    wait_minutes = float(cfg.get("options", "confirm_wait_minutes",
+                                 default=30))
+    if wait_minutes <= 0:
+        return RunResult(STATUS_REVIEW_WAIT, "확인 대기 생략")
+    review_dir = cfg.folder("review")
+    deadline = time.monotonic() + wait_minutes * 60
+    log.info("확인 완료 저장을 기다립니다 (최대 %d분) — 확인필요 파일을 "
+             "검토한 뒤 '확인 완료'(B2)를 '예'로 바꾸고 저장하면 곧바로 "
+             "결과 3개를 만듭니다.", int(wait_minutes))
+    while True:
+        current = now or now_local(cfg.timezone_name)
+        week = iso_week_key(current.date())
+        sig = file_validator.current_input_signature(cfg)
+        if excel_report.find_confirmed_review(review_dir, week,
+                                              sig) is not None:
+            log.info("확인 완료 감지 — 결과 생성을 시작합니다.")
+            return run_weekly_job(cfg, state, log, mode="retry",
+                                  allow_partial=allow_partial, now=now)
+        if time.monotonic() >= deadline:
+            log.info("확인 대기 시간이 지나 창을 닫습니다. '확인 완료'만 "
+                     "저장해 두면 프로그램이 자동으로 이어서 결과를 만들고, "
+                     "'자금계획 지금 실행'을 다시 눌러도 됩니다.")
+            return RunResult(STATUS_REVIEW_WAIT,
+                             "확인 대기 시간 초과 — 저장 후 자동 처리 예정")
+        time.sleep(poll_seconds)
+
+
 def _open_file(path) -> None:
     """확인필요 파일을 사용자에게 바로 보여준다 (Windows 전용, 실패 무시)."""
     import os
@@ -709,9 +746,13 @@ def main(argv=None) -> int:
         result = run_weekly_job(cfg, state, log, mode="manual",
                                 allow_partial=args.allow_partial,
                                 force=args.force)
+        if result.status == STATUS_REVIEW_WAIT:
+            # 확인필요 검토 대기: 저장하는 즉시 이어서 결과 생성
+            result = _wait_for_confirmation(
+                cfg, state, log, allow_partial=args.allow_partial)
         print(f"[{result.status}] {result.message}")
         return 0 if result.status in (STATUS_SUCCESS, STATUS_PARTIAL,
-                                      "SKIPPED") else 1
+                                      STATUS_REVIEW_WAIT, "SKIPPED") else 1
 
     from scheduler import AutomationService
     service = AutomationService(cfg, state, log)

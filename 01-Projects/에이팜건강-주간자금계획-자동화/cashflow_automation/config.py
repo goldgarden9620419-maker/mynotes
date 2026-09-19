@@ -82,6 +82,8 @@ DEFAULT_CONFIG: dict = {
         "create_management_report": True,
         # True면 2단계 실행: 확인필요 검토('확인 완료'=예) 후에만 결과 생성
         "confirm_before_results": False,
+        # '지금 실행' 창이 확인 완료 저장을 기다리는 최대 시간(분, 0=대기 안 함)
+        "confirm_wait_minutes": 30,
         "create_pdf_summary": True,
         "create_live_workbook": True,
         "live_template_name": "자금계획_라이브템플릿.xlsx",

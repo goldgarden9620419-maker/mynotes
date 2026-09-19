@@ -251,6 +251,57 @@ def test_확인대기_주기검사가_완료를_감지한다(env):
     assert list(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
 
 
+def test_실행창_확인대기가_저장을_즉시_감지(env):
+    """'지금 실행' 창 대기: 확인 완료 저장 순간 바로 결과 생성."""
+    cfg = env
+    cfg.data.setdefault("options", {})["confirm_before_results"] = True
+    make_full_inputs(cfg, NOW)
+    state = StateManager(cfg.state_dir)
+    assert _run(cfg, state, mode="manual").status == STATUS_REVIEW_WAIT
+
+    # 대기 0분이면 기다리지 않고 그대로 종료
+    cfg.data["options"]["confirm_wait_minutes"] = 0
+    res = app_module._wait_for_confirmation(cfg, state, LOG, now=NOW)
+    assert res.status == STATUS_REVIEW_WAIT
+
+    # '확인 완료' 저장 → 즉시 감지해 결과 3종 생성
+    cfg.data["options"]["confirm_wait_minutes"] = 5
+    review = next(cfg.folder("review").glob("확인필요_*.xlsx"))
+    wb = load_workbook(review)
+    wb["확인필요"]["B2"] = "예"
+    wb.save(review)
+    wb.close()
+    res = app_module._wait_for_confirmation(cfg, state, LOG,
+                                            poll_seconds=0.01, now=NOW)
+    assert res.status == STATUS_SUCCESS, res.message
+    assert list(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
+
+
+def test_확인감시_틱이_저장을_감지한다(env):
+    """상주 감시(30초 간격) 틱: 확인 완료 저장을 잡아 결과를 만든다."""
+    cfg = env
+    cfg.data.setdefault("options", {})["confirm_before_results"] = True
+    now = now_local(cfg.timezone_name)
+    make_full_inputs(cfg, now)
+    state = StateManager(cfg.state_dir)
+    from scheduler import AutomationService
+    service = AutomationService(cfg, state, LOG)
+
+    assert service.run_job(mode="auto").status == STATUS_REVIEW_WAIT
+    service._review_watch_tick()          # 미확인 → 변화 없음
+    state.reload()
+    assert state.state["last_run_status"] == STATUS_REVIEW_WAIT
+
+    review = next(cfg.folder("review").glob("확인필요_*.xlsx"))
+    wb = load_workbook(review)
+    wb["확인필요"]["B2"] = "예"
+    wb.save(review)
+    wb.close()
+    service._review_watch_tick()
+    state.reload()
+    assert state.state["last_run_status"] == STATUS_SUCCESS
+
+
 def test_확인필요_처리지시_라운드트립(tmp_path):
     """일자·내용·금액 분리 표기 + '처리'(계획에 반영) 지시 읽기."""
     import excel_report as er

@@ -65,6 +65,13 @@ class AutomationService:
         self.scheduler.start()
         self.log.info("스케줄러 시작. 다음 자동 실행: %s", self.next_run_text())
 
+        # 시작 시 이미 확인 대기 상태면 빠른 감시를 이어서 켠다
+        self.state.reload()
+        if self.state.state.get("last_run_status") == STATUS_REVIEW_WAIT \
+                and self.state.state.get("last_run_week") == iso_week_key(
+                    now_local(self.cfg.timezone_name).date()):
+            self._start_review_watch()
+
         if self.cfg.get("startup", "check_missed_run", default=True):
             threading.Thread(target=self.check_missed_run, daemon=True).start()
 
@@ -112,10 +119,50 @@ class AutomationService:
         elif result.status == STATUS_WAITING_FILES:
             self.notify("필수자료 대기", result.message)
         elif result.status == STATUS_REVIEW_WAIT:
-            # 확인필요 파일은 실행부가 이미 화면에 열어 두었다
+            # 확인필요 파일은 실행부가 이미 화면에 열어 두었다.
+            # 저장 즉시 이어받도록 30초 간격 감시를 켠다
             self.notify("확인필요 검토 대기", result.message)
+            self._start_review_watch()
         elif result.status == "FAILED":
             self.notify("실행 실패", result.message)
+
+    # ------------------------------------------------------------------
+    # 확인 완료 빠른 감시 (30초 간격 — 10분 주기 검사의 보완)
+    # ------------------------------------------------------------------
+    def _start_review_watch(self) -> None:
+        try:
+            if self.scheduler.get_job("review_watch"):
+                return
+            self.scheduler.add_job(
+                self._review_watch_tick, IntervalTrigger(seconds=30),
+                id="review_watch", name="확인 완료 감시",
+                replace_existing=True)
+            self.log.info("확인 완료 감시 시작 (30초 간격) — 확인필요 파일을 "
+                          "저장하면 곧바로 결과를 만듭니다.")
+        except Exception:
+            pass
+
+    def _stop_review_watch(self) -> None:
+        try:
+            if self.scheduler.get_job("review_watch"):
+                self.scheduler.remove_job("review_watch")
+        except Exception:
+            pass
+
+    def _review_watch_tick(self) -> None:
+        now = now_local(self.cfg.timezone_name)
+        week = iso_week_key(now.date())
+        self.state.reload()
+        if self.state.state.get("last_run_status") != STATUS_REVIEW_WAIT \
+                or self.state.state.get("last_run_week") != week:
+            self._stop_review_watch()
+            return
+        signature = file_validator.current_input_signature(self.cfg)
+        if excel_report.find_confirmed_review(
+                self.cfg.folder("review"), week, signature) is not None:
+            self._stop_review_watch()
+            self.log.info("확인 완료가 감지되어 결과 생성을 시작합니다.")
+            self.run_job(mode="retry")
 
     # ------------------------------------------------------------------
     # 미실행 보완 (4번 항목)
