@@ -85,9 +85,11 @@ def test_경영보고_생성과_수식(tmp_path):
     assert ws["D48"].value == "대외비 급여·인건비(대외비)"
     assert "SUM(" in str(ws["E141"].value)
     assert ws.auto_filter.ref == "A46:F140"   # 지급일별 필터
-    # ④ 필요 추가 입금: 목표잔액 셀 참조 MAX 수식 (80/90/100 3행)
+    # ④ 필요 추가 입금: 금액은 좁은 B열을 피해 C~F열 (##### 방지)
     assert ws["A146"].value == 0.8 and ws["A148"].value == 1.0
-    assert "MAX(0,$B$144" in str(ws["E146"].value)
+    assert ws["B146"].value is None                # B열엔 금액 없음
+    assert ws["C146"].value == -5_000_000          # 4주 기말잔액
+    assert "MAX(0,$C$144" in str(ws["F146"].value)
     # ⑤ 전달 메모 수식
     memo = str(ws["A152"].value)
     assert memo.startswith("=IF(") and "건강사업팀" in memo
