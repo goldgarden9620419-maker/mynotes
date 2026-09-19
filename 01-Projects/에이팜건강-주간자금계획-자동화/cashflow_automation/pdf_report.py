@@ -102,7 +102,6 @@ def create_pdf_summary(report: dict, out_path: Path) -> Path:
         ["4주 최저 예상잔액",
          f"{_fmt_money(scenario.get('4주 최저잔액'))}"
          f" ({_fmt_date(scenario.get('4주 최저잔액일'))})"],
-        ["13주 예상 기말잔액", _fmt_money(scenario.get("13주 기말잔액"))],
         ["향후 4주 확정지출", _fmt_money(report.get("next4w_confirmed_out"))],
         ["카드 결제 예정액(4주)", _fmt_money(report.get("card_due_4w"))],
         ["확인필요 건수", f"{len(report.get('issues', []))}건"],

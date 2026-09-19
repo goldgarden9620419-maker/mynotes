@@ -273,7 +273,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             draft_added, draft_pruned = \
                 forecast_engine.refresh_auto_draft_file(
                     draft_path, recurring_projectable, base_date,
-                    default_mode=draft_mode_default)
+                    default_mode=draft_mode_default, holidays=holidays)
             if draft_added or draft_pruned:
                 log.info("자동추정 목록 갱신: 신규 %d건, 지난 항목 정리 %d건",
                          draft_added, draft_pruned)
@@ -463,7 +463,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                                  chk_start, chk_end),
             plan["countable"], draft_aliases, chk_start, chk_end,
             variable_items=[i for i in recurring
-                            if i.get("성격") == "변동"])
+                            if i.get("성격") == "변동"],
+            holidays=holidays)
         # 확인필요 지시로 이미 계획에 넣은 항목은 누락이 아니다
         directive_keys = {(d["항목"], d["일자"]) for d in review_directives}
         for c in recurring_check:

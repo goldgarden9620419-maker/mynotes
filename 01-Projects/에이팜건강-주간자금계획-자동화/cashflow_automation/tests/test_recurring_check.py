@@ -102,6 +102,39 @@ def test_주말실행이면_대표보고_일별전망은_차주(tmp_path):
                                          for i in range(5)]
 
 
+def test_정기지출_예정일은_다음_영업일로(tmp_path):
+    """주말(토·일)·공휴일에 걸린 정기지출 예정일은 다음 영업일로 옮긴다.
+    다음 영업일이 달을 넘기면 그 달 마지막 영업일로 앞당긴다."""
+    hol = {date(2026, 9, 24): "추석 연휴", date(2026, 9, 25): "추석"}
+    assert fe.adjust_to_business_day(date(2026, 9, 26), hol) \
+        == date(2026, 9, 28)                       # 토 → 월
+    assert fe.adjust_to_business_day(date(2026, 9, 24), hol) \
+        == date(2026, 9, 28)                       # 추석(목) → 연휴 뒤 월
+    assert fe.adjust_to_business_day(date(2026, 9, 23), hol) \
+        == date(2026, 9, 23)                       # 평일 그대로
+    # 월말 주말은 달을 넘기지 않고 그 달 마지막 영업일로 (10/31 토→10/30 금)
+    assert fe.adjust_to_business_day(date(2026, 10, 31)) == date(2026, 10, 30)
+
+    # 자동추정 목록 생성에도 적용된다
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    recur = [{"정기지출명": "토요건", "대표 지급일": 26,
+              "평균 월지출": 100000.0, "신뢰도": "상"},
+             {"정기지출명": "연휴건", "대표 지급일": 24,
+              "평균 월지출": 200000.0, "신뢰도": "상"}]
+    fe.refresh_auto_draft_file(draft, recur, BASE, holidays=hol)
+    rows = {r[1]: r[0] for r in fe.read_draft_table(draft)["rows"]}
+    assert rows["토요건"] == date(2026, 9, 28)
+    assert rows["연휴건"] == date(2026, 9, 28)
+
+    # 정기지출 체크의 변동 항목 합성 예정일도 영업일로 옮겨진다
+    checks = fe.weekly_recurring_check(
+        [], [], {}, BASE, date(2026, 10, 2),
+        variable_items=[{"정기지출명": "주말변동", "대표 지급일": 26,
+                         "평균 월지출": 1000.0, "성격": "변동"}],
+        holidays=hol)
+    assert checks[0]["예정일"] == date(2026, 9, 28)
+
+
 def test_금주체크_판정과_구간(tmp_path):
     start, end = date(2026, 9, 21), date(2026, 10, 2)
     draft_rows = [
