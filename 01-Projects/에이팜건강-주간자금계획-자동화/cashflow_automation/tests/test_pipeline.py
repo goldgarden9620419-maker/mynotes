@@ -385,6 +385,34 @@ def test_일별_비고_지출내역_요약():
     assert "취소된거래처" not in (daily[1]["비고"] or "")
 
 
+def test_지난자료_보관기간_지나면_삭제(tmp_path):
+    """99_지난자료: 보관 일수가 지난 파일은 지우고 빈 폴더도 정리한다."""
+    import os
+    import time as _time
+    import backup_manager
+
+    class _Cfg:
+        def folder(self, name):
+            return tmp_path / {"archive": "99"}[name]
+
+    cfg = _Cfg()
+    old_dir = cfg.folder("archive") / "지난결과"
+    old_dir.mkdir(parents=True)
+    old_file = old_dir / "주간자금계획_옛날.xlsx"
+    old_file.write_text("x")
+    past = _time.time() - 20 * 86400
+    os.utime(old_file, (past, past))
+    recent = cfg.folder("archive") / "지난결과_최근.xlsx"
+    recent.write_text("y")
+
+    removed = backup_manager.purge_old_archive(cfg, keep_days=14)
+    assert removed == 1
+    assert not old_file.exists() and not old_dir.exists()  # 빈 폴더 정리
+    assert recent.exists()                                  # 최근 파일 유지
+    # keep_days=0이면 정리하지 않는다
+    assert backup_manager.purge_old_archive(cfg, keep_days=0) == 0
+
+
 def test_은행폴더_계좌별_최신파일만_유지(tmp_path):
     """모든 계좌가 더 최신 파일로 대체된 은행 파일만 지난자료로 이동한다."""
     from datetime import date

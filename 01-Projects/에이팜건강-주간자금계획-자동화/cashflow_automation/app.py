@@ -541,6 +541,13 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         # 10) 이력 저장·지난자료 정리·상태 기록
         bank_loader.save_history(history_path, merged_history)
         backup_manager.archive_old_outputs(cfg)
+        # 지난자료는 임시 보관소 — 보관 기간이 지나면 자동으로 비운다
+        retention = int(cfg.get("options", "archive_retention_days",
+                                default=14))
+        purged = backup_manager.purge_old_archive(cfg, retention)
+        if purged:
+            log.info("지난자료 정리: 보관 %d일 지난 파일 %d개 삭제",
+                     retention, purged)
         # 결과 폴더에는 이번 실행분만 남긴다 (이전 버전은 99_지난자료/지난결과)
         if cfg.get("options", "keep_only_latest_outputs", default=True):
             swept = backup_manager.archive_superseded_outputs(
