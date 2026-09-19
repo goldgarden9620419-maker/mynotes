@@ -1595,14 +1595,15 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
     지출은 전액 우리은행에서 집행하고, 부족분은 농협→국민 순으로
     우리은행에 이체해 채우는 것으로 가정한다. 입금은 최근 이력의
     계좌별 외부입금 비중대로 배분한다.
-    반환: {"accounts": [(은행, 계좌) 우선순위 순], "rows": [...]}
+    반환: {"accounts": [(은행, 계좌) 우선순위 순], "shares": {계좌: 비중},
+          "rows": [...]} — 각 행의 "입금"에 그날 계좌별 배분액을 담는다.
     """
     _PRIORITY = {"우리은행": 0, "농협": 1, "국민은행": 2}
     accounts = sorted(balances.keys(),
                       key=lambda k: (_PRIORITY.get(k[0], 9),
                                      -(balances.get(k) or 0)))
     if not accounts:
-        return {"accounts": [], "rows": []}
+        return {"accounts": [], "shares": {}, "rows": []}
 
     inflow_by_acct = {k: 0.0 for k in accounts}
     for r in history_rows:
@@ -1623,7 +1624,7 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
         if day.get("실적"):
             rows.append({"일자": d, "요일": day.get("요일"), "실적": True,
                          "잔액": dict(bal) if d == actual_until else None,
-                         "이체": {}, "비고": "실적 구간"})
+                         "입금": {}, "이체": {}, "비고": "실적 구간"})
             continue
         inflow = ((day.get("온라인 예상입금") or 0)
                   + (day.get("확정·기타입금") or 0))
@@ -1631,8 +1632,9 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
                    + (day.get("카드결제") or 0)
                    + (day.get("자동이체") or 0)
                    + (day.get("기타지출") or 0))
+        deposits = {k: inflow * shares[k] for k in accounts}
         for k in accounts:
-            bal[k] += inflow * shares[k]
+            bal[k] += deposits[k]
         transfers: dict = {}
         note = ""
         need = outflow - bal[woori]
@@ -1650,8 +1652,9 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
             if need > 0:
                 note = f"전 계좌 소진 — 부족 {need:,.0f}원"
         rows.append({"일자": d, "요일": day.get("요일"), "실적": False,
-                     "잔액": dict(bal), "이체": transfers, "비고": note})
-    return {"accounts": accounts, "rows": rows}
+                     "잔액": dict(bal), "입금": deposits,
+                     "이체": transfers, "비고": note})
+    return {"accounts": accounts, "shares": shares, "rows": rows}
 
 
 # ---------------------------------------------------------------------------
