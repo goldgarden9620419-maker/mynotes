@@ -247,7 +247,10 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         _put(ws, row, 2, WEEKDAY_KO[d.weekday()], align="center", border=True,
              color=day_color)
         # 숨김 도우미: G=요일별 온라인 평균, H=확정·기타입금(수식 참조용)
-        _put(ws, row, 7, round(weekday_avg.get(d.weekday(), 0)), fmt="#,##0")
+        # 공휴일은 은행·정산이 쉬므로 예상입금 0 (2026-09-20 사용자 결정)
+        _put(ws, row, 7,
+             0 if d in holidays else round(weekday_avg.get(d.weekday(), 0)),
+             fmt="#,##0")
         _put(ws, row, 8, round(src.get("확정·기타입금") or 0), fmt="#,##0")
         if is_actual:
             inflow = (src.get("온라인 예상입금") or 0) \
