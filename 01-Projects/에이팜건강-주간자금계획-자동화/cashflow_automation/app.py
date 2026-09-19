@@ -537,10 +537,18 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             if review_path is None:
                 review_path = unique_path(review_dir / issue_name)
                 draft_table = forecast_engine.read_draft_table(draft_path)
+                # 지난 확인 파일과 비교해 새로 생긴 항목을 강조 표시한다
+                prev_files = sorted(review_dir.glob("확인필요_*.xlsx"),
+                                    key=lambda p: p.stat().st_mtime)
+                snapshot = (excel_report.review_snapshot(prev_files[-1])
+                            if prev_files else None)
+                new_marks = excel_report.diff_new_items(
+                    issues, recurring, draft_table, snapshot)
                 excel_report.create_issue_workbook(
                     issues, review_path, week_key=week_key,
                     signature=input_sig, recurring=recurring,
-                    draft_table=draft_table, holidays=holidays)
+                    draft_table=draft_table, holidays=holidays,
+                    new_marks=new_marks)
                 expected = (["안내", "자동추정_지출목록", "확인필요"]
                             + (["정기지출분석"] if recurring else []))
                 if not excel_report.verify_workbook(review_path, expected):
@@ -551,16 +559,22 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 _open_file(review_path)
                 state.mark_result(now, STATUS_REVIEW_WAIT,
                                   input_signature=input_sig)
+                new_note = (f" ⚠ 지난 확인 이후 새 항목 "
+                            f"{new_marks['count']}건이 주황색으로 표시되어 "
+                            "있습니다 — 꼭 확인해 주세요."
+                            if new_marks.get("count") else "")
                 log.info("확인필요 %d건 검토 대기 — %s 의 시트들(안내·"
                          "자동추정_지출목록·확인필요·정기지출분석)을 검토한 "
                          "뒤 '안내' 시트의 '확인 완료'(B2)를 '예'로 바꾸고 "
                          "저장하면 결과 파일이 만들어집니다 (켜져 있으면 "
-                         "10분 안에 자동)", len(issues), review_path.name)
+                         "10분 안에 자동)%s",
+                         len(issues), review_path.name, new_note)
                 return RunResult(
                     STATUS_REVIEW_WAIT,
                     f"확인필요 {len(issues)}건 검토 대기 — "
                     f"{review_path.name}의 시트들을 확인한 뒤 '안내' 시트 "
-                    "'확인 완료'를 '예'로 바꾸면 결과 3개가 만들어집니다",
+                    "'확인 완료'를 '예'로 바꾸면 결과 3개가 만들어집니다"
+                    + new_note,
                     [review_path], len(issues))
             log.info("확인 완료 확인됨(%s) — 결과 파일을 만듭니다",
                      review_path.name)

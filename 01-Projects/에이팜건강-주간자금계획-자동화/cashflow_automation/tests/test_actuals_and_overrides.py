@@ -262,6 +262,68 @@ def test_자동추정_시트_수정_원본목록_역반영(tmp_path):
     assert not drafts and excluded == 2
 
 
+def test_새_항목은_주황색_강조와_안내멘트(tmp_path):
+    """지난 확인 파일에 없던 항목은 주황색 행으로 강조되고,
+    안내 시트에 '확인해 달라'는 멘트가 나타난다."""
+    from datetime import date as _date
+    from openpyxl import load_workbook
+    import excel_report as er
+
+    def _rec(name, cls):
+        return {"은행": "우리", "정기지출명": name, "분류": cls,
+                "발생개월수": 6, "거래건수": 6, "평균 월지출": 100000.0,
+                "대표 지급일": 25, "신뢰도": "상", "성격": "정기"}
+
+    issues1 = [{"구분": "계획 없는 실제출금", "일자": _date(2026, 9, 22),
+                "내용": "사무용품", "금액": 10000.0}]
+    recurring1 = [_rec("SKB", "통신비")]
+    draft1 = {"mode": "개별 관리",
+              "rows": [(_date(2026, 9, 25), "SKB", 220000.0, "상",
+                        "제외", "")]}
+    prev = tmp_path / "확인필요_20260921_0900.xlsx"
+    er.create_issue_workbook(issues1, prev, week_key="2026-W39",
+                             signature="s", recurring=recurring1,
+                             draft_table=draft1)
+    snap = er.review_snapshot(prev)
+    assert snap and snap["recurring"] == {"SKB"}
+
+    issues2 = issues1 + [{"구분": "정기지출 누락 의심",
+                          "일자": _date(2026, 9, 26), "내용": "KT 통신",
+                          "금액": 90000.0, "지시항목": "KT"}]
+    recurring2 = recurring1 + [_rec("KT", "통신비")]
+    draft2 = {"mode": "개별 관리",
+              "rows": draft1["rows"]
+              + [(_date(2026, 9, 28), "코웨이", 113398.0, "상",
+                  "반영", "")]}
+    marks = er.diff_new_items(issues2, recurring2, draft2, snap)
+    assert marks["count"] == 3
+
+    out = tmp_path / "확인필요_20260921_0910.xlsx"
+    er.create_issue_workbook(issues2, out, week_key="2026-W39",
+                             signature="s", recurring=recurring2,
+                             draft_table=draft2, new_marks=marks)
+    wb = load_workbook(out)
+    assert "새로 생긴 항목이 3건" in str(wb["안내"]["A3"].value)
+    def _fill(ws, r):
+        return str(ws.cell(row=r, column=1).fill.start_color.rgb or "")
+    assert _fill(wb["확인필요"], 6).endswith("FFE699")      # 새 항목 행
+    assert not _fill(wb["확인필요"], 5).endswith("FFE699")  # 기존 항목
+    assert _fill(wb["정기지출분석"], 7).endswith("FFE699")  # KT
+    assert _fill(wb["자동추정_지출목록"], 6).endswith("FFE699")  # 코웨이
+    wb.close()
+
+    # 변화가 없으면 '그대로'라는 안내가 뜬다
+    marks0 = er.diff_new_items(issues1, recurring1, draft1, snap)
+    assert marks0["count"] == 0
+    same = tmp_path / "확인필요_20260921_0920.xlsx"
+    er.create_issue_workbook(issues1, same, week_key="2026-W39",
+                             signature="s", recurring=recurring1,
+                             draft_table=draft1, new_marks=marks0)
+    wb = load_workbook(same)
+    assert "그대로" in str(wb["안내"]["A3"].value)
+    wb.close()
+
+
 def test_계좌별_시나리오_인출_우선순위():
     """우리은행 부족분은 농협→국민 순으로 이체해 채운다."""
     daily = [{"일자": date(2026, 9, 21), "요일": "월", "실적": False,
