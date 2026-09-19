@@ -63,6 +63,7 @@ options:
   create_excel: false
   create_management_report: true
   confirm_before_results: true
+  confirm_wait_minutes: 30
   create_pdf_summary: true
   backup_input_files: true
   open_output_folder_after_manual_run: true
