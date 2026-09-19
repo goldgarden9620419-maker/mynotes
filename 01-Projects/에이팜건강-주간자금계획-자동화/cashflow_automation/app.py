@@ -79,6 +79,11 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         log.warning("중복 실행 방지: %s", exc)
         return RunResult("LOCKED", str(exc))
 
+    # '확인 완료'는 검토 대기 중(REVIEW_WAIT)에만 유효하다 — 결과가 이미
+    # 만들어진 뒤의 새 실행은 항상 새 확인 단계부터 시작한다
+    # (2026-09-20 사용자 요청: 실행할 때마다 확인 받고 결과 생성)
+    prior_status = state.state.get("last_run_status", "")
+
     workspace = None
     try:
         state.mark_running(now)
@@ -197,7 +202,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                default=False)
         confirmed_review = None
         review_directives = []
-        if confirm_mode:
+        if confirm_mode and prior_status == STATUS_REVIEW_WAIT:
             confirmed_review = excel_report.find_confirmed_review(
                 review_dir, week_key, input_sig)
         if confirmed_review is not None:
