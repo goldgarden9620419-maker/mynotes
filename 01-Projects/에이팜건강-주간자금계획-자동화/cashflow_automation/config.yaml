@@ -1,0 +1,84 @@
+company_name: "(주)에이팜건강"
+timezone: "Asia/Seoul"
+
+schedule:
+  day_of_week: "mon"
+  hour: 9
+  minute: 10
+
+startup:
+  auto_start_with_windows: true
+  initial_wait_seconds: 60      # 시작 후 OneDrive·네트워크 동기화 대기
+  check_missed_run: true
+  run_missed_job_immediately: true
+
+missed_run:
+  enabled: true
+  run_on_any_day_after_monday: true
+  require_success_status: true
+  prioritize_current_week: true
+
+retry:
+  enabled: true
+  interval_minutes: 10
+  end_time: "10:30"
+  continue_after_program_restart: true
+
+input_change:
+  detect_after_success: true
+  auto_rerun: false             # 사용자 승인 없이 재생성하지 않음
+  notify_user: true
+
+folders:
+  general_teams: "./01_일반팀_지출계획"
+  confidential_admin: "./02_경영지원_대외비"
+  bank_root: "./03_은행거래내역"
+  base_workbook: "./04_기준파일"
+  output: "./05_결과"
+  review: "./06_확인필요"
+  log: "./07_실행로그"
+  backup: "./08_백업"
+  archive: "./99_지난자료"
+
+forecast:
+  default_receipt_rate: 0.8     # 입금 예측 반영률 (0.6/0.7/0.8/0.9/1.0)
+  receipt_rates: [0.6, 0.7, 0.8, 0.9, 1.0]
+  minimum_cash_balance: 0       # 이 금액 미만이면 '주의' 표시
+  online_history_weeks: 12
+  online_recency_halflife: 4     # 최근 주 가중(반감기, 주). 0이면 단순 평균
+  include_unconfirmed: true     # 승인대기·미확정도 지급일자 기준 반영
+  # 2026-09-19 사용자 결정: 자동추정은 전부 제외, 팀 지출예정 파일 기준
+  auto_draft_default: 전체 제외
+
+
+matching:
+  date_window_days: 3           # 지급예정일 전후 허용 일수
+  name_similarity_threshold: 70
+  partial_payment_tolerance: 0.05
+
+bank:
+  recent_days: 14
+  month_end_top_day: 25         # 이 날짜 이후 KB TOP출금은 월말 급여로 분류
+  internal_account_keywords: ["에이팜건강", "(주)에이팜건강"]
+  classify_rules_file: "classify_rules.json"
+
+recurring:
+  lookback_months: 6
+  min_months: 4
+
+options:
+  create_excel: false            # 고정서식 파일은 경영보고로 대체
+  create_management_report: true  # 대화형 주간 경영보고
+  confirm_before_results: true    # 확인필요 검토('확인 완료'=예) 후 결과 생성
+  confirm_wait_minutes: 30        # 실행창이 확인 완료 저장을 기다리는 시간(분)
+  mask_confidential: false        # 2026-09-19 사용자 결정: 결과물은 대표·관리자 전용이라 대외비 상세 표시
+  archive_retention_days: 14      # 99_지난자료 보관 일수 — 지나면 자동 삭제
+  create_pdf_summary: true
+  create_live_workbook: true          # 수식 유지 라이브 양식 생성
+  live_template_name: "자금계획_라이브템플릿.xlsx"  # 04_기준파일 안에 배치
+  keep_only_latest_outputs: true      # 05_결과에 최신 실행분만 유지
+  keep_only_latest_bank_files: true   # 은행 폴더에 계좌별 최신 파일만 유지
+  backup_input_files: true
+  open_output_folder_after_manual_run: true
+
+base_workbook_name: "에이팜건강_자금계획_기준파일.xlsx"
