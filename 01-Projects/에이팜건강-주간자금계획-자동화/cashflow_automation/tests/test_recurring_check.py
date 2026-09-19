@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """일괄 반영/제외 스위치와 금주 정기지출 체크 테스트."""
-from datetime import date
+from datetime import date, timedelta
 
 from openpyxl import load_workbook
 
@@ -47,6 +47,15 @@ def test_전체제외_기본값이면_생성부터_제외(tmp_path):
     wb = load_workbook(draft)
     assert wb[fe.GUIDE_SHEET].cell(row=6, column=2).value == "전체 제외"
     wb.close()
+
+
+def test_주말실행이면_대표보고_일별전망은_차주(tmp_path):
+    """display_week_start를 차주 월요일로 주면 금주일별이 차주 월~금."""
+    fc = fe.build_forecast([], BASE, 1_000_000, [], [], [], [0.8], 0.8,
+                           display_week_start=BASE + timedelta(days=7))
+    days = fc["rate_scenarios"][0.8]["금주일별"]
+    assert [d for d, _b, _s in days] == [BASE + timedelta(days=7 + i)
+                                         for i in range(5)]
 
 
 def test_금주체크_판정과_구간(tmp_path):

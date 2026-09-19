@@ -125,11 +125,22 @@ def create_pdf_summary(report: dict, out_path: Path) -> Path:
                     if r in forecast.get("rate_scenarios", {})]
     scenarios = forecast.get("rate_scenarios", {})
 
-    story.append(Paragraph("금주 일별 잔액 전망 (월~금)", section))
-    day_rows = [["일자"] + [f"반영률 {int(r * 100)}% 기말잔액"
-                          for r in report_rates]]
     base_days = (scenarios.get(report_rates[0], {}).get("금주일별", [])
                  if report_rates else [])
+    # 조회 시점보다 뒤의 주면 '차주'로 표기 (주말 실행 시 다가오는 주)
+    from common import week_monday
+    title_label = "금주 일별 잔액 전망 (월~금)"
+    if base_days:
+        first_d, last_d = base_days[0][0], base_days[-1][0]
+        run_d = meta.get("run_date")
+        word = ("차주" if run_d is not None
+                and week_monday(first_d) > week_monday(run_d) else "금주")
+        title_label = (f"{word} 일별 잔액 전망 "
+                       f"({first_d.month}/{first_d.day} ~ "
+                       f"{last_d.month}/{last_d.day})")
+    story.append(Paragraph(title_label, section))
+    day_rows = [["일자"] + [f"반영률 {int(r * 100)}% 기말잔액"
+                          for r in report_rates]]
     shortage_cells = []
     for i, (d, _bal, _state) in enumerate(base_days, start=1):
         row = [f"{_fmt_date(d)} ({'월화수목금토일'[d.weekday()]})"]
