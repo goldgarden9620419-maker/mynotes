@@ -131,6 +131,63 @@ def test_정기지출분석_수정_수확_반영(tmp_path):
     assert fe.update_override_sheet(base, edits) == 0
 
 
+def test_확인필요_정기지출분석_시트와_일괄변경_왕복(tmp_path):
+    """확인필요 파일의 정기지출분석 시트: 필터·드롭다운·K4 일괄 변경이
+    붙고, 수정(개별·일괄)이 수확돼 기준파일 정기지출분류로 흘러간다."""
+    from openpyxl import load_workbook
+    import excel_report as er
+
+    out = tmp_path / "확인필요_20260921_0910.xlsx"
+    recurring = [
+        {"은행": "우리은행", "정기지출명": "SKB", "분류": "통신비",
+         "발생개월수": 6, "거래건수": 6, "평균 월지출": 220000.0,
+         "대표 지급일": 25, "신뢰도": "상", "성격": "정기"},
+        {"은행": "농협", "정기지출명": "코웨이", "분류": "렌탈료",
+         "발생개월수": 6, "거래건수": 6, "평균 월지출": 113398.0,
+         "대표 지급일": 28, "신뢰도": "상", "성격": "정기"},
+    ]
+    er.create_issue_workbook([], out, week_key="2026-W39",
+                             signature="sig", recurring=recurring)
+
+    wb = load_workbook(out)
+    ws = wb["정기지출분석"]
+    # 머리글(5행) 필터 + K4 일괄 변경 셀 + 성격 드롭다운
+    assert ws.auto_filter.ref == "A5:K7"
+    assert ws["K4"].value == "변경 안 함"
+    formulas = [str(dv.formula1) for dv in ws.data_validations.dataValidation]
+    assert any("전체 변동" in f for f in formulas)
+    assert any("정기,변동,제외" in f for f in formulas)
+    assert ws["K6"].value == "정기"
+    # 사용자가 SKB만 '변동'으로 수정
+    ws["K6"] = "변동"
+    wb.save(out)
+    wb.close()
+
+    edits = fe.harvest_recurring_edits(out)
+    assert edits["SKB"]["성격"] == "변동"
+    assert edits["코웨이"]["성격"] == "정기"
+
+    # K4 일괄 변경은 개별 값보다 우선한다
+    wb = load_workbook(out)
+    wb["정기지출분석"]["K4"] = "전체 변동"
+    wb.save(out)
+    wb.close()
+    edits = fe.harvest_recurring_edits(out)
+    assert edits["SKB"]["성격"] == "변동"
+    assert edits["코웨이"]["성격"] == "변동"
+
+    # 기준파일 반영 → 다음 오버라이드로 적용
+    from openpyxl import Workbook
+    base = tmp_path / "기준.xlsx"
+    nb = Workbook()
+    nb.active.title = "카드결제기준"
+    nb.save(base)
+    nb.close()
+    assert fe.update_override_sheet(base, edits) >= 2
+    fe.apply_recurring_overrides(recurring, fe.load_recurring_overrides(base))
+    assert all(i["성격"] == "변동" for i in recurring)
+
+
 def test_계좌별_시나리오_인출_우선순위():
     """우리은행 부족분은 농협→국민 순으로 이체해 채운다."""
     daily = [{"일자": date(2026, 9, 21), "요일": "월", "실적": False,
