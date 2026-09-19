@@ -350,6 +350,20 @@ def test_계좌별_시나리오_인출_우선순위():
     sc2 = fe.build_account_scenario(daily2, balances, [])
     assert "부족" in sc2["rows"][0]["비고"]
 
+    # 예상입금은 최근 외부입금 비중대로 나뉘고, 배분액이 행에 기록된다
+    hist = [{"은행": "우리은행", "계좌": "W", "입금액": 300.0},
+            {"은행": "국민은행", "계좌": "K", "입금액": 700.0},
+            {"은행": "국민은행", "계좌": "K", "입금액": 500.0,
+             "내부이체": True}]                     # 내부이체는 비중 제외
+    daily3 = [dict(daily[0], **{"온라인 예상입금": 1000.0, "기타지출": 0.0})]
+    sc3 = fe.build_account_scenario(daily3, balances, hist)
+    assert sc3["shares"][("우리은행", "W")] == 0.3
+    assert sc3["shares"][("농협", "N")] == 0.0
+    row3 = sc3["rows"][0]
+    assert round(row3["입금"][("우리은행", "W")]) == 300
+    assert round(row3["입금"][("국민은행", "K")]) == 700
+    assert round(row3["잔액"][("국민은행", "K")]) == 1700
+
 
 def test_에이팜_판별과_지출예정_수집():
     """㈜에이팜 관련만 골라내고 자사명(에이팜건강)은 제외한다."""
