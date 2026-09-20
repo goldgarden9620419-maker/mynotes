@@ -5541,5 +5541,246 @@
     "answerIndex": 2,
     "explanation": "코사인법칙에 의해 a^2 = b^2 + c^2 - 2bc cosA = 4^2 + 6^2 - 2×4×6×cos60° = 16+36-48×(1/2) = 52-24=28입니다. 따라서 a = √28 = 2√7입니다.",
     "concept": "삼각형의 두 변의 길이와 그 끼인각을 알 때, 나머지 한 변의 길이는 코사인법칙 a^2 = b^2+c^2-2bc cosA로 구한다."
+  },
+  {
+    "id": "en-2026-09-21-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-21",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Engineers designing new types of adhesives have long looked to nature for inspiration, and few creatures have proven as useful as the gecko, whose feet allow it to climb walls and hang from ceilings [u]without leaving[/u]① any residue behind. Researchers examining the gecko's toes under a microscope discovered millions of microscopic hairs, each [u]splitting[/u]② into hundreds of even finer branches that grip surfaces at the molecular level. This structure creates a weak but reliable force called the van der Waals force, a phenomenon [u]which occurs[/u]③ whenever two surfaces come extremely close together. Inspired by this discovery, scientists have developed synthetic materials [u]cover[/u]④ with similar microscopic fibers, allowing robots and even humans to scale smooth vertical surfaces. Unlike traditional adhesives, these gecko-inspired materials can be peeled off and reused thousands of times without [u]losing[/u]⑤ their grip.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 synthetic materials는 미세한 섬유로 '덮인' 대상이므로 능동의 원형 cover가 아니라 수동의 의미를 갖는 과거분사 covered가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 전치사 without 뒤에 오는 동명사 leaving, ②은 each(각 털)를 의미상 주어로 하는 현재분사 splitting, ③는 a phenomenon을 선행사로 하는 주격 관계대명사절의 단수동사 occurs, ⑤는 전치사 without 뒤에 오는 동명사 losing입니다.",
+    "vocab": [
+      {
+        "word": "adhesive",
+        "meaning": "접착제"
+      },
+      {
+        "word": "residue",
+        "meaning": "잔여물, 흔적"
+      },
+      {
+        "word": "synthetic",
+        "meaning": "합성의, 인공의"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-21-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-21",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Psychologists have observed a curious pattern in which people with limited knowledge or skill in a particular area tend to overestimate their own competence, a bias known as the Dunning-Kruger effect. Research on this phenomenon suggests that ______. In one study, participants who scored in the bottom quartile on tests of grammar, logic, and humor consistently rated their own performance as above average, often placing themselves in the top half of all test-takers. Interestingly, when these same participants were later trained to improve their skills, their self-assessments became more accurate, not because their confidence increased, but because they finally gained the expertise needed to recognize their own earlier mistakes. This suggests that a certain baseline level of competence is necessary not just to perform a task well, but to accurately judge one's own performance.",
+    "choices": [
+      "the very lack of skill that causes poor performance also prevents people from recognizing how poor that performance is",
+      "people who are highly skilled in one area tend to overestimate their abilities in unrelated areas as well",
+      "confidence in one's abilities is the single most reliable predictor of actual performance on any task",
+      "formal education is the only reliable way to eliminate overconfidence in unskilled individuals",
+      "experts consistently underestimate the difficulty of tasks that novices find challenging"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤의 실험에서 최하위권 참가자들이 자신의 성적을 상위권으로 착각했고, 훈련을 통해 실력이 늘고 나서야 자기 평가가 정확해졌다는 내용이 이어집니다. 이는 곧 실력 부족 자체가 자신의 부족함을 알아차리는 능력까지 함께 앗아간다는 것을 보여주므로, 정답은 ①입니다. 나머지 선택지는 지문에서 언급되지 않았거나 지문의 핵심 논지와 무관합니다.",
+    "vocab": [
+      {
+        "word": "quartile",
+        "meaning": "사분위수"
+      },
+      {
+        "word": "competence",
+        "meaning": "능력, 역량"
+      },
+      {
+        "word": "bias",
+        "meaning": "편향, 편견"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-21-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-21",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In 1928, the Scottish bacteriologist Alexander Fleming left a petri dish of Staphylococcus bacteria uncovered on his laboratory bench before going on vacation.\n(A) Realizing that the mold itself might be producing a substance capable of destroying bacteria, Fleming began a series of experiments to isolate and test this substance, which he eventually named penicillin.\n(B) When he returned, he found that the dish had become contaminated with a blue-green mold, and to his surprise, the bacteria surrounding the mold had been destroyed.\n(C) Although Fleming's early attempts to purify penicillin in large quantities were largely unsuccessful, his discovery laid the foundation for other scientists to develop it into the first widely used antibiotic.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 플레밍이 휴가를 떠나기 전 접시를 덮지 않고 두었다는 내용입니다. (B)는 돌아와 보니 곰팡이가 생겼고 그 주변 세균이 죽어 있었다는 관찰을 설명하고, (A)는 그 곰팡이가 세균을 죽이는 물질을 만들어냈을 것이라 추론하여 실험을 시작하고 페니실린이라 명명했다는 내용이며, (C)는 대량 정제에는 실패했지만 이 발견이 이후 항생제 개발의 토대가 되었다는 결론으로 마무리됩니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "bacteriologist",
+        "meaning": "세균학자"
+      },
+      {
+        "word": "contaminated",
+        "meaning": "오염된"
+      },
+      {
+        "word": "isolate",
+        "meaning": "분리하다, 추출하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-21-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-21",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Trains scheduled to depart at what their timetable called nine o'clock might therefore leave at a completely different moment depending on whose local time was being used.",
+    "passage": "Before the late nineteenth century, most towns and cities set their own local time based on the position of the sun, meaning that noon in one town might differ by several minutes from noon in a town just a few kilometers away. ( ① ) This inconsistency caused little difficulty when travel was slow and communication was limited to short distances. ( ② ) As railway networks expanded rapidly across countries, however, this patchwork of local times became a serious practical problem. ( ③ ) Railway companies needed passengers to arrive at stations according to a single, predictable schedule, but each town's clocks disagreed with its neighbors', making coordination between towns nearly impossible. ( ④ ) In response, railway companies and eventually national governments began adopting standardized time zones, dividing the world into regions that shared a single official time. ( ⑤ ) Although a few regions initially resisted the change, preferring to keep their traditional local time, standardized time zones had become the global norm by the early twentieth century.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 시간표상의 '9시'가 어느 지역의 시각을 기준으로 하느냐에 따라 실제로는 전혀 다른 순간을 의미할 수 있었다는, 열차 시각표 혼란의 구체적 사례입니다. 이는 바로 앞 문장인 '각 마을의 시계가 서로 달라 마을 간 조율이 거의 불가능했다'는 문제 제기를 구체적으로 예시하며, 뒤에 이어지는 '이에 대응해 철도 회사와 각국 정부가 표준시간대를 도입하기 시작했다'는 해결책 문장과 자연스럽게 연결됩니다. 따라서 주어진 문장은 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "patchwork",
+        "meaning": "조각조각 짜맞춘 것, 뒤죽박죽인 것"
+      },
+      {
+        "word": "coordination",
+        "meaning": "조율, 조정"
+      },
+      {
+        "word": "norm",
+        "meaning": "규범, 표준"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-21-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-21",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many people believe that they can boost their productivity by working on several tasks at once, frequently switching between emails, phone calls, and reports throughout the day. However, cognitive psychologists have found that what feels like multitasking is, in most cases, actually rapid task-switching, and this switching carries a hidden cost. Each time the brain shifts its attention from one task to another, it must disengage from the rules and goals of the first task and reload the rules and goals of the second, a process that takes a measurable amount of time even when the switch feels instantaneous. Over the course of a workday filled with frequent interruptions, these brief delays accumulate, and studies estimate that heavy multitaskers can lose up to forty percent of their potential productivity compared to when they focus on a single task until completion. Moreover, the quality of work produced while switching between tasks tends to suffer, since divided attention makes it harder to catch errors or think through problems deeply. Given these costs, researchers increasingly recommend that people block out uninterrupted periods of time for demanding tasks rather than attempting to juggle multiple responsibilities simultaneously.",
+    "choices": [
+      "switching rapidly between tasks carries hidden time and quality costs that undermine the productivity gains people expect from multitasking",
+      "people who multitask are naturally less intelligent than those who focus on one task at a time",
+      "emails and phone calls are the leading causes of workplace stress among office employees",
+      "the human brain is incapable of performing more than one task at any given moment",
+      "productivity can only be improved by eliminating all interruptions from the workplace entirely"
+    ],
+    "answerIndex": 0,
+    "explanation": "이 글은 멀티태스킹처럼 느껴지는 것이 실제로는 빠른 작업 전환이며, 이 전환에는 시간 손실과 작업 품질 저하라는 숨겨진 비용이 따른다는 것을 설명합니다. 실험 결과 최대 40%의 생산성 손실과 오류 증가가 언급되므로, 이 글의 주제로 가장 적절한 것은 ①입니다. 나머지 선택지는 본문에서 다루지 않은 내용이거나 지나치게 극단적인 주장입니다.",
+    "vocab": [
+      {
+        "word": "disengage",
+        "meaning": "(하던 것에서) 벗어나다, 분리되다"
+      },
+      {
+        "word": "accumulate",
+        "meaning": "누적되다, 쌓이다"
+      },
+      {
+        "word": "juggle",
+        "meaning": "동시에 여러 가지를 처리하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-21-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-21",
+    "prompt": "등비수열 {a_n}에서 a_2 = 6, a_5 = 48일 때, a_7의 값은?",
+    "choices": [
+      "96",
+      "144",
+      "192",
+      "288",
+      "384"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_5 / a_2 = r^3 = 48/6 = 8이므로 공비 r = 2입니다. a_2 = a_1 × r = 6이므로 a_1 = 3입니다. 따라서 a_7 = a_1 × r^6 = 3 × 64 = 192입니다.",
+    "concept": "등비수열의 일반항 a_n = a_1 × r^(n-1)을 이용하여 두 항의 비로부터 공비를 구한 뒤 첫째항을 구한다."
+  },
+  {
+    "id": "math-2026-09-21-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-21",
+    "prompt": "함수 f(x) = x^3 - 3x^2 + a가 x = 2에서 극솟값 4를 가질 때, 상수 a의 값은?",
+    "choices": [
+      "4",
+      "6",
+      "8",
+      "10",
+      "12"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x^2 - 6x = 3x(x-2)이므로 f'(x) = 0인 x는 0과 2이고, x=2의 좌우에서 f'(x)의 부호가 음에서 양으로 바뀌므로 x=2에서 극솟값을 갖습니다. f(2) = 8 - 12 + a = a - 4이며, 이 값이 4이므로 a - 4 = 4, 즉 a = 8입니다.",
+    "concept": "f'(x) = 0이 되는 점에서 f'(x)의 부호가 음에서 양으로 바뀌면 그 점에서 극솟값을 가지며, 이를 이용해 미지수를 구할 수 있다."
+  },
+  {
+    "id": "math-2026-09-21-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-21",
+    "prompt": "수직선 위를 움직이는 점 P의 시각 t(t≥0)에서의 속도가 v(t) = 6t^2 - 6t이다. t=0에서 원점에 있던 점 P의 t=2에서의 위치는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "점 P의 위치는 속도함수를 적분하여 구할 수 있습니다. ∫[0,2] (6t^2 - 6t) dt = [2t^3 - 3t^2] (0부터 2까지) = (16 - 12) - 0 = 4입니다. 따라서 t=2에서 점 P의 위치는 4입니다.",
+    "concept": "수직선 위를 움직이는 점의 위치는 시각 0에서의 위치에 속도함수의 정적분 값을 더하여 구할 수 있다."
+  },
+  {
+    "id": "math-2026-09-21-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-21",
+    "prompt": "주머니 속에 빨간 공 3개, 파란 공 2개가 들어있다. 이 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 두 공의 색이 서로 같을 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 5개의 공 중 2개를 꺼내는 경우의 수는 C(5,2) = 10가지입니다. 두 공의 색이 같은 경우는 빨간 공 2개를 꺼내는 C(3,2) = 3가지와 파란 공 2개를 꺼내는 C(2,2) = 1가지를 더한 4가지입니다. 따라서 확률은 4/10 = 2/5입니다.",
+    "concept": "동시에 꺼내는 조합 문제에서는 전체 경우의 수와 사건이 일어나는 경우의 수를 각각 조합 C(n,r)으로 세어 확률을 구한다."
+  },
+  {
+    "id": "math-2026-09-21-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-21",
+    "prompt": "0 ≤ x < 2π일 때, 방정식 2sin x = 1의 모든 근의 합은?",
+    "choices": [
+      "π/2",
+      "2π/3",
+      "π",
+      "4π/3",
+      "3π/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "2sin x = 1에서 sin x = 1/2입니다. 0 ≤ x < 2π 범위에서 sin x = 1/2를 만족하는 x는 x = π/6과 x = 5π/6입니다. 따라서 모든 근의 합은 π/6 + 5π/6 = π입니다.",
+    "concept": "sin x = k (0<k<1) 형태의 방정식은 단위원에서 y좌표가 k인 두 점을 찾아 그에 대응하는 각을 구하여 해를 얻는다."
   }
 ]
