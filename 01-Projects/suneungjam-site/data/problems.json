@@ -5782,5 +5782,246 @@
     "answerIndex": 2,
     "explanation": "2sin x = 1에서 sin x = 1/2입니다. 0 ≤ x < 2π 범위에서 sin x = 1/2를 만족하는 x는 x = π/6과 x = 5π/6입니다. 따라서 모든 근의 합은 π/6 + 5π/6 = π입니다.",
     "concept": "sin x = k (0<k<1) 형태의 방정식은 단위원에서 y좌표가 k인 두 점을 찾아 그에 대응하는 각을 구하여 해를 얻는다."
+  },
+  {
+    "id": "en-2026-09-22-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-22",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "When wolves were reintroduced to Yellowstone National Park in 1995 after a seventy-year absence, scientists predicted [u]that[/u]① their return would simply reduce the elk population. What actually followed, however, was a far more complex chain of ecological changes. With wolves once again hunting elk, the elk began [u]avoiding[/u]② certain valleys where they had previously grazed without fear, allowing young willow and aspen trees in those areas [u]to recover[/u]③ for the first time in decades. As the trees grew taller, beaver populations increased because the animals now had more building material, and the dams they constructed created new wetlands that attracted [u]beneficial[/u]④ insects, fish, and birds. Even the rivers themselves began to change course less frequently, their banks stabilized by the roots of the returning vegetation, a phenomenon that ecologists now [u]refers[/u]⑤ to as a trophic cascade.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 주어는 복수명사 ecologists이므로 단수동사 refers가 아니라 복수동사 refer가 되어야 합니다. 나머지는 모두 어법상 올바릅니다: ①은 predicted의 목적어인 명사절을 이끄는 접속사 that, ②는 동명사를 목적어로 취하는 동사 avoid의 avoiding, ③은 'allow + 목적어 + to부정사' 구조의 to recover, ④는 insects를 수식하는 형용사 beneficial입니다.",
+    "vocab": [
+      {
+        "word": "graze",
+        "meaning": "(가축 등이) 풀을 뜯어먹다"
+      },
+      {
+        "word": "vegetation",
+        "meaning": "식생, 초목"
+      },
+      {
+        "word": "trophic cascade",
+        "meaning": "영양 단계 연쇄 효과"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-22-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-22",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Behavioral economists have long noted that people tend to feel the pain of losing something more intensely than the pleasure of gaining something of equal value, a tendency known as loss aversion. Research on this bias suggests that ______. In one experiment, participants were given a coffee mug and then asked how much money they would accept to give it up; on average, they demanded roughly twice as much as they had been willing to pay to acquire an identical mug just minutes earlier, even though nothing about the mug's value had changed. This asymmetry appears repeatedly in real-world decisions as well: investors often hold onto losing stocks far longer than is rational, hoping to avoid the psychological discomfort of locking in a loss, even when selling and reinvesting elsewhere would clearly serve them better. Such findings suggest that people are not purely rational calculators of gains and losses, but are instead powerfully shaped by the simple fact of which side of a transaction they currently occupy.",
+    "choices": [
+      "the mere act of possessing something changes how much value a person assigns to it, independent of the object's actual worth",
+      "people are generally more willing to take financial risks as they accumulate greater wealth over time",
+      "education about financial markets is the most effective way to eliminate irrational investment behavior",
+      "investors who diversify their portfolios experience less psychological discomfort than those who do not",
+      "the price of an object in a marketplace is determined solely by supply and demand"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤에 이어지는 머그컵 실험에서, 동일한 물건이라도 자신이 소유하게 된 순간 그것을 포기하는 데 요구하는 금액이 사기 위해 지불하려던 금액보다 훨씬 커진다는 내용이 제시됩니다. 이는 물건 자체의 가치가 아니라 '소유'라는 사실만으로 그 물건에 부여하는 가치가 달라진다는 것을 보여주므로 정답은 ①입니다. 나머지 선택지는 지문에서 언급되지 않았거나 지문의 핵심 논지와 무관합니다.",
+    "vocab": [
+      {
+        "word": "asymmetry",
+        "meaning": "비대칭"
+      },
+      {
+        "word": "acquire",
+        "meaning": "얻다, 획득하다"
+      },
+      {
+        "word": "aversion",
+        "meaning": "혐오, 회피 성향"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-22-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-22",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In 1796, the English physician Edward Jenner decided to test a theory that had circulated among rural communities in England for years: that people who had already caught cowpox, a mild disease affecting cattle, seemed never to catch smallpox.\n(A) To investigate this claim, Jenner scraped material from a cowpox sore on the hand of a milkmaid and used it to inoculate a healthy eight-year-old boy.\n(B) Several weeks later, Jenner deliberately exposed the boy to smallpox itself, and to his relief, the boy showed no sign of infection whatsoever, remaining perfectly healthy.\n(C) Convinced that the cowpox material had provided genuine protection, Jenner published his findings and called the procedure vaccination, after vacca, the Latin word for cow.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 문장은 제너가 시골 지역에 퍼져 있던 이론을 검증하기로 했다는 내용입니다. (A)는 이 주장을 검증하기 위해 우두 종기에서 채취한 물질을 소년에게 접종했다는 내용이고, (B)는 몇 주 후 소년을 천연두에 의도적으로 노출시켰지만 감염되지 않았다는 결과이며, (C)는 이 결과에 확신을 얻어 연구 결과를 발표하고 백신 접종이라 명명했다는 결론입니다. 따라서 순서는 (A)-(B)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "inoculate",
+        "meaning": "접종하다"
+      },
+      {
+        "word": "circulated",
+        "meaning": "(소문 등이) 퍼지다, 유포되다"
+      },
+      {
+        "word": "deliberately",
+        "meaning": "의도적으로, 고의로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-22-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-22",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Wegener also pointed out that identical species of extinct plants and freshwater reptiles had been found in rock layers on both sides of the Atlantic Ocean, a pattern that would be nearly impossible to explain if the continents had always been separated by thousands of kilometers of open water.",
+    "passage": "In 1912, the German scientist Alfred Wegener proposed a startling idea: that the continents were not fixed in place but had once been joined together as a single landmass before slowly drifting apart over millions of years. ( ① ) His initial evidence was visual, based on the way the coastlines of South America and Africa appeared to fit together like pieces of a puzzle. ( ② ) Most geologists of his time dismissed this idea, since Wegener could not explain what force might be powerful enough to move entire continents across the ocean floor. ( ③ ) Undeterred, Wegener continued to gather supporting evidence from multiple scientific fields. ( ④ ) He also noted that matching rock formations and mountain ranges appeared on continents now separated by vast oceans, further strengthening his case. ( ⑤ ) It was not until the 1960s, decades after Wegener's death, that the discovery of seafloor spreading finally provided a mechanism, and his once-ridiculed theory became the foundation of modern plate tectonics.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 대서양 양쪽의 지층에서 동일한 멸종 동식물 화석이 발견되었다는, 웨게너가 제시한 또 다른 증거입니다. ③ 뒤에서 '여러 분야에서 증거를 모으기 시작했다'고 언급한 뒤, ④ 뒤 문장이 'He also noted that matching rock formations...'로 '또 다른' 증거를 이어서 제시하고 있으므로, 화석 증거를 설명하는 주어진 문장은 ④에 들어가야 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "undeterred",
+        "meaning": "단념하지 않는, 굴하지 않는"
+      },
+      {
+        "word": "landmass",
+        "meaning": "대륙, 육지 덩어리"
+      },
+      {
+        "word": "formation",
+        "meaning": "(암석 등의) 지층, 형성물"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-22-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-22",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Common sense suggests that having more options makes people happier, since greater choice presumably increases the odds of finding exactly what one wants. Psychological research, however, tells a more complicated story. In a well known study, shoppers presented with a display of twenty-four varieties of jam were far more likely to stop and sample the products than those presented with only six varieties, yet the larger display led to dramatically fewer actual purchases. Follow-up interviews revealed that many shoppers who faced the wider selection ultimately felt overwhelmed and uncertain about which jar represented the best choice, and this uncertainty made them anxious about the possibility of regretting their decision later. Similar effects have been documented in contexts ranging from retirement savings plans to romantic matchmaking services, where an abundance of options often leads people to delay decisions indefinitely or to feel less satisfied with whatever they eventually choose. These findings suggest that beyond a certain point, additional choices do not expand freedom so much as they impose a psychological burden that can leave people paralyzed or dissatisfied.",
+    "choices": [
+      "beyond a certain point, having more options can overwhelm people and reduce both their willingness to choose and their satisfaction with what they choose",
+      "people always make better decisions when they are given as many options as possible in any situation",
+      "retirement savings plans are less effective than romantic matchmaking services at helping people make decisions",
+      "shoppers consistently prefer smaller stores over larger stores regardless of the variety of products offered",
+      "psychological research has proven that human beings are fundamentally incapable of making rational decisions"
+    ],
+    "answerIndex": 0,
+    "explanation": "이 글은 선택지가 많을수록 오히려 사람들이 압도감과 불확실성을 느껴 실제 구매나 결정을 미루고, 나중에 만족도도 낮아진다는 내용을 잼 진열대 실험과 여러 사례를 통해 설명합니다. 따라서 이 글의 주제로 가장 적절한 것은 ①입니다. 나머지 선택지는 지문의 내용을 왜곡하거나 지나치게 단정적입니다.",
+    "vocab": [
+      {
+        "word": "abundance",
+        "meaning": "풍부함, 과다"
+      },
+      {
+        "word": "paralyzed",
+        "meaning": "마비된, 무력해진"
+      },
+      {
+        "word": "indefinitely",
+        "meaning": "무기한으로"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-22-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-22",
+    "prompt": "등차수열 {a_n}에서 a_3 = 11, a_7 = 27일 때, a_10의 값은?",
+    "choices": [
+      "35",
+      "37",
+      "39",
+      "41",
+      "43"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 27 - 11 = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = 11이므로 a_1 = 11 - 8 = 3입니다. 따라서 a_10 = a_1 + 9d = 3 + 36 = 39입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d를 이용하여 두 항의 차이로부터 공차를 구한 뒤 첫째항을 구한다."
+  },
+  {
+    "id": "math-2026-09-22-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-22",
+    "prompt": "함수 f(x) = x^3 - 6x^2 + 9x + a가 x = 1에서 극댓값 5를 가질 때, 상수 a의 값은?",
+    "choices": [
+      "-1",
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x^2 - 12x + 9 = 3(x-1)(x-3)이므로 f'(x) = 0인 x는 1과 3이고, x=1의 좌우에서 f'(x)의 부호가 양에서 음으로 바뀌므로 x=1에서 극댓값을 갖습니다. f(1) = 1 - 6 + 9 + a = a + 4이며, 이 값이 5이므로 a + 4 = 5, 즉 a = 1입니다.",
+    "concept": "f'(x) = 0이 되는 점에서 f'(x)의 부호가 양에서 음으로 바뀌면 그 점에서 극댓값을 가지며, 이를 이용해 미지수를 구할 수 있다."
+  },
+  {
+    "id": "math-2026-09-22-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-22",
+    "prompt": "두 곡선 f(x) = x^2, g(x) = 2x로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "2/3",
+      "1",
+      "4/3",
+      "5/3",
+      "2"
+    ],
+    "answerIndex": 2,
+    "explanation": "x^2 = 2x에서 x(x-2) = 0이므로 두 곡선은 x = 0, x = 2에서 만납니다. 이 구간에서 g(x) = 2x가 f(x) = x^2보다 위에 있으므로 넓이는 ∫[0,2] (2x - x^2) dx = [x^2 - x^3/3] (0부터 2까지) = (4 - 8/3) - 0 = 4/3입니다.",
+    "concept": "두 곡선으로 둘러싸인 부분의 넓이는 두 교점 사이에서 위쪽 함수에서 아래쪽 함수를 뺀 식을 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-22-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-22",
+    "prompt": "서로 다른 5개의 문자 A, B, C, D, E를 일렬로 나열할 때, A와 B가 서로 이웃하도록 나열하는 경우의 수는?",
+    "choices": [
+      "24",
+      "36",
+      "48",
+      "60",
+      "72"
+    ],
+    "answerIndex": 2,
+    "explanation": "A와 B를 하나로 묶어 한 문자로 생각하면 (AB), C, D, E의 4개를 일렬로 나열하는 경우의 수는 4! = 24가지입니다. 이때 묶음 내부에서 A와 B의 순서를 바꾸는 경우가 2가지 있으므로, 전체 경우의 수는 24 × 2 = 48가지입니다.",
+    "concept": "이웃하는 조건이 있는 순열 문제는 이웃하는 원소들을 하나로 묶어 전체를 나열한 후, 묶음 내부의 순서를 곱하여 구한다."
+  },
+  {
+    "id": "math-2026-09-22-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-22",
+    "prompt": "0 ≤ x < 2π일 때, 방정식 2cos²x - cos x - 1 = 0의 모든 근의 합은?",
+    "choices": [
+      "π",
+      "4π/3",
+      "3π/2",
+      "2π",
+      "5π/2"
+    ],
+    "answerIndex": 3,
+    "explanation": "cos x = t로 치환하면 2t^2 - t - 1 = 0이고, 이를 인수분해하면 (2t+1)(t-1) = 0이므로 t = -1/2 또는 t = 1입니다. cos x = 1을 만족하는 x는 0 ≤ x < 2π에서 x = 0이고, cos x = -1/2를 만족하는 x는 x = 2π/3, x = 4π/3입니다. 따라서 모든 근의 합은 0 + 2π/3 + 4π/3 = 2π입니다.",
+    "concept": "cos x에 대한 이차방정식은 t = cos x로 치환하여 t값을 구한 뒤, 단위원에서 그 t값에 대응하는 x를 모두 찾아 해를 얻는다."
   }
 ]
