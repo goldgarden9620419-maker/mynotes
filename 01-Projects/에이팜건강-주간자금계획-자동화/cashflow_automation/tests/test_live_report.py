@@ -191,6 +191,10 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert exp["A8"].value is None
     assert exp.freeze_panes == "A6"
     assert exp.auto_filter.ref == "A5:Q7"   # 머리글 필터 (데이터 2행)
+    # 경영보고 지출예정 표와 같은 기간(실행일 9/23~차주 금 10/2)만 표시
+    assert exp.row_dimensions[6].hidden          # 반영일 10/23 → 창 밖
+    assert not exp.row_dimensions[7].hidden      # 반영일 9/23 → 표시
+    assert "실행일~차주 금요일" in str(exp["A3"].value)
     # 에이팜 지출계획 시트: 취합 시트 바로 다음, 미반영/반영 구분 + 합계
     names = wb.sheetnames
     assert names.index("에이팜 지출계획") == names.index("지출계획_취합") + 1
