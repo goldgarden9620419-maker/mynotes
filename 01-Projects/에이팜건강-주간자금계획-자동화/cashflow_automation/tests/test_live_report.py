@@ -404,9 +404,11 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     assert daily.cell(row=5, column=8).value == "확정·기타입금"
     assert daily.cell(row=5, column=9).value == "송금예정"
     assert daily.cell(row=5, column=15).value == "비고"
-    # 계좌 열은 그룹(개요)으로 접을 수 있다
-    assert daily.column_dimensions["C"].outline_level == 1
-    assert daily.column_dimensions["F"].outline_level == 1
+    # 계좌 열은 그룹(개요)으로 접을 수 있다 — 그룹의 모든 열에 지정
+    for col in ("C", "D", "F", "G"):
+        assert daily.column_dimensions[col].outline_level == 1
+        assert not daily.column_dimensions[col].hidden
+    assert daily.column_dimensions["E"].outline_level in (0, None)
     # 수식 연결도 새 열 기준: 순현금(L)·기말(N)
     assert daily.cell(row=8, column=12).value == "=E8+H8-I8-J8-K8"
     assert daily.cell(row=8, column=14).value == "=M8+L8"
