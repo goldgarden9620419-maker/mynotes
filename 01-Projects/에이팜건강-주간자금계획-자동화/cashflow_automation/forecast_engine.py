@@ -1212,32 +1212,40 @@ def intraday_actuals(countable_plans: list[dict], history_rows: list[dict],
                    if (p.get("자금계획 반영일") == run_date
                        and (p.get("예상금액") or 0) > 0)]
     executed = {id(p): 0.0 for p in plans_today}
+    matched_txt: dict[int, list[str]] = {id(p): [] for p in plans_today}
     unplanned_out = 0.0
+
+    def _hit(plan: dict, tx: dict, amt: float) -> None:
+        executed[id(plan)] += amt
+        name = (normalize_text(tx.get("기재내용·상대방"))
+                or normalize_text(tx.get("적요")) or "(무기재)")
+        matched_txt[id(plan)].append(f"{name} {amt:,.0f}")
+
     txs = sorted((t for t in todays if (t.get("출금액") or 0) > 0),
                  key=lambda t: -(t.get("출금액") or 0))
     for tx in txs:
         amt = tx.get("출금액") or 0
+        # ① 거래처 이름이 비슷하고(유사도 40+, 은행 표기는 '국민네이버
+        #    apha'처럼 잘려 70을 못 넘는 경우가 많다) 금액이 계획의 남은
+        #    몫 안이면 그 계획의 집행으로 본다 (분할 집행 포함) — 금액대가
+        #    비슷하다는 이유만으로 다른 계획에 붙는 것을 막는다
+        named = [(payment_matcher._name_similarity(p, tx), p)
+                 for p in plans_today]
+        named = [(sim, p) for sim, p in named
+                 if sim >= 40
+                 and (p.get("예상금액") or 0) - executed[id(p)] >= amt - 1]
+        if named:
+            _hit(max(named, key=lambda t: t[0])[1], tx, amt)
+            continue
+        # ② 금액·일자·지급방법 점수 매칭 (계획 초과 집행도 여기서 잡힘)
         best, best_score = None, 0.0
         for p in plans_today:
-            # 이름 유사도 문턱을 40으로 낮춘다 — 당일·같은 금액대 계획이
-            # 여럿일 때 거래처 이름이 비슷한 계획이 이기게 (은행 표기는
-            # '국민네이버 apha'처럼 잘려 70을 못 넘는 경우가 많다)
             s = payment_matcher._score(p, tx, name_threshold=40,
                                        window_days=3)
             if s > best_score:
                 best, best_score = p, s
         if best is not None and best_score >= 40:
-            executed[id(best)] += amt
-            continue
-        # 분할 집행: 한 계획을 여러 번에 나눠 보낸 경우 — 금액이 계획의
-        # 남은 몫 안이고 거래처 이름이 비슷하면 그 계획의 집행으로 본다
-        split = next(
-            (p for p in plans_today
-             if (p.get("예상금액") or 0) - executed[id(p)] >= amt - 1
-             and payment_matcher._name_similarity(p, tx) >= 40),
-            None)
-        if split is not None:
-            executed[id(split)] += amt
+            _hit(best, tx, amt)
         else:
             unplanned_out += amt
 
@@ -1251,13 +1259,33 @@ def intraday_actuals(countable_plans: list[dict], history_rows: list[dict],
 
     remaining = {"송금": 0.0, "카드": 0.0, "자동이체": 0.0}
     executed_cat = {"송금": 0.0, "카드": 0.0, "자동이체": 0.0}
+    details = []           # 항목별 대조 (지출계획_취합 시트 표시용)
     for p in plans_today:
         cat = _category(p)
-        executed_cat[cat] += executed[id(p)]
-        remaining[cat] += max(0.0, (p.get("예상금액") or 0)
-                              - executed[id(p)])
+        exe = executed[id(p)]
+        planned = p.get("예상금액") or 0
+        executed_cat[cat] += exe
+        remaining[cat] += max(0.0, planned - exe)
+        if exe <= 0:
+            status, why = "미집행", "당일 실제 출금에서 일치 항목 없음"
+        elif abs(exe - planned) < 1:
+            status, why = "집행 확인", " + ".join(matched_txt[id(p)])
+        elif exe < planned:
+            status = "일부지급"
+            why = (" + ".join(matched_txt[id(p)])
+                   + f" — 잔여 {planned - exe:,.0f}")
+        else:
+            status = "초과집행"
+            why = (" + ".join(matched_txt[id(p)])
+                   + f" — 계획보다 {exe - planned:,.0f} 많음")
+        details.append({"요청ID": p.get("요청ID", ""),
+                        "거래처": p.get("거래처", ""),
+                        "예상금액": planned, "집행액": exe,
+                        "잔여": max(0.0, planned - exe),
+                        "구분": cat, "상태": status, "사유": why})
 
     return {"일자": run_date,
+            "대조내역": details,
             "온라인실제": online_in,
             "기타입금실제": sum(other_in_rows),
             "확정도착": arrived,
@@ -1751,6 +1779,17 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
             if key in bal:
                 bal[key] -= (r.get("입금액") or 0) - (r.get("출금액") or 0)
     opening = dict(bal)          # 예측 시작 시점의 계좌별 잔액
+    # 전일 마감 실잔고 (표시용): 실잔고에서 당일 거래를 되돌린 값.
+    # intraday가 아니면 opening 자체가 전일 마감이다
+    prev_close = dict(opening)
+    if intraday_date is not None:
+        for r in history_rows:
+            if r.get("거래일") != intraday_date:
+                continue
+            key = (r.get("은행"), r.get("계좌") or "")
+            if key in prev_close:
+                prev_close[key] -= ((r.get("입금액") or 0)
+                                    - (r.get("출금액") or 0))
     woori = accounts[0]
     rows = []
     for day in daily_rows:
@@ -1791,7 +1830,8 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
                      "잔액": dict(bal), "입금": deposits, "지출": outflow,
                      "이체": transfers, "비고": note})
     return {"accounts": accounts, "shares": shares, "opening": opening,
-            "intraday_date": intraday_date, "rows": rows}
+            "prev_close": prev_close, "intraday_date": intraday_date,
+            "rows": rows}
 
 
 # ---------------------------------------------------------------------------
