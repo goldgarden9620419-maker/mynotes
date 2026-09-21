@@ -160,6 +160,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         history_path = cfg.state_dir / "bank_history.csv"
         history = bank_loader.load_history(history_path)
         merged_history = duplicate_checker.merge_with_history(kept, history)
+        # 내부이체는 이력 전체를 놓고 짝(같은 날·같은 금액·다른 계좌)으로
+        # 다시 판정한다 — 과거에 키워드만으로 잘못 표시된 행도 되돌아오고,
+        # 상대 계좌 파일이 늦게 온 이체도 짝이 생기면 표시된다
+        bank_classifier.mark_internal_transfers(merged_history, rules)
         bank_classifier.classify_rows(
             [r for r in merged_history if not r.get("자동분류")], rules)
         recurring = forecast_engine.analyze_recurring(

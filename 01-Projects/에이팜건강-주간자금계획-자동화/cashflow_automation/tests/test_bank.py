@@ -58,13 +58,50 @@ def test_거래일시가_다르면_중복이_아니다():
     assert not dups
 
 
-def test_내부이체_제외():
-    row = _tx(bank="국민은행", out_amt=5000000.0, memo="(주)에이팜건강")
-    issues = classify_rows([row], DEFAULT_RULES)
-    assert row["자동분류"] == CLASS_INTERNAL
-    assert row["내부이체"] is True
-    assert row["현금유출입"] == 0
+def test_내부이체는_반대편_거래가_있어야_표시():
+    w = dict(_tx(bank="우리은행", out_amt=5000000.0, memo="(주)에이팜건강"),
+             계좌="220351")
+    d = dict(_tx(bank="국민은행", in_amt=5000000.0, memo="에이팜건강"),
+             계좌="169124")
+    issues = classify_rows([w, d], DEFAULT_RULES)
+    for row in (w, d):
+        assert row["자동분류"] == CLASS_INTERNAL
+        assert row["내부이체"] is True
+        assert row["현금유출입"] == 0
     assert not issues
+
+
+def test_회사명이_붙은_외부지급은_내부이체가_아니다():
+    """네이버 광고비 충전 가상계좌는 계좌명에 광고주(회사)명이 붙는다.
+
+    2026-09-21 실사용에서 발견: '국민네이버 apha'·'국민네이버 에이팜건'
+    출금이 내부이체로 오분류되어 총 시작잔액이 계좌별 출발 잔액 합과
+    2,508,000원 어긋났다. 반대편 입금이 우리 계좌에 없으면 외부 지급이다.
+    """
+    rows = [
+        dict(_tx(bank="우리은행", out_amt=2178000.0,
+                 memo="국민네이버 apha"), 계좌="220351"),
+        dict(_tx(bank="우리은행", out_amt=330000.0,
+                 memo="국민네이버 에이팜건"), 계좌="220351", order=2),
+    ]
+    classify_rows(rows, DEFAULT_RULES)
+    for row in rows:
+        assert row["내부이체"] is False
+        assert row["자동분류"] != CLASS_INTERNAL
+    assert rows[0]["현금유출입"] == -2178000.0
+
+
+def test_이력의_잘못된_내부이체_표시를_짝_재판정으로_되돌린다():
+    stale = dict(_tx(bank="우리은행", out_amt=330000.0,
+                     memo="국민네이버 에이팜건"), 계좌="220351")
+    stale["자동분류"] = CLASS_INTERNAL
+    stale["내부이체"] = True
+    stale["현금유출입"] = 0.0
+    from bank_classifier import mark_internal_transfers
+    mark_internal_transfers([stale], DEFAULT_RULES)
+    assert stale["내부이체"] is False
+    assert stale["자동분류"] == ""
+    assert stale["현금유출입"] == -330000.0
 
 
 def test_월말_TOP출금_급여_분류():
