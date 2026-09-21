@@ -380,11 +380,14 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("forecast", "minimum_cash_balance", default=0),
             cfg.get("forecast", "online_history_weeks", default=12),
             cfg.get("forecast", "online_recency_halflife", default=4),
-            display_week_start=display_monday, holidays=holidays)
-        # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위)
+            display_week_start=display_monday, holidays=holidays,
+            run_date=now.date())
+        # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위).
+        # 실행일 당일 거래는 실적으로 확정하지 않으므로 시작 잔액도
+        # 전일 마감으로 되돌린다 (backout_from)
         account_scenario = forecast_engine.build_account_scenario(
             forecast["daily"], balances, merged_history,
-            forecast.get("actual_until"))
+            forecast.get("actual_until"), backout_from=now.date())
         for row in forecast["daily"]:
             if row["상태"] == forecast_engine.STATE_SHORTAGE:
                 issues.append({"구분": "음수 예상잔액",
