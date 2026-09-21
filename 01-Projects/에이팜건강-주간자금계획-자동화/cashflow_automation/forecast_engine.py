@@ -1171,17 +1171,17 @@ def _plan_amounts_by_date(plans: list[dict]) -> dict[date, dict[str, float]]:
 def intraday_actuals(countable_plans: list[dict], history_rows: list[dict],
                      adjustments: list[dict],
                      run_date: date) -> Optional[dict]:
-    """실행일 당일 행을 '이미 확인된 실적 + 남은 계획'으로 합치기 위한 집계.
+    """실행일 당일의 실제 입출금 집계와 '남은 계획' 계산.
 
-    당일은 실적으로 확정하지 않지만(아직 끝나지 않은 날), 은행에 이미
-    찍힌 실제 입출금은 당일 계획 행에 반영한다 (2026-09-21 사용자 요청):
-    - 온라인 입금: 실제가 추정을 넘으면 실제를 쓴다 (MAX)
-    - 계획에 없는 실제 입금은 확정·기타입금에 더한다
-      (당일 확정입금 계획과 금액이 같으면 계획 도착으로 보고 제외)
-    - 실제 출금은 당일 지급계획과 대조해, 계획 안의 집행이면 계획 금액
-      유지(초과분만 가산), 계획 밖 지출은 조정·추정 지출에 더한다
-    이렇게 하면 당일 기말잔액 = 현재 실잔고 + 남은 예상입금 − 남은 계획
-    지출이 되어, 실제 입출금이 사라지지도 이중계산되지도 않는다.
+    당일 계획 행은 은행 확인 실잔고에서 출발해 '남은 계획'만 반영한다
+    (2026-09-21 사용자 요청 — 실제 입출금과 예정 금액을 구분 표시):
+    - 남은 온라인 예상입금 = MAX(0, 추정 − 실제 온라인 입금)
+    - 남은 확정입금 = 확정입금 계획 − 같은 금액으로 도착한 실제 입금
+    - 남은 지급계획 = 계획 − 당일 실제 출금과 대조된 집행분 (항목별)
+    - 계획 밖 실제 지출·계획에 없던 실제 입금은 이미 실잔고에 반영돼
+      있으므로 계획 행에는 더하지 않는다
+    결과: 당일 기말잔액 = 현재 실잔고 + 남은 입금 − 남은 지출.
+    실제 입출금 내역은 출발 행 표시용으로 함께 돌려준다.
     """
     todays = [r for r in history_rows
               if r.get("거래일") == run_date and not r.get("내부이체")]
@@ -1198,14 +1198,13 @@ def intraday_actuals(countable_plans: list[dict], history_rows: list[dict],
     planned_in = [(a.get("조정입금") or 0) for a in adjustments
                   if a.get("일자") == run_date and (a.get("조정입금") or 0) > 0]
     used_plan = [False] * len(planned_in)
-    other_in = 0.0
+    arrived = 0.0          # 확정입금 계획과 같은 금액으로 도착한 실제 입금
     for amt in other_in_rows:
         hit = next((j for j, p in enumerate(planned_in)
                     if not used_plan[j] and abs(p - amt) < 1), None)
-        if hit is None:
-            other_in += amt
-        else:
+        if hit is not None:
             used_plan[hit] = True
+            arrived += amt
 
     # 당일 실제 출금 ↔ 당일 지급계획 대조 (한 계획에 분할 집행 허용)
     import payment_matcher
@@ -1250,16 +1249,20 @@ def intraday_actuals(countable_plans: list[dict], history_rows: list[dict],
             return "자동이체"
         return "송금"
 
-    excess = {"송금": 0.0, "카드": 0.0, "자동이체": 0.0}
+    remaining = {"송금": 0.0, "카드": 0.0, "자동이체": 0.0}
+    executed_cat = {"송금": 0.0, "카드": 0.0, "자동이체": 0.0}
     for p in plans_today:
-        over = executed[id(p)] - (p.get("예상금액") or 0)
-        if over > 0:
-            excess[_category(p)] += over
+        cat = _category(p)
+        executed_cat[cat] += executed[id(p)]
+        remaining[cat] += max(0.0, (p.get("예상금액") or 0)
+                              - executed[id(p)])
 
     return {"일자": run_date,
             "온라인실제": online_in,
-            "기타입금실제": other_in,
-            "초과집행": excess,
+            "기타입금실제": sum(other_in_rows),
+            "확정도착": arrived,
+            "집행": executed_cat,
+            "남은계획": remaining,
             "계획외지출": unplanned_out,
             "입금실제": in_total,
             "출금실제": out_total}
@@ -1555,19 +1558,21 @@ def build_daily_plan(countable_plans: list[dict], base_date: date,
             etc_out = adj["지출"]
             note = "; ".join(adj["내용"])
             if intraday and d == intraday["일자"]:
-                online = max(online, intraday["온라인실제"])
-                adj_in += intraday["기타입금실제"]
-                planned = {k: planned.get(k, 0.0)
-                           + intraday["초과집행"].get(k, 0.0)
-                           for k in ("송금", "카드", "자동이체")}
-                etc_out += intraday["계획외지출"]
-                extra = (f"당일 실적 반영: 입금 {intraday['입금실제']:,.0f}"
-                         f" · 지출 {intraday['출금실제']:,.0f} 집행"
-                         " — 남은 계획 유지")
+                # 당일 행은 '남은 계획'만 — 실제 입출금은 이미 은행 확인
+                # 실잔고(이 행의 기초잔액)에 반영돼 있다
+                online = max(0.0, online - intraday["온라인실제"])
+                adj_in = max(0.0, adj_in - intraday["확정도착"])
+                planned = dict(intraday["남은계획"])
+                extra = (f"남은 계획만 표시 — 오늘 실제 입금 "
+                         f"{intraday['입금실제']:,.0f}·출금 "
+                         f"{intraday['출금실제']:,.0f}은 출발 실잔고에 반영")
                 note = f"{note}; {extra}" if note else extra
         inflow = online + adj_in
         outflow = planned["송금"] + planned["카드"] + planned["자동이체"] + etc_out
         net = inflow - outflow
+        if intraday and d == intraday["일자"]:
+            # 당일 기초 = 은행 확인 실잔고(당일 실제 순증감 포함)
+            balance = intraday.get("현재잔고", balance)
         opening = balance
         balance = opening + net
         if balance < 0:
@@ -1733,8 +1738,11 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
               if total_in > 0 else {k: 1 / len(accounts) for k in accounts})
 
     bal = {k: float(balances.get(k) or 0) for k in accounts}
-    # 실행일 이후 거래를 되돌린다 — 내부이체도 계좌별 잔액은 바꾸므로 포함
-    if backout_from is not None:
+    # intraday_date(실행일)가 있으면 은행 확인 실잔고에서 그대로 출발한다 —
+    # 당일 계획 행이 '남은 계획'만 반영하므로 당일 거래를 되돌릴 필요가
+    # 없다 (2026-09-21 사용자 요청). 없으면(과거 호환) 실행일 이후 거래를
+    # 되돌린다 — 내부이체도 계좌별 잔액은 바꾸므로 포함
+    if intraday_date is None and backout_from is not None:
         for r in history_rows:
             d = r.get("거래일")
             if d is None or d < backout_from:
@@ -1743,26 +1751,14 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
             if key in bal:
                 bal[key] -= (r.get("입금액") or 0) - (r.get("출금액") or 0)
     opening = dict(bal)          # 예측 시작 시점의 계좌별 잔액
-    # 실행일 당일 이미 들어온 실제 입금(계좌별) — 당일 행은 실제 입금을
-    # 실제 계좌에 배분하고, 남은 예상입금만 비중대로 나눈다 (2026-09-21).
-    # 일별계획의 당일 행도 같은 실적을 반영(intraday)해야 합이 맞는다
-    intraday_in: dict = {}
-    if intraday_date is not None:
-        for r in history_rows:
-            if (r.get("거래일") == intraday_date
-                    and not r.get("내부이체")
-                    and (r.get("입금액") or 0) > 0):
-                key = (r.get("은행"), r.get("계좌") or "")
-                if key in inflow_by_acct:
-                    intraday_in[key] = (intraday_in.get(key, 0.0)
-                                        + r["입금액"])
     woori = accounts[0]
     rows = []
     for day in daily_rows:
         d = day["일자"]
         if day.get("실적"):
             rows.append({"일자": d, "요일": day.get("요일"), "실적": True,
-                         "잔액": dict(bal) if d == actual_until else None,
+                         "잔액": (dict(bal) if d == actual_until
+                                and intraday_date is None else None),
                          "입금": {}, "지출": None, "이체": {},
                          "비고": "실적 구간"})
             continue
@@ -1772,13 +1768,7 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
                    + (day.get("카드결제") or 0)
                    + (day.get("자동이체") or 0)
                    + (day.get("기타지출") or 0))
-        if d == intraday_date and intraday_in:
-            actual_total = sum(intraday_in.values())
-            remaining = max(0.0, inflow - actual_total)
-            deposits = {k: intraday_in.get(k, 0.0) + remaining * shares[k]
-                        for k in accounts}
-        else:
-            deposits = {k: inflow * shares[k] for k in accounts}
+        deposits = {k: inflow * shares[k] for k in accounts}
         for k in accounts:
             bal[k] += deposits[k]
         transfers: dict = {}
@@ -1801,8 +1791,7 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
                      "잔액": dict(bal), "입금": deposits, "지출": outflow,
                      "이체": transfers, "비고": note})
     return {"accounts": accounts, "shares": shares, "opening": opening,
-            "intraday_date": intraday_date, "intraday_in": intraday_in,
-            "rows": rows}
+            "intraday_date": intraday_date, "rows": rows}
 
 
 # ---------------------------------------------------------------------------
@@ -1843,11 +1832,13 @@ def build_forecast(countable_plans: list[dict], base_date: date,
     net_actual = sum(f["온라인입금"] + f["기타입금"] - f["출금"]
                      for f in actual_flows.values())
     start_balance = opening_balance - net_actual
-    # 실행일 당일 행: 이미 확인된 실제 입출금 + 남은 계획 (2026-09-21)
+    # 실행일 당일 행: 은행 확인 실잔고에서 출발 + 남은 계획 (2026-09-21)
     intraday = None
     if run_date is not None and run_date >= base_date:
         intraday = intraday_actuals(countable_plans, history_rows,
                                     adjustments, run_date)
+        if intraday is not None:
+            intraday["현재잔고"] = opening_balance
     scenarios = {}
     main = None
     for rate in sorted(set(list(rates) + [default_rate])):
