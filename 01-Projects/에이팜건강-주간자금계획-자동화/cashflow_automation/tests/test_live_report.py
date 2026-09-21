@@ -366,12 +366,13 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     assert "출발" in str(ws.cell(row=7, column=12).value)
     # 예측 행은 수식: 요약!B13(반영률)을 바꾸면 즉시 재계산된다
     # (입금은 4주일별계획의 반영률 수식을 참조, 이체·잔액은 MIN/MAX 연쇄)
+    # (계좌 2개 배치의 4주일별계획: E 온라인, H 확정, I 송금, J 카드, K 조정)
     assert ws.cell(row=8, column=6).value \
-        == "='4주일별계획'!C8+'4주일별계획'!D8"          # ② 합계
+        == "='4주일별계획'!E8+'4주일별계획'!H8"          # ② 합계
     assert ws.cell(row=8, column=7).value == "=F8*0.700000"
     assert ws.cell(row=8, column=8).value == "=F8*0.300000"
     assert ws.cell(row=8, column=9).value \
-        == "='4주일별계획'!E8+'4주일별계획'!F8+'4주일별계획'!G8"  # ③
+        == "='4주일별계획'!I8+'4주일별계획'!J8+'4주일별계획'!K8"  # ③
     # 이체 계산용 숨김 열(M) + 표시 열(J=농협→우리)
     assert ws.column_dimensions["M"].hidden
     assert ws.cell(row=8, column=13).value \
@@ -386,16 +387,31 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     # 일자·요일·총잔액 고정 + 수식 보호(암호 없음)
     assert ws.freeze_panes == "D6"
     assert ws.protection.sheet
-    # 4주일별계획 오른쪽에 계좌별 입금 배분·예상잔고 연동 열 (L~O)
+    # 4주일별계획 새 배치(2026-09-21 사용자 지정): 일자·요일 → 계좌별
+    # 예상잔고(C~D) → 온라인(E) → 계좌별 배분(F~G) → 확정(H) → 송금(I)
     daily = wb["4주일별계획"]
-    assert daily.cell(row=4, column=12).value == "계좌별 입금 배분(예상)"
-    assert daily.cell(row=4, column=14).value == "계좌별 예상잔고"
-    assert "주초 실 잔액" in str(daily.cell(row=3, column=12).value)
-    assert daily.cell(row=8, column=12).value == "='계좌별시나리오'!G8"
-    assert daily.cell(row=8, column=13).value == "='계좌별시나리오'!H8"
-    assert daily.cell(row=8, column=14).value == "='계좌별시나리오'!D8"
-    assert daily.cell(row=8, column=15).value == "='계좌별시나리오'!E8"
-    assert "우리" in str(daily.cell(row=5, column=12).value)
+    assert daily.cell(row=4, column=3).value == "계좌별 예상잔고"
+    assert daily.cell(row=4, column=6).value == "계좌별 입금 배분(예상)"
+    assert "실잔고" in str(daily.cell(row=3, column=1).value)
+    assert daily.cell(row=8, column=3).value == "='계좌별시나리오'!D8"
+    assert daily.cell(row=8, column=4).value == "='계좌별시나리오'!E8"
+    assert daily.cell(row=8, column=6).value == "='계좌별시나리오'!G8"
+    assert daily.cell(row=8, column=7).value == "='계좌별시나리오'!H8"
+    assert "우리" in str(daily.cell(row=5, column=3).value)
+    assert daily.cell(row=5, column=5).value == "온라인 예상입금"
+    assert daily.cell(row=5, column=8).value == "확정·기타입금"
+    assert daily.cell(row=5, column=9).value == "송금예정"
+    assert daily.cell(row=5, column=15).value == "비고"
+    # 계좌 열은 그룹(개요)으로 접을 수 있다
+    assert daily.column_dimensions["C"].outline_level == 1
+    assert daily.column_dimensions["F"].outline_level == 1
+    # 수식 연결도 새 열 기준: 순현금(L)·기말(N)
+    assert daily.cell(row=8, column=12).value == "=E8+H8-I8-J8-K8"
+    assert daily.cell(row=8, column=14).value == "=M8+L8"
+    # 요약 4주 기말·최저 수식도 새 기말 열(N)로 재작성
+    assert wb["요약"]["B14"].value == "='4주일별계획'!N33"
+    # 13주 1주차 SUMIFS는 새 온라인 열(E)을 합산
+    assert "'4주일별계획'!$E$6:$E$33" in str(wb["13주주별계획"]["C6"].value)
     wb.close()
 
 
