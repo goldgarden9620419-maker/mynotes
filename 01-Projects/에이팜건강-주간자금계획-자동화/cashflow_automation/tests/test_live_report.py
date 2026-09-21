@@ -156,8 +156,8 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     # 비고란에 그날 지출 내역 요약 (3일차), 없는 날은 비움
     assert daily["K10"].value == "서울보증보험 632,250"
     assert daily["K8"].value is None
-    # 첫 계획 행의 기초잔액은 출발 행 기말(실잔고)을 잇는다
-    assert daily["I8"].value == "=J7"
+    # 수요일 실행(기준일<실행일): 숨김 실적 체인은 시작잔액 값에서 출발
+    assert daily["I8"].value == 5_000_000
     weekly = wb["13주주별계획"]
     # 1주차 SUMIFS가 새 날짜로 재작성
     assert "DATE(2026,9,21)" in weekly["C6"].value
@@ -199,7 +199,7 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert exp["Q7"].value == "승인대기 상태(정책상 반영)"
     assert exp["A8"].value is None
     assert exp.freeze_panes == "A6"
-    assert exp.auto_filter.ref == "A5:U7"   # 머리글 필터 (대조·확인완료 열 포함)
+    assert exp.auto_filter.ref == "A5:Q7"   # 머리글 필터 (데이터 2행)
     # 경영보고 지출예정 표와 같은 기간(실행일 9/23~차주 금 10/2)만 표시
     assert exp.row_dimensions[6].hidden          # 반영일 10/23 → 창 밖
     assert not exp.row_dimensions[7].hidden      # 반영일 9/23 → 표시
@@ -257,8 +257,8 @@ def test_실행일_당일만_실적인_경우_시작잔액_고정(tmp_path):
     fill_live_workbook(template, rep, out)
     wb = load_workbook(out)
     daily = wb["4주일별계획"]
-    assert daily["J7"].value == 5_000_000           # 출발 행 실잔고 고정
-    assert daily["I8"].value == "=J7"
+    assert daily["J6"].value == 5_000_000           # 출발 행 실잔고 고정
+    assert daily["I8"].value == "=J6"
     assert not daily.row_dimensions[8].hidden       # 실행일 행 표시
     wb.close()
 
@@ -377,7 +377,8 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     assert ws.cell(row=7, column=4).value == 800_000
     assert ws.cell(row=7, column=5).value == 200_000
     assert ws.cell(row=7, column=3).value == "=SUM(D7:E7)"
-    assert "출발" in str(ws.cell(row=7, column=12).value)
+    assert "출발" in str(ws.cell(row=6, column=12).value)
+    assert "참고" in str(ws.cell(row=7, column=12).value)
     assert ws.row_dimensions[8].hidden
     assert ws.row_dimensions[9].hidden
     assert not ws.row_dimensions[10].hidden

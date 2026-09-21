@@ -239,8 +239,6 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, 13, 8, round(start_balance), fmt="#,##0")  # H13: 시작잔액(숨김)
 
     holidays = report.get("holidays") or {}
-    intraday = forecast.get("intraday") or {}
-    run_d = meta.get("run_date")
     # 실행일~차주 금요일 밖의 일자 행은 숨긴다 (2026-09-19 사용자 요청).
     # 값·수식은 그대로 두므로 4주 합계·시나리오는 전체 기간으로 계산된다.
     w_start, w_end = exec_window(meta.get("run_date") or base_date)
@@ -279,21 +277,6 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
                  border=True)
             _put(ws, row, 6, "실적", size=9, color="808080", align="center",
                  border=True)
-        elif intraday and d == intraday.get("일자"):
-            # 실행일 당일: 은행 확인 실잔고(① 총잔액)에서 출발해 '남은
-            # 계획'만 반영한다 — 이미 확인된 실제 입출금은 ①에 반영됨
-            act_online = round(intraday.get("온라인실제") or 0)
-            exec_total = round(sum((intraday.get("집행") or {}).values()))
-            _put(ws, row, 3,
-                 f"=MAX(0,ROUND(G{row}*{_RATE_CELL},0)-{act_online})"
-                 f"+H{row}",
-                 fmt="#,##0", border=True)
-            _put(ws, row, 4,
-                 f"=MAX(0,SUMIFS($E${_EXP_FIRST}:$E${_EXP_LAST},"
-                 f"$A${_EXP_FIRST}:$A${_EXP_LAST},A{row})-{exec_total})",
-                 fmt="#,##0", border=True)
-            _put(ws, row, 6, f'=IF(E{row}<0,"부족","")', color="C00000",
-                 align="center", border=True)
         else:
             _put(ws, row, 3, f"=ROUND(G{row}*{_RATE_CELL},0)+H{row}",
                  fmt="#,##0", border=True)
@@ -302,12 +285,7 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
                  fmt="#,##0", border=True)
             _put(ws, row, 6, f'=IF(E{row}<0,"부족","")', color="C00000",
                  align="center", border=True)
-        if run_d is not None and d == run_d:
-            prev = f"C{total_row}"      # ① 현재 자금 현황의 총잔액
-        elif i == 0:
-            prev = _START_CELL
-        else:
-            prev = f"E{row - 1}"
+        prev = _START_CELL if i == 0 else f"E{row - 1}"
         _put(ws, row, 5, f"={prev}+C{row}-D{row}", fmt="#,##0", border=True)
     ws.conditional_formatting.add(
         f"E{_DAY_FIRST}:E{_DAY_LAST}",
