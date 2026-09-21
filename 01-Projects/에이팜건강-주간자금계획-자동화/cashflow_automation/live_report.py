@@ -322,11 +322,6 @@ def _fill_daily(wb, forecast: dict, base_date: date,
         _band(lay["bal"][0], lay["bal"][-1], "계좌별 예상잔고", navy)
         _band(lay["alloc"][0], lay["alloc"][-1],
               "계좌별 입금 배분(예상)", green)
-        # 열 그룹(개요)으로 묶어 접었다 펼 수 있게 한다
-        ws.column_dimensions.group(col_l(lay["bal"][0]),
-                                   col_l(lay["bal"][-1]), outline_level=1)
-        ws.column_dimensions.group(col_l(lay["alloc"][0]),
-                                   col_l(lay["alloc"][-1]), outline_level=1)
 
     heads = [(1, "일자", navy, 11), (2, "요일", navy, 5)]
     heads += [(c, account_label(b, a), navy, 13)
@@ -351,6 +346,13 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             cell.fill = PatternFill("solid", start_color=color)
             cell.border = box
         ws.column_dimensions[col_l(c)].width = width
+    # 계좌 열 2개 그룹은 개요(+/-)로 접었다 펼 수 있다. group() 호출은
+    # 너비 설정과 겹치면 한 열만 남는 문제가 있어 열별로 직접 지정한다
+    for c in lay["bal"] + lay["alloc"]:
+        ws.column_dimensions[col_l(c)].outline_level = 1
+        ws.column_dimensions[col_l(c)].hidden = False
+    if accounts:
+        ws.sheet_format.outlineLevelCol = 1
 
     # 실적 구간이 있으면 시작잔액을 '기준일 시작' 잔액 값으로 고정한다
     # (현재잔액에는 이미 이번 주 실적이 반영돼 있어 이중계산 방지).
