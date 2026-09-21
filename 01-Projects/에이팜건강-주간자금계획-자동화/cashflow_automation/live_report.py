@@ -88,7 +88,8 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_weekly(wb["13주주별계획"], forecast, base_date)
     _fill_account_scenario(wb, report.get("account_scenario"),
                            holidays=holidays)
-    _fill_expense(wb, report.get("integrated_masked", []), holidays=holidays)
+    _fill_expense(wb, report.get("integrated_masked", []), holidays=holidays,
+                  run_date=meta.get("run_date"))
     _fill_apalm_expense(wb, report.get("apalm_expenses", []),
                         holidays=holidays)
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []),
@@ -618,10 +619,14 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
 
 
 def _fill_expense(wb, rows: list[dict],
-                  holidays: Optional[dict] = None) -> None:
+                  holidays: Optional[dict] = None,
+                  run_date: Optional[date] = None) -> None:
     """팀 지출계획 취합을 별도 시트로 자동 반영 (매주 전체 갱신).
 
     대외비 행은 분류·총액 집계로만 표시된다(상세 미노출).
+    경영보고 지출예정 표와 같은 기간(실행일~차주 금요일)만 표시하고
+    그 밖의 반영일 행은 숨긴다 (2026-09-21 사용자 요청) — 값은 남아
+    있어 행 숨기기 해제로 전체를 볼 수 있다.
     """
     from openpyxl.styles import Alignment, Font, PatternFill
     from excel_report import is_offday
@@ -641,7 +646,9 @@ def _fill_expense(wb, rows: list[dict],
                           color="1F4E79")
     note = _set(ws, 3, 1,
                 "매 실행마다 팀 제출 파일에서 자동 갱신됩니다. "
-                "대외비는 분류·총액만 표시됩니다.")
+                "대외비는 분류·총액만 표시됩니다. 경영보고와 같은 "
+                "실행일~차주 금요일 기간만 표시합니다 (그 밖의 반영일 "
+                "행은 숨김 — 행 숨기기 해제로 전체 확인).")
     if note is not None:
         note.font = Font(name="맑은 고딕", size=9, color="808080")
 
@@ -655,12 +662,16 @@ def _fill_expense(wb, rows: list[dict],
             cell.alignment = Alignment(horizontal="center")
         ws.column_dimensions[get_column_letter(c)].width = width
 
+    window = exec_window(run_date) if run_date is not None else None
     r = 6
     for row in rows:
+        reflect_d = None
         for c, (_header, key, _width) in enumerate(_EXPENSE_COLUMNS, start=1):
             value = row.get(key)
             if isinstance(value, datetime):
                 value = value.date()
+            if key == "자금계획 반영일" and isinstance(value, date):
+                reflect_d = value
             cell = _set(ws, r, c, value)
             if cell is None:
                 continue
@@ -672,13 +683,18 @@ def _fill_expense(wb, rows: list[dict],
                 if is_offday(value, holidays):
                     cell.font = Font(name="맑은 고딕", size=10,
                                      color="C00000")
+        # 경영보고 지출예정 표와 같은 기간 밖의 반영일 행은 숨긴다
+        ws.row_dimensions[r].hidden = bool(
+            window is not None and reflect_d is not None
+            and not (window[0] <= reflect_d <= window[1]))
         r += 1
     # 머리글 자동 필터 — 반영일·팀명·반영상태 등으로 골라 볼 수 있다
     ws.auto_filter.ref = (f"A5:{get_column_letter(len(_EXPENSE_COLUMNS))}"
                           f"{max(r - 1, 6)}")
-    # 이전 실행의 잔여 행 정리
+    # 이전 실행의 잔여 행 정리 (숨김 상태도 되돌린다)
     end = max(ws.max_row, r)
     for rr in range(r, end + 1):
+        ws.row_dimensions[rr].hidden = False
         row_empty = True
         for c in range(1, len(_EXPENSE_COLUMNS) + 1):
             if ws.cell(row=rr, column=c).value is not None:
