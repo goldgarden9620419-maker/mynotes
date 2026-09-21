@@ -1,13 +1,13 @@
 {
-  "last_successful_week": "2026-W38",
-  "last_successful_date": "2026-09-20",
-  "last_successful_time": "03:06:11",
-  "last_run_status": "REVIEW_WAIT",
+  "last_successful_week": "2026-W39",
+  "last_successful_date": "2026-09-21",
+  "last_successful_time": "09:27:43",
+  "last_run_status": "SUCCESS",
   "last_run_week": "2026-W39",
-  "last_run_at": "2026-09-21 09:21:54",
-  "last_output_file": "주간자금계획_경영보고_20260920_0306.xlsx",
+  "last_run_at": "2026-09-21 09:27:43",
+  "last_output_file": "주간자금계획_경영보고_20260921_0927.xlsx",
   "last_error": "",
-  "input_signature": "df57235308df6b79",
+  "input_signature": "e88e3b3298cd3fb3",
   "pending_weeks": [],
   "running": false
 }
