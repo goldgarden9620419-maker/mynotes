@@ -1589,12 +1589,16 @@ def build_weekly_plan(countable_plans: list[dict], base_date: date,
 
 def build_account_scenario(daily_rows: list[dict], balances: dict,
                            history_rows: list[dict],
-                           actual_until: Optional[date] = None) -> dict:
+                           actual_until: Optional[date] = None,
+                           backout_from: Optional[date] = None) -> dict:
     """계좌별 일별 잔액 시나리오 (인출 우선순위: 우리은행→농협→국민은행).
 
     지출은 전액 우리은행에서 집행하고, 부족분은 농협→국민 순으로
     우리은행에 이체해 채우는 것으로 가정한다. 입금은 최근 이력의
     계좌별 외부입금 비중대로 배분한다.
+    backout_from(보통 실행일)이 있으면 그날 이후 거래를 시작 잔액에서
+    되돌린다 — 실행일은 실적으로 확정하지 않고 하루 전체를 예측하므로,
+    당일 새벽 거래가 이중으로 반영되지 않게 전일 마감 잔액에서 출발한다.
     반환: {"accounts": [(은행, 계좌) 우선순위 순], "shares": {계좌: 비중},
           "rows": [...]} — 각 행의 "입금"에 그날 계좌별 배분액을 담는다.
     """
@@ -1617,6 +1621,15 @@ def build_account_scenario(daily_rows: list[dict], balances: dict,
               if total_in > 0 else {k: 1 / len(accounts) for k in accounts})
 
     bal = {k: float(balances.get(k) or 0) for k in accounts}
+    # 실행일 이후 거래를 되돌린다 — 내부이체도 계좌별 잔액은 바꾸므로 포함
+    if backout_from is not None:
+        for r in history_rows:
+            d = r.get("거래일")
+            if d is None or d < backout_from:
+                continue
+            key = (r.get("은행"), r.get("계좌") or "")
+            if key in bal:
+                bal[key] -= (r.get("입금액") or 0) - (r.get("출금액") or 0)
     opening = dict(bal)          # 예측 시작 시점의 계좌별 잔액
     woori = accounts[0]
     rows = []
@@ -1672,7 +1685,8 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                    history_weeks: int = 12,
                    recency_halflife: float = 4.0,
                    display_week_start: Optional[date] = None,
-                   holidays: Optional[dict] = None) -> dict:
+                   holidays: Optional[dict] = None,
+                   run_date: Optional[date] = None) -> dict:
     """전체 예측 결과와 반영률별 시나리오를 만든다.
 
     opening_balance는 '현재(최신 거래내역 기준) 총잔액'이다.
@@ -1684,6 +1698,16 @@ def build_forecast(countable_plans: list[dict], base_date: date,
     weekday_avg = weekday_online_averages(history_rows, base_date,
                                           history_weeks, recency_halflife)
     actual_flows, actual_until = actual_daily_flows(history_rows, base_date)
+    # 실행일 당일은 아직 끝나지 않은 날이라 실적으로 확정하지 않는다 —
+    # 은행 파일에 당일 새벽 거래만 찍힌 채 그날의 계획 지출(팀 송금 등)이
+    # 통째로 사라지는 것을 막는다 (2026-09-21 사용자 발견). 당일 거래의
+    # 순증감은 아래 net_actual(전체 합)로 시작잔액에서 되돌려지므로,
+    # 당일을 다시 예측해도 이중계산이 없다.
+    if (run_date is not None and actual_until is not None
+            and actual_until >= run_date):
+        actual_until = run_date - timedelta(days=1)
+        if actual_until < base_date:
+            actual_until = None
     net_actual = sum(f["온라인입금"] + f["기타입금"] - f["출금"]
                      for f in actual_flows.values())
     start_balance = opening_balance - net_actual

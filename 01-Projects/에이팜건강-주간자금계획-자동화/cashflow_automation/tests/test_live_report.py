@@ -230,6 +230,25 @@ def test_실행일_행은_실적이어도_보인다(tmp_path):
     wb.close()
 
 
+def test_실행일_당일만_실적인_경우_시작잔액_고정(tmp_path):
+    """당일 새벽 거래로 시작잔액≠현재잔액이면 actual_until이 없어도
+    I6를 기준일 시작 잔액 값으로 고정한다 (이중계산 방지)."""
+    template = tmp_path / "템플릿.xlsx"
+    _make_stub_template(template)
+    rep = _fake_report(NEW_MONDAY)
+    rep["meta"]["run_date"] = NEW_MONDAY
+    rep["forecast"]["actual_until"] = None          # 당일은 실적 확정 제외
+    rep["forecast"]["start_balance"] = 5_000_000    # 기준일 시작
+    rep["forecast"]["opening_balance"] = 5_400_000  # 현재(새벽 순증감 +40만)
+    out = tmp_path / "결과.xlsx"
+    fill_live_workbook(template, rep, out)
+    wb = load_workbook(out)
+    daily = wb["4주일별계획"]
+    assert daily["I6"].value == 5_000_000
+    assert not daily.row_dimensions[6].hidden       # 실행일 행 표시
+    wb.close()
+
+
 def test_지출시트_재실행시_잔여행_정리(tmp_path):
     """행이 줄어든 다음 주 실행에서 이전 잔여 데이터가 남지 않는다."""
     template = tmp_path / "템플릿.xlsx"

@@ -36,6 +36,78 @@ def test_지난날짜는_실적으로_채운다():
     assert daily[date(2026, 9, 17)]["실적"] is False
 
 
+def test_실행일_당일은_실적으로_확정하지_않는다():
+    """은행 파일에 당일 새벽 거래가 찍혀도 당일 계획 지출은 살아 있어야 한다.
+
+    2026-09-21 실사용에서 발견: 월요일 실행 때 은행 내역이 당일 새벽
+    자동이체까지 담고 있으면 당일이 '실적'으로 확정되어 그날 지급예정
+    (네이버SA&GFA 등 1,369만원)이 자금계획에서 통째로 사라졌다.
+    """
+    base = date(2026, 9, 21)                       # 월요일 = 실행일
+    history = [
+        _tx(date(2026, 9, 1), in_amt=1_000_000, cls="온라인매출입금"),
+        # 실행일 새벽 실적: 입금 500,000 / 출금 100,000 (순 +400,000)
+        _tx(base, in_amt=500_000, cls="온라인매출입금"),
+        _tx(base, out_amt=100_000),
+    ]
+    plans = [{"자금계획 반영일": base, "예상금액": 3_498_000.0,
+              "지급방법": "계좌송금", "확정여부": "확정"}]
+    fc = fe.build_forecast(plans, base, 10_000_000, history, [], [],
+                           [0.8], 0.8, run_date=base)
+    # 당일은 실적 구간에서 제외 (기준일 전날 → None)
+    assert fc["actual_until"] is None
+    # 시작잔액 = 현재잔액 − 당일 새벽 순증감 (되돌려서 이중계산 방지)
+    assert round(fc["start_balance"]) == 10_000_000 - 400_000
+    d21 = fc["daily"][0]
+    assert d21["실적"] is False
+    assert d21["팀별 송금예정"] == 3_498_000      # 당일 계획 지출 유지
+    assert round(d21["기초잔액"]) == 9_600_000
+
+    # 실행일이 수요일이면 월·화까지만 실적으로 확정한다
+    run_wed = date(2026, 9, 23)
+    history2 = history + [
+        _tx(date(2026, 9, 22), in_amt=200_000, cls="온라인매출입금"),
+        _tx(run_wed, out_amt=50_000),
+    ]
+    fc2 = fe.build_forecast(plans, base, 10_000_000, history2, [], [],
+                            [0.8], 0.8, run_date=run_wed)
+    assert fc2["actual_until"] == date(2026, 9, 22)
+    daily2 = {r["일자"]: r for r in fc2["daily"]}
+    assert daily2[date(2026, 9, 22)]["실적"] is True
+    assert daily2[run_wed]["실적"] is False
+    # run_date를 안 주면(과거 호환) 기존처럼 마지막 은행일까지 실적
+    fc3 = fe.build_forecast(plans, base, 10_000_000, history2, [], [],
+                            [0.8], 0.8)
+    assert fc3["actual_until"] == run_wed
+
+
+def test_계좌별시나리오_당일거래_되돌리기():
+    """backout_from(실행일) 이후 거래는 시작 잔액에서 되돌린다 (내부이체 포함)."""
+    run = date(2026, 9, 21)
+    acc_w = ("우리은행", "220351")
+    acc_n = ("농협", "301-569003")
+    balances = {acc_w: 5_000_000, acc_n: 2_000_000}
+    hist = [
+        {"거래일": date(2026, 9, 18), "은행": "우리은행", "계좌": "220351",
+         "입금액": 700_000, "출금액": 0, "내부이체": False},   # 과거 — 무관
+        {"거래일": run, "은행": "우리은행", "계좌": "220351",
+         "입금액": 500_000, "출금액": 100_000, "내부이체": False},
+        {"거래일": run, "은행": "농협", "계좌": "301-569003",
+         "입금액": 0, "출금액": 300_000, "내부이체": True},    # 내부이체도 되돌림
+    ]
+    daily = [{"일자": run, "요일": "월", "실적": False,
+              "온라인 예상입금": 0, "확정·기타입금": 0, "팀별 송금예정": 0,
+              "카드결제": 0, "자동이체": 0, "기타지출": 0}]
+    sc = fe.build_account_scenario(daily, balances, hist, None,
+                                   backout_from=run)
+    # 우리: 5,000,000 − (500,000−100,000) = 4,600,000 / 농협: 2,000,000 + 300,000
+    assert round(sc["opening"][acc_w]) == 4_600_000
+    assert round(sc["opening"][acc_n]) == 2_300_000
+    # backout_from 없으면 기존 그대로
+    sc0 = fe.build_account_scenario(daily, balances, hist, None)
+    assert round(sc0["opening"][acc_w]) == 5_000_000
+
+
 def test_팀계획과_겹치는_자동초안_조정_제외():
     adjustments = [
         # 이름·금액·날짜가 모두 비슷 → 중복으로 제외

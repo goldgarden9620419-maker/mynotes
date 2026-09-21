@@ -205,10 +205,15 @@ def _fill_daily(ws, forecast: dict, base_date: date,
             note_col = c
             break
     # 실적 구간이 있으면 시작잔액을 '기준일 시작' 잔액 값으로 고정한다
-    # (현재잔액에는 이미 이번 주 실적이 반영돼 있어 이중계산 방지)
-    if forecast.get("actual_until") is not None \
-            and forecast.get("start_balance") is not None:
-        i6 = _set(ws, 6, 9, round(forecast["start_balance"]))
+    # (현재잔액에는 이미 이번 주 실적이 반영돼 있어 이중계산 방지).
+    # 실행일 당일 거래만 은행에 찍힌 경우(당일은 실적으로 확정하지 않아
+    # actual_until이 비어 있어도 시작잔액≠현재잔액)도 같은 이유로 고정한다
+    start = forecast.get("start_balance")
+    opening = forecast.get("opening_balance")
+    if start is not None and (
+            forecast.get("actual_until") is not None
+            or (opening is not None and round(start) != round(opening))):
+        i6 = _set(ws, 6, 9, round(start))
         if i6 is not None:
             i6.number_format = "#,##0"
     for i in range(28):
