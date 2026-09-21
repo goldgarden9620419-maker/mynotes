@@ -211,12 +211,20 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                default=False)
         confirmed_review = None
         review_directives = []
+        intraday_holds: set = set()
         if confirm_mode and prior_status == STATUS_REVIEW_WAIT:
             confirmed_review = excel_report.find_confirmed_review(
                 review_dir, week_key, input_sig)
         if confirmed_review is not None:
             review_directives = excel_report.load_review_directives(
                 confirmed_review)
+            # 당일 지출·실제 차이 항목 중 '보류(제외)' 선택 — 오늘 계획에서 뺀다
+            intraday_holds = excel_report.load_intraday_holds(
+                confirmed_review)
+            if intraday_holds:
+                log.info("당일 지출 보류(제외) %d건 반영: %s",
+                         len(intraday_holds),
+                         ", ".join(sorted(intraday_holds)[:5]))
             # 확인 파일의 정기지출분석 시트 수정(분류·성격)을 반영한다.
             # 예전 형식(별도 정기지출분석 파일)도 계속 읽는다.
             rev_edits = forecast_engine.harvest_recurring_edits(
@@ -371,6 +379,30 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                        f"{(adj.get('조정지출') or 0):,.0f}원 — "
                        "팀 지출계획에 같은 건이 있어 자동 추정에서 제외",
                 "원본파일": "기준파일 주간조정"})
+        # 당일 지출계획 vs 실제 출금 대조 — 차이 항목은 확인필요에 올려
+        # 사용자가 '지출 예정(유지)'/'보류(제외)'를 고른다 (2026-09-21)
+        intraday_preview = forecast_engine.intraday_actuals(
+            plan["countable"], merged_history, adjustments, now.date(),
+            holds=intraday_holds)
+        for det in (intraday_preview or {}).get("대조내역", []):
+            if det["상태"] == "집행 확인":
+                continue
+            subject = det.get("거래처") or det.get("요청ID") or ""
+            if mask_conf and any(
+                    p.get("confidential") for p in plan["countable"]
+                    if p.get("요청ID") == det.get("요청ID")):
+                subject = "대외비"
+            issues.append({
+                "구분": excel_report.ISSUE_INTRADAY,
+                "팀명": det.get("팀명"),
+                "요청ID": det.get("요청ID"),
+                "일자": now.date(),
+                "내용": f"{subject} — {det['상태']}: {det['사유']}. "
+                       "오늘 나갈 예정이면 '지출 예정(유지)', 안 나갈 "
+                       "것이면 '보류(제외)'를 처리 열에서 고르세요",
+                "금액": det.get("잔여") or det.get("예상금액"),
+                "원본파일": "",
+                "당일지시": det.get("잔여", 0) > 0})
         rates = cfg.get("forecast", "receipt_rates",
                         default=[0.6, 0.7, 0.8, 0.9, 1.0])
         # 대표보고 '일별 잔액 전망(월~금)': 주말 실행이면 차주를 보여준다
@@ -385,7 +417,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("forecast", "online_history_weeks", default=12),
             cfg.get("forecast", "online_recency_halflife", default=4),
             display_week_start=display_monday, holidays=holidays,
-            run_date=now.date())
+            run_date=now.date(), intraday_holds=intraday_holds)
         # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위).
         # 실행일 당일 거래는 실적으로 확정하지 않으므로 시작 잔액도
         # 전일 마감으로 되돌린다 (backout_from)
