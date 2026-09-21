@@ -41,8 +41,11 @@ DEFAULT_RULES = {
         "월말분류": CONF_CAT_PAYROLL,
         "그외분류": CLASS_REVIEW,
     },
-    # '에이팜건'은 은행 표기가 잘린 경우('국민네이버 에이팜건' 등),
-    # 'apha'는 영문 계좌별칭(apharm) 잘림까지 잡기 위한 키워드다.
+    # 내부이체 '후보' 키워드 — 키워드만으로 확정하지 않는다.
+    # 네이버 광고비 충전 가상계좌처럼 계좌명에 광고주(회사)명이 붙는
+    # 외부 지급('국민네이버 에이팜건', '국민네이버 apha')도 걸리므로,
+    # 같은 날·같은 금액의 반대편 거래가 다른 우리 계좌에 있을 때만
+    # 내부이체로 표시한다 (mark_internal_transfers).
     "internal_keywords": ["에이팜건강", "(주)에이팜건강", "에이팜건", "apha"],
 }
 
@@ -85,28 +88,91 @@ def _direction_ok(row: dict, direction: str) -> bool:
     return True
 
 
+def mark_internal_transfers(rows: list[dict], rules: dict) -> None:
+    """회사 계좌 간 이체를 표시한다 (전체 목록 기준으로 다시 판정).
+
+    키워드(회사명)만으로 확정하면 네이버 광고비 충전 가상계좌처럼
+    계좌명에 회사명이 붙는 외부 지급까지 내부이체가 되므로,
+    같은 거래일·같은 금액의 반대편 거래가 '다른' 우리 계좌에 실제로
+    있을 때만 짝으로 묶어 표시한다. 이전 실행이 남긴 표시는 지우고
+    다시 판정하므로, 상대 계좌 파일이 늦게 들어와 한 다리만 보이던
+    이체도 다음 실행에서 짝을 찾으면 자동으로 표시된다.
+    """
+    internal_keywords = [normalize_text(k)
+                         for k in rules.get("internal_keywords", [])]
+
+    def _candidate(row: dict) -> bool:
+        text = _row_text(row)
+        return any(k and k in text for k in internal_keywords)
+
+    # 이전 표시를 지우고(현금유출입 복원) 아래에서 짝으로 다시 판정한다
+    eligible: list[dict] = []
+    for row in rows:
+        if row.get("반영상태") != BANK_REFLECT_OK:
+            continue
+        if row.get("내부이체") or row.get("자동분류") == CLASS_INTERNAL:
+            row["자동분류"] = ""
+            row["내부이체"] = False
+            row["현금유출입"] = ((row.get("입금액") or 0.0)
+                                - (row.get("출금액") or 0.0))
+        # 다른 규칙으로 이미 분류된 행(온라인매출 등)은 짝 후보에서 제외
+        if not row.get("자동분류"):
+            eligible.append(row)
+
+    buckets: dict[tuple, dict[str, list[dict]]] = {}
+    for row in eligible:
+        out_amt = row.get("출금액") or 0.0
+        in_amt = row.get("입금액") or 0.0
+        if row.get("거래일") is None:
+            continue
+        if out_amt > 0:
+            key, side = (row["거래일"], round(out_amt)), "출금"
+        elif in_amt > 0:
+            key, side = (row["거래일"], round(in_amt)), "입금"
+        else:
+            continue
+        buckets.setdefault(key, {"입금": [], "출금": []})[side].append(row)
+
+    def _acct(row: dict) -> tuple:
+        return (row.get("은행"), row.get("계좌"))
+
+    def _mark(row: dict) -> None:
+        row["자동분류"] = CLASS_INTERNAL
+        row["내부이체"] = True
+        row["현금유출입"] = 0.0
+
+    for pair in buckets.values():
+        used: set[int] = set()
+        for w in pair["출금"]:
+            for d in pair["입금"]:
+                if id(d) in used or _acct(d) == _acct(w):
+                    continue
+                if not (_candidate(w) or _candidate(d)):
+                    continue
+                used.add(id(d))
+                _mark(w)
+                _mark(d)
+                break
+
+
 def classify_rows(rows: list[dict], rules: dict) -> list[dict]:
     """자동분류·내부이체를 표시한다. 확인필요 목록을 돌려준다.
 
     내부이체는 현금유출입 0으로 만들어 실제 입금·지출 합계에서 제외한다.
     """
     issues: list[dict] = []
-    internal_keywords = [normalize_text(k)
-                         for k in rules.get("internal_keywords", [])]
     top_cfg = rules.get("top_withdrawal", {}) or {}
     rule_list = rules.get("rules", [])
+
+    # 1) 회사 계좌 간 이체 (짝이 확인된 거래만)
+    mark_internal_transfers(rows, rules)
 
     for row in rows:
         if row.get("반영상태") != BANK_REFLECT_OK:
             continue
-        text = _row_text(row)
-
-        # 1) 회사 계좌 간 이체
-        if any(k and k in text for k in internal_keywords):
-            row["자동분류"] = CLASS_INTERNAL
-            row["내부이체"] = True
-            row["현금유출입"] = 0.0
+        if row.get("내부이체"):
             continue
+        text = _row_text(row)
 
         # 2) 국민은행 TOP출금 (월말=급여, 그외=확인필요)
         if row.get("은행") == top_cfg.get("은행", "국민은행") and any(
