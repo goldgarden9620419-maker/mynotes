@@ -617,6 +617,85 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     ws.protection = SheetProtection(sheet=True, formatRows=False,
                                     formatColumns=False)
 
+    # ── 4주일별계획 오른쪽에 계좌별 입금 배분·예상잔고 열을 붙인다
+    # (2026-09-21 사용자 요청). 두 시트는 행 번호가 1:1이라 계좌별
+    # 시나리오 셀을 수식으로 참조만 하면 반영률(B13) 연동까지 그대로
+    # 따라온다. 주초 실 잔액(은행 확인)은 안내 줄로 표시한다.
+    dws = wb["4주일별계획"]
+    note_col_d = 11
+    for c in range(1, 21):
+        if str(dws.cell(row=5, column=c).value or "").strip() == "비고":
+            note_col_d = c
+            break
+    start = note_col_d + 1
+    # 이전 실행 잔재 정리 (계좌 수 변동 대비 여유 폭)
+    span = 2 * n + 8
+    for rng in list(dws.merged_cells.ranges):
+        if rng.min_row <= 4 <= rng.max_row and rng.min_col >= start:
+            dws.unmerge_cells(str(rng))
+    for rr in range(3, 34):
+        for c in range(start, start + span):
+            cell = dws.cell(row=rr, column=c)
+            if not isinstance(cell, MergedCell):
+                cell.value = None
+                cell.fill = PatternFill()
+                cell.border = Border()
+
+    opening_txt = " · ".join(
+        f"{account_label(b, a)} {round(float(opening.get((b, a)) or 0)):,}"
+        for b, a in accounts)
+    onote = _set(dws, 3, start,
+                 f"주초 실 잔액(은행 확인): {opening_txt} — 예상잔고 = 실 "
+                 "잔액 + 입금 배분 − 지출·이체 (계좌별시나리오 연동, "
+                 "반영률 B13 적용)")
+    if onote is not None:
+        onote.font = Font(name="맑은 고딕", size=9, color=gray)
+
+    def _dband(c1, c2, text, color):
+        for c in range(c1, c2 + 1):
+            cell = dws.cell(row=4, column=c)
+            cell.fill = PatternFill("solid", start_color=color)
+            cell.border = box
+        head = _set(dws, 4, c1, text)
+        if head is not None:
+            head.font = Font(**white_bold)
+            head.alignment = Alignment(horizontal="left",
+                                       vertical="center")
+        if c2 > c1:
+            dws.merge_cells(start_row=4, start_column=c1,
+                            end_row=4, end_column=c2)
+
+    _dband(start, start + n - 1, "계좌별 입금 배분(예상)", green)
+    _dband(start + n, start + 2 * n - 1, "계좌별 예상잔고", navy)
+    sref = f"'{ACCOUNT_SCENARIO_SHEET}'!"
+    for idx, (b, a) in enumerate(accounts):
+        for c, color in ((start + idx, green), (start + n + idx, navy)):
+            h = _set(dws, 5, c, account_label(b, a))
+            if h is not None:
+                h.font = Font(**white_bold)
+                h.alignment = Alignment(horizontal="center",
+                                        vertical="center")
+                h.fill = PatternFill("solid", start_color=color)
+                h.border = box
+            dws.column_dimensions[col_l(c)].width = 13
+    for rr in range(6, 34):
+        for idx in range(n):
+            c_in = start + idx
+            c_bal = start + n + idx
+            cell = _set(dws, rr, c_in,
+                        f"={sref}{col_l(col_in_sum + 1 + idx)}{rr}")
+            if cell is not None:
+                cell.number_format = num_flow
+                cell.font = Font(name="맑은 고딕", size=10)
+                cell.fill = in_fill
+                cell.border = box
+            cell = _set(dws, rr, c_bal, f"={sref}{col_l(4 + idx)}{rr}")
+            if cell is not None:
+                cell.number_format = num_bal
+                cell.font = Font(name="맑은 고딕", size=10)
+                cell.fill = total_fill
+                cell.border = box
+
 
 def _fill_expense(wb, rows: list[dict],
                   holidays: Optional[dict] = None,

@@ -386,6 +386,16 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     # 일자·요일·총잔액 고정 + 수식 보호(암호 없음)
     assert ws.freeze_panes == "D6"
     assert ws.protection.sheet
+    # 4주일별계획 오른쪽에 계좌별 입금 배분·예상잔고 연동 열 (L~O)
+    daily = wb["4주일별계획"]
+    assert daily.cell(row=4, column=12).value == "계좌별 입금 배분(예상)"
+    assert daily.cell(row=4, column=14).value == "계좌별 예상잔고"
+    assert "주초 실 잔액" in str(daily.cell(row=3, column=12).value)
+    assert daily.cell(row=8, column=12).value == "='계좌별시나리오'!G8"
+    assert daily.cell(row=8, column=13).value == "='계좌별시나리오'!H8"
+    assert daily.cell(row=8, column=14).value == "='계좌별시나리오'!D8"
+    assert daily.cell(row=8, column=15).value == "='계좌별시나리오'!E8"
+    assert "우리" in str(daily.cell(row=5, column=12).value)
     wb.close()
 
 
