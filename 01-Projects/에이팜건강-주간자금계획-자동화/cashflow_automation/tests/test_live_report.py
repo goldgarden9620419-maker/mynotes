@@ -140,17 +140,22 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert verify_live_workbook(out, NEW_MONDAY)
     wb = load_workbook(out)
     daily = wb["4주일별계획"]
-    # 날짜가 새 주차로 이동
-    assert daily["A6"].value.date() == NEW_MONDAY
-    assert daily["A33"].value.date() == NEW_MONDAY + timedelta(days=27)
+    # 6행은 출발 행(전일 마감 실잔고 — 실행일 수요일의 전일 화요일)
+    assert daily["A6"].value.date() == NEW_MONDAY + timedelta(days=1)
+    assert "전일 마감 실잔고" in str(daily["K6"].value)
+    # 날짜가 새 주차로 이동 (계획은 7행부터)
+    assert daily["A7"].value.date() == NEW_MONDAY
+    assert daily["A34"].value.date() == NEW_MONDAY + timedelta(days=27)
     # 반영률 수식은 그대로
-    assert "INDEX" in daily["C6"].value and "$B$13" in daily["C6"].value
+    assert "INDEX" in daily["C7"].value and "$B$13" in daily["C7"].value
     # 지출 값 기록 (1일차 기타지출, 4일차 카드)
-    assert daily["G6"].value == 100000
-    assert daily["F9"].value == 500000
+    assert daily["G7"].value == 100000
+    assert daily["F10"].value == 500000
     # 비고란에 그날 지출 내역 요약 (3일차), 없는 날은 비움
-    assert daily["K8"].value == "서울보증보험 632,250"
-    assert daily["K6"].value is None
+    assert daily["K9"].value == "서울보증보험 632,250"
+    assert daily["K7"].value is None
+    # 첫 계획 행의 기초잔액은 출발 행 기말(실잔고)을 잇는다
+    assert daily["I7"].value == "=J6"
     weekly = wb["13주주별계획"]
     # 1주차 SUMIFS가 새 날짜로 재작성
     assert "DATE(2026,9,21)" in weekly["C6"].value
@@ -172,9 +177,10 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     # 13주 주별계획은 매주 볼 필요가 없어 숨김 (자료·수식은 유지)
     assert wb["13주주별계획"].sheet_state == "hidden"
     # 실행일(수) 전의 지난 실적 일자(월·화)는 숨기고 실행일부터 보인다
-    assert daily.row_dimensions[6].hidden
+    assert not daily.row_dimensions[6].hidden    # 출발 행은 항상 표시
     assert daily.row_dimensions[7].hidden
-    assert not daily.row_dimensions[8].hidden
+    assert daily.row_dimensions[8].hidden
+    assert not daily.row_dimensions[9].hidden
     # 지출계획 취합 시트가 새로 생성되어 자동 반영된다
     assert "지출계획_취합" in wb.sheetnames
     exp = wb["지출계획_취합"]
@@ -228,9 +234,9 @@ def test_실행일_행은_실적이어도_보인다(tmp_path):
     fill_live_workbook(template, rep, out)
     wb = load_workbook(out)
     daily = wb["4주일별계획"]
-    assert daily.row_dimensions[6].hidden          # 월 (지난 실적)
-    assert not daily.row_dimensions[7].hidden      # 화 (실행일 — 실적이어도 표시)
-    assert not daily.row_dimensions[8].hidden      # 수 (예측)
+    assert daily.row_dimensions[7].hidden          # 월 (지난 실적)
+    assert not daily.row_dimensions[8].hidden      # 화 (실행일 — 실적이어도 표시)
+    assert not daily.row_dimensions[9].hidden      # 수 (예측)
     wb.close()
 
 
@@ -248,8 +254,9 @@ def test_실행일_당일만_실적인_경우_시작잔액_고정(tmp_path):
     fill_live_workbook(template, rep, out)
     wb = load_workbook(out)
     daily = wb["4주일별계획"]
-    assert daily["I6"].value == 5_000_000
-    assert not daily.row_dimensions[6].hidden       # 실행일 행 표시
+    assert daily["J6"].value == 5_000_000           # 출발 행 실잔고 고정
+    assert daily["I7"].value == "=J6"
+    assert not daily.row_dimensions[7].hidden       # 실행일 행 표시
     wb.close()
 
 
@@ -301,21 +308,21 @@ def test_실행일_차주금요일_붉은_상자(tmp_path):
     """붉은 상자는 실행일부터 차주 금요일까지를 하나로 묶는다."""
     template = tmp_path / "템플릿.xlsx"
     _make_stub_template(template)
-    # 월요일(9/21) 실행 → 9/21 ~ 차주 금요일 10/2 (6~17행)
+    # 월요일(9/21) 실행 → 9/21 ~ 차주 금요일 10/2 (7~18행)
     out1 = tmp_path / "결과1.xlsx"
     fill_live_workbook(template, _fake_report(NEW_MONDAY), out1)
     wb = load_workbook(out1)
-    _assert_exec_box(wb["4주일별계획"], 6, 17)
+    _assert_exec_box(wb["4주일별계획"], 7, 18)
     # 비고란은 자동 줄바꿈
-    assert wb["4주일별계획"]["K8"].alignment.wrap_text
+    assert wb["4주일별계획"]["K9"].alignment.wrap_text
     wb.close()
-    # 목요일(9/24) 실행 → 9/24 ~ 10/2 (9~17행), 재실행에도 상자는 하나
+    # 목요일(9/24) 실행 → 9/24 ~ 10/2 (10~18행), 재실행에도 상자는 하나
     report2 = _fake_report(NEW_MONDAY)
     report2["meta"]["run_date"] = NEW_MONDAY + timedelta(days=3)
     out2 = tmp_path / "결과2.xlsx"
     fill_live_workbook(out1, report2, out2)
     wb = load_workbook(out2)
-    _assert_exec_box(wb["4주일별계획"], 9, 17)
+    _assert_exec_box(wb["4주일별계획"], 10, 18)
     wb.close()
 
 
@@ -359,46 +366,50 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     assert str(ws.cell(row=4, column=6).value).startswith("②")
     note = str(ws.cell(row=3, column=1).value)
     assert "읽는 법" in note and "70%" in note and "30%" in note
-    # 지난 실적 행은 숨기고, 마지막 실적일(출발 잔액)만 남긴다
-    assert ws.row_dimensions[6].hidden
-    assert not ws.row_dimensions[7].hidden
-    assert ws.cell(row=7, column=3).value == 1_000_000     # 출발 총잔액
-    assert "출발" in str(ws.cell(row=7, column=12).value)
-    # 예측 행은 수식: 요약!B13(반영률)을 바꾸면 즉시 재계산된다
-    # (입금은 4주일별계획의 반영률 수식을 참조, 이체·잔액은 MIN/MAX 연쇄)
+    # 6행 = 출발 행(전일 마감 실잔고), 지난 실적 행(7·8)은 전부 숨긴다
+    assert not ws.row_dimensions[6].hidden
+    assert ws.cell(row=6, column=4).value == 800_000
+    assert ws.cell(row=6, column=5).value == 200_000
+    assert ws.cell(row=6, column=3).value == "=SUM(D6:E6)"
+    assert "출발" in str(ws.cell(row=6, column=12).value)
+    assert ws.row_dimensions[7].hidden
+    assert ws.row_dimensions[8].hidden
+    assert not ws.row_dimensions[9].hidden
+    # 예측 행(9행=수요일)은 수식: 요약!B13(반영률)을 바꾸면 즉시 재계산
     # (계좌 2개 배치의 4주일별계획: E 온라인, H 확정, I 송금, J 카드, K 조정)
-    assert ws.cell(row=8, column=6).value \
-        == "='4주일별계획'!E8+'4주일별계획'!H8"          # ② 합계
-    assert ws.cell(row=8, column=7).value == "=F8*0.700000"
-    assert ws.cell(row=8, column=8).value == "=F8*0.300000"
-    assert ws.cell(row=8, column=9).value \
-        == "='4주일별계획'!I8+'4주일별계획'!J8+'4주일별계획'!K8"  # ③
+    assert ws.cell(row=9, column=6).value \
+        == "='4주일별계획'!E9+'4주일별계획'!H9"          # ② 합계
+    assert ws.cell(row=9, column=7).value == "=F9*0.700000"
+    assert ws.cell(row=9, column=8).value == "=F9*0.300000"
+    assert ws.cell(row=9, column=9).value \
+        == "='4주일별계획'!I9+'4주일별계획'!J9+'4주일별계획'!K9"  # ③
     # 이체 계산용 숨김 열(M) + 표시 열(J=농협→우리)
     assert ws.column_dimensions["M"].hidden
-    assert ws.cell(row=8, column=13).value \
-        == "=MIN(MAX(0,200000.00+H8),MAX(0,I8-800000.00-G8))"
-    assert ws.cell(row=8, column=10).value == "=M8"
-    assert ws.cell(row=8, column=11).value is None         # 국민 계좌 없음
-    # ① 잔액: 첫 예측 행은 출발 잔액 리터럴에서 시작
-    assert ws.cell(row=8, column=4).value == "=800000.00+G8-I8+M8"
-    assert ws.cell(row=8, column=5).value == "=200000.00+H8-M8"
-    assert ws.cell(row=8, column=3).value == "=SUM(D8:E8)"
-    assert "부족" in str(ws.cell(row=8, column=12).value)  # 경고 수식
-    # 일자·요일·총잔액 고정 + 수식 보호(암호 없음)
-    assert ws.freeze_panes == "D6"
+    # 전날 잔액은 바로 윗 행(8행=마지막 실적) 셀을 참조한다
+    assert ws.cell(row=9, column=13).value \
+        == "=MIN(MAX(0,E8+H9),MAX(0,I9-D8-G9))"
+    assert ws.cell(row=9, column=10).value == "=M9"
+    assert ws.cell(row=9, column=11).value is None         # 국민 계좌 없음
+    assert ws.cell(row=9, column=4).value == "=D8+G9-I9+M9"
+    assert ws.cell(row=9, column=5).value == "=E8+H9-M9"
+    assert ws.cell(row=9, column=3).value == "=SUM(D9:E9)"
+    assert "부족" in str(ws.cell(row=9, column=12).value)  # 경고 수식
+    # 일자·요일·총잔액·출발 행 고정 + 수식 보호(암호 없음)
+    assert ws.freeze_panes == "D7"
     assert ws.protection.sheet
     # 4주일별계획 새 배치(2026-09-21 사용자 지정): 일자·요일 → 계좌별
     # 예상잔고(C~D) → 온라인(E) → 계좌별 배분(F~G) → 확정(H) → 송금(I)
     daily = wb["4주일별계획"]
     assert daily.cell(row=4, column=3).value == "계좌별 예상잔고"
     assert daily.cell(row=4, column=6).value == "계좌별 입금 배분(예상)"
-    a3 = str(daily.cell(row=3, column=1).value)
-    assert "실잔고" in a3 and "출발(전일 마감) 잔액" in a3
-    assert "800,000" in a3          # 우리 출발 잔액(전일 마감) 표시
-    assert daily.cell(row=8, column=3).value == "='계좌별시나리오'!D8"
-    assert daily.cell(row=8, column=4).value == "='계좌별시나리오'!E8"
-    assert daily.cell(row=8, column=6).value == "='계좌별시나리오'!G8"
-    assert daily.cell(row=8, column=7).value == "='계좌별시나리오'!H8"
+    assert "실잔고" in str(daily.cell(row=3, column=1).value)
+    # 6행 출발 행: 계좌별 실잔고(시나리오 6행 참조) + 라벨
+    assert daily.cell(row=6, column=3).value == "='계좌별시나리오'!D6"
+    assert "전일 마감 실잔고" in str(daily.cell(row=6, column=15).value)
+    assert daily.cell(row=9, column=3).value == "='계좌별시나리오'!D9"
+    assert daily.cell(row=9, column=4).value == "='계좌별시나리오'!E9"
+    assert daily.cell(row=9, column=6).value == "='계좌별시나리오'!G9"
+    assert daily.cell(row=9, column=7).value == "='계좌별시나리오'!H9"
     assert "우리" in str(daily.cell(row=5, column=3).value)
     assert daily.cell(row=5, column=5).value == "온라인 예상입금"
     assert daily.cell(row=5, column=8).value == "확정·기타입금"
@@ -410,12 +421,12 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
         assert not daily.column_dimensions[col].hidden
     assert daily.column_dimensions["E"].outline_level in (0, None)
     # 수식 연결도 새 열 기준: 순현금(L)·기말(N)
-    assert daily.cell(row=8, column=12).value == "=E8+H8-I8-J8-K8"
-    assert daily.cell(row=8, column=14).value == "=M8+L8"
-    # 요약 4주 기말·최저 수식도 새 기말 열(N)로 재작성
-    assert wb["요약"]["B14"].value == "='4주일별계획'!N33"
-    # 13주 1주차 SUMIFS는 새 온라인 열(E)을 합산
-    assert "'4주일별계획'!$E$6:$E$33" in str(wb["13주주별계획"]["C6"].value)
+    assert daily.cell(row=9, column=12).value == "=E9+H9-I9-J9-K9"
+    assert daily.cell(row=9, column=14).value == "=M9+L9"
+    # 요약 4주 기말·최저 수식도 새 기말 열(N)·행(7~34)으로 재작성
+    assert wb["요약"]["B14"].value == "='4주일별계획'!N34"
+    # 13주 1주차 SUMIFS는 새 온라인 열(E)·행(7~34)을 합산
+    assert "'4주일별계획'!$E$7:$E$34" in str(wb["13주주별계획"]["C6"].value)
     wb.close()
 
 

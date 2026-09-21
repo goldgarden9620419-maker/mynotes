@@ -51,9 +51,9 @@ _CONF_LABEL = {"상": "높음", "중": "중간", "하": "낮음"}
 _MONEY_WON = '#,##0"원"'
 
 # 13주 1~4주차 SUMIFS: 일별계획의 해당 열을 주 단위로 합산
-_SUMIFS = ("=SUMIFS('4주일별계획'!${col}$6:${col}$33,"
-           "'4주일별계획'!$A$6:$A$33,\">=\"&DATE({y1},{m1},{d1}),"
-           "'4주일별계획'!$A$6:$A$33,\"<=\"&DATE({y2},{m2},{d2}))")
+_SUMIFS = ("=SUMIFS('4주일별계획'!${col}$7:${col}$34,"
+           "'4주일별계획'!$A$7:$A$34,\">=\"&DATE({y1},{m1},{d1}),"
+           "'4주일별계획'!$A$7:$A$34,\"<=\"&DATE({y2},{m2},{d2}))")
 
 
 class LiveTemplateError(RuntimeError):
@@ -91,7 +91,8 @@ def fill_live_workbook(template_path: Path, report: dict,
                 last_dates=report.get("account_last_dates"))
     _fill_weekly(wb["13주주별계획"], forecast, base_date, n_acc)
     _fill_account_scenario(wb, report.get("account_scenario"),
-                           holidays=holidays)
+                           holidays=holidays,
+                           run_date=meta.get("run_date"))
     _fill_expense(wb, report.get("integrated_masked", []), holidays=holidays,
                   run_date=meta.get("run_date"))
     _fill_apalm_expense(wb, report.get("apalm_expenses", []),
@@ -140,8 +141,8 @@ def verify_live_workbook(path: Path, base_date: date) -> bool:
             "INDEX" in str(daily.cell(row=r, column=online_col).value or "")
             and "$B$13" in str(daily.cell(row=r,
                                           column=online_col).value or "")
-            for r in range(6, 34))
-        a6 = daily["A6"].value
+            for r in range(7, 35))
+        a6 = daily["A7"].value       # 6행은 전일 마감 실잔고 출발 행
         a6_date = a6.date() if isinstance(a6, datetime) else a6
         weekly = wb["13주주별계획"]
         c6w = str(weekly["C6"].value or "")
@@ -177,8 +178,8 @@ def _fill_summary(ws, report: dict, base_date: date, stats: dict,
     # 4주 기말·최저 잔액 수식을 일별계획의 기말잔액 열 위치로 재작성
     # (계좌 열 수에 따라 열이 이동한다)
     close = col_l(daily_layout(n_acc)["close"])
-    ws["B14"] = f"='4주일별계획'!{close}33"
-    ws["B15"] = f"=MIN('4주일별계획'!{close}6:{close}33)"
+    ws["B14"] = f"='4주일별계획'!{close}34"
+    ws["B15"] = f"=MIN('4주일별계획'!{close}7:{close}34)"
     if stats.get("외부입금") is not None:
         ws["B7"] = round(stats["외부입금"])
         ws["B8"] = round(stats.get("외부출금") or 0)
@@ -290,15 +291,10 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             + (f"({last_dates[(b, a)]:%m-%d})"
                if last_dates.get((b, a)) else "")
             for b, a in accounts)
-        open_txt = " · ".join(
-            f"{account_label(b, a)} "
-            f"{round(float(opening_map.get((b, a)) or 0)):,}"
-            for b, a in accounts)
-        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt}"
-                     f"  |  출발(전일 마감) 잔액: {open_txt} — 예상잔고는 "
-                     "출발 잔액에 예상입금·지출·이체를 반영한 하루 마감 "
-                     "기준 값(반영률 B13 연동, 당일 이미 반영된 실적은 "
-                     "중복 계산 안 함)")
+        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 표의 첫 "
+                     "행(전일 마감 실잔고)에서 출발해 예상입금·지출·이체를 "
+                     "반영한 하루 마감 기준으로 계산합니다(반영률 B13 연동, "
+                     "당일 이미 반영된 실적은 중복 계산 안 함)")
     a3 = _set(ws, 3, 1, note_txt)
     if a3 is not None:
         a3.font = Font(name="맑은 고딕", size=9, color=gray)
@@ -376,8 +372,32 @@ def _fill_daily(wb, forecast: dict, base_date: date,
         return cell
 
     red_font = Font(name="맑은 고딕", size=10, color="C00000")
+    bold_font = Font(name="맑은 고딕", size=10, bold=True)
+    start_fill = PatternFill("solid", start_color="EDEDED")
+
+    # 출발 행(6행): 전일 마감 실잔고 — 계좌별 실잔고를 먼저 확인하고
+    # 그 아래로 계획이 이어진다 (2026-09-21 사용자 요청)
+    prev_d = (run_date or base_date) - timedelta(days=1)
+    for c in range(1, note_col + 1):
+        cell = ws.cell(row=6, column=c)
+        if not isinstance(cell, MergedCell):
+            cell.fill = start_fill
+            cell.border = box
+    _put(6, 1, datetime.combine(prev_d, dtime()), fmt="yyyy-mm-dd",
+         fill=start_fill, font=bold_font)
+    _put(6, 2, WEEKDAY_KO[prev_d.weekday()], fill=start_fill,
+         font=bold_font)
+    for idx, c in enumerate(lay["bal"]):
+        _put(6, c, f"='{ACCOUNT_SCENARIO_SHEET}'!{col_l(4 + idx)}6",
+             fmt=num_bal, fill=bal_fill, font=bold_font)
+    _put(6, lay["close"],
+         round(start) if fix_start else "='요약'!$B$6",
+         fmt="#,##0", fill=start_fill, font=bold_font)
+    _put(6, note_col, "전일 마감 실잔고 — 여기서 계획 시작",
+         fill=start_fill, font=bold_font)
+
     for i in range(28):
-        row = 6 + i
+        row = 7 + i
         d = base_date + timedelta(days=i)
         off = d.weekday() >= 5 or d in holidays
         acell = _put(row, 1, datetime.combine(d, dtime()),
@@ -420,13 +440,9 @@ def _fill_daily(wb, forecast: dict, base_date: date,
         _put(row, lay["net"],
              f"={ol}{row}+{cl}{row}-{el}{row}-{fl}{row}-{gl}{row}",
              fmt=money, fill=calc_fill)
-        if row == 6:
-            _put(row, lay["open"],
-                 round(start) if fix_start else "='요약'!$B$6",
-                 fmt="#,##0", fill=calc_fill)
-        else:
-            _put(row, lay["open"], f"={col_l(lay['close'])}{row - 1}",
-                 fmt="#,##0", fill=calc_fill)
+        # 기초잔액은 앞 행의 기말(첫 계획 행은 출발 행의 실잔고)을 잇는다
+        _put(row, lay["open"], f"={col_l(lay['close'])}{row - 1}",
+             fmt="#,##0", fill=calc_fill)
         _put(row, lay["close"],
              f"={col_l(lay['open'])}{row}+{col_l(lay['net'])}{row}",
              fmt=money, fill=calc_fill)
@@ -438,7 +454,7 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             rd = ws.row_dimensions.get(row)
             if rd is not None:
                 rd.height = None    # 높이 자동(customHeight 해제)
-    ws.freeze_panes = "C6"
+    ws.freeze_panes = "C7"
     # 은행 내역으로 확인이 끝난 지난 일자(실적 구간)는 행을 숨긴다 —
     # 조회일 이후의 자금계획에 집중 (2026-09-20 사용자 요청).
     # 단, 실행일 행은 당일 실적이 있어도 항상 보인다 (2026-09-21 사용자
@@ -448,7 +464,7 @@ def _fill_daily(wb, forecast: dict, base_date: date,
     show_from = run_date or actual_until
     for i in range(28):
         d = base_date + timedelta(days=i)
-        ws.row_dimensions[6 + i].hidden = bool(
+        ws.row_dimensions[7 + i].hidden = bool(
             actual_until is not None and d <= actual_until
             and (show_from is None or d < show_from))
     # 붉은 상자는 그 일자 행 전체(모든 열)를 묶는다 (2026-09-21 사용자 요청)
@@ -504,7 +520,7 @@ def _outline_exec_window(ws, note_col: int, base_date: date,
             pass
     last_col = max(note_col, 11)
     # 이전 실행이 남긴 붉은 테두리를 먼저 지운다 (재실행 대비)
-    for r in range(6, 34):
+    for r in range(7, 35):
         for c in range(1, last_col + 1):
             cell = ws.cell(row=r, column=c)
             b = cell.border
@@ -521,8 +537,8 @@ def _outline_exec_window(ws, note_col: int, base_date: date,
             if dirty:
                 cell.border = b
     start, end = exec_window(run_date or base_date)
-    first = 6 + max(0, min((start - base_date).days, 27))
-    last = 6 + max(0, min((end - base_date).days, 27))
+    first = 7 + max(0, min((start - base_date).days, 27))
+    last = 7 + max(0, min((end - base_date).days, 27))
     outline_week_box(ws, first, last, 1, last_col)
 
 
@@ -562,7 +578,8 @@ ACCOUNT_SCENARIO_SHEET = "계좌별시나리오"
 
 
 def _fill_account_scenario(wb, scenario: Optional[dict],
-                           holidays: Optional[dict] = None) -> None:
+                           holidays: Optional[dict] = None,
+                           run_date: Optional[date] = None) -> None:
     """계좌별 일별 잔액 시나리오 시트 (우리→농협→국민 인출 우선순위).
 
     ① 잔액 → ② 당일 예상입금 배분 → ③ 지출 → ④ 부족분 이체 블록을
@@ -713,12 +730,38 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     nh_cols = [c for (b, _a), c in helper_cols.items() if b == "농협"]
     kb_cols = [c for (b, _a), c in helper_cols.items() if b == "국민은행"]
 
-    first_forecast = True
-    r = 6
+    # 출발 행(6행): 전일 마감 실잔고 — 계좌별 실잔고를 먼저 보여주고
+    # 그 아래로 시나리오가 이어진다 (2026-09-21 사용자 요청)
+    prev_d = (run_date or (rows[0]["일자"] if rows else date.today())) \
+        - timedelta(days=1)
+    for c in range(1, col_note + 1):
+        cell = ws.cell(row=6, column=c)
+        cell.border = box
+        if c == col_total:
+            cell.fill = total_fill
+        elif col_total < c <= col_total + n:
+            cell.fill = total_fill
+    a6 = _set(ws, 6, 1, datetime.combine(prev_d, dtime()))
+    if a6 is not None:
+        a6.number_format = "yyyy-mm-dd"
+        a6.font = Font(name="맑은 고딕", size=10, bold=True)
+    w6 = _set(ws, 6, 2, WEEKDAY_KO[prev_d.weekday()])
+    if w6 is not None:
+        w6.font = Font(name="맑은 고딕", size=10, bold=True)
+    _num(6, col_total, f"=SUM({col_l(4)}6:{col_l(3 + n)}6)", num_bal,
+         bold=True)
+    for idx, k in enumerate(accounts):
+        _num(6, 4 + idx, round(float(opening.get(k) or 0)), num_bal,
+             bold=True)
+    n6 = _set(ws, 6, col_note, "전일 마감 실잔고 — 여기서 출발")
+    if n6 is not None:
+        n6.font = Font(name="맑은 고딕", size=9, bold=True, color=gray)
+
+    r = 7
     for i, row in enumerate(rows):
         d = row["일자"]
-        # 지난 실적 일자는 숨김 — 마지막 실적일(출발 잔액)만 남긴다
-        ws.row_dimensions[r].hidden = last_act is not None and i < last_act
+        # 지난 실적 일자는 숨긴다 (출발 행이 전일 마감 잔고를 보여준다)
+        ws.row_dimensions[r].hidden = last_act is not None and i <= last_act
         acell = _set(ws, r, 1, datetime.combine(d, dtime()))
         if acell is not None:
             acell.number_format = "yyyy-mm-dd"
@@ -736,19 +779,15 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
                      num_bal, bold=True)
                 for idx, k in enumerate(accounts):
                     _num(r, 4 + idx, round(balances.get(k, 0)), num_bal)
-            ncell = _set(ws, r, col_note,
-                         "여기까지 실적 — 이 잔액에서 출발"
-                         if i == last_act else "실적 구간")
+            ncell = _set(ws, r, col_note, "실적 구간")
             if ncell is not None:
                 ncell.font = Font(name="맑은 고딕", size=9, color=gray)
         else:
             # 예측 행은 전부 수식: 요약!B13(반영률)을 바꾸면 4주일별계획
             # 입금 수식을 거쳐 이 표의 입금·이체·잔액이 즉시 재계산된다
-            prev = ({k: f"{float(opening.get(k) or 0):.2f}"
-                     for k in accounts} if first_forecast else
-                    {k: f"{col_l(4 + idx)}{r - 1}"
-                     for idx, k in enumerate(accounts)})
-            first_forecast = False
+            # 전날 잔액: 바로 윗 행(첫 계획 행은 6행 출발 실잔고) 참조
+            prev = {k: f"{col_l(4 + idx)}{r - 1}"
+                    for idx, k in enumerate(accounts)}
             in_cell = {k: f"{col_l(col_in_sum + 1 + idx)}{r}"
                        for idx, k in enumerate(accounts)}
             out_ref = f"{col_l(col_out)}{r}"
@@ -801,7 +840,7 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
             elif c in (col_tr, col_tr + 1):
                 cell.fill = tr_fill
         r += 1
-    ws.freeze_panes = "D6"   # 일자·요일·총잔액 고정
+    ws.freeze_panes = "D7"   # 일자·요일·총잔액·출발 행 고정
     # 실수로 수식을 지우지 않게 암호 없는 시트 보호 (행·열 숨기기
     # 해제와 셀 선택은 그대로 가능)
     from openpyxl.worksheet.protection import SheetProtection
