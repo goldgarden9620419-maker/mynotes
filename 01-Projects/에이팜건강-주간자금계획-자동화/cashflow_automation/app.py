@@ -383,7 +383,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         # 사용자가 '지출 예정(유지)'/'보류(제외)'를 고른다 (2026-09-21)
         intraday_preview = forecast_engine.intraday_actuals(
             plan["countable"], merged_history, adjustments, now.date(),
-            holds=intraday_holds)
+            holds=intraday_holds, holidays=holidays)
         for det in (intraday_preview or {}).get("대조내역", []):
             if det["상태"] == "집행 확인":
                 continue
