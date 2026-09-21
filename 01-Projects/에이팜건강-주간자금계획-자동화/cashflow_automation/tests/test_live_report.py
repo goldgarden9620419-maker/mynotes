@@ -191,6 +191,10 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert exp["A8"].value is None
     assert exp.freeze_panes == "A6"
     assert exp.auto_filter.ref == "A5:Q7"   # 머리글 필터 (데이터 2행)
+    # 경영보고 지출예정 표와 같은 기간(실행일 9/23~차주 금 10/2)만 표시
+    assert exp.row_dimensions[6].hidden          # 반영일 10/23 → 창 밖
+    assert not exp.row_dimensions[7].hidden      # 반영일 9/23 → 표시
+    assert "실행일~차주 금요일" in str(exp["A3"].value)
     # 에이팜 지출계획 시트: 취합 시트 바로 다음, 미반영/반영 구분 + 합계
     names = wb.sheetnames
     assert names.index("에이팜 지출계획") == names.index("지출계획_취합") + 1
@@ -227,6 +231,25 @@ def test_실행일_행은_실적이어도_보인다(tmp_path):
     assert daily.row_dimensions[6].hidden          # 월 (지난 실적)
     assert not daily.row_dimensions[7].hidden      # 화 (실행일 — 실적이어도 표시)
     assert not daily.row_dimensions[8].hidden      # 수 (예측)
+    wb.close()
+
+
+def test_실행일_당일만_실적인_경우_시작잔액_고정(tmp_path):
+    """당일 새벽 거래로 시작잔액≠현재잔액이면 actual_until이 없어도
+    I6를 기준일 시작 잔액 값으로 고정한다 (이중계산 방지)."""
+    template = tmp_path / "템플릿.xlsx"
+    _make_stub_template(template)
+    rep = _fake_report(NEW_MONDAY)
+    rep["meta"]["run_date"] = NEW_MONDAY
+    rep["forecast"]["actual_until"] = None          # 당일은 실적 확정 제외
+    rep["forecast"]["start_balance"] = 5_000_000    # 기준일 시작
+    rep["forecast"]["opening_balance"] = 5_400_000  # 현재(새벽 순증감 +40만)
+    out = tmp_path / "결과.xlsx"
+    fill_live_workbook(template, rep, out)
+    wb = load_workbook(out)
+    daily = wb["4주일별계획"]
+    assert daily["I6"].value == 5_000_000
+    assert not daily.row_dimensions[6].hidden       # 실행일 행 표시
     wb.close()
 
 

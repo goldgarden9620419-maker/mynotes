@@ -380,11 +380,14 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("forecast", "minimum_cash_balance", default=0),
             cfg.get("forecast", "online_history_weeks", default=12),
             cfg.get("forecast", "online_recency_halflife", default=4),
-            display_week_start=display_monday, holidays=holidays)
-        # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위)
+            display_week_start=display_monday, holidays=holidays,
+            run_date=now.date())
+        # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위).
+        # 실행일 당일 거래는 실적으로 확정하지 않으므로 시작 잔액도
+        # 전일 마감으로 되돌린다 (backout_from)
         account_scenario = forecast_engine.build_account_scenario(
             forecast["daily"], balances, merged_history,
-            forecast.get("actual_until"))
+            forecast.get("actual_until"), backout_from=now.date())
         for row in forecast["daily"]:
             if row["상태"] == forecast_engine.STATE_SHORTAGE:
                 issues.append({"구분": "음수 예상잔액",
@@ -852,6 +855,8 @@ def main(argv=None) -> int:
                         help="필수파일이 없어도 부분 실행")
     parser.add_argument("--once", action="store_true",
                         help="미실행 보완 검사만 1회 수행 후 종료")
+    parser.add_argument("--weekly-reconcile", action="store_true",
+                        help="이번 주 계획 vs 실제 입출금 대조 파일 생성 후 종료")
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--headless", action="store_true",
                         help="트레이 아이콘 없이 상주 실행")
@@ -865,6 +870,12 @@ def main(argv=None) -> int:
         for key in ("last_run_status", "last_run_week", "last_run_at",
                     "last_successful_week", "last_output_file", "last_error"):
             print(f"  {key}: {s.get(key, '')}")
+        return 0
+
+    if args.weekly_reconcile:
+        import weekly_reconcile
+        out = weekly_reconcile.run_weekly_reconcile(cfg, log)
+        print(f"[OK] 주간 대조 파일: {out}")
         return 0
 
     if args.run_now:

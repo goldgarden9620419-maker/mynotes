@@ -1,0 +1,4 @@
+01-Projects/에이팜건강-주간자금계획-자동화/cashflow_automation/tests/test_live_report.py
+01-Projects/에이팜건강-주간자금계획-자동화/자금계획_자동화_순서도와_사용방법.md
+01-Projects/에이팜건강-주간자금계획-자동화/자금계획_자동화_프로젝트_프롬프트.md
+01-Projects/에이팜건강-주간자금계획-자동화/자금계획_자동화_한눈에_보기.md
