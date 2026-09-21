@@ -257,12 +257,16 @@ def _fill_daily(ws, forecast: dict, base_date: date,
                 rd.height = None    # 높이 자동(customHeight 해제)
     # 은행 내역으로 확인이 끝난 지난 일자(실적 구간)는 행을 숨긴다 —
     # 조회일 이후의 자금계획에 집중 (2026-09-20 사용자 요청).
-    # 자료·수식은 그대로라 필요하면 행 숨기기 해제로 볼 수 있다
+    # 단, 실행일 행은 당일 실적이 있어도 항상 보인다 (2026-09-21 사용자
+    # 요청: 실행일 포함 표시). 자료·수식은 그대로라 필요하면 행 숨기기
+    # 해제로 볼 수 있다
     actual_until = forecast.get("actual_until")
+    show_from = run_date or actual_until
     for i in range(28):
         d = base_date + timedelta(days=i)
         ws.row_dimensions[6 + i].hidden = bool(
-            actual_until is not None and d <= actual_until)
+            actual_until is not None and d <= actual_until
+            and (show_from is None or d < show_from))
     _outline_exec_window(ws, note_col, base_date, run_date)
 
 
