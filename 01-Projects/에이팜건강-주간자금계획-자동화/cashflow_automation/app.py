@@ -855,6 +855,8 @@ def main(argv=None) -> int:
                         help="필수파일이 없어도 부분 실행")
     parser.add_argument("--once", action="store_true",
                         help="미실행 보완 검사만 1회 수행 후 종료")
+    parser.add_argument("--weekly-reconcile", action="store_true",
+                        help="이번 주 계획 vs 실제 입출금 대조 파일 생성 후 종료")
     parser.add_argument("--status", action="store_true")
     parser.add_argument("--headless", action="store_true",
                         help="트레이 아이콘 없이 상주 실행")
@@ -868,6 +870,12 @@ def main(argv=None) -> int:
         for key in ("last_run_status", "last_run_week", "last_run_at",
                     "last_successful_week", "last_output_file", "last_error"):
             print(f"  {key}: {s.get(key, '')}")
+        return 0
+
+    if args.weekly_reconcile:
+        import weekly_reconcile
+        out = weekly_reconcile.run_weekly_reconcile(cfg, log)
+        print(f"[OK] 주간 대조 파일: {out}")
         return 0
 
     if args.run_now:

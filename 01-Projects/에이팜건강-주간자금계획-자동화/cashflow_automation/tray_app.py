@@ -53,6 +53,10 @@ def run_tray(service) -> None:
         notify("변경자료 반영", "변경된 입력자료로 다시 생성합니다.")
         service.apply_changes()
 
+    def on_reconcile(icon_, item_):
+        notify("주간 대조", "이번 주 계획 vs 실제 입출금을 대조합니다.")
+        service.run_reconcile()
+
     def on_open_output(icon_, item_):
         service.open_output_folder()
 
@@ -84,6 +88,7 @@ def run_tray(service) -> None:
         pystray.MenuItem(next_run_title, None, enabled=False),
         pystray.Menu.SEPARATOR,
         pystray.MenuItem("지금 실행", on_run_now),
+        pystray.MenuItem("주간 대조 확인 (계획 vs 실제)", on_reconcile),
         pystray.MenuItem("이번 주 실행상태 확인", on_status),
         pystray.MenuItem("누락파일 확인", on_missing),
         pystray.MenuItem("변경자료 반영", on_apply_changes),
