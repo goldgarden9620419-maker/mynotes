@@ -53,6 +53,40 @@ def _xlsx_openable(path: Path) -> bool:
         return False
 
 
+def _bank_file_readable(path: Path) -> bool:
+    """은행 파일은 확장자와 내용이 달라도 읽으므로, 내용 기준으로만
+    판독 가능성을 검사한다 (zip/OLE/텍스트 중 하나면 통과 —
+    상세 해석은 bank_loader가 담당)."""
+    try:
+        with open(path, "rb") as f:
+            head = f.read(8)
+    except OSError:
+        return False
+    if head[:2] == b"PK":
+        return _xlsx_openable(path)
+    if head == b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1":
+        return True
+    try:
+        raw = path.read_bytes()
+    except OSError:
+        return False
+    if raw[:2] in (b"\xff\xfe", b"\xfe\xff"):
+        try:
+            raw.decode("utf-16")
+            return True
+        except (UnicodeDecodeError, UnicodeError):
+            return False
+    if b"\x00" in raw:          # NUL이 섞인 이진 파일은 텍스트가 아니다
+        return False
+    for encoding in ("utf-8-sig", "cp949", "euc-kr", "utf-8"):
+        try:
+            raw.decode(encoding)
+            return True
+        except (UnicodeDecodeError, UnicodeError):
+            continue
+    return False
+
+
 def bank_files(cfg, bank: str) -> list[Path]:
     bank_dir = cfg.bank_dir(bank)
     if not bank_dir.exists():
@@ -98,7 +132,7 @@ def validate_inputs(cfg) -> ValidationResult:
             continue
         for path in files:
             result.input_files.append(path)
-            if path.suffix.lower() == ".xlsx" and not _xlsx_openable(path):
+            if not _bank_file_readable(path):
                 result.corrupted.append({"구분": "손상된 파일", "은행": bank,
                                          "내용": f"파일을 열 수 없습니다: {path.name}",
                                          "원본파일": path.name})
