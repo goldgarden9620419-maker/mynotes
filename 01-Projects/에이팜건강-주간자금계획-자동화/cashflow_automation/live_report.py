@@ -51,9 +51,10 @@ _CONF_LABEL = {"상": "높음", "중": "중간", "하": "낮음"}
 _MONEY_WON = '#,##0"원"'
 
 # 13주 1~4주차 SUMIFS: 일별계획의 해당 열을 주 단위로 합산
-_SUMIFS = ("=SUMIFS('4주일별계획'!${col}$7:${col}$34,"
-           "'4주일별계획'!$A$7:$A$34,\">=\"&DATE({y1},{m1},{d1}),"
-           "'4주일별계획'!$A$7:$A$34,\"<=\"&DATE({y2},{m2},{d2}))")
+# (6행 전일 마감·7행 오늘 실잔고 출발 행 다음의 계획 행 8~35 기준)
+_SUMIFS = ("=SUMIFS('4주일별계획'!${col}$8:${col}$35,"
+           "'4주일별계획'!$A$8:$A$35,\">=\"&DATE({y1},{m1},{d1}),"
+           "'4주일별계획'!$A$8:$A$35,\"<=\"&DATE({y2},{m2},{d2}))")
 
 
 class LiveTemplateError(RuntimeError):
@@ -94,7 +95,8 @@ def fill_live_workbook(template_path: Path, report: dict,
                            holidays=holidays,
                            run_date=meta.get("run_date"))
     _fill_expense(wb, report.get("integrated_masked", []), holidays=holidays,
-                  run_date=meta.get("run_date"))
+                  run_date=meta.get("run_date"),
+                  intraday=forecast.get("intraday"))
     _fill_apalm_expense(wb, report.get("apalm_expenses", []),
                         holidays=holidays)
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []),
@@ -141,8 +143,8 @@ def verify_live_workbook(path: Path, base_date: date) -> bool:
             "INDEX" in str(daily.cell(row=r, column=online_col).value or "")
             and "$B$13" in str(daily.cell(row=r,
                                           column=online_col).value or "")
-            for r in range(7, 35))
-        a6 = daily["A7"].value       # 6행은 전일 마감 실잔고 출발 행
+            for r in range(8, 36))
+        a6 = daily["A8"].value       # 6~7행은 전일·오늘 실잔고 출발 행
         a6_date = a6.date() if isinstance(a6, datetime) else a6
         weekly = wb["13주주별계획"]
         c6w = str(weekly["C6"].value or "")
@@ -178,8 +180,8 @@ def _fill_summary(ws, report: dict, base_date: date, stats: dict,
     # 4주 기말·최저 잔액 수식을 일별계획의 기말잔액 열 위치로 재작성
     # (계좌 열 수에 따라 열이 이동한다)
     close = col_l(daily_layout(n_acc)["close"])
-    ws["B14"] = f"='4주일별계획'!{close}34"
-    ws["B15"] = f"=MIN('4주일별계획'!{close}7:{close}34)"
+    ws["B14"] = f"='4주일별계획'!{close}35"
+    ws["B15"] = f"=MIN('4주일별계획'!{close}8:{close}35)"
     if stats.get("외부입금") is not None:
         ws["B7"] = round(stats["외부입금"])
         ws["B8"] = round(stats.get("외부출금") or 0)
@@ -291,10 +293,11 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             + (f"({last_dates[(b, a)]:%m-%d})"
                if last_dates.get((b, a)) else "")
             for b, a in accounts)
-        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 표의 첫 "
-                     "행이 이 계좌별 실잔고이고, 같은 행에 오늘 이미 확인된 "
-                     "실제 입금·출금을 표시합니다. 실행일 계획 행은 실잔고에서 "
-                     "출발해 아직 집행되지 않은 '남은 예정 금액'만 반영합니다"
+        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 6행은 전일 "
+                     "마감, 7행은 오늘 실잔고와 오늘 실제 입금·출금입니다. "
+                     "실행일 계획 행은 오늘 실잔고에서 출발해 아직 집행되지 "
+                     "않은 '남은 예정 금액'만 반영하며, 지출계획_취합에서 "
+                     "확인완료(반영제외)한 항목은 회색으로 빠집니다"
                      "(반영률 B13 연동, 실적이 사라지거나 이중계산되지 않음)")
     a3 = _set(ws, 3, 1, note_txt)
     if a3 is not None:
@@ -376,25 +379,42 @@ def _fill_daily(wb, forecast: dict, base_date: date,
     bold_font = Font(name="맑은 고딕", size=10, bold=True)
     start_fill = PatternFill("solid", start_color="EDEDED")
 
-    # 출발 행(6행): 은행 확인 계좌별 실잔고 + 오늘 이미 확인된 실제
-    # 입금·출금 — 계획(예정 금액)과 구분해 실제를 이 행에 표시한다
-    # (2026-09-21 사용자 요청). 계획 행은 이 실잔고에서 출발한다.
-    # intraday 방식이 아니면(과거 호환) 전일 마감 실잔고 행이 된다
+    # 출발 행 2개 (2026-09-21 사용자 요청):
+    #  6행 = 전일 마감 계좌별 실잔고 (참고)
+    #  7행 = 오늘 은행 확인 계좌별 실잔고 + 오늘 실제 입금·출금 — 예정
+    #        금액과 구분해 실제를 이 행에 표시하고 계획은 여기서 출발.
+    # intraday 방식이 아니면(과거 호환) 두 행 모두 전일 마감 값이 된다
     intraday = forecast.get("intraday") or {}
     v3 = (scenario or {}).get("intraday_date") is not None
-    start_d = (run_date or base_date) if v3 \
-        else (run_date or base_date) - timedelta(days=1)
-    for c in range(1, note_col + 1):
-        cell = ws.cell(row=6, column=c)
-        if not isinstance(cell, MergedCell):
-            cell.fill = start_fill
-            cell.border = box
-    _put(6, 1, datetime.combine(start_d, dtime()), fmt="yyyy-mm-dd",
-         fill=start_fill, font=bold_font)
-    _put(6, 2, WEEKDAY_KO[start_d.weekday()], fill=start_fill,
-         font=bold_font)
+    today_d = run_date or base_date
+    prev_d = today_d - timedelta(days=1)
+    gray_font = Font(name="맑은 고딕", size=10, color="808080")
+    for rr in (6, 7):
+        for c in range(1, note_col + 1):
+            cell = ws.cell(row=rr, column=c)
+            if not isinstance(cell, MergedCell):
+                cell.fill = start_fill
+                cell.border = box
+    # 6행: 전일 마감 실잔고
+    _put(6, 1, datetime.combine(prev_d, dtime()), fmt="yyyy-mm-dd",
+         fill=start_fill, font=gray_font)
+    _put(6, 2, WEEKDAY_KO[prev_d.weekday()], fill=start_fill,
+         font=gray_font)
     for idx, c in enumerate(lay["bal"]):
         _put(6, c, f"='{ACCOUNT_SCENARIO_SHEET}'!{col_l(4 + idx)}6",
+             fmt=num_bal, fill=bal_fill, font=gray_font)
+    _put(6, lay["close"],
+         f"='{ACCOUNT_SCENARIO_SHEET}'!{col_l(3)}6" if accounts else None,
+         fmt="#,##0", fill=start_fill, font=gray_font)
+    _put(6, note_col, "전일 마감 실잔고 (참고)", fill=start_fill,
+         font=gray_font)
+    # 7행: 오늘 실잔고 + 실제 입출금
+    _put(7, 1, datetime.combine(today_d, dtime()), fmt="yyyy-mm-dd",
+         fill=start_fill, font=bold_font)
+    _put(7, 2, WEEKDAY_KO[today_d.weekday()], fill=start_fill,
+         font=bold_font)
+    for idx, c in enumerate(lay["bal"]):
+        _put(7, c, f"='{ACCOUNT_SCENARIO_SHEET}'!{col_l(4 + idx)}7",
              fmt=num_bal, fill=bal_fill, font=bold_font)
     if v3 and intraday:
         # 오늘 실제 입금(온라인/기타)·출금(계획 집행/계획 밖) 구분 표시
@@ -405,23 +425,30 @@ def _fill_daily(wb, forecast: dict, base_date: date,
                      (lay["etc"], intraday.get("계획외지출")),
                      (lay["net"], (intraday.get("입금실제") or 0)
                       - (intraday.get("출금실제") or 0))):
-            _put(6, c, round(v) if v else None, fmt=num_flow,
+            _put(7, c, round(v) if v else None, fmt=num_flow,
                  fill=start_fill, font=bold_font)
     if v3:
-        _put(6, lay["close"], "='요약'!$B$6", fmt="#,##0",
+        _put(7, lay["close"], "='요약'!$B$6", fmt="#,##0",
              fill=start_fill, font=bold_font)
-        _put(6, note_col,
-             "은행 확인 실잔고와 오늘 실제 입금·출금 — 계획은 여기서 시작",
+        _put(7, note_col,
+             "오늘 실잔고(은행 확인) + 실제 입금·출금 — 계획은 여기서 시작",
              fill=start_fill, font=bold_font)
     else:
-        _put(6, lay["close"],
+        _put(7, lay["close"],
              round(start) if fix_start else "='요약'!$B$6",
              fmt="#,##0", fill=start_fill, font=bold_font)
-        _put(6, note_col, "전일 마감 실잔고 — 여기서 계획 시작",
+        _put(7, note_col, "실잔고 — 여기서 계획 시작",
              fill=start_fill, font=bold_font)
 
+    # 확인완료(반영제외) 항목 차감용 SUMIFS — 지출계획_취합 시트의
+    # 잔여금액(숨김 T)·확인완료(S)·구분(U) 열을 반영일로 골라 합산
+    def _excluded(r, cat):
+        es = EXPENSE_SHEET
+        return (f"SUMIFS('{es}'!$T$6:$T$500,'{es}'!$F$6:$F$500,$A${r},"
+                f"'{es}'!$S$6:$S$500,\"예\",'{es}'!$U$6:$U$500,\"{cat}\")")
+
     for i in range(28):
-        row = 7 + i
+        row = 8 + i
         d = base_date + timedelta(days=i)
         off = d.weekday() >= 5 or d in holidays
         acell = _put(row, 1, datetime.combine(d, dtime()),
@@ -462,22 +489,42 @@ def _fill_daily(wb, forecast: dict, base_date: date,
                     src.get("팀별 송금예정") or None,
                     src.get("카드결제") or None,
                     etc or None]
-        for key, v in zip(("conf", "transfer", "card", "etc"), vals):
-            _put(row, lay[key], round(v) if v else None,
+        if v3 and intraday and d == intraday.get("일자"):
+            # 실행일: 지출계획_취합에서 확인완료 체크한 항목의 잔여를
+            # 빼는 수식 — 체크 즉시 재계산되고 회색으로 표시된다
+            from openpyxl.formatting.rule import FormulaRule
+            for key, cat, base in (
+                    ("transfer", "송금", vals[1]),
+                    ("card", "카드", vals[2]),
+                    ("etc", "자동이체", vals[3])):
+                ex = _excluded(row, cat)
+                _put(row, lay[key],
+                     f"=MAX(0,{round(base or 0)}-{ex})",
+                     fmt=money, fill=edit_fill)
+                cell_ref = f"{col_l(lay[key])}{row}"
+                ws.conditional_formatting.add(
+                    cell_ref,
+                    FormulaRule(formula=[f"{ex}>0"],
+                                font=Font(color="A6A6A6")))
+            _put(row, lay["conf"], round(vals[0]) if vals[0] else None,
                  fmt=money, fill=edit_fill)
+        else:
+            for key, v in zip(("conf", "transfer", "card", "etc"), vals):
+                _put(row, lay[key], round(v) if v else None,
+                     fmt=money, fill=edit_fill)
         ol, cl = col_l(lay["online"]), col_l(lay["conf"])
         el, fl, gl = (col_l(lay["transfer"]), col_l(lay["card"]),
                       col_l(lay["etc"]))
         _put(row, lay["net"],
              f"={ol}{row}+{cl}{row}-{el}{row}-{fl}{row}-{gl}{row}",
              fmt=money, fill=calc_fill)
-        # 기초잔액은 앞 행의 기말을 잇는다. 실행일 계획 행은 출발 행의
-        # 은행 확인 실잔고에서 시작하고, 그 앞의 숨김 실적 행은 기준일
-        # 시작잔액에서 따로 이어진다 (당일 실제가 이중계산되지 않게)
+        # 기초잔액은 앞 행의 기말을 잇는다. 실행일 계획 행은 7행(오늘
+        # 실잔고)에서 시작하고, 그 앞의 숨김 실적 행은 기준일 시작잔액에서
+        # 따로 이어진다 (당일 실제가 이중계산되지 않게)
         if v3 and run_date is not None and d == run_date:
-            _put(row, lay["open"], f"={col_l(lay['close'])}6",
+            _put(row, lay["open"], f"={col_l(lay['close'])}7",
                  fmt="#,##0", fill=calc_fill)
-        elif (v3 and row == 7 and run_date is not None
+        elif (v3 and row == 8 and run_date is not None
                 and run_date > base_date):
             _put(row, lay["open"], round(start or 0), fmt="#,##0",
                  fill=calc_fill)
@@ -495,7 +542,7 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             rd = ws.row_dimensions.get(row)
             if rd is not None:
                 rd.height = None    # 높이 자동(customHeight 해제)
-    ws.freeze_panes = "C7"
+    ws.freeze_panes = "C8"
     # 은행 내역으로 확인이 끝난 지난 일자(실적 구간)는 행을 숨긴다 —
     # 조회일 이후의 자금계획에 집중 (2026-09-20 사용자 요청).
     # 단, 실행일 행은 당일 실적이 있어도 항상 보인다 (2026-09-21 사용자
@@ -505,7 +552,7 @@ def _fill_daily(wb, forecast: dict, base_date: date,
     show_from = run_date or actual_until
     for i in range(28):
         d = base_date + timedelta(days=i)
-        ws.row_dimensions[7 + i].hidden = bool(
+        ws.row_dimensions[8 + i].hidden = bool(
             actual_until is not None and d <= actual_until
             and (show_from is None or d < show_from))
     # 붉은 상자는 그 일자 행 전체(모든 열)를 묶는다 (2026-09-21 사용자 요청)
@@ -561,7 +608,7 @@ def _outline_exec_window(ws, note_col: int, base_date: date,
             pass
     last_col = max(note_col, 11)
     # 이전 실행이 남긴 붉은 테두리를 먼저 지운다 (재실행 대비)
-    for r in range(7, 35):
+    for r in range(8, 36):
         for c in range(1, last_col + 1):
             cell = ws.cell(row=r, column=c)
             b = cell.border
@@ -578,8 +625,8 @@ def _outline_exec_window(ws, note_col: int, base_date: date,
             if dirty:
                 cell.border = b
     start, end = exec_window(run_date or base_date)
-    first = 7 + max(0, min((start - base_date).days, 27))
-    last = 7 + max(0, min((end - base_date).days, 27))
+    first = 8 + max(0, min((start - base_date).days, 27))
+    last = 8 + max(0, min((end - base_date).days, 27))
     outline_week_box(ws, first, last, 1, last_col)
 
 
@@ -771,44 +818,48 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     nh_cols = [c for (b, _a), c in helper_cols.items() if b == "농협"]
     kb_cols = [c for (b, _a), c in helper_cols.items() if b == "국민은행"]
 
-    # 출발 행(6행): 은행 확인 계좌별 실잔고 — 실잔고를 먼저 보여주고
-    # 그 아래로 시나리오가 이어진다 (2026-09-21 사용자 요청).
-    # intraday 방식이면 실행일(은행 최신 확인) 기준, 아니면 전일 마감
+    # 출발 행 2개 (2026-09-21 사용자 요청):
+    #  6행 = 전일 마감 계좌별 실잔고 (참고)
+    #  7행 = 오늘 은행 확인 계좌별 실잔고 — 여기서 시나리오가 출발
     intraday_date = scenario.get("intraday_date")
-    if intraday_date is not None:
-        prev_d = run_date or intraday_date
-    else:
-        prev_d = (run_date or (rows[0]["일자"] if rows else date.today())) \
-            - timedelta(days=1)
-    for c in range(1, col_note + 1):
-        cell = ws.cell(row=6, column=c)
-        cell.border = box
-        if c == col_total:
-            cell.fill = total_fill
-        elif col_total < c <= col_total + n:
-            cell.fill = total_fill
-    a6 = _set(ws, 6, 1, datetime.combine(prev_d, dtime()))
-    if a6 is not None:
-        a6.number_format = "yyyy-mm-dd"
-        a6.font = Font(name="맑은 고딕", size=10, bold=True)
-    w6 = _set(ws, 6, 2, WEEKDAY_KO[prev_d.weekday()])
-    if w6 is not None:
-        w6.font = Font(name="맑은 고딕", size=10, bold=True)
-    _num(6, col_total, f"=SUM({col_l(4)}6:{col_l(3 + n)}6)", num_bal,
-         bold=True)
-    for idx, k in enumerate(accounts):
-        _num(6, 4 + idx, round(float(opening.get(k) or 0)), num_bal,
-             bold=True)
-    n6 = _set(ws, 6, col_note,
-              "은행 확인 실잔고 — 여기서 출발" if intraday_date is not None
-              else "전일 마감 실잔고 — 여기서 출발")
-    if n6 is not None:
-        n6.font = Font(name="맑은 고딕", size=9, bold=True, color=gray)
+    today_d = run_date or intraday_date \
+        or (rows[0]["일자"] if rows else date.today())
+    prev_d = today_d - timedelta(days=1)
+    prev_close = scenario.get("prev_close") or opening
+    for rr in (6, 7):
+        for c in range(1, col_note + 1):
+            cell = ws.cell(row=rr, column=c)
+            cell.border = box
+            if col_total <= c <= col_total + n:
+                cell.fill = total_fill
+    for rr, dd, vals, bold, label in (
+            (6, prev_d, prev_close, False, "전일 마감 실잔고 (참고)"),
+            (7, today_d, opening, True,
+             "오늘 실잔고(은행 확인) — 여기서 출발" if intraday_date
+             else "실잔고 — 여기서 출발")):
+        acell = _set(ws, rr, 1, datetime.combine(dd, dtime()))
+        if acell is not None:
+            acell.number_format = "yyyy-mm-dd"
+            acell.font = Font(name="맑은 고딕", size=10, bold=bold,
+                              color=None if bold else gray)
+        wcell = _set(ws, rr, 2, WEEKDAY_KO[dd.weekday()])
+        if wcell is not None:
+            wcell.font = Font(name="맑은 고딕", size=10, bold=bold,
+                              color=None if bold else gray)
+        _num(rr, col_total, f"=SUM({col_l(4)}{rr}:{col_l(3 + n)}{rr})",
+             num_bal, bold=True)
+        for idx, k in enumerate(accounts):
+            _num(rr, 4 + idx, round(float(vals.get(k) or 0)), num_bal,
+                 bold=bold)
+        ncell = _set(ws, rr, col_note, label)
+        if ncell is not None:
+            ncell.font = Font(name="맑은 고딕", size=9, bold=bold,
+                              color=gray)
 
-    r = 7
+    r = 8
     for i, row in enumerate(rows):
         d = row["일자"]
-        # 지난 실적 일자는 숨긴다 (출발 행이 전일 마감 잔고를 보여준다)
+        # 지난 실적 일자는 숨긴다 (출발 행이 실잔고를 보여준다)
         ws.row_dimensions[r].hidden = last_act is not None and i <= last_act
         acell = _set(ws, r, 1, datetime.combine(d, dtime()))
         if acell is not None:
@@ -834,8 +885,8 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
             # 예측 행은 전부 수식: 요약!B13(반영률)을 바꾸면 4주일별계획
             # 입금 수식을 거쳐 이 표의 입금·이체·잔액이 즉시 재계산된다
             # 전날 잔액: 바로 윗 행 참조. 실행일 행은 (앞에 숨김 실적
-            # 행이 있어도) 6행의 은행 확인 실잔고에서 출발한다
-            prev_r = 6 if (intraday_date is not None
+            # 행이 있어도) 7행의 오늘 실잔고에서 출발한다
+            prev_r = 7 if (intraday_date is not None
                            and d == intraday_date) else r - 1
             prev = {k: f"{col_l(4 + idx)}{prev_r}"
                     for idx, k in enumerate(accounts)}
@@ -891,7 +942,7 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
             elif c in (col_tr, col_tr + 1):
                 cell.fill = tr_fill
         r += 1
-    ws.freeze_panes = "D7"   # 일자·요일·총잔액·출발 행 고정
+    ws.freeze_panes = "D8"   # 일자·요일·총잔액·출발 행 2개 고정
     # 실수로 수식을 지우지 않게 암호 없는 시트 보호 (행·열 숨기기
     # 해제와 셀 선택은 그대로 가능)
     from openpyxl.worksheet.protection import SheetProtection
@@ -901,13 +952,19 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
 
 def _fill_expense(wb, rows: list[dict],
                   holidays: Optional[dict] = None,
-                  run_date: Optional[date] = None) -> None:
+                  run_date: Optional[date] = None,
+                  intraday: Optional[dict] = None) -> None:
     """팀 지출계획 취합을 별도 시트로 자동 반영 (매주 전체 갱신).
 
     대외비 행은 분류·총액 집계로만 표시된다(상세 미노출).
     경영보고 지출예정 표와 같은 기간(실행일~차주 금요일)만 표시하고
-    그 밖의 반영일 행은 숨긴다 (2026-09-21 사용자 요청) — 값은 남아
-    있어 행 숨기기 해제로 전체를 볼 수 있다.
+    그 밖의 반영일 행은 숨긴다 (2026-09-21 사용자 요청).
+
+    실행일 당일 항목은 은행 실제 출금과의 대조 결과(왜 일치하지
+    않는지)를 R열에 표시하고, S열 '확인완료(반영제외)'를 '예'로
+    고르면 그 항목의 잔여 금액이 4주일별계획의 송금예정·조정에서
+    수식으로 빠지며 해당 셀 숫자가 회색으로 표시된다 (2026-09-21).
+    T(잔여금액)·U(구분) 열은 그 수식용 숨김 열이다.
     """
     from openpyxl.styles import Alignment, Font, PatternFill
     from excel_report import is_offday
@@ -934,7 +991,14 @@ def _fill_expense(wb, rows: list[dict],
         note.font = Font(name="맑은 고딕", size=9, color="808080")
 
     from openpyxl.utils import get_column_letter
-    for c, (header, _key, width) in enumerate(_EXPENSE_COLUMNS, start=1):
+    extra_heads = [("당일 대조 (계획 vs 실제)", 30),
+                   ("확인완료(반영제외)", 15),
+                   ("잔여금액", 11), ("구분", 7)]
+    n_base = len(_EXPENSE_COLUMNS)
+    n_all = n_base + len(extra_heads)
+    for c, (header, width) in enumerate(
+            [(h, w) for h, _k, w in _EXPENSE_COLUMNS]
+            + extra_heads, start=1):
         cell = _set(ws, 5, c, header)
         if cell is not None:
             cell.fill = PatternFill("solid", start_color="1F4E79")
@@ -942,6 +1006,15 @@ def _fill_expense(wb, rows: list[dict],
                              size=10)
             cell.alignment = Alignment(horizontal="center")
         ws.column_dimensions[get_column_letter(c)].width = width
+    # 잔여금액·구분은 수식용 숨김 열
+    for c in (n_base + 3, n_base + 4):
+        ws.column_dimensions[get_column_letter(c)].hidden = True
+
+    # 당일 대조 내역: 요청ID로 연결한다
+    match_by_id = {d.get("요청ID"): d
+                   for d in (intraday or {}).get("대조내역", [])
+                   if d.get("요청ID")}
+    edit_fill = PatternFill("solid", start_color="FFF2CC")
 
     window = exec_window(run_date) if run_date is not None else None
     r = 6
@@ -964,20 +1037,51 @@ def _fill_expense(wb, rows: list[dict],
                 if is_offday(value, holidays):
                     cell.font = Font(name="맑은 고딕", size=10,
                                      color="C00000")
+        det = match_by_id.get(row.get("요청ID")) \
+            if reflect_d == run_date else None
+        if det is not None:
+            mcell = _set(ws, r, n_base + 1,
+                         f"{det['상태']}: {det['사유']}")
+            if mcell is not None:
+                mcell.font = Font(
+                    name="맑은 고딕", size=9,
+                    color="C00000" if det["상태"] != "집행 확인"
+                    else "548235")
+                mcell.alignment = Alignment(horizontal="left",
+                                            wrap_text=True)
+            scell = _set(ws, r, n_base + 2, None)
+            if scell is not None:
+                scell.fill = edit_fill
+            _set(ws, r, n_base + 3, round(det["잔여"]))
+            _set(ws, r, n_base + 4, det["구분"])
         # 경영보고 지출예정 표와 같은 기간 밖의 반영일 행은 숨긴다
         ws.row_dimensions[r].hidden = bool(
             window is not None and reflect_d is not None
             and not (window[0] <= reflect_d <= window[1]))
         r += 1
+    # 확인완료 드롭다운(예) + '예' 행은 회색 처리
+    if match_by_id:
+        from openpyxl.worksheet.datavalidation import DataValidation
+        from openpyxl.formatting.rule import FormulaRule
+        done_l = get_column_letter(n_base + 2)
+        dv = DataValidation(type="list", formula1='"예"', allow_blank=True)
+        dv.error = "'예'만 선택할 수 있습니다 (지우면 다시 반영)."
+        dv.showErrorMessage = True
+        ws.add_data_validation(dv)
+        dv.add(f"{done_l}6:{done_l}{max(r - 1, 6)}")
+        ws.conditional_formatting.add(
+            f"A6:{get_column_letter(n_base + 2)}{max(r - 1, 6)}",
+            FormulaRule(formula=[f'${done_l}6="예"'],
+                        font=Font(color="A6A6A6")))
     # 머리글 자동 필터 — 반영일·팀명·반영상태 등으로 골라 볼 수 있다
-    ws.auto_filter.ref = (f"A5:{get_column_letter(len(_EXPENSE_COLUMNS))}"
+    ws.auto_filter.ref = (f"A5:{get_column_letter(n_all)}"
                           f"{max(r - 1, 6)}")
     # 이전 실행의 잔여 행 정리 (숨김 상태도 되돌린다)
     end = max(ws.max_row, r)
     for rr in range(r, end + 1):
         ws.row_dimensions[rr].hidden = False
         row_empty = True
-        for c in range(1, len(_EXPENSE_COLUMNS) + 1):
+        for c in range(1, n_all + 1):
             if ws.cell(row=rr, column=c).value is not None:
                 _set(ws, rr, c, None)
                 row_empty = False
