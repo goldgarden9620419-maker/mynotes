@@ -292,10 +292,10 @@ def _fill_daily(wb, forecast: dict, base_date: date,
                if last_dates.get((b, a)) else "")
             for b, a in accounts)
         note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 표의 첫 "
-                     "행(전일 마감 실잔고)에서 출발해 예상입금·지출·이체를 "
-                     "반영한 하루 마감 기준으로 계산합니다(반영률 B13 연동). "
-                     "실행일 당일 행은 이미 확인된 실제 입출금 + 남은 계획"
-                     "으로 계산해 실적이 사라지거나 이중계산되지 않습니다")
+                     "행이 이 계좌별 실잔고이고, 같은 행에 오늘 이미 확인된 "
+                     "실제 입금·출금을 표시합니다. 실행일 계획 행은 실잔고에서 "
+                     "출발해 아직 집행되지 않은 '남은 예정 금액'만 반영합니다"
+                     "(반영률 B13 연동, 실적이 사라지거나 이중계산되지 않음)")
     a3 = _set(ws, 3, 1, note_txt)
     if a3 is not None:
         a3.font = Font(name="맑은 고딕", size=9, color=gray)
@@ -376,26 +376,49 @@ def _fill_daily(wb, forecast: dict, base_date: date,
     bold_font = Font(name="맑은 고딕", size=10, bold=True)
     start_fill = PatternFill("solid", start_color="EDEDED")
 
-    # 출발 행(6행): 전일 마감 실잔고 — 계좌별 실잔고를 먼저 확인하고
-    # 그 아래로 계획이 이어진다 (2026-09-21 사용자 요청)
-    prev_d = (run_date or base_date) - timedelta(days=1)
+    # 출발 행(6행): 은행 확인 계좌별 실잔고 + 오늘 이미 확인된 실제
+    # 입금·출금 — 계획(예정 금액)과 구분해 실제를 이 행에 표시한다
+    # (2026-09-21 사용자 요청). 계획 행은 이 실잔고에서 출발한다.
+    # intraday 방식이 아니면(과거 호환) 전일 마감 실잔고 행이 된다
+    intraday = forecast.get("intraday") or {}
+    v3 = (scenario or {}).get("intraday_date") is not None
+    start_d = (run_date or base_date) if v3 \
+        else (run_date or base_date) - timedelta(days=1)
     for c in range(1, note_col + 1):
         cell = ws.cell(row=6, column=c)
         if not isinstance(cell, MergedCell):
             cell.fill = start_fill
             cell.border = box
-    _put(6, 1, datetime.combine(prev_d, dtime()), fmt="yyyy-mm-dd",
+    _put(6, 1, datetime.combine(start_d, dtime()), fmt="yyyy-mm-dd",
          fill=start_fill, font=bold_font)
-    _put(6, 2, WEEKDAY_KO[prev_d.weekday()], fill=start_fill,
+    _put(6, 2, WEEKDAY_KO[start_d.weekday()], fill=start_fill,
          font=bold_font)
     for idx, c in enumerate(lay["bal"]):
         _put(6, c, f"='{ACCOUNT_SCENARIO_SHEET}'!{col_l(4 + idx)}6",
              fmt=num_bal, fill=bal_fill, font=bold_font)
-    _put(6, lay["close"],
-         round(start) if fix_start else "='요약'!$B$6",
-         fmt="#,##0", fill=start_fill, font=bold_font)
-    _put(6, note_col, "전일 마감 실잔고 — 여기서 계획 시작",
-         fill=start_fill, font=bold_font)
+    if v3 and intraday:
+        # 오늘 실제 입금(온라인/기타)·출금(계획 집행/계획 밖) 구분 표시
+        exec_total = sum((intraday.get("집행") or {}).values())
+        for c, v in ((lay["online"], intraday.get("온라인실제")),
+                     (lay["conf"], intraday.get("기타입금실제")),
+                     (lay["transfer"], exec_total),
+                     (lay["etc"], intraday.get("계획외지출")),
+                     (lay["net"], (intraday.get("입금실제") or 0)
+                      - (intraday.get("출금실제") or 0))):
+            _put(6, c, round(v) if v else None, fmt=num_flow,
+                 fill=start_fill, font=bold_font)
+    if v3:
+        _put(6, lay["close"], "='요약'!$B$6", fmt="#,##0",
+             fill=start_fill, font=bold_font)
+        _put(6, note_col,
+             "은행 확인 실잔고와 오늘 실제 입금·출금 — 계획은 여기서 시작",
+             fill=start_fill, font=bold_font)
+    else:
+        _put(6, lay["close"],
+             round(start) if fix_start else "='요약'!$B$6",
+             fmt="#,##0", fill=start_fill, font=bold_font)
+        _put(6, note_col, "전일 마감 실잔고 — 여기서 계획 시작",
+             fill=start_fill, font=bold_font)
 
     for i in range(28):
         row = 7 + i
@@ -416,8 +439,7 @@ def _fill_daily(wb, forecast: dict, base_date: date,
                          f"{col_l(5 + n + idx)}{row}",
                  fmt=num_flow, fill=alloc_fill)
         # 온라인 예상입금: 지난 실적일·공휴일은 값, 그 밖엔 반영률 수식.
-        # 실행일 당일은 이미 들어온 실제 입금을 하한으로 둔다 (MAX)
-        intraday = forecast.get("intraday") or {}
+        # 실행일 당일은 '남은 예상'만 — 이미 들어온 실제를 뺀다 (MAX 0)
         iday_online = (round(intraday.get("온라인실제") or 0)
                        if d == intraday.get("일자") else 0)
         if src and src.get("실적"):
@@ -425,11 +447,10 @@ def _fill_daily(wb, forecast: dict, base_date: date,
                  round(src.get("온라인 예상입금") or 0),
                  fmt="#,##0", fill=online_fill)
         elif d in holidays:
-            _put(row, lay["online"], iday_online, fmt="#,##0",
-                 fill=online_fill)
+            _put(row, lay["online"], 0, fmt="#,##0", fill=online_fill)
         elif iday_online:
             _put(row, lay["online"],
-                 f"=MAX({_DAILY_ONLINE.format(r=row)[1:]},{iday_online})",
+                 f"=MAX(0,{_DAILY_ONLINE.format(r=row)[1:]}-{iday_online})",
                  fmt=money, fill=online_fill)
         else:
             _put(row, lay["online"], _DAILY_ONLINE.format(r=row),
@@ -450,9 +471,19 @@ def _fill_daily(wb, forecast: dict, base_date: date,
         _put(row, lay["net"],
              f"={ol}{row}+{cl}{row}-{el}{row}-{fl}{row}-{gl}{row}",
              fmt=money, fill=calc_fill)
-        # 기초잔액은 앞 행의 기말(첫 계획 행은 출발 행의 실잔고)을 잇는다
-        _put(row, lay["open"], f"={col_l(lay['close'])}{row - 1}",
-             fmt="#,##0", fill=calc_fill)
+        # 기초잔액은 앞 행의 기말을 잇는다. 실행일 계획 행은 출발 행의
+        # 은행 확인 실잔고에서 시작하고, 그 앞의 숨김 실적 행은 기준일
+        # 시작잔액에서 따로 이어진다 (당일 실제가 이중계산되지 않게)
+        if v3 and run_date is not None and d == run_date:
+            _put(row, lay["open"], f"={col_l(lay['close'])}6",
+                 fmt="#,##0", fill=calc_fill)
+        elif (v3 and row == 7 and run_date is not None
+                and run_date > base_date):
+            _put(row, lay["open"], round(start or 0), fmt="#,##0",
+                 fill=calc_fill)
+        else:
+            _put(row, lay["open"], f"={col_l(lay['close'])}{row - 1}",
+                 fmt="#,##0", fill=calc_fill)
         _put(row, lay["close"],
              f"={col_l(lay['open'])}{row}+{col_l(lay['net'])}{row}",
              fmt=money, fill=calc_fill)
@@ -740,10 +771,15 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     nh_cols = [c for (b, _a), c in helper_cols.items() if b == "농협"]
     kb_cols = [c for (b, _a), c in helper_cols.items() if b == "국민은행"]
 
-    # 출발 행(6행): 전일 마감 실잔고 — 계좌별 실잔고를 먼저 보여주고
-    # 그 아래로 시나리오가 이어진다 (2026-09-21 사용자 요청)
-    prev_d = (run_date or (rows[0]["일자"] if rows else date.today())) \
-        - timedelta(days=1)
+    # 출발 행(6행): 은행 확인 계좌별 실잔고 — 실잔고를 먼저 보여주고
+    # 그 아래로 시나리오가 이어진다 (2026-09-21 사용자 요청).
+    # intraday 방식이면 실행일(은행 최신 확인) 기준, 아니면 전일 마감
+    intraday_date = scenario.get("intraday_date")
+    if intraday_date is not None:
+        prev_d = run_date or intraday_date
+    else:
+        prev_d = (run_date or (rows[0]["일자"] if rows else date.today())) \
+            - timedelta(days=1)
     for c in range(1, col_note + 1):
         cell = ws.cell(row=6, column=c)
         cell.border = box
@@ -763,7 +799,9 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     for idx, k in enumerate(accounts):
         _num(6, 4 + idx, round(float(opening.get(k) or 0)), num_bal,
              bold=True)
-    n6 = _set(ws, 6, col_note, "전일 마감 실잔고 — 여기서 출발")
+    n6 = _set(ws, 6, col_note,
+              "은행 확인 실잔고 — 여기서 출발" if intraday_date is not None
+              else "전일 마감 실잔고 — 여기서 출발")
     if n6 is not None:
         n6.font = Font(name="맑은 고딕", size=9, bold=True, color=gray)
 
@@ -795,8 +833,11 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
         else:
             # 예측 행은 전부 수식: 요약!B13(반영률)을 바꾸면 4주일별계획
             # 입금 수식을 거쳐 이 표의 입금·이체·잔액이 즉시 재계산된다
-            # 전날 잔액: 바로 윗 행(첫 계획 행은 6행 출발 실잔고) 참조
-            prev = {k: f"{col_l(4 + idx)}{r - 1}"
+            # 전날 잔액: 바로 윗 행 참조. 실행일 행은 (앞에 숨김 실적
+            # 행이 있어도) 6행의 은행 확인 실잔고에서 출발한다
+            prev_r = 6 if (intraday_date is not None
+                           and d == intraday_date) else r - 1
+            prev = {k: f"{col_l(4 + idx)}{prev_r}"
                     for idx, k in enumerate(accounts)}
             in_cell = {k: f"{col_l(col_in_sum + 1 + idx)}{r}"
                        for idx, k in enumerate(accounts)}
@@ -804,23 +845,10 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
             w = accounts[0]
             need = f"MAX(0,{out_ref}-{prev[w]}-{in_cell[w]})"
             _num(r, col_in_sum, "=" + d_in.format(r=r), num_flow)
-            # 실행일 당일: 이미 들어온 실제 입금은 실제 계좌에 두고,
-            # 남은 예상입금만 비중대로 배분한다 (2026-09-21 사용자 요청)
-            iin = (scenario.get("intraday_in") or {}
-                   if d == scenario.get("intraday_date") else {})
-            if iin:
-                atot = round(sum(iin.values()))
-                for idx, k in enumerate(accounts):
-                    _num(r, col_in_sum + 1 + idx,
-                         f"={round(iin.get(k, 0.0))}"
-                         f"+MAX(0,{col_l(col_in_sum)}{r}-{atot})"
-                         f"*{shares.get(k, 0):.6f}",
-                         num_flow)
-            else:
-                for idx, k in enumerate(accounts):
-                    _num(r, col_in_sum + 1 + idx,
-                         f"={col_l(col_in_sum)}{r}*{shares.get(k, 0):.6f}",
-                         num_flow)
+            for idx, k in enumerate(accounts):
+                _num(r, col_in_sum + 1 + idx,
+                     f"={col_l(col_in_sum)}{r}*{shares.get(k, 0):.6f}",
+                     num_flow)
             _num(r, col_out, "=" + d_out.format(r=r), num_flow)
             done = []
             for k in accounts[1:]:
