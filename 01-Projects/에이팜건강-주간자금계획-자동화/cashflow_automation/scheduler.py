@@ -62,6 +62,17 @@ class AutomationService:
         self.scheduler.add_job(
             self._periodic_check, IntervalTrigger(minutes=max(1, interval)),
             id="periodic", name="파일 대기·변경 감지 검사")
+        # 금요일 주간 대조: 계획 vs 실제 입출금 차이를 먼저 확인받는다
+        # (2026-09-21 사용자 요청). schedule.reconcile로 요일·시각 조정
+        rec = self.cfg.get("schedule", "reconcile", default={}) or {}
+        if rec.get("enabled", True):
+            self.scheduler.add_job(
+                self._scheduled_reconcile, CronTrigger(
+                    day_of_week=rec.get("day_of_week", "fri"),
+                    hour=int(rec.get("hour", 17)),
+                    minute=int(rec.get("minute", 0)),
+                    timezone=self.cfg.timezone_name),
+                id="reconcile", name="주간 대조 (계획 vs 실제 입출금)")
         self.scheduler.start()
         self.log.info("스케줄러 시작. 다음 자동 실행: %s", self.next_run_text())
 
@@ -260,6 +271,27 @@ class AutomationService:
         threading.Thread(target=self.run_job,
                          kwargs={"mode": "manual", "force": False},
                          daemon=True).start()
+
+    def _scheduled_reconcile(self) -> None:
+        if self.paused:
+            self.log.info("자동실행 일시정지 상태라 주간 대조를 건너뜁니다.")
+            return
+        self._do_reconcile()
+
+    def run_reconcile(self) -> None:
+        """트레이 메뉴: 주간 대조 파일을 백그라운드로 생성한다."""
+        threading.Thread(target=self._do_reconcile, daemon=True).start()
+
+    def _do_reconcile(self) -> None:
+        import weekly_reconcile
+        try:
+            out = weekly_reconcile.run_weekly_reconcile(self.cfg, self.log)
+            self.notify("주간 대조",
+                        f"계획 vs 실제 대조 파일을 만들었습니다: {out.name} — "
+                        "차이 항목을 확인해 주세요.")
+        except Exception as exc:
+            self.log.exception("주간 대조 생성 실패")
+            self.notify("주간 대조 실패", str(exc))
 
     def apply_changes(self) -> None:
         """변경자료 반영: 완료된 주라도 강제로 다시 생성."""
