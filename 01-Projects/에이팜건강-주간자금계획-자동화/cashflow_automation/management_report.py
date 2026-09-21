@@ -239,6 +239,7 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     _put(ws, 13, 8, round(start_balance), fmt="#,##0")  # H13: 시작잔액(숨김)
 
     holidays = report.get("holidays") or {}
+    intraday = forecast.get("intraday") or {}
     # 실행일~차주 금요일 밖의 일자 행은 숨긴다 (2026-09-19 사용자 요청).
     # 값·수식은 그대로 두므로 4주 합계·시나리오는 전체 기간으로 계산된다.
     w_start, w_end = exec_window(meta.get("run_date") or base_date)
@@ -277,6 +278,20 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
                  border=True)
             _put(ws, row, 6, "실적", size=9, color="808080", align="center",
                  border=True)
+        elif intraday and d == intraday.get("일자"):
+            # 실행일 당일: 실제 입출금 + 아직 안 나간 예정(보류 제외) —
+            # 지출은 엔진 값(③ 표 수정과 연동되지 않는 유일한 행)
+            act_online = round(intraday.get("온라인실제") or 0)
+            out_val = round((src.get("팀별 송금예정") or 0)
+                            + (src.get("카드결제") or 0)
+                            + (src.get("자동이체") or 0)
+                            + (src.get("기타지출") or 0))
+            _put(ws, row, 3,
+                 f"=MAX(ROUND(G{row}*{_RATE_CELL},0),{act_online})+H{row}",
+                 fmt="#,##0", border=True)
+            _put(ws, row, 4, out_val, fmt="#,##0", border=True)
+            _put(ws, row, 6, f'=IF(E{row}<0,"부족","")', color="C00000",
+                 align="center", border=True)
         else:
             _put(ws, row, 3, f"=ROUND(G{row}*{_RATE_CELL},0)+H{row}",
                  fmt="#,##0", border=True)

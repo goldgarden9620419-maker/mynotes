@@ -764,6 +764,10 @@ _ACTION_COL = 9                # I: 처리 (정기지출 누락 → 계획에 �
 _ITEM_COL = 10                 # J(숨김): 정기지출명 (지시 대상 식별)
 ACTION_INCLUDE = "계획에 반영"
 ACTION_SKIP = "반영 안 함"
+# 당일 지출·실제 차이 행의 처리 선택지 (2026-09-21 사용자 요청)
+ISSUE_INTRADAY = "당일 지출·실제 차이"
+ACTION_KEEP = "지출 예정(유지)"
+ACTION_HOLD = "보류(제외)"
 
 
 # 지난 확인 이후 새로 생긴 항목의 강조색 (주황)
@@ -1104,9 +1108,12 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         guide = ws["A1"]
         guide.value = ("사람 확인이 필요한 항목입니다. '정기지출 누락 의심'은 "
                        "'처리' 열에서 계획에 반영/반영 안 함을 고르세요 — "
-                       "일자·금액 칸을 고치면 고친 값으로 들어갑니다. 검토가 "
-                       "끝나면 '안내' 시트의 '확인 완료'(B2)를 '예'로 바꾸고 "
-                       "저장하세요.")
+                       "일자·금액 칸을 고치면 고친 값으로 들어갑니다. "
+                       "'당일 지출·실제 차이'는 오늘 지출계획과 실제 출금이 "
+                       "다른 항목입니다: 오늘 나갈 예정이면 '지출 예정(유지)', "
+                       "안 나갈 것이면 '보류(제외)'를 고르세요 — 보류는 오늘 "
+                       "자금계획에서 빠집니다. 검토가 끝나면 '안내' 시트의 "
+                       "'확인 완료'(B2)를 '예'로 바꾸고 저장하세요.")
         guide.font = Font(name="맑은 고딕", bold=True, size=10,
                           color="B36B00")
         guide.alignment = Alignment(horizontal="left", vertical="center",
@@ -1130,7 +1137,24 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                           "입력할 수 있습니다."
         action_dv.showErrorMessage = True
         ws.add_data_validation(action_dv)
+        hold_dv = DataValidation(
+            type="list", formula1=f'"{ACTION_KEEP},{ACTION_HOLD}"',
+            allow_blank=True)
+        hold_dv.error = f"'{ACTION_KEEP}' 또는 '{ACTION_HOLD}'만 " \
+                        "입력할 수 있습니다."
+        hold_dv.showErrorMessage = True
+        ws.add_data_validation(hold_dv)
         for r, issue in enumerate(issues, start=start + 1):
+            if issue.get("당일지시"):
+                # 당일 지출·실제 차이: 기본은 '지출 예정(유지)' —
+                # '보류(제외)'로 바꾼 항목만 오늘 계획에서 뺀다
+                cell = ws.cell(row=r, column=_ACTION_COL, value=ACTION_KEEP)
+                cell.fill = PatternFill("solid", start_color="FFF2CC")
+                cell.font = _BODY_FONT
+                cell.alignment = Alignment(horizontal="center")
+                cell.border = _BORDER
+                hold_dv.add(cell.coordinate)
+                continue
             if not issue.get("지시항목"):
                 continue
             cell = ws.cell(row=r, column=_ACTION_COL, value=ACTION_SKIP)
@@ -1288,6 +1312,39 @@ def load_review_directives(path: Path) -> list[dict]:
         return result
     except Exception:
         return result
+    finally:
+        wb.close()
+
+
+def load_intraday_holds(path: Path) -> set:
+    """확인 완료된 확인필요 파일에서 '보류(제외)' 지시를 읽는다.
+
+    '당일 지출·실제 차이' 행의 처리 열(I)을 '보류(제외)'로 고른 항목의
+    요청ID(D열) 집합 — 그 항목의 남은 예정 금액은 오늘 자금계획에서
+    뺀다. 기본값 '지출 예정(유지)'는 계획대로 반영한다.
+    """
+    holds: set = set()
+    try:
+        wb = load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return holds
+    try:
+        if REVIEW_SHEET not in wb.sheetnames:
+            return holds
+        ws = wb[REVIEW_SHEET]
+        for row in ws.iter_rows(min_row=5, max_col=_ACTION_COL,
+                                values_only=True):
+            kind = str(row[0] or "").strip()
+            if kind != ISSUE_INTRADAY:
+                continue
+            action = str(row[_ACTION_COL - 1] or "").strip() \
+                if len(row) >= _ACTION_COL else ""
+            req_id = str(row[3] or "").strip()          # D: 요청ID
+            if action == ACTION_HOLD and req_id:
+                holds.add(req_id)
+        return holds
+    except Exception:
+        return holds
     finally:
         wb.close()
 

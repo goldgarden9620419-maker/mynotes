@@ -588,10 +588,10 @@ def test_금주일별_시나리오_생성():
     assert days[0][0] == base and days[-1][0] == date(2026, 9, 25)
 
 
-def test_당일_실제_입출금은_표시용_요약으로만_담긴다():
-    """계획은 지출예정(취합)·온라인 예상입금만 반영하고, 당일 실제
-    입출금은 today_actual(출발 행 표시용)로만 담는다 (2026-09-21
-    사용자 결정 — 자동 대조·차감 없이 단순하게)."""
+def test_당일_행은_실제와_남은_예정으로_계산한다():
+    """당일 행 = 실제 입출금 + 아직 안 나간 예정 (2026-09-21 사용자
+    요청 — 오늘 행은 실지출·실입금 위주). 실제는 today_actual로도
+    담겨 출발 행(7행)에 표시된다."""
     base = date(2026, 9, 21)
     history = [
         {"거래일": base, "입금액": 10_373_905.0, "출금액": 0.0,
@@ -628,3 +628,68 @@ def test_13주에_정기지출_추정을_반영하지_않는다():
     for w in fc["weekly"][4:]:
         assert round(w.get("카드결제") or 0) == 0
         assert round(w.get("기타지출") or 0) == 0
+
+
+def test_보류_선택한_당일_예정은_계획에서_뺀다():
+    """확인 단계에서 '보류(제외)'로 고른 항목의 잔여는 오늘 계획에서
+    빠진다 (2026-09-21 사용자 요청 — 차이는 사용자가 결정)."""
+    base = date(2026, 9, 21)
+    history = [{"거래일": base, "입금액": 0.0, "출금액": 2_508_000.0,
+                "자동분류": "", "내부이체": False,
+                "기재내용·상대방": "국민네이버 apha"}]
+    plans = [
+        {"요청ID": "마케팅-001", "자금계획 반영일": base,
+         "예상금액": 3_498_000.0, "거래처": "네이버SA&GFA",
+         "지급방법": "계좌송금", "확정여부": "확정"},
+        {"요청ID": "물류-002", "자금계획 반영일": base,
+         "예상금액": 1_996_000.0, "거래처": "트라이앵글하모니",
+         "지급방법": "계좌송금", "확정여부": "확정"},
+    ]
+    # 보류 없음: 네이버 잔여 990,000 + 트라이앵글 1,996,000 유지
+    fc = fe.build_forecast(plans, base, 10_000_000, history, [], [],
+                           [0.8], 0.8, run_date=base)
+    assert round(fc["daily"][0]["팀별 송금예정"]) == 2_508_000 + 990_000 \
+        + 1_996_000
+    # 트라이앵글 보류: 잔여 1,996,000이 계획에서 빠진다
+    fc2 = fe.build_forecast(plans, base, 10_000_000, history, [], [],
+                            [0.8], 0.8, run_date=base,
+                            intraday_holds={"물류-002"})
+    assert round(fc2["daily"][0]["팀별 송금예정"]) == 2_508_000 + 990_000
+    assert "보류 제외" in fc2["daily"][0]["비고"]
+    # 대조내역: 네이버 일부지급 / 트라이앵글 미집행(보류)
+    det = {d["요청ID"]: d for d in fc2["intraday"]["대조내역"]}
+    assert det["마케팅-001"]["상태"] == "일부지급"
+    assert det["물류-002"]["상태"] == "미집행"
+    assert det["물류-002"]["보류"] is True
+
+
+def test_확인파일_보류_선택_왕복(tmp_path):
+    """확인필요 파일의 '당일 지출·실제 차이' 행에서 '보류(제외)'를
+    고르면 load_intraday_holds가 요청ID를 돌려준다."""
+    import excel_report
+
+    issues = [
+        {"구분": excel_report.ISSUE_INTRADAY, "팀명": "물류팀",
+         "요청ID": "물류-002", "일자": date(2026, 9, 21),
+         "내용": "트라이앵글하모니 — 미집행", "금액": 1_996_000,
+         "원본파일": "", "당일지시": True},
+        {"구분": excel_report.ISSUE_INTRADAY, "팀명": "마케팅팀",
+         "요청ID": "마케팅-001", "일자": date(2026, 9, 21),
+         "내용": "네이버SA&GFA — 일부지급", "금액": 990_000,
+         "원본파일": "", "당일지시": True},
+        {"구분": "정기지출 누락 의심", "일자": date(2026, 9, 22),
+         "내용": "메트라이프", "금액": 4_900_000, "원본파일": "",
+         "지시항목": "메트라이프"},
+    ]
+    path = tmp_path / "확인필요_test.xlsx"
+    excel_report.create_issue_workbook(issues, path, week_key="2026-W39",
+                                       signature="sig")
+    from openpyxl import load_workbook
+    wb = load_workbook(path)
+    ws = wb[excel_report.REVIEW_SHEET]
+    # 당일 행 기본값은 '지출 예정(유지)'
+    assert ws.cell(row=5, column=9).value == excel_report.ACTION_KEEP
+    ws.cell(row=5, column=9).value = excel_report.ACTION_HOLD   # 물류-002 보류
+    wb.save(path)
+    wb.close()
+    assert excel_report.load_intraday_holds(path) == {"물류-002"}
