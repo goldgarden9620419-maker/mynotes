@@ -9,8 +9,9 @@
 from __future__ import annotations
 
 import csv
+import io
 import re
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from typing import Any, Optional
 
@@ -36,7 +37,8 @@ _FIELD_CANDIDATES: dict[str, list[str]] = {
 }
 _MIN_HEADER_MATCHES = 3
 
-SUPPORTED_SUFFIXES = {".xls", ".xlsx", ".csv"}
+SUPPORTED_SUFFIXES = {".xls", ".xlsx", ".csv", ".txt", ".tsv",
+                      ".htm", ".html"}
 
 HISTORY_COLUMNS = ["거래일시", "거래일", "은행", "계좌", "출금액", "입금액",
                    "거래후잔액", "적요", "기재내용·상대방", "취급점", "자동분류"]
@@ -96,41 +98,170 @@ def _find_account_hint(rows: list[list[Any]], header_idx: int) -> str:
 # 파일 읽기
 # ---------------------------------------------------------------------------
 
-def _read_raw_rows(path: Path) -> list[list[Any]]:
-    suffix = path.suffix.lower()
-    if suffix == ".csv":
-        for encoding in ("utf-8-sig", "cp949", "euc-kr", "utf-8"):
-            try:
-                with open(path, encoding=encoding, newline="") as f:
-                    return [row for row in csv.reader(f)]
-            except (UnicodeDecodeError, UnicodeError):
-                continue
-        raise ValueError("CSV 인코딩을 판별하지 못했습니다")
-    if suffix == ".xlsx":
-        from openpyxl import load_workbook
-        wb = load_workbook(path, data_only=True, read_only=True)
+_OLE_MAGIC = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"
+# 스타일 XML이 깨진 xlsx 복구용 최소 스타일 (셀 서식 참조가 남아 있어도
+# 안전하게 열리도록 빈 서식을 넉넉히 채운다)
+_XF = '<xf numFmtId="0" fontId="0" fillId="0" borderId="0"/>'
+_MIN_STYLES = (
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+    '<styleSheet xmlns="http://schemas.openxmlformats.org/'
+    'spreadsheetml/2006/main">'
+    '<fonts count="1"><font><sz val="11"/><name val="Calibri"/>'
+    '</font></fonts>'
+    '<fills count="2"><fill><patternFill patternType="none"/></fill>'
+    '<fill><patternFill patternType="gray125"/></fill></fills>'
+    '<borders count="1"><border><left/><right/><top/><bottom/>'
+    '<diagonal/></border></borders>'
+    f'<cellStyleXfs count="1">{_XF}</cellStyleXfs>'
+    f'<cellXfs count="512">{_XF * 512}</cellXfs>'
+    '</styleSheet>')
+
+
+def _read_xlsx_plain(path: Path) -> list[list[Any]]:
+    from openpyxl import load_workbook
+    wb = load_workbook(path, data_only=True, read_only=True)
+    try:
+        ws = wb[wb.sheetnames[0]]
+        return [list(row) for row in ws.iter_rows(values_only=True)]
+    finally:
+        wb.close()
+
+
+def _read_xlsx_rows(path: Path) -> list[list[Any]]:
+    """xlsx 읽기. 스타일 XML이 깨진 은행 파일은 복구해서 재시도한다."""
+    try:
+        return _read_xlsx_plain(path)
+    except Exception:
+        import tempfile
+        import zipfile
         try:
-            ws = wb[wb.sheetnames[0]]
-            return [list(row) for row in ws.iter_rows(values_only=True)]
+            with zipfile.ZipFile(path) as zin:
+                names = zin.namelist()
+                with tempfile.NamedTemporaryFile(
+                        suffix=".xlsx", delete=False) as tmp:
+                    tmp_path = Path(tmp.name)
+                with zipfile.ZipFile(tmp_path, "w",
+                                     zipfile.ZIP_DEFLATED) as zout:
+                    for name in names:
+                        if name == "xl/styles.xml":
+                            zout.writestr(name, _MIN_STYLES)
+                        else:
+                            zout.writestr(name, zin.read(name))
+        except Exception:
+            raise ValueError("xlsx 파일을 열 수 없습니다 (손상)")
+        try:
+            return _read_xlsx_plain(tmp_path)
         finally:
-            wb.close()
-    if suffix == ".xls":
-        import xlrd
-        book = xlrd.open_workbook(str(path))
-        sheet = book.sheet_by_index(0)
-        rows = []
-        for r in range(sheet.nrows):
-            row = []
-            for c in range(sheet.ncols):
-                cell = sheet.cell(r, c)
-                if cell.ctype == xlrd.XL_CELL_DATE:
-                    row.append(datetime(*xlrd.xldate_as_tuple(
-                        cell.value, book.datemode)))
-                else:
-                    row.append(cell.value)
-            rows.append(row)
-        return rows
-    raise ValueError(f"지원하지 않는 파일 형식: {suffix}")
+            try:
+                tmp_path.unlink()
+            except OSError:
+                pass
+
+
+def _read_xls_rows(path: Path) -> list[list[Any]]:
+    import xlrd
+    book = xlrd.open_workbook(str(path))
+    sheet = book.sheet_by_index(0)
+    rows = []
+    for r in range(sheet.nrows):
+        row = []
+        for c in range(sheet.ncols):
+            cell = sheet.cell(r, c)
+            if cell.ctype == xlrd.XL_CELL_DATE:
+                row.append(datetime(*xlrd.xldate_as_tuple(
+                    cell.value, book.datemode)))
+            else:
+                row.append(cell.value)
+        rows.append(row)
+    return rows
+
+
+def _read_text(path: Path) -> Optional[str]:
+    raw = path.read_bytes()
+    encodings = ("utf-8-sig", "cp949", "euc-kr", "utf-8")
+    if raw[:2] in (b"\xff\xfe", b"\xfe\xff"):
+        encodings = ("utf-16",) + encodings
+    for encoding in encodings:
+        try:
+            return raw.decode(encoding)
+        except (UnicodeDecodeError, UnicodeError):
+            continue
+    return None
+
+
+class _HtmlTableParser:
+    """은행이 .xls 확장자로 주는 HTML 표를 행 목록으로 바꾼다."""
+
+    def __init__(self):
+        from html.parser import HTMLParser
+
+        outer = self
+
+        class _P(HTMLParser):
+            def __init__(self):
+                super().__init__(convert_charrefs=True)
+                self.rows: list[list[str]] = []
+                self._row: Optional[list[str]] = None
+                self._cell: Optional[list[str]] = None
+
+            def handle_starttag(self, tag, attrs):
+                if tag == "tr":
+                    self._row = []
+                elif tag in ("td", "th"):
+                    self._cell = []
+                elif tag == "br" and self._cell is not None:
+                    self._cell.append(" ")
+
+            def handle_endtag(self, tag):
+                if tag in ("td", "th") and self._cell is not None:
+                    self._row = self._row if self._row is not None else []
+                    self._row.append(" ".join(
+                        "".join(self._cell).split()))
+                    self._cell = None
+                elif tag == "tr" and self._row is not None:
+                    self.rows.append(self._row)
+                    self._row = None
+
+            def handle_data(self, data):
+                if self._cell is not None:
+                    self._cell.append(data)
+
+        outer.parser = _P()
+
+    def parse(self, text: str) -> list[list[str]]:
+        self.parser.feed(text)
+        self.parser.close()
+        return self.parser.rows
+
+
+def _read_raw_rows(path: Path) -> list[list[Any]]:
+    """확장자와 무관하게 파일 내용을 판별해 표를 읽는다.
+
+    은행 다운로드 파일은 확장자와 실제 형식이 다른 경우가 많다:
+    .xls인데 HTML 표, .xlsx인데 구형 xls, 스타일이 깨진 xlsx, CSV 등.
+    zip(xlsx) → OLE(구형 xls) → HTML 표 → CSV/TSV 순서로 시도한다
+    (2026-09-21 사용자 요청: 형식 구분 없이 읽기).
+    """
+    with open(path, "rb") as f:
+        head = f.read(8)
+    if head[:2] == b"PK":
+        return _read_xlsx_rows(path)
+    if head == _OLE_MAGIC:
+        return _read_xls_rows(path)
+    text = _read_text(path)
+    if text is not None:
+        stripped = text.lstrip().lower()
+        if stripped.startswith("<") and (
+                "<table" in stripped or "<tr" in stripped
+                or "<html" in stripped):
+            rows = _HtmlTableParser().parse(text)
+            if rows:
+                return rows
+        delimiter = "\t" if text.count("\t") > text.count(",") else ","
+        return [row for row in
+                csv.reader(io.StringIO(text), delimiter=delimiter)]
+    raise ValueError("알 수 없는 파일 형식입니다 "
+                     "(xlsx·xls·HTML 표·CSV 어느 것으로도 읽지 못함)")
 
 
 def load_bank_file(path: Path, bank: str) -> tuple[list[dict], list[dict]]:
@@ -170,11 +301,26 @@ def load_bank_file(path: Path, bank: str) -> tuple[list[dict], list[dict]]:
     return rows, issues
 
 
+def _excel_serial(value: Any) -> Optional[datetime]:
+    """엑셀 날짜 일련값 → datetime. 스타일이 깨진 xlsx를 복구해 읽으면
+    날짜 서식이 사라져 숫자로 오므로 그럴듯한 범위만 날짜로 되살린다."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    if not 20000 <= float(value) <= 80000:      # 1954년~2119년
+        return None
+    return datetime(1899, 12, 30) + timedelta(days=float(value))
+
+
 def _normalize_bank_row(values: dict, bank: str, filename: str,
                         account_hint: str, order: int) -> Optional[dict]:
-    tx_datetime = parse_datetime(values.get("거래일시"))
+    tx_datetime = (parse_datetime(values.get("거래일시"))
+                   or _excel_serial(values.get("거래일시")))
     tx_date = parse_date(values.get("거래일")) or (
         tx_datetime.date() if tx_datetime else None)
+    if tx_date is None:
+        serial = _excel_serial(values.get("거래일"))
+        if serial is not None:
+            tx_date = serial.date()
     if tx_datetime is None and tx_date is None:
         raw_date = normalize_text(values.get("거래일")
                                   or values.get("거래일시"))
