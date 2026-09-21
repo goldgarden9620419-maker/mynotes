@@ -132,7 +132,10 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     template = tmp_path / "템플릿.xlsx"
     _make_stub_template(template)
     out = tmp_path / "결과.xlsx"
-    fill_live_workbook(template, _fake_report(NEW_MONDAY), out)
+    rep = _fake_report(NEW_MONDAY)
+    # 수요일 실행, 실적은 화요일까지 → 월·화 행만 숨는다
+    rep["meta"]["run_date"] = NEW_MONDAY + timedelta(days=2)
+    fill_live_workbook(template, rep, out)
 
     assert verify_live_workbook(out, NEW_MONDAY)
     wb = load_workbook(out)
@@ -168,7 +171,7 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert "정기지출분석" not in wb.sheetnames
     # 13주 주별계획은 매주 볼 필요가 없어 숨김 (자료·수식은 유지)
     assert wb["13주주별계획"].sheet_state == "hidden"
-    # 은행 내역으로 확인된 지난 일자(월·화)는 숨기고 그 뒤부터 보인다
+    # 실행일(수) 전의 지난 실적 일자(월·화)는 숨기고 실행일부터 보인다
     assert daily.row_dimensions[6].hidden
     assert daily.row_dimensions[7].hidden
     assert not daily.row_dimensions[8].hidden
@@ -203,6 +206,27 @@ def test_라이브양식_다음주로_재고정(tmp_path):
     assert ap["H8"].value == 330000
     assert ap["G9"].value == "합계(자금계획 반영)"
     assert ap["H9"].value == 5000000
+    wb.close()
+
+
+def test_실행일_행은_실적이어도_보인다(tmp_path):
+    """은행 내역이 실행일 당일까지 있어도 실행일 행은 숨기지 않는다.
+
+    월요일 실행 + 은행 실적도 월요일(당일)까지인 실제 상황
+    (2026-09-21 사용자 요청: 실행일 포함 표시).
+    """
+    template = tmp_path / "템플릿.xlsx"
+    _make_stub_template(template)
+    rep = _fake_report(NEW_MONDAY)
+    rep["meta"]["run_date"] = NEW_MONDAY + timedelta(days=1)      # 화요일 실행
+    rep["forecast"]["actual_until"] = NEW_MONDAY + timedelta(days=1)
+    out = tmp_path / "결과.xlsx"
+    fill_live_workbook(template, rep, out)
+    wb = load_workbook(out)
+    daily = wb["4주일별계획"]
+    assert daily.row_dimensions[6].hidden          # 월 (지난 실적)
+    assert not daily.row_dimensions[7].hidden      # 화 (실행일 — 실적이어도 표시)
+    assert not daily.row_dimensions[8].hidden      # 수 (예측)
     wb.close()
 
 
