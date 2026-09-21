@@ -81,11 +81,15 @@ def fill_live_workbook(template_path: Path, report: dict,
     stats = report.get("history_stats", {})
 
     holidays = report.get("holidays") or {}
+    scen = report.get("account_scenario") or {}
+    n_acc = len(scen.get("accounts") or [])
     _fill_config(wb["설정및분류"], forecast)
-    _fill_summary(wb["요약"], report, base_date, stats)
-    _fill_daily(wb["4주일별계획"], forecast, base_date,
-                meta.get("run_date"), holidays=holidays)
-    _fill_weekly(wb["13주주별계획"], forecast, base_date)
+    _fill_summary(wb["요약"], report, base_date, stats, n_acc)
+    _fill_daily(wb, forecast, base_date,
+                meta.get("run_date"), holidays=holidays,
+                scenario=scen, balances=report.get("balances"),
+                last_dates=report.get("account_last_dates"))
+    _fill_weekly(wb["13주주별계획"], forecast, base_date, n_acc)
     _fill_account_scenario(wb, report.get("account_scenario"),
                            holidays=holidays)
     _fill_expense(wb, report.get("integrated_masked", []), holidays=holidays,
@@ -123,11 +127,19 @@ def verify_live_workbook(path: Path, base_date: date) -> bool:
         return False
     try:
         daily = wb["4주일별계획"]
+        # 온라인 예상입금 열은 계좌 열 수에 따라 위치가 다르다
+        online_col = 3
+        for c in range(1, 30):
+            if str(daily.cell(row=5, column=c).value or "").strip() \
+                    == "온라인 예상입금":
+                online_col = c
+                break
         # 실적으로 채워진 지난 날짜는 값이므로, 미래 행 중 하나라도
         # 반영률 수식(INDEX×$B$13)이 살아 있으면 수식 보존으로 본다
         formula_ok = any(
-            "INDEX" in str(daily.cell(row=r, column=3).value or "")
-            and "$B$13" in str(daily.cell(row=r, column=3).value or "")
+            "INDEX" in str(daily.cell(row=r, column=online_col).value or "")
+            and "$B$13" in str(daily.cell(row=r,
+                                          column=online_col).value or "")
             for r in range(6, 34))
         a6 = daily["A6"].value
         a6_date = a6.date() if isinstance(a6, datetime) else a6
@@ -156,10 +168,17 @@ def _fill_config(ws, forecast: dict) -> None:
         _set(ws, 6 + i, 3, round(weekday_avg.get(i, 0)))
 
 
-def _fill_summary(ws, report: dict, base_date: date, stats: dict) -> None:
+def _fill_summary(ws, report: dict, base_date: date, stats: dict,
+                  n_acc: int = 0) -> None:
+    from openpyxl.utils import get_column_letter as col_l
     ws["A3"] = (f"기준일 {base_date} | 농협·우리은행·국민은행 계좌 "
                 "거래내역 통합 (자동 갱신)")
     ws["B6"] = round(report.get("total_balance") or 0)
+    # 4주 기말·최저 잔액 수식을 일별계획의 기말잔액 열 위치로 재작성
+    # (계좌 열 수에 따라 열이 이동한다)
+    close = col_l(daily_layout(n_acc)["close"])
+    ws["B14"] = f"='4주일별계획'!{close}33"
+    ws["B15"] = f"=MIN('4주일별계획'!{close}6:{close}33)"
     if stats.get("외부입금") is not None:
         ws["B7"] = round(stats["외부입금"])
         ws["B8"] = round(stats.get("외부출금") or 0)
@@ -189,49 +208,194 @@ def _fill_summary(ws, report: dict, base_date: date, stats: dict) -> None:
 ETC_HEADER = "조정·추정 지출"   # 자동이체 + 주간조정·자동추정·확인지시 합
 
 
-def _fill_daily(ws, forecast: dict, base_date: date,
+DAILY_SHEET = "4주일별계획"
+_DAILY_ONLINE = ("=INDEX('설정및분류'!$C$6:$C$12,WEEKDAY(A{r},2))"
+                 "*'요약'!$B$13")
+
+
+def daily_layout(n: int) -> dict:
+    """4주일별계획 열 배치 (2026-09-21 사용자 지정 순서).
+
+    일자·요일 | 계좌별 예상잔고 | 온라인 예상입금 | 계좌별 입금 배분 |
+    확정·기타입금 | 송금예정 | 카드결제 | 조정·추정 지출 | 순현금흐름 |
+    기초잔액 | 기말잔액 | 비고. 계좌가 없으면(n=0) 예전 배치와 같다.
+    """
+    return {
+        "bal": list(range(3, 3 + n)),
+        "online": 3 + n,
+        "alloc": list(range(4 + n, 4 + 2 * n)),
+        "conf": 4 + 2 * n, "transfer": 5 + 2 * n, "card": 6 + 2 * n,
+        "etc": 7 + 2 * n, "net": 8 + 2 * n, "open": 9 + 2 * n,
+        "close": 10 + 2 * n, "note": 11 + 2 * n,
+    }
+
+
+def _fill_daily(wb, forecast: dict, base_date: date,
                 run_date: Optional[date] = None,
-                holidays: Optional[dict] = None) -> None:
-    from openpyxl.styles import Font
+                holidays: Optional[dict] = None,
+                scenario: Optional[dict] = None,
+                balances: Optional[dict] = None,
+                last_dates: Optional[dict] = None) -> None:
+    """4주일별계획 시트를 처음부터 다시 그린다 (자동 생성).
+
+    계좌별 예상잔고·입금 배분 열은 계좌별시나리오(행 1:1) 셀을 참조하는
+    수식이라 반영률(요약 B13)과 함께 즉시 재계산된다. 실잔고(은행에서
+    확인된 계좌별 최근 잔고)는 상단 안내 줄에 표시한다 — 예상잔고는
+    실잔고에 예상입금·지출·이체를 반영한 값이며, 당일 이미 입금·출금된
+    실적은 중복 계산하지 않는다 (2026-09-21 사용자 요청 배치).
+    """
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
+    from openpyxl.utils import get_column_letter as col_l
+
     holidays = holidays or {}
+    balances = balances or {}
+    last_dates = last_dates or {}
+    accounts = (scenario or {}).get("accounts") or []
+    opening_map = (scenario or {}).get("opening") or {}
+    n = len(accounts)
+    lay = daily_layout(n)
+    note_col = lay["note"]
     daily_by_date = {r["일자"]: r for r in forecast.get("daily", [])}
-    # G열 머리글을 정확한 이름으로 (2026-09-20 사용자 요청: 기타지출 → 조정·추정 지출)
-    if str(ws.cell(row=5, column=7).value or "").strip() in ("기타지출",
-                                                             ETC_HEADER):
-        _set(ws, 5, 7, ETC_HEADER)
-    # 비고 열 위치는 머리글(5행)에서 찾는다 (기본 K열)
-    note_col = 11
-    for c in range(1, 21):
-        if str(ws.cell(row=5, column=c).value or "").strip() == "비고":
-            note_col = c
-            break
+
+    index = wb.sheetnames.index(DAILY_SHEET)
+    wb.remove(wb[DAILY_SHEET])
+    ws = wb.create_sheet(DAILY_SHEET, index)
+
+    navy, green, gray = "1F4E79", "548235", "808080"
+    money = '#,##0"원"'
+    num_bal = "#,##0;[Red]-#,##0"
+    num_flow = "#,##0;[Red]-#,##0;"          # 0은 빈칸으로
+    bal_fill = PatternFill("solid", start_color="D9E2F1")
+    alloc_fill = PatternFill("solid", start_color="E2EFDA")
+    edit_fill = PatternFill("solid", start_color="FFF2CC")
+    calc_fill = PatternFill("solid", start_color="EBF1DE")
+    online_fill = PatternFill("solid", start_color="F2F2F2")
+    thin = Side(style="thin", color="D9D9D9")
+    box = Border(left=thin, right=thin, top=thin, bottom=thin)
+    white_bold = dict(name="맑은 고딕", bold=True, size=9, color="FFFFFF")
+
+    title = _set(ws, 2, 1, "향후 4주 일별 자금계획")
+    if title is not None:
+        title.font = Font(name="맑은 고딕", bold=True, size=13, color=navy)
+    note_txt = ("온라인 예상입금은 최근 12주 요일별 평균 × 입금 반영률"
+                "(요약 B13)로 계산됩니다. 노란색 칸만 입력하세요.")
+    if accounts:
+        def _real(k):
+            v = balances.get(k)
+            if v is None:
+                v = opening_map.get(k)
+            return round(float(v or 0))
+        real_txt = " · ".join(
+            f"{account_label(b, a)} {_real((b, a)):,}"
+            + (f"({last_dates[(b, a)]:%m-%d})"
+               if last_dates.get((b, a)) else "")
+            for b, a in accounts)
+        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 예상잔고는 "
+                     "실잔고에 예상입금·지출·이체를 반영한 값(반영률 B13 "
+                     "연동, 당일 이미 반영된 실적은 중복 계산 안 함)")
+    a3 = _set(ws, 3, 1, note_txt)
+    if a3 is not None:
+        a3.font = Font(name="맑은 고딕", size=9, color=gray)
+
+    # 4행 그룹 띠 + 5행 머리글
+    def _band(c1, c2, text, color):
+        for c in range(c1, c2 + 1):
+            cell = ws.cell(row=4, column=c)
+            cell.fill = PatternFill("solid", start_color=color)
+            cell.border = box
+        head = _set(ws, 4, c1, text)
+        if head is not None:
+            head.font = Font(**white_bold)
+            head.alignment = Alignment(horizontal="left",
+                                       vertical="center")
+        if c2 > c1:
+            ws.merge_cells(start_row=4, start_column=c1,
+                           end_row=4, end_column=c2)
+
+    if accounts:
+        _band(lay["bal"][0], lay["bal"][-1], "계좌별 예상잔고", navy)
+        _band(lay["alloc"][0], lay["alloc"][-1],
+              "계좌별 입금 배분(예상)", green)
+        # 열 그룹(개요)으로 묶어 접었다 펼 수 있게 한다
+        ws.column_dimensions.group(col_l(lay["bal"][0]),
+                                   col_l(lay["bal"][-1]), outline_level=1)
+        ws.column_dimensions.group(col_l(lay["alloc"][0]),
+                                   col_l(lay["alloc"][-1]), outline_level=1)
+
+    heads = [(1, "일자", navy, 11), (2, "요일", navy, 5)]
+    heads += [(c, account_label(b, a), navy, 13)
+              for c, (b, a) in zip(lay["bal"], accounts)]
+    heads += [(lay["online"], "온라인 예상입금", navy, 14)]
+    heads += [(c, account_label(b, a), green, 13)
+              for c, (b, a) in zip(lay["alloc"], accounts)]
+    heads += [(lay["conf"], "확정·기타입금", navy, 13),
+              (lay["transfer"], "송금예정", navy, 13),
+              (lay["card"], "카드결제", navy, 12),
+              (lay["etc"], ETC_HEADER, navy, 13),
+              (lay["net"], "순현금흐름", navy, 13),
+              (lay["open"], "기초잔액", navy, 14),
+              (lay["close"], "기말잔액", navy, 14),
+              (note_col, "비고", navy, 34)]
+    for c, text, color, width in heads:
+        cell = _set(ws, 5, c, text)
+        if cell is not None:
+            cell.font = Font(**white_bold)
+            cell.alignment = Alignment(horizontal="center",
+                                       vertical="center")
+            cell.fill = PatternFill("solid", start_color=color)
+            cell.border = box
+        ws.column_dimensions[col_l(c)].width = width
+
     # 실적 구간이 있으면 시작잔액을 '기준일 시작' 잔액 값으로 고정한다
     # (현재잔액에는 이미 이번 주 실적이 반영돼 있어 이중계산 방지).
     # 실행일 당일 거래만 은행에 찍힌 경우(당일은 실적으로 확정하지 않아
     # actual_until이 비어 있어도 시작잔액≠현재잔액)도 같은 이유로 고정한다
     start = forecast.get("start_balance")
     opening = forecast.get("opening_balance")
-    if start is not None and (
-            forecast.get("actual_until") is not None
-            or (opening is not None and round(start) != round(opening))):
-        i6 = _set(ws, 6, 9, round(start))
-        if i6 is not None:
-            i6.number_format = "#,##0"
+    fix_start = start is not None and (
+        forecast.get("actual_until") is not None
+        or (opening is not None and round(start) != round(opening)))
+
+    def _put(row, c, value, fmt=None, fill=None, font=None):
+        cell = _set(ws, row, c, value)
+        if cell is not None:
+            if fmt:
+                cell.number_format = fmt
+            if fill is not None:
+                cell.fill = fill
+            cell.font = font or Font(name="맑은 고딕", size=10)
+            cell.border = box
+        return cell
+
+    red_font = Font(name="맑은 고딕", size=10, color="C00000")
     for i in range(28):
         row = 6 + i
         d = base_date + timedelta(days=i)
-        acell = _set(ws, row, 1, datetime.combine(d, dtime()))
-        if acell is not None:
-            acell.number_format = "yyyy-mm-dd"
-        wcell = _set(ws, row, 2, WEEKDAY_KO[d.weekday()])
-        # 주말·공휴일은 일자·요일을 붉은 글자로
-        if d.weekday() >= 5 or d in holidays:
-            for cell in (acell, wcell):
-                if cell is not None:
-                    cell.font = Font(name=cell.font.name or "맑은 고딕",
-                                     size=cell.font.sz or 10,
-                                     bold=cell.font.b, color="C00000")
+        off = d.weekday() >= 5 or d in holidays
+        acell = _put(row, 1, datetime.combine(d, dtime()),
+                     fmt="yyyy-mm-dd", font=red_font if off else None)
+        _put(row, 2, WEEKDAY_KO[d.weekday()],
+             font=red_font if off else None)
         src = daily_by_date.get(d)
+        # 계좌별 예상잔고·입금 배분 — 계좌별시나리오 참조 (행 1:1)
+        for idx, c in enumerate(lay["bal"]):
+            _put(row, c, f"='{ACCOUNT_SCENARIO_SHEET}'!"
+                         f"{col_l(4 + idx)}{row}",
+                 fmt=num_bal, fill=bal_fill)
+        for idx, c in enumerate(lay["alloc"]):
+            _put(row, c, f"='{ACCOUNT_SCENARIO_SHEET}'!"
+                         f"{col_l(5 + n + idx)}{row}",
+                 fmt=num_flow, fill=alloc_fill)
+        # 온라인 예상입금: 지난 실적일·공휴일은 값, 그 밖엔 반영률 수식
+        if src and src.get("실적"):
+            _put(row, lay["online"],
+                 round(src.get("온라인 예상입금") or 0),
+                 fmt="#,##0", fill=online_fill)
+        elif d in holidays:
+            _put(row, lay["online"], 0, fmt="#,##0", fill=online_fill)
+        else:
+            _put(row, lay["online"], _DAILY_ONLINE.format(r=row),
+                 fmt=money, fill=online_fill)
         vals = [None, None, None, None]
         if src:
             etc = (src.get("자동이체") or 0) + (src.get("기타지출") or 0)
@@ -239,28 +403,34 @@ def _fill_daily(ws, forecast: dict, base_date: date,
                     src.get("팀별 송금예정") or None,
                     src.get("카드결제") or None,
                     etc or None]
-        # 지난 날짜(실적)는 온라인입금도 실제 값으로 고정한다
-        if src and src.get("실적"):
-            c3 = _set(ws, row, 3, round(src.get("온라인 예상입금") or 0))
-            if c3 is not None:
-                c3.number_format = "#,##0"
-        elif d in holidays:
-            # 공휴일 예상입금 0 고정 (0 × 반영률 = 0이라 상호작용 무해)
-            c3 = _set(ws, row, 3, 0)
-            if c3 is not None:
-                c3.number_format = "#,##0"
-        for c, v in zip((4, 5, 6, 7), vals):
-            _set(ws, row, c, round(v) if v else None)
-        # 그날 반영된 지출 내역 요약 (없으면 이전 실행 잔여값 정리)
-        ncell = _set(ws, row, note_col, (src or {}).get("비고") or None)
+        for key, v in zip(("conf", "transfer", "card", "etc"), vals):
+            _put(row, lay[key], round(v) if v else None,
+                 fmt=money, fill=edit_fill)
+        ol, cl = col_l(lay["online"]), col_l(lay["conf"])
+        el, fl, gl = (col_l(lay["transfer"]), col_l(lay["card"]),
+                      col_l(lay["etc"]))
+        _put(row, lay["net"],
+             f"={ol}{row}+{cl}{row}-{el}{row}-{fl}{row}-{gl}{row}",
+             fmt=money, fill=calc_fill)
+        if row == 6:
+            _put(row, lay["open"],
+                 round(start) if fix_start else "='요약'!$B$6",
+                 fmt="#,##0", fill=calc_fill)
+        else:
+            _put(row, lay["open"], f"={col_l(lay['close'])}{row - 1}",
+                 fmt="#,##0", fill=calc_fill)
+        _put(row, lay["close"],
+             f"={col_l(lay['open'])}{row}+{col_l(lay['net'])}{row}",
+             fmt=money, fill=calc_fill)
+        # 그날 반영된 지출 내역 요약
+        ncell = _put(row, note_col, (src or {}).get("비고") or None)
         if ncell is not None:
-            # 긴 내역은 셀 안에서 자동 줄바꿈 + 행 높이 자동 조정
-            from openpyxl.styles import Alignment
             ncell.alignment = Alignment(horizontal="left", vertical="top",
                                         wrap_text=True)
             rd = ws.row_dimensions.get(row)
             if rd is not None:
                 rd.height = None    # 높이 자동(customHeight 해제)
+    ws.freeze_panes = "C6"
     # 은행 내역으로 확인이 끝난 지난 일자(실적 구간)는 행을 숨긴다 —
     # 조회일 이후의 자금계획에 집중 (2026-09-20 사용자 요청).
     # 단, 실행일 행은 당일 실적이 있어도 항상 보인다 (2026-09-21 사용자
@@ -273,6 +443,7 @@ def _fill_daily(ws, forecast: dict, base_date: date,
         ws.row_dimensions[6 + i].hidden = bool(
             actual_until is not None and d <= actual_until
             and (show_from is None or d < show_from))
+    # 붉은 상자는 그 일자 행 전체(모든 열)를 묶는다 (2026-09-21 사용자 요청)
     _outline_exec_window(ws, note_col, base_date, run_date)
 
 
@@ -347,11 +518,18 @@ def _outline_exec_window(ws, note_col: int, base_date: date,
     outline_week_box(ws, first, last, 1, last_col)
 
 
-def _fill_weekly(ws, forecast: dict, base_date: date) -> None:
+def _fill_weekly(ws, forecast: dict, base_date: date,
+                 n_acc: int = 0) -> None:
+    from openpyxl.utils import get_column_letter as col_l
     weekly = forecast.get("weekly", [])
     if str(ws.cell(row=5, column=7).value or "").strip() in ("기타지출",
                                                              ETC_HEADER):
         _set(ws, 5, 7, ETC_HEADER)
+    # 13주 시트의 C~G가 합산할 4주일별계획 열 (계좌 열 수에 따라 이동)
+    lay = daily_layout(n_acc)
+    src = {"C": col_l(lay["online"]), "D": col_l(lay["conf"]),
+           "E": col_l(lay["transfer"]), "F": col_l(lay["card"]),
+           "G": col_l(lay["etc"])}
     for w in range(13):
         r = 6 + w
         w_start = base_date + timedelta(weeks=w)
@@ -361,7 +539,7 @@ def _fill_weekly(ws, forecast: dict, base_date: date) -> None:
             # 1~4주차: SUMIFS 수식의 날짜 리터럴을 새 주차로 재작성
             for col in ("C", "D", "E", "F", "G"):
                 ws[f"{col}{r}"] = _SUMIFS.format(
-                    col=col, y1=w_start.year, m1=w_start.month,
+                    col=src[col], y1=w_start.year, m1=w_start.month,
                     d1=w_start.day, y2=w_end.year, m2=w_end.month,
                     d2=w_end.day)
         else:
@@ -506,6 +684,12 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     opening = scenario.get("opening") or {}
     daily = "'4주일별계획'!"                 # 행 번호가 이 시트와 같다
     col_l = get_column_letter
+    # 4주일별계획의 입금·지출 열 위치 (계좌 열 수에 따라 이동)
+    dlay = daily_layout(n)
+    d_in = f"{daily}{col_l(dlay['online'])}{{r}}+{daily}{col_l(dlay['conf'])}{{r}}"
+    d_out = (f"{daily}{col_l(dlay['transfer'])}{{r}}"
+             f"+{daily}{col_l(dlay['card'])}{{r}}"
+             f"+{daily}{col_l(dlay['etc'])}{{r}}")
 
     def _num(rr, cc, value, fmt, bold=False):
         cell = _set(ws, rr, cc, value)
@@ -562,13 +746,12 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
             out_ref = f"{col_l(col_out)}{r}"
             w = accounts[0]
             need = f"MAX(0,{out_ref}-{prev[w]}-{in_cell[w]})"
-            _num(r, col_in_sum, f"={daily}C{r}+{daily}D{r}", num_flow)
+            _num(r, col_in_sum, "=" + d_in.format(r=r), num_flow)
             for idx, k in enumerate(accounts):
                 _num(r, col_in_sum + 1 + idx,
                      f"={col_l(col_in_sum)}{r}*{shares.get(k, 0):.6f}",
                      num_flow)
-            _num(r, col_out, f"={daily}E{r}+{daily}F{r}+{daily}G{r}",
-                 num_flow)
+            _num(r, col_out, "=" + d_out.format(r=r), num_flow)
             done = []
             for k in accounts[1:]:
                 minus = "".join(f"-{col_l(c)}{r}" for c in done)
@@ -616,85 +799,6 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
     from openpyxl.worksheet.protection import SheetProtection
     ws.protection = SheetProtection(sheet=True, formatRows=False,
                                     formatColumns=False)
-
-    # ── 4주일별계획 오른쪽에 계좌별 입금 배분·예상잔고 열을 붙인다
-    # (2026-09-21 사용자 요청). 두 시트는 행 번호가 1:1이라 계좌별
-    # 시나리오 셀을 수식으로 참조만 하면 반영률(B13) 연동까지 그대로
-    # 따라온다. 주초 실 잔액(은행 확인)은 안내 줄로 표시한다.
-    dws = wb["4주일별계획"]
-    note_col_d = 11
-    for c in range(1, 21):
-        if str(dws.cell(row=5, column=c).value or "").strip() == "비고":
-            note_col_d = c
-            break
-    start = note_col_d + 1
-    # 이전 실행 잔재 정리 (계좌 수 변동 대비 여유 폭)
-    span = 2 * n + 8
-    for rng in list(dws.merged_cells.ranges):
-        if rng.min_row <= 4 <= rng.max_row and rng.min_col >= start:
-            dws.unmerge_cells(str(rng))
-    for rr in range(3, 34):
-        for c in range(start, start + span):
-            cell = dws.cell(row=rr, column=c)
-            if not isinstance(cell, MergedCell):
-                cell.value = None
-                cell.fill = PatternFill()
-                cell.border = Border()
-
-    opening_txt = " · ".join(
-        f"{account_label(b, a)} {round(float(opening.get((b, a)) or 0)):,}"
-        for b, a in accounts)
-    onote = _set(dws, 3, start,
-                 f"주초 실 잔액(은행 확인): {opening_txt} — 예상잔고 = 실 "
-                 "잔액 + 입금 배분 − 지출·이체 (계좌별시나리오 연동, "
-                 "반영률 B13 적용)")
-    if onote is not None:
-        onote.font = Font(name="맑은 고딕", size=9, color=gray)
-
-    def _dband(c1, c2, text, color):
-        for c in range(c1, c2 + 1):
-            cell = dws.cell(row=4, column=c)
-            cell.fill = PatternFill("solid", start_color=color)
-            cell.border = box
-        head = _set(dws, 4, c1, text)
-        if head is not None:
-            head.font = Font(**white_bold)
-            head.alignment = Alignment(horizontal="left",
-                                       vertical="center")
-        if c2 > c1:
-            dws.merge_cells(start_row=4, start_column=c1,
-                            end_row=4, end_column=c2)
-
-    _dband(start, start + n - 1, "계좌별 입금 배분(예상)", green)
-    _dband(start + n, start + 2 * n - 1, "계좌별 예상잔고", navy)
-    sref = f"'{ACCOUNT_SCENARIO_SHEET}'!"
-    for idx, (b, a) in enumerate(accounts):
-        for c, color in ((start + idx, green), (start + n + idx, navy)):
-            h = _set(dws, 5, c, account_label(b, a))
-            if h is not None:
-                h.font = Font(**white_bold)
-                h.alignment = Alignment(horizontal="center",
-                                        vertical="center")
-                h.fill = PatternFill("solid", start_color=color)
-                h.border = box
-            dws.column_dimensions[col_l(c)].width = 13
-    for rr in range(6, 34):
-        for idx in range(n):
-            c_in = start + idx
-            c_bal = start + n + idx
-            cell = _set(dws, rr, c_in,
-                        f"={sref}{col_l(col_in_sum + 1 + idx)}{rr}")
-            if cell is not None:
-                cell.number_format = num_flow
-                cell.font = Font(name="맑은 고딕", size=10)
-                cell.fill = in_fill
-                cell.border = box
-            cell = _set(dws, rr, c_bal, f"={sref}{col_l(4 + idx)}{rr}")
-            if cell is not None:
-                cell.number_format = num_bal
-                cell.font = Font(name="맑은 고딕", size=10)
-                cell.fill = total_fill
-                cell.border = box
 
 
 def _fill_expense(wb, rows: list[dict],
