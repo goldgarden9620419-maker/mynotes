@@ -392,7 +392,9 @@ def test_계좌별시나리오_입금배분_표시(tmp_path):
     daily = wb["4주일별계획"]
     assert daily.cell(row=4, column=3).value == "계좌별 예상잔고"
     assert daily.cell(row=4, column=6).value == "계좌별 입금 배분(예상)"
-    assert "실잔고" in str(daily.cell(row=3, column=1).value)
+    a3 = str(daily.cell(row=3, column=1).value)
+    assert "실잔고" in a3 and "출발(전일 마감) 잔액" in a3
+    assert "800,000" in a3          # 우리 출발 잔액(전일 마감) 표시
     assert daily.cell(row=8, column=3).value == "='계좌별시나리오'!D8"
     assert daily.cell(row=8, column=4).value == "='계좌별시나리오'!E8"
     assert daily.cell(row=8, column=6).value == "='계좌별시나리오'!G8"
