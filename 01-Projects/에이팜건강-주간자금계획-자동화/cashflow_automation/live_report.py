@@ -290,9 +290,15 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             + (f"({last_dates[(b, a)]:%m-%d})"
                if last_dates.get((b, a)) else "")
             for b, a in accounts)
-        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 예상잔고는 "
-                     "실잔고에 예상입금·지출·이체를 반영한 값(반영률 B13 "
-                     "연동, 당일 이미 반영된 실적은 중복 계산 안 함)")
+        open_txt = " · ".join(
+            f"{account_label(b, a)} "
+            f"{round(float(opening_map.get((b, a)) or 0)):,}"
+            for b, a in accounts)
+        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt}"
+                     f"  |  출발(전일 마감) 잔액: {open_txt} — 예상잔고는 "
+                     "출발 잔액에 예상입금·지출·이체를 반영한 하루 마감 "
+                     "기준 값(반영률 B13 연동, 당일 이미 반영된 실적은 "
+                     "중복 계산 안 함)")
     a3 = _set(ws, 3, 1, note_txt)
     if a3 is not None:
         a3.font = Font(name="맑은 고딕", size=9, color=gray)
