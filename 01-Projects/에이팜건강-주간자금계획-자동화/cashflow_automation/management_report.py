@@ -252,7 +252,8 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         if hide_window:
             ws.row_dimensions[row].hidden = not (w_start <= d <= w_end)
         src = daily_by_date.get(d, {})
-        is_actual = actual_until is not None and d <= actual_until
+        is_actual = (actual_until is not None and d <= actual_until) \
+            or bool(src.get("당일실적"))
         # 주말·공휴일은 일자·요일을 붉은 글자로 (2026-09-20 사용자 요청)
         day_color = "C00000" if (d.weekday() >= 5 or d in holidays) \
             else "000000"
@@ -278,18 +279,18 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
                  border=True)
             _put(ws, row, 6, "실적", size=9, color="808080", align="center",
                  border=True)
-        elif intraday and d == intraday.get("일자"):
-            # 실행일 당일: 실제 입출금 + 아직 안 나간 예정(보류 제외) —
-            # 지출은 엔진 값(③ 표 수정과 연동되지 않는 유일한 행)
-            act_online = round(intraday.get("온라인실제") or 0)
-            out_val = round((src.get("팀별 송금예정") or 0)
-                            + (src.get("카드결제") or 0)
-                            + (src.get("자동이체") or 0)
-                            + (src.get("기타지출") or 0))
-            _put(ws, row, 3,
-                 f"=MAX(ROUND(G{row}*{_RATE_CELL},0),{act_online})+H{row}",
+        elif intraday and d == intraday.get("이월일"):
+            # 익일: 전일 미집행 이월분을 SUMIFS에 더한다 (③ 표의 전일
+            # 항목은 실적 마감으로 닫혀 이 값으로만 반영된다)
+            carried = round(sum((intraday.get("남은계획") or {}).values())
+                            + (intraday.get("_이월확정") or 0) * 0
+                            + (intraday.get("_이월조정지출") or 0))
+            _put(ws, row, 3, f"=ROUND(G{row}*{_RATE_CELL},0)+H{row}",
                  fmt="#,##0", border=True)
-            _put(ws, row, 4, out_val, fmt="#,##0", border=True)
+            _put(ws, row, 4,
+                 f"=SUMIFS($E${_EXP_FIRST}:$E${_EXP_LAST},"
+                 f"$A${_EXP_FIRST}:$A${_EXP_LAST},A{row})+{carried}",
+                 fmt="#,##0", border=True)
             _put(ws, row, 6, f'=IF(E{row}<0,"부족","")', color="C00000",
                  align="center", border=True)
         else:

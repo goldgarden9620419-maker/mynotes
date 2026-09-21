@@ -292,11 +292,11 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             + (f"({last_dates[(b, a)]:%m-%d})"
                if last_dates.get((b, a)) else "")
             for b, a in accounts)
-        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 계획은 6행 "
-                     "전일 마감 실잔고에서 출발하고, 실행일 행은 오늘 실제 "
-                     "입출금 + 아직 안 나간 예정(확인 단계에서 보류한 항목 "
-                     "제외)으로 계산합니다. 7행은 오늘 실잔고와 실제 "
-                     "입금·출금(참고)이며 이중계산되지 않습니다")
+        note_txt += (f"  |  실잔고(은행 최근 확인): {real_txt} — 실행일 "
+                     "행은 은행 파일 그대로 실적으로 마감(기말 = 오늘 "
+                     "실잔고)하고, 아직 안 나간 예정(보류 제외)은 익일로 "
+                     "이월합니다. 자금 예산은 익일부터 오늘 실잔고에서 "
+                     "출발합니다(반영률 B13 연동)")
     a3 = _set(ws, 3, 1, note_txt)
     if a3 is not None:
         a3.font = Font(name="맑은 고딕", size=9, color=gray)
@@ -446,21 +446,14 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             _put(row, c, f"='{ACCOUNT_SCENARIO_SHEET}'!"
                          f"{col_l(5 + n + idx)}{row}",
                  fmt=num_flow, fill=alloc_fill)
-        # 온라인 예상입금: 지난 실적일·공휴일은 값, 그 밖엔 반영률 수식.
-        # 실행일 당일은 이미 들어온 실제 입금을 하한으로 둔다 (MAX)
-        iday_online = (round(intraday.get("온라인실제") or 0)
-                       if d == intraday.get("일자") else 0)
-        if src and src.get("실적"):
+        # 온라인 예상입금: 지난 실적일·실행일(은행 확인 실적)·공휴일은
+        # 값, 그 밖엔 반영률 수식
+        if src and (src.get("실적") or src.get("당일실적")):
             _put(row, lay["online"],
                  round(src.get("온라인 예상입금") or 0),
                  fmt="#,##0", fill=online_fill)
         elif d in holidays:
-            _put(row, lay["online"], iday_online, fmt="#,##0",
-                 fill=online_fill)
-        elif iday_online:
-            _put(row, lay["online"],
-                 f"=MAX({_DAILY_ONLINE.format(r=row)[1:]},{iday_online})",
-                 fmt=money, fill=online_fill)
+            _put(row, lay["online"], 0, fmt="#,##0", fill=online_fill)
         else:
             _put(row, lay["online"], _DAILY_ONLINE.format(r=row),
                  fmt=money, fill=online_fill)
@@ -830,7 +823,19 @@ def _fill_account_scenario(wb, scenario: Optional[dict],
                 if cell is not None:
                     cell.font = red
 
-        if row.get("실적"):
+        if row.get("당일실적"):
+            balances = row.get("잔액") or {}
+            _num(r, col_total,
+                 round(sum(balances.get(k, 0) for k in accounts)),
+                 num_bal, bold=True)
+            for idx, k in enumerate(accounts):
+                _num(r, 4 + idx, round(balances.get(k, 0)), num_bal,
+                     bold=True)
+            ncell = _set(ws, r, col_note, "실적(은행 확인) — 여기서 예산 출발")
+            if ncell is not None:
+                ncell.font = Font(name="맑은 고딕", size=9, bold=True,
+                                  color=gray)
+        elif row.get("실적"):
             balances = row.get("잔액")
             if balances is not None:
                 _num(r, col_total,
