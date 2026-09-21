@@ -391,7 +391,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         # 전일 마감으로 되돌린다 (backout_from)
         account_scenario = forecast_engine.build_account_scenario(
             forecast["daily"], balances, merged_history,
-            forecast.get("actual_until"), backout_from=now.date())
+            forecast.get("actual_until"), backout_from=now.date(),
+            intraday_date=now.date())
         for row in forecast["daily"]:
             if row["상태"] == forecast_engine.STATE_SHORTAGE:
                 issues.append({"구분": "음수 예상잔액",
