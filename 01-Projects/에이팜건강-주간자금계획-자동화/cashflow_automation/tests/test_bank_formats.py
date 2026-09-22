@@ -84,3 +84,58 @@ def test_읽을수없는_파일은_손상으로_보고(tmp_path):
     assert rows == []
     assert any(i["구분"] == "손상된 파일" for i in issues)
     assert not _bank_file_readable(p)
+
+
+# ---------------------------------------------------------------------------
+# 더존 내보내기 (2026-09-22 사용자 요청): 월/일·적요·입금액·출금액·잔액,
+# 연도 없는 날짜, 전일잔액·합계 행, 계좌번호 없음(파일명 뒷자리로 구분)
+# ---------------------------------------------------------------------------
+
+def _더존_파일(path, d1, d2):
+    from openpyxl import Workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.append(["월/일", "적요", "입금액", "출금액", "잔액"])
+    ws.append([d1.strftime("%m-%d"), "전일잔액", "0", "0", "20147954"])
+    ws.append([d2.strftime("%m-%d"), "KG이니시스", "750249", "0", "20898203"])
+    ws.append([d2.strftime("%m-%d"), "METLIFE09002", "0", "4795900",
+               "16102303"])
+    ws.append(["합     계", "", "750249", "4795900", ""])
+    wb.save(path)
+    wb.close()
+
+
+def test_더존_월일_양식을_읽고_파일명에서_계좌를_찾는다(tmp_path):
+    from datetime import timedelta
+    d1 = date.today() - timedelta(days=2)
+    d2 = date.today() - timedelta(days=1)
+    p = tmp_path / "국민 4577 20260922.xlsx"
+    _더존_파일(p, d1, d2)
+    rows, issues = load_bank_file(p, "국민")
+    assert issues == []                      # 합계 행이 오류가 되면 안 된다
+    assert len(rows) == 3                    # 전일잔액 포함, 합계 제외
+    assert rows[0]["거래일"] == d1           # 연도 없는 월-일 보정
+    assert rows[0]["입금액"] == 0 and rows[0]["거래후잔액"] == 20147954
+    assert rows[1]["거래일"] == d2
+    assert rows[2]["출금액"] == 4795900
+    assert all(r["계좌"] == "4577" for r in rows)   # 날짜 토큰은 계좌가 아니다
+    assert rows[1]["적요"] == "KG이니시스"   # 상대방 이름은 적요로 들어온다
+
+
+def test_연도없는_날짜는_연말연초에도_맞게_보정한다():
+    from bank_loader import _parse_month_day
+    assert _parse_month_day("12-30", ref=date(2027, 1, 3)) == date(2026, 12, 30)
+    assert _parse_month_day("01-02", ref=date(2027, 1, 3)) == date(2027, 1, 2)
+    assert _parse_month_day("합 계") is None
+
+
+def test_파일명_계좌_뒷자리를_은행원본_전체번호와_통일한다():
+    from bank_loader import unify_account_labels
+    rows = [{"은행": "국민", "계좌": "93401-01-154577"},
+            {"은행": "국민", "계좌": "4577"},
+            {"은행": "국민", "계좌": "169124"},
+            {"은행": "농협", "계좌": "4577"}]
+    unify_account_labels(rows)
+    assert rows[1]["계좌"] == "93401-01-154577"   # 뒷자리 일치 → 같은 계좌
+    assert rows[2]["계좌"] == "169124"            # 대응 없음 → 그대로
+    assert rows[3]["계좌"] == "4577"              # 다른 은행은 건드리지 않음

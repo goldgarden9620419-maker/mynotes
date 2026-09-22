@@ -23,7 +23,8 @@ from common import (
 # 표준 필드별 헤더 후보 (공백 제거 후 부분일치)
 _FIELD_CANDIDATES: dict[str, list[str]] = {
     "거래일시": ["거래일시"],
-    "거래일": ["거래일자", "거래날짜", "거래일", "일자", "날짜"],
+    "거래일": ["거래일자", "거래날짜", "거래일", "일자", "날짜",
+             "월/일", "월일"],
     "거래시간": ["거래시간", "시간"],
     "계좌": ["계좌번호", "계좌"],
     "출금액": ["출금금액", "출금액", "출금(원)", "지급금액", "지급(원)",
@@ -77,21 +78,79 @@ def _detect_header(rows: list[list[Any]]) -> Optional[tuple[int, dict[int, str]]
     return best
 
 
+_ACCOUNT_PATTERN = re.compile(r"(\d{4,8}(?:[- ]\d{2,6}){1,3}|\d{10,14})")
+
+
 def _find_account_hint(rows: list[list[Any]], header_idx: int) -> str:
     """헤더 위쪽에서 '계좌번호: xxx' 형태의 안내를 찾는다.
 
     은행에 따라 '계좌번호' 라벨과 번호가 다른 셀에 있으므로
     행 전체를 이어붙여 검색한다.
     """
-    pattern = re.compile(r"(\d{4,8}(?:[- ]\d{2,6}){1,3}|\d{10,14})")
     for row in rows[:header_idx]:
         row_text = " ".join(normalize_text(v) for v in row if v not in
                             (None, ""))
         if "계좌" in row_text:
-            m = pattern.search(row_text)
+            m = _ACCOUNT_PATTERN.search(row_text)
             if m:
                 return m.group(1).strip()
     return ""
+
+
+def _looks_like_date_token(token: str) -> bool:
+    """YYYYMMDD·YYMMDD로 읽히는 숫자 토큰은 계좌가 아니라 날짜다."""
+    if len(token) == 8 and token[:2] in ("19", "20"):
+        return 1 <= int(token[4:6]) <= 12 and 1 <= int(token[6:8]) <= 31
+    if len(token) == 6:
+        return 1 <= int(token[2:4]) <= 12 and 1 <= int(token[4:6]) <= 31
+    return False
+
+
+def _account_hint_from_filename(stem: str) -> str:
+    """파일 안에 계좌번호가 없을 때(더존 내보내기 등) 파일명에서 찾는다.
+
+    '국민 4577 20260922.xlsx'처럼 계좌 뒷자리를 파일명에 적어두면
+    그 숫자를 계좌 구분자로 쓴다. 날짜로 보이는 토큰은 제외하고,
+    공백은 계좌 구분자로 보지 않는다('4577 20260922' 오결합 방지).
+    """
+    text = normalize_text(stem)
+    m = re.search(r"(\d{4,8}(?:-\d{2,6}){1,3}|\d{10,14})", text)
+    if m and not _looks_like_date_token(m.group(1)):
+        return m.group(1)
+    best = ""
+    for token in re.findall(r"\d{4,}", text):
+        if _looks_like_date_token(token):
+            continue
+        if len(token) >= len(best):
+            best = token
+    return best
+
+
+_MONTH_DAY_RE = re.compile(r"^(\d{1,2})[-/.월]\s*(\d{1,2})일?$")
+
+
+def _parse_month_day(value: Any, ref: Optional[date] = None) -> Optional[date]:
+    """'09-21'·'9/21'처럼 연도 없는 월-일(더존 내보내기)을 날짜로 만든다.
+
+    거래내역에 미래 날짜는 없으므로, 기준일(ref)보다 일주일 넘게
+    미래가 되는 해석은 지난해 날짜로 본다 (연말·연초 파일 대비).
+    """
+    text = normalize_text(value)
+    m = _MONTH_DAY_RE.match(text)
+    if not m:
+        return None
+    month, day = int(m.group(1)), int(m.group(2))
+    if not (1 <= month <= 12 and 1 <= day <= 31):
+        return None
+    ref = ref or date.today()
+    for year in (ref.year, ref.year - 1):
+        try:
+            cand = date(year, month, day)
+        except ValueError:
+            continue
+        if cand <= ref + timedelta(days=7):
+            return cand
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -279,7 +338,8 @@ def load_bank_file(path: Path, bank: str) -> tuple[list[dict], list[dict]]:
                      "내용": "거래내역 헤더를 찾지 못했습니다",
                      "원본파일": path.name}]
     header_idx, mapping = header
-    account_hint = _find_account_hint(raw_rows, header_idx)
+    account_hint = (_find_account_hint(raw_rows, header_idx)
+                    or _account_hint_from_filename(path.stem))
 
     rows: list[dict] = []
     for order, raw in enumerate(raw_rows[header_idx + 1:], start=1):
@@ -321,14 +381,18 @@ def _normalize_bank_row(values: dict, bank: str, filename: str,
         serial = _excel_serial(values.get("거래일"))
         if serial is not None:
             tx_date = serial.date()
+    if tx_date is None:
+        # 더존 내보내기는 '09-21'처럼 연도 없는 월-일을 쓴다
+        tx_date = _parse_month_day(values.get("거래일"))
     if tx_datetime is None and tx_date is None:
         raw_date = normalize_text(values.get("거래일")
                                   or values.get("거래일시"))
         if not raw_date:
             return None  # 빈 행
-        # '총 862건', '합계' 같은 요약 행은 거래가 아니다
-        if raw_date.startswith("총") or "합계" in raw_date \
-                or raw_date.endswith("건"):
+        # '총 862건', '합계'('합  계' 포함) 같은 요약 행은 거래가 아니다
+        compact = raw_date.replace(" ", "")
+        if compact.startswith("총") or "합계" in compact \
+                or compact.endswith("건"):
             return None
         return {"_잘못된날짜": True}
     if tx_datetime is None and values.get("거래시간") is not None:
@@ -387,7 +451,39 @@ def load_all_banks(cfg) -> dict:
             rows, file_issues = load_bank_file(path, bank)
             all_rows.extend(rows)
             issues.extend(file_issues)
+    unify_account_labels(all_rows)
     return {"rows": all_rows, "issues": issues, "missing_banks": missing_banks}
+
+
+def unify_account_labels(rows: list[dict]) -> list[dict]:
+    """짧은 계좌 라벨을 같은 은행의 전체 계좌번호와 뒷자리로 맞춰 통일한다.
+
+    더존 내보내기처럼 계좌번호가 없는 파일은 파일명 뒷자리(예: '국민 4577')로
+    구분하는데, 같은 계좌의 은행 원본('…154577')과 라벨이 다르면 잔액이
+    이중 합산되고 내부이체 짝 판정도 어긋난다. 뒷자리가 일치하는 전체
+    번호가 같은 은행에 정확히 하나면 그 라벨로 바꿔 같은 계좌로 묶는다.
+    """
+    by_bank: dict[str, set[str]] = {}
+    for row in rows:
+        account = row.get("계좌") or ""
+        if account:
+            by_bank.setdefault(row.get("은행") or "", set()).add(account)
+    mapping: dict[tuple, str] = {}
+    for bank, accounts in by_bank.items():
+        digits = {a: re.sub(r"\D", "", a) for a in accounts}
+        for short in accounts:
+            if len(digits[short]) < 4:
+                continue
+            longer = [a for a in accounts
+                      if a != short and len(digits[a]) > len(digits[short])
+                      and digits[a].endswith(digits[short])]
+            if len(longer) == 1:
+                mapping[(bank, short)] = longer[0]
+    for row in rows:
+        key = (row.get("은행") or "", row.get("계좌") or "")
+        if key in mapping:
+            row["계좌"] = mapping[key]
+    return rows
 
 
 # ---------------------------------------------------------------------------
