@@ -13,7 +13,7 @@ from __future__ import annotations
 import argparse
 import sys
 import traceback
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time as dtime, timedelta
 from pathlib import Path
 
 from common import (
@@ -382,11 +382,22 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                        f"{(adj.get('조정지출') or 0):,.0f}원 — "
                        "팀 지출계획에 같은 건이 있어 자동 추정에서 제외",
                 "원본파일": "기준파일 주간조정"})
-        # 당일 지출계획 vs 실제 출금 대조 — 차이 항목은 확인필요에 올려
-        # 사용자가 '지출 예정(유지)'/'보류(제외)'를 고른다 (2026-09-21)
-        intraday_preview = forecast_engine.intraday_actuals(
+        # 당일 지출계획 vs 실제 출금 대조. 대조 자체는 항상 계산해
+        # 경영보고 '실지출' 표시에 쓰고, 실적 마감·이월과 확인필요의
+        # 유지/보류 선택 행은 마감 시각(기본 17:00) 이후 실행에만 적용한다
+        # (2026-09-22 사용자 확정 — 아침 실행은 오늘 예정을 계획 그대로)
+        close_after = str(cfg.get("intraday", "close_after",
+                                  default="17:00"))
+        try:
+            _h, _m = close_after.split(":")
+            close_time = dtime(int(_h), int(_m))
+        except (ValueError, AttributeError):
+            close_time = dtime(17, 0)
+        intraday_on = now.time() >= close_time
+        intraday_check = forecast_engine.intraday_actuals(
             plan["countable"], merged_history, adjustments, now.date(),
             holds=intraday_holds, holidays=holidays)
+        intraday_preview = intraday_check if intraday_on else None
         for det in (intraday_preview or {}).get("대조내역", []):
             if det["상태"] == "집행 확인":
                 continue
@@ -420,7 +431,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             cfg.get("forecast", "online_history_weeks", default=12),
             cfg.get("forecast", "online_recency_halflife", default=4),
             display_week_start=display_monday, holidays=holidays,
-            run_date=now.date(), intraday_holds=intraday_holds)
+            run_date=now.date(), intraday_holds=intraday_holds,
+            intraday_enabled=intraday_on)
         # 계좌별 일별 잔액 시나리오 (우리→농협→국민 인출 우선순위).
         # 실행일 당일 거래는 실적으로 확정하지 않으므로 시작 잔액도
         # 전일 마감으로 되돌린다 (backout_from)
@@ -486,7 +498,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             week_expenses.append({"일자": d, "구분": r0.get("팀명") or "",
                                   "내용": subject,
                                   "금액": r0.get("예상금액") or 0,
-                                  "지급방법": r0.get("지급방법") or ""})
+                                  "지급방법": r0.get("지급방법") or "",
+                                  "요청ID": r0.get("요청ID") or ""})
         for adj in adjustments:
             amt = adj.get("조정지출") or 0
             d = adj.get("일자")
@@ -541,6 +554,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             "account_scenario": account_scenario,
             "apalm_expenses": apalm_expenses,
             "week_expenses": week_expenses,
+            "adjustments": adjustments,
+            "intraday_check": intraday_check,
             "recurring_check": recurring_check,
             "receipt_rates": rates,
             "holidays": holidays,

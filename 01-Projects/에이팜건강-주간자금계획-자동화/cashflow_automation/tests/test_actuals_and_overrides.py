@@ -110,6 +110,27 @@ def test_당일거래가_은행파일에_없으면_실적마감하지_않는다(
     assert "이월" not in (d22["비고"] or "")
 
 
+def test_마감시각_이전에는_당일거래가_있어도_실적마감하지_않는다():
+    """intraday_enabled=False(17시 이전 실행)면 은행 파일에 당일 거래가
+    있어도 실행일 행은 계획 그대로다 (2026-09-22 사용자 확정 — 아침에
+    새 은행 파일을 올려 새벽 자동입금이 찍혀 있어도 오늘 예정 유지)."""
+    base = date(2026, 9, 21)
+    history = [
+        _tx(date(2026, 9, 1), in_amt=1_000_000, cls="온라인매출입금"),
+        _tx(base, in_amt=500_000, cls="온라인매출입금"),   # 당일 새벽 입금
+    ]
+    plans = [{"자금계획 반영일": base, "예상금액": 3_498_000.0,
+              "지급방법": "계좌송금", "확정여부": "확정"}]
+    fc = fe.build_forecast(plans, base, 10_000_000, history, [], [],
+                           [0.8], 0.8, run_date=base,
+                           intraday_enabled=False)
+    assert fc["intraday"] is None
+    d21 = fc["daily"][0]
+    assert not d21.get("당일실적")
+    assert round(d21["팀별 송금예정"]) == 3_498_000
+    assert round(fc["daily"][1]["팀별 송금예정"]) == 0
+
+
 def test_계좌별시나리오_당일거래_되돌리기():
     """backout_from(실행일) 이후 거래는 시작 잔액에서 되돌린다 (내부이체 포함)."""
     run = date(2026, 9, 21)
