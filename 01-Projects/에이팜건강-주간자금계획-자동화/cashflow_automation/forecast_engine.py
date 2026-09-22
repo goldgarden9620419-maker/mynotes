@@ -1235,25 +1235,34 @@ def intraday_actuals(countable_plans: list[dict], history_rows: list[dict],
                  key=lambda t: -(t.get("출금액") or 0))
     for tx in txs:
         amt = tx.get("출금액") or 0
-        # ① 거래처 이름이 비슷하고(유사도 40+, 은행 표기는 '국민네이버
-        #    apha'처럼 잘려 70을 못 넘는다) 금액이 계획의 남은 몫 안이면
+        # ① 거래처 이름이 비슷하고(유사도 40 초과 — 'SKB…' 같은 은행
+        #    축약 표기는 44점대라 잡히고, 3글자 이름이 무관한 3글자
+        #    표기와 한 글자만 겹칠 때 나오는 구조적 잡음은 정확히
+        #    40.0점이라 걸러진다: '네이버' vs '아이임대규' 오귀속 방지,
+        #    2026-09-22 실데이터) 금액이 계획의 남은 몫 안이면
         #    그 계획의 집행으로 본다 (분할 집행 포함)
         named = [(payment_matcher._name_similarity(p, tx), p)
                  for p in plans_today]
         named = [(sim, p) for sim, p in named
-                 if sim >= 40
+                 if sim > 40
                  and (p.get("예상금액") or 0) - executed[id(p)] >= amt - 1]
         if named:
             _hit(max(named, key=lambda t: t[0])[1], tx, amt)
             continue
-        # ② 금액·일자·지급방법 점수 매칭 (계획 초과 집행도 여기서 잡힘)
+        # ② 금액·일자·지급방법 점수 매칭 (계획 초과 집행도 여기서 잡힘).
+        # 문턱은 정식 매칭 기준(60점)과 같게 두고, 이름 가점 문턱은 45로
+        # 둔다 — 40점이면 '금액대 비슷+당일+계좌송금'에 구조적 이름 잡음
+        # (정확히 40.0점)이 가점까지 받아 관계없는 출금(계획외 지출)이
+        # 계획에 잘못 흡수되어 미집행·잔여 판정이 통째로 꼬인다
+        # (2026-09-22 실데이터: 쁘띠앤·임대료 등이 네이버 계획으로
+        # 오귀속되던 문제. 'SKB…' 같은 축약 표기(44점대)는 ①에서 잡힌다)
         best, best_score = None, 0.0
         for p in plans_today:
-            sc = payment_matcher._score(p, tx, name_threshold=40,
+            sc = payment_matcher._score(p, tx, name_threshold=45,
                                         window_days=3)
             if sc > best_score:
                 best, best_score = p, sc
-        if best is not None and best_score >= 40:
+        if best is not None and best_score >= 60:
             _hit(best, tx, amt)
         else:
             unplanned_out += amt
