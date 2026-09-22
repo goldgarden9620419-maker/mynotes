@@ -249,6 +249,7 @@
 - 증상: 앱 메뉴 "무료 양식"이 배포됐는데 안 보임 → Deployments 확인 결과 **최근 push 3건(쓰레드 7편·무료 양식 메뉴·브리핑 출처 규칙)의 배포가 아예 생성되지 않음** (GitHub→Vercel 웹훅 신호 누락, 연결 자체는 Sep 2부터 유지 중)
 - 조치: 재트리거 push도 무반응 → jade가 Vercel **Create Deployment**(main 최신 커밋 선택 → Deploy to Production)로 수동 배포 → 밀린 변경 전부 반영 확인
 - 재발 대비: ① push 후 반영이 안 보이면 Deployments에서 해당 커밋의 배포 항목 존재부터 확인 ② 수동 배포 방법 = Deployments 우상단 ⋯ → Create Deployment → main 칩 클릭 → Deploy to Production ③ **토요일 블로그 루틴은 push=발행이므로, 자동 배포가 죽어 있으면 발행 실패** — push 직후 자동 배포 생성 여부 확인 필요 (02b1f7a push로 웹훅 복구 테스트함)
+- **9/22 밤 경과**: 수동 배포(e6fbc1f)로 서비스는 최신 상태 (무료 양식 메뉴·쓰레드 대기열·브리핑 규칙 모두 반영 확인). jade가 Settings→Git에서 **Disconnect→재연결 완료** ("Connected just now"). 이후 테스트 push 2건(02b1f7a, f33bab6)이 자동 배포로 잡히는지 **미확인 상태로 종료** — ⏭ 내일 확인할 것: ① Deployments에 f33bab6 항목 생겼는지 (없으면 GitHub Settings→Applications→Vercel→Repository access에 harubogo 포함 확인) ② 쓰레드 5편 10:10 자동 발행 여부 ③ 디스콰이엇 등록(키트 준비됨)
 
 ## PWA 앱 설치 지원 (9/22, jade 아이디어)
 
