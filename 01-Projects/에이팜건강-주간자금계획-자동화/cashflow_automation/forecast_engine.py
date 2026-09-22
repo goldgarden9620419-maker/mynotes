@@ -1183,7 +1183,16 @@ def intraday_actuals(countable_plans: list[dict], history_rows: list[dict],
       않는다 — 차이는 자동 판단하지 않고 사용자가 결정
     그래서 익일 기초 = 실행일 실잔고가 되고, 자금 예산은 익일부터
     시작된다. 대조내역은 확인필요 시트 표시용.
+
+    실적 마감은 **은행 파일에 실행일 당일 거래가 확인될 때만** 적용한다
+    (2026-09-22 사용자 확정): 아침처럼 전일자 파일로 실행하면 당일
+    거래가 없어 None을 돌려주고, 실행일 행은 예전처럼 송금예정·조정
+    계획 그대로 표시된다. 당일 파일을 올린 뒤 다시 실행하면 마감된다.
     """
+    # 당일 거래(내부이체 포함)가 은행 파일에 하나도 없으면 아직 오늘을
+    # 확인하지 않은 것이다 — 실적 마감·이월을 하지 않는다
+    if not any(r.get("거래일") == run_date for r in history_rows):
+        return None
     holds = holds or set()
     todays = [r for r in history_rows
               if r.get("거래일") == run_date and not r.get("내부이체")]
