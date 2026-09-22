@@ -150,9 +150,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                            "내용": f"파일 기간 겹침으로 {len(dup_rows)}건 자동"
                                   f" 제외 ({summary}) — 조치 불필요",
                            "원본파일": ""})
-        rules = bank_classifier.load_rules(
-            cfg.state_dir / cfg.get("bank", "classify_rules_file",
-                                    default="classify_rules.json"))
+        rules_path = cfg.state_dir / cfg.get(
+            "bank", "classify_rules_file", default="classify_rules.json")
+        rules = bank_classifier.load_rules(rules_path)
         issues.extend(bank_classifier.classify_rows(kept, rules))
         log.info("은행 거래 %d건 (중복 제외 %d건)", len(kept), len(dup_rows))
 
@@ -228,6 +228,21 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 log.info("당일 지출 보류(제외) %d건 반영: %s",
                          len(intraday_holds),
                          ", ".join(sorted(intraday_holds)[:5]))
+            # '계획 없는 실제출금' 처리 열에 적은 분류를 기억한다
+            # (2026-09-22 사용자 요청): 규칙 파일에 저장해 다음 실행부터
+            # 같은 이름의 거래를 그 분류로 자동 처리하고, 이번 실행분에도
+            # 즉시 적용해 확인필요에 다시 올리지 않는다
+            custom_names = excel_report.load_unplanned_classifications(
+                confirmed_review)
+            if custom_names:
+                bank_classifier.remember_custom_names(rules, custom_names)
+                bank_classifier.save_rules(rules_path, rules)
+                applied = bank_classifier.apply_custom_names(
+                    merged_history, rules)
+                log.info("사용자 지정 분류 %d건 기억 (이번 실행 적용 %d건): %s",
+                         len(custom_names), applied,
+                         ", ".join(f"{c['이름']}→{c['분류']}"
+                                   for c in custom_names[:5]))
             # 확인 파일의 정기지출분석 시트 수정(분류·성격)을 반영한다.
             # 예전 형식(별도 정기지출분석 파일)도 계속 읽는다.
             rev_edits = forecast_engine.harvest_recurring_edits(

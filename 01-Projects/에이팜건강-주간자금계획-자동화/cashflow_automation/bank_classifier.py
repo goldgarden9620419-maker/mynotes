@@ -47,7 +47,66 @@ DEFAULT_RULES = {
     # 같은 날·같은 금액의 반대편 거래가 다른 우리 계좌에 있을 때만
     # 내부이체로 표시한다 (mark_internal_transfers).
     "internal_keywords": ["에이팜건강", "(주)에이팜건강", "에이팜건", "apha"],
+    # 사용자 지정 분류 — 확인필요의 '계획 없는 실제출금' 행 처리 열에
+    # 적은 분류를 기억한다: [{"이름": 거래 표기, "분류": 지정 분류}].
+    # 같은 이름이 거래 내용에 들어 있으면 그 분류로 자동 처리하고
+    # 다시 확인필요에 올리지 않는다 (2026-09-22 사용자 요청)
+    "사용자분류": [],
 }
+
+
+def save_rules(rules_path: Path | None, rules: dict) -> None:
+    """분류 규칙을 저장한다 (사용자 지정 분류 기억용)."""
+    if rules_path is None:
+        return
+    try:
+        rules_path = Path(rules_path)
+        rules_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(rules_path, "w", encoding="utf-8") as f:
+            json.dump(rules, f, ensure_ascii=False, indent=2)
+    except OSError:
+        pass
+
+
+def remember_custom_names(rules: dict, entries: list[dict]) -> int:
+    """사용자 지정 분류를 규칙에 합친다. 같은 이름은 새 분류로 덮는다."""
+    by_name: dict[str, dict] = {}
+    for e in list(rules.get("사용자분류") or []):
+        name = normalize_text(e.get("이름"))
+        if name:
+            by_name[name] = {"이름": name, "분류": str(e.get("분류") or "")}
+    changed = 0
+    for e in entries or []:
+        name = normalize_text(e.get("이름"))
+        cls = str(e.get("분류") or "").strip()
+        if not name or not cls:
+            continue
+        if by_name.get(name, {}).get("분류") != cls:
+            changed += 1
+        by_name[name] = {"이름": name, "분류": cls}
+    rules["사용자분류"] = list(by_name.values())
+    return changed
+
+
+def apply_custom_names(rows: list[dict], rules: dict) -> int:
+    """사용자 지정 분류를 적용한다 (미분류·확인필요 행만 덮는다)."""
+    entries = [e for e in rules.get("사용자분류") or []
+               if normalize_text(e.get("이름"))]
+    if not entries:
+        return 0
+    applied = 0
+    for row in rows:
+        if row.get("반영상태") != BANK_REFLECT_OK or row.get("내부이체"):
+            continue
+        if (row.get("자동분류") or "") not in ("", CLASS_REVIEW):
+            continue
+        text = _row_text(row)
+        for e in entries:
+            if normalize_text(e.get("이름")) in text:
+                row["자동분류"] = e.get("분류", "")
+                applied += 1
+                break
+    return applied
 
 
 def load_rules(rules_path: Path | None) -> dict:
@@ -174,7 +233,16 @@ def classify_rows(rows: list[dict], rules: dict) -> list[dict]:
             continue
         text = _row_text(row)
 
-        # 2) 국민은행 TOP출금 (월말=급여, 그외=확인필요)
+        # 2) 사용자 지정 분류 (확인필요 처리 열에서 기억한 것 — 최우선)
+        custom = next(
+            (c for c in rules.get("사용자분류") or []
+             if normalize_text(c.get("이름"))
+             and normalize_text(c.get("이름")) in text), None)
+        if custom is not None:
+            row["자동분류"] = custom.get("분류", "")
+            continue
+
+        # 3) 국민은행 TOP출금 (월말=급여, 그외=확인필요)
         if row.get("은행") == top_cfg.get("은행", "국민은행") and any(
                 k in text for k in top_cfg.get("키워드", ["TOP출금"])):
             tx_date = row.get("거래일")
@@ -190,7 +258,7 @@ def classify_rows(rows: list[dict], rules: dict) -> list[dict]:
                     "원본파일": row.get("원본파일", "")})
             continue
 
-        # 3) 일반 키워드 규칙
+        # 4) 일반 키워드 규칙
         for rule in rule_list:
             bank = rule.get("은행")
             if bank and row.get("은행") != bank:

@@ -766,6 +766,7 @@ ACTION_INCLUDE = "계획에 반영"
 ACTION_SKIP = "반영 안 함"
 # 당일 지출·실제 차이 행의 처리 선택지 (2026-09-21 사용자 요청)
 ISSUE_INTRADAY = "당일 지출·실제 차이"
+ISSUE_UNPLANNED = "계획 없는 실제출금"
 ACTION_KEEP = "지출 예정(유지)"
 ACTION_HOLD = "보류(제외)"
 
@@ -949,7 +950,9 @@ def _build_review_guide_sheet(ws, week_key: str, signature: str,
                   "사람 확인이 필요한 항목입니다. '정기지출 누락 의심'은 "
                   "'처리' 열에서 계획에 반영/반영 안 함을 고르세요 — 일자·"
                   "금액 칸을 고치면 고친 값으로 들어갑니다. '예정지출 "
-                  "미출금'·'계획 없는 실제출금'은 확인용(조치 불필요)."))
+                  "미출금'은 확인용(조치 불필요). '계획 없는 실제출금'은 "
+                  "처리 열에 분류를 적으면(예: 급여·상여) 기억해서 "
+                  "다음부터 같은 이름의 거래를 자동 분류합니다."))
     if has_recurring:
         steps.append(("정기지출분석",
                       "정기지출의 분류·성격(정기/비정기/제외)을 확인·수정"
@@ -1112,8 +1115,11 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                        "'당일 지출·실제 차이'는 오늘 지출계획과 실제 출금이 "
                        "다른 항목입니다: 오늘 나갈 예정이면 '지출 예정(유지)', "
                        "안 나갈 것이면 '보류(제외)'를 고르세요 — 보류는 오늘 "
-                       "자금계획에서 빠집니다. 검토가 끝나면 '안내' 시트의 "
-                       "'확인 완료'(B2)를 '예'로 바꾸고 저장하세요.")
+                       "자금계획에서 빠집니다. '계획 없는 실제출금'은 처리 "
+                       "열에 분류를 적으면(예: 급여·상여) 기억해서 다음부터 "
+                       "같은 이름의 거래를 그 분류로 자동 처리합니다. 검토가 "
+                       "끝나면 '안내' 시트의 '확인 완료'(B2)를 '예'로 바꾸고 "
+                       "저장하세요.")
         guide.font = Font(name="맑은 고딕", bold=True, size=10,
                           color="B36B00")
         guide.alignment = Alignment(horizontal="left", vertical="center",
@@ -1145,6 +1151,15 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         hold_dv.showErrorMessage = True
         ws.add_data_validation(hold_dv)
         for r, issue in enumerate(issues, start=start + 1):
+            if issue.get("구분") == ISSUE_UNPLANNED:
+                # 처리 열에 분류를 적으면(예: 급여·상여) 기억해 다음부터
+                # 같은 이름의 거래를 그 분류로 자동 처리한다 (2026-09-22)
+                cell = ws.cell(row=r, column=_ACTION_COL, value="")
+                cell.fill = PatternFill("solid", start_color="FFF2CC")
+                cell.font = _BODY_FONT
+                cell.alignment = Alignment(horizontal="center")
+                cell.border = _BORDER
+                continue
             if issue.get("당일지시"):
                 # 당일 지출·실제 차이: 기본은 '지출 예정(유지)' —
                 # '보류(제외)'로 바꾼 항목만 오늘 계획에서 뺀다
@@ -1314,6 +1329,39 @@ def load_review_directives(path: Path) -> list[dict]:
         return result
     finally:
         wb.close()
+
+
+def load_unplanned_classifications(path: Path) -> list[dict]:
+    """확인 완료된 확인필요 파일에서 '계획 없는 실제출금' 분류 지정을 읽는다.
+
+    처리 열(I)에 적은 자유 분류(예: '급여·상여')를 [{이름, 분류}]로
+    돌려준다 — 이름은 내용(F)의 거래 표기. 프로그램이 규칙으로 기억해
+    다음부터 같은 이름의 거래를 그 분류로 자동 처리한다 (2026-09-22
+    사용자 요청). 드롭다운 지시어와 겹치는 값은 무시한다.
+    """
+    result: list[dict] = []
+    known = {ACTION_INCLUDE, ACTION_SKIP, ACTION_KEEP, ACTION_HOLD}
+    try:
+        wb = load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return result
+    try:
+        if REVIEW_SHEET not in wb.sheetnames:
+            return result
+        ws = wb[REVIEW_SHEET]
+        for row in ws.iter_rows(min_row=5, max_col=_ACTION_COL,
+                                values_only=True):
+            if str(row[0] or "").strip() != ISSUE_UNPLANNED:
+                continue
+            action = str(row[_ACTION_COL - 1] or "").strip() \
+                if len(row) >= _ACTION_COL else ""
+            name = str(row[5] or "").strip()            # F: 내용(거래 표기)
+            if not action or action in known or not name:
+                continue
+            result.append({"이름": name[:40], "분류": action[:30]})
+        return result
+    except Exception:
+        return result
 
 
 def load_intraday_holds(path: Path) -> set:
