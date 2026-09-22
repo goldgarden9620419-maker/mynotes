@@ -719,6 +719,48 @@ def test_보류_선택한_당일_예정은_계획에서_뺀다():
     assert det["물류-002"]["보류"] is True
 
 
+def test_계획없는출금_분류_기억_왕복(tmp_path):
+    """'계획 없는 실제출금' 행의 처리 열에 분류를 적으면 기억해서
+    같은 이름의 거래를 자동 분류하고 다시 확인필요에 올리지 않는다
+    (2026-09-22 사용자 요청 — 예: TOP출금 명절 상여)."""
+    import bank_classifier
+    import excel_report
+
+    issues = [
+        {"구분": excel_report.ISSUE_UNPLANNED, "은행": "국민은행",
+         "일자": date(2026, 9, 22), "내용": "TOP출금", "금액": 7_800_000,
+         "원본파일": "국민 4577.xls"},
+    ]
+    path = tmp_path / "확인필요_unplanned.xlsx"
+    excel_report.create_issue_workbook(issues, path, week_key="2026-W39",
+                                       signature="sig")
+    from openpyxl import load_workbook
+    wb = load_workbook(path)
+    ws = wb[excel_report.REVIEW_SHEET]
+    assert ws.cell(row=5, column=9).value in ("", None)     # 자유 입력 칸
+    ws.cell(row=5, column=9).value = "급여·상여"
+    wb.save(path)
+    wb.close()
+    got = excel_report.load_unplanned_classifications(path)
+    assert got == [{"이름": "TOP출금", "분류": "급여·상여"}]
+
+    # 규칙에 기억 → 같은 이름의 거래는 자동 분류된다
+    rules = {"사용자분류": []}
+    assert bank_classifier.remember_custom_names(rules, got) == 1
+    row = {"거래일": date(2026, 10, 6), "은행": "국민은행", "계좌": "4577",
+           "출금액": 7_500_000.0, "입금액": 0.0, "적요": "TOP출금",
+           "기재내용·상대방": "", "자동분류": "", "내부이체": False,
+           "반영상태": "정상반영"}
+    assert bank_classifier.apply_custom_names([row], rules) == 1
+    assert row["자동분류"] == "급여·상여"
+    # classify_rows 경로에서도 최우선 적용 (내장 TOP출금 규칙보다 먼저)
+    row2 = dict(row, 자동분류="", 거래일=date(2026, 10, 28))
+    full_rules = dict(bank_classifier.DEFAULT_RULES)
+    full_rules["사용자분류"] = rules["사용자분류"]
+    bank_classifier.classify_rows([row2], full_rules)
+    assert row2["자동분류"] == "급여·상여"
+
+
 def test_확인파일_보류_선택_왕복(tmp_path):
     """확인필요 파일의 '당일 지출·실제 차이' 행에서 '보류(제외)'를
     고르면 load_intraday_holds가 요청ID를 돌려준다."""
