@@ -1860,7 +1860,8 @@ def build_forecast(countable_plans: list[dict], base_date: date,
                    display_week_start: Optional[date] = None,
                    holidays: Optional[dict] = None,
                    run_date: Optional[date] = None,
-                   intraday_holds: Optional[set] = None) -> dict:
+                   intraday_holds: Optional[set] = None,
+                   intraday_enabled: bool = True) -> dict:
     """전체 예측 결과와 반영률별 시나리오를 만든다.
 
     opening_balance는 '현재(최신 거래내역 기준) 총잔액'이다.
@@ -1888,8 +1889,10 @@ def build_forecast(countable_plans: list[dict], base_date: date,
     # 실행일 당일: 계획 vs 실제 대조 + 하이브리드(실제 + 남은 예정).
     # 기초는 전일 마감이고 당일 실제가 행에 포함되므로, net_actual
     # 백아웃과 합쳐 이중계산 없이 기말 = 현재 실잔고 + 남은 예정이 된다
+    # intraday_enabled=False(마감 시각 이전 실행)면 당일 거래가 있어도
+    # 실적 마감·이월을 하지 않는다 — 실행일 행은 계획 그대로 (2026-09-22)
     intraday = None
-    if run_date is not None and run_date >= base_date:
+    if intraday_enabled and run_date is not None and run_date >= base_date:
         intraday = intraday_actuals(countable_plans, history_rows,
                                     adjustments, run_date,
                                     holds=intraday_holds,
