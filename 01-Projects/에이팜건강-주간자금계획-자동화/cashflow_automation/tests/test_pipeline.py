@@ -207,11 +207,14 @@ def test_확인후_결과생성_2단계(env):
     state.reload()
     assert state.state["last_run_status"] == STATUS_REVIEW_WAIT
 
-    # 확인 파일 하나에 검토 시트가 순서대로 담긴다 — 첫 시트가 '안내'
+    # 확인 파일 하나에 검토 시트가 순서대로 담긴다 — 첫 시트가 '안내'.
+    # 자동추정_지출목록 시트는 만들지 않는다 (2026-09-23: 자동추정
+    # 금액을 계획에 반영하지 않음 — 정기지출은 '정기지출누락' 시트로)
     wb = load_workbook(reviews[0])
     assert wb.sheetnames[0] == "안내"
-    assert wb.sheetnames[1] == "자동추정_지출목록"
+    assert "자동추정_지출목록" not in wb.sheetnames
     assert "확인필요" in wb.sheetnames
+    assert "정기지출누락" in wb.sheetnames
     # 안내 시트: 사용법 표 + 확인 완료 컨트롤 (B2 드롭다운, 기본 '아니오')
     assert "확인 단계 안내" in str(wb["안내"]["A1"].value)
     assert wb["안내"]["B2"].value == "아니오"
@@ -417,10 +420,14 @@ def test_확인필요_처리지시_라운드트립(tmp_path):
     assert ws["E5"].value.date() == date(2026, 9, 17)
     assert ws["F5"].value == "결제대행사" and ws["G5"].value == 123456
     assert ws["I5"].value is None            # 누락 아닌 행엔 처리 칸 없음
-    # 누락 의심 행: 처리 기본 '반영 안 함'
-    assert ws["I6"].value == "반영 안 함"
-    ws["I6"] = "계획에 반영"
-    ws["G6"] = 8_000_000                     # 금액을 고치면 고친 값으로 반영
+    # 누락 의심은 확인필요 시트가 아니라 '정기지출누락' 전용 시트로
+    # 분리된다 (2026-09-23 사용자 요청) — 처리 기본 '반영 안 함'
+    assert ws["I6"].value is None
+    ms = wb[er.RECURRING_MISSING_SHEET]
+    assert ms["F5"].value.startswith("METLIFE")
+    assert ms["I5"].value == "반영 안 함"
+    ms["I5"] = "계획에 반영"
+    ms["G5"] = 8_000_000                     # 금액을 고치면 고친 값으로 반영
     wb.save(path)
     wb.close()
 

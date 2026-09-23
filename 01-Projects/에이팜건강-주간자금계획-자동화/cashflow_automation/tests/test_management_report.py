@@ -193,14 +193,12 @@ def test_입금예정_표와_실지출_대조_확인란(tmp_path):
     wb.close()
 
 
-def test_정기지출_체크_시트(tmp_path):
+def test_정기지출_체크_시트를_만들지_않는다(tmp_path):
+    # 2026-09-23 사용자 확정: 정기지출 관련은 결과파일에 넣지 않는다 —
+    # 누락 의심은 확인필요 파일의 '정기지출누락' 시트에서만 확인받는다
     rep = _report()
     rep["meta"]["run_date"] = date(2026, 9, 21)
     rep["recurring_check"] = [
-        {"예정일": date(2026, 9, 23), "항목": "농협카드",
-         "예상금액": 6_066_502, "관리상태": "제외",
-         "팀제출일": date(2026, 9, 23), "팀제출금액": 10_000_000.0,
-         "누락": False, "판정": "팀 계획 반영"},
         {"예정일": date(2026, 9, 25), "항목": "SKB",
          "예상금액": 220_000, "관리상태": "제외",
          "팀제출일": None, "팀제출금액": None,
@@ -211,11 +209,5 @@ def test_정기지출_체크_시트(tmp_path):
     assert mr.verify_management_workbook(out)
 
     wb = load_workbook(out)
-    ws = wb[mr.CHECK_SHEET]
-    assert "누락 의심 1건" in str(ws["A3"].value)
-    assert ws["C6"].value == "농협카드" and "있음" in str(ws["F6"].value)
-    assert ws["C7"].value == "SKB" and ws["F7"].value == "없음"
-    assert "누락 의심" in str(ws["G7"].value)
-    assert str(ws["A7"].fill.start_color.rgb).endswith("FFC7CE")  # 붉은 행
-    assert ws.auto_filter.ref.startswith("A5:G")
+    assert wb.sheetnames == [mr.SHEET_NAME]
     wb.close()

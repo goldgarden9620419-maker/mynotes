@@ -757,6 +757,10 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
 
 
 REVIEW_SHEET = "확인필요"
+# 정기지출 누락 의심 전용 확인 시트 (2026-09-23 사용자 요청:
+# 정기지출은 결과파일에 넣지 않고, 누락 가능성만 따로 시트에서 확인)
+RECURRING_MISSING_SHEET = "정기지출누락"
+ISSUE_RECURRING_MISSING = "정기지출 누락 의심"
 _REVIEW_CONFIRM_CELL = "B2"    # 예/아니오 드롭다운
 _REVIEW_WEEK_CELL = "J2"       # 숨김: 주차 키
 _REVIEW_SIG_CELL = "K2"        # 숨김: 입력자료 서명
@@ -880,7 +884,8 @@ def diff_new_items(issues: list[dict], recurring: list[dict] | None,
 
 def _build_review_guide_sheet(ws, week_key: str, signature: str,
                               has_draft: bool, has_recurring: bool,
-                              new_marks: dict | None = None) -> None:
+                              new_marks: dict | None = None,
+                              has_missing: bool = False) -> None:
     """확인 파일 첫 시트 '안내': 사용법 설명 + '확인 완료' 컨트롤."""
     from common import REVIEW_GUIDE_SHEET
     from openpyxl.worksheet.datavalidation import DataValidation
@@ -947,12 +952,18 @@ def _build_review_guide_sheet(ws, week_key: str, signature: str,
                       "바꾸려면 시트 위 '일괄 설정'(B2)을 고르세요. 고친 "
                       "내용은 원본 목록 파일에도 자동 반영됩니다."))
     steps.append(("확인필요",
-                  "사람 확인이 필요한 항목입니다. '정기지출 누락 의심'은 "
-                  "'처리' 열에서 계획에 반영/반영 안 함을 고르세요 — 일자·"
-                  "금액 칸을 고치면 고친 값으로 들어갑니다. '예정지출 "
-                  "미출금'은 확인용(조치 불필요). '계획 없는 실제출금'은 "
-                  "처리 열에 분류를 적으면(예: 급여·상여) 기억해서 "
-                  "다음부터 같은 이름의 거래를 자동 분류합니다."))
+                  "사람 확인이 필요한 항목입니다. '예정지출 미출금'은 "
+                  "확인용(조치 불필요). '당일 지출·실제 차이'는 유지/보류를 "
+                  "고르세요. '계획 없는 실제출금'은 처리 열에 분류를 "
+                  "적으면(예: 급여·상여) 기억해서 다음부터 같은 이름의 "
+                  "거래를 자동 분류합니다."))
+    if has_missing:
+        steps.append(("정기지출누락",
+                      "매월 나가던 정기지출인데 이번 팀 지출예정 파일에 "
+                      "없는 항목입니다. 정기지출은 자동으로 계획에 넣지 "
+                      "않으니(2026-09-23부터), 실제로 나갈 지출이면 '처리' "
+                      "열에서 '계획에 반영'을 고르고, 원칙적으로는 해당 "
+                      "팀에 재제출을 요청하세요."))
     if has_recurring:
         steps.append(("정기지출분석",
                       "정기지출의 분류·성격(정기/비정기/제외)을 확인·수정"
@@ -1082,20 +1093,30 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                           new_marks: dict | None = None) -> Path:
     """확인 파일 하나에 검토 시트를 확인 순서대로 담는다.
 
-    시트: ① 안내(사용법 + '확인 완료' 컨트롤) ② 자동추정_지출목록
-    (draft_table 제공 시 — 반영/제외·일괄 설정, 확인 완료 후 원본 목록
-    파일에 역반영) ③ 확인필요(처리 지시) ④ 정기지출분석(recurring 제공
-    시 — 분류·성격). week_key/signature가 없으면 확인필요 표 하나만
-    만든다(기록용).
+    시트: ① 안내(사용법 + '확인 완료' 컨트롤) ② 확인필요(처리 지시)
+    ③ 정기지출누락(팀 지출예정 파일에 없는 정기지출 — '계획에 반영'
+    선택 항목만 계획에 들어감, 2026-09-23 분리) ④ 정기지출분석
+    (recurring 제공 시 — 분류·성격). draft_table을 주면 예전 형식의
+    자동추정_지출목록 시트도 만든다(현재 미사용). week_key/signature가
+    없으면 확인필요 표 하나만 만든다(기록용).
     """
     from common import DRAFT_REVIEW_SHEET
 
     wb = Workbook()
     control = bool(week_key or signature)
+    # 정기지출 누락 의심은 전용 시트로 분리한다 (2026-09-23 사용자
+    # 요청: 정기지출은 결과파일에 넣지 않고 누락 확인만 따로 받는다)
+    missing_issues: list[dict] = []
+    if control:
+        missing_issues = [i for i in issues
+                          if i.get("구분") == ISSUE_RECURRING_MISSING]
+        issues = [i for i in issues
+                  if i.get("구분") != ISSUE_RECURRING_MISSING]
     if control:
         _build_review_guide_sheet(wb.active, week_key, signature,
                                   draft_table is not None,
-                                  bool(recurring), new_marks=new_marks)
+                                  bool(recurring), new_marks=new_marks,
+                                  has_missing=True)
         if draft_table is not None:
             _build_draft_review_sheet(
                 wb.create_sheet(DRAFT_REVIEW_SHEET), draft_table, holidays,
@@ -1109,17 +1130,16 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         start = 4
         ws.merge_cells("A1:H1")
         guide = ws["A1"]
-        guide.value = ("사람 확인이 필요한 항목입니다. '정기지출 누락 의심'은 "
-                       "'처리' 열에서 계획에 반영/반영 안 함을 고르세요 — "
-                       "일자·금액 칸을 고치면 고친 값으로 들어갑니다. "
+        guide.value = ("사람 확인이 필요한 항목입니다. "
                        "'당일 지출·실제 차이'는 오늘 지출계획과 실제 출금이 "
                        "다른 항목입니다: 오늘 나갈 예정이면 '지출 예정(유지)', "
                        "안 나갈 것이면 '보류(제외)'를 고르세요 — 보류는 오늘 "
                        "자금계획에서 빠집니다. '계획 없는 실제출금'은 처리 "
                        "열에 분류를 적으면(예: 급여·상여) 기억해서 다음부터 "
-                       "같은 이름의 거래를 그 분류로 자동 처리합니다. 검토가 "
-                       "끝나면 '안내' 시트의 '확인 완료'(B2)를 '예'로 바꾸고 "
-                       "저장하세요.")
+                       "같은 이름의 거래를 그 분류로 자동 처리합니다. "
+                       "정기지출 누락 의심은 '정기지출누락' 시트에서 따로 "
+                       "확인하세요. 검토가 끝나면 '안내' 시트의 "
+                       "'확인 완료'(B2)를 '예'로 바꾸고 저장하세요.")
         guide.font = Font(name="맑은 고딕", bold=True, size=10,
                           color="B36B00")
         guide.alignment = Alignment(horizontal="left", vertical="center",
@@ -1187,6 +1207,9 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                 if _issue_sig(issue) in new_issue_sigs:
                     for c in range(1, 9):
                         ws.cell(row=r, column=c).fill = NEW_ITEM_FILL
+        _build_recurring_missing_sheet(
+            wb.create_sheet(RECURRING_MISSING_SHEET), missing_issues,
+            holidays=holidays)
         if recurring:
             _fill_recurring_review_sheet(
                 wb.create_sheet("정기지출분석"), recurring,
@@ -1196,6 +1219,65 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
     wb.save(out_path)
     wb.close()
     return out_path
+
+
+def _build_recurring_missing_sheet(ws, issues: list[dict],
+                                   holidays: dict | None = None) -> None:
+    """'정기지출누락' 시트: 팀 지출예정 파일에 없는 정기지출 확인.
+
+    2026-09-23 사용자 확정: 정기지출 추정은 자금계획·결과파일에 넣지
+    않는다. 매월 나가던 지출이 이번 팀 지출예정 파일에 없으면 여기
+    올라오고, '처리' 열에서 '계획에 반영'을 고른 항목만 이번 계획에
+    들어간다(기본 '반영 안 함' — 원칙은 팀 재제출 요청).
+    """
+    from openpyxl.worksheet.datavalidation import DataValidation
+
+    ws.merge_cells("A1:H1")
+    guide = ws["A1"]
+    guide.value = ("매월 나가던 정기지출인데 이번 팀 지출예정 파일에서 "
+                   "찾지 못한 항목입니다. 정기지출은 자동으로 계획에 넣지 "
+                   "않으니, 실제로 나갈 지출이면 '처리' 열에서 '계획에 "
+                   "반영'을 고르세요 — 일자(E)·금액(G) 칸을 고치면 고친 "
+                   "값으로 들어갑니다. 원칙은 해당 팀에 지출예정 파일 "
+                   "재제출을 요청하는 것입니다. 검토가 끝나면 '안내' 시트 "
+                   "B2를 '예'로 저장하세요.")
+    guide.font = Font(name=_FONT, bold=True, size=10, color="B36B00")
+    guide.alignment = Alignment(horizontal="left", vertical="center",
+                                wrap_text=True)
+    ws.row_dimensions[1].height = 34
+    start = 4
+    _write_table(ws, _ISSUE_COLUMNS, issues, start_row=start,
+                 holidays=holidays)
+    head = ws.cell(row=start, column=_ACTION_COL, value="처리")
+    head.fill = _HEADER_FILL
+    head.font = _HEADER_FONT
+    head.alignment = Alignment(horizontal="center", vertical="center")
+    head.border = _BORDER
+    ws.column_dimensions[get_column_letter(_ACTION_COL)].width = 14
+    if not issues:
+        note = ws.cell(row=start + 1, column=1,
+                       value="이번 구간(실행일~차주 금요일)에 누락 의심 "
+                             "정기지출이 없습니다.")
+        note.font = Font(name=_FONT, size=10, color="1E7145")
+        ws.column_dimensions["J"].hidden = True
+        return
+    action_dv = DataValidation(
+        type="list", formula1=f'"{ACTION_INCLUDE},{ACTION_SKIP}"',
+        allow_blank=True)
+    action_dv.error = f"'{ACTION_INCLUDE}' 또는 '{ACTION_SKIP}'만 " \
+                      "입력할 수 있습니다."
+    action_dv.showErrorMessage = True
+    ws.add_data_validation(action_dv)
+    for r, issue in enumerate(issues, start=start + 1):
+        cell = ws.cell(row=r, column=_ACTION_COL, value=ACTION_SKIP)
+        cell.fill = PatternFill("solid", start_color="FFF2CC")
+        cell.font = _BODY_FONT
+        cell.alignment = Alignment(horizontal="center")
+        cell.border = _BORDER
+        action_dv.add(cell.coordinate)
+        ws.cell(row=r, column=_ITEM_COL,
+                value=issue.get("지시항목") or issue.get("내용"))
+    ws.column_dimensions["J"].hidden = True
 
 
 RECURRING_REVIEW_PREFIX = "정기지출분석"
@@ -1250,8 +1332,8 @@ def _fill_recurring_review_sheet(ws, recurring: list[dict],
                                 wrap_text=True)
     ws.row_dimensions[1].height = 34
     _title(ws, "월 정기지출 분석 — 확인 단계",
-           "정기 = 평균 금액 자동 추정 대상 / 비정기 = 팀 지출예정 파일 "
-           "금액으로만 반영 / 제외 = 추정·정기지출 체크 모두 안 함")
+           "정기·비정기 = 누락 체크 대상 (계획에는 팀 지출예정 파일 "
+           "금액만 반영) / 제외 = 누락 체크도 안 함")
     _write_table(ws, _RECURRING_COLUMNS, _recurring_display(recurring))
     categories = _recurring_categories(recurring)
     add_recurring_controls(ws, 5 + len(recurring), categories=categories)
@@ -1267,14 +1349,13 @@ def _fill_recurring_review_sheet(ws, recurring: list[dict],
         ("N열에는 그 분류의 현재 성격이 보입니다 — 그대로 두면 아무것도 "
          "바뀌지 않고, 값을 바꾼 분류만 전체 적용됩니다. '혼합'은 행마다 "
          "성격이 다르다는 표시입니다.", False),
-        ("정기 — 평균 월지출을 자동 추정해 자금계획 후보로 올립니다 "
-         "(자동추정_지출목록에 등재. 실제 반영 여부는 그 파일의 반영/제외로"
-         " 결정)", False),
-        ("비정기 — 자동 추정을 하지 않습니다. 팀 지출예정 파일에 적힌 "
-         "금액만 자금계획에 반영 (금주 '정기지출 체크' 대조는 계속 함)",
+        ("정기 — 매월 도래를 추적해 '정기지출누락' 시트에서 팀 제출 "
+         "여부를 대조합니다 (2026-09-23부터 금액을 계획에 자동 반영하지 "
+         "않음 — 계획에는 팀 지출예정 파일 금액만)", False),
+        ("비정기 — 정기와 같이 누락 대조만 하고, 팀 지출예정 파일에 "
+         "적힌 금액만 자금계획에 반영합니다", False),
+        ("제외 — 누락 대조도 하지 않습니다 (관리 대상에서 완전 제외)",
          False),
-        ("제외 — 자동 추정도, 정기지출 체크 대조도 하지 않습니다 "
-         "(관리 대상에서 완전 제외)", False),
         ("우선순위 — K4 전체 일괄 > N열 분류별 일괄 > K열 개별 행 "
          "(넓은 쪽이 이깁니다)", False),
     ]
@@ -1299,7 +1380,9 @@ def load_review_directives(path: Path) -> list[dict]:
 
     반환 행: {일자, 금액, 항목} — 정기지출 누락 의심 항목 중 사용자가
     '처리' 열(I)을 '계획에 반영'으로 고른 것. 일자(E)·금액(G)을 표에서
-    고쳐 두면 고친 값으로 반영된다.
+    고쳐 두면 고친 값으로 반영된다. '정기지출누락' 시트(2026-09-23
+    분리)를 먼저 읽고, 예전 형식(확인필요 시트에 함께 표시)도 계속
+    읽는다.
     """
     from common import parse_amount, parse_date
     result: list[dict] = []
@@ -1308,22 +1391,24 @@ def load_review_directives(path: Path) -> list[dict]:
     except Exception:
         return result
     try:
-        if REVIEW_SHEET not in wb.sheetnames:
-            return result
-        ws = wb[REVIEW_SHEET]
-        for row in ws.iter_rows(min_row=5, max_col=_ITEM_COL,
-                                values_only=True):
-            action = str(row[_ACTION_COL - 1] or "").strip() \
-                if len(row) >= _ACTION_COL else ""
-            if action != ACTION_INCLUDE:
+        for sheet in (RECURRING_MISSING_SHEET, REVIEW_SHEET):
+            if sheet not in wb.sheetnames:
                 continue
-            d = parse_date(row[4] if len(row) > 4 else None)       # E: 일자
-            amount = parse_amount(row[6] if len(row) > 6 else None) or 0.0
-            name = str(row[_ITEM_COL - 1] or "").strip() \
-                if len(row) >= _ITEM_COL else ""
-            if d is None or amount <= 0 or not name:
-                continue
-            result.append({"일자": d, "금액": amount, "항목": name})
+            ws = wb[sheet]
+            for row in ws.iter_rows(min_row=5, max_col=_ITEM_COL,
+                                    values_only=True):
+                action = str(row[_ACTION_COL - 1] or "").strip() \
+                    if len(row) >= _ACTION_COL else ""
+                if action != ACTION_INCLUDE:
+                    continue
+                d = parse_date(row[4] if len(row) > 4 else None)   # E: 일자
+                amount = parse_amount(row[6] if len(row) > 6 else None) \
+                    or 0.0
+                name = str(row[_ITEM_COL - 1] or "").strip() \
+                    if len(row) >= _ITEM_COL else ""
+                if d is None or amount <= 0 or not name:
+                    continue
+                result.append({"일자": d, "금액": amount, "항목": name})
         return result
     except Exception:
         return result

@@ -24,7 +24,6 @@ from excel_report import account_label
 from live_report import exec_window, outline_week_box
 
 SHEET_NAME = "주간보고"
-CHECK_SHEET = "정기지출 체크"
 
 _NAVY = "1F4E79"
 _EDIT_FILL = PatternFill("solid", start_color="FFF2CC")   # 수정 가능 칸
@@ -104,73 +103,6 @@ def _section(ws, row, text):
         cell.fill = _HEAD_FILL
         cell.border = _THIN
     _put(ws, row, 1, text, bold=True, color="FFFFFF", size=11)
-
-
-def _fill_recurring_check(wb, report: dict) -> None:
-    """'정기지출 체크' 시트: 금주 도래 정기지출의 팀 제출 여부 대조표.
-
-    자동추정을 '제외'로 두고 팀 지출예정 파일 기준으로 운영할 때,
-    팀이 빠뜨린 매월 정기지출(누락 의심)을 한눈에 보고 재제출을
-    요청할 수 있게 한다.
-    """
-    meta = report["meta"]
-    checks = report.get("recurring_check") or []
-    run_date = meta.get("run_date") or meta["base_date"]
-    win_start, win_end = exec_window(run_date)
-
-    ws = wb.create_sheet(CHECK_SHEET)
-    for c, w in zip(range(1, 8), (12, 6, 28, 14, 12, 27, 30)):
-        ws.column_dimensions[get_column_letter(c)].width = w
-    _put(ws, 1, 1, "금주 정기지출 체크 — 팀 지출예정 제출 확인",
-         bold=True, size=13, color=_NAVY)
-    _put(ws, 2, 1, f"확인 구간 {win_start} ~ {win_end} (실행일~차주 금요일) · "
-                   "매월 나가던 정기지출이 팀 지출예정 파일에 들어왔는지 "
-                   "자동 대조한 결과입니다.", size=9, color="555555")
-    missing = [c for c in checks if c.get("누락")]
-    if missing:
-        _put(ws, 3, 1, f"⚠ 누락 의심 {len(missing)}건 — 해당 팀에 지출예정 "
-                       "파일 재제출을 요청하세요.", bold=True, color="C00000")
-    elif checks:
-        _put(ws, 3, 1, "누락 의심 없음 — 구간 내 정기지출이 모두 팀 계획에 "
-                       "반영되어 있거나 자동 반영 중입니다.",
-             bold=True, color="1E7145")
-    else:
-        _put(ws, 3, 1, "이번 구간에 도래하는 정기지출이 없습니다.",
-             color="555555")
-
-    head_row = 5
-    for c, head in enumerate(("예정일", "요일", "항목", "예상금액(평균)",
-                              "관리상태", "팀 지출예정", "확인 결과"),
-                             start=1):
-        _put(ws, head_row, c, head, bold=True, color="FFFFFF",
-             fill=_HEAD_FILL, align="center", border=True)
-    holidays = report.get("holidays") or {}
-    r = head_row + 1
-    for chk in checks:
-        d = chk.get("예정일")
-        off = d is not None and (d.weekday() >= 5 or d in holidays)
-        day_color = "C00000" if off else "000000"
-        _put(ws, r, 1, d, fmt="yyyy-mm-dd", border=True, color=day_color)
-        _put(ws, r, 2, WEEKDAY_KO[d.weekday()] if d else "",
-             align="center", border=True, color=day_color)
-        _put(ws, r, 3, chk.get("항목") or "", border=True)
-        _put(ws, r, 4, round(chk.get("예상금액") or 0), fmt="#,##0",
-             border=True)
-        _put(ws, r, 5, chk.get("관리상태") or "", align="center", border=True)
-        t_amt, t_date = chk.get("팀제출금액"), chk.get("팀제출일")
-        team = (f"있음 · {t_amt:,.0f}원 ({t_date.month}/{t_date.day})"
-                if t_amt is not None else "없음")
-        _put(ws, r, 6, team, border=True)
-        verdict = _put(ws, r, 7, chk.get("판정") or "", border=True,
-                       bold=bool(chk.get("누락")))
-        if chk.get("누락"):
-            for c in range(1, 8):
-                ws.cell(row=r, column=c).fill = _RED_FILL
-            verdict.font = _font(bold=True, color="C00000")
-        r += 1
-    ws.auto_filter.ref = f"A{head_row}:G{max(r - 1, head_row + 1)}"
-    ws.freeze_panes = f"A{head_row + 1}"
-    _setup_print(ws, max(r - 1, head_row + 1), last_col=7)
 
 
 def create_management_workbook(report: dict, out_path: Path) -> Path:
@@ -536,7 +468,9 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         ws.row_dimensions[hr].hidden = True
     _setup_print(ws, memo_row + 4)
 
-    _fill_recurring_check(wb, report)
+    # '정기지출 체크' 시트는 만들지 않는다 (2026-09-23 사용자 확정:
+    # 정기지출 관련은 결과파일에 넣지 않고, 누락 의심만 확인필요
+    # 파일의 '정기지출누락' 시트에서 확인받는다)
 
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -552,8 +486,7 @@ def verify_management_workbook(path: Path) -> bool:
     except Exception:
         return False
     try:
-        if SHEET_NAME not in wb.sheetnames \
-                or CHECK_SHEET not in wb.sheetnames:
+        if SHEET_NAME not in wb.sheetnames:
             return False
         ws = wb[SHEET_NAME]
         return (str(ws[f"C{_SUM_ROW}"].value or "").startswith("=MIN")

@@ -274,8 +274,9 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                  if i.get("성격", "정기") == "정기"]
         # 자동추정은 별도 목록 파일(04_기준파일/자동추정_지출목록.xlsx)로
         # 관리한다: 첫 실행 때 주간조정의 자동 초안을 이관하고, 매 실행
-        # 정기지출 분석으로 새 항목을 추가한 뒤(사용자 수정 보존),
-        # '반영' 행만 자금계획에 넣는다
+        # 정기지출 분석으로 새 항목을 추가한다(사용자 수정 보존).
+        # 2026-09-23 사용자 확정: 이 목록의 금액은 자금계획에 넣지 않고,
+        # '정기지출누락' 확인의 대조 기준으로만 쓴다
         draft_path = (cfg.folder("base_workbook")
                       / forecast_engine.AUTO_DRAFT_FILE)
         draft_mode_default = cfg.get("forecast", "auto_draft_default",
@@ -310,23 +311,15 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         except OSError:
             log.warning("자동추정_지출목록이 사용 중(Excel에 열림)이라 "
                         "목록 갱신을 건너뜁니다 — 저장된 내용으로 계속 진행")
-        auto_drafts, draft_excluded = forecast_engine.load_auto_drafts(
-            draft_path, base_date)
+        # 2026-09-23 사용자 확정: 자동추정(정기지출) 금액은 자금계획에
+        # 반영하지 않는다 — 계획에는 팀 지출예정 파일(+주간조정 확정입금·
+        # 온라인 예상입금)만 넣고, 정기지출은 '정기지출누락' 시트에서
+        # 확인받은 '계획에 반영' 지시만 들어간다. 기준파일 주간조정에
+        # 남아 있는 예전 '자동 초안' 행도 함께 뺀다
         adjustments = [a for a in adjustments
                        if "자동 초안" not in (a.get("내용") or "")]
-        adjustments += auto_drafts
-        log.info("자동추정 목록 %d건 반영 (제외 %d건)",
-                 len(auto_drafts), draft_excluded)
-        # 성격 변동·제외 항목의 '자동 초안' 지출 추정은 쓰지 않는다
-        # (예: 외상매입금 — 팀 지출예정 파일 금액으로만 반영)
-        adjustments, var_dropped = \
-            forecast_engine.filter_adjustments_by_overrides(
-                adjustments, overrides)
-        if var_dropped:
-            log.info("성격 변동·제외 정기지출의 자동 초안 %d건 제외 (%s)",
-                     len(var_dropped),
-                     ", ".join((a.get("내용") or "")[:30]
-                               for a in var_dropped[:3]))
+        log.info("자동추정 목록은 계획에 반영하지 않음 — 정기지출누락 "
+                 "대조 기준으로만 사용")
 
         # 확인 완료된 확인필요 파일의 '처리' 지시
         # (정기지출 누락 → 계획에 반영/반영 안 함)를 반영한다
@@ -438,8 +431,18 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         display_monday = week_monday(now.date())
         if now.date().weekday() >= 5:       # 토·일
             display_monday += timedelta(days=7)
+        # 실행일 이전 지급 예정은 자금계획에 넣지 않는다 (2026-09-23
+        # 사용자 확정 — 실행 기준일부터만 진행; 은행 대조·미출금 알림은
+        # 위에서 전체 목록으로 이미 했으므로 그대로 유지된다)
+        plannable = forecast_engine.drop_past_plans(plan["countable"],
+                                                    now.date())
+        past_cnt = len(plan["countable"]) - len(plannable)
+        if past_cnt:
+            log.info("실행일(%s) 이전 지급 예정 %d건은 자금계획에서 제외 "
+                     "(미출금 대조·확인필요 표시는 유지)",
+                     now.date(), past_cnt)
         forecast = forecast_engine.build_forecast(
-            plan["countable"], base_date, total_balance, merged_history,
+            plannable, base_date, total_balance, merged_history,
             adjustments, recurring_projectable, rates,
             cfg.get("forecast", "default_receipt_rate", default=0.8),
             cfg.get("forecast", "minimum_cash_balance", default=0),
@@ -483,7 +486,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                           for key in balances}
 
         horizon_end = base_date + timedelta(days=27)
-        next4w = [p for p in plan["countable"]
+        next4w = [p for p in plannable
                   if p.get("자금계획 반영일")
                   and base_date <= p["자금계획 반영일"] <= horizon_end]
         integrated_masked = team_loader.mask_confidential_rows(
@@ -499,6 +502,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         actual_until = forecast.get("actual_until")
         if actual_until is not None and actual_until >= week_start:
             week_start = actual_until + timedelta(days=1)
+        # 실행일 이전 지급 예정은 표에서도 뺀다 (2026-09-23 사용자 확정)
+        week_start = max(week_start, now.date())
         week_expenses = []
         for r0 in integrated_masked:
             if r0.get("반영상태") != REFLECT_OK:
@@ -534,7 +539,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             plan["countable"], draft_aliases, chk_start, chk_end,
             variable_items=[i for i in recurring
                             if i.get("성격") == "변동"],
-            holidays=holidays)
+            holidays=holidays,
+            # 자동추정 금액을 계획에 넣지 않으므로(2026-09-23) 팀 파일에
+            # 없는 정기지출은 전부 누락 의심으로 올린다
+            drafts_reflected=False)
         # 확인필요 지시로 이미 계획에 넣은 항목은 누락이 아니다
         directive_keys = {(d["항목"], d["일자"]) for d in review_directives}
         for c in recurring_check:
@@ -546,10 +554,11 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                  chk_start, chk_end, len(recurring_check), len(missing_chk))
         for c in missing_chk:
             issues.append({
-                "구분": "정기지출 누락 의심",
+                "구분": excel_report.ISSUE_RECURRING_MISSING,
                 "일자": c["예정일"],
                 "내용": f"{c['항목']} — 팀 지출예정 파일에서 찾지 못함. "
-                       "'처리' 열에서 계획에 반영/반영 안 함 선택 "
+                       "정기지출은 자동으로 계획에 넣지 않으니, 나갈 "
+                       "지출이면 '처리' 열에서 '계획에 반영' 선택 "
                        "(일자·금액을 고치면 고친 값으로 반영)",
                 "금액": c["예상금액"],
                 "원본파일": forecast_engine.AUTO_DRAFT_FILE,
@@ -609,20 +618,25 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         if confirm_mode:
             if review_path is None:
                 review_path = unique_path(review_dir / issue_name)
-                draft_table = forecast_engine.read_draft_table(draft_path)
+                # 자동추정_지출목록 시트는 만들지 않는다 (2026-09-23:
+                # 자동추정 금액을 계획에 반영하지 않으므로 반영/제외
+                # 선택이 필요 없다 — 정기지출은 '정기지출누락' 시트로)
                 # 지난 확인 파일과 비교해 새로 생긴 항목을 강조 표시한다
                 prev_files = sorted(review_dir.glob("확인필요_*.xlsx"),
                                     key=lambda p: p.stat().st_mtime)
                 snapshot = (excel_report.review_snapshot(prev_files[-1])
                             if prev_files else None)
+                diff_issues = [
+                    i for i in issues
+                    if i.get("구분") != excel_report.ISSUE_RECURRING_MISSING]
                 new_marks = excel_report.diff_new_items(
-                    issues, recurring, draft_table, snapshot)
+                    diff_issues, recurring, None, snapshot)
                 excel_report.create_issue_workbook(
                     issues, review_path, week_key=week_key,
                     signature=input_sig, recurring=recurring,
-                    draft_table=draft_table, holidays=holidays,
-                    new_marks=new_marks)
-                expected = (["안내", "자동추정_지출목록", "확인필요"]
+                    holidays=holidays, new_marks=new_marks)
+                expected = (["안내", "확인필요",
+                             excel_report.RECURRING_MISSING_SHEET]
                             + (["정기지출분석"] if recurring else []))
                 if not excel_report.verify_workbook(review_path, expected):
                     raise RuntimeError("확인 파일 재열기 검증 실패")
@@ -637,7 +651,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                             "있습니다 — 꼭 확인해 주세요."
                             if new_marks.get("count") else "")
                 log.info("확인필요 %d건 검토 대기 — %s 의 시트들(안내·"
-                         "자동추정_지출목록·확인필요·정기지출분석)을 검토한 "
+                         "확인필요·정기지출누락·정기지출분석)을 검토한 "
                          "뒤 '안내' 시트의 '확인 완료'(B2)를 '예'로 바꾸고 "
                          "저장하면 결과 파일이 만들어집니다 (켜져 있으면 "
                          "10분 안에 자동)%s",

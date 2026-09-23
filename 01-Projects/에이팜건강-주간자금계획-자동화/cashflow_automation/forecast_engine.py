@@ -635,6 +635,19 @@ def load_auto_draft_rows(draft_path: Path,
         wb.close()
 
 
+def drop_past_plans(plans: list[dict], run_date: date) -> list[dict]:
+    """자금계획 반영일이 실행일 이전인 지출계획을 계획 반영에서 뺀다.
+
+    2026-09-23 사용자 확정: 지출예정 파일에 실행일보다 이전 날짜가
+    있어도(지난 주 제출분 재업로드 등) 자금계획은 실행 기준일부터만
+    진행한다. 은행 대조(예정지출 미출금 알림)는 전체 목록으로 계속
+    하므로, 이 함수는 계획(4주·13주·지출예정 표)에 넣을 목록에만 쓴다.
+    """
+    return [p for p in plans
+            if p.get("자금계획 반영일") is None
+            or p["자금계획 반영일"] >= run_date]
+
+
 # 금주 정기지출 체크의 판정 문구
 CHECK_MISSING = "누락 의심 — 팀 재제출 요청"
 CHECK_TEAM_OK = "팀 계획 반영"
@@ -648,13 +661,18 @@ def weekly_recurring_check(draft_rows: list[dict],
                            start: date, end: date,
                            variable_items: list[dict] | None = None,
                            name_threshold: int = 60,
-                           holidays: Optional[dict] = None) -> list[dict]:
+                           holidays: Optional[dict] = None,
+                           drafts_reflected: bool = True) -> list[dict]:
     """실행 구간(start~end)에 도래하는 정기지출의 팀 제출 여부를 대조한다.
 
     자동추정 목록의 행(반영·제외)과 성격 '변동' 정기지출(목록에 없는
     달 포함)을 대상으로, 같은 달 팀 지출예정(취합)에 이름이 이어지는
     입력이 있는지 본다. '제외'·'변동'인데 팀 입력이 없으면 누락 의심 —
     팀에 지출예정 재제출을 요청할 항목이다.
+
+    drafts_reflected=False면(2026-09-23 사용자 확정: 자동추정 금액을
+    자금계획에 넣지 않는 운영) '반영' 표시 행도 자동 반영으로 치지
+    않는다 — 팀 지출예정 파일에 없는 정기지출은 전부 누락 의심이 된다.
     """
     from rapidfuzz import fuzz
 
@@ -723,7 +741,7 @@ def weekly_recurring_check(draft_rows: list[dict],
     results = []
     for i, e in enumerate(entries):
         hit = plans[hit_by_entry[i]] if i in hit_by_entry else None
-        auto = e["관리상태"] == "반영"
+        auto = drafts_reflected and e["관리상태"] == "반영"
         if hit:
             verdict = CHECK_ACTUAL if auto else CHECK_TEAM_OK
         elif auto:
