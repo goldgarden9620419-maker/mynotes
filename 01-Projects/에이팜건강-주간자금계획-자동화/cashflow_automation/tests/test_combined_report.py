@@ -65,9 +65,11 @@ def test_통합파일_시트구성과_경영보고_연동(tmp_path):
     assert mr.verify_combined_workbook(out, NEW_MONDAY)
 
     wb = load_workbook(out)
-    # 시트 순서: 경영보고(입력 기준) → 대표보고 → 라이브 시트들
-    assert wb.sheetnames[:2] == [mr.SHEET_NAME, mr.CEO_SHEET]
-    assert "요약" in wb.sheetnames and "4주일별계획" in wb.sheetnames
+    # 시트 순서(2026-09-23 사용자 요청): 요약·업데이트운영이 맨 앞,
+    # 그다음 경영보고(입력 기준) → 대표보고 → 라이브 시트들
+    assert wb.sheetnames[:4] == ["요약", "업데이트운영",
+                                 mr.SHEET_NAME, mr.CEO_SHEET]
+    assert "4주일별계획" in wb.sheetnames
 
     # 반영률 입력은 경영보고 F12 하나 — 요약 B13이 참조한다
     assert wb["요약"]["B13"].value == f"='{mr.SHEET_NAME}'!$F$12"
@@ -218,4 +220,49 @@ def test_연동_수식은_정적_값과_일치한다(tmp_path):
         assert card == src["카드결제"], (d, "카드", card)
         assert etc == src["자동이체"] + src["기타지출"], (d, "기타", etc)
         assert conf == src["확정·기타입금"], (d, "확정", conf)
+    wb.close()
+
+
+def test_요약_수정안내표와_업데이트운영_안내(tmp_path):
+    """2026-09-23 사용자 요청: 요약 시트에 경영보고 수정 방법과 수정 시
+    각 시트 어디가 바뀌는지 표로, 업데이트운영 시트는 이 파일 운영법
+    안내로 재작성, 두 시트를 맨 앞에 배치."""
+    template = tmp_path / "템플릿.xlsx"
+    _make_stub_template(template)
+    out = tmp_path / "주간자금계획_guide.xlsx"
+    rep = _combined_report()
+    rep["bank_rows"] = [
+        {"은행": "농협", "거래일": date(2026, 9, 21), "입금액": 1000},
+        {"은행": "농협", "거래일": date(2026, 9, 18), "출금액": 500},
+        {"은행": "우리은행", "거래일": date(2026, 9, 22), "입금액": 200,
+         "반영상태": "중복제외"},
+    ]
+    mr.create_combined_workbook(rep, template, out)
+
+    wb = load_workbook(out)
+    ws = wb["요약"]
+    # 사용 방법 문구가 통합 파일 기준으로 갱신됨
+    assert mr.SHEET_NAME in str(ws["D13"].value)
+    # 수정 안내 표: 띠 + 반영률·보류·확정입금 행이 있고 반영 위치가 적힘
+    assert "수정 방법" in str(ws["A19"].value)
+    body = {str(ws.cell(row=r, column=1).value or ""):
+            str(ws.cell(row=r, column=4).value or "")
+            for r in range(21, 27)}
+    assert any("반영률" in k for k in body)
+    assert any("I열" in k and "대표보고" in v for k, v in body.items())
+    assert any("실지출" in k and "H열" in v for k, v in body.items())
+
+    guide = wb["업데이트운영"]
+    text = " ".join(str(c.value) for row in guide.iter_rows(max_row=40)
+                    for c in row if c.value is not None)
+    # 옛 채팅 업로드 안내가 없어지고 폴더 운영 안내로 바뀜
+    assert "대화창" not in text
+    assert "03_은행거래내역" in text and "매주 운영 순서" in text
+    assert "시트 구성" in text and mr.CEO_SHEET in text
+    # 은행 자료 자동 집계: 중복제외 행은 빠진다
+    rows = {str(guide.cell(row=r, column=1).value):
+            guide.cell(row=r, column=2).value
+            for r in range(1, 45)}
+    assert rows.get("농협") == 2
+    assert "우리은행" not in rows
     wb.close()

@@ -111,6 +111,10 @@ def fill_live_workbook(template_path: Path, report: dict,
     _fill_raw(wb["계좌내역통합_RAW"], report.get("bank_rows", []),
               holidays=holidays)
 
+    if link_sheet:
+        # 통합 파일: 업데이트운영 시트를 현재 운영 방법 안내로 새로 쓴다
+        _fill_update_guide(wb, report, link_sheet)
+
     # 은행 파일을 폴더에서 자동으로 읽으므로 수동 붙여넣기 시트는 제거한다
     if "주간계좌_붙여넣기" in wb.sheetnames:
         wb.remove(wb["주간계좌_붙여넣기"])
@@ -219,6 +223,257 @@ def _fill_summary(ws, report: dict, base_date: date, stats: dict,
         else:
             for c in (4, 5, 6):
                 _set(ws, r, c, None)
+    if link_sheet:
+        _rewrite_summary_usage(ws, link_sheet)
+        _fill_summary_guide(ws, link_sheet)
+
+
+_GUIDE_NAVY = "1F4E79"
+
+
+def _guide_font(bold=False, size=10, color="000000"):
+    from openpyxl.styles import Font
+    return Font(name="맑은 고딕", bold=bold, size=size, color=color)
+
+
+def _guide_put(ws, row, col, value, *, bold=False, size=10,
+               color="000000", fill=None, wrap=True, border=True):
+    from openpyxl.styles import Alignment, Border, PatternFill, Side
+    cell = ws.cell(row=row, column=col, value=value)
+    cell.font = _guide_font(bold, size, color)
+    cell.alignment = Alignment(horizontal="left", vertical="center",
+                               wrap_text=wrap)
+    if fill:
+        cell.fill = PatternFill("solid", start_color=fill)
+    if border:
+        cell.border = Border(*(Side(style="thin", color="BBBBBB"),) * 4)
+    return cell
+
+
+def _guide_band(ws, row, text, last_col=8):
+    """요약·업데이트운영 안내용 남색 섹션 띠 (경영보고와 같은 모양)."""
+    from openpyxl.styles import Border, PatternFill, Side
+    for c in range(1, last_col + 1):
+        cell = ws.cell(row=row, column=c)
+        cell.fill = PatternFill("solid", start_color=_GUIDE_NAVY)
+        cell.border = Border(*(Side(style="thin", color="BBBBBB"),) * 4)
+    _guide_put(ws, row, 1, text, bold=True, size=11, color="FFFFFF",
+               fill=_GUIDE_NAVY)
+
+
+def _rewrite_summary_usage(ws, link_sheet: str) -> None:
+    """요약 '사용 방법' 5줄을 통합 파일(경영보고 입력 기준)에 맞게
+    고쳐 쓴다 — 옛 채팅 업로드 시절 문구를 대체 (2026-09-23)."""
+    ws["D13"] = (f"1. 입력·수정은 전부 '{link_sheet}' 시트의 노란 칸에서 "
+                 "합니다 — 나머지 시트는 수식으로 자동 재계산됩니다.")
+    ws["D14"] = ("2. '대표보고' 시트는 그대로 인쇄(A4 한 장), 일별 상세는 "
+                 "'4주일별계획' 시트에서 봅니다.")
+    ws["D17"] = ("5. 무엇을 고치면 어디가 바뀌는지는 아래 "
+                 f"'{link_sheet} 시트 수정 방법' 표를 보세요.")
+
+
+def _fill_summary_guide(ws, link_sheet: str) -> None:
+    """요약 시트 하단에 '경영보고 수정 방법 → 반영 위치' 지도를 쓴다
+    (2026-09-23 사용자 요청: 수정하면 각 시트 어디가 변동되는지 한눈에)."""
+    import management_report as _mr
+
+    total = f"E{_mr._EXP_TOTAL}"
+    target = f"C{_mr._TARGET_ROW}"
+    rows = [
+        ("F12 · 입금 반영률 (총잔액 옆)",
+         "60~100%에서 선택",
+         f"{link_sheet} ③ 일별 온라인 예상입금·④ 잔액과 판정 → "
+         "4주일별계획 온라인 예상입금 열 → 계좌별시나리오·13주 → "
+         "요약 B13~B16 → 대표보고 시나리오 표"),
+        ("② 지출예정 A열(지급일)·E열(금액)",
+         "일자·금액을 바로 고침 (숨은 예비 행을 펴면 새 지출 추가)",
+         f"{link_sheet} ② 합계 {total}·④ 그 날짜의 지출·잔액·지출 내역 "
+         "→ 4주일별계획 송금·카드·조정 열과 잔액 → 계좌별시나리오 → "
+         "대표보고"),
+        ("② G열(실지출·은행 확인)",
+         "실제 나간 금액을 입력",
+         "② H열(차이)만 자동 계산 — 계획 대비 대조 기록용이라 다른 "
+         "시트 숫자는 바뀌지 않음"),
+        ("② I열(확인 드롭다운)",
+         "적용 / 보류 선택 (빈칸 = 적용)",
+         f"'보류' 행은 ② 합계 {total}·④ 일별 흐름·4주일별계획·"
+         "대표보고에서 전부 빠짐 — 이 파일 안에서만 유효"),
+        ("③ 입금예정 확정입금 행 A(일자)·E(금액)",
+         "확정입금 일자·금액을 고침",
+         f"{link_sheet} ④ 그 날짜 입금·잔액 → 4주일별계획 "
+         "확정·기타입금 열 → 계좌별시나리오 → 대표보고"),
+        (f"{target} · 목표 최저잔액",
+         "안정 목표 금액을 입력",
+         "⑤ 필요 추가 입금(반영률 시나리오별 부족액)만 다시 계산"),
+    ]
+
+    head = 19
+    _guide_band(ws, head, f"{link_sheet} 시트 수정 방법 — 무엇을 고치면 "
+                          "어디가 바뀌나 (전부 수식 자동 반영)")
+    _guide_put(ws, head + 1, 1, f"수정하는 곳 ({link_sheet} 노란 칸)",
+               bold=True, fill="D9E2F3")
+    _guide_put(ws, head + 1, 2, "이렇게 수정", bold=True, fill="D9E2F3")
+    _guide_put(ws, head + 1, 4, "바뀌는 곳 (수정 즉시 자동 재계산)",
+               bold=True, fill="D9E2F3")
+    for c in (3, 5, 6, 7, 8):
+        _guide_put(ws, head + 1, c, None, fill="D9E2F3")
+    ws.merge_cells(start_row=head + 1, start_column=2,
+                   end_row=head + 1, end_column=3)
+    ws.merge_cells(start_row=head + 1, start_column=4,
+                   end_row=head + 1, end_column=8)
+    for i, (where, how, effect) in enumerate(rows):
+        r = head + 2 + i
+        _guide_put(ws, r, 1, where)
+        _guide_put(ws, r, 2, how)
+        _guide_put(ws, r, 4, effect)
+        for c in (3, 5, 6, 7, 8):
+            _guide_put(ws, r, c, None)
+        ws.merge_cells(start_row=r, start_column=2, end_row=r, end_column=3)
+        ws.merge_cells(start_row=r, start_column=4, end_row=r, end_column=8)
+        ws.row_dimensions[r].height = 44
+    note = head + 2 + len(rows)
+    _guide_put(ws, note, 1,
+               "※ 이 파일에서 한 수정은 이 파일 안에서만 유효합니다 — "
+               "다음 실행 결과는 팀 지출계획·확인 단계 기준으로 새로 "
+               "계산됩니다. 숨겨진 날짜·예비 행은 행 숨기기 해제로 볼 수 "
+               "있습니다.", size=9, color="B36B00", border=False)
+    ws.merge_cells(start_row=note, start_column=1, end_row=note,
+                   end_column=8)
+    ws.row_dimensions[note].height = 28
+
+
+UPDATE_GUIDE_SHEET = "업데이트운영"
+
+
+def _fill_update_guide(wb, report: dict, link_sheet: str) -> None:
+    """업데이트운영 시트를 통합 파일 운영 방법으로 새로 쓴다
+    (2026-09-23 사용자 요청: 이 파일에 맞게 쉽게·보기 좋게).
+
+    옛 채팅 업로드 안내를 지우고 ① 매주 운영 순서 ② 시트 구성
+    ③ 현재 반영된 은행 자료(실행 데이터로 자동 집계)를 담는다.
+    """
+    from openpyxl.styles import Border, PatternFill
+    if UPDATE_GUIDE_SHEET in wb.sheetnames:
+        ws = wb[UPDATE_GUIDE_SHEET]
+    else:
+        ws = wb.create_sheet(UPDATE_GUIDE_SHEET)
+
+    # 옛 내용·병합·서식을 정리하고 새로 쓴다
+    for rng in [str(r) for r in list(ws.merged_cells.ranges)]:
+        ws.unmerge_cells(rng)
+    for row in ws.iter_rows(min_row=1, max_row=max(ws.max_row, 60),
+                            max_col=16):
+        for cell in row:
+            cell.value = None
+            cell.fill = PatternFill()
+            cell.border = Border()
+    for c, w in zip("ABCDEFGH", (16, 15, 15, 15, 15, 15, 15, 15)):
+        ws.column_dimensions[c].width = w
+
+    def _body(r, a, b, tall=True):
+        _guide_put(ws, r, 1, a, bold=True)
+        _guide_put(ws, r, 2, b)
+        for c in range(3, 9):
+            _guide_put(ws, r, c, None)
+        ws.merge_cells(start_row=r, start_column=2, end_row=r, end_column=8)
+        ws.row_dimensions[r].height = 34 if tall else 20
+
+    _guide_put(ws, 2, 1, "이 파일 사용·업데이트 안내", bold=True, size=14,
+               color=_GUIDE_NAVY, border=False, wrap=False)
+    _guide_put(ws, 3, 1,
+               "매주 실행 때마다 05_결과 폴더에 새 주간자금계획 파일이 "
+               "만들어집니다 — 열어 볼 파일은 최신 파일 하나입니다. 이 "
+               "안내는 실행할 때마다 자동으로 새로 쓰입니다.",
+               size=9, color="555555", border=False)
+    ws.merge_cells("A3:H3")
+    ws.row_dimensions[3].height = 26
+
+    _guide_band(ws, 5, "① 매주 운영 순서")
+    steps = [
+        ("1. 은행 파일", "월요일 아침 농협·우리은행·국민은행에서 최근 "
+         "거래내역(엑셀)을 내려받아 03_은행거래내역 폴더에 넣습니다 — "
+         "조회기간이 겹쳐도 중복 거래는 자동 제외되고, 지난 파일은 자동 "
+         "보관됩니다."),
+        ("2. 팀 지출계획", "각 팀 주간 지출계획 파일을 01_지출계획 폴더에 "
+         "넣습니다 (경영지원 대외비 파일은 02_경영지원_대외비 폴더)."),
+        ("3. 자동 실행", "월요일 09:10 자동 실행됩니다 (트레이 아이콘 → "
+         "'지금 실행'으로 언제든 수동 실행 가능). 먼저 06_확인필요 폴더에 "
+         "확인 파일이 열립니다."),
+        ("4. 확인·저장", "확인 파일의 시트(확인필요·정기지출누락·"
+         "정기지출분석)를 검토하고 '안내' 시트 B2를 '예'로 바꿔 저장하면 "
+         "몇 분 안에 이 결과 파일이 만들어집니다."),
+        (f"5. 수정·보고", f"이 파일의 '{link_sheet}' 시트 노란 칸에서 "
+         "일정·금액을 수정하고(전 시트 자동 반영 — 요약 시트의 표 참고), "
+         "'대표보고' 시트를 그대로 A4 인쇄해 보고합니다."),
+        ("6. 금요일 대조", "금요일 17:00 은행 파일을 새로 받아 넣으면 "
+         "06_확인필요에 주간대조 파일이 생성됩니다 — 이번 주 계획 vs "
+         "실제 입출금 차이를 확인합니다."),
+    ]
+    for i, (a, b) in enumerate(steps):
+        _body(6 + i, a, b)
+
+    sheet_row = 6 + len(steps) + 1
+    _guide_band(ws, sheet_row, "② 이 파일의 시트 구성")
+    sheets = [
+        ("요약", "잔액·통계 요약 + 경영보고 수정 방법 표"),
+        (UPDATE_GUIDE_SHEET, "이 안내 (운영 순서·시트 구성·은행 자료 현황)"),
+        (link_sheet, "★ 입력 기준 시트 — ①현황 ②지출예정 ③입금예정 "
+         "④일별 흐름 ⑤필요 추가 입금 ⑥메모. 노란 칸을 고치면 전 시트 "
+         "자동 재계산"),
+        ("대표보고", "A4 한 장 인쇄용 요약 — 경영보고에 수식으로 연동"),
+        ("4주일별계획", "일별 상세(실무용) — 경영보고 수정에 자동 연동"),
+        ("계좌별시나리오", "계좌별 잔액·입금 배분·부족분 이체 계획"),
+        ("지출계획_취합", "팀 지출계획 취합 (대외비는 분류·총액만)"),
+        ("에이팜 지출계획", "에이팜 지출 상세"),
+        ("계좌내역통합_RAW", "은행 3사 거래내역 통합 원본"),
+        ("설정및분류", "요일평균 등 내부 계산용 (수정 불필요)"),
+        ("13주주별계획 (숨김)", "13주 주별 전망 — 시트 숨기기 해제로 열람"),
+    ]
+    for i, (a, b) in enumerate(sheets):
+        _body(sheet_row + 1 + i, a, b,
+              tall=(a == link_sheet))
+
+    bank_row = sheet_row + 1 + len(sheets) + 1
+    _guide_band(ws, bank_row, "③ 현재 반영된 은행 자료 (자동 집계)")
+    by_bank = {}
+    for t in report.get("bank_rows", []):
+        if t.get("반영상태") == "중복제외":
+            continue
+        info = by_bank.setdefault(t.get("은행") or "기타",
+                                  {"n": 0, "min": None, "max": None})
+        info["n"] += 1
+        d = t.get("거래일")
+        if d:
+            if info["min"] is None or d < info["min"]:
+                info["min"] = d
+            if info["max"] is None or d > info["max"]:
+                info["max"] = d
+    heads = ("은행", "반영 거래건수", "자료 시작일", "최종 거래일")
+    for c, h in enumerate(heads, start=1):
+        _guide_put(ws, bank_row + 1, c, h, bold=True, fill="D9E2F3",
+                   wrap=False)
+    r = bank_row + 2
+    if not by_bank:
+        _guide_put(ws, r, 1, "반영된 은행 자료가 없습니다", border=False)
+        r += 1
+    for bank in sorted(by_bank):
+        info = by_bank[bank]
+        _guide_put(ws, r, 1, bank, wrap=False)
+        cell = _guide_put(ws, r, 2, info["n"], wrap=False)
+        cell.number_format = "#,##0"
+        for c, key in ((3, "min"), (4, "max")):
+            v = info[key]
+            cell = _guide_put(
+                ws, r, c,
+                datetime.combine(v, dtime()) if v else None, wrap=False)
+            cell.number_format = "yyyy-mm-dd"
+        r += 1
+    _guide_put(ws, r + 1, 1,
+               "※ 은행 파일에서 읽은 거래 기준입니다. 최종 거래일이 오래"
+               "됐으면 새 은행 파일을 03_은행거래내역 폴더에 넣고 다시 "
+               "실행하세요.", size=9, color="B36B00", border=False)
+    ws.merge_cells(start_row=r + 1, start_column=1, end_row=r + 1,
+                   end_column=8)
 
 
 ETC_HEADER = "조정·추정 지출"   # 자동이체 + 주간조정·자동추정·확인지시 합

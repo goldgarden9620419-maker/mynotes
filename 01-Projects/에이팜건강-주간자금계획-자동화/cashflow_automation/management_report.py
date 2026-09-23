@@ -771,9 +771,11 @@ def create_combined_workbook(report: dict, template_path: Path,
                              out_path: Path) -> Path:
     """통합 결과 파일 하나를 만든다 (2026-09-23 사용자 요청).
 
-    시트 순서: 경영보고(입력 기준) → 대표보고(A4 인쇄) → 라이브 시트들.
-    라이브의 일별 지출·확정입금 칸은 경영보고 ③·④ 표를 SUMIFS로
-    참조하므로, 경영보고에서 일자·금액·반영률(F12)을 고치면 라이브의
+    시트 순서(2026-09-23 사용자 요청: 요약·업데이트운영을 맨 앞으로):
+    요약(수정 안내 표 포함) → 업데이트운영(운영 방법) → 경영보고(입력
+    기준) → 대표보고(A4 인쇄) → 라이브 시트들. 라이브의 일별
+    지출·확정입금 칸은 경영보고 ③·④ 표를 SUMIFS로 참조하므로,
+    경영보고에서 일자·금액·반영률(F12)을 고치면 라이브의
     4주일별계획·계좌별시나리오·13주·요약까지 전부 즉시 재계산된다.
     """
     import live_report
@@ -784,6 +786,11 @@ def create_combined_workbook(report: dict, template_path: Path,
     try:
         build_management_sheet(wb, report)
         build_ceo_sheet(wb, report)
+        front = ["요약", live_report.UPDATE_GUIDE_SHEET,
+                 SHEET_NAME, CEO_SHEET]
+        wb._sheets.sort(key=lambda sh: (front.index(sh.title)
+                                        if sh.title in front
+                                        else len(front)))
         wb.active = 0
         wb.save(out_path)
     finally:
@@ -809,6 +816,9 @@ def verify_combined_workbook(path: Path, base_date: date) -> bool:
             return False
         summary = wb["요약"]
         if str(summary["B13"].value or "") != f"='{SHEET_NAME}'!$F$12":
+            return False
+        # 요약·업데이트운영이 맨 앞 (2026-09-23 사용자 요청)
+        if wb.sheetnames[:2] != ["요약", "업데이트운영"]:
             return False
     except Exception:
         return False
