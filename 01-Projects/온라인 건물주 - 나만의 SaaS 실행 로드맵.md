@@ -249,7 +249,12 @@
 - 증상: 앱 메뉴 "무료 양식"이 배포됐는데 안 보임 → Deployments 확인 결과 **최근 push 3건(쓰레드 7편·무료 양식 메뉴·브리핑 출처 규칙)의 배포가 아예 생성되지 않음** (GitHub→Vercel 웹훅 신호 누락, 연결 자체는 Sep 2부터 유지 중)
 - 조치: 재트리거 push도 무반응 → jade가 Vercel **Create Deployment**(main 최신 커밋 선택 → Deploy to Production)로 수동 배포 → 밀린 변경 전부 반영 확인
 - 재발 대비: ① push 후 반영이 안 보이면 Deployments에서 해당 커밋의 배포 항목 존재부터 확인 ② 수동 배포 방법 = Deployments 우상단 ⋯ → Create Deployment → main 칩 클릭 → Deploy to Production ③ **토요일 블로그 루틴은 push=발행이므로, 자동 배포가 죽어 있으면 발행 실패** — push 직후 자동 배포 생성 여부 확인 필요 (02b1f7a push로 웹훅 복구 테스트함)
-- **9/22 밤 경과**: 수동 배포(e6fbc1f)로 서비스는 최신 상태 (무료 양식 메뉴·쓰레드 대기열·브리핑 규칙 모두 반영 확인). jade가 Settings→Git에서 **Disconnect→재연결 완료** ("Connected just now"). 이후 테스트 push 2건(02b1f7a, f33bab6)이 자동 배포로 잡히는지 **미확인 상태로 종료** — ⏭ 내일 확인할 것: ① Deployments에 f33bab6 항목 생겼는지 (없으면 GitHub Settings→Applications→Vercel→Repository access에 harubogo 포함 확인) ② 쓰레드 5편 10:10 자동 발행 여부 ③ 디스콰이엇 등록(키트 준비됨)
+- **9/22 밤 경과**: 수동 배포(e6fbc1f)로 서비스는 최신 상태 (무료 양식 메뉴·쓰레드 대기열·브리핑 규칙 모두 반영 확인). jade가 Settings→Git에서 **Disconnect→재연결 완료** ("Connected just now"). 이후 테스트 push 2건(02b1f7a, f33bab6)이 자동 배포로 잡히는지 **미확인 상태로 종료**
+- ✅ **9/23 종결 — 우회 배포선으로 복구 완료**:
+  - 진단 결과: GitHub Vercel 앱 Repository access에 harubogo 포함(정상), 프로젝트 Settings→Git 연결·토글 정상, vercel.json 결백, **mynotes 저장소 push는 배포가 생기는데 harubogo만 안 생김** → 설정 문제가 아닌 Vercel 쪽 내부 연동 오류로 결론 (재연결로도 안 풀림)
+  - 해결(플랜 B): **Vercel Deploy Hook(`github-push`, main) 생성 → GitHub harubogo 저장소 Settings→Webhooks에 그 URL을 push 이벤트 웹훅으로 등록** — Vercel 앱 웹훅이 죽어 있어도 push=배포가 되는 우회선
+  - 검증: 테스트 push `99fad2c` → 1분 내 자동 배포 Ready·Production 확인 (밀려 있던 f33bab6도 함께 배포됨). **push→배포 정상화, 토요일 블로그 루틴 안전**
+  - 유의: 우회선은 어느 브랜치에 push해도 main을 프로덕션 배포함 (harubogo는 main에만 push하므로 실사용 문제 없음). 훅 URL은 아는 사람이 배포를 트리거할 수 있으므로 기록·채팅에 남기지 않음. 나중에 Vercel 쪽이 저절로 복구되면 배포가 2번씩 생길 수 있는데, 그때 GitHub 웹훅을 지우면 됨
 
 ## PWA 앱 설치 지원 (9/22, jade 아이디어)
 
