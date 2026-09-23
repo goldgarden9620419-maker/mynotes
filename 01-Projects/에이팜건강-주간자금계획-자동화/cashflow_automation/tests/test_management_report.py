@@ -56,7 +56,7 @@ def test_경영보고_생성과_수식(tmp_path):
     assert mr.verify_management_workbook(out)
 
     wb = load_workbook(out)
-    ws = wb["주간보고"]
+    ws = wb["경영보고"]
     # ① 총잔액 합계 수식
     assert str(ws["C8"].value).startswith("=SUM(")
     # ② 4주(28일) 일별 표: 반영률 셀 참조 + 지출 SUMIFS + 시작잔액 연결
@@ -129,7 +129,7 @@ def test_경영보고_실행일_기준_지난_일자_숨김(tmp_path):
     assert mr.verify_management_workbook(out)
 
     wb = load_workbook(out)
-    ws = wb["주간보고"]
+    ws = wb["경영보고"]
     assert ws.row_dimensions[14].hidden          # 9/21 (지난 일자)
     assert ws.row_dimensions[15].hidden          # 9/22
     assert not ws.row_dimensions[16].hidden      # 9/23 (실행일)
@@ -166,7 +166,7 @@ def test_입금예정_표와_실지출_대조_확인란(tmp_path):
     assert mr.verify_management_workbook(out)
 
     wb = load_workbook(out)
-    ws = wb["주간보고"]
+    ws = wb["경영보고"]
     # ③ 첫 행 = 실행일(9/22) 온라인 예상: ②의 숨김 요일평균(J15)×반영률
     assert ws["C47"].value == "온라인 예상"
     assert "J15" in str(ws["E47"].value) and "$F$12" in str(ws["E47"].value)
@@ -209,5 +209,5 @@ def test_정기지출_체크_시트를_만들지_않는다(tmp_path):
     assert mr.verify_management_workbook(out)
 
     wb = load_workbook(out)
-    assert wb.sheetnames == [mr.SHEET_NAME]
+    assert wb.sheetnames == [mr.SHEET_NAME, mr.CEO_SHEET]
     wb.close()

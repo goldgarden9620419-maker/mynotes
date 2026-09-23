@@ -914,8 +914,8 @@ def _build_review_guide_sheet(ws, week_key: str, signature: str,
     dv.add(_REVIEW_CONFIRM_CELL)
     note = ws["C2"]
     note.value = (f"(주차 {week_key})  모든 시트를 검토한 뒤 왼쪽 B2를 "
-                  "'예'로 바꾸고 저장하세요 — 결과 3개(경영보고·대표보고 "
-                  "PDF·라이브)가 곧바로 만들어집니다.")
+                  "'예'로 바꾸고 저장하세요 — 통합 결과 파일(경영보고·"
+                  "대표보고·라이브 시트)이 곧바로 만들어집니다.")
     note.font = Font(name=_FONT, size=10, color="B36B00")
     ws[_REVIEW_WEEK_CELL] = week_key
     ws[_REVIEW_SIG_CELL] = signature

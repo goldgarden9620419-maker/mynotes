@@ -21,7 +21,7 @@ from typing import Optional
 from openpyxl import load_workbook
 from openpyxl.cell.cell import MergedCell
 
-from common import WEEKDAY_KO
+from common import PAY_METHOD_CARD, PAY_METHOD_TRANSFER, WEEKDAY_KO
 from excel_report import account_label
 
 
@@ -62,8 +62,16 @@ class LiveTemplateError(RuntimeError):
 
 
 def fill_live_workbook(template_path: Path, report: dict,
-                       out_path: Path) -> Path:
-    """템플릿의 수식·서식을 유지한 채 최신 값으로 채워 저장한다."""
+                       out_path: Path,
+                       link_sheet: str | None = None) -> Path:
+    """템플릿의 수식·서식을 유지한 채 최신 값으로 채워 저장한다.
+
+    link_sheet가 주어지면(통합 파일, 2026-09-23 사용자 요청) 그 시트
+    (경영보고)를 입력 기준으로 연동한다: 요약 B13 반영률 = 경영보고
+    F12 참조, 4주일별계획의 계획 행 확정입금·송금·카드·조정지출 칸 =
+    경영보고 ③·④ 표 SUMIFS. 경영보고에서 일자·금액을 고치면 라이브
+    전체(시나리오·13주·요약 포함)가 수식으로 즉시 재계산된다.
+    """
     template_path = Path(template_path)
     if not template_path.exists():
         raise LiveTemplateError(f"라이브 템플릿이 없습니다: {template_path}")
@@ -85,11 +93,13 @@ def fill_live_workbook(template_path: Path, report: dict,
     scen = report.get("account_scenario") or {}
     n_acc = len(scen.get("accounts") or [])
     _fill_config(wb["설정및분류"], forecast)
-    _fill_summary(wb["요약"], report, base_date, stats, n_acc)
+    _fill_summary(wb["요약"], report, base_date, stats, n_acc,
+                  link_sheet=link_sheet)
     _fill_daily(wb, forecast, base_date,
                 meta.get("run_date"), holidays=holidays,
                 scenario=scen, balances=report.get("balances"),
-                last_dates=report.get("account_last_dates"))
+                last_dates=report.get("account_last_dates"),
+                link_sheet=link_sheet)
     _fill_weekly(wb["13주주별계획"], forecast, base_date, n_acc)
     _fill_account_scenario(wb, report.get("account_scenario"),
                            holidays=holidays,
@@ -171,10 +181,14 @@ def _fill_config(ws, forecast: dict) -> None:
 
 
 def _fill_summary(ws, report: dict, base_date: date, stats: dict,
-                  n_acc: int = 0) -> None:
+                  n_acc: int = 0, link_sheet: str | None = None) -> None:
     from openpyxl.utils import get_column_letter as col_l
     ws["A3"] = (f"기준일 {base_date} | 농협·우리은행·국민은행 계좌 "
                 "거래내역 통합 (자동 갱신)")
+    if link_sheet:
+        # 통합 파일: 반영률 입력은 경영보고 F12 한 곳으로 통일한다
+        ws["B13"] = f"='{link_sheet}'!$F$12"
+        ws["B13"].number_format = "0%"
     ws["B6"] = round(report.get("total_balance") or 0)
     # 4주 기말·최저 잔액 수식을 일별계획의 기말잔액 열 위치로 재작성
     # (계좌 열 수에 따라 열이 이동한다)
@@ -237,7 +251,8 @@ def _fill_daily(wb, forecast: dict, base_date: date,
                 holidays: Optional[dict] = None,
                 scenario: Optional[dict] = None,
                 balances: Optional[dict] = None,
-                last_dates: Optional[dict] = None) -> None:
+                last_dates: Optional[dict] = None,
+                link_sheet: Optional[str] = None) -> None:
     """4주일별계획 시트를 처음부터 다시 그린다 (자동 생성).
 
     계좌별 예상잔고·입금 배분 열은 계좌별시나리오(행 1:1) 셀을 참조하는
@@ -279,8 +294,14 @@ def _fill_daily(wb, forecast: dict, base_date: date,
     title = _set(ws, 2, 1, "향후 4주 일별 자금계획")
     if title is not None:
         title.font = Font(name="맑은 고딕", bold=True, size=13, color=navy)
-    note_txt = ("온라인 예상입금은 최근 12주 요일별 평균 × 입금 반영률"
-                "(요약 B13)로 계산됩니다. 노란색 칸만 입력하세요.")
+    if link_sheet:
+        note_txt = (f"온라인 예상입금은 최근 12주 요일별 평균 × 입금 "
+                    f"반영률('{link_sheet}' F12 연동)로 계산됩니다. "
+                    f"지급일·금액·확정입금은 '{link_sheet}' 시트의 ③·④ "
+                    f"표에서 고치세요 — 이 표는 자동으로 따라옵니다.")
+    else:
+        note_txt = ("온라인 예상입금은 최근 12주 요일별 평균 × 입금 반영률"
+                    "(요약 B13)로 계산됩니다. 노란색 칸만 입력하세요.")
     if accounts:
         def _real(k):
             v = balances.get(k)
@@ -457,16 +478,54 @@ def _fill_daily(wb, forecast: dict, base_date: date,
         else:
             _put(row, lay["online"], _DAILY_ONLINE.format(r=row),
                  fmt=money, fill=online_fill)
-        vals = [None, None, None, None]
-        if src:
-            etc = (src.get("자동이체") or 0) + (src.get("기타지출") or 0)
-            vals = [src.get("확정·기타입금") or None,
-                    src.get("팀별 송금예정") or None,
-                    src.get("카드결제") or None,
-                    etc or None]
-        for key, v in zip(("conf", "transfer", "card", "etc"), vals):
-            _put(row, lay[key], round(v) if v else None,
-                 fmt=money, fill=edit_fill)
+        plan_row = not (src and (src.get("실적") or src.get("당일실적")))
+        if link_sheet and plan_row:
+            # 통합 파일: 계획 행의 확정입금·송금·카드·조정지출은 경영보고
+            # ③·④ 표를 SUMIFS로 참조한다 (2026-09-23 사용자 요청 —
+            # 경영보고에서 일자·금액을 고치면 이 표·시나리오·13주가
+            # 즉시 재계산). 이월일에는 전일 미집행 이월분을 더한다
+            L = f"'{link_sheet}'!"
+            inc = f"{L}$E$47:$E$68,{L}$A$47:$A$68,$A{row}"
+            exp = f"{L}$E$73:$E$166,{L}$A$73:$A$166,$A{row}"
+            meth = f"{L}$F$73:$F$166"
+            carr_tr = carr_card = carr_etc = carr_conf = 0
+            if intraday and d == intraday.get("이월일"):
+                remain = intraday.get("남은계획") or {}
+                carr_tr = round(remain.get("송금") or 0)
+                carr_card = round(remain.get("카드") or 0)
+                carr_etc = round((remain.get("자동이체") or 0)
+                                 + (intraday.get("_이월조정지출") or 0))
+                carr_conf = round(intraday.get("_이월확정") or 0)
+
+            def _plus(v):
+                return f"+{v}" if v else ""
+            money_flow = '#,##0"원";-#,##0"원";'
+            tr_ref = f"{col_l(lay['transfer'])}{row}"
+            card_ref = f"{col_l(lay['card'])}{row}"
+            _put(row, lay["conf"],
+                 f'=SUMIFS({inc},{L}$C$47:$C$68,"확정입금")'
+                 + _plus(carr_conf), fmt=money_flow, fill=calc_fill)
+            _put(row, lay["transfer"],
+                 f'=SUMIFS({exp},{meth},"{PAY_METHOD_TRANSFER}")'
+                 + _plus(carr_tr), fmt=money_flow, fill=calc_fill)
+            _put(row, lay["card"],
+                 f'=SUMIFS({exp},{meth},"{PAY_METHOD_CARD}")'
+                 + _plus(carr_card), fmt=money_flow, fill=calc_fill)
+            _put(row, lay["etc"],
+                 f"=SUMIFS({exp})"
+                 + _plus(carr_tr + carr_card + carr_etc)
+                 + f"-{tr_ref}-{card_ref}", fmt=money_flow, fill=calc_fill)
+        else:
+            vals = [None, None, None, None]
+            if src:
+                etc = (src.get("자동이체") or 0) + (src.get("기타지출") or 0)
+                vals = [src.get("확정·기타입금") or None,
+                        src.get("팀별 송금예정") or None,
+                        src.get("카드결제") or None,
+                        etc or None]
+            for key, v in zip(("conf", "transfer", "card", "etc"), vals):
+                _put(row, lay[key], round(v) if v else None,
+                     fmt=money, fill=edit_fill)
         ol, cl = col_l(lay["online"]), col_l(lay["conf"])
         el, fl, gl = (col_l(lay["transfer"]), col_l(lay["card"]),
                       col_l(lay["etc"]))

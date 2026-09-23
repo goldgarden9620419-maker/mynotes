@@ -23,7 +23,10 @@ from common import WEEKDAY_KO
 from excel_report import account_label
 from live_report import exec_window, outline_week_box
 
-SHEET_NAME = "주간보고"
+# 통합 파일(주간자금계획_일시.xlsx)의 첫 시트 이름 (2026-09-23 사용자
+# 요청: 경영보고·대표보고·라이브를 한 파일로 합치고 경영보고가 입력 기준)
+SHEET_NAME = "경영보고"
+CEO_SHEET = "대표보고"
 
 _NAVY = "1F4E79"
 _EDIT_FILL = PatternFill("solid", start_color="FFF2CC")   # 수정 가능 칸
@@ -106,6 +109,24 @@ def _section(ws, row, text):
 
 
 def create_management_workbook(report: dict, out_path: Path) -> Path:
+    """경영보고 시트만 담은 워크북 (라이브 템플릿이 없을 때의 대체용)."""
+    wb = Workbook()
+    wb.remove(wb.active)
+    build_management_sheet(wb, report)
+    build_ceo_sheet(wb, report)
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(out_path)
+    wb.close()
+    return out_path
+
+
+def build_management_sheet(wb, report: dict):
+    """'경영보고' 시트를 주어진 워크북의 맨 앞에 만든다.
+
+    노란 칸(반영률 F12·③ 확정입금 일자·금액·④ 지급일·금액·목표잔액)을
+    고치면 ②와 라이브 시트(SUMIFS 연동)까지 즉시 재계산된다.
+    """
     meta = report["meta"]
     forecast = report["forecast"]
     base_date: date = meta["base_date"]
@@ -117,9 +138,9 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     if start_balance is None:
         start_balance = report.get("total_balance") or 0
 
-    wb = Workbook()
-    ws = wb.active
-    ws.title = SHEET_NAME
+    if SHEET_NAME in wb.sheetnames:
+        wb.remove(wb[SHEET_NAME])
+    ws = wb.create_sheet(SHEET_NAME, 0)
     for c, w in zip(range(1, 12), (13, 6, 15, 40, 16, 14, 14, 12, 9,
                                    12, 12)):
         ws.column_dimensions[get_column_letter(c)].width = w
@@ -211,7 +232,21 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         _put(ws, row, 10,
              0 if d in holidays else round(weekday_avg.get(d.weekday(), 0)),
              fmt="#,##0")
-        _put(ws, row, 11, round(src.get("확정·기타입금") or 0), fmt="#,##0")
+        # K: 계획 행은 ③ 확정입금 표를 SUMIFS로 참조 — ③의 일자·금액을
+        # 고치면 ②와 (연동된) 라이브까지 즉시 재계산된다 (2026-09-23).
+        # 실적 행은 실제 값, 이월일은 전일 미도착 확정입금을 더한다
+        _k_sumifs = (f"=SUMIFS($E${_INC_FIRST}:$E${_INC_LAST},"
+                     f"$A${_INC_FIRST}:$A${_INC_LAST},A{row},"
+                     f"$C${_INC_FIRST}:$C${_INC_LAST},\"확정입금\")")
+        if is_actual:
+            _put(ws, row, 11, round(src.get("확정·기타입금") or 0),
+                 fmt="#,##0")
+        elif intraday and d == intraday.get("이월일"):
+            _put(ws, row, 11,
+                 _k_sumifs + f"+{round(intraday.get('_이월확정') or 0)}",
+                 fmt="#,##0")
+        else:
+            _put(ws, row, 11, _k_sumifs, fmt="#,##0")
         if is_actual:
             inflow = (src.get("온라인 예상입금") or 0) \
                 + (src.get("확정·기타입금") or 0)
@@ -280,18 +315,19 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
         if (adj.get("조정입금") or 0) > 0:
             adj_in_by_date.setdefault(adj.get("일자"), []).append(adj)
 
-    def _inc_row(r, d, gubun, naeyong, expect, actual):
+    def _inc_row(r, d, gubun, naeyong, expect, actual, editable=False):
         off = d is not None and (d.weekday() >= 5 or d in holidays)
         color = "C00000" if off else "000000"
+        edit = _EDIT_FILL if editable else None
         if d is not None:
             _put(ws, r, 1, datetime.combine(d, dtime()), fmt="yyyy-mm-dd",
-                 border=True, color=color)
+                 border=True, color=color, fill=edit)
             _put(ws, r, 2, WEEKDAY_KO[d.weekday()], align="center",
                  border=True, color=color)
         _put(ws, r, 3, gubun, border=True)
         _put(ws, r, 4, naeyong, border=True, align="left")
         if expect is not None:
-            _put(ws, r, 5, expect, fmt="#,##0", border=True)
+            _put(ws, r, 5, expect, fmt="#,##0", border=True, fill=edit)
         else:
             _put(ws, r, 5, "", border=True)
         if actual is not None:
@@ -318,7 +354,7 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
             if inc_row > _INC_LAST:
                 break
             _inc_row(inc_row, d, "확정입금", adj.get("내용") or "",
-                     round(adj.get("조정입금") or 0), None)
+                     round(adj.get("조정입금") or 0), None, editable=True)
             inc_row += 1
         if (d == run_date and today_actual
                 and (today_actual.get("기타입금") or 0) > 0
@@ -327,6 +363,19 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
                      None, today_actual.get("기타입금"))
             inc_row += 1
         d += timedelta(days=1)
+    # 창 밖(차주 금요일 이후~4주 끝) 확정입금도 표에 담는다(행 숨김) —
+    # ②의 K열과 라이브가 이 표 전체를 SUMIFS로 참조하므로, 여기 있어야
+    # 그 날짜의 확정입금이 계획에 반영되고 일자·금액 수정도 이어진다
+    horizon = base_date + timedelta(days=_DAY_COUNT - 1)
+    for adj_d in sorted(k for k in adj_in_by_date
+                        if k is not None and w_end < k <= horizon):
+        for adj in adj_in_by_date.get(adj_d, []):
+            if inc_row > _INC_LAST:
+                break
+            _inc_row(inc_row, adj_d, "확정입금", adj.get("내용") or "",
+                     round(adj.get("조정입금") or 0), None, editable=True)
+            ws.row_dimensions[inc_row].hidden = True
+            inc_row += 1
     for hr in range(inc_row, _INC_LAST + 1):
         ws.row_dimensions[hr].hidden = True
     _put(ws, _INC_TOTAL, 4, "합계(표시 구간)", bold=True, align="center")
@@ -471,12 +520,200 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     # '정기지출 체크' 시트는 만들지 않는다 (2026-09-23 사용자 확정:
     # 정기지출 관련은 결과파일에 넣지 않고, 누락 의심만 확인필요
     # 파일의 '정기지출누락' 시트에서 확인받는다)
+    return ws
 
-    out_path = Path(out_path)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
-    wb.close()
+
+def build_ceo_sheet(wb, report: dict):
+    """'대표보고' 시트 — 경영보고 셀을 수식으로 참조하는 한 장 요약.
+
+    2026-09-23 사용자 요청: PDF 대신 같은 파일 안의 시트로 만들고,
+    경영보고에서 일자·금액·반영률을 고치면 여기도 즉시 따라오게 하며,
+    그대로 인쇄하면 A4 한 장에 맞게 나온다.
+    """
+    from common import week_monday
+
+    meta = report["meta"]
+    forecast = report["forecast"]
+    base_date: date = meta["base_date"]
+    run_date = meta.get("run_date") or base_date
+    holidays = report.get("holidays") or {}
+    M = f"'{SHEET_NAME}'!"
+
+    if CEO_SHEET in wb.sheetnames:
+        wb.remove(wb[CEO_SHEET])
+    pos = 1 if SHEET_NAME in wb.sheetnames else 0
+    ws = wb.create_sheet(CEO_SHEET, pos)
+    for c, w in zip(range(1, 6), (24, 9, 17, 17, 17)):
+        ws.column_dimensions[get_column_letter(c)].width = w
+
+    def _sec(row, text):
+        for c in range(1, 6):
+            cell = ws.cell(row=row, column=c)
+            cell.fill = _HEAD_FILL
+            cell.border = _THIN
+        _put(ws, row, 1, text, bold=True, color="FFFFFF", size=11)
+
+    _put(ws, 1, 1, f"{meta.get('company', '')} 주간 자금계획 보고",
+         bold=True, size=15, color=_NAVY)
+    _put(ws, 2, 1,
+         f'="기준일 {base_date} · 작성 {meta.get("run_at", "")} · '
+         f'입금 반영률 "&TEXT({M}{_RATE_CELL},"0%")'
+         f'&" (경영보고 시트와 실시간 연동)"',
+         size=9, color="555555")
+
+    _sec(4, "핵심 요약")
+    labels = [
+        ("현재 전체 계좌잔액",
+         f"={M}C{6 + len(report.get('balances') or {})}", None),
+        ("4주 예상 기말잔액", f"={M}E{_DAY_LAST}", None),
+        ("4주 최저 예상잔액", f"={M}C{_SUM_ROW}",
+         f'=TEXT(INDEX({M}$A$14:$A$41,MATCH({M}C{_SUM_ROW},'
+         f'{M}$E$14:$E$41,0)),"m/d 예상")'),
+        ("향후 4주 확정지출", f"={M}E{_EXP_TOTAL}", None),
+        ("카드 결제 예정액(4주)",
+         f'=SUMIFS({M}$E${_EXP_FIRST}:$E${_EXP_LAST},'
+         f'{M}$F${_EXP_FIRST}:$F${_EXP_LAST},"법인카드")', None),
+        ("자금부족 예상일",
+         f'=IFERROR(TEXT(INDEX({M}$A$14:$A$41,MATCH(TRUE,'
+         f'INDEX({M}$E$14:$E$41<0,0),0)),"yyyy-mm-dd"),"없음")', "text"),
+        ("확인필요 건수", f"{len(report.get('issues', []))}건", "text"),
+        ("자료 미제출 팀",
+         ", ".join(report.get("missing_teams", [])) or "없음", "text"),
+    ]
+    r = 5
+    for label, value, extra in labels:
+        _put(ws, r, 1, label, bold=True, border=True)
+        _put(ws, r, 3, value, border=True,
+             fmt=None if extra == "text" else "#,##0")
+        if extra and extra != "text":
+            _put(ws, r, 4, extra, size=9, color="808080", border=True)
+        r += 1
+    verdict_row = r + 1
+    ws.merge_cells(start_row=verdict_row, start_column=1,
+                   end_row=verdict_row, end_column=5)
+    v = _put(ws, verdict_row, 1, f"={M}A{_VERDICT_ROW}", bold=True,
+             color=_NAVY)
+    v.alignment = Alignment(horizontal="left", vertical="center",
+                            wrap_text=True)
+
+    # 금주(주말 실행이면 차주) 월~금 일별 전망 — 경영보고 ② 행을 참조
+    display_monday = week_monday(run_date)
+    if run_date.weekday() >= 5:
+        display_monday += timedelta(days=7)
+    word = "차주" if display_monday > week_monday(run_date) else "금주"
+    day_head = verdict_row + 2
+    _sec(day_head, f"{word} 일별 잔액 전망 (월~금) — 반영률·지출 수정과 "
+                   "실시간 연동")
+    for c, head in enumerate(("일자", "요일", "예상 기말잔액", "상태"),
+                             start=1):
+        _put(ws, day_head + 1, c, head, bold=True, color="FFFFFF",
+             fill=_HEAD_FILL, align="center", border=True)
+    off0 = (display_monday - base_date).days
+    for i in range(5):
+        rr = day_head + 2 + i
+        src_row = _DAY_FIRST + off0 + i
+        d = display_monday + timedelta(days=i)
+        in_table = 0 <= off0 + i < _DAY_COUNT
+        color = "C00000" if (d.weekday() >= 5 or d in holidays) else "000000"
+        _put(ws, rr, 1, f"={M}A{src_row}" if in_table else
+             datetime.combine(d, dtime()), fmt="yyyy-mm-dd", border=True,
+             color=color)
+        _put(ws, rr, 2, WEEKDAY_KO[d.weekday()], align="center",
+             border=True, color=color)
+        _put(ws, rr, 3, f"={M}E{src_row}" if in_table else "",
+             fmt="#,##0", border=True)
+        _put(ws, rr, 4, f'=IF(C{rr}<0,"부족","")', align="center",
+             border=True, color="C00000")
+    ws.conditional_formatting.add(
+        f"C{day_head + 2}:C{day_head + 6}",
+        CellIsRule(operator="lessThan", formula=["0"], fill=_RED_FILL))
+
+    # 반영률 시나리오 — 경영보고 ⑤ 표(80·90·100%)를 그대로 참조
+    sc_head = day_head + 8
+    _sec(sc_head, "입금 반영률 시나리오 (80·90·100%) — 필요 추가 입금")
+    for c, head in enumerate(("반영률", "", "4주 기말잔액", "4주 최저잔액",
+                              "필요 추가 입금"), start=1):
+        if head:
+            _put(ws, sc_head + 1, c, head, bold=True, color="FFFFFF",
+                 fill=_HEAD_FILL, align="center", border=True)
+    for i in range(3):
+        rr = sc_head + 2 + i
+        sr = _SC_FIRST + i
+        _put(ws, rr, 1, f"={M}A{sr}", fmt="0%", align="center", border=True)
+        _put(ws, rr, 3, f"={M}C{sr}", fmt="#,##0", border=True)
+        _put(ws, rr, 4, f"={M}D{sr}", fmt="#,##0", border=True)
+        _put(ws, rr, 5, f"={M}F{sr}", fmt="#,##0", border=True, bold=True)
+    note_row = sc_head + 6
+    _put(ws, note_row, 1,
+         f'="· 목표 최저잔액 "&TEXT({M}{_TARGET_CELL},"#,##0")&"원 기준. '
+         f'시나리오 값은 실행 시점 계산이며, 반영률·지출 수정은 위 표와 '
+         f'경영보고에 즉시 반영됩니다."', size=9, color="808080")
+    _put(ws, note_row + 1, 1,
+         "· 대외비 항목은 분류·총액으로만 표시됩니다. 상세 내역은 같은 "
+         "파일의 경영보고·지출계획_취합 시트를 확인하십시오.",
+         size=9, color="808080")
+
+    # A4 세로 한 장에 맞춤 — 그대로 인쇄하면 바로 보고용
+    from openpyxl.worksheet.page import PageMargins
+    from openpyxl.worksheet.properties import PageSetupProperties
+    ws.print_area = f"A1:E{note_row + 1}"
+    ws.page_setup.orientation = "portrait"
+    ws.page_setup.paperSize = 9              # A4
+    ws.page_setup.fitToWidth = 1
+    ws.page_setup.fitToHeight = 1
+    ws.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
+    ws.page_margins = PageMargins(left=0.5, right=0.5, top=0.6, bottom=0.6)
+    return ws
+
+
+def create_combined_workbook(report: dict, template_path: Path,
+                             out_path: Path) -> Path:
+    """통합 결과 파일 하나를 만든다 (2026-09-23 사용자 요청).
+
+    시트 순서: 경영보고(입력 기준) → 대표보고(A4 인쇄) → 라이브 시트들.
+    라이브의 일별 지출·확정입금 칸은 경영보고 ③·④ 표를 SUMIFS로
+    참조하므로, 경영보고에서 일자·금액·반영률(F12)을 고치면 라이브의
+    4주일별계획·계좌별시나리오·13주·요약까지 전부 즉시 재계산된다.
+    """
+    import live_report
+
+    live_report.fill_live_workbook(template_path, report, out_path,
+                                   link_sheet=SHEET_NAME)
+    wb = load_workbook(out_path)
+    try:
+        build_management_sheet(wb, report)
+        build_ceo_sheet(wb, report)
+        wb.active = 0
+        wb.save(out_path)
+    finally:
+        wb.close()
     return out_path
+
+
+def verify_combined_workbook(path: Path, base_date: date) -> bool:
+    """통합 파일 재열기 검증: 경영보고 수식 + 대표보고 연동 + 라이브."""
+    import live_report
+
+    if not verify_management_workbook(path):
+        return False
+    try:
+        wb = load_workbook(path)
+    except Exception:
+        return False
+    try:
+        if CEO_SHEET not in wb.sheetnames:
+            return False
+        ceo = wb[CEO_SHEET]
+        if not str(ceo["C5"].value or "").startswith(f"='{SHEET_NAME}'!"):
+            return False
+        summary = wb["요약"]
+        if str(summary["B13"].value or "") != f"='{SHEET_NAME}'!$F$12":
+            return False
+    except Exception:
+        return False
+    finally:
+        wb.close()
+    return live_report.verify_live_workbook(path, base_date)
 
 
 def verify_management_workbook(path: Path) -> bool:

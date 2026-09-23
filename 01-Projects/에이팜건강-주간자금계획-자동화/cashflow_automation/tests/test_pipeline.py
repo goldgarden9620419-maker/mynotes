@@ -32,9 +32,10 @@ def test_전체_파이프라인_성공(env):
     assert result.status == STATUS_SUCCESS, result.message
 
     out_dir = cfg.folder("output")
+    # 통합 파일 하나 (2026-09-23): PDF는 만들지 않는다 — '대표보고' 시트
     excels = list(out_dir.glob("주간자금계획_*.xlsx"))
-    pdfs = list(out_dir.glob("주간자금계획_대표보고_*.pdf"))
-    assert len(excels) == 1 and len(pdfs) == 1
+    assert len(excels) == 1
+    assert not list(out_dir.glob("*.pdf"))
     # 확인필요는 05_결과가 아니라 06_확인필요 폴더에만 둔다
     assert not list(out_dir.glob("확인필요_*.xlsx"))
     assert len(list(cfg.folder("review").glob("확인필요_*.xlsx"))) == 1
@@ -52,7 +53,7 @@ def test_전체_파이프라인_성공(env):
     wb = load_workbook(excels[0], read_only=True)
     try:
         texts = []
-        for row in wb["주간보고"].iter_rows(values_only=True):
+        for row in wb["경영보고"].iter_rows(values_only=True):
             texts.extend(str(v) for v in row if v is not None)
         joined = " ".join(texts)
         assert "가상급여처리" not in joined
@@ -79,11 +80,11 @@ def test_같은_주차_중복_실행_방지(env):
     forced = _run(cfg, state, force=True)
     assert forced.status == STATUS_SUCCESS
     excels = sorted(cfg.folder("output")
-                    .glob("주간자금계획_경영보고_*.xlsx"))
+                    .glob("주간자금계획_*.xlsx"))
     assert len(excels) == 1
     assert excels[0].stem.endswith("_2")  # 새 실행분 (이름 충돌 회피)
     archived = sorted((cfg.folder("archive") / "지난결과")
-                      .glob("주간자금계획_경영보고_*.xlsx"))
+                      .glob("주간자금계획_*.xlsx"))
     assert len(archived) == 1 and not archived[0].stem.endswith("_2")
 
 
@@ -174,11 +175,11 @@ def test_재실행시_이전_결과는_지난자료로_이동(env):
 
     out_dir = cfg.folder("output")
     assert len(list(out_dir.glob("주간자금계획_*.xlsx"))) == 1
-    assert len(list(out_dir.glob("주간자금계획_대표보고_*.pdf"))) == 1
+    assert not list(out_dir.glob("*.pdf"))
     assert not list(out_dir.glob("확인필요_*.xlsx"))   # 06 폴더에만 둔다
-    # 이전 실행분은 삭제되지 않고 지난자료로 이동
+    # 이전 실행분(통합 파일)은 삭제되지 않고 지난자료로 이동
     archive = cfg.folder("archive") / "지난결과"
-    assert len(list(archive.glob("주간자금계획_*"))) >= 2
+    assert len(list(archive.glob("주간자금계획_*"))) >= 1
     # 06_확인필요 폴더도 최신 파일 하나만 유지
     assert len(list(cfg.folder("review").glob("확인필요_*.xlsx"))) == 1
 
@@ -239,8 +240,8 @@ def test_확인후_결과생성_2단계(env):
     done = _run(cfg, state, mode="manual")
     assert done.status == STATUS_SUCCESS, done.message
     out = cfg.folder("output")
-    assert len(list(out.glob("주간자금계획_경영보고_*.xlsx"))) == 1
-    assert len(list(out.glob("주간자금계획_대표보고_*.pdf"))) == 1
+    assert len(list(out.glob("주간자금계획_*.xlsx"))) == 1
+    assert not list(out.glob("*.pdf"))
     assert not list(out.glob("확인필요_*.xlsx"))
     # 확인된 검토 파일은 그대로 남는다
     assert reviews[0].exists()
@@ -283,7 +284,7 @@ def test_확인대기_주기검사가_완료를_감지한다(env):
     service._periodic_check()
     state.reload()
     assert state.state["last_run_status"] == STATUS_SUCCESS
-    assert list(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
+    assert list(cfg.folder("output").glob("주간자금계획_*.xlsx"))
 
 
 def test_실행창_확인대기가_저장을_즉시_감지(env):
@@ -309,7 +310,7 @@ def test_실행창_확인대기가_저장을_즉시_감지(env):
     res = app_module._wait_for_confirmation(cfg, state, LOG,
                                             poll_seconds=0.01, now=NOW)
     assert res.status == STATUS_SUCCESS, res.message
-    assert list(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
+    assert list(cfg.folder("output").glob("주간자금계획_*.xlsx"))
 
 
 def test_확인감시_틱이_저장을_감지한다(env):
@@ -376,11 +377,11 @@ def test_대외비_가림_해제시_상세_표시(env):
     state = StateManager(cfg.state_dir)
     assert _run(cfg, state).status == STATUS_SUCCESS
 
-    out = next(cfg.folder("output").glob("주간자금계획_경영보고_*.xlsx"))
+    out = next(cfg.folder("output").glob("주간자금계획_*.xlsx"))
     wb = load_workbook(out, read_only=True)
     try:
         texts = " ".join(str(v)
-                         for row in wb["주간보고"].iter_rows(values_only=True)
+                         for row in wb["경영보고"].iter_rows(values_only=True)
                          for v in row if v is not None)
     finally:
         wb.close()
