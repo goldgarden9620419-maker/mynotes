@@ -36,35 +36,44 @@ _RED_FILL = PatternFill("solid", start_color="FFC7CE")
 _DIFF_FILL = PatternFill("solid", start_color="FFE699")   # 계획·실제 차이
 _THIN = Border(*(Side(style="thin", color="BBBBBB"),) * 4)
 
-# 일별 흐름 표: 기준일부터 4주(28일)
-_DAY_FIRST, _DAY_COUNT = 14, 28
-_DAY_LAST = _DAY_FIRST + _DAY_COUNT - 1          # 41
-_SUM_ROW = _DAY_LAST + 1                         # 42: 최저·기말
-_VERDICT_ROW = _SUM_ROW + 1                      # 43: 판정문
+# 섹션 순서 (2026-09-23 사용자 요청: 지출예정 표를 현황 바로 다음으로
+# 올려 지급일·금액을 위에서 바로 고치게 한다):
+# ① 현재 자금 현황(계좌 6~11, 총잔액 12행 고정 + 반영률 F12)
+# ② 반영된 지출예정  ③ 반영된 입금예정  ④ 4주 일별 흐름
+# ⑤ 필요 추가 입금  ⑥ 메모
+_ACC_FIRST, _ACC_MAX = 6, 6                      # 계좌 행 6..11 (고정 폭)
+_TOTAL_ROW = 12                                  # 총잔액 (고정)
+_RATE_CELL = "$F$12"                             # 입금 반영률 (총잔액 행)
 
-# 입금 예정 표(③): 실행일~차주 금요일 창의 온라인 예상·확정입금 항목과
-# 실입금(은행 확인) 대조 (2026-09-22 사용자 요청)
-_INC_HEAD = _VERDICT_ROW + 2                     # 45: 섹션 띠
-_INC_COLS = _INC_HEAD + 1                        # 46: 열 머리글
-_INC_FIRST, _INC_LAST = _INC_COLS + 1, 68        # 47..68
-_INC_TOTAL = _INC_LAST + 1                       # 69
+# ② 지출 예정 표의 데이터 행 범위 (SUMIFS가 참조하는 고정 구간)
+_EXP_HEAD = 14                                   # 섹션 띠
+_EXP_COLS = _EXP_HEAD + 1                        # 15: 열 머리글
+_EXP_FIRST, _EXP_LAST = _EXP_COLS + 1, 109       # 16..109
+_EXP_TOTAL = _EXP_LAST + 1                       # 110
 
-# 지출 예정 표의 데이터 행 범위 (SUMIFS가 참조하는 고정 구간)
-_EXP_HEAD = _INC_TOTAL + 2                       # 71: 섹션 띠
-_EXP_COLS = _EXP_HEAD + 1                        # 72: 열 머리글
-_EXP_FIRST, _EXP_LAST = _EXP_COLS + 1, 166       # 73..166
-_EXP_TOTAL = _EXP_LAST + 1                       # 167
+# ③ 입금 예정 표: 온라인 예상·확정입금 항목과 실입금(은행 확인) 대조
+_INC_HEAD = _EXP_TOTAL + 2                       # 112: 섹션 띠
+_INC_COLS = _INC_HEAD + 1                        # 113: 열 머리글
+_INC_FIRST, _INC_LAST = _INC_COLS + 1, 135       # 114..135
+_INC_TOTAL = _INC_LAST + 1                       # 136
 
-_TARGET_HEAD = _EXP_TOTAL + 2                    # 169
-_TARGET_ROW = _TARGET_HEAD + 1                   # 170: 목표 최저잔액
-_SC_COLS = _TARGET_ROW + 1                       # 171
-_SC_FIRST = _SC_COLS + 1                         # 172..174
+# ④ 일별 흐름 표: 기준일부터 4주(28일)
+_DAY_HEAD = _INC_TOTAL + 2                       # 138: 섹션 띠
+_DAY_COLS = _DAY_HEAD + 1                        # 139: 열 머리글
+_DAY_FIRST, _DAY_COUNT = _DAY_COLS + 1, 28       # 140..167
+_DAY_LAST = _DAY_FIRST + _DAY_COUNT - 1          # 167
+_SUM_ROW = _DAY_LAST + 1                         # 168: 최저·기말
+_VERDICT_ROW = _SUM_ROW + 1                      # 169: 판정문
 
-_RATE_CELL = "$F$12"
+_TARGET_HEAD = _VERDICT_ROW + 2                  # 171
+_TARGET_ROW = _TARGET_HEAD + 1                   # 172: 목표 최저잔액
+_SC_COLS = _TARGET_ROW + 1                       # 173
+_SC_FIRST = _SC_COLS + 1                         # 174..176
+
 # 목표 최저잔액 입력칸 — B열(요일용, 좁음)을 피해 C열에 둔다
 _TARGET_CELL = f"$C${_TARGET_ROW}"
-# 시작잔액·②용 숨김 도우미는 J·K열 (G·H는 ④ 실지출·차이 열로 사용)
-_START_CELL = "$K$13"
+# 시작잔액·④용 숨김 도우미는 J·K열 (G·H는 ② 실지출·차이 열로 사용)
+_START_CELL = f"$K${_DAY_COLS}"
 
 
 def _font(bold=False, size=10, color="000000"):
@@ -124,8 +133,10 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
 def build_management_sheet(wb, report: dict):
     """'경영보고' 시트를 주어진 워크북의 맨 앞에 만든다.
 
-    노란 칸(반영률 F12·③ 확정입금 일자·금액·④ 지급일·금액·목표잔액)을
-    고치면 ②와 라이브 시트(SUMIFS 연동)까지 즉시 재계산된다.
+    섹션 순서(2026-09-23 사용자 요청): ① 현황 → ② 지출예정(수정) →
+    ③ 입금예정(수정) → ④ 4주 일별 흐름 → ⑤ 필요 추가 입금 → ⑥ 메모.
+    노란 칸(반영률 F12·② 지급일·금액·③ 확정입금 일자·금액·목표잔액)을
+    고치면 ④와 라이브 시트(SUMIFS 연동)까지 즉시 재계산된다.
     """
     meta = report["meta"]
     forecast = report["forecast"]
@@ -155,10 +166,11 @@ def build_management_sheet(wb, report: dict):
                    f"실행일~차주 금요일만 표시 (그 밖의 일자 행은 숨김 — "
                    f"행 숨기기 해제로 열람 가능)",
          size=9, color="555555")
-    _put(ws, 3, 1, "노란 칸(입금 반영률·목표 최저잔액·지출 지급일·금액)을 "
-                   "고치면 아래 모든 수치가 즉시 다시 계산됩니다. "
-                   "④ 지출예정에서 실지출과 차이 나는 행(주황)은 확인(I열) "
-                   "드롭다운으로 확인 표시하세요.",
+    _put(ws, 3, 1, "노란 칸(입금 반영률 F12·② 지출 지급일·금액·③ 확정입금·"
+                   "목표 최저잔액)을 고치면 이 시트의 ④ 일별 흐름과 라이브 "
+                   "시트 전체가 즉시 다시 계산됩니다. ② 지출예정에서 "
+                   "실지출과 차이 나는 행(주황)은 확인(I열) 드롭다운으로 "
+                   "표시하세요.",
          size=9, color="B36B00")
 
     # ① 현재 자금 현황 -----------------------------------------------------
@@ -166,26 +178,22 @@ def build_management_sheet(wb, report: dict):
     labels = report.get("account_labels", {})
     last_dates = report.get("account_last_dates", {})
     balances = sorted(report.get("balances", {}).items())
-    r = 6
-    for key, amount in balances:
+    # 계좌 행은 6~11로 고정하고 총잔액은 항상 12행 — 아래 표들의 행
+    # 위치(수식 참조 구간)가 계좌 수와 무관하게 일정해진다 (2026-09-23)
+    for i, (key, amount) in enumerate(balances[:_ACC_MAX]):
+        r = _ACC_FIRST + i
         _put(ws, r, 1, labels.get(key) or account_label(*key), border=True)
         _put(ws, r, 3, round(amount or 0), fmt="#,##0", border=True)
         last = last_dates.get(key)
         _put(ws, r, 4, f"최종 거래일 {last}" if last else "", size=9,
              color="808080")
-        r += 1
-    total_row = r
-    _put(ws, total_row, 1, "총잔액", bold=True, border=True)
-    _put(ws, total_row, 3, f"=SUM(C6:C{total_row - 1})", bold=True,
-         fmt="#,##0", border=True)
-
-    # ② 향후 4주 일별 자금 흐름 --------------------------------------------
-    _section(ws, 12, "② 향후 4주 일별 자금 흐름 "
-                     "(실행일~차주 금요일만 표시 · 계산은 4주 전체)")
-    _put(ws, 12, 5, "입금 반영률", bold=True, color="FFFFFF")
-    _put(ws, 12, 6, rate, fill=_EDIT_FILL, fmt="0%", align="center",
+    _put(ws, _TOTAL_ROW, 1, "총잔액", bold=True, border=True)
+    _put(ws, _TOTAL_ROW, 3, f"=SUM(C{_ACC_FIRST}:C{_TOTAL_ROW - 1})",
+         bold=True, fmt="#,##0", border=True)
+    # 입금 반영률은 총잔액 행 옆(F12) — 라이브·수식이 모두 이 칸을 본다
+    _put(ws, _TOTAL_ROW, 5, "입금 반영률", bold=True)
+    _put(ws, _TOTAL_ROW, 6, rate, fill=_EDIT_FILL, fmt="0%", align="center",
          border=True)
-    # 라이브 파일처럼 드롭다운으로 반영률을 고른다 (고르면 즉시 재계산)
     from openpyxl.worksheet.datavalidation import DataValidation
     rate_options = sorted(report.get("receipt_rates")
                           or [0.6, 0.7, 0.8, 0.9, 1.0])
@@ -198,11 +206,6 @@ def build_management_sheet(wb, report: dict):
     rate_dv.showErrorMessage = True
     ws.add_data_validation(rate_dv)
     rate_dv.add(_RATE_CELL.replace("$", ""))
-    for c, head in enumerate(("일자", "요일", "입금", "지출", "예상잔액",
-                              "상태"), start=1):
-        _put(ws, 13, c, head, bold=True, color="FFFFFF", fill=_HEAD_FILL,
-             align="center", border=True)
-    _put(ws, 13, 11, round(start_balance), fmt="#,##0")  # K13: 시작잔액(숨김)
 
     holidays = report.get("holidays") or {}
     intraday = forecast.get("intraday") or {}
@@ -211,6 +214,169 @@ def build_management_sheet(wb, report: dict):
     w_start, w_end = exec_window(meta.get("run_date") or base_date)
     table_end = base_date + timedelta(days=_DAY_COUNT - 1)
     hide_window = w_start <= table_end and w_end >= base_date
+
+    # ② 반영된 지출예정 전체 (수정 가능 + 실지출 대조·확인란).
+    # 2026-09-23 사용자 요청으로 현황 바로 다음에 둔다 — 여기서
+    # 지급일·금액을 고치면 ④ 일별 흐름과 라이브 전 시트가 재계산
+    _section(ws, _EXP_HEAD, "② 반영된 지출예정 (실행일~차주 금요일 표시) — "
+                            "지급일·금액(노란 칸)을 고치면 아래 ④ 일별 "
+                            "흐름과 라이브 시트 전체가 다시 계산됩니다 · "
+                            "실지출과 차이 나는 행(주황)은 확인(I열) 선택")
+    for c, head in enumerate(("지급일", "요일", "구분", "내용", "금액",
+                              "지급방법", "실지출(은행 확인)", "차이(잔여)",
+                              "확인"), start=1):
+        _put(ws, _EXP_COLS, c, head, bold=True, color="FFFFFF",
+             fill=_HEAD_FILL, align="center", border=True)
+    intraday_chk = (report.get("intraday_check")
+                    or forecast.get("intraday") or {})
+    check_by_id = {det.get("요청ID"): det
+                   for det in (intraday_chk.get("대조내역") or [])
+                   if det.get("요청ID")}
+    confirm_dv = DataValidation(type="list", formula1='"확인"',
+                                allow_blank=True)
+    ws.add_data_validation(confirm_dv)
+    row = _EXP_FIRST
+    for item in report.get("week_expenses", []):
+        if row > _EXP_LAST:
+            break
+        d = item.get("일자")
+        # 창 밖 지급일 행도 숨긴다 — 값은 남아 ②·합계 계산에는 그대로 반영
+        if hide_window and isinstance(d, date):
+            dd = d.date() if isinstance(d, datetime) else d
+            ws.row_dimensions[row].hidden = not (w_start <= dd <= w_end)
+        # 주말·공휴일 지급일은 붉은 글자 (직접 고친 날짜는 색 유지)
+        off = isinstance(d, date) and (d.weekday() >= 5 or d in holidays)
+        day_color = "C00000" if off else "000000"
+        _put(ws, row, 1,
+             datetime.combine(d, dtime()) if isinstance(d, date) else d,
+             fmt="yyyy-mm-dd", fill=_EDIT_FILL, border=True, color=day_color)
+        _put(ws, row, 2, f'=IF(A{row}="","",MID("월화수목금토일",'
+                         f'WEEKDAY(A{row},2),1))', align="center", border=True,
+             color=day_color)
+        _put(ws, row, 3, item.get("구분") or "", border=True)
+        _put(ws, row, 4, item.get("내용") or "", border=True, align="left")
+        _put(ws, row, 5, round(item.get("금액") or 0), fmt="#,##0",
+             fill=_EDIT_FILL, border=True)
+        _put(ws, row, 6, item.get("지급방법") or "", align="center",
+             border=True)
+        # 실지출 대조: 당일 대조(intraday) 결과를 요청ID로 연결한다.
+        # 차이 나는 행은 주황으로 강조하고 확인란(I) 드롭다운을 단다
+        det = check_by_id.get(item.get("요청ID"))
+        if det is not None:
+            mismatch = det.get("상태") != "집행 확인"
+            fill = _DIFF_FILL if mismatch else None
+            _put(ws, row, 7, round(det.get("집행액") or 0), fmt="#,##0",
+                 border=True, fill=fill)
+            _put(ws, row, 8, f'=IF(G{row}="","",E{row}-G{row})',
+                 fmt="#,##0", border=True, fill=fill)
+            _put(ws, row, 9, "", border=True,
+                 fill=_EDIT_FILL if mismatch else None, align="center")
+            if mismatch:
+                confirm_dv.add(f"I{row}")
+        else:
+            for c in (7, 8, 9):
+                _put(ws, row, c, "", border=True)
+        row += 1
+    exp_next_row = row
+    _put(ws, _EXP_TOTAL, 4, "합계(숨긴 행 포함 4주 전체)", bold=True,
+         align="center")
+    _put(ws, _EXP_TOTAL, 5, f"=SUM(E{_EXP_FIRST}:E{_EXP_LAST})",
+         bold=True, fmt="#,##0")
+    # 머리글에 자동 필터 — 지급일·구분별로 골라 볼 수 있다
+    ws.auto_filter.ref = f"A{_EXP_COLS}:I{_EXP_LAST}"
+
+    # ③ 반영된 입금예정 (표시·대조용, 2026-09-22 사용자 요청) --------------
+    _section(ws, _INC_HEAD, "③ 반영된 입금예정 (실행일~차주 금요일) — "
+                            "예상은 반영률(F12) 연동 · 실입금은 은행 확인 값")
+    for c, head in enumerate(("입금일", "요일", "구분", "내용", "예상금액",
+                              "실입금(은행 확인)", "차이"), start=1):
+        _put(ws, _INC_COLS, c, head, bold=True, color="FFFFFF",
+             fill=_HEAD_FILL, align="center", border=True)
+    run_date = meta.get("run_date") or base_date
+    today_actual = forecast.get("today_actual") or {}
+    adj_in_by_date: dict = {}
+    for adj in report.get("adjustments") or []:
+        if (adj.get("조정입금") or 0) > 0:
+            adj_in_by_date.setdefault(adj.get("일자"), []).append(adj)
+
+    def _inc_row(r, d, gubun, naeyong, expect, actual, editable=False):
+        off = d is not None and (d.weekday() >= 5 or d in holidays)
+        color = "C00000" if off else "000000"
+        edit = _EDIT_FILL if editable else None
+        if d is not None:
+            _put(ws, r, 1, datetime.combine(d, dtime()), fmt="yyyy-mm-dd",
+                 border=True, color=color, fill=edit)
+            _put(ws, r, 2, WEEKDAY_KO[d.weekday()], align="center",
+                 border=True, color=color)
+        _put(ws, r, 3, gubun, border=True)
+        _put(ws, r, 4, naeyong, border=True, align="left")
+        if expect is not None:
+            _put(ws, r, 5, expect, fmt="#,##0", border=True, fill=edit)
+        else:
+            _put(ws, r, 5, "", border=True)
+        if actual is not None:
+            _put(ws, r, 6, round(actual), fmt="#,##0", border=True,
+                 fill=_ACT_FILL)
+        else:
+            _put(ws, r, 6, "", border=True)
+        _put(ws, r, 7, f'=IF(OR(F{r}="",E{r}=""),"",F{r}-E{r})',
+             fmt="#,##0", border=True)
+
+    inc_row = _INC_FIRST
+    d = w_start
+    while d <= w_end and inc_row <= _INC_LAST:
+        offset = (d - base_date).days
+        day_row = _DAY_FIRST + offset if 0 <= offset < _DAY_COUNT else None
+        expect = (f"=ROUND(J{day_row}*{_RATE_CELL},0)"
+                  if day_row is not None else 0)
+        actual = (today_actual.get("온라인")
+                  if d == run_date and today_actual else None)
+        _inc_row(inc_row, d, "온라인 예상", "12주 요일평균 × 반영률",
+                 expect, actual)
+        inc_row += 1
+        for adj in adj_in_by_date.get(d, []):
+            if inc_row > _INC_LAST:
+                break
+            _inc_row(inc_row, d, "확정입금", adj.get("내용") or "",
+                     round(adj.get("조정입금") or 0), None, editable=True)
+            inc_row += 1
+        if (d == run_date and today_actual
+                and (today_actual.get("기타입금") or 0) > 0
+                and inc_row <= _INC_LAST):
+            _inc_row(inc_row, d, "기타 실입금", "계획 외 입금(은행 확인)",
+                     None, today_actual.get("기타입금"))
+            inc_row += 1
+        d += timedelta(days=1)
+    # 창 밖(차주 금요일 이후~4주 끝) 확정입금도 표에 담는다(행 숨김) —
+    # ②의 K열과 라이브가 이 표 전체를 SUMIFS로 참조하므로, 여기 있어야
+    # 그 날짜의 확정입금이 계획에 반영되고 일자·금액 수정도 이어진다
+    horizon = base_date + timedelta(days=_DAY_COUNT - 1)
+    for adj_d in sorted(k for k in adj_in_by_date
+                        if k is not None and w_end < k <= horizon):
+        for adj in adj_in_by_date.get(adj_d, []):
+            if inc_row > _INC_LAST:
+                break
+            _inc_row(inc_row, adj_d, "확정입금", adj.get("내용") or "",
+                     round(adj.get("조정입금") or 0), None, editable=True)
+            ws.row_dimensions[inc_row].hidden = True
+            inc_row += 1
+    for hr in range(inc_row, _INC_LAST + 1):
+        ws.row_dimensions[hr].hidden = True
+    _put(ws, _INC_TOTAL, 4, "합계(표시 구간)", bold=True, align="center")
+    _put(ws, _INC_TOTAL, 5, f"=SUM(E{_INC_FIRST}:E{_INC_LAST})",
+         bold=True, fmt="#,##0")
+    _put(ws, _INC_TOTAL, 6, f"=SUM(F{_INC_FIRST}:F{_INC_LAST})",
+         bold=True, fmt="#,##0")
+
+    # ④ 향후 4주 일별 자금 흐름 --------------------------------------------
+    _section(ws, _DAY_HEAD, "④ 향후 4주 일별 자금 흐름 — ② 지출·③ 입금 "
+                            "수정과 반영률(F12)에 즉시 연동 "
+                            "(실행일~차주 금요일만 표시 · 계산은 4주 전체)")
+    for c, head in enumerate(("일자", "요일", "입금", "지출", "예상잔액",
+                              "상태"), start=1):
+        _put(ws, _DAY_COLS, c, head, bold=True, color="FFFFFF",
+             fill=_HEAD_FILL, align="center", border=True)
+    _put(ws, _DAY_COLS, 11, round(start_balance), fmt="#,##0")  # 시작잔액
 
     for i in range(_DAY_COUNT):
         row = _DAY_FIRST + i
@@ -301,155 +467,6 @@ def build_management_sheet(wb, report: dict):
          f'가능합니다.","향후 4주 최대 부족 "&TEXT(-C{_SUM_ROW},"#,##0")'
          f'&"원 — 지출 일정 조정 또는 자금 조치가 필요합니다.")', bold=True)
 
-    # ③ 반영된 입금예정 (표시·대조용, 2026-09-22 사용자 요청) --------------
-    _section(ws, _INC_HEAD, "③ 반영된 입금예정 (실행일~차주 금요일) — "
-                            "예상은 반영률(F12) 연동 · 실입금은 은행 확인 값")
-    for c, head in enumerate(("입금일", "요일", "구분", "내용", "예상금액",
-                              "실입금(은행 확인)", "차이"), start=1):
-        _put(ws, _INC_COLS, c, head, bold=True, color="FFFFFF",
-             fill=_HEAD_FILL, align="center", border=True)
-    run_date = meta.get("run_date") or base_date
-    today_actual = forecast.get("today_actual") or {}
-    adj_in_by_date: dict = {}
-    for adj in report.get("adjustments") or []:
-        if (adj.get("조정입금") or 0) > 0:
-            adj_in_by_date.setdefault(adj.get("일자"), []).append(adj)
-
-    def _inc_row(r, d, gubun, naeyong, expect, actual, editable=False):
-        off = d is not None and (d.weekday() >= 5 or d in holidays)
-        color = "C00000" if off else "000000"
-        edit = _EDIT_FILL if editable else None
-        if d is not None:
-            _put(ws, r, 1, datetime.combine(d, dtime()), fmt="yyyy-mm-dd",
-                 border=True, color=color, fill=edit)
-            _put(ws, r, 2, WEEKDAY_KO[d.weekday()], align="center",
-                 border=True, color=color)
-        _put(ws, r, 3, gubun, border=True)
-        _put(ws, r, 4, naeyong, border=True, align="left")
-        if expect is not None:
-            _put(ws, r, 5, expect, fmt="#,##0", border=True, fill=edit)
-        else:
-            _put(ws, r, 5, "", border=True)
-        if actual is not None:
-            _put(ws, r, 6, round(actual), fmt="#,##0", border=True,
-                 fill=_ACT_FILL)
-        else:
-            _put(ws, r, 6, "", border=True)
-        _put(ws, r, 7, f'=IF(OR(F{r}="",E{r}=""),"",F{r}-E{r})',
-             fmt="#,##0", border=True)
-
-    inc_row = _INC_FIRST
-    d = w_start
-    while d <= w_end and inc_row <= _INC_LAST:
-        offset = (d - base_date).days
-        day_row = _DAY_FIRST + offset if 0 <= offset < _DAY_COUNT else None
-        expect = (f"=ROUND(J{day_row}*{_RATE_CELL},0)"
-                  if day_row is not None else 0)
-        actual = (today_actual.get("온라인")
-                  if d == run_date and today_actual else None)
-        _inc_row(inc_row, d, "온라인 예상", "12주 요일평균 × 반영률",
-                 expect, actual)
-        inc_row += 1
-        for adj in adj_in_by_date.get(d, []):
-            if inc_row > _INC_LAST:
-                break
-            _inc_row(inc_row, d, "확정입금", adj.get("내용") or "",
-                     round(adj.get("조정입금") or 0), None, editable=True)
-            inc_row += 1
-        if (d == run_date and today_actual
-                and (today_actual.get("기타입금") or 0) > 0
-                and inc_row <= _INC_LAST):
-            _inc_row(inc_row, d, "기타 실입금", "계획 외 입금(은행 확인)",
-                     None, today_actual.get("기타입금"))
-            inc_row += 1
-        d += timedelta(days=1)
-    # 창 밖(차주 금요일 이후~4주 끝) 확정입금도 표에 담는다(행 숨김) —
-    # ②의 K열과 라이브가 이 표 전체를 SUMIFS로 참조하므로, 여기 있어야
-    # 그 날짜의 확정입금이 계획에 반영되고 일자·금액 수정도 이어진다
-    horizon = base_date + timedelta(days=_DAY_COUNT - 1)
-    for adj_d in sorted(k for k in adj_in_by_date
-                        if k is not None and w_end < k <= horizon):
-        for adj in adj_in_by_date.get(adj_d, []):
-            if inc_row > _INC_LAST:
-                break
-            _inc_row(inc_row, adj_d, "확정입금", adj.get("내용") or "",
-                     round(adj.get("조정입금") or 0), None, editable=True)
-            ws.row_dimensions[inc_row].hidden = True
-            inc_row += 1
-    for hr in range(inc_row, _INC_LAST + 1):
-        ws.row_dimensions[hr].hidden = True
-    _put(ws, _INC_TOTAL, 4, "합계(표시 구간)", bold=True, align="center")
-    _put(ws, _INC_TOTAL, 5, f"=SUM(E{_INC_FIRST}:E{_INC_LAST})",
-         bold=True, fmt="#,##0")
-    _put(ws, _INC_TOTAL, 6, f"=SUM(F{_INC_FIRST}:F{_INC_LAST})",
-         bold=True, fmt="#,##0")
-
-    # ④ 반영된 지출예정 전체 (수정 가능 + 실지출 대조·확인란) --------------
-    _section(ws, _EXP_HEAD, "④ 반영된 지출예정 (실행일~차주 금요일 표시) — "
-                            "지급일·금액을 고치면 ②가 다시 계산됩니다 · "
-                            "실지출과 차이 나는 행(주황)은 확인(I열) 선택")
-    for c, head in enumerate(("지급일", "요일", "구분", "내용", "금액",
-                              "지급방법", "실지출(은행 확인)", "차이(잔여)",
-                              "확인"), start=1):
-        _put(ws, _EXP_COLS, c, head, bold=True, color="FFFFFF",
-             fill=_HEAD_FILL, align="center", border=True)
-    intraday_chk = (report.get("intraday_check")
-                    or forecast.get("intraday") or {})
-    check_by_id = {det.get("요청ID"): det
-                   for det in (intraday_chk.get("대조내역") or [])
-                   if det.get("요청ID")}
-    confirm_dv = DataValidation(type="list", formula1='"확인"',
-                                allow_blank=True)
-    ws.add_data_validation(confirm_dv)
-    row = _EXP_FIRST
-    for item in report.get("week_expenses", []):
-        if row > _EXP_LAST:
-            break
-        d = item.get("일자")
-        # 창 밖 지급일 행도 숨긴다 — 값은 남아 ②·합계 계산에는 그대로 반영
-        if hide_window and isinstance(d, date):
-            dd = d.date() if isinstance(d, datetime) else d
-            ws.row_dimensions[row].hidden = not (w_start <= dd <= w_end)
-        # 주말·공휴일 지급일은 붉은 글자 (직접 고친 날짜는 색 유지)
-        off = isinstance(d, date) and (d.weekday() >= 5 or d in holidays)
-        day_color = "C00000" if off else "000000"
-        _put(ws, row, 1,
-             datetime.combine(d, dtime()) if isinstance(d, date) else d,
-             fmt="yyyy-mm-dd", fill=_EDIT_FILL, border=True, color=day_color)
-        _put(ws, row, 2, f'=IF(A{row}="","",MID("월화수목금토일",'
-                         f'WEEKDAY(A{row},2),1))', align="center", border=True,
-             color=day_color)
-        _put(ws, row, 3, item.get("구분") or "", border=True)
-        _put(ws, row, 4, item.get("내용") or "", border=True, align="left")
-        _put(ws, row, 5, round(item.get("금액") or 0), fmt="#,##0",
-             fill=_EDIT_FILL, border=True)
-        _put(ws, row, 6, item.get("지급방법") or "", align="center",
-             border=True)
-        # 실지출 대조: 당일 대조(intraday) 결과를 요청ID로 연결한다.
-        # 차이 나는 행은 주황으로 강조하고 확인란(I) 드롭다운을 단다
-        det = check_by_id.get(item.get("요청ID"))
-        if det is not None:
-            mismatch = det.get("상태") != "집행 확인"
-            fill = _DIFF_FILL if mismatch else None
-            _put(ws, row, 7, round(det.get("집행액") or 0), fmt="#,##0",
-                 border=True, fill=fill)
-            _put(ws, row, 8, f'=IF(G{row}="","",E{row}-G{row})',
-                 fmt="#,##0", border=True, fill=fill)
-            _put(ws, row, 9, "", border=True,
-                 fill=_EDIT_FILL if mismatch else None, align="center")
-            if mismatch:
-                confirm_dv.add(f"I{row}")
-        else:
-            for c in (7, 8, 9):
-                _put(ws, row, c, "", border=True)
-        row += 1
-    _put(ws, _EXP_TOTAL, 4, "합계(숨긴 행 포함 4주 전체)", bold=True,
-         align="center")
-    _put(ws, _EXP_TOTAL, 5, f"=SUM(E{_EXP_FIRST}:E{_EXP_LAST})",
-         bold=True, fmt="#,##0")
-    # 머리글에 자동 필터 — 지급일·구분별로 골라 볼 수 있다
-    ws.auto_filter.ref = f"A{_EXP_COLS}:I{_EXP_LAST}"
-
     # ⑤ 안정을 위한 필요 추가 입금 (향후 4주) ------------------------------
     _section(ws, _TARGET_HEAD, "⑤ 안정을 위한 필요 추가 입금 (향후 4주)")
     _put(ws, _TARGET_ROW, 1, "목표 최저잔액", bold=True)
@@ -513,7 +530,7 @@ def build_management_sheet(wb, report: dict):
 
     # 인쇄 최적화: 지출표의 빈 예비행은 3행만 남기고 숨긴다 (수식 구간
     # $47:$140은 유지 — 필요하면 행 숨기기 해제 후 추가 입력 가능)
-    for hr in range(row + 3, _EXP_LAST + 1):
+    for hr in range(exp_next_row + 3, _EXP_LAST + 1):
         ws.row_dimensions[hr].hidden = True
     _setup_print(ws, memo_row + 4)
 
@@ -562,20 +579,21 @@ def build_ceo_sheet(wb, report: dict):
          size=9, color="555555")
 
     _sec(4, "핵심 요약")
+    day_a = f"{M}$A${_DAY_FIRST}:$A${_DAY_LAST}"
+    day_e = f"{M}$E${_DAY_FIRST}:$E${_DAY_LAST}"
     labels = [
-        ("현재 전체 계좌잔액",
-         f"={M}C{6 + len(report.get('balances') or {})}", None),
+        ("현재 전체 계좌잔액", f"={M}C{_TOTAL_ROW}", None),
         ("4주 예상 기말잔액", f"={M}E{_DAY_LAST}", None),
         ("4주 최저 예상잔액", f"={M}C{_SUM_ROW}",
-         f'=TEXT(INDEX({M}$A$14:$A$41,MATCH({M}C{_SUM_ROW},'
-         f'{M}$E$14:$E$41,0)),"m/d 예상")'),
+         f'=TEXT(INDEX({day_a},MATCH({M}C{_SUM_ROW},'
+         f'{day_e},0)),"m/d 예상")'),
         ("향후 4주 확정지출", f"={M}E{_EXP_TOTAL}", None),
         ("카드 결제 예정액(4주)",
          f'=SUMIFS({M}$E${_EXP_FIRST}:$E${_EXP_LAST},'
          f'{M}$F${_EXP_FIRST}:$F${_EXP_LAST},"법인카드")', None),
         ("자금부족 예상일",
-         f'=IFERROR(TEXT(INDEX({M}$A$14:$A$41,MATCH(TRUE,'
-         f'INDEX({M}$E$14:$E$41<0,0),0)),"yyyy-mm-dd"),"없음")', "text"),
+         f'=IFERROR(TEXT(INDEX({day_a},MATCH(TRUE,'
+         f'INDEX({day_e}<0,0),0)),"yyyy-mm-dd"),"없음")', "text"),
         ("확인필요 건수", f"{len(report.get('issues', []))}건", "text"),
         ("자료 미제출 팀",
          ", ".join(report.get("missing_teams", [])) or "없음", "text"),
