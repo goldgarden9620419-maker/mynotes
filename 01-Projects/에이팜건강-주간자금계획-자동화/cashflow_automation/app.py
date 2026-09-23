@@ -34,7 +34,6 @@ import forecast_engine
 import live_report
 import management_report
 import payment_matcher
-import pdf_report
 import team_loader
 from card_payment import CardPaymentCalculator
 
@@ -604,8 +603,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         }
 
         stamp = now.strftime("%Y%m%d_%H%M")
-        excel_name = f"주간자금계획_{stamp}.xlsx"
-        pdf_name = f"주간자금계획_대표보고_{stamp}.pdf"
+        # 결과물은 통합 파일 하나 (2026-09-23 사용자 요청): 경영보고 +
+        # 대표보고(A4 인쇄용) + 라이브 시트들을 한 워크북에 담고,
+        # 경영보고 ③·④ 표·반영률(F12)을 고치면 전 시트가 재계산된다
+        combined_name = f"주간자금계획_{stamp}.xlsx"
         issue_name = f"확인필요_{stamp}.xlsx"
 
         # 확인 파일은 06_확인필요 폴더에만 둔다 (05_결과는 결과물만).
@@ -660,29 +661,14 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                     STATUS_REVIEW_WAIT,
                     f"확인필요 {len(issues)}건 검토 대기 — "
                     f"{review_path.name}의 시트들을 확인한 뒤 '안내' 시트 "
-                    "'확인 완료'를 '예'로 바꾸면 결과 3개가 만들어집니다"
-                    + new_note,
+                    "'확인 완료'를 '예'로 바꾸면 통합 결과 파일이 "
+                    "만들어집니다" + new_note,
                     [review_path], len(issues))
             log.info("확인 완료 확인됨(%s) — 결과 파일을 만듭니다",
                      review_path.name)
 
         workspace = backup_manager.TempWorkspace(cfg)
         outputs = []
-        if cfg.get("options", "create_excel", default=False):
-            excel_report.create_report_workbook(
-                report, workspace.path(excel_name))
-            if not excel_report.verify_workbook(workspace.path(excel_name)):
-                raise RuntimeError("결과 Excel 재열기 검증 실패")
-            outputs.append(excel_name)
-        # 대화형 경영보고 (고정서식 주간자금계획 파일을 대신함)
-        if cfg.get("options", "create_management_report", default=True):
-            mgmt_name = f"주간자금계획_경영보고_{stamp}.xlsx"
-            management_report.create_management_workbook(
-                report, workspace.path(mgmt_name))
-            if not management_report.verify_management_workbook(
-                    workspace.path(mgmt_name)):
-                raise RuntimeError("경영보고 파일 재열기 검증 실패")
-            outputs.append(mgmt_name)
         if review_path is None:
             # 확인 생략 모드: 결과와 함께 확인필요를 06_확인필요에 기록
             review_path = unique_path(review_dir / issue_name)
@@ -693,11 +679,11 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             expected = ["안내", "확인필요"]
             if not excel_report.verify_workbook(review_path, expected):
                 raise RuntimeError("확인필요 파일 재열기 검증 실패")
-        if cfg.get("options", "create_pdf_summary", default=True):
-            pdf_report.create_pdf_summary(report, workspace.path(pdf_name))
-            outputs.append(pdf_name)
 
-        # 라이브 양식(수식 유지, 반영률 즉시 재계산) — 템플릿이 있을 때만
+        # 통합 결과 파일 (2026-09-23 사용자 요청: 경영보고·대표보고·
+        # 라이브를 한 파일로, 경영보고 수정이 전 시트에 수식으로 연동.
+        # 대표보고 PDF는 더 이상 만들지 않는다 — '대표보고' 시트가
+        # A4 인쇄용을 대신한다)
         template_name = cfg.get("options", "live_template_name",
                                 default=live_report.LIVE_TEMPLATE_NAME)
         live_template = cfg.folder("base_workbook") / template_name
@@ -712,18 +698,22 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 live_template = candidates[0]
                 log.info("라이브 템플릿을 유사한 이름으로 찾음: %s",
                          live_template.name)
-        if cfg.get("options", "create_live_workbook", default=True):
-            if live_template.exists():
-                live_name = f"주간자금계획_라이브_{stamp}.xlsx"
-                live_report.fill_live_workbook(live_template, report,
-                                               workspace.path(live_name))
-                if not live_report.verify_live_workbook(
-                        workspace.path(live_name), base_date):
-                    raise RuntimeError("라이브 자금계획 수식·날짜 검증 실패")
-                outputs.append(live_name)
-            else:
-                log.warning("라이브 템플릿이 없어 라이브 파일을 건너뜁니다. "
-                            "여기에 넣어주세요: %s", live_template)
+        if live_template.exists():
+            management_report.create_combined_workbook(
+                report, live_template, workspace.path(combined_name))
+            if not management_report.verify_combined_workbook(
+                    workspace.path(combined_name), base_date):
+                raise RuntimeError("통합 결과 파일 재열기 검증 실패")
+        else:
+            log.warning("라이브 템플릿이 없어 경영보고·대표보고 시트만 "
+                        "만듭니다. 템플릿을 여기에 넣어주세요: %s",
+                        live_template)
+            management_report.create_management_workbook(
+                report, workspace.path(combined_name))
+            if not management_report.verify_management_workbook(
+                    workspace.path(combined_name)):
+                raise RuntimeError("결과 파일 재열기 검증 실패")
+        outputs.append(combined_name)
 
         moved = workspace.commit(outputs, unique_path)
 
@@ -783,7 +773,7 @@ def _wait_for_confirmation(cfg, state, log, allow_partial: bool = False,
     """'지금 실행' 창에서 확인 완료 저장을 기다렸다가 곧바로 결과를 만든다.
 
     확인필요 파일에서 '확인 완료'(B2)를 '예'로 바꾸고 저장하는 순간
-    감지해 결과 3종을 생성한다. 제한 시간이 지나면 그대로 종료해도
+    감지해 통합 결과 파일을 생성한다. 제한 시간이 지나면 그대로 종료해도
     상주 프로그램의 감시(30초 간격)와 10분 주기 검사가 이어받는다.
     """
     import time
@@ -795,7 +785,7 @@ def _wait_for_confirmation(cfg, state, log, allow_partial: bool = False,
     deadline = time.monotonic() + wait_minutes * 60
     log.info("확인 완료 저장을 기다립니다 (최대 %d분) — 확인필요 파일을 "
              "검토한 뒤 '확인 완료'(B2)를 '예'로 바꾸고 저장하면 곧바로 "
-             "결과 3개를 만듭니다.", int(wait_minutes))
+             "통합 결과 파일을 만듭니다.", int(wait_minutes))
     while True:
         current = now or now_local(cfg.timezone_name)
         week = iso_week_key(current.date())
