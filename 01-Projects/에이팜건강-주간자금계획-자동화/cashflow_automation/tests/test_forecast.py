@@ -128,3 +128,33 @@ def test_정기지출_분석():
     # 2개월만 반복되면 정기지출이 아니다
     few = rows[:2]
     assert analyze_recurring(few, BASE) == []
+
+
+def test_실행일_이전_지급예정은_계획에서_뺀다():
+    """2026-09-23 사용자 확정: 지출예정 파일에 실행일보다 이전 날짜가
+    있어도 자금계획은 실행 기준일부터만 진행한다."""
+    from forecast_engine import drop_past_plans
+
+    run_date = date(2026, 9, 23)   # 수요일 실행
+    plans = [
+        _plan(date(2026, 9, 18), 111000.0),   # 지난주 금요일 → 제외
+        _plan(date(2026, 9, 22), 222000.0),   # 어제 → 제외
+        _plan(run_date, 333000.0),            # 오늘 → 유지
+        _plan(date(2026, 9, 25), 444000.0),   # 미래 → 유지
+        {"자금계획 반영일": None, "지급예정일": None,
+         "예상금액": 5.0, "지급방법": PAY_METHOD_TRANSFER,
+         "반영상태": "정상반영"},              # 날짜 없음 → 유지(별도 처리)
+    ]
+    kept = drop_past_plans(plans, run_date)
+    assert [p["예상금액"] for p in kept] == [333000.0, 444000.0, 5.0]
+
+    # 걸러낸 목록으로 4주 계획을 만들면 과거 지급 예정이 어떤 날에도
+    # 잡히지 않는다 (은행 실적이 아직 없는 과거 날짜 포함)
+    avg = {i: 0.0 for i in range(7)}
+    daily = build_daily_plan([p for p in kept if p["자금계획 반영일"]],
+                             date(2026, 9, 21), opening_balance=10_000_000.0,
+                             weekday_avg=avg, rate=0.8, adjustments=[])
+    by = {r["일자"]: r for r in daily}
+    assert by[date(2026, 9, 22)]["팀별 송금예정"] == 0.0
+    assert by[run_date]["팀별 송금예정"] == 333000.0
+    assert by[date(2026, 9, 25)]["팀별 송금예정"] == 444000.0

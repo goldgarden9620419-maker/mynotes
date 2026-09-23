@@ -412,9 +412,11 @@ def test_새_항목은_주황색_강조와_안내멘트(tmp_path):
     snap = er.review_snapshot(prev)
     assert snap and snap["recurring"] == {"SKB"}
 
-    issues2 = issues1 + [{"구분": "정기지출 누락 의심",
+    # 누락 의심은 '정기지출누락' 시트로 분리되므로(2026-09-23) 확인필요
+    # 시트의 새 항목 강조는 일반 항목으로 확인한다
+    issues2 = issues1 + [{"구분": "계획 없는 실제출금",
                           "일자": _date(2026, 9, 26), "내용": "KT 통신",
-                          "금액": 90000.0, "지시항목": "KT"}]
+                          "금액": 90000.0}]
     recurring2 = recurring1 + [_rec("KT", "통신비")]
     draft2 = {"mode": "개별 관리",
               "rows": draft1["rows"]

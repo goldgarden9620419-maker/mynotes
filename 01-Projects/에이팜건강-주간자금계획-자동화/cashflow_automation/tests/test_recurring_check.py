@@ -170,3 +170,27 @@ def test_금주체크_판정과_구간(tmp_path):
     assert by["㈜에이팜"]["예정일"] == date(2026, 9, 30)
     assert by["㈜에이팜"]["누락"]
     assert [r["예정일"] for r in rows] == sorted(r["예정일"] for r in rows)
+
+
+def test_자동추정_미반영_운영에선_반영행도_누락_의심(tmp_path):
+    """drafts_reflected=False (2026-09-23 사용자 확정: 자동추정 금액을
+    계획에 넣지 않음): '반영' 표시 행도 자동 반영으로 치지 않아,
+    팀 지출예정 파일에 없으면 전부 누락 의심이 된다."""
+    start, end = date(2026, 9, 21), date(2026, 10, 2)
+    draft_rows = [
+        {"일자": date(2026, 9, 23), "정기지출명": "NH기업카드",
+         "예상금액": 6_066_502.0, "반영": "반영"},   # 팀 제출 있음
+        {"일자": date(2026, 9, 28), "정기지출명": "코웨이",
+         "예상금액": 113_398.0, "반영": "반영"},     # 팀 제출 없음 → 누락
+    ]
+    plans = [{"자금계획 반영일": date(2026, 9, 23),
+              "예상금액": 10_000_000.0, "거래처": "농협카드",
+              "지출내용": "8월 카드대금"}]
+    rows = fe.weekly_recurring_check(draft_rows, plans,
+                                     {"NH기업카드": ["농협카드"]},
+                                     start, end, drafts_reflected=False)
+    by = {r["항목"]: r for r in rows}
+    assert by["NH기업카드"]["판정"] == fe.CHECK_TEAM_OK
+    assert not by["NH기업카드"]["누락"]
+    assert by["코웨이"]["누락"]
+    assert by["코웨이"]["판정"] == fe.CHECK_MISSING
