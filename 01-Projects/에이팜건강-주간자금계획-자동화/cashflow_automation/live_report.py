@@ -484,13 +484,16 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             # ③·④ 표를 SUMIFS로 참조한다 (2026-09-23 사용자 요청 —
             # 경영보고에서 일자·금액을 고치면 이 표·시나리오·13주가
             # 즉시 재계산). 이월일에는 전일 미집행 이월분을 더한다
-            # 경영보고의 ③·④ 표 행 범위는 management_report 상수를 따른다
+            # 경영보고의 ③·④ 표 행 범위는 management_report 상수를 따른다.
+            # 확인(I열)에서 '보류'를 고른 행은 계획에서 뺀다 (2026-09-23)
             import management_report as _mr
             L = f"'{link_sheet}'!"
             inc = (f"{L}$E${_mr._INC_FIRST}:$E${_mr._INC_LAST},"
                    f"{L}$A${_mr._INC_FIRST}:$A${_mr._INC_LAST},$A{row}")
             exp = (f"{L}$E${_mr._EXP_FIRST}:$E${_mr._EXP_LAST},"
-                   f"{L}$A${_mr._EXP_FIRST}:$A${_mr._EXP_LAST},$A{row}")
+                   f"{L}$A${_mr._EXP_FIRST}:$A${_mr._EXP_LAST},$A{row},"
+                   f"{L}$I${_mr._EXP_FIRST}:$I${_mr._EXP_LAST},"
+                   f'"<>{_mr.EXP_HOLD}"')
             meth = f"{L}$F${_mr._EXP_FIRST}:$F${_mr._EXP_LAST}"
             carr_tr = carr_card = carr_etc = carr_conf = 0
             if intraday and d == intraday.get("이월일"):
