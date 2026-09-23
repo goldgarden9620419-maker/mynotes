@@ -6264,5 +6264,254 @@
     "answerIndex": 1,
     "explanation": "sin x = t로 치환하면 2t^2 + t - 1 = 0이고, 이를 인수분해하면 (2t-1)(t+1) = 0이므로 t = 1/2 또는 t = -1입니다. 0 ≤ x < 2π에서 sin x = 1/2를 만족하는 x는 π/6, 5π/6이고, sin x = -1을 만족하는 x는 3π/2입니다. 따라서 모든 근의 합은 π/6 + 5π/6 + 3π/2 = π + 3π/2 = 5π/2입니다.",
     "concept": "sin x에 대한 이차방정식은 t = sin x로 치환하여 t값을 구한 뒤, 단위원에서 그 t값에 대응하는 x를 모두 찾아 합을 구한다."
+  },
+  {
+    "id": "en-2026-09-24-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-24",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "For much of the twentieth century, nostalgia was dismissed by physicians as a medical disorder, a condition [u]believed[/u]① to cause weakness and lost appetite among soldiers stationed far from home. Only in recent decades have psychologists begun [u]to study[/u]② nostalgia not as an illness but as a normal emotional response that most people experience on a regular basis. Research suggests that nostalgic memories, though often bittersweet, tend to leave people [u]feeling[/u]③ more connected to others and more optimistic about the future. In one experiment, participants who were asked to recall a nostalgic event reported significantly higher levels of comfort than those who [u]was[/u]④ asked to describe an ordinary recent event. Rather than a weakness to be avoided, nostalgia now appears to function as a psychological resource [u]that[/u]⑤ people draw on during times of loneliness or uncertainty.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 관계대명사 who의 선행사는 those(복수)이므로 동사는 were가 되어야 하지만 was가 쓰여 수 일치가 어긋났습니다. 나머지는 모두 어법상 올바릅니다: ①은 condition을 수식하는 과거분사 believed(수동), ②는 'begin to부정사' 구조의 to study, ③은 'leave+목적어+현재분사' 구조의 feeling, ⑤는 resource를 선행사로 하는 목적격 관계대명사 that(draw on의 목적어)입니다.",
+    "vocab": [
+      {
+        "word": "nostalgia",
+        "meaning": "향수, 향수병"
+      },
+      {
+        "word": "bittersweet",
+        "meaning": "달콤씁쓸한"
+      },
+      {
+        "word": "dismissed",
+        "meaning": "일축했다, 무시했다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-24-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-24",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "By late afternoon, many people find it harder to resist an unhealthy snack or to make a firm decision about even trivial matters, such as what to wear the next day. Psychologists attribute this shift not to laziness but to the fact that the mental effort required to choose among options is a finite resource that ______. Each decision made throughout the day, no matter how small, appears to draw from the same limited reserve of mental energy. A judge who denies parole requests more often late in the day, or a shopper who impulsively tosses items into a cart near the checkout line after a long errand run, may simply be experiencing the effects of a mind that has spent its capacity for careful deliberation.",
+    "choices": [
+      "gradually depletes as the day goes on",
+      "increases with every decision that is made",
+      "remains constant regardless of how it is used",
+      "is instantly replenished after each choice",
+      "has no connection to physical fatigue"
+    ],
+    "answerIndex": 0,
+    "explanation": "빈칸 뒤에서 하루 동안 내려진 모든 결정이 동일한 제한된 정신 에너지 저장고를 소모하며, 판사와 쇼핑객의 사례 모두 하루가 지나면서 정신적 자원이 소진된 결과로 설명되고 있습니다. 따라서 빈칸에는 '하루가 지나면서 점차 소진된다'는 내용이 들어가야 하므로 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "deliberation",
+        "meaning": "숙고, 신중한 생각"
+      },
+      {
+        "word": "parole",
+        "meaning": "가석방"
+      },
+      {
+        "word": "impulsively",
+        "meaning": "충동적으로"
+      },
+      {
+        "word": "reserve",
+        "meaning": "비축, 저장"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-24-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-24",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Long before mechanical refrigeration existed, communities living near cold mountain lakes devised an ingenious way to keep food cool through the warmer months.\n(A) Ice cut from the lake in the depths of winter was hauled down by sled and packed tightly into windowless stone buildings that had been built partly underground.\n(B) As a result, families could enjoy chilled drinks and preserved meat well into the summer, long after the surrounding countryside had grown hot and dry.\n(C) Once inside the building, the blocks of ice were layered with straw and sawdust, materials that trapped cold air and kept the ice from melting for months at a time.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 냉장 기술이 없던 시절 산 근처 마을에서 얼음으로 식품을 차갑게 보관하는 방법을 언급합니다. (A)는 겨울에 자른 얼음을 지하 석조 건물로 옮겨 저장했다는 내용이고, (C)는 건물 안에서 짚과 톱밥으로 얼음을 덮어 녹지 않게 했다는 내용이며, (B)는 그 결과 여름 내내 시원한 음료와 보존육을 즐길 수 있었다는 결과입니다. 따라서 순서는 (A)-(C)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "hauled",
+        "meaning": "끌어 옮겼다"
+      },
+      {
+        "word": "ingenious",
+        "meaning": "기발한, 독창적인"
+      },
+      {
+        "word": "preserved",
+        "meaning": "보존된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-24-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-24",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet rumors soon spread that the dark, bitter drink was some kind of dangerous foreign potion, and several worried clergy petitioned the pope to have it banned.",
+    "passage": "Coffee first arrived in Venice in the early seventeenth century, carried by merchants who had encountered the drink throughout the Ottoman Empire. ( ① ) Venetian traders quickly recognized its appeal and began importing it in larger quantities to sell in the city's busy marketplaces. ( ② ) Word of the strange new beverage spread quickly among the city's residents, many of whom were eager to try something so different from wine or ale. ( ③ ) Concerned that banning something so widely enjoyed might provoke public anger, the pope decided to taste the drink himself before making any decision. ( ④ ) To the surprise of the clergy who had urged him to condemn it, he reportedly found the drink so delightful that he declared it should be baptized to make it a truly Christian beverage. ( ⑤ ) From that point on, coffee spread rapidly across Italy and eventually the rest of Europe, no longer burdened by suspicion of being sinister or forbidden.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 커피가 위험한 외래 음료라는 소문이 퍼지고 성직자들이 교황에게 금지를 청원했다는 내용입니다. ③ 뒤 문장이 '이를 금지하는 것이 대중의 분노를 일으킬까 염려한 교황이 직접 맛보기로 했다'는 내용으로 이어지려면, 그 전에 금지 청원이 있었다는 사실이 먼저 나와야 하므로 주어진 문장은 ③에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "petitioned",
+        "meaning": "청원했다"
+      },
+      {
+        "word": "clergy",
+        "meaning": "성직자"
+      },
+      {
+        "word": "sinister",
+        "meaning": "불길한, 사악한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-24-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-24",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "In one series of experiments, researchers asked participants to assemble simple items, such as storage boxes or furniture, using included instructions. Afterward, participants were asked to state how much money they would be willing to pay for the very item they had just built, as well as for an identical, pre-assembled version made by someone else. Surprisingly, participants consistently valued their own handmade creations far more highly than the identical pre-built version, even when independent judges rated the two items as indistinguishable in quality. This pattern held even when the assembly process was somewhat frustrating or resulted in a visibly imperfect final product. Researchers have since labeled this tendency the IKEA effect, named after the furniture retailer famous for products that customers assemble themselves. The effect appears to stem from a sense of personal investment: once people have put their own labor and effort into creating something, they begin to see a piece of themselves reflected in it, which inflates its perceived worth regardless of its actual quality.",
+    "choices": [
+      "people tend to overvalue things they have built themselves because their own effort becomes part of how they perceive the item's worth",
+      "consumers generally prefer to buy pre-assembled furniture rather than build it themselves",
+      "product quality is the most important factor influencing how much people are willing to pay",
+      "frustration during assembly always lowers a person's opinion of the finished product",
+      "independent judges are more reliable than consumers at estimating an item's true value"
+    ],
+    "answerIndex": 0,
+    "explanation": "글은 사람들이 직접 조립한 물건을 동일한 완제품보다 더 높게 평가하는 '이케아 효과'를 실험을 통해 설명하며, 그 이유가 자신의 노력이 투입된 물건에 스스로를 투영하기 때문이라고 밝히고 있습니다. 따라서 정답은 ①입니다. 나머지 선택지는 본문의 핵심 논지와 무관하거나 본문 내용과 반대됩니다.",
+    "vocab": [
+      {
+        "word": "assemble",
+        "meaning": "조립하다"
+      },
+      {
+        "word": "inflates",
+        "meaning": "부풀리다, 과장하다"
+      },
+      {
+        "word": "indistinguishable",
+        "meaning": "구별할 수 없는"
+      },
+      {
+        "word": "investment",
+        "meaning": "투입, 투자"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-24-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-24",
+    "prompt": "등차수열 {a_n}에서 a_3 = 11, a_7 = 27일 때, a_10의 값은?",
+    "choices": [
+      "33",
+      "36",
+      "39",
+      "42",
+      "45"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 27 - 11 = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = 11이므로 a_1 = 11 - 8 = 3입니다. 따라서 a_10 = a_1 + 9d = 3 + 36 = 39입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d를 이용하여 두 항의 차이로부터 공차를 구한 뒤 첫째항을 구한다."
+  },
+  {
+    "id": "math-2026-09-24-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-24",
+    "prompt": "곡선 y = x^3 - 3x + 4 위의 점 (2, 6)에서의 접선이 y축과 만나는 점의 y좌표는?",
+    "choices": [
+      "-18",
+      "-15",
+      "-12",
+      "-9",
+      "-6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(x) = x^3 - 3x + 4에서 f'(x) = 3x^2 - 3이므로 x = 2에서의 접선의 기울기는 f'(2) = 12 - 3 = 9입니다. 점 (2, 6)을 지나고 기울기가 9인 접선의 방정식은 y - 6 = 9(x - 2), 즉 y = 9x - 12입니다. 이 직선이 y축과 만나는 점은 x = 0일 때이므로 y좌표는 -12입니다.",
+    "concept": "곡선 위의 한 점에서의 접선의 기울기는 그 점에서의 미분계수이며, 점과 기울기를 이용해 접선의 방정식을 세운 뒤 다른 조건(y절편 등)을 계산한다."
+  },
+  {
+    "id": "math-2026-09-24-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-24",
+    "prompt": "곡선 y = x^2 - 4x + 3과 x축으로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "4/3",
+      "2",
+      "8/3",
+      "10/3",
+      "4"
+    ],
+    "answerIndex": 0,
+    "explanation": "x^2 - 4x + 3 = (x-1)(x-3) = 0이므로 곡선은 x = 1, x = 3에서 x축과 만나고, 구간 [1, 3]에서 곡선은 x축 아래에 위치합니다. F(x) = x^3/3 - 2x^2 + 3x라 하면 F(3) = 9 - 18 + 9 = 0, F(1) = 1/3 - 2 + 3 = 4/3이므로 ∫[1,3] (x^2-4x+3) dx = F(3) - F(1) = -4/3입니다. 넓이는 이 값의 절댓값이므로 4/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 넓이를 구할 때, 구간에서 함수값이 음수이면 정적분 값에 절댓값을 취해 넓이를 구한다."
+  },
+  {
+    "id": "math-2026-09-24-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-24",
+    "prompt": "주머니 안에 1부터 5까지의 숫자가 하나씩 적힌 공 5개가 들어 있다. 이 중에서 임의로 3개를 동시에 꺼낼 때, 꺼낸 공에 적힌 수 중 최댓값이 4일 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 1,
+    "explanation": "5개의 공에서 3개를 꺼내는 전체 경우의 수는 C(5,3) = 10입니다. 최댓값이 4이려면 4를 반드시 포함하고 나머지 2개는 4보다 작은 수 {1,2,3} 중에서 뽑아야 하므로 그 경우의 수는 C(3,2) = 3입니다. 따라서 구하는 확률은 3/10입니다.",
+    "concept": "최댓값이 특정 값이 되는 경우의 수는 그 값을 반드시 포함하고 나머지는 그보다 작은 수들 중에서 뽑는 경우의 수로 구한다."
+  },
+  {
+    "id": "math-2026-09-24-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-24",
+    "prompt": "삼각형 ABC에서 a = 6, b = 4, C = 60°일 때, c의 값은?",
+    "choices": [
+      "2√5",
+      "2√6",
+      "2√7",
+      "4√2",
+      "3√3"
+    ],
+    "answerIndex": 2,
+    "explanation": "코사인법칙에 의해 c^2 = a^2 + b^2 - 2ab cosC = 36 + 16 - 2×6×4×(1/2) = 52 - 24 = 28입니다. 따라서 c = √28 = 2√7입니다.",
+    "concept": "삼각형에서 두 변과 그 끼인각을 알 때 나머지 한 변의 길이는 코사인법칙 c^2 = a^2 + b^2 - 2ab cosC로 구한다."
   }
 ]
