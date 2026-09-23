@@ -57,66 +57,66 @@ def test_경영보고_생성과_수식(tmp_path):
 
     wb = load_workbook(out)
     ws = wb["경영보고"]
-    # ① 총잔액 합계 수식
-    assert str(ws["C8"].value).startswith("=SUM(")
-    # ② 4주(28일) 일별 표: 반영률 셀 참조 + 지출 SUMIFS + 시작잔액 연결
-    assert "$F$12" in str(ws["C14"].value)
-    # 반영률(F12)은 드롭다운으로 고른다 (60~100%)
+    # ① 총잔액 합계 수식 — 총잔액은 12행 고정 (2026-09-23 재배치)
+    assert str(ws["C12"].value).startswith("=SUM(")
+    # ④ 4주(28일) 일별 표(140~167행): 반영률 참조 + 지출 SUMIFS + 시작잔액
+    assert "$F$12" in str(ws["C140"].value)
+    # 반영률(F12)은 총잔액 행 옆 드롭다운 (60~100%)
     rate_dvs = [dv for dv in ws.data_validations.dataValidation
                 if "80%" in str(dv.formula1)]
     assert rate_dvs and "F12" in str(rate_dvs[0].sqref)
-    assert "SUMIFS" in str(ws["D14"].value)
-    assert "$E$73" in str(ws["D14"].value)      # 지출 표 구간 참조
-    assert str(ws["E14"].value).startswith("=$K$13")
-    assert ws["A41"].value.date() == date(2026, 10, 18)  # 28일째
-    assert str(ws["C42"].value).startswith("=MIN(E14:E41")
+    assert "SUMIFS" in str(ws["D140"].value)
+    assert "$E$16" in str(ws["D140"].value)     # ② 지출 표 구간 참조
+    assert str(ws["E140"].value).startswith("=$K$139")
+    assert ws["A167"].value.date() == date(2026, 10, 18)  # 28일째
+    assert str(ws["C168"].value).startswith("=MIN(E140:E167")
     # 실행일(월 9/21)~차주 금요일(10/2) 구간이 하나의 붉은 상자 (격자 아님)
     def _side(cell, name):
         s = getattr(cell.border, name, None)
         return s.style if s is not None else None
-    assert _side(ws["A14"], "top") == "medium"
-    assert _side(ws["A14"], "left") == "medium"
-    assert _side(ws["F25"], "bottom") == "medium"
-    assert _side(ws["F25"], "right") == "medium"
-    assert _side(ws["C17"], "left") != "medium"
-    assert _side(ws["A26"], "left") != "medium"   # 구간 밖은 없음
-    # ④ 4주 지출예정 표: 항목·합계 (10/14 건도 포함)
-    assert ws["A73"].value is not None and ws["E73"].value == 500000
-    assert ws["D74"].value == "대외비 급여·인건비(대외비)"
-    assert "SUM(" in str(ws["E167"].value)
-    assert ws.auto_filter.ref == "A72:I166"   # 지급일별 필터
+    assert _side(ws["A140"], "top") == "medium"
+    assert _side(ws["A140"], "left") == "medium"
+    assert _side(ws["F151"], "bottom") == "medium"
+    assert _side(ws["F151"], "right") == "medium"
+    assert _side(ws["C143"], "left") != "medium"
+    assert _side(ws["A152"], "left") != "medium"   # 구간 밖은 없음
+    # ② 4주 지출예정 표(16~109행 — 현황 바로 다음): 항목·합계
+    assert ws["A16"].value is not None and ws["E16"].value == 500000
+    assert ws["D17"].value == "대외비 급여·인건비(대외비)"
+    assert "SUM(" in str(ws["E110"].value)
+    assert ws.auto_filter.ref == "A15:I109"   # 지급일별 필터
     # ⑤ 필요 추가 입금: 금액은 좁은 B열을 피해 C~F열 (##### 방지)
-    assert ws["A172"].value == 0.8 and ws["A174"].value == 1.0
-    assert ws["B172"].value is None                # B열엔 금액 없음
-    assert ws["C172"].value == -5_000_000          # 4주 기말잔액
-    assert "MAX(0,$C$170" in str(ws["F172"].value)
+    assert ws["A174"].value == 0.8 and ws["A176"].value == 1.0
+    assert ws["B174"].value is None                # B열엔 금액 없음
+    assert ws["C174"].value == -5_000_000          # 4주 기말잔액
+    assert "MAX(0,$C$172" in str(ws["F174"].value)
     # ⑥ 전달 메모 수식
-    memo = str(ws["A178"].value)
+    memo = str(ws["A180"].value)
     assert memo.startswith("=IF(") and "건강사업팀" in memo
-    # 공휴일 예상입금 0: 숨김 요일평균(G)이 0 → 입금 수식도 0
-    assert ws["J17"].value == 0 and ws["J18"].value == 0    # 추석 9/24~25
-    assert ws["J15"].value == 1_000_000                     # 평일은 평균
-    # 주말·공휴일 일자는 붉은 글자 (9/24 추석=row17, 9/26 토=row19)
-    assert str(ws["A17"].font.color.rgb).endswith("C00000")
-    assert str(ws["B17"].font.color.rgb).endswith("C00000")
-    assert str(ws["A19"].font.color.rgb).endswith("C00000")
-    assert not str(ws["A15"].font.color.rgb                  # 화요일은 검정
-                   if ws["A15"].font.color else "").endswith("C00000")
+    # 공휴일 예상입금 0: 숨김 요일평균(J)이 0 → 입금 수식도 0
+    assert ws["J143"].value == 0 and ws["J144"].value == 0  # 추석 9/24~25
+    assert ws["J141"].value == 1_000_000                    # 평일은 평균
+    # 주말·공휴일 일자는 붉은 글자 (9/24 추석=143행, 9/26 토=145행)
+    assert str(ws["A143"].font.color.rgb).endswith("C00000")
+    assert str(ws["B143"].font.color.rgb).endswith("C00000")
+    assert str(ws["A145"].font.color.rgb).endswith("C00000")
+    assert not str(ws["A141"].font.color.rgb                 # 화요일은 검정
+                   if ws["A141"].font.color else "").endswith("C00000")
     # 인쇄: A4 세로 폭 맞춤 + 빈 지출행 숨김 (자료 2행 + 예비 3행만 표시)
     assert ws.page_setup.orientation == "portrait"
     assert int(ws.page_setup.fitToWidth or 0) == 1
     assert "$A$1" in str(ws.print_area) and "$I$" in str(ws.print_area)
-    assert not ws.row_dimensions[77].hidden      # 예비행 (73+2건 뒤 3행)
-    assert ws.row_dimensions[78].hidden          # 그 밖의 빈 행은 숨김
-    assert ws.row_dimensions[166].hidden
-    # ② 실행일(9/21)~차주 금요일(10/2)만 표시 — 이후 일자 행은 숨김
-    assert not ws.row_dimensions[14].hidden      # 9/21 (실행일)
-    assert not ws.row_dimensions[25].hidden      # 10/2 (차주 금요일)
-    assert ws.row_dimensions[26].hidden          # 10/3부터 숨김
-    assert ws.row_dimensions[41].hidden
-    # ④ 창 밖 지급일 행 숨김: 9/22는 표시, 10/14는 숨김 (합계에는 포함)
-    assert not ws.row_dimensions[73].hidden
-    assert ws.row_dimensions[74].hidden
+    assert not ws.row_dimensions[20].hidden      # 예비행 (16+2건 뒤 3행)
+    assert ws.row_dimensions[21].hidden          # 그 밖의 빈 행은 숨김
+    assert ws.row_dimensions[109].hidden
+    # ④ 실행일(9/21)~차주 금요일(10/2)만 표시 — 이후 일자 행은 숨김
+    assert not ws.row_dimensions[140].hidden     # 9/21 (실행일)
+    assert not ws.row_dimensions[151].hidden     # 10/2 (차주 금요일)
+    assert ws.row_dimensions[152].hidden         # 10/3부터 숨김
+    assert ws.row_dimensions[167].hidden
+    # ② 창 밖 지급일 행 숨김: 9/22는 표시, 10/14는 숨김 (합계에는 포함)
+    assert not ws.row_dimensions[16].hidden
+    assert ws.row_dimensions[17].hidden
     wb.close()
 
 
@@ -130,17 +130,17 @@ def test_경영보고_실행일_기준_지난_일자_숨김(tmp_path):
 
     wb = load_workbook(out)
     ws = wb["경영보고"]
-    assert ws.row_dimensions[14].hidden          # 9/21 (지난 일자)
-    assert ws.row_dimensions[15].hidden          # 9/22
-    assert not ws.row_dimensions[16].hidden      # 9/23 (실행일)
-    assert not ws.row_dimensions[25].hidden      # 10/2 (차주 금요일)
-    assert ws.row_dimensions[26].hidden          # 10/3부터 숨김
-    # 붉은 상자도 실행일 행(16)에서 시작
-    top = ws["A16"].border.top
+    assert ws.row_dimensions[140].hidden         # 9/21 (지난 일자)
+    assert ws.row_dimensions[141].hidden         # 9/22
+    assert not ws.row_dimensions[142].hidden     # 9/23 (실행일)
+    assert not ws.row_dimensions[151].hidden     # 10/2 (차주 금요일)
+    assert ws.row_dimensions[152].hidden         # 10/3부터 숨김
+    # 붉은 상자도 실행일 행(142)에서 시작
+    top = ws["A142"].border.top
     assert top is not None and top.style == "medium"
-    # ④ 지난 지급일(9/22) 행도 숨김
-    assert ws.row_dimensions[73].hidden
-    assert ws.row_dimensions[74].hidden          # 10/14 (창 밖)
+    # ② 지난 지급일(9/22) 행도 숨김
+    assert ws.row_dimensions[16].hidden
+    assert ws.row_dimensions[17].hidden          # 10/14 (창 밖)
     wb.close()
 
 
@@ -167,29 +167,31 @@ def test_입금예정_표와_실지출_대조_확인란(tmp_path):
 
     wb = load_workbook(out)
     ws = wb["경영보고"]
-    # ③ 첫 행 = 실행일(9/22) 온라인 예상: ②의 숨김 요일평균(J15)×반영률
-    assert ws["C47"].value == "온라인 예상"
-    assert "J15" in str(ws["E47"].value) and "$F$12" in str(ws["E47"].value)
-    assert ws["F47"].value == 123456                 # 실입금(은행 확인)
-    assert str(ws["G47"].value).startswith("=IF(")   # 차이 수식
+    # ③ 첫 행(114) = 실행일(9/22) 온라인 예상: ④의 요일평균(J141)×반영률
+    assert ws["C114"].value == "온라인 예상"
+    assert "J141" in str(ws["E114"].value) \
+        and "$F$12" in str(ws["E114"].value)
+    assert ws["F114"].value == 123456                # 실입금(은행 확인)
+    assert str(ws["G114"].value).startswith("=IF(")  # 차이 수식
     # 기타 실입금(계획 외) 행
-    assert ws["C48"].value == "기타 실입금" and ws["F48"].value == 50000
-    # 9/23 확정입금 항목 행 (온라인 행 다음)
-    conf = [r for r in range(47, 69) if ws[f"C{r}"].value == "확정입금"]
+    assert ws["C115"].value == "기타 실입금" and ws["F115"].value == 50000
+    # 9/23 확정입금 항목 행 (온라인 행 다음) — 일자·금액은 노란 칸
+    conf = [r for r in range(114, 136) if ws[f"C{r}"].value == "확정입금"]
     assert conf and ws[f"E{conf[0]}"].value == 1000000
     assert ws[f"D{conf[0]}"].value == "거래처 정산 입금"
+    assert str(ws[f"E{conf[0]}"].fill.start_color.rgb).endswith("FFF2CC")
     # 합계 행: 예상·실입금 SUM 수식
-    assert "SUM(E47" in str(ws["E69"].value)
-    assert "SUM(F47" in str(ws["F69"].value)
-    # ④ 실지출 대조: 집행액·차이 수식·주황 강조·확인 드롭다운
-    assert ws["G73"].value == 200000
-    assert "E73-G73" in str(ws["H73"].value)
-    assert str(ws["G73"].fill.start_color.rgb).endswith("FFE699")
+    assert "SUM(E114" in str(ws["E136"].value)
+    assert "SUM(F114" in str(ws["F136"].value)
+    # ② 실지출 대조: 집행액·차이 수식·주황 강조·확인 드롭다운
+    assert ws["G16"].value == 200000
+    assert "E16-G16" in str(ws["H16"].value)
+    assert str(ws["G16"].fill.start_color.rgb).endswith("FFE699")
     dv = [v for v in ws.data_validations.dataValidation
           if "확인" in str(v.formula1)]
-    assert dv and any("I73" in str(v.sqref) for v in dv)
+    assert dv and any("I16" in str(v.sqref) for v in dv)
     # 대조 결과가 없는 행(미래 지급일)은 실지출 빈칸
-    assert ws["G74"].value in ("", None)
+    assert ws["G17"].value in ("", None)
     wb.close()
 
 
