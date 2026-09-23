@@ -484,10 +484,14 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             # ③·④ 표를 SUMIFS로 참조한다 (2026-09-23 사용자 요청 —
             # 경영보고에서 일자·금액을 고치면 이 표·시나리오·13주가
             # 즉시 재계산). 이월일에는 전일 미집행 이월분을 더한다
+            # 경영보고의 ③·④ 표 행 범위는 management_report 상수를 따른다
+            import management_report as _mr
             L = f"'{link_sheet}'!"
-            inc = f"{L}$E$47:$E$68,{L}$A$47:$A$68,$A{row}"
-            exp = f"{L}$E$73:$E$166,{L}$A$73:$A$166,$A{row}"
-            meth = f"{L}$F$73:$F$166"
+            inc = (f"{L}$E${_mr._INC_FIRST}:$E${_mr._INC_LAST},"
+                   f"{L}$A${_mr._INC_FIRST}:$A${_mr._INC_LAST},$A{row}")
+            exp = (f"{L}$E${_mr._EXP_FIRST}:$E${_mr._EXP_LAST},"
+                   f"{L}$A${_mr._EXP_FIRST}:$A${_mr._EXP_LAST},$A{row}")
+            meth = f"{L}$F${_mr._EXP_FIRST}:$F${_mr._EXP_LAST}"
             carr_tr = carr_card = carr_etc = carr_conf = 0
             if intraday and d == intraday.get("이월일"):
                 remain = intraday.get("남은계획") or {}
@@ -503,7 +507,8 @@ def _fill_daily(wb, forecast: dict, base_date: date,
             tr_ref = f"{col_l(lay['transfer'])}{row}"
             card_ref = f"{col_l(lay['card'])}{row}"
             _put(row, lay["conf"],
-                 f'=SUMIFS({inc},{L}$C$47:$C$68,"확정입금")'
+                 f'=SUMIFS({inc},{L}$C${_mr._INC_FIRST}:'
+                 f'$C${_mr._INC_LAST},"확정입금")'
                  + _plus(carr_conf), fmt=money_flow, fill=calc_fill)
             _put(row, lay["transfer"],
                  f'=SUMIFS({exp},{meth},"{PAY_METHOD_TRANSFER}")'

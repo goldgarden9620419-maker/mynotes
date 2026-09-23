@@ -76,22 +76,25 @@ def test_통합파일_시트구성과_경영보고_연동(tmp_path):
     # 배치: 온라인3·확정4·송금5·카드6·조정7). 9/24 = 8+3행
     daily = wb["4주일별계획"]
     tr = str(daily.cell(row=11, column=5).value)
-    assert tr.startswith("=SUMIFS") and "'경영보고'!$E$73:$E$166" in tr
+    assert tr.startswith("=SUMIFS") and "'경영보고'!$E$16:$E$109" in tr
     assert "계좌송금" in tr
     card = str(daily.cell(row=11, column=6).value)
     assert "법인카드" in card
     conf = str(daily.cell(row=11, column=4).value)
-    assert "'경영보고'!$E$47:$E$68" in conf and "확정입금" in conf
+    assert "'경영보고'!$E$114:$E$135" in conf and "확정입금" in conf
+    # 조건 범위(C열)도 같은 행 구간이어야 한다 (v9 회귀 방지)
+    assert f"$C${mr._INC_FIRST}:$C${mr._INC_LAST}" in conf.replace(
+        "'경영보고'!", "")
     etc = str(daily.cell(row=11, column=7).value)
     assert etc.startswith("=SUMIFS") and etc.endswith("-E11-F11")
 
-    # 경영보고 ②의 확정입금 도우미(K)도 ③ 표 SUMIFS — ③에서 일자를
-    # 고치면 ②·라이브가 함께 움직인다
+    # 경영보고 ④의 확정입금 도우미(K)도 ③ 표 SUMIFS — ③에서 일자를
+    # 고치면 ④·라이브가 함께 움직인다 (9/24 = 143행)
     ws = wb[mr.SHEET_NAME]
-    k17 = str(ws["K17"].value)          # 9/24 행
-    assert k17.startswith("=SUMIFS($E$47") and "확정입금" in k17
+    k17 = str(ws["K143"].value)
+    assert k17.startswith("=SUMIFS($E$114") and "확정입금" in k17
     # ③ 확정입금 행은 수정 가능(노란 칸)
-    inc_rows = [r for r in range(47, 69) if ws.cell(row=r, column=3).value
+    inc_rows = [r for r in range(114, 136) if ws.cell(row=r, column=3).value
                 == "확정입금"]
     assert inc_rows
     first_inc = inc_rows[0]
@@ -114,8 +117,8 @@ def test_대표보고_시트는_A4_한장_수식_연동(tmp_path):
     wb = load_workbook(out)
     ceo = wb[mr.CEO_SHEET]
     # 핵심 수치가 전부 경영보고 수식 참조 (F12·④ 수정 시 즉시 갱신)
-    assert str(ceo["C5"].value) == f"='{mr.SHEET_NAME}'!C7"   # 총잔액(1계좌)
-    assert str(ceo["C6"].value) == f"='{mr.SHEET_NAME}'!E41"  # 4주 기말
+    assert str(ceo["C5"].value) == f"='{mr.SHEET_NAME}'!C12"  # 총잔액(고정)
+    assert str(ceo["C6"].value) == f"='{mr.SHEET_NAME}'!E167"  # 4주 기말
     assert "SUMIFS" in str(ceo["C9"].value)                   # 카드 4주
     assert str(ceo["C10"].value).startswith("=IFERROR(")      # 부족 예상일
     # 일별 전망·시나리오 표도 경영보고 참조
@@ -177,7 +180,7 @@ def test_연동_수식은_정적_값과_일치한다(tmp_path):
 
     def _sum_exp(d, method=None):
         total = 0.0
-        for r in range(73, 167):
+        for r in range(16, 110):
             if _day(ws.cell(row=r, column=1).value) != d:
                 continue
             m = str(ws.cell(row=r, column=6).value or "")
@@ -188,7 +191,7 @@ def test_연동_수식은_정적_값과_일치한다(tmp_path):
 
     def _sum_conf(d):
         return sum(ws.cell(row=r, column=5).value or 0
-                   for r in range(47, 69)
+                   for r in range(114, 136)
                    if _day(ws.cell(row=r, column=1).value) == d
                    and ws.cell(row=r, column=3).value == "확정입금")
 
