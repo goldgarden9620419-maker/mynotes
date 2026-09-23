@@ -77,13 +77,13 @@ def test_경영보고_생성과_수식(tmp_path):
     assert _side(ws["A140"], "top") == "medium"
     assert _side(ws["A140"], "left") == "medium"
     assert _side(ws["F151"], "bottom") == "medium"
-    assert _side(ws["F151"], "right") == "medium"
+    assert _side(ws["I151"], "right") == "medium"   # 상자는 내역 열(I)까지
     assert _side(ws["C143"], "left") != "medium"
     assert _side(ws["A152"], "left") != "medium"   # 구간 밖은 없음
     # ② 4주 지출예정 표(16~109행 — 현황 바로 다음): 항목·합계
     assert ws["A16"].value is not None and ws["E16"].value == 500000
     assert ws["D17"].value == "대외비 급여·인건비(대외비)"
-    assert "SUM(" in str(ws["E110"].value)
+    assert str(ws["E110"].value).startswith("=SUMIFS")  # 보류 제외 합계
     assert ws.auto_filter.ref == "A15:I109"   # 지급일별 필터
     # ⑤ 필요 추가 입금: 금액은 좁은 B열을 피해 C~F열 (##### 방지)
     assert ws["A174"].value == 0.8 and ws["A176"].value == 1.0
@@ -188,7 +188,7 @@ def test_입금예정_표와_실지출_대조_확인란(tmp_path):
     assert "E16-G16" in str(ws["H16"].value)
     assert str(ws["G16"].fill.start_color.rgb).endswith("FFE699")
     dv = [v for v in ws.data_validations.dataValidation
-          if "확인" in str(v.formula1)]
+          if "보류" in str(v.formula1) and "적용" in str(v.formula1)]
     assert dv and any("I16" in str(v.sqref) for v in dv)
     # 대조 결과가 없는 행(미래 지급일)은 실지출 빈칸
     assert ws["G17"].value in ("", None)
@@ -212,4 +212,38 @@ def test_정기지출_체크_시트를_만들지_않는다(tmp_path):
 
     wb = load_workbook(out)
     assert wb.sheetnames == [mr.SHEET_NAME, mr.CEO_SHEET]
+    wb.close()
+
+
+def test_실지출_수기입력과_보류_제외_수식(tmp_path):
+    """2026-09-23 사용자 요청: ② 실지출(G)은 전 행 수기 입력 칸(차이 H
+    자동 계산), 확인(I)은 적용/보류 드롭다운 — '보류' 행은 ④·합계
+    SUMIFS 조건에서 빠진다. ④ '상태' 열은 그 날짜의 지출 내역 나열로."""
+    rep = _report()
+    out = tmp_path / "주간자금계획_경영보고_hold.xlsx"
+    mr.create_management_workbook(rep, out)
+    wb = load_workbook(out)
+    ws = wb["경영보고"]
+    # 대조 결과가 없는 행도 실지출(G)은 노란 입력칸 + 차이(H) 수식
+    assert str(ws["G16"].fill.start_color.rgb).endswith("FFF2CC")
+    assert "E16-G16" in str(ws["H16"].value)
+    # 예비 행(20)에도 요일·차이 수식과 적용/보류 드롭다운이 깔려 있다
+    assert "WEEKDAY(A20" in str(ws["B20"].value)
+    assert "E20-G20" in str(ws["H20"].value)
+    dv = [v for v in ws.data_validations.dataValidation
+          if "보류" in str(v.formula1)]
+    assert dv and any("I20" in str(v.sqref) for v in dv)
+    # ④ 지출 열은 보류 행을 뺀 SUMIFS, 합계(E110)도 보류 제외
+    assert '"<>보류"' in str(ws["D140"].value)
+    assert '"<>보류"' in str(ws["E110"].value)
+    # ④ '지출 내역'(F, F:I 병합): 그 날짜의 내용·금액 나열 — 배열
+    # 수식(TEXTJOIN)으로 저장해야 엑셀·LibreOffice에서 계산된다
+    assert ws["F139"].value == "지출 내역"
+    v140 = ws["F140"].value
+    f140 = getattr(v140, "text", None) or str(v140)
+    assert type(v140).__name__ == "ArrayFormula"
+    assert f140.startswith("=IFERROR(")
+    assert "TEXTJOIN" in f140 and "$D$16" in f140 and "보류" in f140
+    merged = {str(r) for r in ws.merged_cells.ranges}
+    assert "F140:I140" in merged
     wb.close()

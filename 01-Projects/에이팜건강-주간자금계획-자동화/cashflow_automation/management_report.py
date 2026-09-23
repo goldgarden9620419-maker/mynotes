@@ -27,6 +27,12 @@ from live_report import exec_window, outline_week_box
 # 요청: 경영보고·대표보고·라이브를 한 파일로 합치고 경영보고가 입력 기준)
 SHEET_NAME = "경영보고"
 CEO_SHEET = "대표보고"
+# ② 지출예정 확인(I열) 선택지 (2026-09-23 사용자 요청): '보류' 행은
+# 계획(④·라이브)에서 제외, '적용'·빈칸은 반영
+EXP_APPLY = "적용"
+EXP_HOLD = "보류"
+# ④·라이브·대표보고 SUMIFS 공통 조건: 보류 행 제외
+_NOT_HOLD = f'"<>{EXP_HOLD}"'
 
 _NAVY = "1F4E79"
 _EDIT_FILL = PatternFill("solid", start_color="FFF2CC")   # 수정 가능 칸
@@ -221,7 +227,8 @@ def build_management_sheet(wb, report: dict):
     _section(ws, _EXP_HEAD, "② 반영된 지출예정 (실행일~차주 금요일 표시) — "
                             "지급일·금액(노란 칸)을 고치면 아래 ④ 일별 "
                             "흐름과 라이브 시트 전체가 다시 계산됩니다 · "
-                            "실지출과 차이 나는 행(주황)은 확인(I열) 선택")
+                            "실지출(G)을 적으면 차이(H) 자동 계산 · "
+                            "확인(I)에서 '보류'를 고른 행은 계획에서 제외")
     for c, head in enumerate(("지급일", "요일", "구분", "내용", "금액",
                               "지급방법", "실지출(은행 확인)", "차이(잔여)",
                               "확인"), start=1):
@@ -232,8 +239,15 @@ def build_management_sheet(wb, report: dict):
     check_by_id = {det.get("요청ID"): det
                    for det in (intraday_chk.get("대조내역") or [])
                    if det.get("요청ID")}
-    confirm_dv = DataValidation(type="list", formula1='"확인"',
+    # 확인(I) 드롭다운: '적용'(기본 — 빈칸도 적용) / '보류'(계획 제외).
+    # 2026-09-23 사용자 요청 — '보류' 행은 ④와 라이브의 SUMIFS 조건
+    # ("<>보류")에서 빠져 그 금액이 계획에 반영되지 않는다
+    confirm_dv = DataValidation(type="list",
+                                formula1=f'"{EXP_APPLY},{EXP_HOLD}"',
                                 allow_blank=True)
+    confirm_dv.error = f"'{EXP_APPLY}' 또는 '{EXP_HOLD}'만 " \
+                       "선택할 수 있습니다."
+    confirm_dv.showErrorMessage = True
     ws.add_data_validation(confirm_dv)
     row = _EXP_FIRST
     for item in report.get("week_expenses", []):
@@ -259,28 +273,42 @@ def build_management_sheet(wb, report: dict):
              fill=_EDIT_FILL, border=True)
         _put(ws, row, 6, item.get("지급방법") or "", align="center",
              border=True)
-        # 실지출 대조: 당일 대조(intraday) 결과를 요청ID로 연결한다.
-        # 차이 나는 행은 주황으로 강조하고 확인란(I) 드롭다운을 단다
+        # 실지출(G): 당일 대조(intraday) 결과가 있으면 미리 채우고, 없는
+        # 행도 은행 확인 후 수기로 적을 수 있는 노란 입력칸 (2026-09-23
+        # 사용자 요청). G를 적으면 차이(H)가 자동 계산되고, 차이 나는
+        # 행은 주황 강조. 확인(I)은 모든 행에서 적용/보류 선택 가능
         det = check_by_id.get(item.get("요청ID"))
-        if det is not None:
-            mismatch = det.get("상태") != "집행 확인"
-            fill = _DIFF_FILL if mismatch else None
-            _put(ws, row, 7, round(det.get("집행액") or 0), fmt="#,##0",
-                 border=True, fill=fill)
-            _put(ws, row, 8, f'=IF(G{row}="","",E{row}-G{row})',
-                 fmt="#,##0", border=True, fill=fill)
-            _put(ws, row, 9, "", border=True,
-                 fill=_EDIT_FILL if mismatch else None, align="center")
-            if mismatch:
-                confirm_dv.add(f"I{row}")
-        else:
-            for c in (7, 8, 9):
-                _put(ws, row, c, "", border=True)
+        mismatch = det is not None and det.get("상태") != "집행 확인"
+        _put(ws, row, 7,
+             round(det.get("집행액") or 0) if det is not None else "",
+             fmt="#,##0", border=True,
+             fill=_DIFF_FILL if mismatch else _EDIT_FILL)
+        _put(ws, row, 8, f'=IF(OR(G{row}="",E{row}=""),"",E{row}-G{row})',
+             fmt="#,##0", border=True,
+             fill=_DIFF_FILL if mismatch else None)
+        _put(ws, row, 9, "", border=True, fill=_EDIT_FILL, align="center")
+        confirm_dv.add(f"I{row}")
         row += 1
     exp_next_row = row
-    _put(ws, _EXP_TOTAL, 4, "합계(숨긴 행 포함 4주 전체)", bold=True,
-         align="center")
-    _put(ws, _EXP_TOTAL, 5, f"=SUM(E{_EXP_FIRST}:E{_EXP_LAST})",
+    # 예비 행(숨김)도 바로 쓸 수 있게 입력칸·수식·드롭다운을 깔아 둔다 —
+    # 행 숨기기 해제 후 지급일·내용·금액을 적으면 곧바로 계획에 반영된다
+    for r in range(exp_next_row, _EXP_LAST + 1):
+        _put(ws, r, 1, "", fmt="yyyy-mm-dd", fill=_EDIT_FILL, border=True)
+        _put(ws, r, 2, f'=IF(A{r}="","",MID("월화수목금토일",'
+                       f'WEEKDAY(A{r},2),1))', align="center", border=True)
+        for c in (3, 4, 6):
+            _put(ws, r, c, "", border=True)
+        _put(ws, r, 5, "", fmt="#,##0", fill=_EDIT_FILL, border=True)
+        _put(ws, r, 7, "", fmt="#,##0", fill=_EDIT_FILL, border=True)
+        _put(ws, r, 8, f'=IF(OR(G{r}="",E{r}=""),"",E{r}-G{r})',
+             fmt="#,##0", border=True)
+        _put(ws, r, 9, "", border=True, fill=_EDIT_FILL, align="center")
+        confirm_dv.add(f"I{r}")
+    _put(ws, _EXP_TOTAL, 4, "합계(숨긴 행 포함 4주 전체 · 보류 제외)",
+         bold=True, align="center")
+    _put(ws, _EXP_TOTAL, 5,
+         f"=SUMIFS(E{_EXP_FIRST}:E{_EXP_LAST},"
+         f"I{_EXP_FIRST}:I{_EXP_LAST},{_NOT_HOLD})",
          bold=True, fmt="#,##0")
     # 머리글에 자동 필터 — 지급일·구분별로 골라 볼 수 있다
     ws.auto_filter.ref = f"A{_EXP_COLS}:I{_EXP_LAST}"
@@ -373,10 +401,46 @@ def build_management_sheet(wb, report: dict):
                             "수정과 반영률(F12)에 즉시 연동 "
                             "(실행일~차주 금요일만 표시 · 계산은 4주 전체)")
     for c, head in enumerate(("일자", "요일", "입금", "지출", "예상잔액",
-                              "상태"), start=1):
+                              "지출 내역"), start=1):
         _put(ws, _DAY_COLS, c, head, bold=True, color="FFFFFF",
              fill=_HEAD_FILL, align="center", border=True)
+    for c in (7, 8, 9):     # '지출 내역' 머리글을 F~I 폭으로 병합
+        _put(ws, _DAY_COLS, c, "", fill=_HEAD_FILL, border=True)
+    ws.merge_cells(start_row=_DAY_COLS, start_column=6,
+                   end_row=_DAY_COLS, end_column=9)
     _put(ws, _DAY_COLS, 11, round(start_balance), fmt="#,##0")  # 시작잔액
+
+    def _detail_formula(row, prefix=""):
+        """그 일자에 반영된 ② 지출 항목을 '내용 금액' 형태로 나열한다
+        (2026-09-23 사용자 요청 — '상태' 대신 내역·금액 확인).
+        ②의 지급일·금액 수정을 그대로 따라오고, 보류 행은 뺀다.
+        잔액이 음수면 '⚠ 잔액 부족'을 붙인다. TEXTJOIN이 없는 구형
+        엑셀에서는 IFERROR로 부족 표시만 남긴다(배열 수식으로 저장)."""
+        a = f"$A${_EXP_FIRST}:$A${_EXP_LAST}"
+        dd = f"$D${_EXP_FIRST}:$D${_EXP_LAST}"
+        e = f"$E${_EXP_FIRST}:$E${_EXP_LAST}"
+        ii = f"$I${_EXP_FIRST}:$I${_EXP_LAST}"
+        head = f'"{prefix}"&IF(E{row}<0,"⚠ 잔액 부족 · ","")'
+        core = (f'{head}&_xlfn.TEXTJOIN(" · ",TRUE,IF(({a}=$A{row})*({e}<>0)'
+                f'*({ii}<>"{EXP_HOLD}"),{dd}&" "&TEXT({e},"#,##0"),""))')
+        return (f'=IFERROR({core},'
+                f'"{prefix}"&IF(E{row}<0,"⚠ 잔액 부족",""))')
+
+    def _detail_cell(row, value, **kw):
+        if isinstance(value, str) and value.startswith("=IFERROR"):
+            # TEXTJOIN(IF(배열)) — 배열 수식으로 저장해야 엑셀·LibreOffice
+            # 모두 항목 나열을 계산한다 (일반 수식이면 #VALUE!)
+            from openpyxl.worksheet.formula import ArrayFormula
+            value = ArrayFormula(f"F{row}", value)
+        cell = _put(ws, row, 6, value, border=True, **kw)
+        for c in (7, 8, 9):
+            _put(ws, row, c, "", border=True)
+        ws.merge_cells(start_row=row, start_column=6,
+                       end_row=row, end_column=9)
+        if cell is not None:
+            cell.alignment = Alignment(horizontal="left",
+                                       vertical="center", wrap_text=True)
+        return cell
 
     for i in range(_DAY_COUNT):
         row = _DAY_FIRST + i
@@ -423,8 +487,7 @@ def build_management_sheet(wb, report: dict):
                  border=True)
             _put(ws, row, 4, round(outflow), fmt="#,##0", fill=_ACT_FILL,
                  border=True)
-            _put(ws, row, 6, "실적", size=9, color="808080", align="center",
-                 border=True)
+            _detail_cell(row, "실적(은행 확인)", size=9, color="808080")
         elif intraday and d == intraday.get("이월일"):
             # 익일: 전일 미집행 이월분을 SUMIFS에 더한다 (③ 표의 전일
             # 항목은 실적 마감으로 닫혀 이 값으로만 반영된다)
@@ -435,28 +498,47 @@ def build_management_sheet(wb, report: dict):
                  fmt="#,##0", border=True)
             _put(ws, row, 4,
                  f"=SUMIFS($E${_EXP_FIRST}:$E${_EXP_LAST},"
-                 f"$A${_EXP_FIRST}:$A${_EXP_LAST},A{row})+{carried}",
+                 f"$A${_EXP_FIRST}:$A${_EXP_LAST},A{row},"
+                 f"$I${_EXP_FIRST}:$I${_EXP_LAST},{_NOT_HOLD})+{carried}",
                  fmt="#,##0", border=True)
-            _put(ws, row, 6, f'=IF(E{row}<0,"부족","")', color="C00000",
-                 align="center", border=True)
+            _detail_cell(row, _detail_formula(
+                row, prefix="전일 미집행 이월 포함 · "), size=9)
         else:
             _put(ws, row, 3, f"=ROUND(J{row}*{_RATE_CELL},0)+K{row}",
                  fmt="#,##0", border=True)
             _put(ws, row, 4, f"=SUMIFS($E${_EXP_FIRST}:$E${_EXP_LAST},"
-                             f"$A${_EXP_FIRST}:$A${_EXP_LAST},A{row})",
+                             f"$A${_EXP_FIRST}:$A${_EXP_LAST},A{row},"
+                             f"$I${_EXP_FIRST}:$I${_EXP_LAST},{_NOT_HOLD})",
                  fmt="#,##0", border=True)
-            _put(ws, row, 6, f'=IF(E{row}<0,"부족","")', color="C00000",
-                 align="center", border=True)
+            _detail_cell(row, _detail_formula(row), size=9)
         prev = _START_CELL if i == 0 else f"E{row - 1}"
         _put(ws, row, 5, f"={prev}+C{row}-D{row}", fmt="#,##0", border=True)
     ws.conditional_formatting.add(
         f"E{_DAY_FIRST}:E{_DAY_LAST}",
         CellIsRule(operator="lessThan", formula=["0"], fill=_RED_FILL))
-    # 실행일~차주 금요일 구간을 하나의 붉은 상자로 묶는다
+    # 실행일~차주 금요일 구간을 하나의 붉은 상자로 묶는다. 내역 칸은
+    # F:I 병합이라 저장 시 openpyxl이 앵커(F) 테두리를 병합 범위의
+    # 바깥 모서리로 재구성한다 — 오른쪽·위·아래 모서리를 앵커에 건다
     first = _DAY_FIRST + max(0, min((w_start - base_date).days,
                                     _DAY_COUNT - 1))
     last = _DAY_FIRST + max(0, min((w_end - base_date).days, _DAY_COUNT - 1))
-    outline_week_box(ws, first, last, 1, 6)
+    outline_week_box(ws, first, last, 1, 5)
+    from copy import copy as _copy
+    _red_side = Side(style="medium", color="C00000")
+    for r in range(first, last + 1):
+        anchor = ws.cell(row=r, column=6)
+        b = _copy(anchor.border)
+        b.right = _red_side
+        if r == first:
+            b.top = _red_side
+        if r == last:
+            b.bottom = _red_side
+        anchor.border = b
+        # col5 오른쪽에 생긴 상자 안쪽 선은 지운다
+        e = ws.cell(row=r, column=5)
+        eb = _copy(e.border)
+        eb.right = Side(style="thin", color="BBBBBB")
+        e.border = eb
     _put(ws, _SUM_ROW, 1, "4주 최저 잔액", bold=True)
     _put(ws, _SUM_ROW, 3, f"=MIN(E{_DAY_FIRST}:E{_DAY_LAST})", bold=True,
          fmt="#,##0")
@@ -590,7 +672,8 @@ def build_ceo_sheet(wb, report: dict):
         ("향후 4주 확정지출", f"={M}E{_EXP_TOTAL}", None),
         ("카드 결제 예정액(4주)",
          f'=SUMIFS({M}$E${_EXP_FIRST}:$E${_EXP_LAST},'
-         f'{M}$F${_EXP_FIRST}:$F${_EXP_LAST},"법인카드")', None),
+         f'{M}$F${_EXP_FIRST}:$F${_EXP_LAST},"법인카드",'
+         f'{M}$I${_EXP_FIRST}:$I${_EXP_LAST},{_NOT_HOLD})', None),
         ("자금부족 예상일",
          f'=IFERROR(TEXT(INDEX({day_a},MATCH(TRUE,'
          f'INDEX({day_e}<0,0),0)),"yyyy-mm-dd"),"없음")', "text"),
@@ -745,7 +828,8 @@ def verify_management_workbook(path: Path) -> bool:
             return False
         ws = wb[SHEET_NAME]
         return (str(ws[f"C{_SUM_ROW}"].value or "").startswith("=MIN")
-                and "SUM(" in str(ws[f"E{_EXP_TOTAL}"].value or "")
+                and str(ws[f"E{_EXP_TOTAL}"].value or "")
+                .startswith("=SUM")     # SUMIFS(보류 제외) 합계
                 and str(ws[f"E{_DAY_FIRST}"].value or "").startswith("="))
     except Exception:
         return False
