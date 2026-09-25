@@ -139,7 +139,8 @@ def launch(p):
         headless=False,
         viewport=None,
         args=["--start-maximized", "--disable-blink-features=AutomationControlled"],
-        ignore_default_args=["--enable-automation"],
+        ignore_default_args=["--enable-automation", "--no-sandbox"],
+        chromium_sandbox=True,
     )
     for channel in ("chrome", "msedge"):
         try:
@@ -200,6 +201,13 @@ def click_body(ed):
     loc.click()
 
 
+def click_body_end(page, ed):
+    paras = ed.locator(".se-section-text .se-text-paragraph, .se-component.se-text .se-text-paragraph")
+    if paras.count():
+        paras.last.click()
+    page.keyboard.press("ControlOrMeta+End")
+
+
 def attach_file(page, ed, file_path):
     btn = first_visible(ed, ['button[data-name="file"]', ".se-file-toolbar-button", 'button:has-text("파일")'])
     if not btn:
@@ -209,15 +217,28 @@ def attach_file(page, ed, file_path):
             btn.click()
         fc.value.set_files(str(file_path))
     except Exception:
-        # 파일 버튼을 누르면 "내 PC / MYBOX" 선택이 먼저 뜨는 경우
-        pc = first_visible(ed, ['button:has-text("내 PC")', 'label:has-text("내 PC")'], timeout=3000)
-        if not pc:
+        # 파일 버튼을 누르면 "파일 불러오기 — 내 컴퓨터 / 네이버 MYBOX" 창이 먼저 뜬다
+        done = False
+        pc = first_visible(ed, ['button:has-text("내 컴퓨터")', 'label:has-text("내 컴퓨터")',
+                                ':text("내 컴퓨터")', 'button:has-text("내 PC")'], timeout=4000)
+        if pc:
+            try:
+                with page.expect_file_chooser(timeout=5000) as fc:
+                    pc.click()
+                fc.value.set_files(str(file_path))
+                done = True
+            except Exception:
+                pass
+        if not done:
+            # 숨겨진 파일 입력칸에 직접 넣기 (창이 안 열려도 동작)
+            inputs = ed.locator('input[type="file"]')
+            if inputs.count():
+                inputs.last.set_input_files(str(file_path))
+                done = True
+        if not done:
             raise RuntimeError("파일 선택 창이 열리지 않음")
-        with page.expect_file_chooser(timeout=5000) as fc:
-            pc.click()
-        fc.value.set_files(str(file_path))
-    time.sleep(4)  # 업로드 대기
-    page.keyboard.press("ControlOrMeta+End")
+    time.sleep(5)  # 업로드 대기
+    click_body_end(page, ed)
     page.keyboard.press("Enter")
 
 
@@ -310,6 +331,11 @@ def main():
                 except Exception as e:
                     failed.append(f"엑셀 첨부: {e} → 본문의 첨부 자리에 직접 첨부해 주세요")
                     snap(page, "attach")
+                    page.keyboard.press("Escape")
+                    x = first_visible(ed, [".se-popup-close-button", 'button[aria-label*="닫기"]'], timeout=1000)
+                    if x:
+                        x.click()
+                    click_body_end(page, ed)
                     paste(page, PLACEHOLDER + "\n")
                 paste(page, after.lstrip("\n"))
             else:
