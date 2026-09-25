@@ -6754,5 +6754,246 @@
     "answerIndex": 2,
     "explanation": "2sinθ = 1에서 sinθ = 1/2입니다. 0 ≤ θ < 2π 범위에서 이를 만족하는 θ는 θ = π/6과 θ = 5π/6이므로, 모든 θ의 값의 합은 π/6 + 5π/6 = π입니다.",
     "concept": "사인함수 값이 같은 두 해는 π - θ 관계를 가지므로, 0부터 2π 범위에서 sinθ = k(0<k<1)를 만족하는 두 해의 합은 π이다."
+  },
+  {
+    "id": "en-2026-09-26-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-26",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "When people encounter information that challenges a belief they already hold, they often experience a kind of mental discomfort known as cognitive dissonance, a state [u]that[/u]① most individuals are motivated to reduce as quickly as possible. One common strategy for reducing this discomfort involves selectively seeking out evidence [u]that supports[/u]② the original belief while ignoring evidence that contradicts it, a pattern [u]known[/u]③ as confirmation bias. In one experiment, participants who were given articles both supporting and challenging their political views [u]spent[/u]④ considerably more time reading the article that aligned with what they already believed. As a result, exposure to a wide range of viewpoints does not always [u]guarantees[/u]⑤ that people become better informed, since selective attention can quietly filter out the perspectives that matter most.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤에서 조동사 does 뒤에는 동사원형이 와야 하므로 guarantees가 아니라 guarantee가 되어야 합니다. ①은 state를 선행사로 하는 관계대명사 that, ②는 evidence를 선행사로 하는 관계절 안의 동사 supports, ③은 pattern을 수식하는 과거분사 known(수동의 의미), ④는 주어 participants에 맞는 과거동사 spent로 모두 어법상 올바릅니다.",
+    "vocab": [
+      {
+        "word": "dissonance",
+        "meaning": "부조화, 불일치"
+      },
+      {
+        "word": "contradicts",
+        "meaning": "모순되다, 반박하다"
+      },
+      {
+        "word": "align",
+        "meaning": "일치하다, 부합하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-26-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-26",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In the early twentieth century, a psychologist named Bluma Zeigarnik noticed that waiters in a busy restaurant could recall the details of an unpaid order with remarkable accuracy, yet the same information vanished from memory almost the moment the bill was settled. Intrigued by this pattern, she conducted a series of experiments in which participants were asked to complete a set of simple tasks, some of which were interrupted before they could be finished. When later asked to recall the tasks, participants remembered the interrupted ones far more often than the ones they had completed. Zeigarnik concluded that ______. An unfinished task appears to create a kind of mental tension that keeps it active in memory until it is resolved, which is why a half-written email or an unanswered question can linger in the mind long after we have moved on to other things.",
+    "choices": [
+      "incomplete tasks tend to remain in memory more persistently than tasks that have already been completed",
+      "people generally forget both completed and interrupted tasks at about the same rate",
+      "tasks requiring the most effort are the ones most likely to be forgotten entirely",
+      "memory for a task improves the longer a person spends completing it",
+      "waiters have better memories than people in most other occupations"
+    ],
+    "answerIndex": 0,
+    "explanation": "실험에서 참가자들은 완료한 과제보다 중단된 과제를 훨씬 더 잘 기억했다는 내용을 근거로, 빈칸에는 완료되지 않은 과제가 완료된 과제보다 기억에 더 오래 남는 경향이 있다는 내용이 들어가야 합니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "intrigued",
+        "meaning": "흥미를 느낀"
+      },
+      {
+        "word": "linger",
+        "meaning": "남아 있다, 오래 지속되다"
+      },
+      {
+        "word": "resolved",
+        "meaning": "해결된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-26-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-26",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Long before it became a customary gesture at celebrations, the practice of touching glasses together before drinking was rooted in a very practical concern.\n(A) To ease this worry, hosts developed a custom of pouring a small amount of wine from one cup into another so that both drinkers would be consuming from the same source.\n(B) In many ancient societies, sharing a drink with someone carried the risk that the beverage had been secretly poisoned by a rival or an enemy.\n(C) Over time, the exchange of wine was simplified into the more convenient act of striking the cups together hard enough that a little liquid would splash from one into the other, which eventually evolved into the toast we recognize today.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 건배 관습이 실용적인 우려에서 비롯되었다고 언급합니다. (B)는 그 우려가 독살의 위험이었다는 구체적 내용이고, (A)는 그 걱정을 덜기 위해 술을 서로 섞어 마시는 관습이 생겼다는 내용이며, (C)는 시간이 지나며 잔을 부딪히는 방식으로 간소화되어 오늘날의 건배가 되었다는 결과입니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "customary",
+        "meaning": "관습적인"
+      },
+      {
+        "word": "rooted in",
+        "meaning": "~에 뿌리를 둔"
+      },
+      {
+        "word": "splash",
+        "meaning": "튀다, 쏟아지다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-26-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-26",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet this seemingly inconvenient layout was not an accident but the result of a deliberate decision by store planners.",
+    "passage": "Anyone who has wondered why milk, one of the most frequently purchased grocery items, is almost always located at the very back of the supermarket has stumbled upon a small mystery of retail design. ( ① ) At first glance, placing such a popular product as far as possible from the entrance seems like a strange way to keep customers happy, since shoppers who need only milk are forced to walk past dozens of unrelated aisles to reach it. ( ② ) Retail researchers have found that the longer a customer's path through the store, the more products that customer is likely to notice and eventually place in the cart. ( ③ ) By positioning essential items like milk, eggs, and bread at opposite corners of the store, retailers effectively guarantee that even a shopper running a quick errand will pass by shelves full of items they had not planned to buy. ( ④ ) Snacks, magazines, and seasonal displays are often arranged along these extended routes precisely because they benefit most from impulse purchases. ( ⑤ ) What looks like poor planning, then, is in fact a carefully engineered strategy for maximizing the average shopper's spending.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 앞서 언급된 '불편해 보이는 배치'가 사실은 의도된 결정이었다는 반전을 제시합니다. ② 앞에서는 우유가 매장 뒤쪽에 있어 불편하다는 내용이 나오고, ② 뒤에서는 소매 연구자들이 고객의 이동 경로가 길수록 더 많은 상품을 보게 된다는 것을 발견했다는 내용이 이어지므로, 이 배치가 의도적이라는 주어진 문장은 ②에 들어가야 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "deliberate",
+        "meaning": "의도적인"
+      },
+      {
+        "word": "impulse",
+        "meaning": "충동"
+      },
+      {
+        "word": "errand",
+        "meaning": "심부름, 용무"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-26-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-26",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "It seems intuitive that having more options should make us happier, since a larger selection increases the chance of finding exactly what we want. Yet research on decision-making suggests that beyond a certain point, additional choices can make people less satisfied rather than more. When shoppers were presented with a large assortment of jams to sample, they were more likely to stop and taste them, but far less likely to actually make a purchase than shoppers who encountered a smaller assortment. Psychologists suggest that an overwhelming number of options increases the mental effort required to compare alternatives and raises the fear of making the wrong choice, so that many people simply avoid deciding at all. Even among those who do choose from a large set of options, satisfaction with the final decision tends to be lower, since it is easier to imagine an alternative that might have been better. What initially appears to be a straightforward benefit of freedom, then, turns out to carry a hidden psychological cost.",
+    "choices": [
+      "having too many options can make decision-making harder and reduce satisfaction with the choice eventually made",
+      "consumers always prefer the largest possible selection of products when shopping",
+      "jam is a less appealing product to sample than other grocery items",
+      "shoppers who compare more options end up saving the most money",
+      "the fear of making mistakes has little effect on how people shop"
+    ],
+    "answerIndex": 0,
+    "explanation": "선택지가 많을수록 오히려 구매를 망설이게 되고, 선택한 뒤에도 만족도가 낮아진다는 잼 실험 사례를 통해 지나치게 많은 선택지가 의사결정을 어렵게 하고 최종 만족도를 낮춘다는 것을 보여줍니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "assortment",
+        "meaning": "모음, 종류"
+      },
+      {
+        "word": "overwhelming",
+        "meaning": "압도적인"
+      },
+      {
+        "word": "intuitive",
+        "meaning": "직관적인"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-26-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-26",
+    "prompt": "등차수열 {a_n}에서 a_3 = 11, a_7 = 27일 때, a_10의 값은?",
+    "choices": [
+      "33",
+      "36",
+      "39",
+      "42",
+      "45"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_7 - a_3 = 4d = 27 - 11 = 16이므로 공차 d = 4입니다. a_3 = a_1 + 2d = 11이므로 a_1 = 11 - 8 = 3입니다. 따라서 a_10 = a_1 + 9d = 3 + 36 = 39입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1 + (n-1)d를 이용하여 두 항의 차이로부터 공차를 구한 뒤 원하는 항을 계산한다."
+  },
+  {
+    "id": "math-2026-09-26-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-26",
+    "prompt": "함수 f(x) = x^3 - 3x^2 - 9x + 5의 극솟값은?",
+    "choices": [
+      "-26",
+      "-22",
+      "-18",
+      "-14",
+      "-10"
+    ],
+    "answerIndex": 1,
+    "explanation": "f'(x) = 3x^2 - 6x - 9 = 3(x-3)(x+1)이므로 x = 3 또는 x = -1에서 f'(x) = 0입니다. f''(x) = 6x - 6이고, f''(3) = 12 > 0이므로 x = 3에서 극솟값을 가지며, f''(-1) = -12 < 0이므로 x = -1에서는 극댓값을 가집니다. f(3) = 27 - 27 - 27 + 5 = -22이므로 극솟값은 -22입니다.",
+    "concept": "삼차함수의 극값은 f'(x) = 0인 x를 구한 뒤 f''(x)의 부호로 극대인지 극소인지 판별하고, 그 x를 원함수에 대입하여 극값을 구한다."
+  },
+  {
+    "id": "math-2026-09-26-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-26",
+    "prompt": "곡선 y = -x^2 + 4x와 x축으로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "16/3",
+      "22/3",
+      "28/3",
+      "32/3",
+      "38/3"
+    ],
+    "answerIndex": 3,
+    "explanation": "-x^2 + 4x = 0에서 x(4-x) = 0이므로 곡선은 x = 0, x = 4에서 x축과 만나고, 이 구간에서 곡선은 x축보다 위에 있습니다. 넓이는 ∫[0,4] (-x^2+4x) dx이고, 부정적분은 -x^3/3 + 2x^2입니다. x=4일 때 값은 -64/3+32 = 32/3, x=0일 때 값은 0이므로 넓이는 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 도형의 넓이는 곡선이 x축과 만나는 점(x절편)을 구한 뒤 그 구간에서 곡선의 부정적분을 계산하여 구한다."
+  },
+  {
+    "id": "math-2026-09-26-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-26",
+    "prompt": "주사위를 두 번 던져서 나온 눈의 수의 합이 8일 확률은?",
+    "choices": [
+      "1/9",
+      "5/36",
+      "1/6",
+      "7/36",
+      "2/9"
+    ],
+    "answerIndex": 1,
+    "explanation": "주사위를 두 번 던질 때 전체 경우의 수는 6×6=36입니다. 눈의 합이 8이 되는 경우는 (2,6),(3,5),(4,4),(5,3),(6,2)로 5가지입니다. 따라서 구하는 확률은 5/36입니다.",
+    "concept": "두 개의 독립적인 시행에서 특정 합이 나오는 확률은 전체 경우의 수 중 조건을 만족하는 경우의 수를 세어 구한다."
+  },
+  {
+    "id": "math-2026-09-26-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-26",
+    "prompt": "0 ≤ θ < 2π일 때, 방정식 2cosθ + 1 = 0을 만족시키는 모든 θ의 값의 합은?",
+    "choices": [
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 2,
+    "explanation": "2cosθ + 1 = 0에서 cosθ = -1/2입니다. 0 ≤ θ < 2π 범위에서 이를 만족하는 θ는 θ = 2π/3과 θ = 4π/3이므로, 모든 θ의 값의 합은 2π/3 + 4π/3 = 2π입니다.",
+    "concept": "코사인함수 값이 같은 두 해는 2π - θ 관계를 가지므로, 0부터 2π 범위에서 cosθ=k(k≠±1)를 만족하는 두 해의 합은 2π이다."
   }
 ]
