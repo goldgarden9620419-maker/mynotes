@@ -334,6 +334,23 @@ def read_json(path: Path, default: Optional[dict] = None) -> dict:
         return dict(default or {})
 
 
+def save_workbook(wb, out_path) -> None:
+    """빈 데이터 유효성 검사를 정리한 뒤 통합문서를 저장한다.
+
+    드롭다운(DataValidation)을 등록해 두고 해당 행이 0건이라 셀이
+    하나도 연결되지 않으면 openpyxl이 <dataValidations count="0"/>
+    빈 요소를 저장하는데, Excel은 이를 손상으로 보고 '복구' 대화상자를
+    띄운다 (2026-09-25 확인필요 파일에서 실제 발생). 모든 결과물
+    저장은 wb.save 대신 이 함수를 거친다.
+    """
+    for ws in wb.worksheets:
+        dvs = getattr(ws, "data_validations", None)
+        if dvs is not None and dvs.dataValidation:
+            dvs.dataValidation = [d for d in dvs.dataValidation
+                                  if d.sqref and len(d.sqref.ranges) > 0]
+    wb.save(out_path)
+
+
 def unique_path(path: Path) -> Path:
     """이미 존재하면 _2, _3 … 접미사를 붙여 덮어쓰기를 막는다."""
     path = Path(path)

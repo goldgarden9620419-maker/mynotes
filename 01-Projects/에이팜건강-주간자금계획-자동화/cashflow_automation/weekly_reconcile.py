@@ -17,7 +17,7 @@ from typing import Optional
 from common import (
     BANK_REFLECT_OK, MATCH_AMOUNT_DIFF, MATCH_DATE_DIFF, MATCH_MANUAL,
     MATCH_NOT_FOUND, MATCH_PAID, MATCH_PARTIAL, MATCH_UNPLANNED,
-    REFLECT_PAID, now_local, week_monday,
+    REFLECT_PAID, now_local, save_workbook, week_monday,
 )
 from excel_report import account_label
 
@@ -266,7 +266,7 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
 
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
+    save_workbook(wb, out_path)
     wb.close()
     return out_path
 
