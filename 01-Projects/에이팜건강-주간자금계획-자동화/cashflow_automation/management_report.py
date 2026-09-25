@@ -19,7 +19,7 @@ from openpyxl.formatting.rule import CellIsRule
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
-from common import WEEKDAY_KO
+from common import WEEKDAY_KO, save_workbook
 from excel_report import account_label
 from live_report import exec_window, outline_week_box
 
@@ -131,7 +131,7 @@ def create_management_workbook(report: dict, out_path: Path) -> Path:
     build_ceo_sheet(wb, report)
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
+    save_workbook(wb, out_path)
     wb.close()
     return out_path
 
@@ -792,7 +792,7 @@ def create_combined_workbook(report: dict, template_path: Path,
                                         if sh.title in front
                                         else len(front)))
         wb.active = 0
-        wb.save(out_path)
+        save_workbook(wb, out_path)
     finally:
         wb.close()
     return out_path

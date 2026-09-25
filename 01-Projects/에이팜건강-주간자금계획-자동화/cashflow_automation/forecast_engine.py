@@ -18,8 +18,8 @@ from typing import Optional
 
 from common import (
     BANK_REFLECT_OK, PAY_METHOD_AUTO, PAY_METHOD_CARD, PAY_METHOD_TRANSFER,
-    REFLECT_OK, normalize_text, parse_amount, parse_date, weekday_ko,
-    week_monday,
+    REFLECT_OK, normalize_text, parse_amount, parse_date, save_workbook,
+    weekday_ko, week_monday,
 )
 from bank_classifier import CLASS_ONLINE_SALES
 
@@ -283,7 +283,7 @@ def _create_draft_workbook(draft_path: Path, rows: list[dict],
     _ensure_draft_dropdown(ws)
     _ensure_alias_sheet(wb)
     draft_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(draft_path)
+    save_workbook(wb, draft_path)
     wb.close()
 
 
@@ -325,7 +325,7 @@ def migrate_auto_drafts(base_workbook: Path, draft_path: Path,
                                         for c in ws[r])
                     if "자동 초안" in row_text:
                         ws.delete_rows(r)
-                wb.save(base_workbook)
+                save_workbook(wb, base_workbook)
                 break
         wb.close()
     except Exception:
@@ -406,7 +406,7 @@ def refresh_auto_draft_file(draft_path: Path, recurring_items: list[dict],
     _ensure_alias_sheet(wb)
     _sort_draft_rows(ws)        # 일자순 정렬로 보기 좋게
     _style_draft_sheet(ws)      # 표 서식 재적용
-    wb.save(draft_path)
+    save_workbook(wb, draft_path)
     wb.close()
     return added, pruned
 
@@ -523,7 +523,7 @@ def apply_review_draft_edits(review_path: Path, draft_path: Path) -> int:
             _ensure_draft_dropdown(ws)
             _sort_draft_rows(ws)
             _style_draft_sheet(ws)
-        wb.save(draft_path)
+        save_workbook(wb, draft_path)
         return changed
     finally:
         wb.close()

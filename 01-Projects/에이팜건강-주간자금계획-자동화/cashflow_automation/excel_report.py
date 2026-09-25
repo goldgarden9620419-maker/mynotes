@@ -18,7 +18,7 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
-from common import (CONFIDENTIAL_MASK, RECURRING_BULK_CELL,
+from common import (CONFIDENTIAL_MASK, RECURRING_BULK_CELL, save_workbook,
                     RECURRING_BULK_KEEP, RECURRING_CAT_NAME_COL,
                     RECURRING_CAT_PICK_COL, RECURRING_NATURE_DISPLAY)
 
@@ -751,7 +751,7 @@ def create_report_workbook(report: dict, out_path: Path) -> Path:
 
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
+    save_workbook(wb, out_path)
     wb.close()
     return out_path
 
@@ -1216,7 +1216,7 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                 new_names=(new_marks or {}).get("recurring"))
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
+    save_workbook(wb, out_path)
     wb.close()
     return out_path
 

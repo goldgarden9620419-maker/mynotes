@@ -21,7 +21,8 @@ from typing import Optional
 from openpyxl import load_workbook
 from openpyxl.cell.cell import MergedCell
 
-from common import PAY_METHOD_CARD, PAY_METHOD_TRANSFER, WEEKDAY_KO
+from common import (PAY_METHOD_CARD, PAY_METHOD_TRANSFER, WEEKDAY_KO,
+                    save_workbook)
 from excel_report import account_label
 
 
@@ -130,7 +131,7 @@ def fill_live_workbook(template_path: Path, report: dict,
 
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    wb.save(out_path)
+    save_workbook(wb, out_path)
     wb.close()
     return out_path
 
