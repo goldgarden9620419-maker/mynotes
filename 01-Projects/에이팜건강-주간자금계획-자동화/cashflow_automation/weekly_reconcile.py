@@ -41,7 +41,9 @@ def _d(value):
 def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
                          balances: dict, run_date: date,
                          date_window_days: int = 3,
-                         name_threshold: float = 70) -> dict:
+                         name_threshold: float = 70,
+                         aliases: Optional[list[list[str]]] = None,
+                         amount_tolerance: float = 0.01) -> dict:
     """이번 주(월요일~run_date) 계획 vs 실제 대조 자료를 만든다.
 
     plans: 통합 지출계획 행(정상반영·지급완료), bank_rows: 표준 은행 행.
@@ -62,7 +64,8 @@ def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
     matched = payment_matcher.match_payments(
         week_plans, bank_rows, run_date,
         window_days=date_window_days, name_threshold=name_threshold,
-        unplanned_days=max(0, (run_date - monday).days))
+        unplanned_days=max(0, (run_date - monday).days),
+        aliases=aliases, amount_tolerance=amount_tolerance)
 
     diffs = [r for r in matched["results"]
              if r.get("대조결과") != MATCH_PAID]
@@ -302,7 +305,10 @@ def run_weekly_reconcile(cfg, log, now=None, open_file: bool = True) -> Path:
         match_targets, kept, balances, run_date,
         date_window_days=cfg.get("matching", "date_window_days", default=3),
         name_threshold=cfg.get("matching", "name_similarity_threshold",
-                               default=70))
+                               default=70),
+        aliases=rules.get("매칭별칭"),
+        amount_tolerance=cfg.get("matching", "amount_tolerance",
+                                 default=0.01))
 
     out = cfg.folder("review") / f"주간대조_{now:%Y%m%d_%H%M}.xlsx"
     write_reconcile_workbook(data, out)
