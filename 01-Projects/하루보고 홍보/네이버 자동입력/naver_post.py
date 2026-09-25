@@ -14,6 +14,7 @@
   맥    : "실행 (맥).command" 더블클릭
   특정 글: python naver_post.py 4      (블로그 글 4)
   점검만: python naver_post.py --dry   (브라우저 없이 원고 읽기만 확인)
+  바로가기: "바탕화면 바로가기 만들기.bat" 더블클릭 (윈도우 바탕화면에 실행 아이콘 생성)
 
 주의
   - 로그인 정보(쿠키)는 이 폴더가 아닌 사용자 홈의 .harubogo-naver-profile 에만 저장된다.
@@ -274,9 +275,53 @@ def pick_category(ed, category):
     opt.click()
 
 
+# ---------------------------------------------------------------- 바탕화면 바로가기
+SHORTCUT_NAME = "네이버 블로그 발행 (하루보고).lnk"
+
+
+def make_shortcut():
+    """윈도우 바탕화면에 '실행 (윈도우).bat' 바로가기를 만든다. (OneDrive 바탕화면도 자동 인식)"""
+    if os.name != "nt":
+        print("바탕화면 바로가기는 윈도우에서만 자동으로 만듭니다.")
+        print("맥은 '실행 (맥).command'를 Option+Command 키를 누른 채 바탕화면으로 끌어다 놓으면 됩니다.")
+        return
+    import base64
+    import subprocess
+    target = HERE / "실행 (윈도우).bat"
+    if not target.exists():
+        sys.exit(f"[오류] '{target.name}' 파일을 찾지 못했습니다.")
+    icon = ""
+    for c in (r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+              r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"):
+        if Path(c).exists():
+            icon = c + ",0"
+            break
+    ps = (
+        "$d=[Environment]::GetFolderPath('Desktop');"
+        f"$p=Join-Path $d '{SHORTCUT_NAME}';"
+        "$s=(New-Object -ComObject WScript.Shell).CreateShortcut($p);"
+        "$s.TargetPath=$env:HB_TARGET;$s.WorkingDirectory=$env:HB_DIR;"
+        "$s.Description='하루보고 네이버 블로그 반자동 입력';"
+        "if($env:HB_ICON){$s.IconLocation=$env:HB_ICON};"
+        "$s.Save();Write-Output $p"
+    )
+    enc = base64.b64encode(ps.encode("utf-16-le")).decode()
+    env = dict(os.environ, HB_TARGET=str(target), HB_DIR=str(HERE), HB_ICON=icon)
+    r = subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", enc],
+                       env=env, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if r.returncode != 0:
+        sys.exit("[오류] 바로가기를 만들지 못했습니다:\n" + (r.stderr or r.stdout))
+    print("\n바탕화면에 바로가기를 만들었습니다:")
+    print("  " + (r.stdout.strip() or SHORTCUT_NAME))
+    print("앞으로는 바탕화면의 '네이버 블로그 발행 (하루보고)'를 더블클릭하면 됩니다.")
+
+
 # ---------------------------------------------------------------- 메인
 def main():
     args = [a for a in sys.argv[1:]]
+    if "--shortcut" in args:
+        make_shortcut()
+        return
     dry = "--dry" in args
     nums = [int(a) for a in args if a.isdigit()]
     path = find_post(nums[0] if nums else None)
