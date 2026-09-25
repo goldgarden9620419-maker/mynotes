@@ -38,6 +38,8 @@ WRITE_URL = f"https://blog.naver.com/{BLOG_ID}?Redirect=Write&"
 HERE = Path(__file__).resolve().parent
 PROMO_DIR = HERE.parent  # "하루보고 홍보" 폴더
 PROFILE_DIR = Path.home() / ".harubogo-naver-profile"
+PUBLISHED_FILE = PROFILE_DIR / "발행완료.txt"  # 이 PC에서 발행을 마친 글 번호 기록 (동기화 폴더 밖)
+ALREADY_PUBLISHED = {1, 2, 3, 4}  # 도구를 만들기 전에 이미 발행한 글
 LOG_DIR = HERE / "오류기록"
 PLACEHOLDER = "(여기에 양식 파일 첨부)"
 
@@ -139,7 +141,8 @@ def launch(p):
         user_data_dir=str(PROFILE_DIR),
         headless=False,
         viewport=None,
-        args=["--start-maximized", "--disable-blink-features=AutomationControlled"],
+        args=["--start-maximized", "--disable-blink-features=AutomationControlled",
+              "--hide-crash-restore-bubble", "--disable-session-crashed-bubble"],
         ignore_default_args=["--enable-automation", "--no-sandbox"],
         chromium_sandbox=True,
     )
@@ -316,6 +319,29 @@ def make_shortcut():
     print("앞으로는 바탕화면의 '네이버 블로그 발행 (하루보고)'를 더블클릭하면 됩니다.")
 
 
+# ---------------------------------------------------------------- 발행 기록
+def post_number(path):
+    m = re.match(r"블로그 글 (\d+)", path.name)
+    return int(m.group(1)) if m else None
+
+
+def load_published():
+    done = set(ALREADY_PUBLISHED)
+    try:
+        for line in PUBLISHED_FILE.read_text(encoding="utf-8").split():
+            if line.isdigit():
+                done.add(int(line))
+    except FileNotFoundError:
+        pass
+    return done
+
+
+def mark_published(n):
+    PROFILE_DIR.mkdir(exist_ok=True)
+    with PUBLISHED_FILE.open("a", encoding="utf-8") as f:
+        f.write(f"{n}\n")
+
+
 # ---------------------------------------------------------------- 메인
 def main():
     args = [a for a in sys.argv[1:]]
@@ -325,6 +351,12 @@ def main():
     dry = "--dry" in args
     nums = [int(a) for a in args if a.isdigit()]
     path = find_post(nums[0] if nums else None)
+    num = post_number(path)
+    if not nums and not dry and num in load_published():
+        print(f"\n새로 발행할 글이 없습니다. (가장 최근 원고인 '{path.stem}'은 이미 발행했어요)")
+        print("새 글은 토요일 18시 이후 준비됩니다. Obsidian에서 Pull 한 뒤 다시 실행해 주세요.")
+        print(f"(이미 발행한 글을 일부러 다시 넣으려면: py naver_post.py {num})")
+        return
     post = parse_post(path)
 
     print(f"\n[원고] {path.name}")
@@ -414,13 +446,21 @@ def main():
         else:
             print(" 입력 완료! 모든 단계가 정상적으로 채워졌습니다.")
         print(" 브라우저에서 내용을 훑어보고, 발행 창의 초록색 '발행' 버튼을 눌러주세요.")
-        print(" (발행 후 이 창에서 Enter를 누르면 브라우저가 닫힙니다.)")
+        print("")
+        print(" 발행을 마쳤으면  y  입력 후 Enter  (다음부터 이 글은 다시 채우지 않음)")
+        print(" 발행하지 않고 닫으려면 그냥 Enter")
         print("=" * 56)
         try:
-            input()
+            ans = input().strip().lower()
         except EOFError:
+            ans = ""
+        if ans in ("y", "yes", "ㅛ", "예", "네", "응") and num is not None:
+            mark_published(num)
+            print(f" 글 {num} 발행 완료로 기록했습니다.")
+        try:
+            ctx.close()  # 이 창에서 정상 종료해야 다음 실행 때 '페이지 복원' 창이 안 뜸
+        except Exception:
             pass
-        ctx.close()
 
 
 if __name__ == "__main__":
