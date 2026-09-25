@@ -339,7 +339,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
             match_targets, kept, now.date(),
             cfg.get("matching", "date_window_days", default=3),
             cfg.get("matching", "name_similarity_threshold", default=70),
-            cfg.get("bank", "recent_days", default=14))
+            cfg.get("bank", "recent_days", default=14),
+            aliases=rules.get("매칭별칭"),
+            amount_tolerance=cfg.get("matching", "amount_tolerance",
+                                     default=0.01))
         mask_conf = cfg.get("options", "mask_confidential", default=True)
         today = now.date()
         for row in matched["results"]:

@@ -66,6 +66,9 @@ DEFAULT_CONFIG: dict = {
         "date_window_days": 3,
         "name_similarity_threshold": 70,
         "partial_payment_tolerance": 0.05,
+        # 이 비율 이내의 계획-실제 금액 차이는 지급완료로 본다
+        # (CMS 수수료·단수 차이 흡수, 별칭·합산 매칭에도 적용)
+        "amount_tolerance": 0.01,
     },
     "bank": {
         "recent_days": 14,
