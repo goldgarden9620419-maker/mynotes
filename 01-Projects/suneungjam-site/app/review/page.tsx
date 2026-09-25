@@ -32,10 +32,38 @@ export default function ReviewPage() {
 
   if (problems.length === 0) {
     return (
-      <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col items-center justify-center px-6 py-16 text-center">
-        <p className="text-muted">저장된 틀린 문제가 없어요.</p>
-        <Link href="/" className="mt-4 text-sm text-accent hover:underline">
-          ← 메인으로 돌아가기
+      <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col items-center px-6 py-16 text-center">
+        <h1 className="text-xl font-bold">오답 복습이란?</h1>
+        <p className="mt-3 text-sm leading-relaxed text-muted">
+          아직 저장된 틀린 문제가 없어요. 이 페이지는 수능잼에서 문제를 풀다가 틀린 문제만 자동으로
+          모아서 다시 보여주는 오답노트예요. 정답과 해설을 눈으로만 확인하고 넘어가면 금방 잊어버리기
+          쉬운데, 틀린 문제만 따로 모아두면 짧은 시간에 내가 약한 유형만 골라서 복습할 수 있어요.
+        </p>
+        <div className="mt-6 flex flex-col gap-3 text-left">
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <h2 className="text-sm font-semibold">오답노트는 어떻게 쌓이나요?</h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted">
+              메인 페이지에서 오늘의 문제를 풀다가 틀리면, 그 문제가 자동으로 이 페이지 목록에
+              추가돼요. 따로 저장 버튼을 누를 필요는 없어요.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <h2 className="text-sm font-semibold">PDF로도 인쇄할 수 있나요?</h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted">
+              네. 문제가 쌓인 뒤 이 페이지 상단의 &ldquo;PDF로 저장(인쇄)&rdquo; 버튼을 누르면, 틀린
+              문제와 해설만 깔끔하게 모아 인쇄하거나 PDF로 저장할 수 있어요.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-border bg-card p-4">
+            <h2 className="text-sm font-semibold">기록은 어디에 저장되나요?</h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted">
+              서버가 아니라 지금 사용 중인 브라우저에만 임시로 저장돼요. 그래서 다른 기기나 브라우저로
+              접속하면 이 목록은 비어 있어요.
+            </p>
+          </div>
+        </div>
+        <Link href="/" className="mt-8 text-sm text-accent hover:underline">
+          ← 문제 풀러 가기
         </Link>
       </div>
     );
