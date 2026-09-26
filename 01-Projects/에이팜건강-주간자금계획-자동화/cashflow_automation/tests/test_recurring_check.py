@@ -1,0 +1,196 @@
+# -*- coding: utf-8 -*-
+"""일괄 반영/제외 스위치와 금주 정기지출 체크 테스트."""
+from datetime import date, timedelta
+
+from openpyxl import load_workbook
+
+import forecast_engine as fe
+
+BASE = date(2026, 9, 21)  # 월요일
+RECUR = [{"정기지출명": "SKB", "대표 지급일": 25,
+          "평균 월지출": 220_000.0, "신뢰도": "상"},
+         {"정기지출명": "코웨이", "대표 지급일": 28,
+          "평균 월지출": 113_398.0, "신뢰도": "상"}]
+
+
+def test_일괄_전체제외_적용과_개별수정_보존(tmp_path):
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    fe.refresh_auto_draft_file(draft, RECUR, BASE)
+    # 기본(개별 관리): 새 행은 '반영'
+    drafts, excluded = fe.load_auto_drafts(draft, BASE)
+    assert len(drafts) == 2 and excluded == 0
+
+    # 사용자가 안내 시트에서 '전체 제외' 선택 → 다음 갱신 때 전 행 적용
+    wb = load_workbook(draft)
+    wb[fe.GUIDE_SHEET].cell(row=6, column=2, value="전체 제외")
+    wb.save(draft)
+    wb.close()
+    fe.refresh_auto_draft_file(draft, RECUR, BASE)
+    drafts, excluded = fe.load_auto_drafts(draft, BASE)
+    assert not drafts and excluded == 2
+
+    # 이후 개별 행을 '반영'으로 되돌리면 다음 갱신에도 보존된다
+    wb = load_workbook(draft)
+    wb[fe.AUTO_DRAFT_SHEET].cell(row=2, column=5, value="반영")
+    wb.save(draft)
+    wb.close()
+    fe.refresh_auto_draft_file(draft, RECUR, BASE)
+    drafts, excluded = fe.load_auto_drafts(draft, BASE)
+    assert len(drafts) == 1 and excluded == 1
+
+
+def test_전체제외_기본값이면_생성부터_제외(tmp_path):
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    fe.refresh_auto_draft_file(draft, RECUR, BASE, default_mode="전체 제외")
+    drafts, excluded = fe.load_auto_drafts(draft, BASE)
+    assert not drafts and excluded == 2
+    wb = load_workbook(draft)
+    assert wb[fe.GUIDE_SHEET].cell(row=6, column=2).value == "전체 제외"
+    wb.close()
+
+
+def test_공휴일_시트_생성과_로드(tmp_path):
+    """기준파일 '공휴일' 시트: 최초 생성 시 기본 공휴일을 채우고,
+    이미 있으면 사용자 관리분을 그대로 읽는다."""
+    from openpyxl import Workbook
+    base = tmp_path / "기준.xlsx"
+    wb = Workbook()
+    wb.active.title = "카드결제기준"
+    wb.save(base)
+    wb.close()
+
+    assert fe.ensure_holiday_sheet(base) > 0
+    assert fe.ensure_holiday_sheet(base) == 0      # 재실행 시 안 건드림
+    holidays = fe.load_holidays(base)
+    assert holidays[date(2026, 9, 25)] == "추석"
+    assert date(2026, 10, 9) in holidays
+
+    # 사용자가 임시공휴일을 추가하면 그대로 읽힌다
+    wb = load_workbook(base)
+    wb[fe.HOLIDAY_SHEET].append([date(2026, 11, 3), "임시공휴일"])
+    wb.save(base)
+    wb.close()
+    assert fe.load_holidays(base)[date(2026, 11, 3)] == "임시공휴일"
+
+
+def test_공휴일은_예상입금_0(tmp_path):
+    """공휴일은 일별 예상입금 0, 5주차 이후 주별 입금도 그만큼 감소."""
+    history = []
+    for w in range(1, 13):
+        d = BASE - timedelta(weeks=w)          # 과거 월요일마다 입금 이력
+        history.append({"거래일": d, "입금액": 1_000_000.0, "출금액": 0.0,
+                        "자동분류": "온라인매출입금", "내부이체": False,
+                        "반영상태": "정상반영"})
+    holidays = {BASE + timedelta(days=3): "추석 연휴",     # 9/24 (목)
+                BASE + timedelta(weeks=5): "가상 공휴일"}  # 6주차 월요일
+    fc = fe.build_forecast([], BASE, 1_000_000, history, [], [],
+                           [1.0], 1.0, holidays=holidays)
+    by_date = {r["일자"]: r for r in fc["daily"]}
+    assert by_date[BASE + timedelta(days=3)]["온라인 예상입금"] == 0
+    assert by_date[BASE]["온라인 예상입금"] > 0            # 평일(월) 정상
+    weekly = fc["weekly"]
+    # 6주차(공휴일 월요일 포함)는 7주차보다 월요일 평균만큼 입금이 적다
+    assert weekly[6]["예상입금"] - weekly[5]["예상입금"] > 0
+
+
+def test_주말실행이면_대표보고_일별전망은_차주(tmp_path):
+    """display_week_start를 차주 월요일로 주면 금주일별이 차주 월~금."""
+    fc = fe.build_forecast([], BASE, 1_000_000, [], [], [], [0.8], 0.8,
+                           display_week_start=BASE + timedelta(days=7))
+    days = fc["rate_scenarios"][0.8]["금주일별"]
+    assert [d for d, _b, _s in days] == [BASE + timedelta(days=7 + i)
+                                         for i in range(5)]
+
+
+def test_정기지출_예정일은_다음_영업일로(tmp_path):
+    """주말(토·일)·공휴일에 걸린 정기지출 예정일은 다음 영업일로 옮긴다.
+    다음 영업일이 달을 넘기면 그 달 마지막 영업일로 앞당긴다."""
+    hol = {date(2026, 9, 24): "추석 연휴", date(2026, 9, 25): "추석"}
+    assert fe.adjust_to_business_day(date(2026, 9, 26), hol) \
+        == date(2026, 9, 28)                       # 토 → 월
+    assert fe.adjust_to_business_day(date(2026, 9, 24), hol) \
+        == date(2026, 9, 28)                       # 추석(목) → 연휴 뒤 월
+    assert fe.adjust_to_business_day(date(2026, 9, 23), hol) \
+        == date(2026, 9, 23)                       # 평일 그대로
+    # 월말 주말은 달을 넘기지 않고 그 달 마지막 영업일로 (10/31 토→10/30 금)
+    assert fe.adjust_to_business_day(date(2026, 10, 31)) == date(2026, 10, 30)
+
+    # 자동추정 목록 생성에도 적용된다
+    draft = tmp_path / "자동추정_지출목록.xlsx"
+    recur = [{"정기지출명": "토요건", "대표 지급일": 26,
+              "평균 월지출": 100000.0, "신뢰도": "상"},
+             {"정기지출명": "연휴건", "대표 지급일": 24,
+              "평균 월지출": 200000.0, "신뢰도": "상"}]
+    fe.refresh_auto_draft_file(draft, recur, BASE, holidays=hol)
+    rows = {r[1]: r[0] for r in fe.read_draft_table(draft)["rows"]}
+    assert rows["토요건"] == date(2026, 9, 28)
+    assert rows["연휴건"] == date(2026, 9, 28)
+
+    # 정기지출 체크의 변동 항목 합성 예정일도 영업일로 옮겨진다
+    checks = fe.weekly_recurring_check(
+        [], [], {}, BASE, date(2026, 10, 2),
+        variable_items=[{"정기지출명": "주말변동", "대표 지급일": 26,
+                         "평균 월지출": 1000.0, "성격": "변동"}],
+        holidays=hol)
+    assert checks[0]["예정일"] == date(2026, 9, 28)
+
+
+def test_금주체크_판정과_구간(tmp_path):
+    start, end = date(2026, 9, 21), date(2026, 10, 2)
+    draft_rows = [
+        {"일자": date(2026, 9, 23), "정기지출명": "NH기업카드",
+         "예상금액": 6_066_502.0, "반영": "제외"},   # 별칭으로 취합과 연결
+        {"일자": date(2026, 9, 23), "정기지출명": "우리카드결제대금",
+         "예상금액": 26_000_000.0, "반영": "제외"},  # 같은 취합 건을 재사용 못함
+        {"일자": date(2026, 9, 25), "정기지출명": "SKB",
+         "예상금액": 220_000.0, "반영": "제외"},     # 취합에 없음 → 누락
+        {"일자": date(2026, 9, 28), "정기지출명": "코웨이",
+         "예상금액": 113_398.0, "반영": "반영"},     # 평균 금액 자동 반영
+        {"일자": date(2026, 10, 15), "정기지출명": "한화생명",
+         "예상금액": 1_000_000.0, "반영": "제외"},   # 구간 밖
+    ]
+    plans = [{"자금계획 반영일": date(2026, 9, 23),
+              "예상금액": 10_000_000.0, "거래처": "농협카드",
+              "지출내용": "8월 카드대금"}]
+    aliases = {"NH기업카드": ["농협카드"]}
+    variable = [{"정기지출명": "㈜에이팜", "대표 지급일": 30,
+                 "평균 월지출": 1_369_025.0, "성격": "변동"}]
+    rows = fe.weekly_recurring_check(draft_rows, plans, aliases,
+                                     start, end, variable_items=variable)
+    by = {r["항목"]: r for r in rows}
+    assert "한화생명" not in by
+    assert by["NH기업카드"]["판정"] == fe.CHECK_TEAM_OK
+    assert by["NH기업카드"]["팀제출금액"] == 10_000_000.0
+    # 취합 한 건은 한 항목만 커버 — 유사도 높은 NH(별칭 일치)가 가져가고
+    # 우리카드는 누락 의심으로 남는다
+    assert by["우리카드결제대금"]["누락"]
+    assert by["SKB"]["누락"] and by["SKB"]["판정"] == fe.CHECK_MISSING
+    assert by["코웨이"]["판정"] == fe.CHECK_AUTO and not by["코웨이"]["누락"]
+    # 성격 '변동' 항목은 목록에 없어도 매월 만들어 검사한다 (9/30 도래)
+    assert by["㈜에이팜"]["예정일"] == date(2026, 9, 30)
+    assert by["㈜에이팜"]["누락"]
+    assert [r["예정일"] for r in rows] == sorted(r["예정일"] for r in rows)
+
+
+def test_자동추정_미반영_운영에선_반영행도_누락_의심(tmp_path):
+    """drafts_reflected=False (2026-09-23 사용자 확정: 자동추정 금액을
+    계획에 넣지 않음): '반영' 표시 행도 자동 반영으로 치지 않아,
+    팀 지출예정 파일에 없으면 전부 누락 의심이 된다."""
+    start, end = date(2026, 9, 21), date(2026, 10, 2)
+    draft_rows = [
+        {"일자": date(2026, 9, 23), "정기지출명": "NH기업카드",
+         "예상금액": 6_066_502.0, "반영": "반영"},   # 팀 제출 있음
+        {"일자": date(2026, 9, 28), "정기지출명": "코웨이",
+         "예상금액": 113_398.0, "반영": "반영"},     # 팀 제출 없음 → 누락
+    ]
+    plans = [{"자금계획 반영일": date(2026, 9, 23),
+              "예상금액": 10_000_000.0, "거래처": "농협카드",
+              "지출내용": "8월 카드대금"}]
+    rows = fe.weekly_recurring_check(draft_rows, plans,
+                                     {"NH기업카드": ["농협카드"]},
+                                     start, end, drafts_reflected=False)
+    by = {r["항목"]: r for r in rows}
+    assert by["NH기업카드"]["판정"] == fe.CHECK_TEAM_OK
+    assert not by["NH기업카드"]["누락"]
+    assert by["코웨이"]["누락"]
+    assert by["코웨이"]["판정"] == fe.CHECK_MISSING
