@@ -6995,5 +6995,250 @@
     "answerIndex": 2,
     "explanation": "2cosθ + 1 = 0에서 cosθ = -1/2입니다. 0 ≤ θ < 2π 범위에서 이를 만족하는 θ는 θ = 2π/3과 θ = 4π/3이므로, 모든 θ의 값의 합은 2π/3 + 4π/3 = 2π입니다.",
     "concept": "코사인함수 값이 같은 두 해는 2π - θ 관계를 가지므로, 0부터 2π 범위에서 cosθ=k(k≠±1)를 만족하는 두 해의 합은 2π이다."
+  },
+  {
+    "id": "en-2026-09-27-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-27",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "When people are asked to estimate how common a particular risk is, they often rely on how easily relevant examples come to mind, a mental shortcut [u]known[/u]① as the availability heuristic. Because dramatic events such as plane crashes receive extensive media coverage, they tend to be recalled far more readily than statistically more common but less newsworthy dangers, a tendency [u]that leads[/u]② many people to overestimate the frequency of rare but vivid events. Researchers studying this phenomenon have found that individuals [u]exposed[/u]③ to frequent news coverage of a specific danger consistently rate that danger as more likely to occur than experts' statistics actually support. This bias can [u]influences[/u]④ decisions ranging from personal insurance choices to public policy priorities, sometimes directing resources away from more pressing but less memorable threats. Correcting for this distortion [u]requires[/u]⑤ deliberately consulting objective data rather than relying on gut impressions shaped by memorable anecdotes.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 조동사 can 뒤에는 동사원형이 와야 하므로 influences가 아니라 influence가 되어야 합니다. ①은 mental shortcut을 수식하는 과거분사 known(수동의 의미), ②는 tendency를 선행사로 하는 관계대명사 that과 단수동사 leads, ③은 individuals를 수식하는 과거분사 exposed(수동의 의미), ⑤는 동명사구 주어 Correcting에 맞는 단수동사 requires로 모두 어법상 올바릅니다.",
+    "vocab": [
+      {
+        "word": "heuristic",
+        "meaning": "어림짐작, 발견적 방법"
+      },
+      {
+        "word": "vivid",
+        "meaning": "생생한"
+      },
+      {
+        "word": "anecdotes",
+        "meaning": "일화"
+      },
+      {
+        "word": "distortion",
+        "meaning": "왜곡"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-27-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-27",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Researchers studying consumer behavior have documented a curious pattern known as the IKEA effect, named after the furniture company famous for products that customers must assemble themselves. In a series of studies, participants who built their own simple items, such as storage boxes or paper cranes, consistently valued their finished creations more highly than identical items that had already been assembled by someone else, even when independent observers rated the two sets of objects as equally well made. Interestingly, this inflated sense of value disappeared when participants failed to complete the assembly or when they later dismantled what they had built, suggesting that ______. The effort invested in creating something appears to become intertwined with a person's sense of ownership, so that the object comes to feel like an extension of the labor spent on it rather than a mere possession acquired without effort.",
+    "choices": [
+      "it is the successful completion of effortful labor, not merely handling an object, that drives the increase in perceived value",
+      "people generally prefer to buy furniture that is already fully assembled by professionals",
+      "objects that require no assembly are always valued more than those that require effort",
+      "independent observers tend to judge self-made objects as of lower quality than professionally made ones",
+      "the price of an item has no influence on how much a person values owning it"
+    ],
+    "answerIndex": 0,
+    "explanation": "참가자들이 스스로 조립을 완료했을 때만 가치를 더 높게 평가했고, 조립을 완료하지 못하거나 다시 분해했을 때는 이런 효과가 사라졌다는 내용을 근거로, 빈칸에는 단순히 물건을 만지는 것이 아니라 노력을 들여 완성하는 행위 자체가 가치 상승을 유발한다는 내용이 들어가야 합니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "assembly",
+        "meaning": "조립"
+      },
+      {
+        "word": "intertwined",
+        "meaning": "뒤얽힌, 밀접하게 연관된"
+      },
+      {
+        "word": "dismantled",
+        "meaning": "해체된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-27-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-27",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Long before it was adopted as a strategy to conserve energy, the idea of shifting clocks forward in spring had been proposed for far more whimsical reasons.\n(A) Benjamin Franklin, writing satirically in 1784, calculated how many candles could be saved if Parisians simply woke up earlier to take advantage of the morning sunlight, though he never seriously proposed changing the clocks themselves.\n(B) It was not until the fuel shortages of the First World War that governments seriously considered the idea, when Germany became the first nation to officially adjust its clocks in order to reduce the use of artificial lighting and conserve coal.\n(C) Once other nations recognized how much energy could be saved, the practice spread quickly across Europe and eventually to the United States, becoming a routine feature of the modern calendar despite ongoing debate over its actual benefits.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 문장은 시간 조정 아이디어가 에너지 절약 전략으로 채택되기 전에 다소 엉뚱한 이유로 제안되었다고 언급합니다. (A)는 프랭클린이 풍자적으로 초를 절약하자고 제안한 엉뚱한 사례이고, (B)는 제1차 세계대전 중 연료 부족으로 독일이 처음 공식적으로 시계를 조정했다는 진지한 채택 사례이며, (C)는 이후 다른 나라들로 이 관행이 확산되었다는 결과입니다. 따라서 순서는 (A)-(B)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "whimsical",
+        "meaning": "엉뚱한, 기발한"
+      },
+      {
+        "word": "satirically",
+        "meaning": "풍자적으로"
+      },
+      {
+        "word": "conserve",
+        "meaning": "절약하다, 보존하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-27-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-27",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Yet removing the buttons entirely would likely cause more frustration than leaving them in place, even though they do nothing at all.",
+    "passage": "Pedestrians in many major cities press the button at a crosswalk confident that doing so will make the signal change more quickly, unaware that in a large number of intersections the button is not connected to anything and serves no functional purpose whatsoever. ( ① ) City engineers explain that in areas where traffic signals are fully computerized and operate on fixed timing cycles, the buttons were often left in place after the system was automated rather than being removed, since disconnecting the wiring would have required additional labor and expense. ( ② ) Similar 'placebo buttons' can be found in elevators, where the door-close button frequently does nothing beyond the doors' preset timing, and in office thermostats that are not actually wired to the building's heating system. ( ③ ) Psychologists suggest that these buttons persist because they satisfy a basic human need to feel some sense of control over one's environment, even when that control is entirely illusory. ( ④ ) Studies on perceived control have shown that people tolerate waiting and other frustrations far better when they believe they have some influence over the outcome, regardless of whether that belief is accurate. ( ⑤ ) In this sense, a button that does nothing may still be doing something important, simply by giving people the comforting impression that they are not entirely powerless.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "주어진 문장은 'Yet'으로 시작하며, 버튼이 아무 기능도 하지 않음에도 불구하고 이를 없애면 오히려 더 큰 불만을 초래할 것이라는 반전 내용을 제시합니다. ⑤ 앞에서는 사람들이 실제로 영향력이 없어도 스스로 통제권이 있다고 믿을 때 좌절을 더 잘 견딘다는 연구 결과가 나오고, ⑤ 뒤에서는 아무 기능도 없는 버튼이 사실은 사람들에게 무력하지 않다는 위안을 줌으로써 중요한 역할을 한다는 결론이 이어지므로, 주어진 문장은 ⑤에 들어가야 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "illusory",
+        "meaning": "환상에 불과한, 착각의"
+      },
+      {
+        "word": "perceived",
+        "meaning": "인지된, 지각된"
+      },
+      {
+        "word": "comforting",
+        "meaning": "위안이 되는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-27-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-27",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "For most of human history, boredom was regarded simply as an unpleasant state to be avoided or eliminated as quickly as possible, yet a growing body of psychological research suggests that this restless, understimulated feeling may serve an important creative function. In one series of experiments, participants who were assigned a deliberately dull task, such as copying numbers from a phone book, before being asked to brainstorm uses for an everyday object generated significantly more original ideas than participants who moved directly to the brainstorming task without first experiencing boredom. Researchers propose that boredom pushes the mind to seek stimulation internally once external stimulation is unavailable, prompting a kind of mental wandering that can surface unusual associations and ideas that a more occupied mind would never encounter. In an era of constant digital distraction, in which any spare moment can immediately be filled with a phone screen, genuine boredom has become increasingly rare, potentially depriving people of a mental state that once reliably sparked imaginative thinking. Rather than treating boredom purely as something to escape, then, occasionally allowing the mind to sit with nothing to do may be a small price worth paying for a burst of creativity.",
+    "choices": [
+      "allowing oneself to experience boredom without immediate distraction can actually stimulate more creative and original thinking",
+      "people today are more creative than previous generations because of constant access to digital entertainment",
+      "copying numbers from a phone book is scientifically proven to be the most effective way to generate new ideas",
+      "brainstorming sessions are generally less effective than solitary reflection when producing original ideas",
+      "digital distraction has completely eliminated the possibility of experiencing boredom in modern life"
+    ],
+    "answerIndex": 0,
+    "explanation": "지루한 과제를 먼저 수행한 참가자들이 곧바로 브레인스토밍을 한 참가자들보다 더 독창적인 아이디어를 냈다는 실험 결과를 통해, 즉각적인 자극 없이 지루함을 경험하도록 두는 것이 오히려 창의적이고 독창적인 사고를 자극할 수 있다는 것을 보여줍니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "restless",
+        "meaning": "안절부절못하는, 불안한"
+      },
+      {
+        "word": "depriving",
+        "meaning": "박탈하는"
+      },
+      {
+        "word": "spark",
+        "meaning": "촉발하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-27-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-27",
+    "prompt": "등비수열 {a_n}에서 a_1 = 3, a_4 = 24일 때, a_6의 값은?",
+    "choices": [
+      "48",
+      "64",
+      "80",
+      "96",
+      "112"
+    ],
+    "answerIndex": 3,
+    "explanation": "a_4 = a_1 r^3 = 3r^3 = 24이므로 r^3 = 8, 즉 r = 2입니다. 따라서 a_6 = a_1 r^5 = 3 × 32 = 96입니다.",
+    "concept": "등비수열의 일반항 a_n = a_1 × r^(n-1)을 이용하여 두 항의 비율로부터 공비 r을 구한 뒤, 이를 이용해 원하는 항의 값을 계산한다."
+  },
+  {
+    "id": "math-2026-09-27-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-27",
+    "prompt": "곡선 y = x^3 - 2x^2 + 3 위의 점 (1, 2)에서의 접선의 기울기는?",
+    "choices": [
+      "-3",
+      "-2",
+      "-1",
+      "0",
+      "1"
+    ],
+    "answerIndex": 2,
+    "explanation": "y' = 3x^2 - 4x이고, x=1을 대입하면 y'(1) = 3(1)^2 - 4(1) = 3 - 4 = -1입니다. 따라서 점 (1,2)에서의 접선의 기울기는 -1입니다.",
+    "concept": "함수 위의 한 점에서의 접선의 기울기는 그 점의 x좌표를 도함수에 대입하여 구한다."
+  },
+  {
+    "id": "math-2026-09-27-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-27",
+    "prompt": "두 곡선 y = x^2와 y = 2x로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "2/3",
+      "1",
+      "4/3",
+      "5/3",
+      "2"
+    ],
+    "answerIndex": 2,
+    "explanation": "x^2 = 2x에서 x(x-2)=0이므로 두 곡선은 x=0, x=2에서 만납니다. 이 구간에서 y=2x가 y=x^2보다 위에 있으므로 넓이는 ∫[0,2] (2x - x^2) dx = [x^2 - x^3/3]₀² = (4 - 8/3) - 0 = 4/3입니다.",
+    "concept": "두 곡선으로 둘러싸인 도형의 넓이는 두 곡선의 교점을 구한 뒤, 그 구간에서 (위쪽 함수 - 아래쪽 함수)를 적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-27-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-27",
+    "prompt": "주머니에 흰 공 3개와 검은 공 2개가 들어있다. 이 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 공이 모두 흰 공일 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 1,
+    "explanation": "흰 공 3개, 검은 공 2개, 총 5개의 공 중에서 2개를 꺼내는 전체 경우의 수는 C(5,2)=10입니다. 이 중 꺼낸 2개가 모두 흰 공인 경우의 수는 C(3,2)=3입니다. 따라서 구하는 확률은 3/10입니다.",
+    "concept": "동시에 꺼내는 경우의 확률은 전체 경우의 수(조합)에 대해 조건을 만족하는 경우의 수(조합)의 비율로 구한다."
+  },
+  {
+    "id": "math-2026-09-27-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-27",
+    "prompt": "함수 f(x) = 3sin(2x - π/3)의 주기와 최댓값의 합은?",
+    "choices": [
+      "π+2",
+      "π+3",
+      "2π+3",
+      "2π+2",
+      "3π+3"
+    ],
+    "answerIndex": 1,
+    "explanation": "f(x) = 3sin(2x - π/3)에서 각의 계수가 2이므로 주기는 2π/2 = π이고, sin 함수의 최댓값이 1이므로 f(x)의 최댓값은 3×1=3입니다. 따라서 주기와 최댓값의 합은 π+3입니다.",
+    "concept": "sin(ax+b) 형태 함수의 주기는 2π/|a|이고, 최댓값은 계수의 절댓값이다."
   }
 ]
