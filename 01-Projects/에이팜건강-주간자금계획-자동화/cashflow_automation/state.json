@@ -1,0 +1,13 @@
+{
+  "last_successful_week": "",
+  "last_successful_date": "",
+  "last_successful_time": "",
+  "last_run_status": "NOT_RUN",
+  "last_run_week": "",
+  "last_run_at": "",
+  "last_output_file": "",
+  "last_error": "",
+  "input_signature": "",
+  "pending_weeks": [],
+  "running": false
+}
