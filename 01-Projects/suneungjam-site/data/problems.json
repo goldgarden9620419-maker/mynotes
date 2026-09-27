@@ -7240,5 +7240,258 @@
     "answerIndex": 1,
     "explanation": "f(x) = 3sin(2x - π/3)에서 각의 계수가 2이므로 주기는 2π/2 = π이고, sin 함수의 최댓값이 1이므로 f(x)의 최댓값은 3×1=3입니다. 따라서 주기와 최댓값의 합은 π+3입니다.",
     "concept": "sin(ax+b) 형태 함수의 주기는 2π/|a|이고, 최댓값은 계수의 절댓값이다."
+  },
+  {
+    "id": "en-2026-09-28-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-28",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The Zeigarnik effect, named after the psychologist who first documented it, describes people's tendency to remember uncompleted tasks more vividly than tasks [u]that have been[/u]① finished. In her original experiments, participants who were interrupted before completing a simple assignment recalled the details of that assignment far more accurately than participants [u]allowed[/u]② to finish it without interruption, suggesting that an unresolved task remains active in memory until it is brought to a close. Some psychologists argue that this lingering mental tension is exactly what [u]make[/u]③ certain marketing techniques effective, since a cliffhanger or an incomplete narrative keeps a person's attention primed. Television producers, aware of this tendency, often end an episode on an unresolved conflict, a technique [u]designed[/u]④ to keep viewers thinking about the show until the next installment airs. Writing down an unfinished task, some researchers report, can weaken the effect, apparently because the act of externalizing the plan [u]signals[/u]⑤ to the mind that the task has been accounted for, even though it has not actually been completed.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③에서 주어는 관계대명사 what이며 이는 앞의 단수 개념(this lingering mental tension이 유발하는 어떤 것)을 가리키는 단수 취급 주어이므로 동사는 make가 아니라 makes가 되어야 합니다. ①은 tasks를 수식하는 관계대명사절로 복수 주어 tasks에 맞춘 현재완료 that have been이 적절하고, ②은 participants를 수식하는 과거분사 allowed(수동의 의미)로 올바르며, ④은 technique을 수식하는 과거분사 designed(수동의 의미)로 올바르고, ⑤는 동명사구 주어 the act of externalizing the plan에 맞춘 단수동사 signals로 모두 어법상 올바릅니다.",
+    "vocab": [
+      {
+        "word": "lingering",
+        "meaning": "오래 지속되는, 남아있는"
+      },
+      {
+        "word": "primed",
+        "meaning": "준비된, 자극된"
+      },
+      {
+        "word": "externalizing",
+        "meaning": "외부로 표출하는, 외재화하는"
+      },
+      {
+        "word": "installment",
+        "meaning": "(연속물의) 1회분, 할부"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-28-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-28",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Common sense suggests that having more options should make decision-making easier and the resulting choice more satisfying, yet a well-known study on jam selection found the opposite to be true. Shoppers who encountered a display with twenty-four different flavors of jam were far more likely to stop and sample the products than those who encountered a display with only six flavors, but the larger display resulted in dramatically fewer actual purchases. Follow-up interviews revealed that many shoppers facing the larger array felt overwhelmed by the number of comparisons required and worried that no matter which jar they chose, a better option had likely been overlooked. Researchers now argue that beyond a certain point, additional choices do not enhance freedom but instead ______, since the mental cost of comparing many similar alternatives can outweigh whatever benefit having those alternatives provides. A moderate range of well-curated options, several follow-up studies have confirmed, tends to produce both quicker decisions and greater subsequent satisfaction than an extensive, unfiltered array.",
+    "choices": [
+      "impose a psychological burden that can make deciding harder and less satisfying",
+      "guarantee that shoppers will always find the objectively best product available",
+      "increase the total number of purchases regardless of how many options are offered",
+      "eliminate the need for shoppers to compare different products before buying",
+      "have no measurable effect on how satisfied shoppers feel with their purchase"
+    ],
+    "answerIndex": 0,
+    "explanation": "선택지가 많을수록 구매는 줄고, 쇼핑객들은 비교의 부담과 더 나은 선택을 놓쳤을지 모른다는 걱정을 느꼈다는 내용, 그리고 뒤이어 비교에 드는 정신적 비용이 이득을 넘어설 수 있다는 설명으로 볼 때, 빈칸에는 선택지가 늘어나는 것이 자유를 늘리는 게 아니라 오히려 심리적 부담을 지워 결정을 더 어렵고 덜 만족스럽게 만든다는 내용이 들어가야 합니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "array",
+        "meaning": "집합, 배열"
+      },
+      {
+        "word": "curated",
+        "meaning": "선별된, 정제된"
+      },
+      {
+        "word": "overlooked",
+        "meaning": "간과된, 눈에 띄지 않은"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-28-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-28",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Though umbrellas are now an ordinary object carried by anyone, their early history in Europe was tangled up with matters of gender and social class.\n(A) This reaction was rooted in a long-standing assumption that carrying an umbrella was an activity fit only for women, since men were expected to tolerate rain rather than shield themselves from it.\n(B) One London merchant who began carrying an umbrella publicly in the 1750s was nevertheless mocked and pelted with rubbish by passersby who considered the accessory effeminate.\n(C) Public attitudes shifted only gradually, and it was not until the early nineteenth century that a man carrying an umbrella on a city street stopped drawing any particular notice.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 우산의 초기 역사가 성별과 계급 문제와 얽혀 있었다고 언급합니다. (B)는 1750년대 런던 상인이 우산을 들고 다니다가 조롱당한 구체적 사례를 제시하고, (A)는 'This reaction'으로 그 조롱의 원인이 우산은 여성만의 것이라는 오래된 통념 때문이었다고 설명하며, (C)는 이후 시간이 지나면서 그런 통념이 점차 바뀌었다는 결과를 제시합니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "effeminate",
+        "meaning": "여성스러운, 나약한"
+      },
+      {
+        "word": "pelted",
+        "meaning": "(물건을) 던져 맞은"
+      },
+      {
+        "word": "rubbish",
+        "meaning": "쓰레기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-28-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-28",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "givenSentence": "Because the wearer cannot accurately judge how their own voice sounds to the people around them, this involuntary volume increase often continues well beyond what the situation actually requires.",
+    "passage": "Anyone who has shared a room with someone wearing large over-ear headphones has likely noticed that the wearer tends to talk in an oddly loud voice, sometimes nearly shouting a request that could easily have been whispered. ( ① ) This phenomenon is closely related to something known as the Lombard effect, in which speakers instinctively raise the volume, pitch, and clarity of their speech whenever background noise makes it harder to hear themselves. ( ② ) Headphones that play music or block outside noise create exactly this kind of interference, since the wearer's own voice, transmitted mostly through vibrations in the skull, becomes harder to monitor once the ears are covered and filled with sound. ( ③ ) The brain, sensing this reduced feedback, automatically compensates by pushing more air through the vocal cords, in much the same way a person naturally shouts to be heard over a noisy crowd. ( ④ ) As a result, headphone wearers frequently end up speaking at a volume that startles anyone standing nearby without headphones on. ( ⑤ ) For this reason, people who work in open offices are often advised to remove one earpiece before speaking, allowing them to monitor their own voice and moderate it accordingly.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 착용자가 자기 목소리를 정확히 판단할 수 없기 때문에 목소리가 커지는 현상이 필요 이상으로 계속된다는 내용입니다. ④ 앞에서는 뇌가 줄어든 청각 피드백을 감지해 목소리를 키우도록 자동으로 보정한다는 내용이 나오고, ④ 뒤에서는 그 결과로 착용자가 주변 사람을 놀라게 할 정도로 큰 소리로 말하게 된다는 결론이 이어지므로, 주어진 문장은 ④에 들어가야 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "instinctively",
+        "meaning": "본능적으로"
+      },
+      {
+        "word": "compensates",
+        "meaning": "보완하다, 상쇄하다"
+      },
+      {
+        "word": "startles",
+        "meaning": "놀라게 하다"
+      },
+      {
+        "word": "earpiece",
+        "meaning": "이어폰, (헤드폰의) 한쪽 귀 부분"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-28-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-28",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Nostalgia has long carried a slightly negative connotation, evoking images of people dwelling excessively on a past that can never be recovered, yet a growing body of psychological research paints a far more favorable picture of this common emotional experience. Across a series of studies, participants who were prompted to recall a cherished personal memory before completing a stressful task reported lower levels of anxiety and greater confidence in their ability to cope than participants who were asked to think about a neutral or unrelated event. Researchers have found that nostalgic reflection reliably increases feelings of social connectedness, reminding people of relationships and moments in which they felt valued and supported, even when the people involved in those memories are no longer present in their lives. This boost in perceived social support appears to be the key mechanism through which nostalgia exerts its calming effect, since simply recalling a pleasant but non-social memory, such as an enjoyable solitary hobby, produces a noticeably weaker benefit. Rather than representing an unhealthy retreat into the past, then, nostalgia may function as a psychological resource that people draw upon, often without realizing it, to steady themselves during difficult or uncertain moments.",
+    "choices": [
+      "nostalgic reflection can serve as a psychological resource that helps people cope with stress by reinforcing a sense of social connection",
+      "people who frequently feel nostalgic are more likely to develop anxiety disorders later in life",
+      "solitary hobbies provide the same psychological benefits as nostalgic memories involving other people",
+      "modern psychology has proven that dwelling on the past is always harmful to a person's mental health",
+      "stressful tasks are the primary cause of nostalgic thinking in most people"
+    ],
+    "answerIndex": 0,
+    "explanation": "소중한 개인적 추억을 회상한 참가자들이 스트레스 상황에서 더 낮은 불안과 더 높은 대처 자신감을 보였고, 이는 향수가 사회적 유대감을 높여주기 때문이라는 내용을 통해, 향수가 사람들이 스트레스에 대처하도록 돕는 심리적 자원으로 기능할 수 있다는 것을 알 수 있습니다. 따라서 정답은 ①입니다.",
+    "vocab": [
+      {
+        "word": "cherished",
+        "meaning": "소중히 여기는"
+      },
+      {
+        "word": "connectedness",
+        "meaning": "유대감, 연결감"
+      },
+      {
+        "word": "retreat",
+        "meaning": "도피, 후퇴"
+      },
+      {
+        "word": "steady",
+        "meaning": "안정시키다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-28-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-28",
+    "prompt": "등차수열 {a_n}에서 a_1=2, a_5=18일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "180",
+      "190",
+      "200",
+      "210",
+      "220"
+    ],
+    "answerIndex": 2,
+    "explanation": "a_5 = a_1 + 4d = 2 + 4d = 18이므로 d=4입니다. 첫째항부터 제10항까지의 합은 S_10 = 10/2 × (2×2 + 9×4) = 5 × (4+36) = 5 × 40 = 200입니다.",
+    "concept": "등차수열의 일반항 a_n = a_1+(n-1)d로 공차를 구한 뒤, 합의 공식 S_n = n/2×{2a_1+(n-1)d}를 이용하여 첫째항부터 n항까지의 합을 계산한다."
+  },
+  {
+    "id": "math-2026-09-28-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-28",
+    "prompt": "함수 f(x) = x^3 - 6x^2 + 9x + 1의 극댓값과 극솟값의 합은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x^2-12x+9 = 3(x-1)(x-3)이므로 x=1, x=3에서 극값을 가집니다. f''(x)=6x-12이고 f''(1)=-6<0이므로 x=1에서 극대이며 f(1)=1-6+9+1=5입니다. f''(3)=6>0이므로 x=3에서 극소이며 f(3)=27-54+27+1=1입니다. 따라서 극댓값과 극솟값의 합은 5+1=6입니다.",
+    "concept": "삼차함수의 극값은 f'(x)=0의 해를 구한 뒤 f''(x)의 부호(또는 f'(x)의 부호 변화)로 극대와 극소를 판별하고, 그 x값을 원함수에 대입하여 구한다."
+  },
+  {
+    "id": "math-2026-09-28-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-28",
+    "prompt": "정적분 ∫₀² (3x^2 - 2x + 1) dx의 값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x^3 - x^2 + x이므로, 정적분 값은 [x^3-x^2+x]₀² = (8-4+2) - 0 = 6입니다.",
+    "concept": "정적분은 피적분함수의 부정적분(원시함수)을 구한 뒤, 위끝을 대입한 값에서 아래끝을 대입한 값을 빼서 계산한다."
+  },
+  {
+    "id": "math-2026-09-28-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-28",
+    "prompt": "숫자 1, 2, 3, 4, 5가 하나씩 적힌 5장의 카드를 일렬로 임의로 나열할 때, 1이 적힌 카드가 맨 앞에 오도록 나열될 확률은?",
+    "choices": [
+      "1/10",
+      "1/5",
+      "1/4",
+      "1/3",
+      "1/2"
+    ],
+    "answerIndex": 1,
+    "explanation": "5장의 카드를 일렬로 나열하는 전체 경우의 수는 5! = 120입니다. 1이 적힌 카드를 맨 앞에 고정하면 나머지 4장의 카드를 나열하는 경우의 수는 4! = 24입니다. 따라서 구하는 확률은 24/120 = 1/5입니다.",
+    "concept": "특정 원소의 위치가 고정된 순열의 수를 구한 뒤, 이를 전체 순열의 수로 나누어 확률을 계산한다."
+  },
+  {
+    "id": "math-2026-09-28-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-28",
+    "prompt": "0≤θ<2π에서 방정식 2sinθ - 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π/2",
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2"
+    ],
+    "answerIndex": 1,
+    "explanation": "2sinθ-1=0에서 sinθ=1/2입니다. 0≤θ<2π에서 sinθ=1/2를 만족하는 θ는 π/6과 5π/6이므로, 모든 해의 합은 π/6+5π/6=π입니다.",
+    "concept": "sinθ=k (0<k<1) 형태의 방정식은 단위원에서 y좌표가 k인 두 점을 찾아, 서로 대칭 관계에 있는 두 각을 해로 구한다."
   }
 ]
