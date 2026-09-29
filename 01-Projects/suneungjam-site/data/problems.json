@@ -7734,5 +7734,246 @@
     "answerIndex": 2,
     "explanation": "sin x = t로 놓으면 2t² − t − 1 = (2t + 1)(t − 1) = 0이므로 t = 1 또는 t = −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = 3π/6 + 18π/6 = 7π/2입니다.",
     "concept": "sin x = t로 치환해 t에 대한 이차방정식으로 바꾸고, 단위원에서 각 t값에 대응하는 x를 구한다."
+  },
+  {
+    "id": "en-2026-09-30-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-09-30",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people assume that creativity [u]depends[/u]① entirely on sudden inspiration, but research suggests that it is more often the product of steady effort. A writer who sets aside an hour every morning, for instance, [u]is[/u]② more likely to produce original ideas than one who waits for the perfect moment. What matters is not the length of each session but the regularity [u]with which[/u]③ it is repeated. Over time, the mind becomes accustomed to [u]generate[/u]④ ideas on demand, and the fear of a blank page gradually fades. Many successful authors therefore treat writing as a craft [u]rather than[/u]⑤ a gift.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④에서 be accustomed to의 to는 전치사이므로 뒤에는 동사원형이 아니라 동명사가 와야 합니다. 따라서 generate가 아니라 generating이어야 합니다. ①은 주어 creativity에 맞는 단수동사, ②는 주어 A writer에 맞는 단수동사, ③은 the regularity with which it is repeated(전치사+관계대명사), ⑤는 A rather than B 구문으로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "steady",
+        "meaning": "꾸준한"
+      },
+      {
+        "word": "accustomed",
+        "meaning": "익숙한"
+      },
+      {
+        "word": "craft",
+        "meaning": "기술, 공예"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-30-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-09-30",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Praise feels pleasant, yet it rarely helps us improve. When a teacher simply says \"Well done,\" the student learns that the work was acceptable but not why. In contrast, specific feedback such as \"Your second argument is strong because it uses concrete data\" shows the student exactly which habits to repeat. This is why effective feedback is valuable not because it makes us feel good but because it ________.",
+    "choices": [
+      "makes clear what we should keep doing or change",
+      "increases the amount of work we can finish in a day",
+      "lowers our fear of being judged by others",
+      "encourages us to compare ourselves with our peers",
+      "removes the need for any further practice"
+    ],
+    "answerIndex": 0,
+    "explanation": "지문은 막연한 칭찬은 왜 잘했는지 알려주지 않지만, 구체적인 피드백은 어떤 습관을 반복해야 하는지 보여준다고 말합니다. 따라서 빈칸에는 효과적인 피드백의 가치가 '무엇을 계속하고 무엇을 바꿔야 할지 분명하게 해 준다'는 데 있다는 ①이 적절합니다.",
+    "vocab": [
+      {
+        "word": "concrete",
+        "meaning": "구체적인"
+      },
+      {
+        "word": "acceptable",
+        "meaning": "받아들일 만한, 괜찮은"
+      },
+      {
+        "word": "feedback",
+        "meaning": "피드백, 평가 의견"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-30-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-09-30",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Some words in one language have no exact equivalent in another.\n(A) As a result, translators often need a whole phrase, or even a footnote, to convey what a single word expresses in the original.\n(B) The Portuguese word saudade, for instance, refers to a tender longing for a person or a time that is no longer present.\n(C) English speakers may feel a similar emotion, but they have no single word that captures it so precisely.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 한 언어의 단어가 다른 언어에 정확히 대응되지 않는 경우가 있다고 소개합니다. (B)는 그 예로 포르투갈어 saudade를 제시하고, (C)는 영어에는 이를 정확히 담은 단어가 없다고 이어가며, (A)는 그 결과 번역가가 구절이나 각주를 써야 한다고 결론짓습니다. 따라서 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "equivalent",
+        "meaning": "대응하는 것, 등가물"
+      },
+      {
+        "word": "longing",
+        "meaning": "그리움, 갈망"
+      },
+      {
+        "word": "footnote",
+        "meaning": "각주"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-30-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-09-30",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Our capacity for sustained attention is limited. ( ① ) Focusing on a demanding task drains mental resources, and after a while errors begin to creep in. ( ② ) Natural settings, however, engage the mind gently without requiring any effort. ( ③ ) Researchers call this effortless attention, and it allows the mind's focusing system to rest. ( ④ ) Students who spend a few minutes among trees, for example, often return to their desks more alert. ( ⑤ )",
+    "givenSentence": "This is why even a short walk outdoors can restore our ability to concentrate.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 This is why는 앞에 원인이 나와야 함을 뜻합니다. 자연 환경이 힘들이지 않고 마음을 사로잡아 집중 체계를 쉬게 한다는 내용(④ 앞) 다음에 '그래서 짧은 산책만으로도 집중력이 회복된다'는 결론이 오고, 뒤의 나무 사이에서 몇 분 보낸 학생들의 예로 자연스럽게 이어지므로 ④가 적절합니다. ③에 넣으면 뒤의 this가 가리킬 대상이 사라집니다.",
+    "vocab": [
+      {
+        "word": "sustained",
+        "meaning": "지속적인"
+      },
+      {
+        "word": "drain",
+        "meaning": "고갈시키다"
+      },
+      {
+        "word": "alert",
+        "meaning": "정신이 맑은, 기민한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-09-30-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-09-30",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When asked to name the most important factor in a successful team, many people point to talent. Yet studies of high-performing groups suggest that the decisive element is psychological safety: the shared belief that one can voice doubts or admit mistakes without being punished. In teams where members feel safe to speak up, errors are caught earlier and lessons are learned faster. Such teams often outperform rivals whose individual members are more gifted, because information flows freely instead of being hidden out of fear.",
+    "choices": [
+      "Talented individuals should be rewarded more than cooperative ones.",
+      "Teams perform best when members feel safe enough to speak up openly.",
+      "Admitting mistakes usually leads to punishment in high-performing groups.",
+      "Rival teams can be defeated only by hiring more gifted members.",
+      "Hiding information is a common strategy for protecting a team's reputation."
+    ],
+    "answerIndex": 1,
+    "explanation": "지문은 성공적인 팀의 핵심이 재능이 아니라, 실수나 의문을 말해도 처벌받지 않는다는 심리적 안전감이라고 설명합니다. 이런 팀은 오류를 일찍 발견하고 빨리 배우므로 ②가 주제입니다.",
+    "vocab": [
+      {
+        "word": "decisive",
+        "meaning": "결정적인"
+      },
+      {
+        "word": "outperform",
+        "meaning": "~보다 더 좋은 성과를 내다"
+      },
+      {
+        "word": "gifted",
+        "meaning": "재능 있는"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-09-30-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-09-30",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, 첫째항부터 제6항까지의 합은?",
+    "choices": [
+      "165",
+      "177",
+      "189",
+      "201",
+      "213"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅/a₂ = r³ = 8이므로 r = 2이고, a₁ = 6/2 = 3입니다. S₆ = 3(2⁶ − 1)/(2 − 1) = 3 × 63 = 189입니다.",
+    "concept": "등비수열 aₙ = a₁rⁿ⁻¹의 첫째항부터 제n항까지의 합은 Sₙ = a₁(rⁿ − 1)/(r − 1) (r ≠ 1)이다."
+  },
+  {
+    "id": "math-2026-09-30-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-09-30",
+    "prompt": "곡선 y = x³ − 3x + 2 위의 점 (2, 4)에서의 접선의 y절편은?",
+    "choices": [
+      "−18",
+      "−16",
+      "−14",
+      "−12",
+      "−10"
+    ],
+    "answerIndex": 2,
+    "explanation": "y' = 3x² − 3이므로 x = 2에서의 접선의 기울기는 9입니다. 접선의 방정식은 y − 4 = 9(x − 2), 즉 y = 9x − 14이므로 y절편은 −14입니다.",
+    "concept": "곡선 y = f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y − f(a) = f'(a)(x − a)이다."
+  },
+  {
+    "id": "math-2026-09-30-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-09-30",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² − 4x = 0에서 x = 0 또는 x = 4이고, 0 ≤ x ≤ 4에서 y ≤ 0입니다. 넓이는 ∫₀⁴ (4x − x²) dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 구간에서 함수의 부호를 확인한 뒤 |f(x)|를 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-09-30-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-09-30",
+    "prompt": "서로 다른 주사위 2개를 동시에 던질 때, 나온 눈의 합이 7 이상일 확률은?",
+    "choices": [
+      "1/2",
+      "5/9",
+      "7/12",
+      "2/3",
+      "3/4"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 36입니다. 눈의 합이 7, 8, 9, 10, 11, 12인 경우의 수는 각각 6, 5, 4, 3, 2, 1이므로 모두 21가지입니다. 따라서 확률은 21/36 = 7/12입니다.",
+    "concept": "사건 A의 확률은 P(A) = (사건 A가 일어나는 경우의 수)/(전체 경우의 수)이다."
+  },
+  {
+    "id": "math-2026-09-30-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-09-30",
+    "prompt": "0 ≤ x < 2π에서 방정식 2cos²x − 3cos x + 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "4π/3",
+      "5π/3",
+      "2π",
+      "7π/3"
+    ],
+    "answerIndex": 3,
+    "explanation": "cos x = t라 하면 2t² − 3t + 1 = (2t − 1)(t − 1) = 0이므로 t = 1/2 또는 t = 1입니다. cos x = 1이면 x = 0, cos x = 1/2이면 x = π/3, 5π/3입니다. 따라서 해의 합은 0 + π/3 + 5π/3 = 2π입니다.",
+    "concept": "삼각방정식은 cos x = t로 치환해 t에 대한 방정식으로 풀고, 단위원에서 해당하는 각을 찾는다."
   }
 ]
