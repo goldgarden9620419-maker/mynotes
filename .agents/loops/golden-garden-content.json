@@ -8,9 +8,20 @@
     "미라클모닝 실패 이유 (수면, 루틴, 습관)",
     "확언 문장 만드는 법 (감정, 가치, 문장)"
   ],
-  "pending_drafts": [
-    "01-Projects/황금정원-블로그/미라클모닝-실패-이유.md",
-    "01-Projects/황금정원-블로그/확언-문장-만드는-법.md"
+  "pending_drafts": [],
+  "published": [
+    {
+      "file": "01-Projects/황금정원-블로그/미라클모닝-실패-이유.md",
+      "topic": "미라클모닝 실패 이유 (수면, 루틴, 습관)",
+      "published_at": "2026-08-08",
+      "tistory_category": "미라클모닝·아침루틴"
+    },
+    {
+      "file": "01-Projects/황금정원-블로그/확언-문장-만드는-법.md",
+      "topic": "확언 문장 만드는 법 (감정, 가치, 문장)",
+      "published_at": "2026-08-09",
+      "tistory_category": "확언·심리·마인드셋"
+    }
   ],
   "counters": {
     "consecutive_no_new_topic": 0
