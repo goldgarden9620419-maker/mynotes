@@ -42,6 +42,9 @@
     --muted: #9a9fab;
     --accent: #e0a458;
     --border: #2a2e38;
+    --gap-section: 32px;
+    --gap-card: 14px;
+    --tap-min: 48px;
   }
   * { box-sizing: border-box; }
   body {
@@ -50,11 +53,15 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     justify-content: center;
-    padding: 40px 16px 80px;
+    padding: 40px 16px calc(80px + env(safe-area-inset-bottom));
   }
   .container { width: 100%; max-width: 560px; }
+  @media (min-width: 768px) {
+    .container { max-width: 680px; }
+  }
   .hero-banner {
     position: relative;
     width: 100%;
@@ -119,15 +126,17 @@
   }
   select, input[type="date"] {
     flex: 1;
+    min-height: var(--tap-min);
     padding: 10px 12px;
     border-radius: 8px;
     border: 1px solid var(--border);
     background: #12141a;
     color: var(--text);
-    font-size: 0.95rem;
+    font-size: 16px; /* iOS Safari 포커스 시 자동 확대 방지 */
   }
   button {
     width: 100%;
+    min-height: var(--tap-min);
     padding: 14px;
     border: none;
     border-radius: 10px;
@@ -161,17 +170,17 @@
   .section-heading {
     font-size: 1.05rem;
     font-weight: 700;
-    margin: 0 0 12px;
+    margin: var(--gap-section) 0 12px;
     display: flex;
     align-items: center;
     gap: 6px;
   }
+  #result > .section-heading:first-child { margin-top: 0; }
   .saju-reading-section {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 22px;
-    margin-bottom: 20px;
   }
   .reading-headline {
     font-size: 1.15rem;
@@ -229,7 +238,6 @@
     border-radius: 16px;
     padding: 24px;
     text-align: center;
-    margin-bottom: 20px;
   }
   .ohang-badge {
     display: inline-block;
@@ -262,15 +270,16 @@
     text-align: center;
     font-size: 0.78rem;
     color: var(--muted);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
   .celeb-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 18px;
-    margin-bottom: 14px;
+    margin-bottom: var(--gap-card);
   }
+  .celeb-card:last-child, .book-card:last-child { margin-bottom: 0; }
   .celeb-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
   .celeb-avatar {
     flex-shrink: 0;
@@ -282,7 +291,7 @@
     justify-content: center;
     background: color-mix(in srgb, var(--field-color, var(--accent)) 16%, #12141a);
     border: 1px solid color-mix(in srgb, var(--field-color, var(--accent)) 45%, var(--border));
-    animation: avatarFloat 2.2s ease-in-out infinite;
+    animation: avatarFloat 3s ease-in-out infinite;
   }
   .celeb-avatar svg { width: 28px; height: 28px; color: var(--field-color, var(--accent)); }
   .celeb-field-label {
@@ -292,17 +301,23 @@
   }
   @keyframes avatarFloat {
     0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
-    50% { transform: translateY(-10px) scale(1.08) rotate(-6deg); }
+    50% { transform: translateY(-4px) scale(1.04) rotate(-3deg); }
   }
   @media (prefers-reduced-motion: reduce) {
     .celeb-avatar { animation: none; }
   }
   .celeb-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 2px; }
   .celeb-ilju { font-size: 0.78rem; color: var(--accent); margin-bottom: 10px; }
-  .celeb-field { margin-bottom: 8px; font-size: 0.88rem; line-height: 1.5; }
+  .celeb-field {
+    margin: 0;
+    padding: 10px 0;
+    border-top: 1px solid var(--border);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
   .celeb-field .label { color: var(--muted); font-size: 0.78rem; display: block; margin-bottom: 2px; }
   .celeb-motto {
-    margin-top: 10px;
+    margin-top: 2px;
     padding: 10px 12px;
     background: #12141a;
     border-radius: 8px;
@@ -314,7 +329,7 @@
     border: 1px solid var(--border);
     border-radius: 14px;
     padding: 16px 18px;
-    margin-bottom: 12px;
+    margin-bottom: var(--gap-card);
     display: flex;
     gap: 14px;
     align-items: flex-start;
@@ -336,14 +351,14 @@
   .book-disclaimer {
     font-size: 0.72rem;
     color: var(--muted);
-    margin: 4px 0 16px;
+    margin: 12px 0 0;
     line-height: 1.5;
   }
   .motto-disclaimer {
     font-size: 0.72rem;
     color: var(--muted);
     text-align: center;
-    margin: 4px 0 16px;
+    margin: 12px 0 0;
     line-height: 1.5;
   }
   .motto-disclaimer a { color: var(--muted); }
@@ -356,13 +371,14 @@
     color: var(--text);
     font-size: 0.9rem;
     cursor: pointer;
-    margin-top: 8px;
+    margin-top: 10px;
+    min-height: var(--tap-min);
   }
   footer {
     text-align: center;
     color: var(--muted);
     font-size: 0.75rem;
-    margin-top: 32px;
+    margin-top: 40px;
   }
   footer a {
     color: var(--muted);
@@ -387,11 +403,11 @@
   .share-row {
     display: flex;
     gap: 8px;
-    margin-top: 4px;
-    margin-bottom: 8px;
+    margin: 24px 0 0;
   }
   .share-btn {
     flex: 1;
+    min-height: var(--tap-min);
     padding: 12px;
     border: none;
     border-radius: 10px;
@@ -455,13 +471,15 @@
     z-index: 100;
     align-items: center;
     justify-content: center;
-    padding: 24px 16px;
+    padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
   }
   .card-modal.open { display: flex; }
   .card-modal-inner {
     max-width: 420px;
     width: 100%;
     max-height: 90vh;
+    max-height: 90dvh;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -471,6 +489,7 @@
     border-radius: 16px;
     display: block;
     max-height: 65vh;
+    max-height: 60dvh;
     object-fit: contain;
     background: #000;
   }
