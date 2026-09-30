@@ -47,6 +47,7 @@ const REVIEWED_PLACES: { match: string; url: string }[] = [
   { match: "속초옥", url: "https://blog.naver.com/gold-jw0419/224417201181" },
   { match: "돈화각", url: "https://blog.naver.com/gold-jw0419/224420048872" },
   { match: "롤링파스타", url: "https://blog.naver.com/gold-jw0419/224423376124" },
+  { match: "샤부마스터", url: "https://blog.naver.com/gold-jw0419/224424112832" },
 ];
 
 function reviewedPostUrl(name: string) {
