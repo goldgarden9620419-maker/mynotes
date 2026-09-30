@@ -7975,5 +7975,246 @@
     "answerIndex": 3,
     "explanation": "cos x = t라 하면 2t² − 3t + 1 = (2t − 1)(t − 1) = 0이므로 t = 1/2 또는 t = 1입니다. cos x = 1이면 x = 0, cos x = 1/2이면 x = π/3, 5π/3입니다. 따라서 해의 합은 0 + π/3 + 5π/3 = 2π입니다.",
     "concept": "삼각방정식은 cos x = t로 치환해 t에 대한 방정식으로 풀고, 단위원에서 해당하는 각을 찾는다."
+  },
+  {
+    "id": "en-2026-10-01-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-01",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists who study sleep have found that memories [u]are[/u]① strengthened during the night. When we learn something new, the brain replays the experience while we rest, [u]what[/u]② helps transfer fragile information into long-term storage. Students [u]who[/u]③ sleep well after studying tend to recall far more than those who do not. It is therefore essential [u]to protect[/u]④ a regular sleep schedule during exam season, rather than [u]staying[/u]⑤ up all night to cram.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "②에서 what은 선행사를 포함한 관계대명사라 앞에 완전한 절이 오면 쓸 수 없습니다. 앞 절 전체를 받아 계속적 용법으로 쓰는 which(=and this)가 되어야 합니다. ①은 주어 memories에 맞는 복수동사, ③은 주격 관계대명사, ④는 진주어 to부정사, ⑤는 rather than 뒤에 병렬된 동명사로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "fragile",
+        "meaning": "연약한, 깨지기 쉬운"
+      },
+      {
+        "word": "cram",
+        "meaning": "벼락치기로 공부하다"
+      },
+      {
+        "word": "transfer",
+        "meaning": "옮기다, 전달하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-01-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-01",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Feedback is often feared because it feels like a judgment of who we are. Yet people who improve fastest rarely take criticism personally. A pointed comment on an essay does not say that the writer lacks ability; it simply reveals where the argument is weak. Seen this way, every correction becomes a map that shows what to work on next. The most effective learners therefore treat feedback as _________ rather than as a verdict on their worth.",
+    "choices": [
+      "a reward for past success",
+      "a reason to avoid challenges",
+      "a measure of natural talent",
+      "information that guides improvement",
+      "an obstacle to self-confidence"
+    ],
+    "answerIndex": 3,
+    "explanation": "지문은 비판을 자신에 대한 판단으로 받아들이지 않고, 약점을 알려주어 다음에 무엇을 고칠지 보여주는 지도로 본다고 설명합니다. 따라서 빈칸에는 '개선을 이끄는 정보'인 ④가 적절합니다. ③은 지문이 오히려 부정하는 관점(능력 부족의 증거)입니다.",
+    "vocab": [
+      {
+        "word": "pointed",
+        "meaning": "날카로운, 직접적인"
+      },
+      {
+        "word": "verdict",
+        "meaning": "판단, 평결"
+      },
+      {
+        "word": "worth",
+        "meaning": "가치"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-01-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-01",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Cities around the world are adding more green space to their neighborhoods.\n(A) Residents also benefit mentally, since time spent among plants is linked to lower levels of stress.\n(B) One reason is that parks reduce summer heat by providing shade and releasing moisture into the air.\n(C) Together, these advantages explain why planners now regard greenery as essential infrastructure rather than mere decoration.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글은 도시가 녹지를 늘리고 있다고 말합니다. (B)는 그 이유 중 하나(더위 완화)를 제시하고, (A)는 also로 또 다른 이점(정신적 안정)을 덧붙이며, (C)는 these advantages로 앞의 이점들을 종합해 결론을 냅니다. 따라서 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "moisture",
+        "meaning": "수분, 습기"
+      },
+      {
+        "word": "infrastructure",
+        "meaning": "기반 시설"
+      },
+      {
+        "word": "mere",
+        "meaning": "단순한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-01-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-01",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Habits are formed through repetition. ( ① ) At first, every action requires conscious attention and deliberate effort. ( ② ) The brain, in turn, begins to link a cue with the action, and the routine becomes smoother. ( ③ ) Eventually the behavior occurs with hardly any thought at all. ( ④ ) This is why brushing your teeth feels effortless, while learning a new language feels exhausting. ( ⑤ )",
+    "givenSentence": "Such effort, however, gradually decreases as the same action is repeated.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 Such effort는 바로 앞에 '노력'이 언급되어야 함을 뜻합니다. ② 앞 문장의 conscious attention and deliberate effort를 받아, 반복할수록 그 노력이 줄어든다고 이어야 하고, 뒤의 '뇌가 단서와 행동을 연결하기 시작한다'는 설명으로 자연스럽게 연결됩니다. ①에 넣으면 Such effort가 가리킬 대상이 없습니다.",
+    "vocab": [
+      {
+        "word": "deliberate",
+        "meaning": "의도적인, 신중한"
+      },
+      {
+        "word": "cue",
+        "meaning": "신호, 단서"
+      },
+      {
+        "word": "exhausting",
+        "meaning": "진이 빠지게 하는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-01-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-01",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many travelers rush through famous landmarks, taking photographs and moving on to the next attraction. Yet those who linger often remember more. By sitting in a local café, walking without a fixed route, or talking with residents, they notice details that a schedule would have hidden. Such unhurried moments turn a trip from a checklist of sights into a story of personal experience. A slower pace may mean seeing fewer places, but it allows each one to leave a deeper impression.",
+    "choices": [
+      "Famous landmarks are not worth visiting for most travelers.",
+      "Photographs are the best way to preserve travel memories.",
+      "Detailed schedules help travelers visit as many places as possible.",
+      "Local residents are the most reliable source of travel information.",
+      "Traveling at a slower pace leads to richer and more memorable experiences."
+    ],
+    "answerIndex": 4,
+    "explanation": "지문은 유명 명소를 서둘러 훑는 것보다 여유 있게 머무는 여행이 더 많은 기억과 깊은 인상을 남긴다고 말합니다. 따라서 주제는 ⑤입니다. ③은 지문과 반대이고, 나머지는 지문에서 다루지 않은 내용입니다.",
+    "vocab": [
+      {
+        "word": "linger",
+        "meaning": "오래 머물다"
+      },
+      {
+        "word": "unhurried",
+        "meaning": "서두르지 않는"
+      },
+      {
+        "word": "impression",
+        "meaning": "인상"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-01-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-01",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3이고, a₁ = 7 − 6 = 1입니다. a₁₀ = 1 + 27 = 28이므로 S₁₀ = 10(1 + 28)/2 = 145입니다.",
+    "concept": "등차수열의 합은 Sₙ = n(a₁ + aₙ)/2 = n{2a₁ + (n − 1)d}/2이다."
+  },
+  {
+    "id": "math-2026-10-01-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-01",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 2의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 1 − 6 + 9 + 2 = 6, f(3) = 27 − 54 + 27 + 2 = 2이므로 차는 4입니다.",
+    "concept": "삼차함수는 f'(x) = 0인 점의 좌우에서 f'(x)의 부호가 +에서 −로 바뀌면 극대, −에서 +로 바뀌면 극소이다."
+  },
+  {
+    "id": "math-2026-10-01-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-01",
+    "prompt": "함수 f(x) = 6x² − 4x + k에 대하여 ∫₀² f(x)dx = 20일 때, 상수 k의 값은?",
+    "choices": [
+      "2",
+      "4",
+      "5",
+      "6",
+      "8"
+    ],
+    "answerIndex": 3,
+    "explanation": "∫₀² (6x² − 4x + k)dx = [2x³ − 2x² + kx]₀² = 16 − 8 + 2k = 8 + 2k입니다. 8 + 2k = 20이므로 k = 6입니다.",
+    "concept": "다항함수의 정적분은 ∫xⁿdx = xⁿ⁺¹/(n+1)을 이용해 부정적분을 구한 뒤 F(b) − F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-10-01-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-01",
+    "prompt": "흰 공 4개, 검은 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 두 공의 색이 같을 확률은?",
+    "choices": [
+      "1/3",
+      "2/7",
+      "4/7",
+      "3/7",
+      "5/7"
+    ],
+    "answerIndex": 3,
+    "explanation": "전체 경우의 수는 ₇C₂ = 21입니다. 모두 흰 공인 경우 ₄C₂ = 6, 모두 검은 공인 경우 ₃C₂ = 3이므로 (6 + 3)/21 = 9/21 = 3/7입니다.",
+    "concept": "서로 배반인 사건의 확률은 P(A ∪ B) = P(A) + P(B)이고, 동시에 뽑는 경우의 수는 조합 ₙCᵣ로 센다."
+  },
+  {
+    "id": "math-2026-10-01-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-01",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − 3sin x + 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x − 1)(sin x − 1) = 0이므로 sin x = 1/2 또는 sin x = 1입니다. sin x = 1/2이면 x = π/6, 5π/6이고, sin x = 1이면 x = π/2입니다. 합은 π/6 + 5π/6 + π/2 = 3π/2입니다.",
+    "concept": "sin x = t로 치환해 t에 대한 이차방정식으로 푼 뒤, 단위원에서 각 t값에 해당하는 x를 구한다."
   }
 ]
