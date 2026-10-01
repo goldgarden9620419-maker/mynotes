@@ -8216,5 +8216,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x − 1)(sin x − 1) = 0이므로 sin x = 1/2 또는 sin x = 1입니다. sin x = 1/2이면 x = π/6, 5π/6이고, sin x = 1이면 x = π/2입니다. 합은 π/6 + 5π/6 + π/2 = 3π/2입니다.",
     "concept": "sin x = t로 치환해 t에 대한 이차방정식으로 푼 뒤, 단위원에서 각 t값에 해당하는 x를 구한다."
+  },
+  {
+    "id": "en-2026-10-02-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-02",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity [u]depends[/u]① on sudden inspiration, but research suggests otherwise. Artists who produce remarkable work often follow strict routines [u]which[/u]② they sit down at the same hour regardless of mood. What matters most is not talent alone but the willingness [u]to show[/u]③ up consistently. Over time, small efforts [u]repeated[/u]④ daily can lead to results that [u]surprise[/u]⑤ even the people who made them.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "②는 뒤에 완전한 절(they sit down at the same hour)이 이어지므로 관계대명사 which를 쓸 수 없고, 전치사 + 관계대명사 in which(또는 관계부사 where)가 되어야 합니다. ①은 주어 creativity에 맞는 단수동사, ③은 willingness를 수식하는 to부정사, ④는 efforts를 수식하는 과거분사(반복되는), ⑤는 선행사 results에 맞는 복수동사로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "remarkable",
+        "meaning": "놀라운, 주목할 만한"
+      },
+      {
+        "word": "regardless of",
+        "meaning": "~에 상관없이"
+      },
+      {
+        "word": "willingness",
+        "meaning": "기꺼이 하는 마음"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-02-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-02",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Modern devices are designed to capture our attention. The more notifications we receive, the less able we become to sustain focus on a single task. Researchers note that each interruption forces the brain to reload its context, which quietly drains mental energy. As a result, a person who checks a phone constantly may feel busy yet accomplish little. Genuine productivity therefore depends less on how much we attempt than on _________.",
+    "choices": [
+      "how quickly we respond to messages",
+      "how many tools we own",
+      "how early we begin our day",
+      "how often we change tasks",
+      "how deeply we can concentrate without interruption"
+    ],
+    "answerIndex": 4,
+    "explanation": "지문은 알림과 방해가 집중을 깨뜨려 정신적 에너지를 소모시키고 결과적으로 성과가 적다고 설명합니다. 따라서 진정한 생산성은 방해 없이 얼마나 깊이 집중할 수 있는가에 달려 있다는 ⑤가 적절합니다. ④는 지문이 문제로 지적하는 행동입니다.",
+    "vocab": [
+      {
+        "word": "sustain",
+        "meaning": "지속하다, 유지하다"
+      },
+      {
+        "word": "interruption",
+        "meaning": "방해, 중단"
+      },
+      {
+        "word": "drain",
+        "meaning": "고갈시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-02-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-02",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Honeybees communicate the location of food through a remarkable behavior known as the waggle dance.\n(A) The angle of the dance relative to the vertical shows the direction of the food in relation to the sun, and the length of the waggle indicates the distance.\n(B) When a forager returns to the hive after finding a rich source of nectar, she performs this dance on the surface of the honeycomb.\n(C) By watching closely, other workers decode these signals and fly directly to the flowers without searching randomly.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글은 꿀벌의 waggle dance를 소개합니다. (B)는 this dance로 이어 언제 춤을 추는지 설명하고, (A)는 그 춤이 전달하는 방향·거리 정보를 설명하며, (C)는 these signals로 (A)의 정보를 다른 일벌이 해독해 꽃으로 간다는 결과를 말합니다. 따라서 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "forager",
+        "meaning": "먹이를 찾아다니는 개체"
+      },
+      {
+        "word": "nectar",
+        "meaning": "꿀, 화밀"
+      },
+      {
+        "word": "decode",
+        "meaning": "해독하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-02-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-02",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Failure is often described as the best teacher. ( ① ) Athletes review lost games to find weaknesses, and scientists learn from experiments that did not work. ( ② ) However, simply experiencing failure does not guarantee improvement. ( ③ ) Learning happens only when people stop to analyze what went wrong and adjust their approach. ( ④ ) Without it, the same mistakes tend to repeat. ( ⑤ )",
+    "givenSentence": "Such analysis is what turns an ordinary mistake into useful knowledge.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 Such analysis는 바로 앞에 '분석'이 언급되어야 함을 뜻합니다. ④ 앞 문장의 analyze what went wrong을 받아 그 분석이 평범한 실수를 유용한 지식으로 바꾼다고 이어야 하고, 뒤 문장의 Without it(= 분석 없이는)과도 자연스럽게 연결됩니다. ③에 넣으면 Such analysis가 가리킬 대상이 없습니다.",
+    "vocab": [
+      {
+        "word": "guarantee",
+        "meaning": "보장하다"
+      },
+      {
+        "word": "analyze",
+        "meaning": "분석하다"
+      },
+      {
+        "word": "approach",
+        "meaning": "접근법"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-02-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-02",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "In many forests, trees are connected by underground networks of fungi. Through these networks, older trees send sugar and nutrients to shaded seedlings that cannot yet gather enough sunlight. When a tree is attacked by insects, it can even release chemical warnings that neighbors detect and respond to by strengthening their defenses. Such findings challenge the view of a forest as a collection of rivals competing for light, suggesting instead a community that survives through mutual support.",
+    "choices": [
+      "Trees grow faster when they are planted far apart.",
+      "Insects are the greatest threat to forest ecosystems.",
+      "Fungi absorb more nutrients than trees do.",
+      "Forest trees support one another through underground networks rather than only competing.",
+      "Seedlings need more sunlight than mature trees do."
+    ],
+    "answerIndex": 3,
+    "explanation": "지문은 균류 네트워크를 통해 나무들이 양분을 나누고 위험을 경고하며, 숲이 경쟁자의 집합이 아니라 상호 지원하는 공동체라고 설명합니다. 따라서 주제는 ④입니다. 나머지는 지문에서 다루지 않았거나 내용과 맞지 않습니다.",
+    "vocab": [
+      {
+        "word": "fungi",
+        "meaning": "균류(곰팡이류)"
+      },
+      {
+        "word": "seedling",
+        "meaning": "묘목, 어린 식물"
+      },
+      {
+        "word": "mutual",
+        "meaning": "상호의"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-02-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-02",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, 첫째항부터 제6항까지의 합은?",
+    "choices": [
+      "165",
+      "177",
+      "189",
+      "201",
+      "213"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅/a₂ = r³ = 8이므로 r = 2이고, a₁ = 6/2 = 3입니다. S₆ = 3(2⁶ − 1)/(2 − 1) = 3 × 63 = 189입니다.",
+    "concept": "등비수열의 합은 r ≠ 1일 때 Sₙ = a₁(rⁿ − 1)/(r − 1)이고, aₘ/aₙ = r^(m−n)이다."
+  },
+  {
+    "id": "math-2026-10-02-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-02",
+    "prompt": "닫힌구간 [0, 3]에서 함수 f(x) = 2x³ − 9x² + 12x의 최댓값은?",
+    "choices": [
+      "4",
+      "5",
+      "9",
+      "12",
+      "14"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 6x² − 18x + 12 = 6(x − 1)(x − 2)이므로 x = 1, 2에서 극값을 가집니다. f(0) = 0, f(1) = 5, f(2) = 16 − 36 + 24 = 4, f(3) = 54 − 81 + 36 = 9이므로 최댓값은 9입니다.",
+    "concept": "닫힌구간에서 연속인 함수의 최댓값은 극값과 양 끝점의 함숫값 중 가장 큰 값이다."
+  },
+  {
+    "id": "math-2026-10-02-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-02",
+    "prompt": "정적분 ∫₁³ (3x² − 2x + 1) dx의 값은?",
+    "choices": [
+      "16",
+      "18",
+      "20",
+      "22",
+      "24"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ − x² + x이므로 [x³ − x² + x]₁³ = (27 − 9 + 3) − (1 − 1 + 1) = 21 − 1 = 20입니다.",
+    "concept": "∫ xⁿ dx = xⁿ⁺¹/(n+1) + C이고, ∫ₐᵇ f(x)dx = F(b) − F(a)이다."
+  },
+  {
+    "id": "math-2026-10-02-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-02",
+    "prompt": "흰 공 4개, 검은 공 3개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "16/35",
+      "18/35",
+      "4/7",
+      "3/5",
+      "22/35"
+    ],
+    "answerIndex": 4,
+    "explanation": "전체 경우의 수는 ₇C₃ = 35입니다. 흰 공 2개·검은 공 1개는 ₄C₂ × ₃C₁ = 18, 흰 공 3개는 ₄C₃ = 4이므로 확률은 (18 + 4)/35 = 22/35입니다.",
+    "concept": "서로 배타적인 경우의 확률은 더하고, 조합의 수 ₙCᵣ = n!/(r!(n−r)!)로 경우의 수를 센다."
+  },
+  {
+    "id": "math-2026-10-02-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-02",
+    "prompt": "0 ≤ x < 2π에서 방정식 2cos²x − cos x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 2,
+    "explanation": "(2cos x + 1)(cos x − 1) = 0이므로 cos x = −1/2 또는 cos x = 1입니다. 0 ≤ x < 2π에서 x = 2π/3, 4π/3, 0이므로 합은 0 + 2π/3 + 4π/3 = 2π입니다.",
+    "concept": "cos x = t로 치환하여 t에 대한 이차방정식으로 풀고, 단위원에서 해당하는 x를 구한다."
   }
 ]
