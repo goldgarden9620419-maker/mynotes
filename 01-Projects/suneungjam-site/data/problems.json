@@ -8457,5 +8457,246 @@
     "answerIndex": 2,
     "explanation": "(2cos x + 1)(cos x − 1) = 0이므로 cos x = −1/2 또는 cos x = 1입니다. 0 ≤ x < 2π에서 x = 2π/3, 4π/3, 0이므로 합은 0 + 2π/3 + 4π/3 = 2π입니다.",
     "concept": "cos x = t로 치환하여 t에 대한 이차방정식으로 풀고, 단위원에서 해당하는 x를 구한다."
+  },
+  {
+    "id": "en-2026-10-03-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-03",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Sleep researchers have long argued that memories [u]are strengthened[/u]① during the night. When we learn something new, the brain replays the experience, [u]transferring[/u]② information from short-term to long-term storage. This is why students [u]who[/u]③ study before bed often remember more than those who stay up late. Skipping sleep, however, [u]make[/u]④ it difficult for the brain to complete this process, and the result is [u]that[/u]⑤ even well-prepared learners forget key details.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④의 주어는 동명사구 Skipping sleep으로 단수 취급하므로 make가 아니라 makes가 되어야 합니다. ①은 주어 memories(복수)에 맞는 수동태, ②는 분사구문, ③은 students를 선행사로 하는 주격 관계대명사, ⑤는 be동사 뒤에서 완전한 절을 이끄는 명사절 접속사 that으로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "replay",
+        "meaning": "되풀이하다, 재생하다"
+      },
+      {
+        "word": "storage",
+        "meaning": "저장, 보관"
+      },
+      {
+        "word": "well-prepared",
+        "meaning": "준비가 잘 된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-03-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-03",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many people think that a good leader must always have the answer. In reality, the most effective leaders are often those who ask the right questions. By inviting others to share their views, they uncover information that would otherwise remain hidden. A leader who pretends to know everything closes the door to such insight, whereas one who admits uncertainty ______________________.",
+    "choices": [
+      "creates room for the team to contribute and improve the decision",
+      "loses the respect of the people who follow",
+      "avoids responsibility for the final outcome",
+      "relies on past success rather than new ideas",
+      "delays action until every opinion is identical"
+    ],
+    "answerIndex": 0,
+    "explanation": "글은 모든 답을 아는 척하는 리더는 통찰의 문을 닫지만, 질문하고 의견을 구하는 리더는 숨은 정보를 얻는다고 말합니다. 따라서 불확실함을 인정하는 리더는 팀이 기여하고 결정을 개선할 여지를 만든다는 ①이 적절합니다. 나머지는 글의 흐름과 반대이거나 언급되지 않은 내용입니다.",
+    "vocab": [
+      {
+        "word": "uncover",
+        "meaning": "밝히다, 드러내다"
+      },
+      {
+        "word": "insight",
+        "meaning": "통찰(력)"
+      },
+      {
+        "word": "uncertainty",
+        "meaning": "불확실성"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-03-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-03",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Urban planners have recently begun to pay attention to an overlooked resource: the rooftop.\n(A) In addition, these green roofs keep buildings cooler in summer, reducing the energy needed for air conditioning.\n(B) Now, however, some cities cover them with soil and plants, which absorb rainwater that would otherwise flood the streets.\n(C) For decades, rooftops were treated as wasted space, occupied only by pipes and machinery.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 4,
+    "explanation": "주어진 글은 '간과된 자원인 옥상'을 소개합니다. (C)는 과거에 옥상이 버려진 공간이었다고 설명하고, (B)는 However로 반전시켜 지금은 흙과 식물로 덮어 빗물을 흡수한다고 하며, (A)는 In addition과 these green roofs로 (B)의 녹색 옥상의 추가 효과를 말합니다. 따라서 (C)-(B)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "overlooked",
+        "meaning": "간과된, 눈에 띄지 않은"
+      },
+      {
+        "word": "machinery",
+        "meaning": "기계류"
+      },
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-03-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-03",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Reading on a screen has become the default for many students. ( ① ) Digital texts are convenient, searchable, and easy to carry. ( ② ) Yet several studies suggest that readers often absorb less from screens than from paper. ( ③ ) One reason is that people tend to skim on-screen text, jumping from one phrase to another instead of following the argument. ( ④ ) Slowing down and reading line by line can reduce this gap. ( ⑤ )",
+    "givenSentence": "This habit of skimming makes it harder to remember details later.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 This habit of skimming은 바로 앞에 skim(훑어 읽기)이 언급되어야 함을 뜻합니다. ④ 앞 문장의 skim on-screen text를 받아 세부 내용을 기억하기 어렵다고 잇고, 뒤 문장의 this gap(이해도 차이)과도 자연스럽게 연결됩니다. ③에 넣으면 This habit이 가리킬 대상이 없습니다.",
+    "vocab": [
+      {
+        "word": "skim",
+        "meaning": "대충 훑어 읽다"
+      },
+      {
+        "word": "absorb",
+        "meaning": "받아들이다, 흡수하다"
+      },
+      {
+        "word": "argument",
+        "meaning": "논지, 주장"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-03-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-03",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Public libraries are often described as places for borrowing books, but their role has expanded far beyond that. Many now offer job-search workshops, free internet access, and meeting rooms for community groups. For people without resources at home, these services can be the difference between isolation and opportunity. In this sense, the modern library functions less as a storehouse of books than as a shared space that supports the whole community.",
+    "choices": [
+      "Digital books will soon replace printed books in libraries.",
+      "Modern libraries serve as community spaces offering much more than book lending.",
+      "Job-search workshops are the most important library service.",
+      "People without internet access rarely visit libraries.",
+      "Library membership should be free for everyone."
+    ],
+    "answerIndex": 1,
+    "explanation": "지문은 도서관이 책 대출을 넘어 구직 워크숍, 인터넷, 모임 공간 등을 제공하며 공동체를 지원하는 공유 공간이 되었다고 설명합니다. 따라서 주제는 ②입니다. 나머지는 지문에서 다루지 않았거나 일부만 다룬 내용입니다.",
+    "vocab": [
+      {
+        "word": "isolation",
+        "meaning": "고립"
+      },
+      {
+        "word": "storehouse",
+        "meaning": "저장소, 보고"
+      },
+      {
+        "word": "function as",
+        "meaning": "~로서 기능하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-03-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-03",
+    "prompt": "수열 {aₙ}이 a₁ = 2, aₙ₊₁ = aₙ + 2n (n ≥ 1)로 정의될 때, a₁₀의 값은?",
+    "choices": [
+      "82",
+      "90",
+      "92",
+      "100",
+      "112"
+    ],
+    "answerIndex": 2,
+    "explanation": "aₙ = a₁ + Σ(k=1~n−1) 2k = 2 + n(n−1)이므로 a₁₀ = 2 + 10 × 9 = 92입니다.",
+    "concept": "aₙ₊₁ − aₙ = f(n) 꼴의 점화식은 aₙ = a₁ + Σ(k=1~n−1) f(k)로 풀고, Σk = n(n+1)/2이다."
+  },
+  {
+    "id": "math-2026-10-03-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-03",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 5, f(3) = 1이므로 차는 4입니다.",
+    "concept": "f′(x)의 부호가 +에서 −로 바뀌면 극대, −에서 +로 바뀌면 극소이다."
+  },
+  {
+    "id": "math-2026-10-03-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-03",
+    "prompt": "정적분 ∫₁² (3x² − 2x + 1) dx의 값은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ − x² + x이므로 [x³ − x² + x]₁² = (8 − 4 + 2) − (1 − 1 + 1) = 6 − 1 = 5입니다.",
+    "concept": "∫ₐᵇ f(x)dx = F(b) − F(a)이고, xⁿ의 부정적분은 xⁿ⁺¹/(n+1)이다."
+  },
+  {
+    "id": "math-2026-10-03-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-03",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 두 공의 색이 같을 확률은?",
+    "choices": [
+      "2/7",
+      "3/7",
+      "4/7",
+      "1/2",
+      "5/7"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 ₇C₂ = 21이고, 둘 다 흰 공인 경우 ₄C₂ = 6, 둘 다 검은 공인 경우 ₃C₂ = 3이므로 확률은 (6 + 3)/21 = 3/7입니다.",
+    "concept": "서로 배반인 사건의 확률은 더하며, 확률 = (사건의 경우의 수)/(전체 경우의 수)이고 조합은 ₙCᵣ = n!/(r!(n−r)!)이다."
+  },
+  {
+    "id": "math-2026-10-03-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-03",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − 3sin x + 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x − 1)(sin x − 1) = 0에서 sin x = 1/2 또는 sin x = 1입니다. sin x = 1/2이면 x = π/6, 5π/6, sin x = 1이면 x = π/2이므로 합은 π/6 + 5π/6 + π/2 = 3π/2입니다.",
+    "concept": "sin x = t로 치환해 t에 대한 이차방정식으로 인수분해한 뒤, 단위원에서 각 t값에 해당하는 x를 구한다."
   }
 ]
