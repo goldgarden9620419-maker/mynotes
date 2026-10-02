@@ -9,6 +9,7 @@
   "used_angles": ["추천 체크리스트 각도", "제품 영상 각도", "먹는 경험·맛 각도", "원료 딥다이브(테프) 각도", "원료 딥다이브(애사비) 각도"],
   "pending_drafts": [],
   "publishing_tool": "Typefully MCP (2026-10-02부터) — social_set_id 337240, kim_jade0419 Threads 연동됨. 기존 PowerShell 스크립트 방식은 백업 수단으로 유지.",
+  "next_run_plan": "2026-10-09 금요일 루프는 텍스트 각도 대신 짧은 제품 영상(히어로샷, 5초 내외)으로 진행 — 사용자가 2026-10-02 요청. higgsfield-product-ad-pipeline으로 기존 자산 재사용해 영상 제작 → Typefully create_media_upload로 업로드 → create_draft의 threads posts[0].media_ids에 첨부 → 첫 댓글은 그대로 구매 링크.",
   "published": [
     {
       "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-1-추천체크리스트.md",
