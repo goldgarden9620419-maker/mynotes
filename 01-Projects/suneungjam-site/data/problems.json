@@ -8698,5 +8698,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x − 1)(sin x − 1) = 0에서 sin x = 1/2 또는 sin x = 1입니다. sin x = 1/2이면 x = π/6, 5π/6, sin x = 1이면 x = π/2이므로 합은 π/6 + 5π/6 + π/2 = 3π/2입니다.",
     "concept": "sin x = t로 치환해 t에 대한 이차방정식으로 인수분해한 뒤, 단위원에서 각 t값에 해당하는 x를 구한다."
+  },
+  {
+    "id": "en-2026-10-04-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-04",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many coastal towns depend on tourism, but the benefits [u]are[/u]① rarely shared evenly. Local shop owners, [u]whose[/u]② income rises in summer, often struggle during the quiet months. Some towns have therefore begun [u]promoting[/u]③ festivals in winter, hoping to attract visitors throughout the year. A council member explained that the goal is not to bring in more tourists but [u]spreading[/u]④ them out over time, [u]which[/u]⑤ makes the local economy more stable.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 'not to bring in ... but ...'은 대등한 구조(not A but B)이므로 to부정사 'to bring in'과 병렬을 이루도록 spreading을 to spread로 고쳐야 합니다. ① 주어 the benefits가 복수이므로 are, ② 선행사 shop owners의 소유 관계를 나타내는 whose, ③ begin은 동명사를 목적어로 취할 수 있어 promoting, ⑤ 앞 절 전체를 선행사로 하는 계속적 용법의 which는 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "tourism",
+        "meaning": "관광업"
+      },
+      {
+        "word": "attract",
+        "meaning": "끌어들이다"
+      },
+      {
+        "word": "evenly",
+        "meaning": "고르게"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-04-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-04",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Memory is often compared to a video recorder, but psychologists point out that this comparison is misleading. Each time we recall an event, we rebuild it from fragments, filling gaps with expectations and later experiences. As a result, the more often a memory is retrieved, the more likely it is to be ______________________.",
+    "choices": [
+      "preserved exactly as it was originally stored",
+      "altered by the circumstances of recollection",
+      "replaced by information from other people only",
+      "forgotten immediately after being retrieved",
+      "separated from the emotions it once carried"
+    ],
+    "answerIndex": 1,
+    "explanation": "기억을 떠올릴 때마다 조각들로부터 다시 구성하며 빈틈을 기대와 이후 경험으로 채운다고 했으므로, 자주 떠올릴수록 회상 상황에 의해 변형될 가능성이 크다는 ②가 적절합니다. ①은 비디오 녹화기 비유와 같은 내용으로 글의 요지와 반대입니다.",
+    "vocab": [
+      {
+        "word": "retrieve",
+        "meaning": "(기억 등을) 되살리다"
+      },
+      {
+        "word": "fragment",
+        "meaning": "조각, 파편"
+      },
+      {
+        "word": "misleading",
+        "meaning": "오해를 낳는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-04-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-04",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Many people assume that creativity is a gift that only a few are born with.\n(A) However, researchers who study artists and inventors find that most of them produced a large number of ordinary works before a successful one appeared.\n(B) This belief discourages beginners, who think that early failure proves they lack talent.\n(C) In other words, creative success usually comes from persistence and volume rather than from sudden inspiration.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 '창의성은 소수의 타고난 재능'이라는 생각을 (B)의 This belief가 받아 초보자에게 미치는 영향을 말하고, (A)가 However로 연구 결과를 제시하며 반박한 뒤, (C)가 In other words로 결론을 정리하므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "discourage",
+        "meaning": "낙담시키다"
+      },
+      {
+        "word": "persistence",
+        "meaning": "끈기"
+      },
+      {
+        "word": "inventor",
+        "meaning": "발명가"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-04-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-04",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Good scientists are not simply collectors of facts. ( ① ) They are constantly doubting their own conclusions. ( ② ) When an experiment produces a surprising result, they do not immediately celebrate. ( ③ ) Instead, they search for errors in their method that might explain it. ( ④ ) Only after repeated checks do they accept the finding as real. ( ⑤ )",
+    "givenSentence": "Such caution may seem slow, but it protects science from false discoveries.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "주어진 문장의 Such caution은 반복해서 검증한 뒤에야 결과를 받아들이는 신중한 태도를 가리킵니다. 따라서 그 내용이 모두 나온 ⑤에 들어가야 자연스럽습니다. ④ 뒤에 반복 검증 내용이 이어지므로 ④에서는 Such caution이 가리킬 대상이 아직 완성되지 않습니다.",
+    "vocab": [
+      {
+        "word": "conclusion",
+        "meaning": "결론"
+      },
+      {
+        "word": "celebrate",
+        "meaning": "축하하다"
+      },
+      {
+        "word": "caution",
+        "meaning": "신중함"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-04-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-04",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many companies now allow employees to work from home, and the results are mixed. Workers save commuting time and report greater freedom, yet they also describe feeling disconnected from colleagues. Informal conversations in hallways, which often spark new ideas, rarely occur on a video call. Therefore, companies must design ways to preserve spontaneous interaction if they wish to benefit from flexible work.",
+    "choices": [
+      "The importance of maintaining informal interaction in remote work environments",
+      "Why commuting time should be reduced for employees",
+      "The technological limits of video conferencing software",
+      "Methods for measuring employee productivity at home",
+      "The decline of traditional offices in large cities"
+    ],
+    "answerIndex": 0,
+    "explanation": "재택근무의 장점과 함께 동료와의 단절, 자발적 대화 부족 문제를 짚고, 마지막 문장에서 자발적 상호작용을 유지할 방법이 필요하다고 결론짓습니다. 따라서 주제는 ①입니다.",
+    "vocab": [
+      {
+        "word": "commute",
+        "meaning": "통근하다"
+      },
+      {
+        "word": "spontaneous",
+        "meaning": "자발적인"
+      },
+      {
+        "word": "flexible",
+        "meaning": "유연한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-04-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-04",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 162일 때, 첫째항부터 제4항까지의 합은?",
+    "choices": [
+      "40",
+      "60",
+      "80",
+      "120",
+      "160"
+    ],
+    "answerIndex": 2,
+    "explanation": "공비를 r라 하면 a₅/a₂ = r³ = 27이므로 r = 3이고 a₁ = 6/3 = 2입니다. 따라서 S₄ = 2(3⁴ − 1)/(3 − 1) = 80입니다.",
+    "concept": "등비수열에서 aₙ = a₁rⁿ⁻¹이고, 합은 Sₙ = a₁(rⁿ − 1)/(r − 1) (r ≠ 1)이다."
+  },
+  {
+    "id": "math-2026-10-04-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-04",
+    "prompt": "곡선 y = x³ − 3x + 2 위의 점 (2, 4)에서의 접선의 y절편은?",
+    "choices": [
+      "−18",
+      "−16",
+      "−14",
+      "−12",
+      "−10"
+    ],
+    "answerIndex": 2,
+    "explanation": "y′ = 3x² − 3이므로 x = 2에서 기울기는 9입니다. 접선은 y − 4 = 9(x − 2), 즉 y = 9x − 14이므로 y절편은 −14입니다.",
+    "concept": "곡선 y = f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y − f(a) = f′(a)(x − a)이다."
+  },
+  {
+    "id": "math-2026-10-04-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-04",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² − 4x = 0에서 x = 0, 4이고 0 ≤ x ≤ 4에서 y ≤ 0이므로 넓이는 ∫₀⁴ (4x − x²) dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 넓이는 구간별로 함수의 부호를 확인해 ∫|f(x)|dx로 구한다."
+  },
+  {
+    "id": "math-2026-10-04-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-04",
+    "prompt": "서로 다른 주사위 2개를 동시에 던질 때, 나온 두 눈의 수의 합이 7 이상일 확률은?",
+    "choices": [
+      "1/2",
+      "7/12",
+      "2/3",
+      "5/12",
+      "5/6"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 36입니다. 합이 7, 8, 9, 10, 11, 12인 경우는 각각 6, 5, 4, 3, 2, 1가지로 모두 21가지이므로 확률은 21/36 = 7/12입니다.",
+    "concept": "확률 = (사건 A가 일어나는 경우의 수)/(전체 경우의 수)이며, 경우를 합의 값별로 나누어 센다."
+  },
+  {
+    "id": "math-2026-10-04-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-04",
+    "prompt": "0 ≤ x ≤ π에서 함수 f(x) = sin²x + 2cos x + 1의 최댓값을 M, 최솟값을 m이라 할 때, M + m의 값은?",
+    "choices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin²x = 1 − cos²x이므로 cos x = t (−1 ≤ t ≤ 1)로 놓으면 f = −t² + 2t + 2 = −(t − 1)² + 3입니다. t = 1일 때 최댓값 M = 3, t = −1일 때 최솟값 m = −1이므로 M + m = 2입니다.",
+    "concept": "sin²x + cos²x = 1로 한 종류의 삼각함수로 통일한 뒤, 치환한 변수의 범위에서 이차함수의 최대·최소를 구한다."
   }
 ]
