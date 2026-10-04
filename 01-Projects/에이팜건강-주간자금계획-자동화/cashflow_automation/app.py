@@ -635,10 +635,16 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                     if i.get("구분") != excel_report.ISSUE_RECURRING_MISSING]
                 new_marks = excel_report.diff_new_items(
                     diff_issues, recurring, None, snapshot)
+                # 처리 드롭다운 후보: 규칙 파일의 기존 분류 (2026-10-04)
+                known_cats = sorted(
+                    ({r.get("분류") for r in rules.get("rules", [])}
+                     | {r.get("분류") for r in rules.get("사용자분류", [])})
+                    - {None, ""})
                 excel_report.create_issue_workbook(
                     issues, review_path, week_key=week_key,
                     signature=input_sig, recurring=recurring,
-                    holidays=holidays, new_marks=new_marks)
+                    holidays=holidays, new_marks=new_marks,
+                    category_choices=known_cats)
                 expected = (["안내", "확인필요",
                              excel_report.RECURRING_MISSING_SHEET]
                             + (["정기지출분석"] if recurring else []))
@@ -675,10 +681,15 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         if review_path is None:
             # 확인 생략 모드: 결과와 함께 확인필요를 06_확인필요에 기록
             review_path = unique_path(review_dir / issue_name)
+            known_cats = sorted(
+                ({r.get("분류") for r in rules.get("rules", [])}
+                 | {r.get("분류") for r in rules.get("사용자분류", [])})
+                - {None, ""})
             excel_report.create_issue_workbook(issues, review_path,
                                                week_key=week_key,
                                                signature=input_sig,
-                                               holidays=holidays)
+                                               holidays=holidays,
+                                               category_choices=known_cats)
             expected = ["안내", "확인필요"]
             if not excel_report.verify_workbook(review_path, expected):
                 raise RuntimeError("확인필요 파일 재열기 검증 실패")
