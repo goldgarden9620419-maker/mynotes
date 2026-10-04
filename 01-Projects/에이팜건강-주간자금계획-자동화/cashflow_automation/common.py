@@ -366,9 +366,15 @@ def _autofit_workbook(wb) -> None:
                           else _DEFAULT_COL_WIDTH)
             merged_width[rng.start_cell.coordinate] = total
 
+        def _col_width(col: int) -> float:
+            dim = ws.column_dimensions.get(get_column_letter(col))
+            return dim.width if dim is not None and dim.width else _DEFAULT_COL_WIDTH
+
         adjust_height = ws.title not in _AUTOFIT_SKIP_HEIGHT_SHEETS
         row_lines: dict[int, int] = {}
         for row in ws.iter_rows():
+            occupied = [c.column for c in row
+                        if not isinstance(c, MergedCell) and c.value is not None]
             for cell in row:
                 if isinstance(cell, MergedCell) or cell.value is None:
                     continue
@@ -379,23 +385,43 @@ def _autofit_workbook(wb) -> None:
                     changed = True
                 # 수식 셀은 표시 결과를 알 수 없으므로 줄바꿈·높이 제외
                 if (isinstance(cell.value, str) and cell.value.strip()
-                        and not cell.value.startswith("=")):
+                        and not cell.value.startswith("=")
+                        and not align.wrap_text):
                     if cell.coordinate in merged_width:
                         width = merged_width[cell.coordinate]
                     else:
-                        dim = ws.column_dimensions.get(cell.column_letter)
-                        width = (dim.width if dim is not None and dim.width
-                                 else _DEFAULT_COL_WIDTH)
+                        # 오른쪽 빈 셀로는 Excel이 글자를 흘려 보여주므로
+                        # (제목·안내문) 다음 값 있는 셀 직전까지를 가용 폭으로
+                        # 본다. 막는 셀이 없으면 끝까지 넘쳐 보이니 줄바꿈 불필요.
+                        blockers = [c for c in occupied if c > cell.column]
+                        if not blockers:
+                            if changed:
+                                cell.alignment = align
+                            continue
+                        width = sum(_col_width(c)
+                                    for c in range(cell.column, min(blockers)))
                     chars = max(1.0, width - 1.0)
                     lines = sum(max(1, -(-int(_display_width(seg)) // int(chars)))
                                 for seg in cell.value.split("\n"))
                     if lines > 1:
-                        if not align.wrap_text:
-                            align.wrap_text = True
-                            changed = True
+                        align.wrap_text = True
+                        changed = True
                         if adjust_height:
                             r = cell.row
                             row_lines[r] = max(row_lines.get(r, 1), lines)
+                elif (isinstance(cell.value, str) and align.wrap_text
+                        and adjust_height):
+                    # 원래부터 줄바꿈인 셀도 행 높이는 보장한다
+                    if cell.coordinate in merged_width:
+                        width = merged_width[cell.coordinate]
+                    else:
+                        width = _col_width(cell.column)
+                    chars = max(1.0, width - 1.0)
+                    lines = sum(max(1, -(-int(_display_width(seg)) // int(chars)))
+                                for seg in cell.value.split("\n"))
+                    if lines > 1:
+                        r = cell.row
+                        row_lines[r] = max(row_lines.get(r, 1), lines)
                 if changed:
                     cell.alignment = align
 
