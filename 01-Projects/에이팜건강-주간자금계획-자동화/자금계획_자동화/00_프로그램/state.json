@@ -1,13 +1,19 @@
 {
-  "last_successful_week": "2026-W40",
-  "last_successful_date": "2026-10-04",
-  "last_successful_time": "23:19:26",
-  "last_run_status": "REVIEW_WAIT",
-  "last_run_week": "2026-W40",
-  "last_run_at": "2026-10-04 23:35:05",
-  "last_output_file": "주간자금계획_20261004_2319.xlsx",
+  "last_successful_week": "2026-W41",
+  "last_successful_date": "2026-10-05",
+  "last_successful_time": "00:14:08",
+  "last_run_status": "SUCCESS",
+  "last_run_week": "2026-W41",
+  "last_run_at": "2026-10-05 00:14:08",
+  "last_output_file": "주간자금계획_20261005_0014.xlsx",
   "last_error": "",
   "input_signature": "1b4e80f3971c312b",
-  "pending_weeks": [],
+  "pending_weeks": [
+    {
+      "week": "2026-W40",
+      "status": "REVIEW_WAIT",
+      "recorded_at": "2026-10-05 00:05:45"
+    }
+  ],
   "running": false
 }
