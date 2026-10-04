@@ -15,3 +15,11 @@
 
 - 이 저장소를 Obsidian 앱에서 여는 사용자는 Git 플러그인의 자동 pull(10분 간격 + 시작 시 pull)이 설정되어 있으므로, 여기서 push한 노트는 자동으로 로컬 Obsidian에도 반영된다.
 - 파일명/노트 제목은 검색하기 쉽게 명확하게 짓는다.
+
+## 저장 브랜치 규칙 (Obsidian 동기화)
+
+- 사용자의 로컬 Obsidian은 **`claude/obsidian-usage-guide-1i4otf`** 브랜치를 pull/push하고 있다. (2026-10-05 확인, Obsidian 오른쪽 아래 상태바에 표시되는 브랜치)
+- 노트를 저장할 때는 **반드시 이 브랜치에도 push**해야 Obsidian 화면에 나타난다.
+- 세션에 지정된 작업 브랜치가 따로 있으면: 작업 브랜치에 커밋·push한 뒤, **노트 파일만** 이 Obsidian 브랜치에 추가로 커밋·push한다. (임시 worktree를 쓰고, 기존 파일은 건드리지 않는다.)
+- push 전에 이 브랜치를 fetch해서 최신 상태(Obsidian의 `vault backup` 커밋 포함) 위에 올린다. force push는 하지 않는다.
+- 사용자가 Obsidian 브랜치를 바꾸면 이 섹션의 브랜치명을 함께 고친다.
