@@ -774,6 +774,17 @@ ISSUE_UNPLANNED = "계획 없는 실제출금"
 ACTION_KEEP = "지출 예정(유지)"
 ACTION_HOLD = "보류(제외)"
 
+# '계획 없는 실제출금' 처리 드롭다운의 기본 분류 후보 (2026-10-04 사용자
+# 요청: 뭘 입력할지 모르겠다 → 드롭다운 + 안내). 여기에 classify_rules의
+# 기존 분류(규칙·사용자분류)를 합쳐 숨김 열(L)에 쓰고 목록 참조한다.
+# 목록에 없는 분류는 직접 입력해도 된다(입력 제한 없음).
+DEFAULT_CATEGORY_CHOICES = [
+    "급여·상여", "4대보험", "원천세·국세", "세금·공과", "임차료·관리비",
+    "통신비", "광고비", "카드대금", "보험료", "물류·운송비",
+    "수수료", "외상매입 지급", "기타 경비",
+]
+_CHOICE_COL = 12               # L(숨김): 분류 드롭다운 후보 목록
+
 
 # 지난 확인 이후 새로 생긴 항목의 강조색 (주황)
 NEW_ITEM_FILL = PatternFill("solid", start_color="FFE699")
@@ -1090,8 +1101,12 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                           recurring: list[dict] | None = None,
                           draft_table: dict | None = None,
                           holidays: dict | None = None,
-                          new_marks: dict | None = None) -> Path:
+                          new_marks: dict | None = None,
+                          category_choices: list[str] | None = None) -> Path:
     """확인 파일 하나에 검토 시트를 확인 순서대로 담는다.
+
+    category_choices: '계획 없는 실제출금' 처리 드롭다운에 기본 후보와
+    함께 보여줄 분류 목록(classify_rules의 기존 분류, 2026-10-04).
 
     시트: ① 안내(사용법 + '확인 완료' 컨트롤) ② 확인필요(처리 지시)
     ③ 정기지출누락(팀 지출예정 파일에 없는 정기지출 — '계획에 반영'
@@ -1135,8 +1150,11 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                        "다른 항목입니다: 오늘 나갈 예정이면 '지출 예정(유지)', "
                        "안 나갈 것이면 '보류(제외)'를 고르세요 — 보류는 오늘 "
                        "자금계획에서 빠집니다. '계획 없는 실제출금'은 처리 "
-                       "열에 분류를 적으면(예: 급여·상여) 기억해서 다음부터 "
+                       "열에서 분류를 고르면(예: 급여·상여) 기억해서 다음부터 "
                        "같은 이름의 거래를 그 분류로 자동 처리합니다. "
+                       "노란 처리 칸은 누르면 쓰는 법 안내가 뜨고 ▼ 단추로 "
+                       "고를 수 있습니다(목록에 없으면 직접 입력, 모르면 "
+                       "비워 두기). "
                        "정기지출 누락 의심은 '정기지출누락' 시트에서 따로 "
                        "확인하세요. 검토가 끝나면 '안내' 시트의 "
                        "'확인 완료'(B2)를 '예'로 바꾸고 저장하세요.")
@@ -1155,13 +1173,26 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         head.alignment = Alignment(horizontal="center", vertical="center")
         head.border = _BORDER
         ws.column_dimensions[get_column_letter(_ACTION_COL)].width = 14
+        from openpyxl.comments import Comment
         from openpyxl.worksheet.datavalidation import DataValidation
+        head.comment = Comment(
+            "처리 칸 쓰는 법 (셀을 누르면 개별 안내가 뜹니다)\n"
+            "· 계획 없는 실제출금: ▼에서 분류 선택(직접 입력도 가능)\n"
+            "  → 저장하면 기억해서 다음부터 자동 분류됩니다\n"
+            "· 당일 지출·실제 차이: 유지 / 보류 선택\n"
+            "· 모르면 비워 두세요 — 다음 실행 때 다시 올라옵니다",
+            "자금계획 자동화", height=110, width=260)
         action_dv = DataValidation(
             type="list", formula1=f'"{ACTION_INCLUDE},{ACTION_SKIP}"',
             allow_blank=True)
         action_dv.error = f"'{ACTION_INCLUDE}' 또는 '{ACTION_SKIP}'만 " \
                           "입력할 수 있습니다."
         action_dv.showErrorMessage = True
+        action_dv.promptTitle = "계획 반영 선택"
+        action_dv.prompt = (f"▼에서 고르세요. '{ACTION_INCLUDE}'을 고른 "
+                            "항목만 이번 자금계획에 들어갑니다. 기본은 "
+                            f"'{ACTION_SKIP}'입니다.")
+        action_dv.showInputMessage = True
         ws.add_data_validation(action_dv)
         hold_dv = DataValidation(
             type="list", formula1=f'"{ACTION_KEEP},{ACTION_HOLD}"',
@@ -1169,16 +1200,47 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
         hold_dv.error = f"'{ACTION_KEEP}' 또는 '{ACTION_HOLD}'만 " \
                         "입력할 수 있습니다."
         hold_dv.showErrorMessage = True
+        hold_dv.promptTitle = "오늘 지출 유지/보류"
+        hold_dv.prompt = (f"▼에서 고르세요. 오늘 나갈 지출이면 "
+                          f"'{ACTION_KEEP}', 오늘 안 나가면 "
+                          f"'{ACTION_HOLD}' — 보류는 오늘 자금계획에서만 "
+                          "빠집니다.")
+        hold_dv.showInputMessage = True
         ws.add_data_validation(hold_dv)
+        # '계획 없는 실제출금' 분류 드롭다운: 기본 후보 + classify_rules의
+        # 기존 분류를 숨김 열(L)에 쓰고 목록으로 참조한다. 목록에 없는
+        # 분류도 직접 입력할 수 있게 입력 제한은 걸지 않는다 (2026-10-04)
+        choices = list(DEFAULT_CATEGORY_CHOICES)
+        for c in sorted(set(category_choices or [])):
+            if c and c not in choices:
+                choices.append(c)
+        col_l = get_column_letter(_CHOICE_COL)
+        for i, c in enumerate(choices, start=2):
+            ws.cell(row=i, column=_CHOICE_COL, value=c)
+        ws.column_dimensions[col_l].hidden = True
+        unplanned_dv = DataValidation(
+            type="list",
+            formula1=f"${col_l}$2:${col_l}${1 + len(choices)}",
+            allow_blank=True)
+        unplanned_dv.showErrorMessage = False    # 직접 입력 허용
+        unplanned_dv.promptTitle = "분류 선택 또는 입력"
+        unplanned_dv.prompt = ("▼에서 분류를 고르거나 직접 입력하세요. "
+                               "저장하면 기억해서 다음부터 같은 이름의 "
+                               "거래를 자동 분류합니다(여기 다시 안 "
+                               "올라옴). 모르면 비워 두세요 — 다음 실행 "
+                               "때 다시 확인합니다.")
+        unplanned_dv.showInputMessage = True
+        ws.add_data_validation(unplanned_dv)
         for r, issue in enumerate(issues, start=start + 1):
             if issue.get("구분") == ISSUE_UNPLANNED:
-                # 처리 열에 분류를 적으면(예: 급여·상여) 기억해 다음부터
+                # 처리 열에서 분류를 고르면(예: 급여·상여) 기억해 다음부터
                 # 같은 이름의 거래를 그 분류로 자동 처리한다 (2026-09-22)
                 cell = ws.cell(row=r, column=_ACTION_COL, value="")
                 cell.fill = PatternFill("solid", start_color="FFF2CC")
                 cell.font = _BODY_FONT
                 cell.alignment = Alignment(horizontal="center")
                 cell.border = _BORDER
+                unplanned_dv.add(cell.coordinate)
                 continue
             if issue.get("당일지시"):
                 # 당일 지출·실제 차이: 기본은 '지출 예정(유지)' —
@@ -1267,6 +1329,11 @@ def _build_recurring_missing_sheet(ws, issues: list[dict],
     action_dv.error = f"'{ACTION_INCLUDE}' 또는 '{ACTION_SKIP}'만 " \
                       "입력할 수 있습니다."
     action_dv.showErrorMessage = True
+    action_dv.promptTitle = "계획 반영 선택"
+    action_dv.prompt = (f"▼에서 고르세요. '{ACTION_INCLUDE}'을 고른 "
+                        "항목만 이번 자금계획에 들어갑니다. 기본은 "
+                        f"'{ACTION_SKIP}' — 원칙은 팀 재제출 요청입니다.")
+    action_dv.showInputMessage = True
     ws.add_data_validation(action_dv)
     for r, issue in enumerate(issues, start=start + 1):
         cell = ws.cell(row=r, column=_ACTION_COL, value=ACTION_SKIP)
