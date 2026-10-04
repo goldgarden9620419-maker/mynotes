@@ -334,15 +334,91 @@ def read_json(path: Path, default: Optional[dict] = None) -> dict:
         return dict(default or {})
 
 
-def save_workbook(wb, out_path) -> None:
-    """빈 데이터 유효성 검사를 정리한 뒤 통합문서를 저장한다.
+# A4 한 장 인쇄 레이아웃이라 행 높이를 건드리면 페이지가 밀리는 시트
+_AUTOFIT_SKIP_HEIGHT_SHEETS = {"대표보고"}
+_DEFAULT_COL_WIDTH = 8.43     # Excel 기본 열 폭
+_LINE_HEIGHT_PT = 14.2        # 11pt 기준 한 줄 높이(포인트)
+_MAX_ROW_HEIGHT_PT = 150.0
 
-    드롭다운(DataValidation)을 등록해 두고 해당 행이 0건이라 셀이
-    하나도 연결되지 않으면 openpyxl이 <dataValidations count="0"/>
-    빈 요소를 저장하는데, Excel은 이를 손상으로 보고 '복구' 대화상자를
-    띄운다 (2026-09-25 확인필요 파일에서 실제 발생). 모든 결과물
-    저장은 wb.save 대신 이 함수를 거친다.
+
+def _display_width(text: str) -> float:
+    """Excel 열 폭 단위로 환산한 표시 폭 (한글·전각 ≈ 1.8)."""
+    return sum(1.8 if unicodedata.east_asian_width(ch) in ("W", "F") else 1.0
+               for ch in text)
+
+
+def _autofit_workbook(wb) -> None:
+    """모든 시트의 셀을 세로 가운데 정렬하고, 잘리는 텍스트는
+    줄바꿈 + 행 높이 자동 계산으로 전부 보이게 만든다."""
+    from copy import copy
+    from openpyxl.cell.cell import MergedCell
+    from openpyxl.utils import get_column_letter
+
+    for ws in wb.worksheets:
+        # 병합 범위: 왼쪽 위 셀 좌표 → 병합된 열들의 폭 합
+        merged_width: dict[str, float] = {}
+        for rng in ws.merged_cells.ranges:
+            total = 0.0
+            for col in range(rng.min_col, rng.max_col + 1):
+                letter = get_column_letter(col)
+                dim = ws.column_dimensions.get(letter)
+                total += (dim.width if dim is not None and dim.width
+                          else _DEFAULT_COL_WIDTH)
+            merged_width[rng.start_cell.coordinate] = total
+
+        adjust_height = ws.title not in _AUTOFIT_SKIP_HEIGHT_SHEETS
+        row_lines: dict[int, int] = {}
+        for row in ws.iter_rows():
+            for cell in row:
+                if isinstance(cell, MergedCell) or cell.value is None:
+                    continue
+                align = copy(cell.alignment)
+                changed = False
+                if align.vertical != "center":
+                    align.vertical = "center"
+                    changed = True
+                # 수식 셀은 표시 결과를 알 수 없으므로 줄바꿈·높이 제외
+                if (isinstance(cell.value, str) and cell.value.strip()
+                        and not cell.value.startswith("=")):
+                    if cell.coordinate in merged_width:
+                        width = merged_width[cell.coordinate]
+                    else:
+                        dim = ws.column_dimensions.get(cell.column_letter)
+                        width = (dim.width if dim is not None and dim.width
+                                 else _DEFAULT_COL_WIDTH)
+                    chars = max(1.0, width - 1.0)
+                    lines = sum(max(1, -(-int(_display_width(seg)) // int(chars)))
+                                for seg in cell.value.split("\n"))
+                    if lines > 1:
+                        if not align.wrap_text:
+                            align.wrap_text = True
+                            changed = True
+                        if adjust_height:
+                            r = cell.row
+                            row_lines[r] = max(row_lines.get(r, 1), lines)
+                if changed:
+                    cell.alignment = align
+
+        for r, lines in row_lines.items():
+            need = min(_MAX_ROW_HEIGHT_PT, lines * _LINE_HEIGHT_PT + 4.0)
+            dim = ws.row_dimensions[r]
+            if dim.height is None or dim.height < need:
+                dim.height = need
+
+
+def save_workbook(wb, out_path) -> None:
+    """정렬·행높이를 다듬고 빈 데이터 유효성 검사를 정리한 뒤 저장한다.
+
+    - 모든 값 있는 셀을 세로 가운데 정렬, 열 폭을 넘는 텍스트는
+      줄바꿈을 켜고 행 높이를 계산해 전부 보이게 한다
+      (2026-10-04 사용자 요청; 대표보고 시트는 A4 유지 위해 높이 제외).
+    - 드롭다운(DataValidation)을 등록해 두고 해당 행이 0건이라 셀이
+      하나도 연결되지 않으면 openpyxl이 <dataValidations count="0"/>
+      빈 요소를 저장하는데, Excel은 이를 손상으로 보고 '복구' 대화상자를
+      띄운다 (2026-09-25 확인필요 파일에서 실제 발생).
+    모든 결과물 저장은 wb.save 대신 이 함수를 거친다.
     """
+    _autofit_workbook(wb)
     for ws in wb.worksheets:
         dvs = getattr(ws, "data_validations", None)
         if dvs is not None and dvs.dataValidation:
