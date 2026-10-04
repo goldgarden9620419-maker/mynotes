@@ -8939,5 +8939,246 @@
     "answerIndex": 2,
     "explanation": "sin²x = 1 − cos²x이므로 cos x = t (−1 ≤ t ≤ 1)로 놓으면 f = −t² + 2t + 2 = −(t − 1)² + 3입니다. t = 1일 때 최댓값 M = 3, t = −1일 때 최솟값 m = −1이므로 M + m = 2입니다.",
     "concept": "sin²x + cos²x = 1로 한 종류의 삼각함수로 통일한 뒤, 치환한 변수의 범위에서 이차함수의 최대·최소를 구한다."
+  },
+  {
+    "id": "en-2026-10-05-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-05",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists who study sleep have found that people [u]deprived[/u]① of rest often misjudge how tired they really are. In one experiment, volunteers [u]were allowed[/u]② to sleep only five hours a night for a week. By the end, they performed poorly on memory tests but insisted that they [u]felt[/u]③ fine. This suggests that the brain loses the ability to notice its own decline, [u]what[/u]④ is why drivers who feel alert may still be dangerously impaired. Experts therefore advise that anyone who feels sleepy [u]avoid[/u]⑤ driving.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 앞 절 전체를 선행사로 받아 'that is why ...'로 이어지는 계속적 용법이므로 관계대명사 what이 아니라 which가 되어야 합니다(what은 선행사를 포함하므로 앞에 쉼표와 함께 쓸 수 없음). ① people을 수식하는 과거분사 deprived, ② 'volunteers가 허락받다'는 수동태 were allowed, ③ insisted가 사실을 말할 때 직설법 felt, ⑤ advise 뒤 that절의 동사원형(should 생략) avoid는 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "deprive",
+        "meaning": "박탈하다"
+      },
+      {
+        "word": "misjudge",
+        "meaning": "잘못 판단하다"
+      },
+      {
+        "word": "impaired",
+        "meaning": "(기능이) 손상된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-05-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-05",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many people believe that unlimited freedom produces the best creative work. Yet musicians, poets, and designers often report the opposite. A sonnet's strict fourteen lines or a painter's limited palette forces the artist to ______________________ rather than rely on familiar solutions. In this sense, limits do not block creativity; they direct it.",
+    "choices": [
+      "imitate the works of earlier masters",
+      "abandon the rules that restrict expression",
+      "search for unexpected solutions within the boundaries",
+      "wait for inspiration to arrive naturally",
+      "reduce the time spent on revising the work"
+    ],
+    "answerIndex": 2,
+    "explanation": "소네트의 엄격한 행 수나 제한된 팔레트가 익숙한 해결책에 기대지 못하게 한다고 했고, 마지막 문장에서 제약이 창의성을 막는 것이 아니라 방향을 잡아 준다고 했으므로 경계 안에서 예상 밖의 해결책을 찾는다는 ③이 적절합니다.",
+    "vocab": [
+      {
+        "word": "palette",
+        "meaning": "(화가의) 색상 범위, 팔레트"
+      },
+      {
+        "word": "sonnet",
+        "meaning": "14행시"
+      },
+      {
+        "word": "rely on",
+        "meaning": "~에 의존하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-05-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-05",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Urban planners have recently turned their attention to rooftops, which are often left unused.\n(A) Building owners benefit as well, since the plants insulate the building and lower energy costs.\n(B) One increasingly popular option is the green roof, a layer of vegetation planted on top of a building.\n(C) Such roofs absorb rainwater, which reduces the burden on city drainage systems during storms.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글의 '방치된 옥상'을 (B)가 green roof라는 구체적 대안으로 소개하고, (C)가 Such roofs로 이를 받아 빗물 흡수의 이점을 말한 뒤, (A)가 as well로 건물주의 이점을 추가하므로 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "vegetation",
+        "meaning": "식물, 초목"
+      },
+      {
+        "word": "insulate",
+        "meaning": "단열하다"
+      },
+      {
+        "word": "drainage",
+        "meaning": "배수"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-05-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-05",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Online reviews have changed how people choose restaurants. ( ① ) A decade ago, diners relied on newspaper critics or advice from friends. ( ② ) Today, a few minutes of scrolling reveals hundreds of opinions from strangers. ( ③ ) Yet faced with so many conflicting opinions, many people feel more confused than before. ( ④ ) Some even give up searching and return to the familiar places they already know. ( ⑤ )",
+    "givenSentence": "Such confusion can easily turn a simple choice into a stressful one.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 Such confusion은 바로 앞 문장의 '혼란스러움(more confused)'을 가리키므로 그 문장 뒤인 ④에 들어가야 합니다. ③ 앞에는 아직 혼란에 대한 언급이 없어 Such confusion이 가리킬 대상이 없고, ⑤ 앞은 포기하고 익숙한 곳으로 돌아간다는 다른 내용입니다.",
+    "vocab": [
+      {
+        "word": "conflicting",
+        "meaning": "상충하는"
+      },
+      {
+        "word": "diner",
+        "meaning": "식당 손님"
+      },
+      {
+        "word": "critic",
+        "meaning": "비평가"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-05-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-05",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "We usually think of volunteering as an act that helps others. However, studies show that volunteers themselves often gain a great deal. They report a stronger sense of purpose, wider social networks, and lower levels of stress. Helping others, it seems, is one of the surest ways to help oneself.",
+    "choices": [
+      "Why governments should fund more volunteer programs",
+      "The personal benefits volunteers receive from helping others",
+      "Ways to balance volunteer work with a busy career",
+      "The difficulty of measuring the value of charity",
+      "Reasons people hesitate to take part in community service"
+    ],
+    "answerIndex": 1,
+    "explanation": "봉사가 남을 돕는 일로만 여겨지지만 봉사자 자신도 삶의 목적의식, 사회적 관계, 스트레스 감소 등 큰 이득을 얻는다는 내용이므로 주제는 ②입니다.",
+    "vocab": [
+      {
+        "word": "volunteer",
+        "meaning": "자원봉사(하다)"
+      },
+      {
+        "word": "purpose",
+        "meaning": "목적, 목적의식"
+      },
+      {
+        "word": "network",
+        "meaning": "인맥, 관계망"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-05-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-05",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "145",
+      "155",
+      "165",
+      "175"
+    ],
+    "answerIndex": 1,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3이고 a₁ = 7 − 2·3 = 1입니다. S₁₀ = 10(2·1 + 9·3)/2 = 5·29 = 145입니다.",
+    "concept": "등차수열에서 aₙ = a₁ + (n−1)d이고, 합은 Sₙ = n{2a₁ + (n−1)d}/2이다."
+  },
+  {
+    "id": "math-2026-10-05-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-05",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 3,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 5, f(3) = 27 − 54 + 27 + 1 = 1이므로 차는 5 − 1 = 4입니다.",
+    "concept": "f′(x) = 0이고 그 좌우에서 부호가 +에서 −로 바뀌면 극대, −에서 +로 바뀌면 극소이다."
+  },
+  {
+    "id": "math-2026-10-05-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-05",
+    "prompt": "정적분 ∫₁³ (x³ − 2x) dx의 값은?",
+    "choices": [
+      "8",
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "answerIndex": 4,
+    "explanation": "x⁴/4 − x²의 값을 구하면 x = 3에서 81/4 − 9 = 45/4, x = 1에서 1/4 − 1 = −3/4입니다. 따라서 45/4 − (−3/4) = 48/4 = 12입니다.",
+    "concept": "∫xⁿ dx = xⁿ⁺¹/(n+1) + C이고, 정적분은 ∫ₐᵇ f(x)dx = F(b) − F(a)이다."
+  },
+  {
+    "id": "math-2026-10-05-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-05",
+    "prompt": "흰 공 3개와 검은 공 4개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 흰 공이 2개 이상일 확률은? (단, 공은 색깔만 다르고 크기와 모양은 같다.)",
+    "choices": [
+      "9/35",
+      "11/35",
+      "13/35",
+      "15/35",
+      "17/35"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 C(7,3) = 35입니다. 흰 공 2개·검은 공 1개인 경우 C(3,2)·C(4,1) = 12, 흰 공 3개인 경우 1이므로 확률은 (12+1)/35 = 13/35입니다.",
+    "concept": "서로 다른 n개에서 r개를 택하는 경우의 수는 C(n,r)이고, 확률은 (사건의 경우의 수)/(전체 경우의 수)이다."
+  },
+  {
+    "id": "math-2026-10-05-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-05",
+    "prompt": "0 ≤ x ≤ 2π에서 함수 f(x) = −sin²x + 2sin x + 3의 최댓값을 M, 최솟값을 m이라 할 때, M + m의 값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 0,
+    "explanation": "sin x = t (−1 ≤ t ≤ 1)로 놓으면 f = −t² + 2t + 3 = −(t−1)² + 4입니다. t = 1에서 최댓값 M = 4, t = −1에서 최솟값 m = −1 − 2 + 3 = 0이므로 M + m = 4입니다.",
+    "concept": "sin x = t로 치환하면 −1 ≤ t ≤ 1이고, 이차함수의 최대·최소는 꼭짓점과 구간 양 끝점에서 구한다."
   }
 ]
