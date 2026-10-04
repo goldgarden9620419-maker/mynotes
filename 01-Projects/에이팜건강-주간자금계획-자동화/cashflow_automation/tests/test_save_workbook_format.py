@@ -21,6 +21,8 @@ def _make_wb():
     ws["A2"] = "짧은글"
     ws["A3"] = ("이 텍스트는 열 폭 12를 훨씬 넘는 아주 긴 한글 설명 문장이라서 "
                 "줄바꿈과 행 높이 조정이 없으면 셀 안에서 보이지 않는다")
+    ws["B3"] = "오른쪽 값"                      # 넘침을 막는 셀
+    ws["A4"] = "오른쪽이 빈 아주 긴 제목 문장 — 옆으로 흘러넘쳐 보이므로 줄바꿈하면 안 된다"
     return wb
 
 
@@ -41,6 +43,15 @@ def test_긴_텍스트는_줄바꿈과_행높이_자동_조정(tmp_path):
     assert ws.row_dimensions[3].height > 20          # 여러 줄 분량
     # 짧은 행은 높이를 건드리지 않는다
     assert ws.row_dimensions[2].height is None
+
+
+def test_오른쪽이_비면_넘침_유지_줄바꿈_안함(tmp_path):
+    out = tmp_path / "f.xlsx"
+    save_workbook(_make_wb(), out)
+    ws = load_workbook(out)["요약"]
+    assert not ws["A4"].alignment.wrap_text     # 제목·안내문 넘침 유지
+    assert ws.row_dimensions[4].height is None
+    assert ws["A4"].alignment.vertical == "center"
 
 
 def test_수식_셀은_줄바꿈과_높이_계산에서_제외(tmp_path):
