@@ -49,6 +49,7 @@ const REVIEWED_PLACES: { match: string; url: string }[] = [
   { match: "롤링파스타", url: "https://blog.naver.com/gold-jw0419/224423376124" },
   { match: "샤부마스터", url: "https://blog.naver.com/gold-jw0419/224424112832" },
   { match: "산호참숯곰장어", url: "https://blog.naver.com/gold-jw0419/224428467567" },
+  { match: "정안정", url: "https://blog.naver.com/gold-jw0419/224429784223" },
 ];
 
 function reviewedPostUrl(name: string) {
