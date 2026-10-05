@@ -10,13 +10,15 @@ from __future__ import annotations
 
 import csv
 import io
+import logging
 import re
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from typing import Any, Optional
 
 from common import (
-    BANK_REFLECT_OK, BANKS, normalize_text, parse_amount, parse_date,
+    BANK_REFLECT_OK, BANKS, is_unreadable_amount, normalize_text,
+    parse_amount, parse_date,
     parse_datetime,
 )
 
@@ -342,6 +344,7 @@ def load_bank_file(path: Path, bank: str) -> tuple[list[dict], list[dict]]:
                     or _account_hint_from_filename(path.stem))
 
     rows: list[dict] = []
+    bad_balances: list[tuple[int, Any]] = []
     for order, raw in enumerate(raw_rows[header_idx + 1:], start=1):
         values = {field: (raw[col] if col < len(raw) else None)
                   for col, field in mapping.items()}
@@ -353,7 +356,29 @@ def load_bank_file(path: Path, bank: str) -> tuple[list[dict], list[dict]]:
                            "내용": f"{order}행 거래일 해석 불가",
                            "원본파일": path.name})
             continue
+        if row.get("_잘못된금액"):
+            # 0원으로 반영하지 않는다 — 거래에서 빼고 확인필요로 올린다
+            detail = ", ".join(f"{k} '{v}'" for k, v in row["_잘못된금액"])
+            logging.getLogger("cashflow").warning(
+                "금액 해석 불가: %s %d행 (%s)", path.name, order, detail)
+            issues.append({"구분": "금액 해석 불가", "은행": bank,
+                           "내용": f"{order}행 {detail} — 거래에서 제외됨",
+                           "원본파일": path.name})
+            continue
+        raw_balance = row.pop("_잔액원문", None)
+        if raw_balance is not None:
+            bad_balances.append((order, raw_balance))
         rows.append(row)
+    if bad_balances:
+        # 잔액은 부가 정보 — 거래는 유지하고 파일당 한 번만 알린다
+        # (가려진 잔액 '*****'처럼 모든 행이 해당될 수 있다)
+        first_order, first_raw = bad_balances[0]
+        detail = (f"거래후잔액 해석 불가 {len(bad_balances)}건 "
+                  f"(첫 행 {first_order}행 '{first_raw}') — 잔액 없이 반영")
+        logging.getLogger("cashflow").warning(
+            "잔액 해석 불가: %s %s", path.name, detail)
+        issues.append({"구분": "잔액 해석 불가", "은행": bank,
+                       "내용": detail, "원본파일": path.name})
     if not rows:
         issues.append({"구분": "은행 자료 누락", "은행": bank,
                        "내용": "읽을 수 있는 거래가 없습니다",
@@ -404,13 +429,17 @@ def _normalize_bank_row(values: dict, bank: str, filename: str,
     if tx_date is None and tx_datetime is not None:
         tx_date = tx_datetime.date()
 
+    bad = [(f, values.get(f)) for f in ("출금액", "입금액")
+           if is_unreadable_amount(values.get(f))]
+    if bad:
+        return {"_잘못된금액": bad}
     out_amount = parse_amount(values.get("출금액")) or 0.0
     in_amount = parse_amount(values.get("입금액")) or 0.0
     balance = parse_amount(values.get("거래후잔액"))
     if out_amount == 0 and in_amount == 0 and balance is None:
         return None  # 합계·안내 행
 
-    return {
+    row = {
         "거래일시": tx_datetime,
         "거래일": tx_date,
         "은행": bank,
@@ -429,6 +458,9 @@ def _normalize_bank_row(values: dict, bank: str, filename: str,
         "반영상태": BANK_REFLECT_OK,
         "row_order": order,
     }
+    if is_unreadable_amount(values.get("거래후잔액")):
+        row["_잔액원문"] = values.get("거래후잔액")  # load_bank_file이 모아 알림
+    return row
 
 
 def load_all_banks(cfg) -> dict:

@@ -16,6 +16,13 @@ from common import REQUIRED_TEAM_COLUMNS, TEAMS, week_monday
 from config import Config
 
 
+@pytest.fixture(autouse=True)
+def _no_auto_open(monkeypatch):
+    """테스트 중 확인필요·결과 Excel이 실제로 열리지 않게 막는다."""
+    import app
+    monkeypatch.setattr(app, "_open_file", lambda path: None)
+
+
 def write_team_file(path: Path, rows: list[dict],
                     extra_columns: list[str] | None = None) -> Path:
     """테스트용 팀 지출계획 파일(수식 없이 값으로) 생성."""

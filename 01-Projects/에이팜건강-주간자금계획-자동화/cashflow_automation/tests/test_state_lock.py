@@ -2,6 +2,8 @@
 """실행상태·미실행 보완·lock 파일 테스트."""
 import json
 import os
+import subprocess
+import sys
 from datetime import datetime
 
 import pytest
@@ -59,18 +61,25 @@ def test_입력변경_감지(tmp_path):
 
 
 def test_lock_동시실행_방지(tmp_path):
-    with RunLock(tmp_path, "2026-W39", "auto"):
-        # 살아있는 다른 프로세스(PID 1)가 잡은 것으로 위장
-        lock_path = tmp_path / "cashflow_automation.lock"
-        data = json.loads(lock_path.read_text(encoding="utf-8"))
-        assert data["pid"] == os.getpid()
-        data["pid"] = 1
-        lock_path.write_text(json.dumps(data), encoding="utf-8")
-        with pytest.raises(LockError):
-            RunLock(tmp_path, "2026-W39", "manual").acquire()
-        # 원상복구 후 release가 정상 동작하도록
-        data["pid"] = os.getpid()
-        lock_path.write_text(json.dumps(data), encoding="utf-8")
+    # 살아있는 다른 프로세스가 잡은 것으로 위장한다. PID 1(리눅스 init)은
+    # Windows에 없으므로 실제로 잠깐 떠 있는 자식 프로세스의 PID를 쓴다.
+    other = subprocess.Popen([sys.executable, "-c",
+                              "import time; time.sleep(30)"])
+    try:
+        with RunLock(tmp_path, "2026-W39", "auto"):
+            lock_path = tmp_path / "cashflow_automation.lock"
+            data = json.loads(lock_path.read_text(encoding="utf-8"))
+            assert data["pid"] == os.getpid()
+            data["pid"] = other.pid
+            lock_path.write_text(json.dumps(data), encoding="utf-8")
+            with pytest.raises(LockError):
+                RunLock(tmp_path, "2026-W39", "manual").acquire()
+            # 원상복구 후 release가 정상 동작하도록
+            data["pid"] = os.getpid()
+            lock_path.write_text(json.dumps(data), encoding="utf-8")
+    finally:
+        other.kill()
+        other.wait()
     assert not lock_path.exists()
 
 

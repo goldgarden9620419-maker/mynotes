@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 import os
 import re
 import tempfile
@@ -243,21 +244,41 @@ def parse_datetime(value: Any) -> Optional[datetime]:
 
 
 def parse_amount(value: Any) -> Optional[float]:
-    """금액 파싱. 콤마·원·공백 허용. 빈 값이면 None."""
+    """금액 파싱. 콤마·원·₩·공백 허용. 빈 값이나 읽을 수 없으면 None.
+
+    회계식 음수 표기도 읽는다: (1,000) · 1,000- · △1,000 → -1000.
+    nan·inf는 금액이 아니므로 None.
+    """
     if value is None or value == "":
         return None
     if isinstance(value, bool):
         return None
     if isinstance(value, (int, float)):
-        return float(value)
+        return float(value) if math.isfinite(value) else None
     text = str(value).strip().replace(",", "").replace("원", "")
-    text = text.replace(" ", "")
+    text = text.replace(" ", "").replace("₩", "")
+    negative = False
+    if len(text) > 2 and text.startswith("(") and text.endswith(")"):
+        text, negative = text[1:-1], True
+    elif len(text) > 1 and text.endswith("-"):
+        text, negative = text[:-1], True
+    elif text.startswith("△"):
+        text, negative = text[1:], True
     if not text or text in {"-", "."}:
         return None
     try:
-        return float(text)
+        amount = float(text)
     except ValueError:
         return None
+    if not math.isfinite(amount):
+        return None
+    return -amount if negative else amount
+
+
+def is_unreadable_amount(value: Any) -> bool:
+    """값이 적혀 있는데 금액으로 읽을 수 없는가 (빈칸·'-'는 해당 없음)."""
+    return (parse_amount(value) is None
+            and str(value if value is not None else "").strip() not in ("", "-"))
 
 
 def normalize_text(value: Any) -> str:

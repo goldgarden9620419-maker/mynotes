@@ -2,6 +2,7 @@
 """백업·격리·임시폴더·지난자료 관리 (31번 항목)."""
 from __future__ import annotations
 
+import os
 import shutil
 import tempfile
 import zipfile
@@ -83,6 +84,20 @@ class TempWorkspace:
 _OUTPUT_PREFIXES = ("주간자금계획", "확인필요", "정기지출분석")
 
 
+def _move_to_archive(src: Path, target: Path) -> None:
+    """지난자료로 옮기고 수정시각을 지금으로 바꾼다.
+
+    shutil.move는 수정시각을 유지하는데 purge_old_archive는 수정시각으로
+    보관 기간을 센다. 그대로 두면 오래된 파일이 옮겨지자마자 같은 실행에서
+    삭제되므로, 보관 기간은 '옮긴 시점'부터 세도록 한다.
+    """
+    shutil.move(str(src), str(target))
+    try:
+        os.utime(target)
+    except OSError:
+        pass  # 이동은 끝났다 — 시각 갱신만 실패하면 예전처럼 일찍 정리될 뿐
+
+
 def _sweep_to_archive(src_dir, archive_dir, keep_names) -> int:
     """keep_names에 없는 결과 파일을 archive_dir로 옮긴다."""
     moved = 0
@@ -99,7 +114,7 @@ def _sweep_to_archive(src_dir, archive_dir, keep_names) -> int:
             stamp = datetime.now().strftime("%H%M%S")
             target = archive_dir / f"{path.stem}_{stamp}{path.suffix}"
         try:
-            shutil.move(str(path), str(target))
+            _move_to_archive(path, target)
             moved += 1
         except OSError:
             continue
@@ -168,7 +183,7 @@ def archive_superseded_bank_files(cfg, bank_rows: list[dict]) -> int:
             stamp = datetime.now().strftime("%H%M%S")
             target = target_dir / f"{src.stem}_{stamp}{src.suffix}"
         try:
-            shutil.move(str(src), str(target))
+            _move_to_archive(src, target)
             moved += 1
         except OSError:
             continue
@@ -220,7 +235,7 @@ def archive_old_outputs(cfg, keep_days: int = 35) -> int:
                 if target.exists():
                     stamp = datetime.now().strftime("%H%M%S")
                     target = archive_dir / f"{path.stem}_{stamp}{path.suffix}"
-                shutil.move(str(path), str(target))
+                _move_to_archive(path, target)
                 moved += 1
         except OSError:
             continue

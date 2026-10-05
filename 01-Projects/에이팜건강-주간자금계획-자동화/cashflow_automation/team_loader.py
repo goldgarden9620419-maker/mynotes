@@ -9,6 +9,7 @@
 """
 from __future__ import annotations
 
+import logging
 from datetime import date
 from pathlib import Path
 from typing import Callable, Optional
@@ -21,7 +22,7 @@ from common import (
     REFLECT_CARD_DATE_NEEDED, REFLECT_MISSING_INFO, REFLECT_OK,
     REFLECT_UNCONFIRMED, REQUIRED_TEAM_COLUMNS, TEAM_SHEET_NAME,
     TEAM_TABLE_NAME, TEAMS, classify_confidential, normalize_text,
-    parse_amount, parse_date,
+    is_unreadable_amount, parse_amount, parse_date,
 )
 from request_id import (
     decide_reflect_status, is_valid_request_id, make_request_id,
@@ -152,6 +153,8 @@ def _normalize_row(raw: dict, team: dict, filename: str,
         "거래처": normalize_text(raw.get("거래처")),
         "지출내용": normalize_text(raw.get("지출내용")),
         "예상금액": parse_amount(raw.get("예상금액")),
+        "_금액원문": (normalize_text(raw.get("예상금액"))
+                   if is_unreadable_amount(raw.get("예상금액")) else ""),
         "지급방법": normalize_text(raw.get("지급방법")),
         "카드구분": normalize_text(raw.get("카드구분")),
         "확정여부": normalize_text(raw.get("확정여부")),
@@ -169,6 +172,10 @@ def _normalize_row(raw: dict, team: dict, filename: str,
         "확인사항": "",
         "자금계획 반영일": None,
     }
+    if row["_금액원문"]:
+        logging.getLogger("cashflow").warning(
+            "금액 해석 불가: %s %d행 예상금액 '%s'", filename, row_order,
+            row["_금액원문"])
     # 품의승인 값으로 확정여부를 해석 (승인=확정, 대기·반려=미확정)
     if not row["확정여부"] and row["품의승인"]:
         approval = row["품의승인"]
@@ -204,7 +211,9 @@ def validate_row(row: dict) -> list[str]:
     if row.get("지급예정일") is None:
         problems.append("지급예정일 누락")
     amount = row.get("예상금액")
-    if amount is None or amount == 0:
+    if row.get("_금액원문"):
+        problems.append(f"금액 해석 불가({row['_금액원문']})")
+    elif amount is None or amount == 0:
         problems.append("금액 누락 또는 0원")
     if not row.get("지급방법"):
         problems.append("지급방법 누락")
