@@ -17,7 +17,7 @@ from typing import Optional
 from common import (
     BANK_REFLECT_OK, MATCH_AMOUNT_DIFF, MATCH_DATE_DIFF, MATCH_MANUAL,
     MATCH_NOT_FOUND, MATCH_PAID, MATCH_PARTIAL, MATCH_UNPLANNED,
-    REFLECT_PAID, now_local, save_workbook, week_monday,
+    REFLECT_PAID, now_local, save_workbook, unique_path, week_monday,
 )
 from excel_report import account_label
 
@@ -310,12 +310,13 @@ def run_weekly_reconcile(cfg, log, now=None, open_file: bool = True) -> Path:
         amount_tolerance=cfg.get("matching", "amount_tolerance",
                                  default=0.01))
 
-    out = cfg.folder("review") / f"주간대조_{now:%Y%m%d_%H%M}.xlsx"
+    out = unique_path(
+        cfg.folder("review") / f"주간대조_{now:%Y%m%d_%H%M%S}.xlsx")
     write_reconcile_workbook(data, out)
     log.info("주간 대조(%s~%s): 일치 %d건, 차이 %d건 — %s",
              data["기간"][0], data["기간"][1], data["일치"],
              len(data["차이내역"]), out.name)
     if open_file:
         from app import _open_file
-        _open_file(out)
+        _open_file(out, log)
     return out

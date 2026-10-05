@@ -18,9 +18,16 @@ from config import Config
 
 @pytest.fixture(autouse=True)
 def _no_auto_open(monkeypatch):
-    """테스트 중 확인필요·결과 Excel이 실제로 열리지 않게 막는다."""
-    import app
-    monkeypatch.setattr(app, "_open_file", lambda path: None)
+    """테스트 중 확인필요·결과 Excel·폴더가 실제로 열리지 않게 막는다.
+
+    _open_file이 아니라 맨 끝의 os.startfile을 막아, '이미 열려 있으면
+    다시 열지 않기' 같은 _open_file 자체 로직은 테스트할 수 있게 둔다.
+    """
+    import os
+
+    def _no_startfile(*args, **kwargs):
+        pass
+    monkeypatch.setattr(os, "startfile", _no_startfile, raising=False)
 
 
 def write_team_file(path: Path, rows: list[dict],

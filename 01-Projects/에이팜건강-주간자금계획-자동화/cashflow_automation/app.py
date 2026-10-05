@@ -605,7 +605,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                if p.get("지급방법") == "법인카드"),
         }
 
-        stamp = now.strftime("%Y%m%d_%H%M")
+        stamp = now.strftime("%Y%m%d_%H%M%S")
         # 결과물은 통합 파일 하나 (2026-09-23 사용자 요청): 경영보고 +
         # 대표보고(A4 인쇄용) + 라이브 시트들을 한 워크북에 담고,
         # 경영보고 ③·④ 표·반영률(F12)을 고치면 전 시트가 재계산된다
@@ -653,7 +653,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 backup_manager.archive_superseded_reviews(
                     cfg, {review_path.name})
                 bank_loader.save_history(history_path, merged_history)
-                _open_file(review_path)
+                _open_file(review_path, log)
                 state.mark_result(now, STATUS_REVIEW_WAIT,
                                   input_signature=input_sig)
                 new_note = (f" ⚠ 지난 확인 이후 새 항목 "
@@ -818,14 +818,46 @@ def _wait_for_confirmation(cfg, state, log, allow_partial: bool = False,
         time.sleep(poll_seconds)
 
 
-def _open_file(path) -> None:
-    """확인필요 파일을 사용자에게 바로 보여준다 (Windows 전용, 실패 무시)."""
+def _is_file_open(path) -> bool:
+    """다른 프로그램(Excel)이 쓰기를 막고 열어 둔 파일인가.
+
+    Excel은 연 통합문서를 쓰기 공유 거부로 잡으므로 쓰기 모드로 열어
+    보면 실제 상태를 알 수 있다 (내용은 바꾸지 않는다). Excel이 비정상
+    종료하면 '~$' 표시 파일이 남으므로 그것만으로는 판단하지 않는다.
+    """
+    # ponytail: 읽기 전용 속성 파일도 '열려 있음'으로 본다 — 결과 폴더엔 없음
+    try:
+        with open(path, "r+b"):
+            return False
+    except PermissionError:
+        return True
+    except OSError:
+        return False
+
+
+def _open_file(path, log=None) -> bool:
+    """확인필요 파일을 사용자에게 바로 보여준다 (Windows 전용, 실패 무시).
+
+    이미 Excel에 열려 있으면 다시 열지 않고 안내만 남긴다.
+    실제로 열었으면 True.
+    """
     import os
+    path = Path(path)
+    if _is_file_open(path):
+        msg = (f"이미 열려 있음: {path.name} — 열려 있는 Excel 창을 확인하세요 "
+               "(또는 다른 프로그램이 사용 중)")
+        print(f"[안내] {msg}")
+        if log is not None:
+            log.info(msg)
+        return False
     try:
         if os.name == "nt":
             os.startfile(str(path))  # type: ignore[attr-defined]
-    except Exception:
-        pass
+            return True
+    except Exception as exc:
+        if log is not None:
+            log.warning("파일 열기 실패: %s (%s)", path.name, exc)
+    return False
 
 
 def _annotate_daily_notes(daily_rows: list[dict], masked_rows: list[dict],
@@ -922,6 +954,10 @@ def _spec_text(spec) -> str:
 # CLI
 # ---------------------------------------------------------------------------
 
+# 지금_실행.bat이 '실패'와 구분해 '이미 실행 중' 안내만 보여 주는 종료 코드
+EXIT_ALREADY_RUNNING = 3
+
+
 def build_runtime(config_path=None, base_dir=None):
     cfg = Config.load(config_path, base_dir)
     cfg.ensure_folders()
@@ -959,23 +995,36 @@ def main(argv=None) -> int:
             print(f"  {key}: {s.get(key, '')}")
         return 0
 
-    if args.weekly_reconcile:
-        import weekly_reconcile
-        out = weekly_reconcile.run_weekly_reconcile(cfg, log)
-        print(f"[OK] 주간 대조 파일: {out}")
-        return 0
+    if args.weekly_reconcile or args.run_now:
+        # 바로가기를 두 번 눌러도 하나만 실행한다. 확인필요 검토 대기까지
+        # 세션 전체를 잡아야 대기 중 재클릭이 새 확인 파일을 만들지 않는다.
+        week_key = iso_week_key(now_local(cfg.timezone_name).date())
+        mode = "reconcile" if args.weekly_reconcile else "manual"
+        try:
+            session = RunLock(cfg.state_dir, week_key, mode).acquire()
+        except LockError as exc:
+            print(f"[안내] {exc} 먼저 연 창의 작업이 끝난 뒤 다시 실행하세요.")
+            log.warning("중복 실행 방지: %s", exc)
+            return EXIT_ALREADY_RUNNING
+        try:
+            if args.weekly_reconcile:
+                import weekly_reconcile
+                out = weekly_reconcile.run_weekly_reconcile(cfg, log)
+                print(f"[OK] 주간 대조 파일: {out}")
+                return 0
 
-    if args.run_now:
-        result = run_weekly_job(cfg, state, log, mode="manual",
-                                allow_partial=args.allow_partial,
-                                force=args.force)
-        if result.status == STATUS_REVIEW_WAIT:
-            # 확인필요 검토 대기: 저장하는 즉시 이어서 결과 생성
-            result = _wait_for_confirmation(
-                cfg, state, log, allow_partial=args.allow_partial)
-        print(f"[{result.status}] {result.message}")
-        return 0 if result.status in (STATUS_SUCCESS, STATUS_PARTIAL,
-                                      STATUS_REVIEW_WAIT, "SKIPPED") else 1
+            result = run_weekly_job(cfg, state, log, mode="manual",
+                                    allow_partial=args.allow_partial,
+                                    force=args.force)
+            if result.status == STATUS_REVIEW_WAIT:
+                # 확인필요 검토 대기: 저장하는 즉시 이어서 결과 생성
+                result = _wait_for_confirmation(
+                    cfg, state, log, allow_partial=args.allow_partial)
+            print(f"[{result.status}] {result.message}")
+            return 0 if result.status in (STATUS_SUCCESS, STATUS_PARTIAL,
+                                          STATUS_REVIEW_WAIT, "SKIPPED") else 1
+        finally:
+            session.release()
 
     from scheduler import AutomationService
     service = AutomationService(cfg, state, log)

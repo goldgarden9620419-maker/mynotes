@@ -498,25 +498,3 @@ def files_signature(paths: Iterable[Path]) -> str:
             items.append(f"{p.name}|missing")
     digest = hashlib.sha256("\n".join(items).encode("utf-8")).hexdigest()
     return digest[:16]
-
-
-def pid_alive(pid: int) -> bool:
-    """해당 PID의 프로세스가 살아있는지 확인한다(Windows/리눅스 공용)."""
-    if pid <= 0:
-        return False
-    if os.name == "nt":  # pragma: no cover - Windows 전용 경로
-        import ctypes
-        PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
-        handle = ctypes.windll.kernel32.OpenProcess(
-            PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
-        if not handle:
-            return False
-        ctypes.windll.kernel32.CloseHandle(handle)
-        return True
-    try:
-        os.kill(pid, 0)
-    except ProcessLookupError:
-        return False
-    except PermissionError:
-        return True
-    return True
