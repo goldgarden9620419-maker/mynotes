@@ -1,14 +1,17 @@
 {
   "loop": "golden-garden-content",
-  "last_run": "2026-09-28T00:07:58Z",
-  "cursor": "2026-09-28T00:07:58Z",
+  "last_run": "2026-10-05T00:13:52Z",
+  "cursor": "2026-10-05T00:13:52Z",
   "buffer_target": 2,
   "pillars": ["새벽 루틴", "확언·자기암시", "부자의 습관", "사주·운세"],
   "handled_topics": [
     "미라클모닝 실패 이유 (수면, 루틴, 습관)",
-    "확언 문장 만드는 법 (감정, 가치, 문장)"
+    "확언 문장 만드는 법 (감정, 가치, 문장)",
+    "확언이 독이 될 때 (자존감, 재현, 대안)"
   ],
-  "pending_drafts": [],
+  "pending_drafts": [
+    "01-Projects/황금정원-블로그/확언이-독이-될-때.md"
+  ],
   "published": [
     {
       "file": "01-Projects/황금정원-블로그/미라클모닝-실패-이유.md",

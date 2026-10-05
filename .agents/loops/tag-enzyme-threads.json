@@ -7,7 +7,9 @@
   "channel": "개인 Threads 계정",
   "posting_method": "partial-auto (post_to_threads.ps1 / post_video_to_threads.ps1 / post_reply_to_threads.ps1, user runs on own machine)",
   "used_angles": ["추천 체크리스트 각도", "제품 영상 각도", "먹는 경험·맛 각도", "원료 딥다이브(테프) 각도", "원료 딥다이브(애사비) 각도"],
-  "pending_drafts": ["01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-5-애사비딥다이브.md"],
+  "pending_drafts": [],
+  "publishing_tool": "Typefully MCP (2026-10-02부터) — social_set_id 337240, kim_jade0419 Threads 연동됨. 기존 PowerShell 스크립트 방식은 백업 수단으로 유지.",
+  "next_run_plan": "2026-10-09 금요일 루프는 텍스트 각도 대신 짧은 제품 영상으로 진행. 컨셉(2026-10-02 사용자와 확정): '원료 삼각형(T.A.G) 비주얼 모션' — T(테프)·A(애사비)·G(글루텐분해유산균) 세 요소가 화면 각 지점에 떠 있다가 중앙으로 모여 합쳐지고, 마지막 컷에서 제품 박스로 전환/완성되는 5초 내외 9:16 무음 영상. 제작: higgsfield-product-ad-pipeline, 마지막 컷은 기존 제품 박스 자산(2026-08-09 제작분) 재사용 가능. 캡션은 'T.A.G, 세 가지가 만나 하나로' 느낌의 짧은 문구 + 재직 고지 문구. 게시: Typefully create_media_upload로 영상 업로드 → create_draft의 threads posts[0].media_ids에 첨부, posts[1]에 구매 링크 첫 댓글. 게시 전 항상 사용자 확인.",
   "published": [
     {
       "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-1-추천체크리스트.md",
@@ -39,6 +41,15 @@
       "account": "kim_jade0419",
       "post_id": "17950023354298363",
       "comment_id": "18135627241640174",
+      "has_purchase_link_comment": true
+    },
+    {
+      "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-5-애사비딥다이브.md",
+      "angle": "원료 딥다이브(애사비) 각도",
+      "published_at": "2026-10-02",
+      "account": "kim_jade0419",
+      "published_url": "https://www.threads.com/@kim_jade0419/post/Dd-K_OSGZmx",
+      "published_via": "typefully",
       "has_purchase_link_comment": true
     }
   ],
