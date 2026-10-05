@@ -9180,5 +9180,246 @@
     "answerIndex": 0,
     "explanation": "sin x = t (−1 ≤ t ≤ 1)로 놓으면 f = −t² + 2t + 3 = −(t−1)² + 4입니다. t = 1에서 최댓값 M = 4, t = −1에서 최솟값 m = −1 − 2 + 3 = 0이므로 M + m = 4입니다.",
     "concept": "sin x = t로 치환하면 −1 ≤ t ≤ 1이고, 이차함수의 최대·최소는 꼭짓점과 구간 양 끝점에서 구한다."
+  },
+  {
+    "id": "en-2026-10-06-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-06",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many students believe that cramming the night before an exam is [u]effective[/u]①, but research suggests otherwise. Information [u]studied[/u]② over several days is remembered far longer than information crammed into a single session. This is because the brain needs time [u]to consolidate[/u]③ new memories. Students who spread out their sessions generally find [u]it[/u]④ easier to recall details when tested. Teachers therefore recommend that students [u]to start[/u]⑤ reviewing well before the exam.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ recommend 뒤 that절은 '(should) + 동사원형' 구조이므로 to start가 아니라 start가 되어야 합니다. ① be동사의 보어로 형용사 effective, ② Information을 수식하는 과거분사 studied, ③ time을 수식하는 to부정사, ④ find + 가목적어 it + 형용사 + 진목적어 to recall은 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "cram",
+        "meaning": "벼락치기로 공부하다"
+      },
+      {
+        "word": "consolidate",
+        "meaning": "공고히 하다, 굳히다"
+      },
+      {
+        "word": "recall",
+        "meaning": "기억해 내다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-06-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-06",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "A good map is useful not because it shows everything, but because it leaves things out. A map that recorded every tree, crack, and puddle would be as large and confusing as the land itself. Mapmakers decide which features matter for a given purpose and ignore the rest. Thus, the value of a map lies in its ______.",
+    "choices": [
+      "faithful copying of every detail",
+      "selective omission of details",
+      "artistic beauty and color",
+      "resistance to changes in the land",
+      "dependence on the traveler's memory"
+    ],
+    "answerIndex": 1,
+    "explanation": "지도가 모든 것을 담지 않고 '생략하기 때문에' 유용하다는 첫 문장과, 목적에 맞는 요소만 고르고 나머지는 무시한다는 내용을 종합하면 빈칸에는 '세부 사항의 선택적 생략'이 적절합니다.",
+    "vocab": [
+      {
+        "word": "omission",
+        "meaning": "생략, 누락"
+      },
+      {
+        "word": "puddle",
+        "meaning": "물웅덩이"
+      },
+      {
+        "word": "feature",
+        "meaning": "특징, 지형지물"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-06-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-06",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Procrastination is a familiar problem for students everywhere.\n(A) However, studies suggest that they are not lazy at all; they postpone the task to escape the discomfort it brings, such as fear of failure.\n(B) Many people assume that those who delay their work are simply lazy.\n(C) Understanding this shifts the solution from stricter schedules to learning how to manage uncomfortable feelings.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 procrastination에 대해 (B)가 '게으르다'는 통념을 제시하고, (A)가 However로 이를 반박하며 진짜 원인(불편한 감정 회피)을 설명하며, (C)가 Understanding this로 이를 받아 해결책을 제시하므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "procrastination",
+        "meaning": "미루기, 지연"
+      },
+      {
+        "word": "postpone",
+        "meaning": "연기하다"
+      },
+      {
+        "word": "discomfort",
+        "meaning": "불편함"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-06-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-06",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Many people think of failure as the opposite of success. ( ① ) Yet inventors often describe their failures as essential steps. ( ② ) Thomas Edison reportedly tested thousands of materials before finding a workable filament. ( ③ ) Each failed attempt eliminated one possibility and narrowed the search. ( ④ ) In this sense, failure is better understood as information than as defeat. ( ⑤ )",
+    "givenSentence": "Seen this way, he was not failing repeatedly but steadily approaching the answer.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 Seen this way는 '실패한 시도마다 가능성 하나를 제거했다'는 바로 앞 문장의 설명을 가리키며, he는 Edison입니다. 따라서 ④에 들어가야 '반복된 실패가 아니라 답에 다가가는 과정'이라는 해석이 자연스럽고, 이어지는 In this sense와도 연결됩니다.",
+    "vocab": [
+      {
+        "word": "filament",
+        "meaning": "(전구의) 필라멘트"
+      },
+      {
+        "word": "eliminate",
+        "meaning": "제거하다"
+      },
+      {
+        "word": "defeat",
+        "meaning": "패배"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-06-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-06",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When we listen to someone, we often prepare our reply while they are still speaking. This habit feels efficient, but it quietly weakens understanding. Our attention is split between the speaker's words and our own thoughts, so we miss tone, hesitation, and the emotions behind the message. Genuine listening, by contrast, means holding back our response until we have fully grasped what the other person is trying to say. People who are listened to in this way tend to feel respected and are more willing to share honestly.",
+    "choices": [
+      "the importance of speaking quickly in conversation",
+      "how to prepare persuasive replies in advance",
+      "the value of fully attending to a speaker before responding",
+      "ways to detect hidden emotions in written messages",
+      "the need to avoid conversations with strangers"
+    ],
+    "answerIndex": 2,
+    "explanation": "답변을 미리 준비하느라 주의가 분산되면 이해가 약해지고, 응답을 미루고 상대의 말을 온전히 이해하려는 경청이 존중감과 솔직한 소통을 낳는다는 내용이므로 주제는 '응답 전에 화자에게 온전히 집중하는 것의 가치'입니다.",
+    "vocab": [
+      {
+        "word": "hesitation",
+        "meaning": "망설임"
+      },
+      {
+        "word": "grasp",
+        "meaning": "이해하다, 파악하다"
+      },
+      {
+        "word": "genuine",
+        "meaning": "진정한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-06-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-06",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 162일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "120",
+      "182",
+      "242",
+      "364",
+      "486"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅/a₂ = r³ = 162/6 = 27이므로 r = 3, a₁ = 6/3 = 2입니다. S₅ = 2(3⁵ − 1)/(3 − 1) = 243 − 1 = 242입니다.",
+    "concept": "등비수열에서 aₙ = a₁rⁿ⁻¹이고, r ≠ 1일 때 첫째항부터 제n항까지의 합은 Sₙ = a₁(rⁿ − 1)/(r − 1)이다."
+  },
+  {
+    "id": "math-2026-10-06-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-06",
+    "prompt": "곡선 y = x³ − 3x + 2 위의 점 (2, 4)에서의 접선의 y절편은?",
+    "choices": [
+      "−18",
+      "−16",
+      "−14",
+      "−12",
+      "−10"
+    ],
+    "answerIndex": 2,
+    "explanation": "y' = 3x² − 3이므로 x = 2에서 기울기는 9입니다. 접선은 y − 4 = 9(x − 2), 즉 y = 9x − 14이므로 y절편은 −14입니다.",
+    "concept": "곡선 y = f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y − f(a) = f'(a)(x − a)이다."
+  },
+  {
+    "id": "math-2026-10-06-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-06",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² − 4x = 0에서 x = 0, 4이고 구간 [0, 4]에서 y ≤ 0이므로 넓이는 ∫₀⁴ (4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 넓이는 구간에서 |f(x)|를 정적분한 값이며, f(x) ≤ 0이면 ∫(−f(x))dx로 계산한다."
+  },
+  {
+    "id": "math-2026-10-06-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-06",
+    "prompt": "서로 다른 두 주사위를 동시에 던져 나온 눈의 합이 8 이상일 때, 두 눈이 모두 짝수일 확률은?",
+    "choices": [
+      "1/5",
+      "1/3",
+      "2/5",
+      "7/15",
+      "3/5"
+    ],
+    "answerIndex": 2,
+    "explanation": "합이 8 이상인 경우는 5 + 4 + 3 + 2 + 1 = 15가지입니다. 이 중 두 눈이 모두 짝수인 경우는 (2,6), (4,4), (6,2), (4,6), (6,4), (6,6)의 6가지이므로 구하는 확률은 6/15 = 2/5입니다.",
+    "concept": "조건부확률 P(B|A) = P(A∩B)/P(A)이며, 근원사건의 수가 같을 때는 n(A∩B)/n(A)로 구한다."
+  },
+  {
+    "id": "math-2026-10-06-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-06",
+    "prompt": "0 ≤ x < 2π에서 방정식 2cos²x − 3cos x + 1 = 0의 모든 근의 합은?",
+    "choices": [
+      "π",
+      "2π",
+      "3π",
+      "4π",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "cos x = t로 놓으면 2t² − 3t + 1 = (2t − 1)(t − 1) = 0이므로 t = 1/2 또는 1입니다. cos x = 1/2에서 x = π/3, 5π/3이고, cos x = 1에서 x = 0이므로 합은 π/3 + 5π/3 + 0 = 2π입니다.",
+    "concept": "cos x = t로 치환해 t에 대한 이차방정식으로 바꾼 뒤, 단위원에서 각 t값에 해당하는 x를 구간 안에서 찾는다."
   }
 ]
