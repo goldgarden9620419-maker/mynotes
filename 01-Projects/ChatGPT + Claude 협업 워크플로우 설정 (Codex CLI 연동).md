@@ -1,7 +1,7 @@
 # ChatGPT + Claude 협업 워크플로우 설정 (Codex CLI 연동)
 
 - 작성일: 2026-10-04
-- 상태: 🔄 진행 중 (2026-10-05 1단계 완료 → 2단계 진행)
+- 상태: 🔄 진행 중 (2026-10-05 1·2단계 완료 → 3단계 진행)
 - 태그: #AI #ClaudeCode #Codex #ChatGPT #자동화
 
 ## 목표
@@ -11,7 +11,7 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
 - **Claude Code가 Codex CLI(ChatGPT 계정으로 로그인)를 도구처럼 호출하는 구조**로 간다.
 - ChatGPT Plus/Pro와 Claude Pro/Max 구독에는 **API 이용료가 포함되지 않는다.** API로 연결하면 사용량만큼 따로 과금된다.
 - Codex CLI는 "Sign in with ChatGPT"로 로그인하면 **구독 사용량 안에서** 쓸 수 있다. Claude Code도 Claude 구독으로 로그인해서 쓴다. → 추가 요금 없음
-- `codex mcp-server`로 Claude Code에 MCP 도구로 등록할 수 있다. 더 간단하게는 Claude가 Bash로 `codex exec`를 실행하게 해도 된다.
+- ~~`codex mcp-server`로 MCP 등록~~ → **2026-08-24 OpenAI가 지원 종료(deprecated)**, 0.160.0에서 연결 실패. **Claude Code가 터미널에서 `codex exec`를 직접 실행하는 방식으로 확정.**
 
 ## 역할 분담
 
@@ -30,13 +30,14 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
   codex          # 처음 실행하면 로그인 화면 → "Sign in with ChatGPT" 선택 (API key 선택 X)
   codex exec "안녕, 연결 테스트야. 한 줄로 답해줘"   # 답이 나오면 성공
   ```
-- [ ] **2단계. Claude Code에 Codex를 MCP 도구로 등록**
-  ```bash
-  npm install -g @anthropic-ai/claude-code   # 이미 설치돼 있다면 생략
-  claude mcp add codex -- codex mcp-server
-  claude mcp list        # 목록에 codex가 보이면 성공
+- [x] **2단계. PC에 Claude Code 설치 + Claude가 `codex exec`로 ChatGPT 호출** ✅ 2026-10-05 완료
+  ```powershell
+  npm install -g @anthropic-ai/claude-code   # 이미 있으면 업데이트됨
+  cd ~\ai-work                               # AI 작업 전용 폴더에서만 실행
+  claude                                     # 신뢰 화면에서 "Yes, I trust this folder"
   ```
-  - 오류가 나면 `codex --help`로 명령 형식을 확인한다. 안 되면 `codex exec` 방식만 써도 충분하다.
+  - Claude 입력창 테스트 문장: `터미널에서 codex exec --skip-git-repo-check "질문" 를 실행해서 ChatGPT의 답을 받고, 네가 검토해서 장단점을 알려줘`
+  - ⚠️ `claude mcp add codex -- cmd /c codex mcp-server` 방식은 실패(CONNECTION_CLOSED) → `claude mcp remove codex -s user`로 삭제함
 - [ ] **3단계. 프로젝트 `CLAUDE.md`에 아래 협업 규칙 붙여넣기**
 - [ ] **4단계. 첫 과제를 정해서 이 흐름으로 실제로 돌려보기**
 
@@ -48,8 +49,8 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
 새 기능이나 프로젝트 요청을 받으면 아래 순서를 따른다.
 
 1. **설계 요청 (ChatGPT)**
-   - codex MCP 도구를 쓰거나, 없으면 Bash로
-     `codex exec "<요구사항> — 아키텍처, 폴더 구조, 단계별 구현 계획을 마크다운으로 작성해줘"` 실행
+   - 터미널에서
+     `codex exec --skip-git-repo-check "<요구사항> — 아키텍처, 폴더 구조, 단계별 구현 계획을 마크다운으로 작성해줘"` 실행
    - 받은 설계 원문을 `docs/design-gpt.md`에 저장
 
 2. **검증 (Claude)**
@@ -63,7 +64,7 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
    - 테스트나 실행으로 동작 확인
 
 4. **교차 리뷰 (ChatGPT, 선택)**
-   - `codex exec "이 diff를 리뷰해줘: 버그, 보안, 개선점만 짧게"` 실행
+   - `codex exec --skip-git-repo-check "이 diff를 리뷰해줘: 버그, 보안, 개선점만 짧게"` 실행
    - 타당한 지적만 반영하고, 반영하지 않은 지적은 이유를 남김
 ```
 
@@ -82,8 +83,14 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
   - `codex exec --skip-git-repo-check "..."` 테스트 성공 (모델 `gpt-5.6-sol`, sandbox read-only)
   - 팁: Git 저장소가 아닌 폴더에서는 `--skip-git-repo-check` 옵션을 붙인다.
 
+- **2026-10-05 2단계 완료**
+  - Claude Code `2.1.289` (이미 로그인돼 있었음). npm `allow-scripts` 경고는 무시해도 정상 동작
+  - 작업 폴더 `C:\Users\AP\ai-work` 생성 (홈 폴더 전체를 신뢰하지 않기 위해)
+  - MCP 등록 실패 → `codex exec` 방식으로 전환, 테스트 성공 (ChatGPT가 폴더 구조 제안 → Claude가 장단점·결론 검토)
+
 ## 다음에 할 일
-1. 2단계: PC에 Claude Code 설치 → Codex를 MCP로 등록
+1. 3단계: `ai-work` 폴더에 협업 규칙 `CLAUDE.md` 만들기
+2. 4단계: 첫 과제로 전체 흐름(설계 → 검증 → 구현 → 교차 리뷰) 돌려보기
 2. 만들고 싶은 기능이나 프로그램을 하나 정해서 첫 과제로 진행
 
 ## 출처
