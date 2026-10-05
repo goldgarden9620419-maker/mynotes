@@ -1,0 +1,412 @@
+<title>블로그+스레드 발행 스튜디오 — 그 짜증은 제 것이 아니었다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-10-03</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>그 짜증은 제 것이 아니었다 (감정전염, 거울뉴런, 거리)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">확언·심리·마인드셋</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">비교검증형</span><span class="chip accent">경험담 직입형 훅</span><span class="chip accent">소제목 4개</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">감정전염</span><span class="chip">거울뉴런</span><span class="chip">공감능력</span><span class="chip">공감피로</span><span class="chip">감정분리</span><span class="chip">멘탈관리</span><span class="chip">심리학</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=4OvzZJSY-W0" target="_blank" rel="noopener noreferrer">"감정 '복사'가 일어나도록 하는 인간 뇌의 놀라운 구조 - 거울뉴런과 공감"</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=4OvzZJSY-W0" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"감정 '복사'가 일어나도록 하는 인간 뇌의 놀라운 구조 - 거울뉴런과 공감"<br />https://www.youtube.com/watch?v=4OvzZJSY-W0</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">거울뉴런과 공감의 뇌과학을 다룬 교양 영상입니다. 아기가 웃는 걸 보면 덩달아 기분이 좋아지고 우는 사람을 보면 마음이 무거워지는 것처럼, 인간에게는 직접 관련 없는 타인에게서 감정을 전염받고 생각과 느낌을 복사하는 능력(공감)이 있다는 관찰에서 출발합니다. 공감의 정의는 분야마다 달라서 같은 감정을 느끼기, 생각 읽어내기, 상대를 위하는 마음 갖기로 나뉘지만 모두 타인의 정신과 연결되는 활동이라는 공통점이 있습니다. 과거에는 공감을 추론으로 설명했습니다 — 감각 정보로 상대의 상태를 유추한 뒤 비슷한 걸 느낀다는 식인데, 실제 공감은 추론 단계가 느껴지지 않을 만큼 즉각적·자동적이라는 반론이 있었고 이 미스터리를 20세기 후반 거울뉴런의 발견이 풀었습니다. 거울뉴런은 전운동겉질과 하측두정피질 등에 분포하는 신경세포로, 타인의 행동을 보는 것만으로 내가 그 행동을 할 때처럼 활성화됩니다. 다리 꼬는 걸 보면 내 운동 영역이, 웃는 표정을 보면 내 표정 담당 영역이, 역겨운 냄새에 찡그리는 사람을 보면 냄새 관련 영역이 켜집니다. 이는 '이해가 먼저, 공감이 나중'이라는 전통적 순서를 뒤집어 공감이 먼저이고 이해가 뒤따를 가능성을 보여주며, SNS 속 타인의 행복에 쉽게 중독되는 이유(남의 행복을 내 것처럼 복사하다 현타)도 설명합니다. 거울뉴런은 타인의 마음을 읽게 해주는 축복이자 내 일과 남의 일을 구별 못 하게 만드는 저주라는 양날의 검이므로, 먼저 미소 짓고 모범을 보이면 좋은 감정이 전염되어 사회 전체의 행복이 늘어난다는 제안으로 마무리됩니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">요즘 『다크심리학2』를 읽으면서 사람의 공감 능력에 대해 예전보다 조금 다르게 생각하게 됐다. 특히 사이코패스의 공감 능력 부재에 대한 내용을 보면서, 공감이 많다고 무조건 좋은 것도 아니고 적다고 무조건 나쁜 것도 아니라는 생각이 들었다.
+
+직장생활을 하다 보면 이런 상황을 자주 겪는다. 거래처 대금 지급이 늦어져 상대방이 힘든 상황을 이야기하면 미안한 마음부터 든다. 직원이 개인적인 사정을 이야기하며 어려움을 호소할 때도 쉽게 원칙대로만 말하기가 어렵다. 하지만 회사의 자금 사정이나 다른 직원들과의 형평성까지 생각하면 모든 사람의 입장을 다 들어줄 수도 없다. 예전에는 이런 결정을 내리고 나면 괜히 내가 너무 냉정했나 싶어 혼자 오래 고민하기도 했다.
+
+그런데 요즘은 성공한 사람들의 심리적 특징을 알아가면서 생각이 조금 달라졌다. 사람의 마음을 이해하는 것과 그 감정에 끌려가는 것은 다른 문제라는 것이다. 상대방의 어려움은 충분히 이해하되, 중요한 순간에는 감정과 판단을 분리할 수 있어야 한다. 결국 내가 갖고 싶은 것은 공감이 없는 냉정함이 아니라, 공감하면서도 필요한 결정을 내릴 수 있는 힘이다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">공감은 분명 인간관계에서 중요한 능력이라고 생각한다. 하지만 무조건 많이 공감하는 것이 좋은 것인지는 잘 모르겠다. 다른 사람의 감정을 너무 깊이 받아들이면 어느 순간 그 사람의 문제까지 내가 짊어지고 있는 것처럼 느껴질 때가 있기 때문이다. 특히 요즘은 SNS나 뉴스처럼 타인의 감정을 계속 접하는 환경 속에 살고 있다. 누군가의 성공을 보면 괜히 비교하게 되고, 누군가의 불행을 보면 내 일도 아닌데 하루 종일 마음이 무거워지기도 한다.
+
+그래서 나는 공감에도 어느 정도 거리가 필요하다고 생각한다. 상대방의 감정을 이해하는 것과 그 감정에 같이 빠져드는 것은 다른 문제다. 모든 사람의 감정을 내 감정처럼 받아들이다 보면 결국 가장 먼저 지치는 사람은 나 자신이다. 공감은 좋은 능력이지만, 동시에 내 감정과 타인의 감정을 구분할 줄 아는 힘도 필요하다. 결국 건강한 공감이란 같이 아파하는 것만이 아니라, 상대를 이해하면서도 나 자신을 잃지 않는 것이라고 생각한다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">그 짜증은 제 것이 아니었다 (감정전염, 거울뉴런, 거리)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 인라인 스타일이 포함되어 바로 카드 디자인으로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">감정전염,거울뉴런,공감능력,공감피로,감정분리,거리두기,인간관계,멘탈관리,심리학,마인드셋</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>확언·심리·마인드셋</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">옆자리 사람이 한숨 쉬면 내 기분까지 가라앉은 적 많음.
+
+예민해서 그런 게 아니라 뇌 구조가 원래 그렇게 생겼음.
+
+정리해봄.
+
+1. 행복은 친구의 친구의 친구(3단계)까지 전염된다는 20년 추적 연구가 있음
+2. 거울뉴런 - 남이 웃는 걸 보기만 해도 내 뇌는 웃을 때처럼 켜짐
+3. SNS 보고 현타 오는 이유 - 남의 행복을 뇌가 내 것처럼 복사했다가 깨어나서
+4. 공감은 양날의 검 - 다 받아주다 보면 제일 먼저 지치는 건 나
+5. 기분이 갑자기 가라앉으면 '이거 내 감정 맞나?' 한 번만 물어볼 것
+
+오늘은 찡그린 얼굴 대신 미소 하나 옮겨보시길 🌱
+
+이런 심리 정리 계속 올림. 남 기분에 휩쓸린 날 꺼내 보고 싶으면 팔로우, 도움 됐으면 좋아요 하나면 충분함</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">그 짜증이 제 것이 아니었던 이유, 전체 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p class="lead-intro" data-ke-size="size16" style="font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;">거래처에서 사정이 어렵다는 전화를 받은 날이면 제 하루까지 무거워졌습니다. 직원이 힘든 개인사를 털어놓은 날은 퇴근하고도 그 얼굴이 머릿속을 떠나지 않았습니다. 처음엔 제가 유난히 여린가 싶었습니다.<br /><br />그런데 심리학은 이걸 성격 문제로 보지 않았습니다. 감정은 실제로 사람 사이에 전염되고, 행복은 친구의 친구의 친구까지 3단계를 건너 퍼진다는 20년 추적 연구가 있습니다. 남의 기분이 제 기분이 되는 감정전염의 구조와 거기서 저를 지키는 거리에 관해 정리했습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;"><br /><br /></p>
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">감정전염은 기분 탓이 아니었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">일반적으로 남의 기분에 잘 휩쓸리는 건 멘탈이 약한 탓이라고 여겨집니다. 그런데 자료를 찾아보니 이건 약함의 문제라기보다 인간의 기본 사양에 가까웠습니다. 감정전염이란 다른 사람의 감정이 표정과 말투를 타고 저에게 그대로 옮아오는 현상을 말하는데, 아기가 까르르 웃는 영상만 봐도 입꼬리가 올라가는 그 경험이 바로 이겁니다.<br /><br />규모를 보면 더 놀랍습니다. 미국 프레이밍햄 지역 주민 4,739명을 20년간 추적한 연구에서 행복은 한 사람에게 머물지 않고 친구, 친구의 친구, 그 친구의 친구까지 3단계를 건너 퍼졌습니다. 행복한 이웃이 옆집에 살면 제가 행복해질 확률이 34% 올라간다는 수치도 있습니다. <a href="https://pubmed.ncbi.nlm.nih.gov/19056788/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: BMJ(영국의학저널)</a><br /><br />저는 이 연구를 보고 사무실 공기가 설명됐습니다. 한 사람이 한숨을 쉬기 시작하면 그 줄 전체가 가라앉던 날들, 그게 다 기분 탓이 아니었던 겁니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b>요약:</b> 감정전염은 타인의 감정이 표정과 말투를 타고 옮아오는 실제 현상이다. 4,739명을 20년 추적한 연구에서 행복은 친구의 친구의 친구까지 3단계를 건너 퍼졌고, 행복한 이웃이 옆집에 살면 행복해질 확률이 34% 높아졌다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">거울뉴런이 남의 표정을 복사하고 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">옮는 경로도 밝혀져 있습니다. 주인공은 거울뉴런입니다. 거울뉴런이란 남이 하는 행동을 보기만 해도 마치 제가 그 행동을 하는 것처럼 켜지는 신경세포로, 전운동겉질과 하측두정피질 등 뇌 여러 곳에 퍼져 함께 작동합니다. 누가 다리 꼬는 걸 보면 제 운동 영역이 함께 켜지고, 웃는 얼굴을 보면 제 표정 근육을 맡는 영역이 켜지고, 역겨운 냄새에 찡그리는 사람을 보면 냄새를 맡지도 않은 제 뇌가 같은 반응을 합니다. <a href="https://pubmed.ncbi.nlm.nih.gov/15217330/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: Annual Review of Neuroscience(PubMed)</a><br /><br />흔히 공감은 상대의 상황을 머리로 이해한 다음에 감정이 따라오는 순서라고 알려져 있습니다. 그런데 거울뉴런은 순서가 반대일 가능성을 보여줍니다. 웃는 사람을 보는 순간 제 기분이 먼저 좋아지고, 그 느낌을 근거로 상대의 행복을 이해하게 된다는 겁니다. 추론할 틈도 없이 전염부터 되는 셈입니다.<br /><br />SNS를 닫고 나서 밀려오는 허탈함도 여기서 설명됩니다. 남이 맛있는 걸 먹고 좋은 걸 사는 장면을 보는 동안 제 뇌는 그 행복을 제 것처럼 복사하고 있다가, 화면을 끄는 순간 제 현실과의 차이를 확인하는 거니까요. 제가 뉴스와 피드를 오래 본 날일수록 마음이 무거웠던 이유를 이제야 알았습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b>요약:</b> 거울뉴런은 타인의 행동과 표정을 보기만 해도 자신이 직접 하는 것처럼 활성화되는 신경세포다. 공감은 이해한 뒤 느끼는 순서가 지닌 통념과 달리, 거울뉴런을 통해 느낌이 먼저 전염되고 이해가 뒤따를 가능성이 있다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">공감은 양날의 검이었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">일반적으로 공감은 많을수록 좋은 능력이라고 알려져 있습니다. 그런데 제 경험상 꼭 그렇지는 않았습니다. 거래처의 어려운 사정에 공감하다 보면 회사 자금 사정을 알면서도 결정을 미루게 됐고, 직원의 개인사를 들은 날엔 다른 직원들과의 형평성을 알면서도 원칙대로 말하기가 어려웠습니다. 결정을 내리고 나면 제가 너무 냉정했나 싶어 혼자 오래 곱씹기도 했습니다.<br /><br />요즘 다크심리학 책을 읽으면서 이 양면이 더 또렷해졌습니다. 공감이 빠진 사람의 문제도 크지만, 반대로 모든 감정을 제 것처럼 받아들이면 남의 문제까지 제가 짊어진 상태가 됩니다. 그렇게 가장 먼저 지치는 사람은 결국 저였습니다.<br /><br />거울뉴런이 축복이자 저주라고 불리는 이유가 여기 있습니다. 타인의 마음을 읽게 해주는 같은 장치가, 제 일과 남의 일을 구별하지 못하게도 만드는 겁니다. 능력 자체를 끄는 건 불가능하니 다루는 법이 필요했습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b>요약:</b> 공감은 타인을 이해하게 해주는 능력이지만 과하면 남의 문제까지 짊어지게 만드는 양날의 검이다. 모든 감정을 자기 것처럼 받아들일 때 가장 먼저 지치는 사람은 자기 자신이다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">이해와 거리는 함께 갈 수 있었다</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">그래서 저는 공감을 줄이는 쪽 대신 거리를 만드는 쪽을 연습하고 있습니다. 상대의 마음을 이해하는 것과 그 감정에 끌려가는 것은 다른 문제라는 걸 구분선으로 삼았습니다. 제가 쓰는 방법은 세 가지입니다.</p>
+<ul style="list-style-type:disc;margin:10px 0 14px 22px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">기분이 갑자기 가라앉으면 &#39;이 감정이 제 것인가, 옮아온 것인가&#39; 한 번 묻기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">어려운 사정은 충분히 듣되, 결정은 감정과 분리해 원칙과 형평으로 내리기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.8;color:#374151;font-size:1rem;">전염을 역이용해서 먼저 미소 짓기 — 표정 하나가 상대의 뇌에도 복사되니까</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">세 번째가 의외로 재미있습니다. 감정이 옮는 구조라면 좋은 감정부터 옮기면 되는 거니까요. 제가 찡그리고 다닌 날은 주변도 가라앉았고, 먼저 웃은 날은 웃음이 돌아왔습니다.<br /><br />결국 건강한 공감이란 같이 아파하는 것이 아니라 상대를 이해하면서도 저 자신을 잃지 않는 것이라고 정리하게 됐습니다. 제가 갖고 싶은 건 공감 없는 냉정함이 아니었고, 공감하면서도 필요한 결정을 내리는 힘이었습니다.</p>
+<div class="summary-card" style="background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;"><b>요약:</b> 건강한 공감은 상대를 이해하면서도 자신을 잃지 않는 상태다. 옮아온 감정인지 스스로 묻기, 듣는 일과 결정하는 일을 분리하기, 먼저 미소를 보내 좋은 감정을 전염시키기가 실천 방법이다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;margin:0;padding:18px 22px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;border-bottom:1px solid #e5e7eb;">제가 저에게 던진 질문들</h2>
+<div class="card-body" style="padding:20px 22px;">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 남 기분에 잘 휩쓸리는 건 내가 유리멘탈이라서야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 거울뉴런은 누구에게나 있다는 걸 알고 마음이 한결 가벼워졌습니다. 전염 자체는 뇌의 기본 작동이고, 문제는 옮아온 감정을 제 것으로 착각한 채 하루 종일 끌고 다니는 쪽이었습니다.</p>
+</div>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 공감을 줄이면 정 없는 사람이 되는 거 아니야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 줄이는 게 목표가 되지는 않았습니다. 듣는 일은 끝까지 듣되 결정만 분리하는 겁니다. 오히려 제가 감정에 휩쓸려 있을 때보다 분리한 뒤에 상대를 더 오래, 더 일관되게 도울 수 있었습니다.</p>
+</div>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. SNS 끊는 게 답일까?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 저는 끊기보다 양을 조절하는 쪽입니다. 피드를 보는 동안 제 뇌가 남의 감정을 쉼 없이 복사하고 있다는 걸 아는 것만으로도 오래 붙잡고 있는 날이 줄었습니다. 무거운 날엔 화면부터 내려놓습니다.</p>
+</div>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;"><b>Q. 오늘 당장 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0;">A. 아침에 마주치는 사람에게 먼저 미소를 보내볼 겁니다. 그리고 기분이 훅 가라앉는 순간이 오면 &#39;이거 누구 감정이지&#39;를 한 번 물어보려 합니다. 질문 하나로도 옮아온 감정은 힘이 빠졌습니다.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;">
+<h2 data-ke-size="size26" style="font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;">결론</h2>
+<div class="card-body" style="padding:20px 22px;">
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">저는 이제 제 기분을 날씨처럼 봅니다. 어떤 구름은 제 안에서 생겼고 어떤 구름은 옆에서 흘러들어온 겁니다. 출처를 구분하는 것만으로도 하루가 덜 흔들렸습니다.<br /><br />오늘 누군가의 한숨이나 피드 속 장면에 마음이 무거워지셨다면, 그 감정의 주인이 누구인지 한 번만 물어보시길 권합니다. 그리고 내일 아침엔 미소 하나를 먼저 옮겨보시고요.<br /><br />이 글을 읽고 마음이 조금 가벼워지셨다면 그게 바로 기분 좋은 전염입니다. 공감♥ 하나로 그 전염을 저에게도 돌려주시면 다음 글 쓸 힘이 됩니다. 남 기분에 휩쓸린 날 다시 오실 수 있게 구독해두셔도 좋습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;">참고: <a href="https://www.youtube.com/watch?v=4OvzZJSY-W0" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=4OvzZJSY-W0</a></p>
+</div>
+</section>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-contagion-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
