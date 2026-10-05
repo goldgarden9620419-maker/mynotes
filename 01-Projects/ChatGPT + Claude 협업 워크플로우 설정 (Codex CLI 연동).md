@@ -1,7 +1,7 @@
 # ChatGPT + Claude 협업 워크플로우 설정 (Codex CLI 연동)
 
 - 작성일: 2026-10-04
-- 상태: 🔄 진행 중 (2026-10-05 1·2단계 완료 → 3단계 진행)
+- 상태: 🔄 진행 중 (2026-10-05 1~3단계 완료 → 4단계 첫 과제 진행)
 - 태그: #AI #ClaudeCode #Codex #ChatGPT #자동화
 
 ## 목표
@@ -38,7 +38,7 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
   ```
   - Claude 입력창 테스트 문장: `터미널에서 codex exec --skip-git-repo-check "질문" 를 실행해서 ChatGPT의 답을 받고, 네가 검토해서 장단점을 알려줘`
   - ⚠️ `claude mcp add codex -- cmd /c codex mcp-server` 방식은 실패(CONNECTION_CLOSED) → `claude mcp remove codex -s user`로 삭제함
-- [ ] **3단계. 프로젝트 `CLAUDE.md`에 아래 협업 규칙 붙여넣기**
+- [x] **3단계. 프로젝트 `CLAUDE.md`에 아래 협업 규칙 붙여넣기** ✅ 2026-10-05 완료 (`C:\Users\AP\ai-work\CLAUDE.md`, 27줄)
 - [ ] **4단계. 첫 과제를 정해서 이 흐름으로 실제로 돌려보기**
 
 ## CLAUDE.md 템플릿 (복붙용)
@@ -88,9 +88,13 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
   - 작업 폴더 `C:\Users\AP\ai-work` 생성 (홈 폴더 전체를 신뢰하지 않기 위해)
   - MCP 등록 실패 → `codex exec` 방식으로 전환, 테스트 성공 (ChatGPT가 폴더 구조 제안 → Claude가 장단점·결론 검토)
 
+- **2026-10-05 3단계 완료**
+  - PC의 Claude에게 템플릿을 붙여 넣어 `ai-work\CLAUDE.md` 생성 (공통 규칙: 한국어 존댓말, 프로젝트별 하위 폴더)
+  - 규칙은 Claude를 **새로 실행할 때부터** 적용된다 (`/exit` 후 `claude` 재실행)
+  - `ai-work`는 git 저장소가 아니라서, 교차 리뷰(diff)를 쓰려면 프로젝트 하위 폴더에서 `git init` 필요
+
 ## 다음에 할 일
-1. 3단계: `ai-work` 폴더에 협업 규칙 `CLAUDE.md` 만들기
-2. 4단계: 첫 과제로 전체 흐름(설계 → 검증 → 구현 → 교차 리뷰) 돌려보기
+1. 4단계: 첫 과제로 전체 흐름(설계 → 검증 → 구현 → 교차 리뷰) 돌려보기
 2. 만들고 싶은 기능이나 프로그램을 하나 정해서 첫 과제로 진행
 
 ## 출처
