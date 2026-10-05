@@ -1,7 +1,7 @@
 # ChatGPT + Claude 협업 워크플로우 설정 (Codex CLI 연동)
 
 - 작성일: 2026-10-04
-- 상태: 🔄 진행 중 (2026-10-05 1~3단계 완료 → 4단계 첫 과제 진행)
+- 상태: ✅ 설정 완료 (2026-10-05 1~4단계 모두 완료, 실사용 단계)
 - 태그: #AI #ClaudeCode #Codex #ChatGPT #자동화
 
 ## 목표
@@ -39,7 +39,7 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
   - Claude 입력창 테스트 문장: `터미널에서 codex exec --skip-git-repo-check "질문" 를 실행해서 ChatGPT의 답을 받고, 네가 검토해서 장단점을 알려줘`
   - ⚠️ `claude mcp add codex -- cmd /c codex mcp-server` 방식은 실패(CONNECTION_CLOSED) → `claude mcp remove codex -s user`로 삭제함
 - [x] **3단계. 프로젝트 `CLAUDE.md`에 아래 협업 규칙 붙여넣기** ✅ 2026-10-05 완료 (`C:\Users\AP\ai-work\CLAUDE.md`, 27줄)
-- [ ] **4단계. 첫 과제를 정해서 이 흐름으로 실제로 돌려보기**
+- [x] **4단계. 첫 과제를 정해서 이 흐름으로 실제로 돌려보기** ✅ 2026-10-05 완료 (할 일 목록 앱 `todo-app`)
 
 ## CLAUDE.md 템플릿 (복붙용)
 
@@ -93,8 +93,23 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
   - 규칙은 Claude를 **새로 실행할 때부터** 적용된다 (`/exit` 후 `claude` 재실행)
   - `ai-work`는 git 저장소가 아니라서, 교차 리뷰(diff)를 쓰려면 프로젝트 하위 폴더에서 `git init` 필요
 
+- **2026-10-05 4단계 완료** — 첫 과제: 할 일 목록 앱 (`C:\Users\AP\ai-work\todo-app`)
+  - 시작 프롬프트: "CLAUDE.md의 협업 규칙대로 할 일 목록 앱을 만들어줘. 프로젝트 폴더 todo-app(그 안에서 git init), Python, 추가/목록/완료/삭제, todos.json 저장, 단계마다 짧게 보고"
+  - 소요 시간 약 5분 50초, `auto mode on` 상태라 거의 묻지 않고 진행
+  - 결과물: `todo.py`, `test_todo.py`, `README.md`, `.gitignore` (+ `docs/design-gpt.md`, `docs/design-final.md`)
+  - 안전장치: 임시 파일에 먼저 쓰고 교체(저장 실패해도 기존 파일 보존), 파일 손상 시 덮어쓰지 않고 오류 표시
+  - 교차 리뷰: Codex 지적 4건 중 3건 반영, 1건(터미널 제어문자 필터)은 개인용이라 불필요 → 이유를 설계 문서에 기록
+  - Codex는 자기 환경에 Python이 없어 테스트를 못 돌림 → 테스트는 Claude가 실행해 통과
+  - 사용법: `cd C:\Users\AP\ai-work\todo-app` → `python todo.py add "장보기"` / `list` / `done 1` / `delete 1` / `python -m unittest -v`
+
+## 실전 사용법 (요약)
+1. PowerShell에서 `cd ~\ai-work` → `claude`
+2. "CLAUDE.md의 협업 규칙대로 ○○을 만들어줘. 프로젝트 폴더: ○○ (그 안에서 git init). 요구사항: ..." 입력
+3. 끝나면 "커밋해줘"로 git에 저장
+
 ## 다음에 할 일
-1. 4단계: 첫 과제로 전체 흐름(설계 → 검증 → 구현 → 교차 리뷰) 돌려보기
+1. todo-app 직접 실행해 보고 "커밋해줘"로 저장
+2. 실제 업무 과제(예: 자금계획 자동화 개선, 블로그 자동화 도구)에 같은 흐름 적용
 2. 만들고 싶은 기능이나 프로그램을 하나 정해서 첫 과제로 진행
 
 ## 출처
