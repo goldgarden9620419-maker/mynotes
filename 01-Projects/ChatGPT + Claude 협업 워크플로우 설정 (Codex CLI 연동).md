@@ -1,7 +1,7 @@
 # ChatGPT + Claude 협업 워크플로우 설정 (Codex CLI 연동)
 
 - 작성일: 2026-10-04
-- 상태: ⏳ 다음 진행 예정 (2026-10-05 1단계부터 시작)
+- 상태: 🔄 진행 중 (2026-10-05 1단계 완료 → 2단계 진행)
 - 태그: #AI #ClaudeCode #Codex #ChatGPT #자동화
 
 ## 목표
@@ -24,7 +24,7 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
 
 ## 설정 체크리스트
 
-- [ ] **1단계. Codex CLI 설치 + ChatGPT 계정 로그인** (Node.js 18 이상 필요)
+- [x] **1단계. Codex CLI 설치 + ChatGPT 계정 로그인** (Node.js 18 이상 필요) ✅ 2026-10-05 완료
   ```bash
   npm install -g @openai/codex
   codex          # 처음 실행하면 로그인 화면 → "Sign in with ChatGPT" 선택 (API key 선택 X)
@@ -74,8 +74,16 @@ ChatGPT가 구조를 짜고, Claude가 검증한 뒤 코드를 짠다. 한쪽 AI
 | 코딩 없이 질문·기획만 할 때 | ChatGPT 웹에서 구조 짜기 → 결과를 Claude에 붙여넣고 "검증 후 코드로 짜줘" | 추가 요금 없음 |
 | 완전 자동 파이프라인이 필요할 때 | Python으로 OpenAI API와 Anthropic API를 직접 호출 | 사용량만큼 별도 과금 |
 
+## 진행 기록
+- **2026-10-05 1단계 완료** (Windows PowerShell)
+  - Node.js `v24.19.0`, Codex CLI `0.160.0` 설치
+  - `cd ~`로 홈 폴더(`C:\Users\AP`)에서 작업 (system32에서 실행하지 않기)
+  - `codex login` → 브라우저에서 ChatGPT 계정 로그인 → `Successfully logged in`
+  - `codex exec --skip-git-repo-check "..."` 테스트 성공 (모델 `gpt-5.6-sol`, sandbox read-only)
+  - 팁: Git 저장소가 아닌 폴더에서는 `--skip-git-repo-check` 옵션을 붙인다.
+
 ## 다음에 할 일
-1. PC에서 1단계 실행 → `codex exec` 테스트 결과나 오류 메시지를 Claude에게 공유
+1. 2단계: PC에 Claude Code 설치 → Codex를 MCP로 등록
 2. 만들고 싶은 기능이나 프로그램을 하나 정해서 첫 과제로 진행
 
 ## 출처
