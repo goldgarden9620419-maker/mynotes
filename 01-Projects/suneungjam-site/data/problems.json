@@ -9421,5 +9421,246 @@
     "answerIndex": 1,
     "explanation": "cos x = t로 놓으면 2t² − 3t + 1 = (2t − 1)(t − 1) = 0이므로 t = 1/2 또는 1입니다. cos x = 1/2에서 x = π/3, 5π/3이고, cos x = 1에서 x = 0이므로 합은 π/3 + 5π/3 + 0 = 2π입니다.",
     "concept": "cos x = t로 치환해 t에 대한 이차방정식으로 바꾼 뒤, 단위원에서 각 t값에 해당하는 x를 구간 안에서 찾는다."
+  },
+  {
+    "id": "en-2026-10-07-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-07",
+    "prompt": "다음 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Sleep researchers have found that people [u]who[/u]① sleep fewer than six hours a night tend to make more mistakes at work. A lack of sleep reduces the ability [u]to concentrate[/u]②, and the errors [u]caused[/u]③ by fatigue often go unnoticed until it is too late. Companies that encourage employees [u]to take[/u]④ regular breaks report that productivity [u]are[/u]⑤ noticeably higher.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ productivity는 불가산명사로 단수 취급하므로 are가 아니라 is가 되어야 합니다. ① people을 수식하는 주격 관계대명사 who, ② ability를 수식하는 to부정사, ③ errors를 수식하는 과거분사 caused, ④ encourage + 목적어 + to부정사 구조는 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "fatigue",
+        "meaning": "피로"
+      },
+      {
+        "word": "unnoticed",
+        "meaning": "눈에 띄지 않는"
+      },
+      {
+        "word": "noticeably",
+        "meaning": "눈에 띄게, 현저하게"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-07-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-07",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "A good map does not show everything. A road map, for instance, leaves out the shape of every building and the name of every tree. Cartographers deliberately omit such details so that readers can find their way without being distracted. Likewise, a good summary is valuable not because it includes everything, but because it ________.",
+    "choices": [
+      "repeats every detail of the original",
+      "carefully chooses what to leave out",
+      "uses more difficult words than the text",
+      "avoids mentioning any main idea",
+      "follows the order of the original sentences"
+    ],
+    "answerIndex": 1,
+    "explanation": "지도가 불필요한 세부 정보를 의도적으로 생략해 길 찾기를 돕는 것처럼(Likewise), 좋은 요약도 모든 것을 담아서가 아니라 무엇을 뺄지 신중하게 골라서 가치가 있습니다. 따라서 빈칸에는 '무엇을 생략할지 신중하게 선택한다'가 적절합니다.",
+    "vocab": [
+      {
+        "word": "cartographer",
+        "meaning": "지도 제작자"
+      },
+      {
+        "word": "omit",
+        "meaning": "생략하다"
+      },
+      {
+        "word": "distract",
+        "meaning": "주의를 흐트러뜨리다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-07-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-07",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Public libraries were once seen mainly as quiet places to borrow books.\n(A) For example, many now host job-training workshops, language classes, and community meetings.\n(B) Today, however, their role has expanded far beyond lending.\n(C) As a result, libraries have become shared spaces where neighbors connect and learn together.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(C)-(A)",
+      "(B)-(A)-(C)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글의 '책을 빌리는 조용한 곳'이라는 과거 인식에 대해 (B)가 However로 역할이 확장되었음을 말하고, (A)가 For example로 구체적 사례를 들며, (C)가 As a result로 결론을 맺으므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "lending",
+        "meaning": "대출"
+      },
+      {
+        "word": "workshop",
+        "meaning": "워크숍, 실습 교육"
+      },
+      {
+        "word": "expand",
+        "meaning": "확장되다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-07-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-07",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Cities are usually far louder than the countryside. ( ① ) Studies of urban birds show that many species sing at a higher pitch in noisy areas. ( ② ) Low-pitched songs are easily drowned out by traffic. ( ③ ) Birds that adjust their pitch can still attract mates and defend territory. ( ④ ) Those that cannot adapt often leave the area altogether. ( ⑤ )",
+    "givenSentence": "This shift allows their calls to be heard above the background rumble.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 This shift는 바로 앞 문장의 '높은 음으로 노래하는 변화'를 가리키며, 그 변화 덕분에 소리가 소음 위로 들린다는 내용입니다. 따라서 ②에 들어가야 뒤의 '낮은 음은 소음에 묻힌다'는 설명과 자연스럽게 이어집니다.",
+    "vocab": [
+      {
+        "word": "pitch",
+        "meaning": "음높이"
+      },
+      {
+        "word": "drown out",
+        "meaning": "(소리를) 묻히게 하다"
+      },
+      {
+        "word": "territory",
+        "meaning": "영역"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-07-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-07",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Having more options is generally thought to be better, but psychologists have found that too many choices can backfire. In one well-known study, shoppers offered a wide variety of jams were less likely to buy any than those offered only a few. Faced with an overwhelming range, people worry about making the wrong decision and often put off choosing altogether. Even when they do choose, they tend to feel less satisfied, wondering whether another option would have been better.",
+    "choices": [
+      "why shoppers prefer familiar brands to new ones",
+      "the negative effects of having too many options",
+      "strategies for comparing prices effectively",
+      "the role of advertising in consumer decisions",
+      "how stores should arrange products on shelves"
+    ],
+    "answerIndex": 1,
+    "explanation": "선택지가 너무 많으면 구매 확률이 떨어지고 결정을 미루며 만족도도 낮아진다는 연구 결과를 제시하는 글이므로 주제는 '선택지가 지나치게 많을 때의 부정적 영향'입니다.",
+    "vocab": [
+      {
+        "word": "backfire",
+        "meaning": "역효과를 낳다"
+      },
+      {
+        "word": "overwhelming",
+        "meaning": "압도적인"
+      },
+      {
+        "word": "put off",
+        "meaning": "미루다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-07-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-07",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "공차 d = (19 − 7)/(7 − 3) = 3이고 a₁ = 7 − 2·3 = 1입니다. S₁₀ = 10(2·1 + 9·3)/2 = 5 × 29 = 145입니다.",
+    "concept": "등차수열의 합 Sₙ = n{2a₁ + (n−1)d}/2 이고, 두 항의 차로부터 공차 d = (aₘ − aₙ)/(m − n)을 구한다."
+  },
+  {
+    "id": "math-2026-10-07-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-07",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 합은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 1 − 6 + 9 + 1 = 5, f(3) = 27 − 54 + 27 + 1 = 1이므로 합은 6입니다.",
+    "concept": "f'(x)의 부호가 양에서 음으로 바뀌는 점에서 극대, 음에서 양으로 바뀌는 점에서 극소이다."
+  },
+  {
+    "id": "math-2026-10-07-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-07",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² − 4x = 0에서 x = 0, 4이고 이 구간에서 y ≤ 0이므로 넓이는 ∫₀⁴ (4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 넓이는 구간별로 함수의 부호를 확인한 뒤 |f(x)|를 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-10-07-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-07",
+    "prompt": "흰 공 3개, 검은 공 4개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 두 공의 색이 같을 확률은?",
+    "choices": [
+      "1/7",
+      "2/7",
+      "3/7",
+      "4/7",
+      "5/7"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 ₇C₂ = 21이고, 같은 색인 경우는 ₃C₂ + ₄C₂ = 3 + 6 = 9입니다. 따라서 확률은 9/21 = 3/7입니다.",
+    "concept": "서로 배반인 사건의 확률은 더하며, 확률 = (사건의 경우의 수)/(전체 경우의 수)로 조합을 이용해 구한다."
+  },
+  {
+    "id": "math-2026-10-07-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-07",
+    "prompt": "sin θ + cos θ = 1/2일 때, sin³θ + cos³θ의 값은?",
+    "choices": [
+      "5/16",
+      "7/16",
+      "9/16",
+      "11/16",
+      "13/16"
+    ],
+    "answerIndex": 3,
+    "explanation": "(sin θ + cos θ)² = 1 + 2 sin θ cos θ = 1/4이므로 sin θ cos θ = −3/8입니다. sin³θ + cos³θ = (sin θ + cos θ)(1 − sin θ cos θ) = (1/2)(1 + 3/8) = 11/16입니다.",
+    "concept": "합과 곱으로 표현하는 곱셈공식 a³ + b³ = (a + b)(a² − ab + b²)와 sin²θ + cos²θ = 1을 이용한다."
   }
 ]
