@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>승인글 - 블랙커피는 무죄가 아니었다</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;background:#f3f4f6;margin:0;padding:24px;color:#111827;}
+.wrap{max-width:760px;margin:0 auto;}
+.meta-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+.meta-row{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;}
+.meta-label{font-weight:700;color:#374151;min-width:70px;font-size:0.92rem;}
+.meta-val{font-size:0.98rem;color:#111827;flex:1;}
+.copy-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.85rem;cursor:pointer;}
+.copy-btn:hover{background:#1d4ed8;}
+h1.page-title{font-size:1.3rem;margin:0 0 6px 0;}
+.section-title{font-size:1.05rem;font-weight:700;margin:26px 0 10px 0;color:#1e3a8a;}
+.preview{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;margin-bottom:20px;}
+textarea{width:100%;height:260px;box-sizing:border-box;font-family:monospace;font-size:0.82rem;padding:12px;border-radius:10px;border:1px solid #d1d5db;}
+.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;font-size:0.9rem;color:#92400e;margin-top:14px;}
+/* card CSS */
+.lead-intro{font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;}
+.post-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;}
+.post-card h2{font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;}
+.card-body{padding:20px 22px;}
+.card-body p{font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;}
+.card-body p:last-child{margin-bottom:0;}
+.card-body h3{font-size:1.1rem;font-weight:700;color:#1e3a8a;margin:18px 0 10px 0;}
+.summary-card{background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;}
+.summary-card b{color:#1d4ed8;}
+.card-body ul,.card-body ol{margin:10px 0 14px 22px;padding:0;}
+.card-body li{margin:6px 0;line-height:1.8;color:#374151;}
+.card-body a{color:#2563eb;text-decoration:underline;}
+.faq-card h2{background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;}
+.faq-item{margin:0;}
+.faq-q{font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;}
+.faq-a{font-size:1rem;line-height:1.9;color:#374151;margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="page-title">승인글 — 블랙커피는 무죄가 아니었다 (모닝커피, 혈당, 타이밍)</h1>
+
+<div class="meta-box">
+<div class="meta-row">
+<span class="meta-label">제목</span>
+<span class="meta-val" id="titleText">블랙커피는 무죄가 아니었다 (모닝커피, 혈당, 타이밍)</span>
+<button class="copy-btn" onclick="copyText('titleText')">복사</button>
+</div>
+<div class="meta-row">
+<span class="meta-label">카테고리</span>
+<span class="meta-val"><b>건강·웰빙 루틴</b></span>
+</div>
+<div class="meta-row">
+<span class="meta-label">태그</span>
+<span class="meta-val" id="tagsText">모닝커피,공복커피,커피타이밍,블랙커피,혈당,코르티솔,카페인,디카페인,건강습관,아메리카노</span>
+<button class="copy-btn" onclick="copyText('tagsText')">복사</button>
+</div>
+</div>
+
+<div class="section-title">본문 미리보기</div>
+<div class="preview" id="previewArea"></div>
+
+<div class="section-title">복사용 본문 HTML</div>
+<textarea id="src" readonly></textarea>
+<button class="copy-btn" onclick="copySrc()" style="margin-top:8px;">본문 HTML 전체 복사</button>
+
+<div class="notice">티스토리 글쓰기에서 HTML 모드로 전환 후 붙여넣으세요. 카드 CSS는 스킨에 최초 1회만 등록하면 됩니다.</div>
+</div>
+
+<script type="text/template" id="srcData">
+<p class="lead-intro" data-ke-size="size16">설탕 한 톨 들어가지 않은 아메리카노라면 빈속에 마셔도 아무 문제 없는 걸까요. 저는 당연히 그렇다고 믿고 출근하자마자 커피부터 찾는 루틴으로 평일을 열어왔습니다.<br /><br />그런데 블랙커피라도 공복에 마시면 아침 식사 후 혈당 반응이 약 50% 커진다는 연구가 있습니다. 모닝커피 자체의 문제라기보다 마시는 타이밍의 문제였던 겁니다. 설탕 없는 커피니까 건강하다고 믿었던 제가 이 연구를 어떻게 소화했는지 정리했습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+
+<section class="post-card">
+<h2 data-ke-size="size26">모닝커피가 제 혈당을 흔들고 있었다</h2>
+<div class="card-body">
+<p data-ke-size="size16">일반적으로 혈당 걱정은 설탕 든 음료를 마시는 사람의 몫이라고 알려져 있습니다. 저도 아메리카노만 마시니까 오히려 건강한 커피 생활을 한다고 여겼습니다. 그런데 영국 배스 대학교 연구팀이 평균 21세의 건강한 성인 29명을 대상으로 한 실험은 다른 이야기를 들려줬습니다.<br /><br />연구팀은 참가자들에게 경구 당부하 검사를 실시했습니다. 당이 든 음료를 마시게 한 뒤 혈당이 얼마나 오르고 얼마나 잘 내려오는지를 정밀하게 재는 검사입니다. 잠을 푹 잔 날과 한 시간마다 깨운 날, 그리고 일어나자마자 진한 블랙커피를 마신 날을 비교했더니 결과가 묘했습니다. 하룻밤 쪼개 잔 것 자체는 혈당 조절에 별 영향이 없었는데, 기상 직후 공복에 마신 커피는 아침 식사 후 혈당과 인슐린 반응을 눈에 띄게 끌어올렸습니다. 그 폭이 약 50%였습니다. <a href="https://www.bath.ac.uk/announcements/drink-coffee-after-breakfast-not-before-for-better-metabolic-control/" target="_blank" rel="noopener noreferrer">출처: 영국 배스대학교</a><br /><br />이유로 지목되는 건 코르티솔입니다. 코르티솔이란 부신에서 나오는 각성 호르몬으로, 눈 뜨고 30분 안에 최고치를 찍으며 자던 몸을 깨우는 역할을 합니다. 이 피크 시간대에 카페인이 들어오면 둘이 함께 작용해 혈당을 더 밀어올릴 수 있다는 설명입니다.<br /><br />뜨끔했던 건 연구 설계 자체가 제 아침이었다는 점입니다. 잠을 설친 날일수록 피로를 쫓으려고 빈속에 커피부터 들이켰으니까요. 제일 안 좋은 조합을 제일 피곤한 날마다 골라 마신 셈입니다.</p>
+<div class="summary-card"><b>요약:</b> 설탕이 없는 블랙커피라도 기상 직후 공복에 마시면 아침 식사 후 혈당 반응이 약 50% 커진다는 영국 배스대 연구가 있다. 기상 30분 내 최고치를 찍는 각성 호르몬 코르티솔과 카페인이 겹치는 것이 원인으로 지목된다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">끊는 대신 타이밍만 바꿔봤다</h2>
+<div class="card-body">
+<p data-ke-size="size16">저는 커피를 마셔도 잠을 설치거나 가슴이 두근거리는 불편이 거의 없는 편입니다. 그래서 지금까지 커피 습관을 의심해본 적이 없었습니다. 그런데 나이가 들며 당뇨 걱정이 하나둘 생기다 보니 생각이 바뀌었습니다. 당장 증상이 없다고 해서 계속 괜찮을 거라고 단정할 수는 없었습니다. 당뇨나 혈압 같은 병은 어느 날 갑자기 오기보다 오랜 생활습관이 쌓여서 오는 경우가 많으니까요.<br /><br />다행히 해법은 커피를 끊는 쪽이 아니었습니다. 코르티솔이 피크를 치고 내려오는 기상 후 두세 시간 뒤, 혹은 아침 식사를 마친 뒤로 첫 잔을 옮기면 됩니다. 공복 커피는 혈당 문제에 더해 위장에도 부담을 줄 수 있어서 식후 한 잔이 여러모로 안전한 선택입니다. 카페인 총량이 걱정되면 식품의약품안전처가 안내하는 성인 하루 카페인 기준을 참고해 잔 수를 정하면 되고, 둘째 잔부터 디카페인으로 바꾸는 방법도 있습니다. <a href="https://www.mfds.go.kr/" target="_blank" rel="noopener noreferrer">출처: 식품의약품안전처</a><br /><br />그래서 제 출근 루틴은 이렇게 바뀌는 중입니다.</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li data-ke-size="size16">아침을 거른 날엔 커피부터 마시지 않기 — 간단한 요기라도 한 뒤 첫 잔</li>
+<li data-ke-size="size16">동료와의 커피 타임은 그대로 두되 시간만 오전 중반 이후로 옮기기</li>
+<li data-ke-size="size16">하루 두 잔째부터는 디카페인으로 바꿔 카페인 총량 줄이기</li>
+</ul>
+<p data-ke-size="size16">돌아보니 문제는 커피 그 자체라기보다 아무 생각 없이 반복해온 습관이었습니다. 동료와 이야기 나누는 그 시간은 좋지만 굳이 빈속에 마실 이유는 없었으니까요. 건강을 지킨다는 건 거창한 결심이 아니라 이런 작은 습관 하나를 의심해보는 데서 시작한다고 저는 생각합니다.</p>
+<div class="summary-card"><b>요약:</b> 공복 모닝커피의 해법은 커피를 끊는 것이 아니고 첫 잔을 기상 2~3시간 뒤나 아침 식사 후로 옮기는 것이다. 카페인 총량이 걱정되면 식품의약품안전처의 성인 하루 기준을 참고하고 둘째 잔부터 디카페인으로 바꾸면 된다.</div>
+</div>
+</section>
+<br />
+
+<section class="post-card faq-card">
+<h2 data-ke-size="size26">제가 저에게 던진 질문들</h2>
+<div class="card-body">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 커피 마셔도 아무렇지 않은데 굳이 바꿔야 해?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 저도 그 생각으로 십수 년을 마셨습니다. 그런데 증상이 없다는 것과 문제가 없다는 건 다른 이야기였습니다. 혈당 영향은 몸으로 느껴지지 않은 채 쌓이는 쪽이라서, 느껴질 때까지 기다리기보다 타이밍만 미리 바꿔두기로 했습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 그래서 모닝커피를 끊은 거야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 못 끊었고 끊을 생각도 없습니다. 아침 커피가 주는 동료와의 대화 시간은 제 평일의 낙이니까요. 대신 빈속을 피하고 식후로 미루는 것만 지킵니다. 같은 커피라도 언제 마시느냐로 몸에 주는 영향이 달라진다는 게 이번에 배운 핵심입니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 하루에 몇 잔까지 괜찮을까?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 성인 하루 카페인 권고 기준을 넘지 않는 선에서 저는 한두 잔으로 정했습니다. 두 잔을 마시는 날엔 한 잔을 디카페인으로 바꿉니다. 양을 세는 것만으로도 오후 늦게 습관처럼 집어 들던 커피가 줄었습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 내일 아침엔 뭐부터 해볼 거야?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 출근하면 커피 머신 대신 물 한 잔부터 마실 겁니다. 그리고 삶은 달걀이든 요거트든 뭐라도 먹은 뒤에 첫 잔을 내리려 합니다. 커피가 하루의 시동이었는데 이제는 하루의 쉼표로 자리를 옮겨주는 중입니다.</p>
+</div>
+</div>
+</section>
+<br />
+
+<section class="post-card">
+<h2 data-ke-size="size26">결론</h2>
+<div class="card-body">
+<p data-ke-size="size16">저는 이제 커피의 죄를 묻기 전에 타이밍부터 봅니다. 같은 아메리카노 한 잔도 빈속 기상 직후에는 혈당을 흔드는 쪽으로, 식사 후에는 하루를 정돈하는 쪽으로 일합니다.<br /><br />내일 아침 눈뜨자마자 커피부터 찾으실 것 같다면 순서 하나만 바꿔보시길 권합니다. 뭐라도 먹고, 그다음에 커피. 돈도 의지력도 거의 들지 않는 변화입니다.<br /><br />이 글을 읽고 내일 첫 커피를 식사 뒤로 미루셨다면 공감♥ 하나를 그 첫 잔의 건배로 받겠습니다. 커피처럼 매일 반복되는 습관을 하나씩 점검하는 글을 계속 쓰고 있으니 구독해두시면 다음 잔도 함께합니다.</p>
+<p data-ke-size="size16">참고: <a href="https://www.youtube.com/watch?v=hip3nVDspzE" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=hip3nVDspzE</a></p>
+</div>
+</section>
+</script>
+
+<script>
+function copyText(id){
+  var t=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t);
+}
+function copySrc(){
+  var ta=document.getElementById('src');
+  ta.select();
+  document.execCommand('copy');
+}
+window.onload=function(){
+  var raw=document.getElementById('srcData').innerHTML;
+  document.getElementById('src').value=raw.trim();
+  document.getElementById('previewArea').innerHTML=raw;
+};
+</script>
+</body>
+</html>
