@@ -42,3 +42,11 @@ https://harubogo.vercel.app/templates?utm_source=instagram&utm_medium=dm
 - 키워드는 **정확히 일치**해야 발송 → 변형 키워드 포함
 - 댓글 단 사람이 나를 팔로우하지 않으면 DM이 **메시지 요청함**으로 감 (정상)
 - 상대가 답장하면 24시간 안에 이어서 대화 가능
+
+## ✅ 가동 기록
+- **2026-10-07 설정 완료·켜짐** — Meta Business Suite → 받은 메시지함 → 자동화 → 「메시지에 댓글 달기」(= Comment to message)
+  - 이름: 재무 댓글 → 양식 DM / 채널: Instagram(+Messenger) / 게시물: 전체(선택 칸 없음)
+  - 키워드: `재무` `양식` `링크` (조건이 "포함된 댓글"이라 변형 키워드 불필요)
+  - 공개 답글: "DM 보내드렸어요 📩 메시지함 확인해주세요!" / DM: 위 문구(utm_medium=dm 링크)
+- 테스트: 본인 계정 댓글로는 발동 안 함 → 지인 계정으로 1편 릴스에 `재무` 댓글 → 1~15분 내 DM 확인
+- 성과 집계: 사이트 방문 통계에서 utm_medium=dm(댓글 DM) vs utm_medium=bio(프로필 링크) 비교
