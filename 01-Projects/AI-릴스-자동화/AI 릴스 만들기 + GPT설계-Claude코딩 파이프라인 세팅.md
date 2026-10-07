@@ -97,3 +97,13 @@ v1(`codex exec` + CLAUDE.md 규칙)은 그대로 살리고, **스킬 2개로 업
 1. 체크리스트 ①②⑦ (5분) → `GPT 설계 → 네 검증 → 네 코딩으로 진행해줘: todo-app에 마감일 기능 추가` 로 v2 시험
 2. ③④ 설치 후 `@내핸들 계정으로 릴스 만들어줘.` (30분~1시간)
 3. 리포트 받으면 주제+내 숫자 한 줄로 첫 원고 → 촬영
+
+## 진행 기록
+- **2026-10-07 v2 첫 실전 성공** — 과제: todo-app 마감일 기능 (`C:\Users\AP\ai-work\todo-app`)
+  - 스킬 전역 복사 → `Successfully loaded skill`, Codex `Logged in using ChatGPT`, `OPENAI_API_KEY` 비어 있음 → API 요금 없음 확인
+  - 설계(GPT) r1 **PASS** (❌ 0개) → 구현 → 테스트 8개(기존 5 + 신규 3) 전부 통과, 총 4분 5초
+  - 바꾼 파일: `todo.py`, `test_todo.py`, `README.md` (새 라이브러리 없음)
+  - 설계와 다르게 한 점: 날짜 검사 함수 2개 → 1개로 합침, 지남 판단은 ISO 날짜 문자열 비교 (deviations에 기록됨)
+  - 사용법: `python todo.py add "보고서" --due 2026-10-10` / `due 1 2026-10-12` / `due 1 --clear` / `list` → 지난 항목 `[지남]`
+  - 기록: `todo-app\.ai-pipeline\20261007-due-date\`
+- 다음: 커밋 → 릴스 도구 설치(체크리스트 ③④)
