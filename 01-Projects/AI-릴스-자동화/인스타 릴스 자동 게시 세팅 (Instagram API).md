@@ -51,9 +51,13 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 2. 페이스북 페이지 **하루보고** 생성 (웹사이트 harubogo.vercel.app) → 설정 → **연결된 계정** → Instagram **@kim_jade0419 연결** (비즈니스 포트폴리오 jade kim에 추가됨)
 3. 도구 → **Graph API 탐색기** → Meta 앱 `harubogo-reels` → 권한 `instagram_basic, instagram_content_publish, pages_show_list, pages_read_engagement, business_management` → Generate → 현재 페이지/비즈니스/IG만 옵트인
 4. ⓘ → 액세스 토큰 도구 → **액세스 토큰 연장**(60일) → 저장
-   - 저장은 **클립보드 방식**(화면에 안 보임): `$m=[regex]::Match((Get-Clipboard -Raw),"EAA[A-Za-z0-9]+").Value; Set-Content -Path "$HOME\.ig_token" -Value $m -NoNewline -Encoding ascii; Set-Clipboard -Value " "`
+   - 저장은 **숨김 입력 방식**(화면에 `****`만 보임, 한글 섞여도 토큰만 추출):
+     ```powershell
+     $s = Read-Host "토큰 붙여넣기(화면에 안 보임)" -AsSecureString; $p = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($s)); $m = [regex]::Match($p,"EAA[A-Za-z0-9]+").Value; if ($m.Length -gt 100) { Set-Content -Path "$HOME\.ig_token" -Value $m -NoNewline -Encoding ascii; "저장 완료: 앞글자 " + $m.Substring(0,3) + " / 길이 " + $m.Length } else { "토큰을 못 찾았어요" }; Remove-Variable s,p,m
+     ```
 5. `python scripts\ig_publish.py --post posts\<파일>.json --dry-run` → 통과 후 게시
 
 ## 게시 기록
 - **2026-10-07 1편 게시 완료** — https://www.instagram.com/reel/DeMEw69EpmX/ (AI 라벨 ON, 처리 약 1분)
-- 할 일: 토큰 교체(화면 노출됨) → 비즈니스 통합에서 harubogo-reels 제거 후 재발급·연장
+- ✅ 2026-10-07 토큰 교체 완료 (비즈니스 통합에서 앱 제거 → 재발급 → 60일 확장 → 숨김 입력 저장, dry-run 통과)
+- ⏰ **토큰 만료 예정: 약 2026-12-06** → 11월 말에 탐색기에서 재발급·확장 (Claude에게 "인스타 토큰 갱신해줘")
