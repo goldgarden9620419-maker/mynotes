@@ -18,6 +18,7 @@ ig_publish.py — Instagram 릴스 자동 게시 (Instagram API with Instagram L
 import argparse
 import datetime as dt
 import json
+import re
 import os
 import sys
 import time
@@ -54,7 +55,10 @@ def info(msg):
 def load_token():
     tok = os.environ.get("IG_ACCESS_TOKEN", "").strip()
     if not tok and TOKEN_FILE.exists():
-        tok = TOKEN_FILE.read_text(encoding="utf-8").strip()
+        # 복사할 때 섞인 한글·공백·줄바꿈이 있어도 토큰 부분만 골라낸다 (Windows 인코딩 차이 대비)
+        raw = TOKEN_FILE.read_bytes().decode("utf-8", errors="ignore")
+        m = re.search(r"(EAA|IG)[A-Za-z0-9_\-]{20,}", raw)
+        tok = m.group(0) if m else raw.strip()
     if not tok:
         die(3, f"토큰이 없습니다. 환경변수 IG_ACCESS_TOKEN 또는 {TOKEN_FILE} 에 저장하세요.")
     return tok

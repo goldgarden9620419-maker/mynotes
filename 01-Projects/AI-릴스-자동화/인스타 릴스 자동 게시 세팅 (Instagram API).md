@@ -51,7 +51,7 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 2. 페이스북 페이지 **하루보고** 생성 (웹사이트 harubogo.vercel.app) → 설정 → **연결된 계정** → Instagram **@kim_jade0419 연결** (비즈니스 포트폴리오 jade kim에 추가됨)
 3. 도구 → **Graph API 탐색기** → Meta 앱 `harubogo-reels` → 권한 `instagram_basic, instagram_content_publish, pages_show_list, pages_read_engagement, business_management` → Generate → 현재 페이지/비즈니스/IG만 옵트인
 4. ⓘ → 액세스 토큰 도구 → **액세스 토큰 연장**(60일) → 저장
-   - 저장은 **클립보드 방식**(화면에 안 보임): `(Get-Clipboard).Trim() | Set-Content -Path "$HOME\.ig_token" -NoNewline; Set-Clipboard -Value " "`
+   - 저장은 **클립보드 방식**(화면에 안 보임): `$m=[regex]::Match((Get-Clipboard -Raw),"EAA[A-Za-z0-9]+").Value; Set-Content -Path "$HOME\.ig_token" -Value $m -NoNewline -Encoding ascii; Set-Clipboard -Value " "`
 5. `python scripts\ig_publish.py --post posts\<파일>.json --dry-run` → 통과 후 게시
 
 ## 게시 기록
