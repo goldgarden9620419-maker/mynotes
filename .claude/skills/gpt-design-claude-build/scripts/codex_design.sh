@@ -12,7 +12,7 @@
 # 종료 코드:
 #   0 성공 · 2 인자 오류 · 10 codex 미설치 · 11 로그인 안 됨
 #   12 API 키 로그인(추가 요금 위험) · 13 빈 결과 · 14 codex 실행 실패/한도 초과/시간 초과
-# macOS 기본 bash 3.2에서도 돌도록 작성.
+# macOS 기본 bash 3.2와 Windows Git Bash(Claude Code의 Bash 도구)에서 모두 돌도록 작성.
 
 set -euo pipefail
 
@@ -110,8 +110,9 @@ fi
 # ---------- 실행 (read-only, 시간 제한) ----------
 TIMEOUT_SEC="${CODEX_TIMEOUT:-900}"
 TO=""
-if command -v timeout >/dev/null 2>&1; then TO="timeout $TIMEOUT_SEC"
-elif command -v gtimeout >/dev/null 2>&1; then TO="gtimeout $TIMEOUT_SEC"; fi
+# GNU timeout만 쓴다 (Windows의 timeout.exe는 다른 프로그램이라 --version 검사로 걸러냄)
+if timeout --version >/dev/null 2>&1; then TO="timeout $TIMEOUT_SEC"
+elif gtimeout --version >/dev/null 2>&1; then TO="gtimeout $TIMEOUT_SEC"; fi
 
 MODEL_ARGS=""
 [ -n "$MODEL" ] && MODEL_ARGS="--model $MODEL"
