@@ -106,4 +106,5 @@ v1(`codex exec` + CLAUDE.md 규칙)은 그대로 살리고, **스킬 2개로 업
   - 설계와 다르게 한 점: 날짜 검사 함수 2개 → 1개로 합침, 지남 판단은 ISO 날짜 문자열 비교 (deviations에 기록됨)
   - 사용법: `python todo.py add "보고서" --due 2026-10-10` / `due 1 2026-10-12` / `due 1 --clear` / `list` → 지난 항목 `[지남]`
   - 기록: `todo-app\.ai-pipeline\20261007-due-date\`
-- 다음: 커밋 → 릴스 도구 설치(체크리스트 ③④)
+  - 커밋 `8d8a8b4` (설계 기록 `.ai-pipeline/` 포함) → GitHub CLI 설치·로그인(`gh auth login --web`) → 비공개 저장소 푸시 완료: https://github.com/goldgarden9620419-maker/todo-app (Private, 2 commits)
+- 다음: 릴스 도구 설치(체크리스트 ③④) → 첫 분석
