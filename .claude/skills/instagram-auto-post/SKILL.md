@@ -43,3 +43,18 @@ description: 인스타그램 릴스 자동 게시(공식 Instagram API). 사용�
 
 - 토큰은 약 60일 유효. 50일마다 `python <스크립트> --refresh-token`.
 - 하루 50개 게시 한도(API).
+
+## "인스타 토큰 갱신해줘" (약 60일마다 · 다음 만료 약 2026-12-06)
+
+현재 방식은 **Facebook 로그인(페이지 연결)** — 토큰은 `EAA…`. 화면 단위로 안내한다.
+1. https://developers.facebook.com/tools/explorer/ → Meta 앱 `harubogo-reels` → 사용자 토큰 → 권한 `instagram_basic, instagram_content_publish, pages_show_list, pages_read_engagement, business_management` → Generate → 현재 페이지(하루보고)·비즈니스(jade kim)·IG(kim_jade0419)만 옵트인 → 저장
+   - "계정 전환" 팝업 → 계속 (페이지 모드면 개인 계정으로 전환 필요)
+2. 토큰 칸 ⓘ → 액세스 토큰 도구에서 열기 → **「액세스 토큰 확장」** → 새 토큰 복사
+3. PowerShell **숨김 입력** 저장 (토큰을 화면·채팅에 절대 노출하지 않게):
+   ```powershell
+   $s = Read-Host "토큰 붙여넣기(화면에 안 보임)" -AsSecureString; $p = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($s)); $m = [regex]::Match($p,"EAA[A-Za-z0-9]+").Value; if ($m.Length -gt 100) { Set-Content -Path "$HOME\.ig_token" -Value $m -NoNewline -Encoding ascii; "저장 완료: 앞글자 " + $m.Substring(0,3) + " / 길이 " + $m.Length } else { "토큰을 못 찾았어요" }; Remove-Variable s,p,m
+   ```
+4. `--dry-run`으로 점검 통과 확인 → 다음 만료일(오늘+60일)을 노트에 기록
+
+## '재무' 댓글 → 자동 DM
+API(Private Replies)는 Advanced Access(앱 심사) 없이는 앱 역할이 없는 일반 댓글러에게 보낼 수 없으므로 **Meta Business Suite 기본 기능 "댓글에 메시지로 답장(Comment to Message)"**을 쓴다(무료, 데스크톱). 설정 절차는 vault 노트 「인스타 '재무' 댓글 자동 DM 세팅」 참고.
