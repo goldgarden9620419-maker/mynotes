@@ -27,7 +27,17 @@ import urllib.request
 from pathlib import Path
 
 API_VERSION = os.environ.get("IG_API_VERSION", "v24.0")
-BASE = f"https://graph.instagram.com/{API_VERSION}"
+BASE = f"https://graph.instagram.com/{API_VERSION}"   # 토큰을 읽은 뒤 set_mode()가 확정
+MODE = "instagram"  # "instagram" (IG… 토큰) 또는 "facebook" (EAA… 토큰, 페이스북 페이지 연결 방식)
+
+
+def set_mode(token):
+    """토큰 앞글자로 방식 판별. Facebook 로그인 토큰은 graph.facebook.com 사용."""
+    global BASE, MODE
+    if token.startswith("EAA"):
+        MODE, BASE = "facebook", f"https://graph.facebook.com/{API_VERSION}"
+    else:
+        MODE, BASE = "instagram", f"https://graph.instagram.com/{API_VERSION}"
 TOKEN_FILE = Path.home() / ".ig_token"
 LOG_FILE = Path(__file__).resolve().parent.parent / "posts" / "publish_log.jsonl"
 
@@ -76,7 +86,24 @@ def call(method, path, params, token, timeout=60):
         raise RuntimeError(f"네트워크 오류: {e.reason}")
 
 
+def check_account_fb(token):
+    want = os.environ.get("IG_USERNAME", "kim_jade0419").lstrip("@")
+    try:
+        r = call("GET", "/me/accounts", {"fields": "name,instagram_business_account{id,username}"}, token)
+    except RuntimeError as e:
+        die(3, f"페이스북 토큰 확인 실패: {e}\n→ Graph API 탐색기에서 pages_show_list 권한을 포함해 토큰을 다시 생성하세요.")
+    accts = [p["instagram_business_account"] | {"page": p.get("name")}
+             for p in r.get("data", []) if p.get("instagram_business_account")]
+    if not accts:
+        die(3, "페이스북 페이지에 연결된 인스타 프로페셔널 계정을 찾지 못했습니다.\n→ 페이지 설정 → 연결된 계정 → Instagram 연결 후 다시 시도하세요.")
+    pick = next((a for a in accts if a.get("username") == want), accts[0])
+    info(f"계정 확인(페이스북 방식): @{pick.get('username')} (id {pick['id']}, 페이지 '{pick.get('page')}')")
+    return {"user_id": pick["id"], "username": pick.get("username")}
+
+
 def check_account(token):
+    if MODE == "facebook":
+        return check_account_fb(token)
     try:
         me = call("GET", "/me", {"fields": "user_id,username,account_type"}, token)
     except RuntimeError as e:
@@ -190,6 +217,19 @@ def publish(post, token, ig_id):
 
 
 def refresh_token(token):
+    if MODE == "facebook":
+        app_id, secret = os.environ.get("FB_APP_ID"), os.environ.get("FB_APP_SECRET")
+        if not (app_id and secret):
+            die(3, "페이스북 방식 토큰 연장에는 환경변수 FB_APP_ID, FB_APP_SECRET 이 필요합니다 (앱 설정 → 기본 설정).")
+        try:
+            r = call("GET", f"https://graph.facebook.com/{API_VERSION}/oauth/access_token",
+                     {"grant_type": "fb_exchange_token", "client_id": app_id,
+                      "client_secret": secret, "fb_exchange_token": token}, token)
+        except RuntimeError as e:
+            die(3, f"토큰 교환 실패: {e}")
+        TOKEN_FILE.write_text(r["access_token"], encoding="utf-8")
+        info(f"60일 토큰으로 교환 완료 → {TOKEN_FILE}")
+        return
     try:
         r = call("GET", "https://graph.instagram.com/refresh_access_token",
                  {"grant_type": "ig_refresh_token"}, token)
@@ -209,6 +249,8 @@ def main():
     a = ap.parse_args()
 
     token = load_token()
+    set_mode(token)
+    info(f"연결 방식: {'Instagram 로그인' if MODE == 'instagram' else 'Facebook 로그인(페이지 연결)'}")
     if a.refresh_token:
         refresh_token(token)
         return
@@ -226,7 +268,7 @@ def main():
     if a.at:
         wait_until(a.at)
 
-    media_id, link = publish(post, token, "me")
+    media_id, link = publish(post, token, "me" if MODE == "instagram" else me["user_id"])
     info(f"✅ 게시 완료! {link or media_id}")
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
     with LOG_FILE.open("a", encoding="utf-8") as f:
