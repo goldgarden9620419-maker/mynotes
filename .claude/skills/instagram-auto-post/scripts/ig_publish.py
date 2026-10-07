@@ -26,7 +26,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-API_VERSION = os.environ.get("IG_API_VERSION", "v24.0")
+API_VERSION = os.environ.get("IG_API_VERSION", "v26.0")
 BASE = f"https://graph.instagram.com/{API_VERSION}"   # 토큰을 읽은 뒤 set_mode()가 확정
 MODE = "instagram"  # "instagram" (IG… 토큰) 또는 "facebook" (EAA… 토큰, 페이스북 페이지 연결 방식)
 
