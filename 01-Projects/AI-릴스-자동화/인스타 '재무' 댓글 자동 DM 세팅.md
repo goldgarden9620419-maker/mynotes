@@ -50,3 +50,4 @@ https://harubogo.vercel.app/templates?utm_source=instagram&utm_medium=dm
   - 공개 답글: "DM 보내드렸어요 📩 메시지함 확인해주세요!" / DM: 위 문구(utm_medium=dm 링크)
 - 테스트: 본인 계정 댓글로는 발동 안 함 → 지인 계정으로 1편 릴스에 `재무` 댓글 → 1~15분 내 DM 확인
 - 성과 집계: 사이트 방문 통계에서 utm_medium=dm(댓글 DM) vs utm_medium=bio(프로필 링크) 비교
+- ✅ **2026-10-07 지인 계정 테스트 통과** — '재무' 댓글 → 양식 DM 자동 도착 확인. 실사용 가동 중
