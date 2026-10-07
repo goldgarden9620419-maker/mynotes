@@ -9662,5 +9662,246 @@
     "answerIndex": 3,
     "explanation": "(sin θ + cos θ)² = 1 + 2 sin θ cos θ = 1/4이므로 sin θ cos θ = −3/8입니다. sin³θ + cos³θ = (sin θ + cos θ)(1 − sin θ cos θ) = (1/2)(1 + 3/8) = 11/16입니다.",
     "concept": "합과 곱으로 표현하는 곱셈공식 a³ + b³ = (a + b)(a² − ab + b²)와 sin²θ + cos²θ = 1을 이용한다."
+  },
+  {
+    "id": "en-2026-10-08-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-08",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity is a gift [u]that only a few are born with[/u]①. However, research suggests that it is a skill [u]developed[/u]② through practice. Artists and scientists alike often report that their best ideas came not from sudden inspiration but from hours of patient work. One study found that people [u]who were encouraged to take regular breaks[/u]③ produced more original solutions than those [u]forcing[/u]④ to work without stopping. This indicates that rest, [u]far from being a waste of time[/u]⑤, can be an essential part of the creative process.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ those 뒤에는 '억지로 ~하게 된' 이라는 수동의 의미가 필요하므로 forcing이 아니라 과거분사 forced가 되어야 합니다. ①은 전치사 with의 목적어가 선행사 a gift인 관계대명사절, ②는 skill을 수식하는 과거분사, ③은 people을 선행사로 하는 관계절, ⑤는 far from + 동명사 구문으로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      },
+      {
+        "word": "original",
+        "meaning": "독창적인"
+      },
+      {
+        "word": "indicate",
+        "meaning": "시사하다, 나타내다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-08-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-08",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Scientists have long known that sleep matters for learning, but recent work shows it does more than simply rest the brain. During deep sleep, the brain replays the patterns of activity it experienced during the day, strengthening important connections while letting trivial ones fade. Students who slept after studying a list of words remembered far more of them than those who stayed awake for the same period. In other words, sleep is not time taken away from learning; it is the stage at which _______.",
+    "choices": [
+      "new habits are quickly forgotten",
+      "experiences are turned into lasting memories",
+      "the brain stops processing information",
+      "trivial details become the most important",
+      "creative ideas are blocked by fatigue"
+    ],
+    "answerIndex": 1,
+    "explanation": "깊은 잠에서 뇌가 낮의 활동 패턴을 재생해 중요한 연결을 강화하고, 잠을 잔 학생이 더 많이 기억했다는 내용이므로 '경험이 오래가는 기억으로 바뀐다'가 적절합니다.",
+    "vocab": [
+      {
+        "word": "trivial",
+        "meaning": "사소한"
+      },
+      {
+        "word": "fade",
+        "meaning": "희미해지다"
+      },
+      {
+        "word": "fatigue",
+        "meaning": "피로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-08-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-08",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "When a new species is introduced into an unfamiliar environment, the results can be surprising.\n(A) As a result, the native fish population dropped sharply within a decade, and several local species nearly disappeared.\n(B) A well-known example is the Nile perch, which was released into Lake Victoria in the 1950s to boost fishing.\n(C) The perch, however, was a fierce predator, feeding on the smaller native fish that had no defense against it.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글의 일반론에 대해 (B)가 A well-known example로 구체적 사례(Nile perch)를 제시하고, (C)가 The perch, however로 그 물고기의 부정적 영향을 설명하며, (A)가 As a result로 결과를 맺으므로 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "native",
+        "meaning": "토착의"
+      },
+      {
+        "word": "predator",
+        "meaning": "포식자"
+      },
+      {
+        "word": "boost",
+        "meaning": "증대시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-08-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-08",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Honeybees communicate the location of food through a remarkable dance. ( ① ) When a forager returns to the hive, she moves in a figure-eight pattern on the honeycomb. ( ② ) The angle of her central run relative to vertical shows the direction of the food in relation to the sun. ( ③ ) The longer she keeps waggling, the farther away the source is. ( ④ ) Nearby workers follow her movements and then fly straight to the flowers. ( ⑤ )",
+    "givenSentence": "Together, these two signals give her nestmates a precise set of directions.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 these two signals는 앞서 설명된 방향(각도)과 거리(흔드는 시간) 두 가지를 가리킵니다. 두 가지가 모두 제시된 직후인 ④에 들어가야 뒤의 '동료들이 곧장 꽃으로 날아간다'로 자연스럽게 이어집니다.",
+    "vocab": [
+      {
+        "word": "forager",
+        "meaning": "먹이를 찾는 일벌"
+      },
+      {
+        "word": "hive",
+        "meaning": "벌집"
+      },
+      {
+        "word": "waggle",
+        "meaning": "(몸을) 흔들다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-08-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-08",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many students treat mistakes as proof that they lack ability, and so they avoid challenges where failure is possible. Yet researchers who study learning argue that errors are among the most valuable sources of feedback. When a learner struggles with a problem and then sees the correct solution, the contrast makes the lesson far more memorable than a smooth success would. Seen this way, mistakes are not signs of failure but stepping stones that guide improvement.",
+    "choices": [
+      "why students should avoid difficult challenges",
+      "the value of mistakes as a tool for learning",
+      "how to measure natural ability accurately",
+      "the difference between smooth and slow learners",
+      "ways teachers can reduce students' errors"
+    ],
+    "answerIndex": 1,
+    "explanation": "실수는 능력 부족의 증거가 아니라 가장 가치 있는 피드백이며 성장의 디딤돌이라는 내용이므로 주제는 '학습 도구로서 실수의 가치'입니다.",
+    "vocab": [
+      {
+        "word": "stepping stone",
+        "meaning": "디딤돌"
+      },
+      {
+        "word": "memorable",
+        "meaning": "기억에 남는"
+      },
+      {
+        "word": "feedback",
+        "meaning": "피드백, 반응"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-08-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-08",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3, a₁ = 7 − 6 = 1입니다. a₁₀ = 1 + 27 = 28이므로 S₁₀ = 10(1 + 28)/2 = 145입니다.",
+    "concept": "등차수열의 일반항 aₙ = a₁ + (n−1)d와 합 Sₙ = n(a₁ + aₙ)/2를 이용한다."
+  },
+  {
+    "id": "math-2026-10-08-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-08",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 합은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 1 − 6 + 9 + 1 = 5, f(3) = 27 − 54 + 27 + 1 = 1이므로 합은 6입니다.",
+    "concept": "f′(x)의 부호가 양에서 음으로 바뀌는 점에서 극대, 음에서 양으로 바뀌는 점에서 극소이다."
+  },
+  {
+    "id": "math-2026-10-08-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-08",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² − 4x = 0에서 x = 0, 4이고 0 ≤ x ≤ 4에서 y ≤ 0이므로 넓이는 ∫₀⁴ (4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 구간에서 함수의 부호를 확인한 뒤 |f(x)|를 정적분하여 구한다."
+  },
+  {
+    "id": "math-2026-10-08-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-08",
+    "prompt": "서로 다른 주사위 2개를 동시에 던져 나온 눈의 합이 8 이상일 때, 두 눈의 수가 서로 같을 확률은?",
+    "choices": [
+      "1/6",
+      "1/5",
+      "1/4",
+      "1/3",
+      "2/5"
+    ],
+    "answerIndex": 1,
+    "explanation": "합이 8 이상인 경우는 8: 5가지, 9: 4가지, 10: 3가지, 11: 2가지, 12: 1가지로 총 15가지입니다. 이 중 두 눈이 같은 경우는 (4,4), (5,5), (6,6)의 3가지이므로 확률은 3/15 = 1/5입니다.",
+    "concept": "조건부확률 P(B|A) = P(A∩B)/P(A) = n(A∩B)/n(A) (표본공간이 동일하게 같은 확률일 때)."
+  },
+  {
+    "id": "math-2026-10-08-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-08",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − cos x − 1 = 0의 모든 근의 합은?",
+    "choices": [
+      "2π",
+      "5π/2",
+      "3π",
+      "7π/2",
+      "4π"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin²x = 1 − cos²x를 대입하면 2cos²x + cos x − 1 = 0, 즉 (2cos x − 1)(cos x + 1) = 0입니다. cos x = 1/2에서 x = π/3, 5π/3, cos x = −1에서 x = π이므로 합은 π/3 + 5π/3 + π = 3π입니다.",
+    "concept": "sin²x + cos²x = 1로 한 종류의 삼각함수에 대한 방정식으로 바꿔 푼다."
   }
 ]
