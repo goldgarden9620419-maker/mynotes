@@ -10144,5 +10144,246 @@
     "answerIndex": 1,
     "explanation": "cos²x = 1 − sin²x를 대입하면 2sin²x − 3sin x + 1 = 0, 즉 (2sin x − 1)(sin x − 1) = 0입니다. sin x = 1/2에서 x = π/6, 5π/6, sin x = 1에서 x = π/2이므로 합은 π/6 + 5π/6 + π/2 = 3π/2입니다.",
     "concept": "sin²x + cos²x = 1을 이용해 한 종류의 삼각함수에 대한 방정식으로 바꾸어 푼다."
+  },
+  {
+    "id": "en-2026-10-10-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-10",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Volunteering is often described as a gift to others, but research suggests that the giver [u]benefits[/u]① as well. People who regularly help their communities tend to report higher levels of happiness, partly because helping others gives them a sense of purpose. One study found that older adults [u]who volunteered[/u]② weekly were less likely to feel lonely than [u]those who did not[/u]③. Experts believe that the social connections [u]formed[/u]④ through volunteer work [u]plays[/u]⑤ an important role in this effect.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 주어는 복수명사 the social connections이므로(formed through volunteer work는 이를 수식하는 과거분사구) 동사도 plays가 아니라 play가 되어야 합니다. ①은 단수 주어 the giver에 맞고, ②는 older adults를 수식하는 관계절, ③ those who did not은 older adults who did not volunteer를 대신하는 표현으로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "volunteering",
+        "meaning": "자원봉사"
+      },
+      {
+        "word": "sense of purpose",
+        "meaning": "삶의 목적의식"
+      },
+      {
+        "word": "lonely",
+        "meaning": "외로운"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-10-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-10",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When we praise children, we tend to focus on their intelligence: \"You're so smart!\" However, studies suggest that this kind of praise can backfire. Children who are praised for being smart often avoid challenging tasks because failure would suggest that they are not, in fact, smart. In contrast, children praised for their effort see difficulty as ______. They are willing to take on harder problems because struggling is simply part of learning.",
+    "choices": [
+      "a sign of their limitations",
+      "a normal step toward improvement",
+      "a reason to seek approval",
+      "a threat to their reputation",
+      "an excuse to give up early"
+    ],
+    "answerIndex": 1,
+    "explanation": "지능을 칭찬받은 아이는 실패를 '똑똑하지 않다는 증거'로 여겨 도전을 피하는 반면, 노력을 칭찬받은 아이는 어려운 문제를 기꺼이 맡고 애쓰는 것을 배움의 일부로 봅니다. 따라서 빈칸에는 어려움을 '향상으로 가는 정상적인 단계'로 본다는 ②가 적절합니다.",
+    "vocab": [
+      {
+        "word": "backfire",
+        "meaning": "역효과를 낳다"
+      },
+      {
+        "word": "reputation",
+        "meaning": "평판"
+      },
+      {
+        "word": "struggle",
+        "meaning": "애쓰다, 고군분투하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-10-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-10",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Many cities are now covering rooftops and walls with plants instead of bare concrete.\n(A) As a result, buildings stay cooler in summer, which reduces the energy needed for air conditioning.\n(B) The main reason is that vegetation absorbs less heat than concrete and cools the surrounding air by releasing water vapor.\n(C) However, installing these green spaces is expensive, so some cities offer financial support to building owners.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 '식물로 덮는 도시'에 대해 (B)가 The main reason으로 이유(식물은 열을 덜 흡수하고 공기를 식힘)를 설명하고, (A)가 As a result로 그 결과(건물이 시원해져 에너지 절감)를 제시하며, (C)가 However로 단점(비용)과 대책을 덧붙이므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "vegetation",
+        "meaning": "식물, 초목"
+      },
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      },
+      {
+        "word": "vapor",
+        "meaning": "증기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-10-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-10",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Many writers and scientists report that their best ideas come while they are on the move. ( ① ) Physical activity increases blood flow to the brain and relaxes the tight focus we use for routine problems. ( ② ) With a looser, more wandering mind, we are better able to connect ideas that seem unrelated. ( ③ ) Sitting at a desk for hours, in contrast, tends to keep our thinking stuck in familiar patterns. ( ④ ) So when you are stuck on a problem, leaving your desk may help more than staring at the screen. ( ⑤ )",
+    "givenSentence": "This is why even a short walk can leave us feeling more creative.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장의 This is why는 앞의 이유를 받습니다. 신체 활동이 집중을 느슨하게 하고 서로 무관해 보이는 생각을 연결하게 한다는 인과가 제시된 직후인 ③에 들어가야 합니다. ④ 앞의 in contrast 문장은 ③ 앞 내용과 대조되므로 그 사이를 끊으면 흐름이 어색해집니다.",
+    "vocab": [
+      {
+        "word": "routine",
+        "meaning": "일상적인"
+      },
+      {
+        "word": "wandering",
+        "meaning": "갈피를 못 잡고 떠도는"
+      },
+      {
+        "word": "unrelated",
+        "meaning": "관련 없는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-10-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-10",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Modern workplaces often reward people who respond instantly to messages. Yet constant interruptions fragment our attention, and it can take more than twenty minutes to return fully to a task after a single distraction. Workers who set aside uninterrupted blocks of time for demanding tasks, and answer messages only at scheduled intervals, produce higher-quality work and report less stress. Being always available, it seems, is not the same as being productive.",
+    "choices": [
+      "the benefits of replying to messages quickly",
+      "why uninterrupted time leads to better work",
+      "how to build friendly relationships at work",
+      "the importance of taking long vacations",
+      "the role of technology in modern offices"
+    ],
+    "answerIndex": 1,
+    "explanation": "즉각 응답은 주의를 분산시키지만, 방해받지 않는 시간을 확보하고 정해진 때에만 메시지에 답하면 더 질 높은 결과와 낮은 스트레스를 얻는다는 글입니다. 따라서 주제는 '방해받지 않는 시간이 더 나은 업무로 이어지는 이유'입니다.",
+    "vocab": [
+      {
+        "word": "fragment",
+        "meaning": "조각내다, 분산시키다"
+      },
+      {
+        "word": "interval",
+        "meaning": "간격"
+      },
+      {
+        "word": "demanding",
+        "meaning": "까다로운, 힘든"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-10-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-10",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3, a₁ = 7 − 2·3 = 1입니다. S₁₀ = 10(2·1 + 9·3)/2 = 5·29 = 145입니다.",
+    "concept": "등차수열의 합은 S_n = n{2a + (n−1)d}/2이다."
+  },
+  {
+    "id": "math-2026-10-10-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-10",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 합은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 1 − 6 + 9 + 1 = 5, f(3) = 27 − 54 + 27 + 1 = 1이므로 합은 6입니다.",
+    "concept": "f′(x)의 부호가 +에서 −로 바뀌는 점에서 극대, −에서 +로 바뀌는 점에서 극소이다."
+  },
+  {
+    "id": "math-2026-10-10-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-10",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² − 4x = 0에서 x = 0, 4이고 0 ≤ x ≤ 4에서 y ≤ 0이므로 넓이는 ∫₀⁴(4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축으로 둘러싸인 넓이는 ∫|f(x)|dx로 구하며, 함수값이 음수인 구간에서는 부호를 바꿔 적분한다."
+  },
+  {
+    "id": "math-2026-10-10-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-10",
+    "prompt": "서로 다른 주사위 2개를 동시에 던져서 나온 두 눈의 합이 7 이상일 때, 적어도 하나의 눈이 6일 확률은?",
+    "choices": [
+      "5/21",
+      "8/21",
+      "10/21",
+      "11/21",
+      "13/21"
+    ],
+    "answerIndex": 3,
+    "explanation": "눈의 합이 7 이상인 경우는 6+5+4+3+2+1 = 21가지입니다. 이 중 적어도 하나가 6인 경우는 (6,1)~(6,6), (1,6)~(5,6)의 11가지(모두 합이 7 이상)이므로 확률은 11/21입니다.",
+    "concept": "조건부확률 P(B|A) = P(A∩B)/P(A) = n(A∩B)/n(A)이다."
+  },
+  {
+    "id": "math-2026-10-10-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-10",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 근의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. 근은 x = π/2, 7π/6, 11π/6이고 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
+    "concept": "sin x에 대한 이차방정식은 t = sin x로 놓고 인수분해한 뒤 −1 ≤ t ≤ 1 범위에서 단위원으로 근을 찾는다."
   }
 ]
