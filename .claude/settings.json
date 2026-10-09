@@ -7,7 +7,30 @@
       "mcp__Google_Drive__read_file_content",
       "mcp__Google_Drive__download_file_content",
       "mcp__Google_Drive__update_file",
-      "mcp__Google_Drive__create_file"
+      "mcp__Google_Drive__create_file",
+      "mcp__Claude_Code_Remote__list_triggers",
+      "mcp__Claude_Code_Remote__update_trigger",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push)",
+      "Bash(git push -u origin *)",
+      "Bash(git push origin *)",
+      "Bash(git fetch *)",
+      "Bash(git pull origin *)",
+      "Bash(cd /home/user/mynotes && git status*)",
+      "Bash(cd /home/user/mynotes && git log*)",
+      "Bash(cd /home/user/mynotes && git diff*)",
+      "Bash(cd /home/user/mynotes && git add *)",
+      "Bash(cd /home/user/mynotes && git commit *)",
+      "Bash(cd /home/user/mynotes && git push)",
+      "Bash(cd /home/user/mynotes && git push -u origin *)",
+      "Bash(cd /home/user/mynotes && git push origin *)",
+      "Bash(cd /home/user/mynotes && git fetch *)",
+      "Bash(cd /home/user/mynotes && git pull origin *)",
+      "Bash(ls*)"
     ]
   }
 }
