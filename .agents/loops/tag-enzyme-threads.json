@@ -14,11 +14,9 @@
     "원료 딥다이브(애사비) 각도",
     "원료 삼각형(T.A.G) 영상 각도"
   ],
-  "pending_drafts": [
-    "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-6-원료삼각형영상.md"
-  ],
+  "pending_drafts": [],
   "publishing_tool": "Typefully MCP (2026-10-02부터) — social_set_id 337240, kim_jade0419 Threads 연동됨. 기존 PowerShell 스크립트 방식은 백업 수단으로 유지.",
-  "next_run_plan": "(2026-10-09 실행에서 사용됨) 원료 삼각형 영상 — 쓰레드-6 노트 참고. 영상 생성은 화질/비용 사용자 선택 대기.",
+  "next_run_plan": null,
   "published": [
     {
       "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-1-추천체크리스트.md",
@@ -59,6 +57,16 @@
       "account": "kim_jade0419",
       "published_url": "https://www.threads.com/@kim_jade0419/post/Dd-K_OSGZmx",
       "published_via": "typefully",
+      "has_purchase_link_comment": true
+    },
+    {
+      "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-6-원료삼각형영상.md",
+      "angle": "원료 삼각형(T.A.G) 영상 각도",
+      "published_at": "2026-10-09",
+      "account": "kim_jade0419",
+      "published_url": "https://www.threads.com/@kim_jade0419/post/DeQZGe0gG8s",
+      "published_via": "typefully",
+      "media": "video (Seedance 2.0, 720p, 5s)",
       "has_purchase_link_comment": true
     }
   ],
