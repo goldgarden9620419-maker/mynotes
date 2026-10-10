@@ -10385,5 +10385,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. 근은 x = π/2, 7π/6, 11π/6이고 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
     "concept": "sin x에 대한 이차방정식은 t = sin x로 놓고 인수분해한 뒤 −1 ≤ t ≤ 1 범위에서 단위원으로 근을 찾는다."
+  },
+  {
+    "id": "en-2026-10-11-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-11",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Sleep is often treated as a luxury, yet researchers [u]insist[/u]① that it is essential for learning. During sleep, the brain organizes the information [u]which[/u]② it has gathered during the day, strengthening important memories. Students [u]who stays up[/u]③ all night to study often find it harder to recall facts the next morning than [u]those getting[/u]④ a full night's rest. This is why many experts advise students [u]to treat[/u]⑤ sleep as part of their study plan.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ 관계대명사 who의 선행사는 복수명사 Students이므로 동사도 stays up이 아니라 stay up이어야 합니다. ①은 insist that ~, ②는 목적격 관계대명사(생략 가능), ④ those getting은 those who get의 분사 표현, ⑤는 advise + 목적어 + to부정사 구조로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "insist",
+        "meaning": "주장하다"
+      },
+      {
+        "word": "organize",
+        "meaning": "정리하다, 체계화하다"
+      },
+      {
+        "word": "recall",
+        "meaning": "기억해 내다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-11-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-11",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many people believe that creativity comes from sudden inspiration. However, studies of successful artists show that they usually follow steady routines, working at the same hours every day. They do not wait for ideas to appear; instead, they ______. Inspiration, in other words, tends to arrive for those who are already at work.",
+    "choices": [
+      "rely on luck to find new topics",
+      "copy the styles of famous artists",
+      "avoid practice to keep their minds fresh",
+      "invite ideas by working regularly",
+      "compete with other artists for attention"
+    ],
+    "answerIndex": 3,
+    "explanation": "성공한 예술가들은 영감을 기다리지 않고 매일 같은 시간에 꾸준히 작업하며, 영감은 이미 일하고 있는 사람에게 찾아온다고 했습니다. 따라서 빈칸에는 규칙적인 작업으로 아이디어를 불러들인다는 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      },
+      {
+        "word": "steady",
+        "meaning": "꾸준한"
+      },
+      {
+        "word": "routine",
+        "meaning": "일과, 루틴"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-11-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-11",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Bees are essential to agriculture.\n(A) This is why the recent decline in their numbers, caused by pesticides and habitat loss, worries farmers.\n(B) As they move from flower to flower, they carry pollen, which allows plants to produce seeds and fruit.\n(C) Without this service, many crops would yield far less, and food prices would rise.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글의 '벌의 중요성'을 (B)가 꽃가루 운반이라는 역할로 구체화하고, (C)의 this service가 (B)의 꽃가루 운반을 가리키며 그 부재의 결과를 설명합니다. (A)의 This is why는 (C)의 결과를 받아 벌 개체 수 감소에 대한 농민의 걱정으로 마무리하므로 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "pollen",
+        "meaning": "꽃가루"
+      },
+      {
+        "word": "pesticide",
+        "meaning": "살충제"
+      },
+      {
+        "word": "yield",
+        "meaning": "생산하다, 산출하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-11-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-11",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "A small European town banned cars from its center in 2019. ( ① ) Many shop owners feared that fewer cars would mean fewer customers. ( ② ) Within a year, more people were walking through the center, and many shops reported higher sales. ( ③ ) Cafés placed tables outdoors, and children began playing in the plazas. ( ④ ) Other towns are now studying the plan as a model. ( ⑤ )",
+    "givenSentence": "This change, however, quickly proved the doubters wrong.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 This change는 자동차 금지를, the doubters는 바로 앞에서 손님이 줄 것을 우려한 상점 주인들을 가리킵니다. 또한 however 뒤에 이어지는 '1년 안에 더 많은 사람이 걸었고 매출이 늘었다'는 내용이 우려가 틀렸음을 증명하므로 ②에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "ban",
+        "meaning": "금지하다"
+      },
+      {
+        "word": "plaza",
+        "meaning": "광장"
+      },
+      {
+        "word": "doubter",
+        "meaning": "의심하는 사람"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-11-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-11",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many students treat mistakes as evidence of failure and quickly erase them. However, researchers who studied learning found that students who carefully reviewed their wrong answers improved more than those who simply moved on to new problems. Mistakes show exactly where understanding is incomplete, which makes them a map for future study. Rather than hiding errors, successful learners treat them as information.",
+    "choices": [
+      "why reviewing mistakes helps learning",
+      "how to avoid making mistakes on exams",
+      "the effect of stress on test scores",
+      "the importance of moving quickly through problems",
+      "ways to build confidence before exams"
+    ],
+    "answerIndex": 0,
+    "explanation": "틀린 문제를 꼼꼼히 검토한 학생이 더 많이 향상되었고, 실수는 이해가 부족한 곳을 알려 주는 정보라는 글입니다. 따라서 주제는 '실수를 검토하는 것이 학습에 도움이 되는 이유'입니다.",
+    "vocab": [
+      {
+        "word": "evidence",
+        "meaning": "증거"
+      },
+      {
+        "word": "incomplete",
+        "meaning": "불완전한"
+      },
+      {
+        "word": "erase",
+        "meaning": "지우다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-11-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-11",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 162일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "121",
+      "182",
+      "200",
+      "242",
+      "364"
+    ],
+    "answerIndex": 3,
+    "explanation": "a₅/a₂ = r³ = 27이므로 r = 3, a₁ = 6/3 = 2입니다. S₅ = 2(3⁵ − 1)/(3 − 1) = 243 − 1 = 242입니다.",
+    "concept": "등비수열의 합은 r ≠ 1일 때 S_n = a(rⁿ − 1)/(r − 1)이다."
+  },
+  {
+    "id": "math-2026-10-11-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-11",
+    "prompt": "곡선 y = x³ − 3x + 2 위의 점 (2, 4)에서의 접선의 y절편은?",
+    "choices": [
+      "−18",
+      "−16",
+      "−14",
+      "−12",
+      "−10"
+    ],
+    "answerIndex": 2,
+    "explanation": "y′ = 3x² − 3이므로 x = 2에서 기울기는 9입니다. 접선은 y − 4 = 9(x − 2), 즉 y = 9x − 14이므로 y절편은 −14입니다.",
+    "concept": "곡선 y = f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y − f(a) = f′(a)(x − a)이다."
+  },
+  {
+    "id": "math-2026-10-11-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-11",
+    "prompt": "함수 f(x)가 f′(x) = 6x² − 4x + 1이고 f(0) = 2일 때, f(2)의 값은?",
+    "choices": [
+      "4",
+      "6",
+      "8",
+      "10",
+      "12"
+    ],
+    "answerIndex": 4,
+    "explanation": "f(x) = ∫(6x² − 4x + 1)dx = 2x³ − 2x² + x + C이고 f(0) = 2에서 C = 2입니다. f(2) = 16 − 8 + 2 + 2 = 12입니다.",
+    "concept": "f′(x)의 부정적분은 f(x) = ∫f′(x)dx이며, 적분상수는 주어진 함숫값으로 결정한다."
+  },
+  {
+    "id": "math-2026-10-11-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-11",
+    "prompt": "흰 공 3개와 검은 공 4개가 들어 있는 주머니에서 동시에 3개의 공을 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "13/35",
+      "16/35",
+      "18/35",
+      "19/35",
+      "22/35"
+    ],
+    "answerIndex": 0,
+    "explanation": "전체 경우의 수는 ₇C₃ = 35입니다. 흰 공 2개·검은 공 1개는 ₃C₂·₄C₁ = 12가지, 흰 공 3개는 1가지이므로 확률은 (12 + 1)/35 = 13/35입니다.",
+    "concept": "서로 배타적인 사건의 확률은 더하며, 조합을 이용해 P = (경우의 수)/(전체 경우의 수)로 구한다."
+  },
+  {
+    "id": "math-2026-10-11-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-11",
+    "prompt": "sin θ + cos θ = 1/2일 때, sin³θ + cos³θ의 값은?",
+    "choices": [
+      "5/16",
+      "7/16",
+      "9/16",
+      "11/16",
+      "13/16"
+    ],
+    "answerIndex": 3,
+    "explanation": "양변을 제곱하면 1 + 2sin θ cos θ = 1/4이므로 sin θ cos θ = −3/8입니다. sin³θ + cos³θ = (sin θ + cos θ)(1 − sin θ cos θ) = (1/2)(1 + 3/8) = 11/16입니다.",
+    "concept": "a³ + b³ = (a + b)(a² − ab + b²)이고, sin²θ + cos²θ = 1이다."
   }
 ]
