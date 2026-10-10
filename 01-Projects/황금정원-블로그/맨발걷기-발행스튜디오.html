@@ -1,0 +1,380 @@
+<title>블로그+스레드 발행 스튜디오 — 효과는 진짜, 이유는 달랐다</title>
+<style>
+:root{
+  --bg:#0F1110; --panel:#171A17; --panel2:#1E221E; --line:#2A2F2A;
+  --ink:#E8E6DC; --muted:#8F948C; --gold:#D9A82F; --green:#7FB08A;
+  --s1:#D9A82F; --s2:#5FA8D3; --s3:#7FB08A; --s4:#B58ED2; --s5:#E0805A; --s6:#5FC9B8;
+}
+*{box-sizing:border-box;}
+body{
+  background:var(--bg); color:var(--ink); margin:0;
+  font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  line-height:1.65;
+}
+.mono{font-family:ui-monospace,Consolas,monospace; letter-spacing:0.12em;}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 22px; border-bottom:1px solid var(--line); background:var(--panel);
+  position:sticky; top:0; z-index:5;
+}
+.logo{display:flex; align-items:center; gap:10px; font-weight:800; font-size:0.95rem;}
+.logo .bars{display:inline-flex; gap:2px;}
+.logo .bars i{width:4px; height:16px; border-radius:1px; display:inline-block;}
+.topbar .date{color:var(--muted); font-size:0.8rem;}
+.layout{
+  display:grid; grid-template-columns:300px 1fr; gap:20px;
+  max-width:1080px; margin:0 auto; padding:20px;
+}
+@media (max-width:900px){ .layout{grid-template-columns:1fr;} aside.brief{position:static;} }
+aside.brief{
+  position:sticky; top:66px; align-self:start;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  padding:18px; display:flex; flex-direction:column; gap:16px;
+}
+.brief-label{font-size:0.68rem; color:var(--gold); font-weight:700;}
+.brief h1{font-size:1.05rem; font-weight:800; margin:0; line-height:1.5; text-wrap:balance;}
+.brief .sec{display:flex; flex-direction:column; gap:7px;}
+.brief .sec .k{font-size:0.68rem; color:var(--muted); font-weight:700;}
+.chips{display:flex; flex-wrap:wrap; gap:6px;}
+.chip{
+  font-size:0.75rem; padding:3px 9px; border-radius:999px;
+  border:1px solid var(--line); background:var(--panel2); color:var(--ink);
+}
+.chip.accent{border-color:var(--gold); color:var(--gold);}
+.brief a{color:var(--s2); font-size:0.8rem; word-break:break-all; text-decoration:underline;}
+.seg-row{display:flex; gap:4px;}
+.seg{flex:1; height:8px; border-radius:2px; background:var(--panel2); border:1px solid var(--line);}
+.seg.on-1{background:var(--s1); border-color:var(--s1);}
+.seg.on-2{background:var(--s2); border-color:var(--s2);}
+.seg.on-3{background:var(--s3); border-color:var(--s3);}
+.seg.on-4{background:var(--s4); border-color:var(--s4);}
+.seg.on-5{background:var(--s5); border-color:var(--s5);}
+.seg.on-6{background:var(--s6); border-color:var(--s6);}
+.prog-num{font-size:0.8rem; color:var(--muted); font-variant-numeric:tabular-nums; font-weight:700;}
+main.flow{display:flex; flex-direction:column; gap:16px; min-width:0;}
+#allDone{
+  display:none; background:rgba(127,176,138,0.12); border:1px solid var(--green);
+  color:var(--green); border-radius:12px; padding:14px 18px; font-weight:800; text-align:center;
+}
+.step{
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  overflow:hidden;
+}
+.step.done{opacity:0.62;}
+.step-head{
+  display:flex; align-items:center; gap:12px; padding:13px 18px;
+  border-bottom:1px solid var(--line); background:var(--panel2);
+}
+.step-tag{font-size:0.7rem; font-weight:700;}
+.step[data-step="1"] .step-tag{color:var(--s1);} .step[data-step="1"]{border-left:3px solid var(--s1);}
+.step[data-step="2"] .step-tag{color:var(--s2);} .step[data-step="2"]{border-left:3px solid var(--s2);}
+.step[data-step="3"] .step-tag{color:var(--s3);} .step[data-step="3"]{border-left:3px solid var(--s3);}
+.step[data-step="4"] .step-tag{color:var(--s4);} .step[data-step="4"]{border-left:3px solid var(--s4);}
+.step[data-step="5"] .step-tag{color:var(--s5);} .step[data-step="5"]{border-left:3px solid var(--s5);}
+.step[data-step="6"] .step-tag{color:var(--s6);} .step[data-step="6"]{border-left:3px solid var(--s6);}
+.ref-step{border-left:3px dashed var(--line); background:var(--panel2);}
+.ref-step .step-head{background:transparent;}
+.step-title{font-weight:800; font-size:0.98rem; margin-right:auto;}
+button.copy{
+  font:inherit; font-size:0.8rem; font-weight:700; cursor:pointer;
+  background:transparent; color:var(--ink); border:1px solid var(--line);
+  border-radius:8px; padding:6px 12px; white-space:nowrap;
+}
+button.copy:hover{border-color:var(--gold); color:var(--gold);}
+button.copy:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.step-body{padding:16px 18px;}
+.step-desc{color:var(--muted); font-size:0.85rem; margin:0 0 12px 0;}
+.step-desc b{color:var(--ink);}
+.snippet{
+  background:var(--bg); border:1px solid var(--line); border-radius:9px;
+  padding:12px 14px; font-size:0.9rem; white-space:pre-wrap; word-break:break-word;
+  margin:0;
+}
+details.preview summary{
+  cursor:pointer; font-weight:700; font-size:0.85rem; color:var(--s2);
+  list-style:none; display:inline-flex; align-items:center; gap:6px;
+}
+details.preview summary::before{content:"▸";}
+details.preview[open] summary::before{content:"▾";}
+.preview-frame{
+  margin-top:10px; border:1px solid var(--line); border-radius:9px;
+  background:#F8FAFC; padding:16px; max-height:420px; overflow:auto;
+}
+.preview-note{font-size:0.75rem; color:var(--muted); margin:6px 0 0;}
+.step-foot{
+  display:flex; justify-content:flex-end; padding:0 18px 14px;
+}
+label.done-toggle{
+  display:flex; align-items:center; gap:8px;
+  font-size:0.85rem; color:var(--muted); cursor:pointer; user-select:none; font-weight:700;
+}
+label.done-toggle input{width:17px; height:17px; accent-color:var(--green); cursor:pointer;}
+footer.studio{max-width:1080px; margin:0 auto; padding:0 20px 40px; color:var(--muted); font-size:0.78rem; text-align:center;}
+</style>
+
+<div class="topbar">
+  <div class="logo">
+    <span class="bars"><i style="background:var(--s1)"></i><i style="background:var(--s2)"></i><i style="background:var(--s3)"></i><i style="background:var(--s4)"></i><i style="background:var(--s5)"></i><i style="background:var(--s6)"></i></span>
+    <span class="mono">블로그+스레드 발행 스튜디오</span>
+  </div>
+  <span class="date mono">2026-10-08</span>
+</div>
+
+<div class="layout">
+<aside class="brief">
+  <span class="brief-label mono">PUBLISHING BRIEF</span>
+  <h1>효과는 진짜, 이유는 달랐다 (맨발걷기, 어싱, 습관)</h1>
+  <div class="sec">
+    <span class="k mono">카테고리</span>
+    <div class="chips"><span class="chip accent">건강·웰빙 루틴</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">스타일</span>
+    <div class="chips"><span class="chip accent">비교검증형</span><span class="chip accent">솔직 고백형 훅</span><span class="chip accent">소제목 3개(배경→분석→실전)</span><span class="chip accent">레이아웃 B 미니멀 에세이형</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">태그</span>
+    <div class="chips"><span class="chip">맨발걷기</span><span class="chip">어싱</span><span class="chip">접지</span><span class="chip">활성산소</span><span class="chip">플라시보</span><span class="chip">걷기운동</span><span class="chip">건강습관</span></div>
+  </div>
+  <div class="sec">
+    <span class="k mono">참고 출처</span>
+    <a href="https://www.youtube.com/watch?v=gLOiX9I8Kkc" target="_blank" rel="noopener noreferrer">"❌맨발 걷기=어싱❌ 과학'처럼' 보이는 것에 속지 말자"</a>
+  </div>
+  <div class="sec">
+    <span class="k mono">진행률</span>
+    <div class="seg-row" id="segRow">
+      <div class="seg" data-seg="1"></div><div class="seg" data-seg="2"></div><div class="seg" data-seg="3"></div>
+      <div class="seg" data-seg="4"></div><div class="seg" data-seg="5"></div><div class="seg" data-seg="6"></div>
+    </div>
+    <span class="prog-num" id="count">0/6 완료</span>
+  </div>
+</aside>
+
+<main class="flow">
+<div id="allDone">🌱 오늘의 발행 완료! 수고하셨습니다.</div>
+
+<section class="step ref-step">
+  <div class="step-head">
+    <span class="step-tag mono" style="color:var(--muted);">참고자료</span>
+    <span class="step-title">이 글에 쓰인 재료 (순서대로)</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc" style="margin:0 0 8px 0;"><b>1. 참고 영상</b></p>
+    <div class="snippet"><a href="https://www.youtube.com/watch?v=gLOiX9I8Kkc" target="_blank" rel="noopener noreferrer" style="color:var(--s2);">"❌맨발 걷기=어싱❌ 과학'처럼' 보이는 것에 속지 말자"<br />https://www.youtube.com/watch?v=gLOiX9I8Kkc</a></div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>2. 참고 메모(영상 요지 정리)</b></p>
+    <div class="snippet">어싱(접지) 이론을 과학의 눈으로 검증하는 대담 영상입니다. 어싱 이론의 핵심 주장 — 몸속 플러스 전하의 활성산소를 땅의 마이너스 자유전자가 중화해 노화·질병까지 막는다 — 을 소개한 뒤 조목조목 따집니다. 측정기를 들고 땅을 밟으면 전위가 0이 되는 시연 영상이 설득력 있어 보이지만, 전위차는 수위가 다른 물이 바다와 연결되면 같아지는 것처럼 접지 순간 0이 되는 게 정의상 당연한 물리 현상이라 "독소가 빠졌다"는 증거가 되지 못한다고 설명합니다. 심장·뇌·피부 등 몸 전체가 복잡한 전기 신호로 움직이는데 접지 하나로 그 메커니즘이 치료될 리 없다는 것. 효과 증언이 많은 이유로는 플라시보 효과를 지목합니다 — 위약은 권하는 쪽을 신뢰할수록 잘 듣는데, 유명인·다수의 증언이 신뢰를 만들어 '나는 건강해지고 있다'는 심리 변화가 실제 몸의 변화로 이어진다는 것. 어싱의 근거로 수백 회 인용되는 2012년 국제 학술지 논문도 저자들이 접지 연구를 후원하는 회사의 계약자·지분 보유자였다는 이해관계를 지적하며(사탕 회사 대표에게 설탕이 좋냐고 묻는 격), 어싱 매트를 수백만 원에 팔아 거액을 벌다 입건된 상업화 사례도 언급합니다. 결론은 균형적입니다 — 맨발 걷기 자체는 분명 좋은 운동이다(안 쓰던 감각 영역 활성화, 울퉁불퉁한 지면에서 에너지 소모·근육 발달 증가, 출연자 본인도 1년간 즐겼을 만큼). 다만 그 좋음을 '과학처럼 보이는' 어싱 이론으로 설명하고 돈벌이에 쓰는 것을 경계하라는 메시지입니다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>3. 내 경험</b></p>
+    <div class="snippet">하루 종일 회사에서 숫자와 씨름하고 이런저런 업무에 치이다 보면 퇴근할 때쯤 머릿속이 복잡해질 때가 많다. 분명 퇴근은 했는데 해결하지 못한 일들과 내일 해야 할 일들이 머릿속에서 쉽게 떠나질 않는다.
+
+나는 일주일에 적어도 3일 이상은 저녁을 먹고 혼자 걷는 시간을 가진다. 이어폰도 끼지 않고 조용히 걸으면서 오늘 있었던 일들을 하나씩 떠올려 본다. 잘했던 일도 있고 아쉬웠던 일도 있지만, 그렇게 걷다 보면 복잡했던 생각들이 조금씩 정리되는 느낌이다.
+
+특히 내가 좋아하는 건 맨발 걷기 코스다. 운동화를 벗고 차가운 땅에 발을 내딛는 순간, 발바닥으로 전해지는 서늘한 온도와 흙의 감촉이 너무 좋다. 하루 종일 긴장했던 몸과 마음이 그 순간만큼은 편안해지는 기분이다.
+
+그런데 참 신기한 게 있다. 저녁을 먹고 맨발로 걸으면 운동화를 신고 걸을 때보다 이상하게 소화가 더 빨리 되는 것 같은 느낌이다. 나만 그런가? ㅎㅎ
+
+어싱의 과학적인 효과가 실제로 얼마나 있는지는 잘 모르겠다. 하지만 나에게 맨발 걷기는 단순한 운동 이상의 의미가 있다. 하루 동안 쌓인 생각들을 내려놓고 오롯이 나 자신에게 집중하는 시간이기 때문이다.
+
+어쩌면 내가 맨발 걷기를 좋아하는 진짜 이유는 건강해진다는 믿음보다 그 시간만큼은 누구의 눈치도 보지 않고 온전히 나 자신으로 돌아갈 수 있기 때문인지도 모르겠다.</div>
+
+    <p class="step-desc" style="margin:16px 0 8px 0;"><b>4. 내 생각/비판</b></p>
+    <div class="snippet">나는 일주일에 적어도 3일 이상 저녁을 먹고 혼자 걷는 시간을 가진다. 하루 종일 회사에서 숫자와 씨름하고 업무에 치이다 보면 퇴근 후에도 머릿속에서 일 생각이 떠나질 않을 때가 많다. 그럴 때 조용히 걸으면서 하루를 돌아보고, 맨발로 차가운 땅을 밟으면 이상하게 마음이 편안해진다. 심지어 운동화를 신고 걸을 때보다 소화도 더 잘되는 것 같은 느낌이다. 나만 그런가? ㅎㅎ
+
+하지만 이런 경험이 있다고 해서 어싱의 과학적 효과까지 무조건 믿어야 할까? 나는 그건 아니라고 생각한다. 내가 느끼는 편안함이 땅의 전자 때문인지, 걷기 운동 때문인지, 아니면 심리적인 만족감 때문인지는 알 수 없기 때문이다.
+
+오히려 비판하고 싶은 건 사람들의 이런 경험을 마치 질병까지 치료할 수 있는 과학적 사실인 것처럼 포장해 비싼 제품을 판매하는 행태다.
+
+나는 건강을 위해 돈을 쓰는 것보다 건강한 습관을 만드는 게 먼저라고 생각한다. 퇴근 후 운동화를 벗고 차가운 땅을 밟으며 하루를 정리하는 것만으로도 충분히 만족스럽다.
+
+좋은 경험이 반드시 과학적 진실일 필요는 없다. 하지만 과학적 진실이 아닌 것을 돈벌이를 위해 사실처럼 포장하는 건 분명 경계해야 한다. 결국 건강을 지키는 데 필요한 건 특별한 제품보다 꾸준히 실천하는 나만의 습관이 아닐까 싶다.</div>
+  </div>
+</section>
+<br />
+
+<section class="step" data-step="1">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 01</span>
+    <span class="step-title">티스토리에 제목 붙여넣기</span>
+    <button class="copy" onclick="copyEl('titleText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">티스토리 글쓰기를 열고 제목란에 붙여넣으세요.</p>
+    <div class="snippet" id="titleText">효과는 진짜, 이유는 달랐다 (맨발걷기, 어싱, 습관)</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="1" />완료</label></div>
+</section>
+
+<section class="step" data-step="2">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 02</span>
+    <span class="step-title">본문 HTML 붙여넣기</span>
+    <button class="copy" onclick="copyBody(this)">전체 복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">에디터를 HTML 모드로 전환한 뒤 전체 붙여넣기 하세요. 이번 글은 레이아웃 B(미니멀 에세이형)로 인라인 스타일이 포함돼 있어 스킨 CSS 없이 바로 보입니다.</p>
+    <details class="preview">
+      <summary>발행 후 모습 미리보기</summary>
+      <div class="preview-frame" id="previewBox"></div>
+      <p class="preview-note">※ 미리보기는 티스토리 화면(라이트 배경) 기준으로 고정되어 있습니다.</p>
+    </details>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="2" />완료</label></div>
+</section>
+
+<section class="step" data-step="3">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 03</span>
+    <span class="step-title">태그 입력</span>
+    <button class="copy" onclick="copyEl('tagText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">태그란에 붙여넣으면 쉼표 기준으로 나뉘어 들어갑니다.</p>
+    <div class="snippet" id="tagText">맨발걷기,어싱,어싱효과,맨발걷기효능,접지,활성산소,플라시보,걷기운동,저녁산책,건강습관</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="3" />완료</label></div>
+</section>
+
+<section class="step" data-step="4">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 04</span>
+    <span class="step-title">발행하고 글 주소 복사</span>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">카테고리를 <b>건강·웰빙 루틴</b>으로 지정 → 공개 발행 → 발행된 글의 URL을 복사해 두세요. STEP 06 쓰레드 댓글에 씁니다. 발행 직후 모바일 화면으로 한 번 확인하면 좋습니다.</p>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="4" />완료</label></div>
+</section>
+
+<section class="step" data-step="5">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 05</span>
+    <span class="step-title">쓰레드(Threads) 게시</span>
+    <button class="copy" onclick="copyEl('threadText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">아래 본문을 그대로 복사해 새 쓰레드로 올리세요.</p>
+    <div class="snippet" id="threadText">퇴근하고 일주일에 3일은 맨발로 걷는 사람임.
+
+근데 어싱이 과학이냐고 물으면 이제 아니라고 답하게 됐음.
+
+정리해봄.
+
+1. 땅 밟으면 전위차가 0 되는 건 물 수위 맞춰지는 것처럼 당연한 물리 현상임 - 치료 근거 아님
+2. 어싱의 근거로 도는 2012년 논문, 저자 5명 중 3명이 어싱 회사 지분 가진 사람들이었음
+3. 어싱 매트 수백만원에 팔다 적발된 업체 사례도 있음 - 땅은 공짜인데
+4. 그래도 맨발 걷기 자체는 진짜 좋음 - 안 쓰던 감각 깨우고 같은 거리도 에너지 소모 더 큼
+5. 효과는 즐기되 설명은 걸러낼 것 - 효과 경험은 진짜, 포장이 문제
+
+오늘 저녁 관리된 흙길에서 20분 어떠심 🌱
+
+이런 건강 정리 계속 올림. 건강템에 지갑 열기 전에 꺼내 보고 싶으면 팔로우, 도움 됐으면 좋아요 하나면 충분함</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="5" />완료</label></div>
+</section>
+
+<section class="step" data-step="6">
+  <div class="step-head">
+    <span class="step-tag mono">STEP 06</span>
+    <span class="step-title">쓰레드 댓글에 블로그 링크 달기</span>
+    <button class="copy" onclick="copyEl('commentText',this)">복사</button>
+  </div>
+  <div class="step-body">
+    <p class="step-desc">방금 올린 쓰레드에 첫 댓글로 아래 문구 + STEP 04에서 복사한 글 주소를 붙이세요.</p>
+    <div class="snippet" id="commentText">효과는 진짜, 이유는 달랐던 맨발 걷기 이야기 👉</div>
+  </div>
+  <div class="step-foot"><label class="done-toggle"><input type="checkbox" data-done="6" />완료</label></div>
+</section>
+</main>
+</div>
+
+<footer class="studio">체크 상태는 이 브라우저에 자동 저장됩니다 · 황금정원 콘텐츠 파이프라인</footer>
+
+<script type="text/template" id="blogSrc">
+<p data-ke-size="size16" style="font-size:1.06rem;line-height:2;color:#1f2937;margin:0 0 10px 0;">솔직히 저는 어싱이 과학인지 따져보지도 않고 맨발 걷기를 즐겨온 사람입니다. 일주일에 사흘은 저녁 먹고 운동화를 벗은 채 흙길을 걷고, 그 시간이 좋아서 남들에게 권하기도 했습니다.<br /><br />그러다 어싱 이론을 제대로 뜯어본 내용을 접하고 생각이 정리됐습니다. 맨발 걷기의 운동 효과는 실재하지만, 땅의 자유전자가 몸속 활성산소를 중화해 병을 고친다는 어싱 이론은 과학적 근거가 부족하다는 겁니다. 효과는 진짜인데 이유가 달랐던 셈입니다. 그 사이 어디쯤에 제 저녁 산책이 있는지 정리해봤습니다.</p>
+<p data-ke-size="size16"><br /></p>
+
+<h2 data-ke-size="size26" style="font-size:1.32rem;font-weight:700;color:#111827;margin:38px 0 16px 0;padding-bottom:10px;border-bottom:2px solid #111827;">맨발걷기가 제 저녁 루틴이 된 이유</h2>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 16px 0;">하루 종일 회사에서 숫자와 씨름하고 나면 퇴근을 해도 머릿속은 퇴근을 못 합니다. 해결 못 한 일과 내일 할 일이 계속 맴돌아서요. 그래서 저는 저녁을 먹고 이어폰 없이 혼자 걷는 시간을 일주일에 사흘 이상 지킵니다. 걷다 보면 복잡하던 생각이 하나씩 자리를 찾아갑니다.<br /><br />그중에서도 제가 아끼는 건 맨발 코스입니다. 운동화를 벗고 첫발을 내딛는 순간 발바닥으로 올라오는 서늘한 온도와 흙의 감촉이 좋아서, 하루 내내 긴장했던 몸이 그 자리에서 풀리는 기분이 듭니다. 신기한 건 맨발로 걸은 날은 소화까지 더 빨리 되는 느낌이라는 겁니다. 저만 그런 건지는 모르겠습니다만.<br /><br />요즘 지자체마다 황톳길을 깔 만큼 맨발 걷기 열풍이 뜨겁고, 효과를 봤다는 증언도 넘칩니다. 저도 그 증언 대열에 서 있던 사람이라 이 유행의 설명서 격인 어싱 이론이 궁금해졌습니다.</p>
+<div style="margin:20px 0 8px 0;padding:12px 4px;border-top:1px solid #d1d5db;border-bottom:1px solid #d1d5db;font-size:0.95rem;line-height:1.8;color:#1f2937;"><b>핵심 한 줄</b> · 맨발 걷기는 발바닥 감촉과 하루를 정리하는 시간 덕분에 꾸준히 이어지는 저녁 루틴이 되기 쉽다. 유행의 설명으로 쓰이는 어싱 이론은 별도로 따져볼 문제다.</div>
+
+<h2 data-ke-size="size26" style="font-size:1.32rem;font-weight:700;color:#111827;margin:38px 0 16px 0;padding-bottom:10px;border-bottom:2px solid #111827;">어싱 이론을 뜯어보니 이랬다</h2>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 16px 0;">일반적으로 어싱은 이렇게 설명됩니다. 몸속에는 플러스 전하를 띠는 활성산소가 있는데, 활성산소란 세포를 손상시키고 노화를 앞당기는 산소 찌꺼기입니다. 땅에는 마이너스 전하의 자유전자가 있으니 맨발로 접지하면 둘이 중화되면서 병까지 낫는다는 논리입니다. 측정기를 몸에 대고 땅을 밟으면 수치가 0이 되는 시연 영상도 돌아다닙니다.<br /><br />그런데 물리로 보면 그 0은 당연한 숫자였습니다. 전위차란 두 지점 사이의 전기적 높이 차이인데, 수위가 다른 물이 바다와 연결되면 높이가 같아지듯 몸이 땅에 닿으면 전위차가 0이 되는 건 정의상 자연스러운 현상입니다. 몸속 독소가 빠져나갔다는 증거와는 거리가 멉니다. 심장과 뇌와 피부가 제각각 복잡한 전기 신호로 움직이는데, 접지 하나로 그 전체가 치료될 리도 없고요.<br /><br />근거로 가장 많이 인용되는 2012년 어싱 논문도 들여다보면 사정이 있습니다. 저자 다섯 명 중 세 명이 접지 연구를 후원하는 회사의 계약자이면서 지분을 가진 사람들이었습니다. 사탕 회사 대표에게 설탕이 몸에 좋은지 묻는 구도인 셈입니다. <a href="https://pubmed.ncbi.nlm.nih.gov/22291721/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: PubMed(해당 논문, 이해충돌 고지·저자 소속에 어싱 관련 회사 표기)</a> 여기에 어싱 매트를 수백만 원에 팔다가 적발된 업체 사례까지 있다고 하니, 제가 느낀 개운함과는 별개로 이 설명서는 걸러서 봐야겠다고 판단했습니다.<br /><br />그럼 효과를 봤다는 그 많은 증언은 뭘까요. 하나는 플라시보 효과로 보입니다. 플라시보 효과란 가짜 약도 믿고 먹으면 실제로 몸이 좋아지는 현상인데, 권하는 사람을 신뢰할수록 강하게 나타난다고 합니다. 걷기 자체의 운동 효과에 이 믿음이 얹히면 몸은 정말 좋아질 수 있습니다. 효과의 경험은 진짜고 설명이 빗나간 겁니다.</p>
+<div style="margin:20px 0 8px 0;padding:12px 4px;border-top:1px solid #d1d5db;border-bottom:1px solid #d1d5db;font-size:0.95rem;line-height:1.8;color:#1f2937;"><b>핵심 한 줄</b> · 접지 시 전위차가 0이 되는 것은 당연한 물리 현상일 뿐 치료의 증거가 되지 못한다. 어싱의 대표 논문은 저자들이 어싱 업체와 이해관계가 있었고, 체감 효과의 상당 부분은 걷기 운동과 플라시보로 설명된다.</div>
+
+<h2 data-ke-size="size26" style="font-size:1.32rem;font-weight:700;color:#111827;margin:38px 0 16px 0;padding-bottom:10px;border-bottom:2px solid #111827;">그래도 저는 계속 맨발로 걷는다</h2>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 16px 0;">결론이 &#39;맨발 걷기 그만두자&#39;는 쪽으로 가지 않는 이유가 있습니다. 어싱과 무관하게 맨발 걷기 자체의 근거 있는 이점이 따로 있기 때문입니다. 평소 신발 안에서 잠자던 발바닥 감각이 깨어나고, 울퉁불퉁한 지면을 걸으면 같은 거리를 걸어도 에너지 소모가 커지고 발과 다리 근육이 더 일합니다. 걷기라는 운동 자체가 건강에 이롭다는 건 질병관리청도 안내하는 상식이고요. <a href="https://health.kdca.go.kr/" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">출처: 질병관리청 국가건강정보포털</a><br /><br />그래서 제 원칙은 세 가지로 정리됐습니다.</p>
+<ul style="list-style-type:disc;margin:12px 0 16px 24px;padding:0;" data-ke-list-type="disc">
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.85;color:#374151;font-size:1rem;">유리나 돌이 없는 관리된 황톳길·맨발 코스에서 20~30분만 걷기</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.85;color:#374151;font-size:1rem;">효과를 제품에서 찾지 않기 — 수백만 원짜리 매트 대신 땅은 공짜</li>
+<li data-ke-size="size16" style="margin:6px 0;line-height:1.85;color:#374151;font-size:1rem;">이어폰 없이 걸으며 하루를 정리하는 저만의 시간으로 쓰기</li>
+</ul>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 16px 0;">생각해보면 제가 맨발 걷기를 좋아하는 진짜 이유는 건강해진다는 믿음보다 그 시간만큼은 누구의 눈치도 보지 않고 온전히 저 자신으로 돌아갈 수 있어서였습니다. 좋은 경험이 반드시 과학적 진실일 필요는 없습니다. 다만 그 경험을 과학으로 포장해 지갑을 열게 하는 쪽은 경계해야 합니다. 건강을 지키는 건 특별한 제품이 아니라 꾸준히 실천하는 저만의 습관이라고 믿습니다.</p>
+<div style="margin:20px 0 8px 0;padding:12px 4px;border-top:1px solid #d1d5db;border-bottom:1px solid #d1d5db;font-size:0.95rem;line-height:1.8;color:#1f2937;"><b>핵심 한 줄</b> · 맨발 걷기는 감각 자극과 에너지 소모 증가라는 어싱과 무관한 이점이 있다. 관리된 길에서 20~30분, 제품 구매 없이, 하루를 정리하는 시간으로 쓰는 것이 현실적인 활용법이다.</div>
+
+<h2 data-ke-size="size26" style="font-size:1.32rem;font-weight:700;color:#111827;margin:38px 0 16px 0;padding-bottom:10px;border-bottom:2px solid #111827;">제가 저에게 던진 질문들</h2>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:22px 0 6px 0;"><b>Q. 맨발로 걸으면 소화가 잘 되는 느낌, 착각이야?</b></p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0 0 4px 0;">A. 착각이라고 단정하지 않기로 했습니다. 식후에 걷는 것 자체가 소화에 도움이 되고 기분이 풀리면 속도 편해지니까요. 다만 그 공을 땅속 전자에게 돌릴 근거는 없다는 것만 구분해두기로 했습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:22px 0 6px 0;"><b>Q. 어싱 매트 하나 들여놓을까 고민했는데?</b></p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0 0 4px 0;">A. 저는 접었습니다. 수백만 원대 매트를 팔다가 적발된 업체 사례를 보고 나니 더 그렇습니다. 걷고 싶으면 공원이 있고 땅은 돈을 받지 않습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:22px 0 6px 0;"><b>Q. 그럼 어싱으로 효과 봤다는 사람들은 다 속은 거야?</b></p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0 0 4px 0;">A. 그분들의 좋아진 몸은 진짜라고 봅니다. 걷기 운동의 효과에 믿음이 얹혀서 나타난 결과일 가능성이 크다는 것뿐입니다. 경험을 부정할 이유는 없고 설명만 바로잡으면 됩니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.85;color:#5b21b6;margin:22px 0 6px 0;"><b>Q. 오늘 저녁엔 뭘 할 거야?</b></p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.9;color:#374151;margin:0 0 4px 0;">A. 저녁 먹고 맨발 코스로 나갈 겁니다. 이어폰은 두고 가서 오늘 꼬인 일 하나를 걸으면서 풀어보려 합니다. 효과의 이유를 알고 걸으니 오히려 마음이 더 가볍습니다.</p>
+
+<h2 data-ke-size="size26" style="font-size:1.32rem;font-weight:700;color:#111827;margin:38px 0 16px 0;padding-bottom:10px;border-bottom:2px solid #111827;">결론</h2>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 16px 0;">저는 효과와 설명을 분리하는 법을 이번에 배웠습니다. 맨발 걷기의 개운함은 챙기고, 그 개운함을 전자와 중화로 포장하는 설명과 수백만 원짜리 제품은 걸러냅니다.<br /><br />몸에 좋다는 유행을 만나면 두 가지만 물어보시길 권합니다. 이 효과가 운동 자체의 효과와 뭐가 다른가, 그리고 이 설명 끝에 뭘 팔려고 하는가.<br /><br />오늘 저녁 운동화를 벗고 흙을 밟으셨다면 공감♥ 하나는 맨발로 꾹 눌러주신 발도장으로 받겠습니다. 건강 유행을 하나씩 따져보는 글을 계속 쓰고 있으니 지갑 열기 전에 들르시도록 구독해두셔도 좋습니다.</p>
+<p data-ke-size="size16" style="font-size:1rem;line-height:1.95;color:#374151;margin:0 0 16px 0;">참고: <a href="https://www.youtube.com/watch?v=gLOiX9I8Kkc" target="_blank" rel="noopener noreferrer" style="color:#2563eb;text-decoration:underline;">https://www.youtube.com/watch?v=gLOiX9I8Kkc</a></p>
+</script>
+
+<script>
+var blogSrc = document.getElementById('blogSrc').textContent.trim();
+document.getElementById('previewBox').innerHTML = blogSrc;
+
+var KEY = 'gg-studio-barefoot-v1';
+var boxes = document.querySelectorAll('input[data-done]');
+var saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e) {}
+boxes.forEach(function(cb){
+  if (saved[cb.dataset.done]) cb.checked = true;
+  cb.addEventListener('change', function(){
+    saved[cb.dataset.done] = cb.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e) {}
+    render();
+  });
+});
+function render(){
+  var done = 0;
+  boxes.forEach(function(cb){
+    var n = cb.dataset.done;
+    cb.closest('.step').classList.toggle('done', cb.checked);
+    var seg = document.querySelector('.seg[data-seg="' + n + '"]');
+    seg.className = 'seg' + (cb.checked ? ' on-' + n : '');
+    if (cb.checked) done++;
+  });
+  document.getElementById('count').textContent = done + '/' + boxes.length + ' 완료';
+  document.getElementById('allDone').style.display = (done === boxes.length) ? 'block' : 'none';
+}
+render();
+
+function copyEl(id, btn){ doCopy(document.getElementById(id).textContent.trim(), btn); }
+function copyBody(btn){ doCopy(blogSrc, btn); }
+function doCopy(text, btn){
+  var done = function(){
+    var old = btn.textContent;
+    btn.textContent = '복사 완료!';
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function(){ fb(text); done(); });
+  } else { fb(text); done(); }
+}
+function fb(text){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+}
+</script>
