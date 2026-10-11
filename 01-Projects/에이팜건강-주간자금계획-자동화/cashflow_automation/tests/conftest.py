@@ -16,20 +16,6 @@ from common import REQUIRED_TEAM_COLUMNS, TEAMS, week_monday
 from config import Config
 
 
-@pytest.fixture(autouse=True)
-def _no_auto_open(monkeypatch):
-    """테스트 중 확인필요·결과 Excel·폴더가 실제로 열리지 않게 막는다.
-
-    _open_file이 아니라 맨 끝의 os.startfile을 막아, '이미 열려 있으면
-    다시 열지 않기' 같은 _open_file 자체 로직은 테스트할 수 있게 둔다.
-    """
-    import os
-
-    def _no_startfile(*args, **kwargs):
-        pass
-    monkeypatch.setattr(os, "startfile", _no_startfile, raising=False)
-
-
 def write_team_file(path: Path, rows: list[dict],
                     extra_columns: list[str] | None = None) -> Path:
     """테스트용 팀 지출계획 파일(수식 없이 값으로) 생성."""

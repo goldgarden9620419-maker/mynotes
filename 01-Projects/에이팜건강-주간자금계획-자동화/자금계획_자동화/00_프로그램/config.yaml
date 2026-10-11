@@ -2,8 +2,8 @@ company_name: (주)에이팜건강
 timezone: Asia/Seoul
 schedule:
   day_of_week: mon
-  hour: 9
-  minute: 10
+  hour: 10
+  minute: 30
 startup:
   auto_start_with_windows: true
   initial_wait_seconds: 60
@@ -17,7 +17,7 @@ missed_run:
 retry:
   enabled: true
   interval_minutes: 10
-  end_time: '10:30'
+  end_time: '12:30'
   continue_after_program_restart: true
 input_change:
   detect_after_success: true
