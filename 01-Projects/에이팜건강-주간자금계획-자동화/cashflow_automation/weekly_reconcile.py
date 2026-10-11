@@ -17,7 +17,7 @@ from typing import Optional
 from common import (
     BANK_REFLECT_OK, MATCH_AMOUNT_DIFF, MATCH_DATE_DIFF, MATCH_MANUAL,
     MATCH_NOT_FOUND, MATCH_PAID, MATCH_PARTIAL, MATCH_UNPLANNED,
-    REFLECT_PAID, now_local, save_workbook, unique_path, week_monday,
+    REFLECT_PAID, now_local, save_workbook, week_monday,
 )
 from excel_report import account_label
 
@@ -176,6 +176,19 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
          bold=True, size=13, color=_NAVY)
     _put(ws, 2, 1, "확인 완료", bold=True)
     _put(ws, 2, 2, "아니오", fill="FFF2CC")
+    # '확인 완료'는 드롭다운으로 고른다 (2026-10-11 사용자 요청:
+    # 타이핑 대신 선택식 + 셀 선택 시 안내 말풍선)
+    from openpyxl.worksheet.datavalidation import DataValidation
+    done_dv = DataValidation(type="list", formula1='"아니오,예"',
+                             allow_blank=True)
+    done_dv.error = "'예' 또는 '아니오'만 입력할 수 있습니다."
+    done_dv.showErrorMessage = True
+    done_dv.promptTitle = "검토 완료 표시"
+    done_dv.prompt = ("차이내역 검토가 끝나면 ▼에서 '예'를 골라 "
+                      "저장하세요. 검토 완료로 기록됩니다.")
+    done_dv.showInputMessage = True
+    ws.add_data_validation(done_dv)
+    done_dv.add("B2")
     msg = (f"차이 {n_diff}건을 확인해 주세요 — ① '계좌별대조' 시트에서 "
            "계좌별 입출금·잔액을 보고 ② '차이내역' 시트에서 "
            "미집행(주황)·계획없는출금(붉은)·금액차이(노랑)를 검토한 뒤 "
@@ -310,13 +323,12 @@ def run_weekly_reconcile(cfg, log, now=None, open_file: bool = True) -> Path:
         amount_tolerance=cfg.get("matching", "amount_tolerance",
                                  default=0.01))
 
-    out = unique_path(
-        cfg.folder("review") / f"주간대조_{now:%Y%m%d_%H%M%S}.xlsx")
+    out = cfg.folder("review") / f"주간대조_{now:%Y%m%d_%H%M}.xlsx"
     write_reconcile_workbook(data, out)
     log.info("주간 대조(%s~%s): 일치 %d건, 차이 %d건 — %s",
              data["기간"][0], data["기간"][1], data["일치"],
              len(data["차이내역"]), out.name)
     if open_file:
         from app import _open_file
-        _open_file(out, log)
+        _open_file(out)
     return out
