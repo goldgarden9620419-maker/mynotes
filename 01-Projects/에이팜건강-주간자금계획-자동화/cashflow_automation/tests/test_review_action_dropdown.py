@@ -59,3 +59,21 @@ def test_처리_머리글에_사용법_메모(tmp_path):
     head = ws.cell(row=4, column=9)              # I4: '처리' 머리글
     assert head.comment is not None
     assert "분류" in head.comment.text
+
+
+def test_주간대조_안내_확인완료는_드롭다운(tmp_path):
+    """2026-10-11 사용자 요청: 주간대조 안내 B2도 선택식."""
+    import weekly_reconcile
+    from datetime import date
+    data = {"기간": (date(2026, 10, 5), date(2026, 10, 9)),
+            "계좌": [], "차이내역": [], "일치": 0, "차이건수": {},
+            "계획지출": 0, "실제출금": 0,
+            "실행일": date(2026, 10, 11),
+            "은행기준일": date(2026, 10, 11)}
+    out = weekly_reconcile.write_reconcile_workbook(
+        data, tmp_path / "주간대조_test.xlsx")
+    ws = load_workbook(out)["안내"]
+    dvs = ws.data_validations.dataValidation
+    hit = [d for d in dvs if any("B2" in str(r) for r in d.sqref.ranges)]
+    assert hit and hit[0].type == "list" and "예" in hit[0].formula1
+    assert hit[0].showInputMessage and hit[0].prompt
