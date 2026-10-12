@@ -1,11 +1,11 @@
 {
-  "last_successful_week": "2026-W41",
-  "last_successful_date": "2026-10-11",
-  "last_successful_time": "15:24:25",
+  "last_successful_week": "2026-W42",
+  "last_successful_date": "2026-10-12",
+  "last_successful_time": "14:28:56",
   "last_run_status": "SUCCESS",
-  "last_run_week": "2026-W41",
-  "last_run_at": "2026-10-11 15:24:25",
-  "last_output_file": "주간자금계획_20261011_152425.xlsx",
+  "last_run_week": "2026-W42",
+  "last_run_at": "2026-10-12 14:28:56",
+  "last_output_file": "주간자금계획_20261012_1428.xlsx",
   "last_error": "",
   "input_signature": "7d249f4b2c43953b",
   "pending_weeks": [
