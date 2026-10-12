@@ -10867,5 +10867,246 @@
     "answerIndex": 2,
     "explanation": "(2cos x − 1)(cos x + 1) = 0이므로 cos x = 1/2 또는 cos x = −1입니다. cos x = 1/2에서 x = π/3, 5π/3, cos x = −1에서 x = π입니다. 합은 π/3 + 5π/3 + π = 3π입니다.",
     "concept": "cos x를 치환하면 삼각방정식을 이차방정식으로 바꿔 인수분해로 풀 수 있다."
+  },
+  {
+    "id": "en-2026-10-13-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-13",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists [u]who[/u]① study sleep have found that memories are strengthened while we rest. During the night, the brain replays the events of the day, [u]moving[/u]② important details into long-term storage. This is why students who sleep well before an exam often perform better than those [u]who stay[/u]③ up all night. A lack of sleep makes it difficult [u]to concentrate[/u]④ and [u]remembers[/u]⑤ new information.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ and로 to concentrate와 병렬 연결되므로 to remember(또는 remember)여야 하며 remembers는 틀립니다. ①은 Scientists를 수식하는 주격 관계대명사, ②는 동시 동작을 나타내는 분사구문, ③ those who stay는 '~하는 사람들', ④는 가목적어 구문 it difficult 뒤의 진목적어 to부정사로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "replay",
+        "meaning": "재생하다, 다시 보여주다"
+      },
+      {
+        "word": "storage",
+        "meaning": "저장"
+      },
+      {
+        "word": "concentrate",
+        "meaning": "집중하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-13-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-13",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "People often assume that creativity comes from sudden inspiration. However, studies of successful inventors show that most breakthroughs came after years of failed attempts. Each failure revealed what did not work and narrowed the search. In this sense, failure is not the opposite of success but ______.",
+    "choices": [
+      "a necessary step toward it",
+      "a sign of a lack of talent",
+      "a reason to give up early",
+      "an event that should be forgotten",
+      "a result of careless planning"
+    ],
+    "answerIndex": 0,
+    "explanation": "발명가들의 돌파구는 수년간의 실패 끝에 나왔고, 각 실패가 효과 없는 방법을 알려 탐색 범위를 좁혔다고 했습니다. 따라서 실패는 성공의 반대가 아니라 성공으로 가는 필수 단계이므로 ①이 적절합니다.",
+    "vocab": [
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      },
+      {
+        "word": "breakthrough",
+        "meaning": "돌파구, 획기적 발전"
+      },
+      {
+        "word": "narrow",
+        "meaning": "좁히다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-13-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-13",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Many people think that learning a language means memorizing long lists of words.\n(A) Instead, learners who read and listen to real stories naturally pick up vocabulary because the words appear again and again in meaningful situations.\n(B) However, researchers have found that this method is rarely effective in the long run, since isolated words are quickly forgotten.\n(C) Therefore, the best way to build a vocabulary is to meet words in context rather than to study them alone.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 '단어 목록 암기'를 (B)가 However로 반박하며 그 방법의 비효율성을 말합니다. (A)의 Instead는 (B)에서 비판한 암기 대신 이야기를 읽고 듣는 방법을 제시하고, (C)의 Therefore가 이를 결론(문맥 속 학습)으로 정리하므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "isolated",
+        "meaning": "고립된, 따로 떨어진"
+      },
+      {
+        "word": "pick up",
+        "meaning": "(자연스럽게) 익히다"
+      },
+      {
+        "word": "in context",
+        "meaning": "문맥 속에서"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-13-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-13",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Honeybees communicate the location of food through a special movement. ( ① ) When a worker finds a good flower patch, she returns to the hive and performs a \"waggle dance.\" ( ② ) The angle at which she moves shows the direction of the food in relation to the sun. ( ③ ) Using both pieces of information, the other bees fly straight to the flowers. ( ④ ) This system allows the colony to collect food efficiently. ( ⑤ )",
+    "givenSentence": "In addition, how long she waggles indicates how far away the food is.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 In addition으로 방향 정보(②뒤 문장)에 거리 정보를 추가합니다. ③ 뒤의 'both pieces of information'은 방향과 거리 두 가지를 모두 가리키므로, 거리 정보를 담은 주어진 문장이 ③에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "waggle",
+        "meaning": "몸을 흔들다"
+      },
+      {
+        "word": "colony",
+        "meaning": "(벌 등의) 군집"
+      },
+      {
+        "word": "in relation to",
+        "meaning": "~와 관련하여"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-13-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-13",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many students believe that rereading a textbook is the best way to prepare for a test. It feels productive because the material looks familiar. However, familiarity is not the same as understanding. Research suggests that testing yourself, by trying to recall information without looking at the page, strengthens memory far more than passive review. The effort of retrieving an answer, even when it is difficult, is what makes learning last.",
+    "choices": [
+      "Why familiar material is easy to understand",
+      "The benefits of self-testing over passive rereading",
+      "The importance of choosing the right textbook",
+      "How stress affects performance on tests",
+      "Ways to make studying more enjoyable"
+    ],
+    "answerIndex": 1,
+    "explanation": "글은 교과서를 다시 읽는 수동적 복습이 효과적으로 느껴지지만, 스스로 시험을 보며 기억해내는 방식이 기억을 훨씬 더 강화한다고 설명합니다. 따라서 주제는 ②입니다.",
+    "vocab": [
+      {
+        "word": "familiarity",
+        "meaning": "익숙함"
+      },
+      {
+        "word": "passive",
+        "meaning": "수동적인"
+      },
+      {
+        "word": "retrieve",
+        "meaning": "(기억 등을) 떠올리다, 인출하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-13-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-13",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합 S₁₀의 값은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3이고, a₁ = a₃ − 2d = 1입니다. a₁₀ = 1 + 9·3 = 28이므로 S₁₀ = 10(1 + 28)/2 = 145입니다.",
+    "concept": "등차수열의 합은 Sₙ = n(a₁ + aₙ)/2이고, aₙ = a₁ + (n−1)d이다."
+  },
+  {
+    "id": "math-2026-10-13-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-13",
+    "prompt": "곡선 y = x³ − 3x 위의 점 (2, 2)에서의 접선의 y절편은?",
+    "choices": [
+      "−20",
+      "−16",
+      "−12",
+      "−8",
+      "−4"
+    ],
+    "answerIndex": 1,
+    "explanation": "y′ = 3x² − 3이므로 x = 2에서 기울기는 9입니다. 접선은 y − 2 = 9(x − 2), 즉 y = 9x − 16이므로 y절편은 −16입니다.",
+    "concept": "곡선 y = f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y − f(a) = f′(a)(x − a)이다."
+  },
+  {
+    "id": "math-2026-10-13-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-13",
+    "prompt": "정적분 ∫₀³ (x² − 2x + 3) dx의 값은?",
+    "choices": [
+      "6",
+      "7",
+      "9",
+      "12",
+      "15"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³/3 − x² + 3x이므로 x = 3에서 9 − 9 + 9 = 9, x = 0에서 0입니다. 따라서 값은 9입니다.",
+    "concept": "다항함수의 정적분은 부정적분 F(x)에 대하여 ∫ₐᵇ f(x)dx = F(b) − F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-10-13-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-13",
+    "prompt": "서로 다른 주사위 2개를 동시에 던질 때, 나온 두 눈의 수의 합이 8 이상일 확률은?",
+    "choices": [
+      "1/3",
+      "3/8",
+      "5/12",
+      "4/9",
+      "1/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 36입니다. 합이 8인 경우 5가지, 9인 경우 4가지, 10인 경우 3가지, 11인 경우 2가지, 12인 경우 1가지로 모두 15가지입니다. 따라서 확률은 15/36 = 5/12입니다.",
+    "concept": "경우의 수가 같은 확률에서 사건 A의 확률은 P(A) = (사건 A의 경우의 수)/(전체 경우의 수)이다."
+  },
+  {
+    "id": "math-2026-10-13-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-13",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
+    "concept": "sin x = t로 치환하여 이차방정식으로 풀고, 단위원에서 각 t값에 해당하는 x를 구한다."
   }
 ]
