@@ -15,10 +15,7 @@
     "확언이 독이 될 때 (자존감, 재현, 대안)",
     "사주의 대운 (10년 주기, 대운수, 해석)"
   ],
-  "pending_drafts": [
-    "01-Projects/황금정원-블로그/확언이-독이-될-때.md",
-    "01-Projects/황금정원-블로그/사주의-대운.md"
-  ],
+  "pending_drafts": [],
   "published": [
     {
       "file": "01-Projects/황금정원-블로그/미라클모닝-실패-이유.md",
@@ -31,6 +28,20 @@
       "topic": "확언 문장 만드는 법 (감정, 가치, 문장)",
       "published_at": "2026-08-09",
       "tistory_category": "확언·심리·마인드셋"
+    },
+    {
+      "file": "01-Projects/황금정원-블로그/확언이-독이-될-때.md",
+      "topic": "확언이 독이 될 때 (자존감, 재현, 대안)",
+      "published_at": "2026-10-12",
+      "tistory_category": "확언·심리·마인드셋",
+      "url": "https://diary21462.tistory.com/entry/%ED%99%95%EC%96%B8%EC%9D%B4-%EB%8F%85%EC%9D%B4-%EB%90%A0-%EB%95%8C-%EC%9E%90%EC%A1%B4%EA%B0%90-%EC%9E%AC%ED%98%84-%EB%8C%80%EC%95%88"
+    },
+    {
+      "file": "01-Projects/황금정원-블로그/사주의-대운.md",
+      "topic": "사주의 대운 (10년 주기, 대운수, 해석)",
+      "published_at": "2026-10-12",
+      "tistory_category": "확언·심리·마인드셋",
+      "url": "https://diary21462.tistory.com/entry/%EC%82%AC%EC%A3%BC%EC%9D%98-%EB%8C%80%EC%9A%B4-10%EB%85%84-%EC%A3%BC%EA%B8%B0-%EB%8C%80%EC%9A%B4%EC%88%98-%ED%95%B4%EC%84%9D"
     }
   ],
   "counters": {
