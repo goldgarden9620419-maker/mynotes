@@ -11108,5 +11108,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
     "concept": "sin x = t로 치환하여 이차방정식으로 풀고, 단위원에서 각 t값에 해당하는 x를 구한다."
+  },
+  {
+    "id": "en-2026-10-14-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-14",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Urban gardens [u]have become[/u]① popular in cities where space is limited. Residents [u]who[/u]② lack yards can grow vegetables on rooftops or in shared lots. These gardens not only provide fresh food but also give neighbors a place [u]where[/u]③ they can meet. Many participants say that working together [u]make[/u]④ them feel more connected to their community. Such connections encourage more people [u]to join[/u]⑤.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 동명사구 working together가 주어이므로 단수 동사 makes가 되어야 하며 make는 틀립니다. ①은 현재완료, ②는 Residents를 수식하는 주격 관계대명사, ③은 place를 수식하는 관계부사(뒤에 완전한 절), ⑤는 encourage + 목적어 + to부정사로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "urban",
+        "meaning": "도시의"
+      },
+      {
+        "word": "participant",
+        "meaning": "참가자"
+      },
+      {
+        "word": "rooftop",
+        "meaning": "옥상"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-14-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-14",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Good feedback does not simply tell learners whether they are right or wrong. Instead, it points to the gap between their current performance and the goal, and suggests how to close it. A grade alone, for example, offers no direction; it is only a verdict. Effective feedback therefore works as ______ rather than a final judgment.",
+    "choices": [
+      "a map for further improvement",
+      "a reward for natural talent",
+      "a measure of speed",
+      "a substitute for practice",
+      "a warning against mistakes"
+    ],
+    "answerIndex": 0,
+    "explanation": "좋은 피드백은 옳고 그름만 알려주지 않고 현재와 목표의 간극을 짚으며 이를 좁히는 방법을 제시한다고 했습니다. 점수는 방향 없는 '판결'일 뿐이라고 대비했으므로, 최종 판단이 아니라 개선 방향을 알려 주는 '지도'라는 ①이 적절합니다.",
+    "vocab": [
+      {
+        "word": "verdict",
+        "meaning": "판결, 평결"
+      },
+      {
+        "word": "gap",
+        "meaning": "간극, 차이"
+      },
+      {
+        "word": "performance",
+        "meaning": "수행, 성과"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-14-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-14",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Many cities have begun to replace asphalt with greener surfaces.\n(A) As a result, neighborhoods with more green space can be several degrees cooler in summer.\n(B) The reason is that dark asphalt absorbs heat during the day and releases it slowly at night.\n(C) In contrast, plants absorb sunlight and release water vapor, which cools the air around them.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글의 '아스팔트를 녹지로 바꾸는 이유'를 (B)가 The reason is로 설명합니다. (C)는 In contrast로 식물의 냉각 효과를 대비시키고, (A)의 As a result가 그 결과(녹지가 많은 동네가 더 시원함)를 정리하므로 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "asphalt",
+        "meaning": "아스팔트"
+      },
+      {
+        "word": "water vapor",
+        "meaning": "수증기"
+      },
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-14-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-14",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Bridges must be designed to cope with changes in temperature. ( ① ) Steel expands when it is heated and contracts when it cools. ( ② ) If nothing allowed for this movement, the bridge could crack. ( ③ ) For this reason, engineers build small gaps called expansion joints into the road surface. ( ④ ) These gaps give the material room to move safely. ( ⑤ )",
+    "givenSentence": "Over a hot summer day, a long bridge can grow several centimeters longer.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 강철이 열에 팽창한다는 일반 설명의 구체적 예(더운 여름날 다리가 길어짐)입니다. ② 뒤의 'this movement'는 주어진 문장이 말한 다리의 늘어남을 가리키므로 ②가 적절합니다.",
+    "vocab": [
+      {
+        "word": "contract",
+        "meaning": "수축하다"
+      },
+      {
+        "word": "expansion joint",
+        "meaning": "신축 이음매"
+      },
+      {
+        "word": "cope with",
+        "meaning": "~에 대처하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-14-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-14",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many people believe that doing several things at once saves time. In fact, the brain does not truly process two demanding tasks simultaneously; it switches rapidly between them. Each switch costs a small amount of time and attention, and these costs add up. As a result, people who multitask often make more errors and finish their work more slowly than those who focus on one task at a time.",
+    "choices": [
+      "The hidden costs of multitasking on efficiency",
+      "Ways to organize a daily schedule",
+      "The benefits of working in teams",
+      "Why the brain needs more sleep",
+      "Tips for learning new skills quickly"
+    ],
+    "answerIndex": 0,
+    "explanation": "여러 일을 동시에 하면 시간이 절약된다는 통념과 달리, 뇌는 과제 사이를 빠르게 전환하며 그때마다 시간과 주의력이 소모되어 오류가 늘고 속도가 느려진다는 내용이므로 ①이 주제입니다.",
+    "vocab": [
+      {
+        "word": "simultaneously",
+        "meaning": "동시에"
+      },
+      {
+        "word": "demanding",
+        "meaning": "까다로운, 요구가 많은"
+      },
+      {
+        "word": "add up",
+        "meaning": "쌓이다, 합쳐지다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-14-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-14",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, a₇의 값은?",
+    "choices": [
+      "96",
+      "144",
+      "192",
+      "256",
+      "384"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅/a₂ = r³ = 8이므로 r = 2, a₁ = 3입니다. 따라서 a₇ = 3·2⁶ = 192입니다.",
+    "concept": "등비수열의 일반항은 aₙ = a₁rⁿ⁻¹이고, aₘ과 aₙ의 비는 r^(n−m)이다."
+  },
+  {
+    "id": "math-2026-10-14-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-14",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값은?",
+    "choices": [
+      "1",
+      "3",
+      "5",
+      "7",
+      "9"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 극대, x = 3에서 극소입니다. 극댓값은 f(1) = 1 − 6 + 9 + 1 = 5입니다.",
+    "concept": "f'(x)의 부호가 양에서 음으로 바뀌는 x에서 f(x)는 극대이다."
+  },
+  {
+    "id": "math-2026-10-14-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-14",
+    "prompt": "정적분 ∫₁² (3x² + 2x) dx의 값은?",
+    "choices": [
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "answerIndex": 3,
+    "explanation": "부정적분은 x³ + x²이므로 x = 2에서 8 + 4 = 12, x = 1에서 1 + 1 = 2입니다. 따라서 값은 12 − 2 = 10입니다.",
+    "concept": "∫ₐᵇ f(x)dx = F(b) − F(a)이며, xⁿ의 부정적분은 xⁿ⁺¹/(n+1)이다."
+  },
+  {
+    "id": "math-2026-10-14-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-14",
+    "prompt": "서로 다른 동전 4개를 동시에 던질 때, 앞면이 정확히 2개 나올 확률은?",
+    "choices": [
+      "3/8",
+      "1/4",
+      "5/16",
+      "7/16",
+      "1/2"
+    ],
+    "answerIndex": 0,
+    "explanation": "전체 경우의 수는 2⁴ = 16이고, 앞면 2개가 나오는 경우의 수는 ₄C₂ = 6입니다. 따라서 확률은 6/16 = 3/8입니다.",
+    "concept": "독립시행에서 n번 중 r번 일어날 확률은 ₙCᵣ pʳ(1−p)ⁿ⁻ʳ이다."
+  },
+  {
+    "id": "math-2026-10-14-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-14",
+    "prompt": "0 ≤ x < 2π에서 방정식 2cos²x − 3cos x + 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "2π",
+      "3π/2",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2cos x − 1)(cos x − 1) = 0이므로 cos x = 1/2 또는 cos x = 1입니다. cos x = 1/2에서 x = π/3, 5π/3, cos x = 1에서 x = 0이므로 합은 π/3 + 5π/3 + 0 = 2π입니다.",
+    "concept": "cos x에 대한 이차방정식은 t = cos x로 치환하여 인수분해한 뒤, 단위원에서 해를 구한다."
   }
 ]
