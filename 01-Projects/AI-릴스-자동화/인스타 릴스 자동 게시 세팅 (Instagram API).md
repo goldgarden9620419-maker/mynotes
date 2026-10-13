@@ -61,5 +61,6 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 - **2026-10-07 1편 게시 완료** — https://www.instagram.com/reel/DeMEw69EpmX/ (AI 라벨 ON, 처리 약 1분)
 - **2026-10-08 19:30 2편 게시 완료 (--at 예약)** — https://www.instagram.com/reel/DeOuQmzimre/ (AI 라벨 ON)
 - **2026-10-10 21:30 3편 게시 완료 (--at 예약)** — https://www.instagram.com/reel/DeUFlSsFQlJ/ (AI 라벨 ON)
+- **2026-10-13 21:33 4편 게시 완료 (즉시 게시)** — https://www.instagram.com/reel/Deb0KyfihqK/ (AI 라벨 OFF, 원래 10/14 21:30 예정이었으나 명령 블록 전체 실행으로 바로 게시됨)
 - ✅ 2026-10-07 토큰 교체 완료 (비즈니스 통합에서 앱 제거 → 재발급 → 60일 확장 → 숨김 입력 저장, dry-run 통과)
 - ⏰ **토큰 만료 예정: 약 2026-12-06** → 11월 말에 탐색기에서 재발급·확장 (Claude에게 "인스타 토큰 갱신해줘")
