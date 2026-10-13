@@ -51,6 +51,7 @@ const REVIEWED_PLACES: { match: string; url: string }[] = [
   { match: "산호참숯곰장어", url: "https://blog.naver.com/gold-jw0419/224428467567" },
   { match: "정안정", url: "https://blog.naver.com/gold-jw0419/224429784223" },
   { match: "임진각", url: "https://blog.naver.com/gold-jw0419/224430607039" },
+  { match: "고기싸롱", url: "https://blog.naver.com/gold-jw0419/224439441672" },
 ];
 
 function reviewedPostUrl(name: string) {
