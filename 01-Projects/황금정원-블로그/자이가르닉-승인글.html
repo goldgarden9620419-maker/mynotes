@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>승인글 - 자꾸 생각나서 사랑인 줄 알았다</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Malgun Gothic",sans-serif;background:#f3f4f6;margin:0;padding:24px;color:#111827;}
+.wrap{max-width:760px;margin:0 auto;}
+.meta-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:20px 22px;margin-bottom:20px;}
+.meta-row{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;}
+.meta-label{font-weight:700;color:#374151;min-width:70px;font-size:0.92rem;}
+.meta-val{font-size:0.98rem;color:#111827;flex:1;}
+.copy-btn{background:#2563eb;color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:0.85rem;cursor:pointer;}
+.copy-btn:hover{background:#1d4ed8;}
+h1.page-title{font-size:1.3rem;margin:0 0 6px 0;}
+.section-title{font-size:1.05rem;font-weight:700;margin:26px 0 10px 0;color:#1e3a8a;}
+.preview{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;margin-bottom:20px;}
+textarea{width:100%;height:260px;box-sizing:border-box;font-family:monospace;font-size:0.82rem;padding:12px;border-radius:10px;border:1px solid #d1d5db;}
+.notice{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;font-size:0.9rem;color:#92400e;margin-top:14px;}
+/* card CSS */
+.lead-intro{font-size:1.05rem;line-height:1.95;color:#1f2937;margin:0 0 10px 0;}
+.post-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,0.05);margin:22px 0;overflow:hidden;}
+.post-card h2{font-size:1.3rem;font-weight:700;color:#1e3a8a;margin:0;padding:18px 22px;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:1px solid #e5e7eb;}
+.card-body{padding:20px 22px;}
+.card-body p{font-size:1rem;line-height:1.95;color:#374151;margin:0 0 14px 0;}
+.card-body p:last-child{margin-bottom:0;}
+.card-body h3{font-size:1.1rem;font-weight:700;color:#1e3a8a;margin:18px 0 10px 0;}
+.summary-card{background:#f0f7ff;border-left:4px solid #3b82f6;border-radius:8px;padding:14px 16px;margin-top:16px;font-size:0.95rem;line-height:1.8;color:#1e40af;}
+.summary-card b{color:#1d4ed8;}
+.card-body ul,.card-body ol{margin:10px 0 14px 22px;padding:0;}
+.card-body li{margin:6px 0;line-height:1.8;color:#374151;}
+.card-body a{color:#2563eb;text-decoration:underline;}
+.faq-card h2{background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:#5b21b6;}
+.faq-item{margin:0;}
+.faq-q{font-size:1rem;line-height:1.85;color:#5b21b6;margin:0 0 6px 0;}
+.faq-a{font-size:1rem;line-height:1.9;color:#374151;margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1 class="page-title">승인글 — 자꾸 생각나서 사랑인 줄 알았다 (자이가르닉, 미련, 매듭)</h1>
+
+<div class="meta-box">
+<div class="meta-row">
+<span class="meta-label">제목</span>
+<span class="meta-val" id="titleText">자꾸 생각나서 사랑인 줄 알았다 (자이가르닉, 미련, 매듭)</span>
+<button class="copy-btn" onclick="copyText('titleText')">복사</button>
+</div>
+<div class="meta-row">
+<span class="meta-label">카테고리</span>
+<span class="meta-val"><b>확언·심리·마인드셋</b></span>
+</div>
+<div class="meta-row">
+<span class="meta-label">태그</span>
+<span class="meta-val" id="tagsText">자이가르닉효과,자이가르닉,미련,이별심리,잊는법,그리움,인지적종결욕구,이별극복,관계정리,심리학</span>
+<button class="copy-btn" onclick="copyText('tagsText')">복사</button>
+</div>
+</div>
+
+<div class="section-title">본문 미리보기</div>
+<div class="preview" id="previewArea"></div>
+
+<div class="section-title">복사용 본문 HTML</div>
+<textarea id="src" readonly></textarea>
+<button class="copy-btn" onclick="copySrc()" style="margin-top:8px;">본문 HTML 전체 복사</button>
+
+<div class="notice">티스토리 글쓰기에서 HTML 모드로 전환 후 붙여넣으세요. 카드 CSS는 스킨에 최초 1회만 등록하면 됩니다.</div>
+</div>
+
+<script type="text/template" id="srcData">
+<p class="lead-intro" data-ke-size="size16">얼마 전 저는 오래 마음을 주고받았던 소중한 사람과 관계를 정리했습니다. 나름 단호한 편이라고 믿어왔는데, 이번만큼은 어디를 가든 무엇을 보든 그 사람이 떠올랐습니다.<br /><br />심리학에는 자이가르닉 효과라는 개념이 있습니다. 자이가르닉 효과는 끝내지 못한 일을 완료한 일보다 더 오래, 더 자주 떠올리는 심리 현상입니다. 이 개념을 알고 나서야 저는 제 미련과 그리움을 조금 다르게 보기 시작했습니다.</p>
+<p data-ke-size="size16"><br /><br /></p>
+<section class="post-card">
+<h2 data-ke-size="size26">자이가르닉 효과를 알고 나서야 보였다</h2>
+<div class="card-body">
+<p data-ke-size="size16">일반적으로 헤어진 사람이 자꾸 생각나면 아직 사랑하기 때문이라고들 합니다. 저도 그렇게 믿었습니다. 그런데 제 경험을 뜯어보니 조금 이상했습니다. 잊으려고 노력할수록 기억은 오히려 또렷해졌고, 다른 일에 집중해봐도 그 순간뿐이었습니다. 사랑이 깊어서라고 하기엔 떠오르는 방식이 숙제에 가까웠습니다. 마치 제출하지 못한 서류가 책상 위에 계속 놓여 있는 듯한 느낌이었습니다.<br /><br />자이가르닉 효과의 자이가르닉은 1920년대에 활동한 심리학자의 이름입니다. 식당에서 복잡한 주문을 메모 없이 정확히 기억하던 웨이터가 서빙을 마친 뒤에는 그 주문을 전혀 기억하지 못하는 모습을 보고 연구를 시작했다고 전해집니다. 이후 실험에서도 사람들은 중간에 끊긴 과제를 끝낸 과제보다 훨씬 잘 기억했습니다. 뇌는 끝난 일의 파일은 닫아버리고, 끝나지 못한 일의 파일은 계속 열어둔다는 뜻입니다.<br /><br />제 머릿속에서 그 사람이 떠나지 않았던 이유도 여기에 겹쳐 보였습니다. 관계가 깔끔하게 매듭지어지지 못한 채 끝났기 때문에, 뇌가 그 파일을 닫지 못하고 있었던 것으로 보입니다.</p>
+<div class="summary-card"><b>요약:</b> 자이가르닉 효과는 끝내지 못한 일을 완료한 일보다 더 오래 기억하는 심리 현상입니다. 누군가 자꾸 떠오른다는 사실만으로는 그 감정이 사랑인지 미련인지 구분할 수 없습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card">
+<h2 data-ke-size="size26">미련의 정체부터 다시 들여다봤다</h2>
+<div class="card-body">
+<p data-ke-size="size16">이런 현상이 생기는 이유로 심리학은 인지적 종결 욕구를 꼽습니다. 인지적 종결 욕구란 마무리되지 못한 일을 머릿속에 정리해 넣고 싶어 하는 욕구로, 말을 하다 마는 사람에게 유난히 답답함을 느끼는 것도 같은 원리입니다.<br /><br />일이라면 마저 끝내면 그만입니다. 문제는 인간관계입니다. 상대가 일방적으로 연락을 끊거나 마음을 전할 길 자체가 사라지면, 관계를 깔끔하게 종결지을 방법이 없습니다. 그래서 끝이 흐릿했던 관계일수록 미련과 집착이 유난히 오래 남는 것으로 보입니다.<br /><br />제 경우는 제가 먼저 정리한 관계였는데도 그랬습니다. 끝을 정하는 것과 마음이 매듭지어지는 건 전혀 다른 문제였고, 하지 못한 말들이 남아 머릿속에서 혼자 대화를 이어가고 있었습니다.<br /><br />다만 저는 여기서 반대쪽도 의심해봤습니다. 모든 그리움을 심리 현상 하나로 설명해버리는 것도 위험해 보였기 때문입니다. 진심으로 사랑했고 소중했던 시간이 있었기에 그만큼 아픈 것일 수도 있습니다. 자꾸 떠오른다는 사실은 사랑의 증거도, 미련만의 증거도 되지 못합니다. 그 생각의 정체는 시간을 두고 제가 직접 확인해야 하는 것이었습니다.</p>
+<div class="summary-card"><b>요약:</b> 인지적 종결 욕구는 마무리되지 못한 일을 정리하고 싶어 하는 마음의 욕구입니다. 일방적으로 끝난 관계는 종결이 어려워 미련이 오래 남지만, 그리움 전부를 심리 현상으로 단정할 수는 없습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card">
+<h2 data-ke-size="size26">매듭 짓는 방식을 바꿔봤다</h2>
+<div class="card-body">
+<p data-ke-size="size16">미국 심리학자들이 2011년 학술지에 발표한 연구가 제게 힌트가 됐습니다. 끝내지 못한 목표는 침투적 사고를 일으킵니다. 침투적 사고란 원하지 않는데도 머릿속에 자꾸 끼어드는 생각을 말합니다. 그런데 이 연구에서 참가자들이 미완성 목표에 대해 구체적인 계획을 세우자 끼어들던 생각이 눈에 띄게 줄었습니다. 일을 실제로 끝내지 않았는데도, 언제 어떻게 하겠다는 계획만으로 뇌가 열린 파일을 닫는 쪽으로 움직였다는 뜻입니다. <a href="https://doi.org/10.1037/a0024192" target="_blank" rel="noopener noreferrer">출처: Journal of Personality and Social Psychology(2011)</a><br /><br />저는 이 원리를 감정에 적용해봤습니다. 관계 자체는 되돌릴 수 없으니, 감정을 다루는 방식에 계획을 세운 것입니다.</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li data-ke-size="size16">생각이 떠오르면 억누르는 대신 '지금 그 사람이 생각났다'라고 한 줄 적었습니다</li>
+<li data-ke-size="size16">그리움이 유난히 큰 날에는 저녁 산책처럼 몸을 쓰는 일정을 하나 넣었습니다</li>
+<li data-ke-size="size16">'언제까지 잊겠다'는 기한은 정하지 않기로 했습니다</li>
+</ul>
+<p data-ke-size="size16">이별 뒤에 충분히 슬퍼하는 시간을 심리학에서는 애도 과정이라고 부릅니다. 애도 과정은 상실을 받아들이기 위해 누구에게나 필요한 심리적 과정으로 설명되며, 서두른다고 짧아지는 것 같지는 않았습니다. <a href="https://www.mentalhealth.go.kr/" target="_blank" rel="noopener noreferrer">출처: 국가정신건강정보포털</a></p>
+<div class="summary-card"><b>요약:</b> 구체적인 계획을 세우는 것만으로 미완성 목표가 일으키는 침투적 사고가 줄어든다는 연구 결과가 있습니다. 감정도 억누르는 대신 적고 계획하면 매듭에 가까워집니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card">
+<h2 data-ke-size="size26">빨리 잊어야 한다는 강박을 내려놓았다</h2>
+<div class="card-body">
+<p data-ke-size="size16">돌아보면 이별 뒤에 저를 가장 힘들게 한 건 빨리 잊어야 한다는 저 자신의 강박이었습니다. 왜 자꾸 생각나지, 아직 미련이 남았나, 언제쯤 괜찮아질까. 이런 질문으로 제 감정을 끊임없이 심문했고, 그럴수록 마음은 더 시끄러워졌습니다. 함께 갔던 장소를 지날 때나 사소한 물건 하나를 볼 때도 기억은 불쑥 올라왔는데, 그때마다 '또 생각했네'라고 저를 다그치는 게 그리움 자체보다 저를 더 지치게 했습니다.<br /><br />그래서 지금은 반대로 합니다. 생각이 나면 좋은 추억으로 받아들이고, 그리우면 그리운 대로 인정합니다. 떠오른 기억을 밀어내는 데 쓰던 힘을 오늘 저녁 메뉴나 내일 일정 같은 제 하루로 돌렸습니다. 신기하게도 그렇게 하자 마음이 한결 편해졌고, 생각나는 횟수도 저절로 줄기 시작했습니다. 억누를 때는 하루에도 몇 번씩 올라오던 생각이 인정하고 나서는 드문드문해졌습니다.<br /><br />시간이 약이라고들 하지만, 제 경험상 시간보다 중요한 건 감정을 대하는 태도였습니다. 잊는 것이 정리가 아니라, 떠올려도 더 이상 아프지 않은 상태가 정리라는 걸 이제는 압니다.</p>
+<div class="summary-card"><b>요약:</b> 이별 후 가장 큰 고통은 빨리 잊어야 한다는 강박에서 올 수 있습니다. 그리움을 인정하는 태도가 기억을 지우려는 노력보다 회복에 가깝습니다.</div>
+</div>
+</section>
+<br />
+<section class="post-card faq-card">
+<h2 data-ke-size="size26">제가 저에게 던진 질문들</h2>
+<div class="card-body">
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 자꾸 생각나면 아직 사랑하고 있는 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 저도 한참 헷갈렸습니다. 자이가르닉 효과를 알고 나서는 떠오르는 횟수로 판단하지 않기로 했습니다. 끝내지 못한 일은 원래 자주 떠오릅니다. 사랑인지는 마음이 가라앉은 뒤에야 보이는 것 같습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 그리움을 억지로라도 끊어내야 하는 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 저는 그러지 않기로 했습니다. 충분히 그리워하는 시간도 애도 과정의 일부라고 받아들였습니다. 억지로 끊으려 할수록 열린 파일만 더 선명해지는 걸 제가 직접 겪었기 때문입니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 언제쯤 괜찮아질지 조급해지면 어떻게 하지?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 기한을 정하는 순간 회복이 숙제가 됐습니다. 그래서 저는 날짜를 지우고 기록만 남겼습니다. 적어둔 메모가 쌓이면서 생각나는 간격이 길어지는 걸 확인한 게 오히려 위로가 됐습니다.</p>
+</div>
+<p data-ke-size="size16"><br /></p>
+<div class="faq-item">
+<p class="faq-q" data-ke-size="size16"><b>Q. 새로운 만남은 언제 시작해도 되는 걸까?</b></p>
+<p class="faq-a" data-ke-size="size16">A. 옷장을 정리해야 새 옷이 들어올 자리가 보인다는 말을 저는 관계에도 적용합니다. 그 사람이 떠올라도 일상이 흔들리지 않을 때, 그때가 제 매듭이 지어진 시점이라고 생각합니다.</p>
+</div>
+</div>
+</section>
+<br />
+<section class="post-card">
+<h2 data-ke-size="size26">결론</h2>
+<div class="card-body">
+<p data-ke-size="size16">그 사람이 자꾸 생각난다고 해서 제 마음이 여전히 거기에 가 있다고 단정하지 않기로 했습니다. 끝내지 못한 일을 붙잡는 뇌의 습관일 수도, 진심이 남긴 잔향일 수도 있습니다. 어느 쪽이든 제가 할 일은 같았습니다. 감정을 심문하는 대신 인정하고, 기록하고, 제 하루를 계속 사는 것입니다. 이별의 완성은 그 사람 없이도 제 삶을 온전히 살아가게 되는 것이라고 저는 믿습니다. 기억을 지우는 일은 그 완성에 필요하지 않았습니다.</p>
+<p data-ke-size="size16">비슷한 마음을 지나고 계신 분이 있다면, 오늘 눌러주신 공감♥ 하나를 '나도 매듭 하나 지었다'는 신호로 받겠습니다. 다음에도 마음이 가벼워지는 심리 이야기로 찾아오겠습니다.</p>
+<p data-ke-size="size16">참고한 영상: <a href="https://www.youtube.com/watch?v=eLj9LbwCBFI" target="_blank" rel="noopener noreferrer">이게 사랑이 아니면 뭐예요? ㅣ 자이가르닉 효과 (어썸 심리학)</a></p>
+</div>
+</section>
+</script>
+
+<script>
+function copyText(id){
+  var t=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t);
+}
+function copySrc(){
+  var ta=document.getElementById('src');
+  ta.select();
+  document.execCommand('copy');
+}
+window.onload=function(){
+  var raw=document.getElementById('srcData').innerHTML;
+  document.getElementById('src').value=raw.trim();
+  document.getElementById('previewArea').innerHTML=raw;
+};
+</script>
+</body>
+</html>
