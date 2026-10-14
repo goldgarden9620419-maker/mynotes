@@ -11349,5 +11349,242 @@
     "answerIndex": 1,
     "explanation": "(2cos x − 1)(cos x − 1) = 0이므로 cos x = 1/2 또는 cos x = 1입니다. cos x = 1/2에서 x = π/3, 5π/3, cos x = 1에서 x = 0이므로 합은 π/3 + 5π/3 + 0 = 2π입니다.",
     "concept": "cos x에 대한 이차방정식은 t = cos x로 치환하여 인수분해한 뒤, 단위원에서 해를 구한다."
+  },
+  {
+    "id": "en-2026-10-15-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-15",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Researchers [u]studying[/u]① sleep have found that students [u]who[/u]② go to bed late often struggle to concentrate in class. Lack of sleep makes it difficult [u]to remember[/u]③ new information. One study showed that teenagers [u]given[/u]④ extra rest performed better on tests than those [u]who was[/u]⑤ tired.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ those는 복수 대명사이므로 관계대명사절의 동사도 복수형 were가 되어야 하며 was는 틀립니다. ①은 Researchers를 수식하는 현재분사, ②는 주격 관계대명사, ③은 가목적어 it에 대응하는 진목적어 to부정사, ④는 teenagers를 수식하는 과거분사(주어진)로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "concentrate",
+        "meaning": "집중하다"
+      },
+      {
+        "word": "struggle",
+        "meaning": "애쓰다, 힘겨워하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-15-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-15",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "People often assume that creativity comes from sudden inspiration. However, studies of successful inventors show that most of their ideas grew out of long periods of patient experimentation. Failed attempts were not wasted; each one revealed what did not work and narrowed the search. Creativity, in other words, is less a flash of genius than ______.",
+    "choices": [
+      "the product of natural talent alone",
+      "a reward for avoiding mistakes",
+      "a result of working in silence",
+      "the accumulation of many small trials",
+      "a way of copying others' ideas"
+    ],
+    "answerIndex": 3,
+    "explanation": "발명가들의 아이디어는 오랜 시간의 끈기 있는 실험에서 나왔고, 실패한 시도도 탐색 범위를 좁혀 주었다고 했습니다. 따라서 창의성은 번뜩이는 천재성보다 '수많은 작은 시도의 누적'이라는 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "inventor",
+        "meaning": "발명가"
+      },
+      {
+        "word": "experimentation",
+        "meaning": "실험"
+      },
+      {
+        "word": "accumulation",
+        "meaning": "축적"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-15-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-15",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Honeybees communicate the location of food through a special movement.\n(A) The angle of the dance relative to vertical shows the direction of the food compared with the sun.\n(B) When a worker finds a good source, she returns to the hive and performs a \"waggle dance.\"\n(C) Using this information, the watching bees fly straight to the flower patch.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 '특별한 움직임'을 (B)가 waggle dance로 구체화합니다. (A)는 그 춤(the dance)의 각도가 알려 주는 방향 정보를 설명하고, (C)는 Using this information으로 그 정보를 활용해 날아가는 결과를 말하므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "waggle",
+        "meaning": "(몸을) 흔들다"
+      },
+      {
+        "word": "hive",
+        "meaning": "벌집"
+      },
+      {
+        "word": "relative to",
+        "meaning": "~에 비해, ~에 상대적으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-15-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-15",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Many people think that learning a language is mostly about memorizing words. ( ① ) However, researchers argue that listening practice matters just as much. ( ② ) Learners who hear natural speech every day pick up rhythm and pronunciation without effort. ( ③ ) Vocabulary lists, on the other hand, rarely show how words sound in real conversation. ( ④ ) Thus, a balanced routine should include both. ( ⑤ )",
+    "givenSentence": "This is why a student with a large vocabulary can still struggle to understand a fast-speaking native speaker.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 This is why는 앞 문장의 원인을 받습니다. 단어 목록이 실제 대화에서 단어가 어떻게 들리는지 보여주지 못한다는 내용 바로 뒤인 ④에 들어가야, 어휘가 많아도 빠른 말을 알아듣기 어렵다는 결과가 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "pronunciation",
+        "meaning": "발음"
+      },
+      {
+        "word": "routine",
+        "meaning": "일과, 루틴"
+      },
+      {
+        "word": "memorize",
+        "meaning": "암기하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-15-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-15",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Public libraries are changing. Once places only for borrowing books, they now offer workshops, job training, and free internet access. Many also host community events that bring neighbors together. As a result, libraries are becoming centers of community life rather than quiet storehouses of books.",
+    "choices": [
+      "the decline of reading habits among young people",
+      "the importance of silence in learning spaces",
+      "the high cost of operating public facilities",
+      "the rise of online bookstores",
+      "the expanding role of libraries as community centers"
+    ],
+    "answerIndex": 4,
+    "explanation": "도서관이 책 대여를 넘어 워크숍, 취업 교육, 인터넷, 지역 행사를 제공하며 공동체 생활의 중심이 되고 있다는 내용이므로 ⑤가 주제입니다.",
+    "vocab": [
+      {
+        "word": "workshop",
+        "meaning": "워크숍, 실습 모임"
+      },
+      {
+        "word": "host",
+        "meaning": "(행사를) 주최하다"
+      },
+      {
+        "word": "storehouse",
+        "meaning": "저장소, 창고"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-15-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-15",
+    "prompt": "등차수열 {aₙ}에서 a₃=7, a₇=19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "145",
+      "150",
+      "155",
+      "160",
+      "165"
+    ],
+    "answerIndex": 0,
+    "explanation": "a₇−a₃=4d=12이므로 d=3, a₁=7−6=1입니다. a₁₀=1+27=28이므로 S₁₀=10(1+28)/2=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n(a₁+aₙ)/2, 일반항 aₙ=a₁+(n−1)d"
+  },
+  {
+    "id": "math-2026-10-15-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-15",
+    "prompt": "함수 f(x)=x³−6x²+9x+1의 극댓값과 극솟값의 합은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 3,
+    "explanation": "f'(x)=3x²−12x+9=3(x−1)(x−3)이므로 x=1에서 극대, x=3에서 극소입니다. f(1)=5, f(3)=27−54+27+1=1이므로 합은 6입니다.",
+    "concept": "f'(x)의 부호가 +에서 −로 바뀌는 점에서 극대, −에서 +로 바뀌는 점에서 극소"
+  },
+  {
+    "id": "math-2026-10-15-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-15",
+    "prompt": "정적분 ∫₀² (3x²−2x+1) dx의 값은?",
+    "choices": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "10"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³−x²+x이므로 x=2에서 8−4+2=6, x=0에서 0입니다. 따라서 값은 6입니다.",
+    "concept": "∫xⁿ dx = xⁿ⁺¹/(n+1)+C 와 정적분 ∫ₐᵇ f(x)dx = F(b)−F(a)"
+  },
+  {
+    "id": "math-2026-10-15-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-15",
+    "prompt": "6명의 학생 중에서 대표 3명을 뽑을 때, 특정한 두 학생 A, B 중 정확히 한 명만 포함되도록 뽑는 경우의 수는?",
+    "choices": [
+      "6",
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "answerIndex": 3,
+    "explanation": "A, B 중 한 명을 고르는 방법은 2가지, 나머지 4명 중 2명을 고르는 방법은 ₄C₂=6가지이므로 2×6=12입니다.",
+    "concept": "조합 ₙCᵣ=n!/(r!(n−r)!)와 곱의 법칙"
+  },
+  {
+    "id": "math-2026-10-15-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-15",
+    "prompt": "0≤x<2π에서 방정식 2cos²x+cosx−1=0의 모든 해의 합은?",
+    "choices": [
+      "5π/2",
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2cosx−1)(cosx+1)=0이므로 cosx=1/2 또는 cosx=−1입니다. 해는 x=π/3, 5π/3, π이고 합은 π/3+5π/3+π=3π입니다.",
+    "concept": "cosx에 대한 이차방정식으로 보고 인수분해한 뒤 단위원에서 해를 구한다"
   }
 ]
