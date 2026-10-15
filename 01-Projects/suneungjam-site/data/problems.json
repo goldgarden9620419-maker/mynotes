@@ -11586,5 +11586,246 @@
     "answerIndex": 1,
     "explanation": "(2cosx−1)(cosx+1)=0이므로 cosx=1/2 또는 cosx=−1입니다. 해는 x=π/3, 5π/3, π이고 합은 π/3+5π/3+π=3π입니다.",
     "concept": "cosx에 대한 이차방정식으로 보고 인수분해한 뒤 단위원에서 해를 구한다"
+  },
+  {
+    "id": "en-2026-10-16-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-16",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that talent alone [u]determines[/u]① success, but research suggests that steady practice matters more. Athletes [u]who train[/u]② every day often improve faster than those [u]relying[/u]③ on natural ability. A coach once remarked that what separates champions from others [u]are[/u]④ not talent but the willingness [u]to keep[/u]⑤ going after failure.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ what separates champions from others는 명사절로 단수 취급하므로 동사는 are가 아니라 is여야 합니다. ①은 주어 talent에 맞는 단수 동사, ②는 복수 선행사 Athletes를 받는 관계절, ③은 those를 수식하는 현재분사, ⑤는 willingness를 수식하는 to부정사로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "willingness",
+        "meaning": "기꺼이 하는 마음"
+      },
+      {
+        "word": "remark",
+        "meaning": "언급하다"
+      },
+      {
+        "word": "steady",
+        "meaning": "꾸준한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-16-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-16",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Memory is often compared to a video recorder, but psychologists say this comparison is misleading. Each time we recall an event, we do not replay a fixed file; instead, we rebuild it from scattered pieces, and the details can shift subtly. This is why two people who witnessed the same event may describe it quite differently. In short, remembering is closer to ______ than to playing back a recording.",
+    "choices": [
+      "reconstructing a story from fragments",
+      "storing facts in a permanent archive",
+      "copying information word for word",
+      "deleting unnecessary details",
+      "comparing events with others' reports"
+    ],
+    "answerIndex": 0,
+    "explanation": "기억은 고정된 파일을 재생하는 것이 아니라 흩어진 조각으로 다시 만들어 내는 것이라 했으므로, '조각들로 이야기를 재구성하는 것'이 빈칸에 적절합니다.",
+    "vocab": [
+      {
+        "word": "misleading",
+        "meaning": "오해를 일으키는"
+      },
+      {
+        "word": "witness",
+        "meaning": "목격하다"
+      },
+      {
+        "word": "subtly",
+        "meaning": "미묘하게"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-16-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-16",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Cities around the world are planting more trees along their streets.\n(A) As a result, residents in these neighborhoods report cooler summers and cleaner air.\n(B) The shade from the leaves lowers the temperature of pavement, which otherwise absorbs and releases heat.\n(C) Planners have found that this simple step brings benefits beyond appearance.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 4,
+    "explanation": "(C)의 this simple step이 주어진 글의 나무 심기를 가리키며 외관 이상의 이점을 소개합니다. (B)는 그 이점의 원리(그늘이 포장도로 온도를 낮춤)를 설명하고, (A)는 As a result로 그 결과를 말하므로 (C)-(B)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "pavement",
+        "meaning": "포장도로"
+      },
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      },
+      {
+        "word": "resident",
+        "meaning": "주민"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-16-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-16",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Good writers rarely produce a perfect draft on the first try. ( ① ) They write quickly, then return to improve the structure and clarity. ( ② ) After that, they read the text slowly, checking spelling and punctuation. ( ③ ) Revision, in this sense, is not extra work but an essential part of writing. ( ④ ) A first draft is only the beginning. ( ⑤ )",
+    "givenSentence": "Without this step, even a well-written essay can contain errors that distract the reader.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장의 this step은 바로 앞에서 언급된 맞춤법과 문장부호를 확인하는 단계를 가리킵니다. 그 단계가 없으면 잘 쓴 글에도 독자를 방해하는 오류가 남는다는 내용이므로 ③에 들어가야 이어지는 Revision 문장과 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "draft",
+        "meaning": "초안"
+      },
+      {
+        "word": "punctuation",
+        "meaning": "문장부호"
+      },
+      {
+        "word": "distract",
+        "meaning": "주의를 흩뜨리다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-16-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-16",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many people volunteer to help others, but the benefits are not one-sided. Studies show that volunteers report lower stress, stronger friendships, and a greater sense of purpose. Helping a neighbor or a stranger shifts attention away from personal worries and builds confidence. In this way, giving to others turns out to be a gift to oneself.",
+    "choices": [
+      "the need for more government support for charities",
+      "how to choose a suitable volunteer program",
+      "personal benefits that volunteers gain from helping others",
+      "the difficulty of balancing work and community service",
+      "the effect of friendship on academic performance"
+    ],
+    "answerIndex": 2,
+    "explanation": "봉사자들이 스트레스 감소, 우정, 삶의 목적의식 등을 얻는다며 남을 돕는 일이 결국 자신에게도 선물이 된다고 했으므로 주제는 ③입니다.",
+    "vocab": [
+      {
+        "word": "volunteer",
+        "meaning": "자원봉사하다"
+      },
+      {
+        "word": "one-sided",
+        "meaning": "한쪽으로 치우친"
+      },
+      {
+        "word": "purpose",
+        "meaning": "목적의식"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-16-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-16",
+    "prompt": "등비수열 {aₙ}에서 a₂=6, a₅=48일 때, 첫째항부터 제6항까지의 합은?",
+    "choices": [
+      "165",
+      "177",
+      "189",
+      "201",
+      "213"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅/a₂=r³=8이므로 r=2, a₁=3입니다. S₆=3(2⁶−1)/(2−1)=3×63=189입니다.",
+    "concept": "등비수열의 합 Sₙ=a(rⁿ−1)/(r−1) (r≠1), 일반항 aₙ=arⁿ⁻¹"
+  },
+  {
+    "id": "math-2026-10-16-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-16",
+    "prompt": "함수 f(x)=x³−3x²+k의 닫힌구간 [−1, 3]에서의 최댓값이 5일 때, 최솟값은? (단, k는 상수)",
+    "choices": [
+      "−1",
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x)=3x(x−2)이므로 x=0, 2가 임계점입니다. f(−1)=k−4, f(0)=k, f(2)=k−4, f(3)=k이므로 최댓값은 k=5, 최솟값은 k−4=1입니다.",
+    "concept": "닫힌구간에서 연속인 함수의 최댓값·최솟값은 극값과 양 끝점의 함숫값을 비교하여 구한다"
+  },
+  {
+    "id": "math-2026-10-16-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-16",
+    "prompt": "곡선 y=−x²+4x와 직선 y=x로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "3",
+      "7/2",
+      "4",
+      "9/2",
+      "5"
+    ],
+    "answerIndex": 3,
+    "explanation": "−x²+4x=x에서 x²−3x=0이므로 x=0, 3입니다. 넓이는 ∫₀³(−x²+3x)dx=[−x³/3+3x²/2]₀³=−9+27/2=9/2입니다.",
+    "concept": "두 곡선 사이의 넓이는 ∫ₐᵇ |f(x)−g(x)| dx (위쪽 함수 − 아래쪽 함수)"
+  },
+  {
+    "id": "math-2026-10-16-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-16",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 2개의 공을 동시에 꺼낼 때, 꺼낸 두 공의 색이 같을 확률은?",
+    "choices": [
+      "2/7",
+      "3/7",
+      "4/7",
+      "5/7",
+      "6/7"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 ₇C₂=21이고, 둘 다 흰 공인 경우 ₄C₂=6, 둘 다 검은 공인 경우 ₃C₂=3이므로 확률은 (6+3)/21=3/7입니다.",
+    "concept": "서로 배반인 사건의 확률의 합 P(A∪B)=P(A)+P(B), 조합의 수 ₙCᵣ"
+  },
+  {
+    "id": "math-2026-10-16-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-16",
+    "prompt": "0≤x<2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x+1)(sin x−1)=0이므로 sin x=1 또는 sin x=−1/2입니다. 해는 x=π/2, 7π/6, 11π/6이고 합은 π/2+7π/6+11π/6=7π/2입니다.",
+    "concept": "sin x를 한 문자로 치환하여 인수분해한 뒤, 단위원에서 각 값에 해당하는 x를 모두 찾는다"
   }
 ]
