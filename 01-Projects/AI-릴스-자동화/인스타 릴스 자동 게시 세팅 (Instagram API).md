@@ -64,5 +64,6 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 - ~~2026-10-13 21:33 4편 1차 게시 https://www.instagram.com/reel/Deb0KyfihqK/~~ → 배경음 웅 소리로 삭제
 - **2026-10-13 21:4x 4편 v2 재게시 완료** — https://www.instagram.com/p/Deb1Ssmil1E/ (AI 라벨 OFF, 배경음 제거 + 완성 딩 효과음)
 - **2026-10-14 20:3x 5편 게시 완료 (인스타 앱 직접 업로드 + 앱 음악)** — https://www.instagram.com/p/DeeSBp8obpT/ (AI 라벨 OFF, 하루보고 페이스북 페이지 동시 공유)
+- **2026-10-15 6편 게시 완료 (앱 업로드, 음악 없이 올라감)** — https://www.instagram.com/p/Deg61KJIMd2/ (AI 라벨 OFF) · 교훈: 앱에서 「다음」 전에 상단 곡 이름 확인
 - ✅ 2026-10-07 토큰 교체 완료 (비즈니스 통합에서 앱 제거 → 재발급 → 60일 확장 → 숨김 입력 저장, dry-run 통과)
 - ⏰ **토큰 만료 예정: 약 2026-12-06** → 11월 말에 탐색기에서 재발급·확장 (Claude에게 "인스타 토큰 갱신해줘")
