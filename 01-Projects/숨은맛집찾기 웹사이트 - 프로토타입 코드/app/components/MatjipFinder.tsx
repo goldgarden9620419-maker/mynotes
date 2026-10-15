@@ -52,6 +52,7 @@ const REVIEWED_PLACES: { match: string; url: string }[] = [
   { match: "정안정", url: "https://blog.naver.com/gold-jw0419/224429784223" },
   { match: "임진각", url: "https://blog.naver.com/gold-jw0419/224430607039" },
   { match: "고기싸롱", url: "https://blog.naver.com/gold-jw0419/224439441672" },
+  { match: "호탕한갈비탕", url: "https://blog.naver.com/gold-jw0419/224440361087" },
 ];
 
 function reviewedPostUrl(name: string) {
