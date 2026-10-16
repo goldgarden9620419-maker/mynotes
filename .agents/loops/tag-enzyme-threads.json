@@ -15,9 +15,7 @@
     "원료 삼각형(T.A.G) 영상 각도",
     "원료 딥다이브(글루텐 분해 유산균) 각도"
   ],
-  "pending_drafts": [
-    "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-7-글루텐분해유산균딥다이브.md"
-  ],
+  "pending_drafts": [],
   "publishing_tool": "Typefully MCP (2026-10-02부터) — social_set_id 337240, kim_jade0419 Threads 연동됨. 기존 PowerShell 스크립트 방식은 백업 수단으로 유지.",
   "next_run_plan": null,
   "published": [
@@ -70,6 +68,15 @@
       "published_url": "https://www.threads.com/@kim_jade0419/post/DeQZGe0gG8s",
       "published_via": "typefully",
       "media": "video (Seedance 2.0, 720p, 5s)",
+      "has_purchase_link_comment": true
+    },
+    {
+      "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-7-글루텐분해유산균딥다이브.md",
+      "angle": "원료 딥다이브(글루텐 분해 유산균) 각도",
+      "published_at": "2026-10-16",
+      "account": "kim_jade0419",
+      "published_url": "https://www.threads.com/@kim_jade0419/post/DeifnGmm0Cx",
+      "published_via": "typefully",
       "has_purchase_link_comment": true
     }
   ],
