@@ -11827,5 +11827,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x+1)(sin x−1)=0이므로 sin x=1 또는 sin x=−1/2입니다. 해는 x=π/2, 7π/6, 11π/6이고 합은 π/2+7π/6+11π/6=7π/2입니다.",
     "concept": "sin x를 한 문자로 치환하여 인수분해한 뒤, 단위원에서 각 값에 해당하는 x를 모두 찾는다"
+  },
+  {
+    "id": "en-2026-10-17-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-17",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many students believe that [u]studying[/u]① longer always leads to better results, but experts point out that the quality of attention [u]matters[/u]② more. Those who take short breaks often find it easier [u]to maintain[/u]③ focus than those [u]who don't[/u]④. In one study, learners [u]whom[/u]⑤ rested for five minutes every hour remembered more of the material.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ whom 뒤에 바로 동사 rested가 이어지므로 whom이 아니라 주격 관계대명사 who(또는 that)여야 합니다. ①은 동명사 주어, ②는 주어 quality에 맞는 단수 동사, ③은 가목적어 it에 대응하는 진목적어 to부정사, ④는 those를 수식하는 관계절로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "maintain",
+        "meaning": "유지하다"
+      },
+      {
+        "word": "attention",
+        "meaning": "주의, 집중"
+      },
+      {
+        "word": "material",
+        "meaning": "자료, 내용"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-17-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-17",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Language learners often feel embarrassed when they make mistakes, and some stop speaking altogether. However, teachers who study successful learners notice a different attitude. These learners say the wrong word, listen to the reaction, and adjust the next time. In other words, they treat errors not as failures but as ______ that guide their improvement.",
+    "choices": [
+      "sources of feedback",
+      "signs of missing talent",
+      "reasons to avoid speaking",
+      "proof of fixed ability",
+      "distractions from practice"
+    ],
+    "answerIndex": 0,
+    "explanation": "성공한 학습자는 틀린 말을 하고 반응을 듣고 다음에 조정한다고 했으므로, 실수를 개선을 이끄는 '피드백의 원천'으로 본다는 내용이 빈칸에 적절합니다.",
+    "vocab": [
+      {
+        "word": "embarrassed",
+        "meaning": "당황한, 창피한"
+      },
+      {
+        "word": "altogether",
+        "meaning": "완전히"
+      },
+      {
+        "word": "adjust",
+        "meaning": "조정하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-17-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-17",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Bees play a crucial role in agriculture.\n(A) Without them, many crops would produce far less fruit, and farmers would face higher costs.\n(B) This is because they carry pollen from flower to flower while collecting nectar.\n(C) Scientists therefore warn that a decline in bee populations could threaten food supplies.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 '벌이 농업에서 중요한 역할을 한다'는 내용의 이유를 (B)가 This is because로 설명합니다. 이어서 (A)가 벌이 없을 때의 결과를 말하고, (C)가 therefore로 결론(벌 개체 수 감소의 위험)을 맺으므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "crucial",
+        "meaning": "매우 중요한"
+      },
+      {
+        "word": "pollen",
+        "meaning": "꽃가루"
+      },
+      {
+        "word": "nectar",
+        "meaning": "꿀, 화밀"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-17-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-17",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Many people now rely on smartphones to store phone numbers, addresses, and appointments. ( ① ) This convenience frees our minds from routine details. ( ② ) Yet researchers have noticed a side effect. ( ③ ) When we expect a device to keep information for us, we make less effort to remember it ourselves. ( ④ ) Over time, our memory for such details may weaken. ( ⑤ )",
+    "givenSentence": "Psychologists call this tendency \"cognitive offloading.\"",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 this tendency는 바로 앞 문장의 '기기가 정보를 보관해 줄 것이라 기대하면 스스로 기억하려는 노력을 덜 한다'는 경향을 가리킵니다. 그 경향에 이름(cognitive offloading)을 붙인 뒤 Over time으로 장기적 영향을 설명하는 흐름이므로 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "rely on",
+        "meaning": "~에 의존하다"
+      },
+      {
+        "word": "appointment",
+        "meaning": "약속, 일정"
+      },
+      {
+        "word": "offloading",
+        "meaning": "(부담을) 떠넘기기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-17-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-17",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Parks are more than patches of green in a crowded city. They give neighbors a place to meet, children a place to play, and workers a place to rest. Studies show that people who live near parks report lower stress and stronger ties with those around them. Cities that treat parks as optional extras therefore overlook an investment in both health and community.",
+    "choices": [
+      "Urban parks improve residents' well-being and community bonds.",
+      "Designing parks that attract international tourists is essential.",
+      "Overcrowded city centers cause serious social problems.",
+      "Maintaining public green spaces costs too much for cities.",
+      "Children need playgrounds more than adults need parks."
+    ],
+    "answerIndex": 0,
+    "explanation": "공원이 이웃 간 만남, 놀이, 휴식의 장소를 제공하며 스트레스를 낮추고 유대를 강화한다는 내용이므로, 도시 공원이 주민의 건강과 공동체 유대에 기여한다는 ①번이 주제입니다.",
+    "vocab": [
+      {
+        "word": "overlook",
+        "meaning": "간과하다"
+      },
+      {
+        "word": "ties",
+        "meaning": "유대, 관계"
+      },
+      {
+        "word": "optional",
+        "meaning": "선택적인"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-17-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-17",
+    "prompt": "등차수열 {aₙ}에서 a₃=7, a₈=22일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "125",
+      "135",
+      "145",
+      "155",
+      "165"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₈−a₃=5d=15이므로 d=3, a₁=7−6=1입니다. a₁₀=1+27=28이므로 S₁₀=10(1+28)/2=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n(a₁+aₙ)/2, 일반항 aₙ=a₁+(n−1)d"
+  },
+  {
+    "id": "math-2026-10-17-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-17",
+    "prompt": "곡선 y=x³−2x+3 위의 점 (2, 7)에서의 접선의 y절편은?",
+    "choices": [
+      "−17",
+      "−15",
+      "−13",
+      "−11",
+      "−9"
+    ],
+    "answerIndex": 2,
+    "explanation": "y'=3x²−2이므로 x=2에서 기울기는 10입니다. 접선은 y−7=10(x−2), 즉 y=10x−13이므로 y절편은 −13입니다.",
+    "concept": "곡선 y=f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y−f(a)=f'(a)(x−a)"
+  },
+  {
+    "id": "math-2026-10-17-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-17",
+    "prompt": "함수 f(x)가 f'(x)=6x²−4x+1이고 f(0)=2일 때, f(2)의 값은?",
+    "choices": [
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(x)=∫(6x²−4x+1)dx=2x³−2x²+x+C이고 f(0)=2이므로 C=2입니다. f(2)=16−8+2+2=12입니다.",
+    "concept": "부정적분 ∫xⁿdx=xⁿ⁺¹/(n+1)+C 이고, 적분상수는 주어진 함숫값으로 결정한다"
+  },
+  {
+    "id": "math-2026-10-17-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-17",
+    "prompt": "서로 다른 주사위 두 개를 동시에 던질 때, 나오는 눈의 수의 합이 7 이상일 확률은?",
+    "choices": [
+      "5/12",
+      "1/2",
+      "7/12",
+      "2/3",
+      "3/4"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 36입니다. 합이 7, 8, 9, 10, 11, 12인 경우는 각각 6, 5, 4, 3, 2, 1가지이므로 21가지입니다. 확률은 21/36=7/12입니다.",
+    "concept": "각 경우가 동일한 정도로 일어날 때 확률은 (사건 A의 경우의 수)/(전체 경우의 수)"
+  },
+  {
+    "id": "math-2026-10-17-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-17",
+    "prompt": "sinθ+cosθ=1/2일 때, sinθcosθ의 값은?",
+    "choices": [
+      "−3/4",
+      "−3/8",
+      "−1/4",
+      "3/8",
+      "3/4"
+    ],
+    "answerIndex": 1,
+    "explanation": "양변을 제곱하면 sin²θ+2sinθcosθ+cos²θ=1/4이고 sin²θ+cos²θ=1이므로 1+2sinθcosθ=1/4입니다. 따라서 sinθcosθ=−3/8입니다.",
+    "concept": "sin²θ+cos²θ=1 과 (sinθ+cosθ)²=1+2sinθcosθ"
   }
 ]
