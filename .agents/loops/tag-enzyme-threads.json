@@ -1,7 +1,7 @@
 {
   "loop": "tag-enzyme-threads",
-  "last_run": "2026-10-09",
-  "cursor": "2026-10-09",
+  "last_run": "2026-10-16",
+  "cursor": "2026-10-16",
   "buffer_target": 1,
   "product": "국민 T.A.G 효소",
   "channel": "개인 Threads 계정",
@@ -12,9 +12,12 @@
     "먹는 경험·맛 각도",
     "원료 딥다이브(테프) 각도",
     "원료 딥다이브(애사비) 각도",
-    "원료 삼각형(T.A.G) 영상 각도"
+    "원료 삼각형(T.A.G) 영상 각도",
+    "원료 딥다이브(글루텐 분해 유산균) 각도"
   ],
-  "pending_drafts": [],
+  "pending_drafts": [
+    "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-7-글루텐분해유산균딥다이브.md"
+  ],
   "publishing_tool": "Typefully MCP (2026-10-02부터) — social_set_id 337240, kim_jade0419 Threads 연동됨. 기존 PowerShell 스크립트 방식은 백업 수단으로 유지.",
   "next_run_plan": null,
   "published": [
