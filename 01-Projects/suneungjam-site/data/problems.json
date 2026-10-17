@@ -12068,5 +12068,246 @@
     "answerIndex": 1,
     "explanation": "양변을 제곱하면 sin²θ+2sinθcosθ+cos²θ=1/4이고 sin²θ+cos²θ=1이므로 1+2sinθcosθ=1/4입니다. 따라서 sinθcosθ=−3/8입니다.",
     "concept": "sin²θ+cos²θ=1 과 (sinθ+cosθ)²=1+2sinθcosθ"
+  },
+  {
+    "id": "en-2026-10-18-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-18",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists who study memory have found that sleep [u]plays[/u]① a crucial role in turning short-term experiences into lasting knowledge. During deep sleep, the brain replays [u]what it has learned[/u]② during the day, strengthening the connections [u]that matter[/u]③ most. This is why students [u]who stays[/u]④ up all night often perform worse than those [u]who sleep[/u]⑤ normally.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 선행사 students가 복수이므로 관계절의 동사도 복수형 stay여야 합니다(who stays → who stay). ①은 단수 주어 sleep에 맞는 plays, ②는 replays의 목적어 역할을 하는 관계대명사 what, ③은 복수 선행사 connections에 맞는 matter, ⑤는 those(=students)를 수식하는 관계절의 복수 동사로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "crucial",
+        "meaning": "매우 중요한"
+      },
+      {
+        "word": "replay",
+        "meaning": "다시 재생하다"
+      },
+      {
+        "word": "strengthen",
+        "meaning": "강화하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-18-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-18",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Every map leaves out details. A subway map ignores the real distances between stations, and a hiking map ignores the shops along the road. Yet no one calls these maps failures. A map becomes useful not by including everything, but by ______ for the person who will use it.",
+    "choices": [
+      "selecting the details that serve a specific purpose",
+      "reproducing every feature of the land exactly",
+      "avoiding any simplification of the terrain",
+      "using as many colors and symbols as possible",
+      "replacing the traveler's own judgment entirely"
+    ],
+    "answerIndex": 0,
+    "explanation": "지하철 지도와 등산 지도는 각각 쓰임에 필요 없는 정보를 생략하고도 유용하다고 했으므로, 지도의 유용함은 사용 목적에 맞는 세부 사항을 선택하는 데서 나온다는 내용이 빈칸에 적절합니다.",
+    "vocab": [
+      {
+        "word": "terrain",
+        "meaning": "지형"
+      },
+      {
+        "word": "simplification",
+        "meaning": "단순화"
+      },
+      {
+        "word": "serve",
+        "meaning": "~에 도움이 되다, 부합하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-18-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-18",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Early in the twentieth century, most farmers planted a single crop across their entire land.\n(A) However, when a disease struck that crop, the whole harvest could be lost within weeks.\n(B) This approach was efficient because the same tools and methods could be used for every field.\n(C) As a result, many farmers began to plant a variety of crops to spread the risk.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 단일 작물 재배를 (B)가 This approach로 받아 효율성을 설명하고, (A)가 However로 그 약점(병충해 시 전체 수확 손실)을 제시하며, (C)가 As a result로 다양한 작물 재배라는 결과를 맺으므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "harvest",
+        "meaning": "수확(물)"
+      },
+      {
+        "word": "strike",
+        "meaning": "(병·재해 등이) 닥치다"
+      },
+      {
+        "word": "spread the risk",
+        "meaning": "위험을 분산하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-18-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-18",
+    "prompt": "주어진 문장이 들어가기에 가장 적절한 곳을 고르시오.",
+    "passage": "Emotions spread between people more easily than we realize. ( ① ) When one person smiles, those nearby tend to smile back automatically. ( ② ) Researchers call this emotional mimicry, and the copied expression gradually produces the matching feeling. ( ③ ) A single irritable colleague can therefore darken the atmosphere of an entire office. ( ④ ) A cheerful greeting, for example, can lift the mood of a whole team. ( ⑤ )",
+    "givenSentence": "Fortunately, the same process works in the opposite direction as well.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 the same process ... in the opposite direction은 바로 앞 문장의 '부정적 기분이 사무실 분위기를 어둡게 한다'는 내용과 대비되어 긍정적 감정도 같은 방식으로 퍼진다는 뜻입니다. 이어지는 '쾌활한 인사가 팀 분위기를 높인다'는 예시로 연결되므로 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "mimicry",
+        "meaning": "모방, 흉내"
+      },
+      {
+        "word": "irritable",
+        "meaning": "짜증을 잘 내는"
+      },
+      {
+        "word": "atmosphere",
+        "meaning": "분위기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-18-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-18",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many people think that talent decides who becomes an expert. But studies of musicians and athletes suggest a different picture. The best performers are usually those who practice deliberately: they set specific goals, seek immediate feedback, and focus on the parts they find hardest. Hours of casual repetition, by contrast, produce little improvement. Skill, in other words, grows from how we practice, not merely how long.",
+    "choices": [
+      "Deliberate practice, rather than innate talent, drives the development of expertise.",
+      "Musicians generally practice longer than athletes do.",
+      "Immediate feedback is unnecessary for beginners.",
+      "Natural talent is the only reliable predictor of success.",
+      "Casual repetition is the most enjoyable way to learn."
+    ],
+    "answerIndex": 0,
+    "explanation": "전문성은 타고난 재능이 아니라 구체적 목표, 즉각적 피드백, 약점 집중이 있는 의도적 연습에서 나온다는 것이 글의 요지이므로 ①이 주제입니다.",
+    "vocab": [
+      {
+        "word": "deliberately",
+        "meaning": "의도적으로, 계획적으로"
+      },
+      {
+        "word": "casual",
+        "meaning": "가벼운, 무심한"
+      },
+      {
+        "word": "expertise",
+        "meaning": "전문 지식·기술"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-18-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-18",
+    "prompt": "등비수열 {aₙ}에서 a₂=6, a₅=162일 때, 첫째항부터 제4항까지의 합은?",
+    "choices": [
+      "60",
+      "70",
+      "80",
+      "90",
+      "100"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅/a₂=r³=27이므로 r=3, a₁=2입니다. S₄=2(3⁴−1)/(3−1)=80입니다.",
+    "concept": "등비수열의 일반항 aₙ=a₁rⁿ⁻¹, 합 Sₙ=a₁(rⁿ−1)/(r−1) (r≠1)"
+  },
+  {
+    "id": "math-2026-10-18-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-18",
+    "prompt": "함수 f(x)=x³−6x²+9x+1의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x)=3x²−12x+9=3(x−1)(x−3)이므로 x=1에서 극대, x=3에서 극소입니다. f(1)=5, f(3)=1이므로 차는 4입니다.",
+    "concept": "f'(x)의 부호가 양에서 음으로 바뀌는 점에서 극대, 음에서 양으로 바뀌는 점에서 극소"
+  },
+  {
+    "id": "math-2026-10-18-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-18",
+    "prompt": "정적분 ∫₀² (3x²−2x+1)dx의 값은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 3,
+    "explanation": "부정적분은 x³−x²+x이므로 x=2에서 8−4+2=6, x=0에서 0이어서 값은 6입니다.",
+    "concept": "다항함수의 정적분은 부정적분 F에 대해 ∫ₐᵇ f(x)dx=F(b)−F(a)"
+  },
+  {
+    "id": "math-2026-10-18-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-18",
+    "prompt": "흰 공 3개, 검은 공 4개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "9/35",
+      "11/35",
+      "12/35",
+      "16/35",
+      "13/35"
+    ],
+    "answerIndex": 4,
+    "explanation": "전체 경우의 수는 ₇C₃=35입니다. 흰 공 2개·검은 공 1개는 ₃C₂×4=12, 흰 공 3개는 1이므로 13/35입니다.",
+    "concept": "조합을 이용한 확률 P(A)=(사건 A의 경우의 수)/(전체 경우의 수), 합의 법칙"
+  },
+  {
+    "id": "math-2026-10-18-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-18",
+    "prompt": "0≤x<2π에서 방정식 2sin²x−sinx−1=0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sinx+1)(sinx−1)=0이므로 sinx=1 또는 sinx=−1/2입니다. 해는 π/2, 7π/6, 11π/6이고 합은 π/2+3π=7π/2입니다.",
+    "concept": "sinx를 t로 치환해 이차방정식으로 인수분해한 뒤, 단위원에서 해당 각을 찾는다"
   }
 ]
