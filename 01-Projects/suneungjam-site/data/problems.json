@@ -12550,5 +12550,246 @@
     "answerIndex": 1,
     "explanation": "양변을 제곱하면 1+2sinθcosθ=1/4이므로 sinθcosθ=−3/8입니다. sin³θ+cos³θ=(sinθ+cosθ)(1−sinθcosθ)=(1/2)(1+3/8)=11/16입니다.",
     "concept": "sin²θ+cos²θ=1과 a³+b³=(a+b)(a²−ab+b²)를 이용한다"
+  },
+  {
+    "id": "en-2026-10-20-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-20",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Sleep researchers have found that students [u]who stay up late[/u]① to study often perform worse on exams than those [u]who get[/u]② adequate rest. This happens because the brain organizes new information during sleep, [u]which[/u]③ makes memories more stable. Skipping this process means that [u]what[/u]④ was learned during the day may fade quickly. Therefore, protecting a regular sleep schedule is [u]much more effectively[/u]⑤ than cramming through the night.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ be동사 is의 보어 자리이므로 부사 effectively가 아니라 형용사 effective(much more effective)가 와야 합니다. ①은 선행사 students를 받는 주격 관계대명사, ②는 those를 수식하는 who절, ③은 앞 절 전체를 선행사로 하는 계속적 용법의 which, ④는 means that 뒤 that절의 주어 역할을 하는 명사절 what으로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "organize",
+        "meaning": "체계화하다, 정리하다"
+      },
+      {
+        "word": "adequate",
+        "meaning": "충분한, 적절한"
+      },
+      {
+        "word": "cramming",
+        "meaning": "벼락치기 공부"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-20-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-20",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "We often assume that more choices lead to greater satisfaction. However, studies on consumer behavior suggest the opposite. When shoppers face dozens of nearly identical options, they tend to feel overwhelmed and postpone their decision, or later regret the one they picked. In other words, an abundance of options can ________, making people less content with what they finally choose.",
+    "choices": [
+      "increase the value of every item",
+      "undermine the confidence of the decision maker",
+      "shorten the time needed to compare products",
+      "guarantee a perfectly rational judgment",
+      "reduce the price of popular goods"
+    ],
+    "answerIndex": 1,
+    "explanation": "선택지가 너무 많으면 압도되어 결정을 미루거나 후회한다고 했고, 빈칸 뒤에서 '최종 선택에 덜 만족하게 된다'고 했으므로 '결정하는 사람의 확신을 약화시킨다'가 적절합니다.",
+    "vocab": [
+      {
+        "word": "overwhelmed",
+        "meaning": "압도된, 어쩔 줄 모르는"
+      },
+      {
+        "word": "abundance",
+        "meaning": "풍부함, 다량"
+      },
+      {
+        "word": "undermine",
+        "meaning": "약화시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-20-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-20",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Long before modern clocks existed, farmers relied on the sky to organize their work.\n(A) As a result, communities could agree on when to plant seeds and when to harvest crops without any written calendar.\n(B) They noticed that the sun rose in a slightly different place each season, and that certain stars appeared only at particular times of the year.\n(C) These repeating patterns became reliable signals that were passed down from one generation to the next.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글의 the sky에 대한 구체적 관찰인 (B)가 먼저 오고, (B)의 반복되는 현상을 These repeating patterns로 받는 (C)가 이어지며, 그 결과를 As a result로 정리하는 (A)가 마지막입니다.",
+    "vocab": [
+      {
+        "word": "rely on",
+        "meaning": "~에 의존하다"
+      },
+      {
+        "word": "harvest",
+        "meaning": "수확하다"
+      },
+      {
+        "word": "generation",
+        "meaning": "세대"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-20-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-20",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many people think of memory as a recording device that stores events exactly as they happened. ① In reality, memory works more like a storyteller. ② Each time we recall an event, the brain rebuilds it from scattered pieces of information. ③ Small details may be added or lost during this process. ④ This is why two witnesses of the same accident can give quite different accounts. ⑤ Understanding this should make us more careful about trusting our own vivid recollections.",
+    "givenSentence": "As a result, a recalled memory can differ from the original event without our noticing.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 'As a result'로 시작하며, 세부 내용이 추가되거나 사라진다는 앞 문장(③ 뒤)의 결과에 해당합니다. 또한 바로 뒤 문장 'This is why two witnesses...'가 기억이 원래 사건과 달라질 수 있다는 내용을 받으므로 ④ 위치가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "scattered",
+        "meaning": "흩어진"
+      },
+      {
+        "word": "witness",
+        "meaning": "목격자"
+      },
+      {
+        "word": "recollection",
+        "meaning": "기억, 회상"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-20-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-20",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many teenagers treat mistakes as proof that they lack talent. Psychologists, however, argue that errors are an essential part of learning. When a student works through a wrong answer and discovers why it failed, the new understanding tends to last longer than one gained by simply reading the correct solution. Teachers who encourage students to analyze their errors, rather than hide them, help build resilience and a genuine interest in improvement.",
+    "choices": [
+      "실수를 분석하는 과정이 오래 남는 학습과 성장으로 이어진다",
+      "재능이 있는 학생은 실수를 거의 하지 않는다",
+      "정답을 먼저 읽는 것이 가장 효율적인 학습법이다",
+      "교사는 학생의 오답을 즉시 수정해 주어야 한다",
+      "청소년기에는 새로운 취미를 갖는 것이 중요하다"
+    ],
+    "answerIndex": 0,
+    "explanation": "글 전체가 실수를 숨기지 않고 분석할 때 이해가 오래가고 성장으로 이어진다는 내용이므로 ①이 주제입니다.",
+    "vocab": [
+      {
+        "word": "resilience",
+        "meaning": "회복력, 탄력성"
+      },
+      {
+        "word": "genuine",
+        "meaning": "진정한"
+      },
+      {
+        "word": "analyze",
+        "meaning": "분석하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-20-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-20",
+    "prompt": "등차수열 {aₙ}에서 a₃=7, a₇=19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇−a₃=4d=12이므로 d=3, a₁=7−6=1입니다. S₁₀=10(2·1+9·3)/2=5·29=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n{2a+(n−1)d}/2"
+  },
+  {
+    "id": "math-2026-10-20-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-20",
+    "prompt": "함수 f(x)=x³−3x²−9x+2의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "24",
+      "28",
+      "32",
+      "36",
+      "40"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x)=3x²−6x−9=3(x−3)(x+1)이므로 x=−1에서 극대, x=3에서 극소입니다. f(−1)=−1−3+9+2=7, f(3)=27−27−27+2=−25이므로 차는 7−(−25)=32입니다.",
+    "concept": "f'(x)=0이고 부호가 바뀌는 지점에서 극값을 갖는다"
+  },
+  {
+    "id": "math-2026-10-20-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-20",
+    "prompt": "곡선 y=x²과 직선 y=2x로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "1",
+      "4/3",
+      "5/3",
+      "2",
+      "7/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "교점은 x²=2x에서 x=0, 2입니다. 넓이는 ∫₀²(2x−x²)dx=[x²−x³/3]₀²=4−8/3=4/3입니다.",
+    "concept": "두 곡선 사이의 넓이는 위쪽 함수−아래쪽 함수를 정적분한다"
+  },
+  {
+    "id": "math-2026-10-20-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-20",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 두 공의 색이 같을 확률은?",
+    "choices": [
+      "2/7",
+      "3/7",
+      "4/7",
+      "5/7",
+      "1/2"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 C(7,2)=21입니다. 둘 다 흰 공인 경우 C(4,2)=6, 둘 다 검은 공인 경우 C(3,2)=3이므로 확률은 9/21=3/7입니다.",
+    "concept": "서로 배반인 사건의 확률은 더하고, 확률=(해당 경우의 수)/(전체 경우의 수)이다"
+  },
+  {
+    "id": "math-2026-10-20-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-20",
+    "prompt": "0≤x<2π에서 방정식 2sin²x−3sinx+1=0의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "3π/2",
+      "2π",
+      "5π/2",
+      "3π"
+    ],
+    "answerIndex": 1,
+    "explanation": "sinx=t로 두면 2t²−3t+1=(2t−1)(t−1)=0이므로 t=1/2 또는 1입니다. sinx=1/2이면 x=π/6, 5π/6, sinx=1이면 x=π/2이므로 합은 π/6+5π/6+π/2=3π/2입니다.",
+    "concept": "sinx를 t로 치환해 이차방정식으로 푼 뒤 단위원에서 해를 구한다"
   }
 ]
