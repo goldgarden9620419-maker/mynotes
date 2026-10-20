@@ -12791,5 +12791,246 @@
     "answerIndex": 1,
     "explanation": "sinx=t로 두면 2t²−3t+1=(2t−1)(t−1)=0이므로 t=1/2 또는 1입니다. sinx=1/2이면 x=π/6, 5π/6, sinx=1이면 x=π/2이므로 합은 π/6+5π/6+π/2=3π/2입니다.",
     "concept": "sinx를 t로 치환해 이차방정식으로 푼 뒤 단위원에서 해를 구한다"
+  },
+  {
+    "id": "en-2026-10-21-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-21",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Researchers who study habits suggest that people [u]form[/u]① routines more easily when a new behavior is attached to something they already do. A student, for example, may decide [u]to review[/u]② vocabulary right after brushing his teeth every morning. Because the cue is already part of daily life, the brain does not need [u]to make[/u]③ a fresh decision each time. Over several weeks, the action becomes so automatic that it [u]feels[/u]④ almost effortless, and the learner no longer has to remind [u]him[/u]⑤ to start.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ remind의 목적어가 문장의 주어인 the learner와 같은 사람이므로 재귀대명사 himself가 되어야 합니다. ①은 people이 주어인 복수 동사, ②는 decide의 목적어인 to부정사, ③은 need to-v 구조, ④는 주어 it(the action)에 맞는 단수 동사 feels로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "cue",
+        "meaning": "신호, 단서"
+      },
+      {
+        "word": "effortless",
+        "meaning": "힘들이지 않는"
+      },
+      {
+        "word": "attach",
+        "meaning": "붙이다, 연결하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-21-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-21",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In science, a result that contradicts a hypothesis is often seen as a disappointment. Yet many major discoveries began exactly this way. When an experiment produces an unexpected outcome, it forces researchers to question assumptions they had taken for granted. In this sense, an unexpected result is not a failure but ________.",
+    "choices": [
+      "a signal pointing toward a better question",
+      "a proof that the method was careless",
+      "a reason to abandon the field",
+      "a repetition of previous findings",
+      "a way to avoid further testing"
+    ],
+    "answerIndex": 0,
+    "explanation": "예상 밖의 결과가 연구자들로 하여금 당연하게 여기던 가정을 의심하게 만들고 중요한 발견으로 이어진다고 했으므로, 빈칸에는 '더 나은 질문을 가리키는 신호'가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "contradict",
+        "meaning": "모순되다, 반박하다"
+      },
+      {
+        "word": "hypothesis",
+        "meaning": "가설"
+      },
+      {
+        "word": "take for granted",
+        "meaning": "당연하게 여기다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-21-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-21",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Cities around the world are rethinking how they use their streets.\n(A) Instead of widening roads for more cars, some have turned lanes into bike paths and small public plazas.\n(B) For decades, planners assumed that the best way to reduce traffic jams was to build more roads.\n(C) The results suggest that when people are given safe alternatives, many choose to leave their cars at home.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글의 '도시들이 거리 사용 방식을 재고한다'에 이어, 과거의 통념을 설명하는 (B)가 먼저 오고, 그와 대비되어 'Instead of widening roads'로 새로운 시도를 소개하는 (A), 그 시도의 결과(The results)를 말하는 (C)가 마지막입니다.",
+    "vocab": [
+      {
+        "word": "plaza",
+        "meaning": "광장"
+      },
+      {
+        "word": "alternative",
+        "meaning": "대안"
+      },
+      {
+        "word": "assume",
+        "meaning": "가정하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-21-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-21",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many people believe that talent alone decides who becomes an expert. ① Researchers who studied top violinists, however, found a different pattern. ② The best players had practiced for thousands more hours than their less successful peers. ③ Importantly, much of that time was spent on difficult passages they could not yet play well. ④ Simply repeating familiar pieces did not lead to the same improvement. ⑤ Effort focused on one's weaknesses, rather than sheer quantity, seems to be the key.",
+    "givenSentence": "That is, they deliberately sought out exactly what they could not yet do.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 That is는 앞 문장을 달리 풀어 설명하는 표현으로, '아직 연주하지 못하는 어려운 부분에 시간을 썼다'는 ③ 문장을 '할 수 없는 것을 일부러 찾아 연습했다'로 바꿔 말합니다. 또 뒤 문장 Simply repeating familiar pieces가 이 연습 방식과 대비되므로 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "sheer",
+        "meaning": "순전한, 단순한"
+      },
+      {
+        "word": "peer",
+        "meaning": "동료, 또래"
+      },
+      {
+        "word": "passage",
+        "meaning": "(악곡의) 구절"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-21-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-21",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Public libraries are often described as places to borrow books, but their role has grown far wider. Many now host language classes, job workshops, and quiet study rooms that anyone can use for free. For residents who cannot afford private tutoring or a home office, these services open doors that would otherwise remain closed. By offering shared space and shared knowledge, libraries help neighbors meet, learn, and support one another.",
+    "choices": [
+      "도서관은 무료 공유 공간과 지식을 통해 지역 사회의 학습과 유대를 돕는다",
+      "도서관의 대출 도서 수는 해마다 빠르게 감소하고 있다",
+      "개인 과외는 도서관 수업보다 항상 효과적이다",
+      "조용한 학습 공간은 재택근무에 가장 적합하다",
+      "언어 학습은 다양한 연령대에서 같은 방식으로 이루어진다"
+    ],
+    "answerIndex": 0,
+    "explanation": "도서관이 책 대출을 넘어 무료 수업·워크숍·학습 공간을 제공해 이웃이 만나 배우고 서로 돕게 한다는 내용이므로 ①이 주제입니다.",
+    "vocab": [
+      {
+        "word": "workshop",
+        "meaning": "워크숍, 실습 강좌"
+      },
+      {
+        "word": "afford",
+        "meaning": "~할 여유가 있다"
+      },
+      {
+        "word": "resident",
+        "meaning": "주민"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-21-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-21",
+    "prompt": "등차수열 {aₙ}에 대하여 a₃=7, a₇=19일 때, 첫째항부터 제10항까지의 합 S₁₀의 값은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇−a₃=4d=12이므로 d=3, a₁=a₃−2d=1입니다. S₁₀=10(2·1+9·3)/2=5·29=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n{2a+(n−1)d}/2"
+  },
+  {
+    "id": "math-2026-10-21-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-21",
+    "prompt": "함수 f(x)=x³−3x²−9x+4의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "24",
+      "28",
+      "32",
+      "36",
+      "40"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x)=3x²−6x−9=3(x−3)(x+1)이므로 x=−1에서 극대, x=3에서 극소입니다. f(−1)=−1−3+9+4=9, f(3)=27−27−27+4=−23이므로 차는 9−(−23)=32입니다.",
+    "concept": "f'(x)의 부호가 +에서 −로 바뀌는 점에서 극대, −에서 +로 바뀌는 점에서 극소이다"
+  },
+  {
+    "id": "math-2026-10-21-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-21",
+    "prompt": "곡선 y=4x−x²과 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "4x−x²=0에서 x=0, 4이고 구간에서 y≥0이므로 넓이는 ∫₀⁴(4x−x²)dx=[2x²−x³/3]₀⁴=32−64/3=32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 y≥0인 구간에서 ∫y dx로 구한다"
+  },
+  {
+    "id": "math-2026-10-21-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-21",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 흰 공이 2개 이상일 확률은? (단, 공은 색깔만 다르다.)",
+    "choices": [
+      "18/35",
+      "19/35",
+      "22/35",
+      "24/35",
+      "26/35"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 ₇C₃=35입니다. 흰 공 2개·검은 공 1개는 ₄C₂·₃C₁=18, 흰 공 3개는 ₄C₃=4이므로 확률은 (18+4)/35=22/35입니다.",
+    "concept": "서로 배타적인 경우의 수를 더하고 전체 경우의 수로 나누어 확률을 구한다"
+  },
+  {
+    "id": "math-2026-10-21-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-21",
+    "prompt": "0≤x<2π에서 방정식 2cos²x+cosx−1=0의 모든 해의 합은?",
+    "choices": [
+      "2π",
+      "5π/2",
+      "3π",
+      "7π/2",
+      "4π"
+    ],
+    "answerIndex": 2,
+    "explanation": "cosx=t로 두면 2t²+t−1=(2t−1)(t+1)=0이므로 t=1/2 또는 −1입니다. cosx=1/2이면 x=π/3, 5π/3, cosx=−1이면 x=π이므로 합은 π/3+5π/3+π=3π입니다.",
+    "concept": "cosx를 t로 치환해 이차방정식으로 푼 뒤 단위원에서 해를 구한다"
   }
 ]
