@@ -12,6 +12,7 @@ ig_publish.py — Instagram 릴스 자동 게시 (Instagram API with Instagram L
   python ig_publish.py --refresh-token                                 # 60일 토큰 연장
 
 토큰: 환경변수 IG_ACCESS_TOKEN 또는 ~/.ig_token 파일 (저장소/vault에 절대 넣지 말 것)
+클라우드 세션: IG_PROXY_AUTH=1 이면 토큰 없이 호출 (환경의 네트워크 시크릿이 graph.facebook.com 요청에 Authorization 헤더 자동 첨부)
 
 종료 코드: 0 성공 · 2 입력 오류 · 3 토큰/계정 문제 · 4 영상 처리 실패/시간 초과 · 5 게시 실패 · 6 AI 라벨 미지원
 """
@@ -35,7 +36,7 @@ MODE = "instagram"  # "instagram" (IG… 토큰) 또는 "facebook" (EAA… 토�
 def set_mode(token):
     """토큰 앞글자로 방식 판별. Facebook 로그인 토큰은 graph.facebook.com 사용."""
     global BASE, MODE
-    if token.startswith("EAA"):
+    if token == PROXY or token.startswith("EAA"):
         MODE, BASE = "facebook", f"https://graph.facebook.com/{API_VERSION}"
     else:
         MODE, BASE = "instagram", f"https://graph.instagram.com/{API_VERSION}"
@@ -52,7 +53,12 @@ def info(msg):
     print(f"[ig_publish] {msg}", flush=True)
 
 
+PROXY = "__proxy__"  # 클라우드 환경: 네트워크 시크릿이 Authorization 헤더를 자동으로 붙임
+
+
 def load_token():
+    if os.environ.get("IG_PROXY_AUTH") == "1":
+        return PROXY
     tok = os.environ.get("IG_ACCESS_TOKEN", "").strip()
     if not tok and TOKEN_FILE.exists():
         # 복사할 때 섞인 한글·공백·줄바꿈이 있어도 토큰 부분만 골라낸다 (Windows 인코딩 차이 대비)
@@ -67,7 +73,8 @@ def load_token():
 def call(method, path, params, token, timeout=60):
     """Graph API 호출. 오류 시 Meta 메시지를 그대로 담아 RuntimeError."""
     params = dict(params or {})
-    params["access_token"] = token
+    if token != PROXY:
+        params["access_token"] = token
     url = path if path.startswith("http") else f"{BASE}{path}"
     data = None
     if method == "GET":
