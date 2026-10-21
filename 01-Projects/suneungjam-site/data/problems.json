@@ -13032,5 +13032,250 @@
     "answerIndex": 2,
     "explanation": "cosx=t로 두면 2t²+t−1=(2t−1)(t+1)=0이므로 t=1/2 또는 −1입니다. cosx=1/2이면 x=π/3, 5π/3, cosx=−1이면 x=π이므로 합은 π/3+5π/3+π=3π입니다.",
     "concept": "cosx를 t로 치환해 이차방정식으로 푼 뒤 단위원에서 해를 구한다"
+  },
+  {
+    "id": "en-2026-10-22-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-22",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists who study sleep have found that people [u]who get[/u]① enough rest tend to remember new information more accurately. During sleep, the brain replays the day's experiences, [u]strengthening[/u]② connections between neurons. This is why students who stay up all night to cram often find [u]it[/u]③ difficult to recall what they studied. Skipping sleep may seem like a way of saving time, but the results [u]suggests[/u]④ that it actually wastes the effort [u]already spent[/u]⑤ on studying.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 주어 the results가 복수이므로 동사는 suggest가 되어야 합니다. ①은 선행사 people에 맞는 관계절 동사 get, ②는 분사구문 strengthening, ③은 find it difficult to-v(가목적어 it), ⑤는 effort를 뒤에서 수식하는 과거분사 spent로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "replay",
+        "meaning": "재생하다, 되풀이하다"
+      },
+      {
+        "word": "cram",
+        "meaning": "벼락치기로 공부하다"
+      },
+      {
+        "word": "recall",
+        "meaning": "기억해 내다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-22-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-22",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many people think of mistakes as evidence that they lack ability. However, psychologists point out that mistakes are often the most informative moments in learning, because they reveal exactly where our understanding breaks down. A student who simply rereads correct answers gains little, while one who studies why an answer was wrong builds a more accurate mental model. In other words, errors are not the opposite of learning but ________.",
+    "choices": [
+      "a distraction from it",
+      "a shortcut around it",
+      "a necessary part of it",
+      "a reward for it",
+      "a substitute for it"
+    ],
+    "answerIndex": 2,
+    "explanation": "실수가 이해가 무너지는 지점을 정확히 드러내 주고, 오답의 이유를 공부하는 학생이 더 정확한 사고 모형을 만든다고 했으므로, 오류는 학습의 반대가 아니라 '학습의 필수적인 일부'라는 ③이 알맞습니다.",
+    "vocab": [
+      {
+        "word": "evidence",
+        "meaning": "증거"
+      },
+      {
+        "word": "reveal",
+        "meaning": "드러내다"
+      },
+      {
+        "word": "mental model",
+        "meaning": "사고 모형"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-22-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-22",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Cities around the world are rethinking how they use their streets.\n(A) However, many now see them as shared spaces; for instance, some have closed central roads to cars on weekends, allowing residents to walk, cycle, and gather freely.\n(B) Traditionally, streets were designed mainly to move vehicles as quickly as possible.\n(C) Such experiments have shown that public space, once reclaimed, can strengthen community ties and local businesses.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "(B)가 전통적으로 도로는 차량 이동 위주였다는 배경을 제시하고, (A)가 However로 공유 공간이라는 새 관점과 For instance 사례를 이어 가며, (C)의 Such experiments가 (A)의 사례를 가리키므로 (B)-(A)-(C) 순서입니다.",
+    "vocab": [
+      {
+        "word": "reclaim",
+        "meaning": "되찾다"
+      },
+      {
+        "word": "ties",
+        "meaning": "유대, 관계"
+      },
+      {
+        "word": "vehicle",
+        "meaning": "차량"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-22-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-22",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "This is why even a short walk can noticeably improve a person's mood.",
+    "passage": "Physical activity triggers the release of chemicals in the brain that reduce stress and promote feelings of well-being. ( ① ) These chemicals, known as endorphins, are produced within minutes of starting moderate exercise. ( ② ) Researchers also note that exposure to natural light during outdoor activity helps regulate the body's internal clock. ( ③ ) As a result, people who exercise regularly often sleep better at night. ( ④ ) Better sleep, in turn, makes it easier to manage emotions the following day. ( ⑤ )",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 This is why는 앞 문장의 원인에 대한 결과를 이끕니다. 엔도르핀이 운동 시작 몇 분 만에 생성된다는 ② 앞 문장이 '짧은 산책만으로도 기분이 좋아지는' 이유가 되므로 ②가 적절합니다. ①은 These chemicals의 지시 대상을 끊습니다.",
+    "vocab": [
+      {
+        "word": "endorphin",
+        "meaning": "엔도르핀"
+      },
+      {
+        "word": "moderate",
+        "meaning": "적당한"
+      },
+      {
+        "word": "regulate",
+        "meaning": "조절하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-22-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-22",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Boredom is often treated as a problem to be solved immediately, usually by reaching for a phone. Yet studies suggest that periods of boredom allow the mind to wander, and mind-wandering is linked to creative problem solving and planning for the future. When we fill every idle moment with stimulation, we deny ourselves this valuable mental space.",
+    "choices": [
+      "How to get rid of boredom immediately",
+      "Why limiting phone use is necessary for students",
+      "How creative thinking helps reduce boredom",
+      "The value of boredom as space for a wandering mind",
+      "The importance of constant stimulation for focus"
+    ],
+    "answerIndex": 3,
+    "explanation": "지루함을 즉시 없애려 하지만, 지루한 시간의 마음 방황이 창의적 문제 해결과 미래 계획에 연결되며 모든 틈을 자극으로 채우면 이 정신적 공간을 잃는다는 내용이므로 ④가 주제입니다.",
+    "vocab": [
+      {
+        "word": "idle",
+        "meaning": "한가한"
+      },
+      {
+        "word": "stimulation",
+        "meaning": "자극"
+      },
+      {
+        "word": "deny",
+        "meaning": "박탈하다, 부정하다"
+      },
+      {
+        "word": "wander",
+        "meaning": "헤매다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-22-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-22",
+    "prompt": "등비수열 {aₙ}에서 a₂=6, a₅=162일 때, 첫째항부터 제6항까지의 합 S₆의 값은?",
+    "choices": [
+      "182",
+      "364",
+      "546",
+      "728",
+      "1092"
+    ],
+    "answerIndex": 3,
+    "explanation": "공비를 r라 하면 a₅/a₂=r³=27이므로 r=3, a₁=6/3=2입니다. S₆=2(3⁶−1)/(3−1)=728입니다.",
+    "concept": "등비수열의 합 Sₙ=a(rⁿ−1)/(r−1) (r≠1)과 aₙ=arⁿ⁻¹을 이용한다"
+  },
+  {
+    "id": "math-2026-10-22-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-22",
+    "prompt": "곡선 y=x³−3x+5 위의 점 (2, 7)에서의 접선의 y절편은?",
+    "choices": [
+      "−13",
+      "−11",
+      "−9",
+      "−7",
+      "−5"
+    ],
+    "answerIndex": 1,
+    "explanation": "y'=3x²−3이므로 x=2에서 기울기는 9입니다. 접선은 y=9(x−2)+7=9x−11이므로 y절편은 −11입니다.",
+    "concept": "곡선 y=f(x) 위의 점 (a, f(a))에서의 접선은 y=f'(a)(x−a)+f(a)이다"
+  },
+  {
+    "id": "math-2026-10-22-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-22",
+    "prompt": "곡선 y=x²−2x와 직선 y=x로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "7/2",
+      "4",
+      "9/2",
+      "5",
+      "11/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "x²−2x=x에서 x=0 또는 3이고 구간에서 직선이 위에 있습니다. 넓이=∫₀³(3x−x²)dx=[3x²/2−x³/3]₀³=27/2−9=9/2입니다.",
+    "concept": "두 곡선으로 둘러싸인 넓이는 위쪽 함수에서 아래쪽 함수를 뺀 것을 교점 사이에서 정적분한다"
+  },
+  {
+    "id": "math-2026-10-22-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-22",
+    "prompt": "두 개의 주사위를 동시에 던질 때, 나온 두 눈의 합이 6 이상인 사건을 A, 두 눈이 모두 짝수인 사건을 B라 하자. 조건부확률 P(B|A)의 값은?",
+    "choices": [
+      "3/13",
+      "4/13",
+      "5/13",
+      "6/13",
+      "7/13"
+    ],
+    "answerIndex": 1,
+    "explanation": "합이 5 이하인 경우는 1+2+3+4=10가지이므로 n(A)=36−10=26입니다. A∩B는 (2,4),(4,2),(4,4),(2,6),(6,2),(4,6),(6,4),(6,6)의 8가지입니다. 따라서 P(B|A)=8/26=4/13입니다.",
+    "concept": "조건부확률 P(B|A)=n(A∩B)/n(A) (동일 확률 표본공간)"
+  },
+  {
+    "id": "math-2026-10-22-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-22",
+    "prompt": "함수 f(x)=a·cos(bx)+c (a>0, b>0)의 최댓값이 5, 최솟값이 −1, 주기가 π일 때, a+b+c의 값은?",
+    "choices": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "answerIndex": 2,
+    "explanation": "최댓값 a+c=5, 최솟값 −a+c=−1이므로 a=3, c=2입니다. 주기 2π/b=π에서 b=2입니다. 따라서 a+b+c=7입니다.",
+    "concept": "y=a·cos(bx)+c의 최댓값은 |a|+c, 최솟값은 −|a|+c, 주기는 2π/b이다"
   }
 ]
