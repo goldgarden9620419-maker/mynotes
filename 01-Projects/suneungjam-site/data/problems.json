@@ -13277,5 +13277,251 @@
     "answerIndex": 2,
     "explanation": "최댓값 a+c=5, 최솟값 −a+c=−1이므로 a=3, c=2입니다. 주기 2π/b=π에서 b=2입니다. 따라서 a+b+c=7입니다.",
     "concept": "y=a·cos(bx)+c의 최댓값은 |a|+c, 최솟값은 −|a|+c, 주기는 2π/b이다"
+  },
+  {
+    "id": "en-2026-10-23-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-23",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity [u]is[/u]① a gift that only a few are born with. However, research suggests that creative ideas often emerge from [u]combining[/u]② existing knowledge in unexpected ways. A musician who studies architecture, for example, may discover patterns [u]which[/u]③ never occurred to colleagues focused solely on music. What matters is not [u]how are you talented[/u]④ but whether you are willing to explore fields [u]unfamiliar[/u]⑤ to you.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 의문사가 이끄는 간접의문문은 '의문사+주어+동사' 어순이므로 how talented you are가 되어야 합니다. ①은 that절의 주어 creativity에 맞는 단수동사, ②는 전치사 from 뒤의 동명사, ③은 선행사 patterns를 받는 주격 관계대명사, ⑤는 fields를 뒤에서 수식하는 형용사구로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "emerge",
+        "meaning": "나타나다, 생겨나다"
+      },
+      {
+        "word": "solely",
+        "meaning": "오로지, 단지"
+      },
+      {
+        "word": "unfamiliar",
+        "meaning": "낯선, 익숙하지 않은"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-23-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-23",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "A map is never a perfect copy of the land it represents. To be useful, it must leave out most details—tiny streams, individual trees, the color of every roof. A map that included everything would be as large as the territory itself and therefore useless. In the same way, human memory works well because it ______. We keep the main points of an experience and let the rest fade, which allows us to find meaning in what would otherwise be an overwhelming flood of information.",
+    "choices": [
+      "records every moment exactly as it occurred",
+      "selectively discards less important details",
+      "depends on repeated exposure to the same event",
+      "improves when we compare it with others' memories",
+      "remains unchanged throughout our lives"
+    ],
+    "answerIndex": 1,
+    "explanation": "지도가 불필요한 세부 사항을 생략해야 쓸모 있듯이, 기억도 핵심만 남기고 나머지는 희미해지게 두어 의미를 찾게 해 줍니다. 따라서 빈칸에는 '덜 중요한 세부 사항을 선택적으로 버린다'가 적절합니다. ①은 지도 비유와 정반대이고, ③④⑤는 글에서 언급되지 않습니다.",
+    "vocab": [
+      {
+        "word": "territory",
+        "meaning": "영토, 지역"
+      },
+      {
+        "word": "overwhelming",
+        "meaning": "압도적인"
+      },
+      {
+        "word": "selectively",
+        "meaning": "선택적으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-23-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-23",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "(A) Planting vegetation on them, however, can change this. Plants absorb heat and rainwater, lowering building temperatures and reducing flooding.\n(B) They sit empty and exposed to the sun, heating the buildings below and raising cooling costs in summer.\n(C) As a result, a growing number of cities now encourage owners to install green roofs through tax benefits.",
+    "givenSentence": "Rooftops in crowded cities are often wasted space.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 '낭비되는 옥상 공간'에 대해 (B)가 그 상태(비어 있고 건물을 달굼)를 설명하고, (A)의 However와 this가 (B)의 문제를 받아 식물 심기의 해결책을 제시하며, (C)의 As a result로 그 결과(정책 장려)를 말하므로 (B)-(A)-(C)가 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "vegetation",
+        "meaning": "식물, 초목"
+      },
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      },
+      {
+        "word": "flooding",
+        "meaning": "홍수, 침수"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-23-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-23",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Researchers once asked children to draw pictures for fun. ① Some were promised a prize for drawing, while others were promised nothing. ② Two weeks later, the researchers observed how much time the children spent drawing on their own. ③ The children who had been given a prize drew far less than they had before. ④ This difference suggests that the prize turned a pleasurable activity into a task done for payment. ⑤ In other words, external rewards can weaken the very motivation they are meant to strengthen.",
+    "givenSentence": "In contrast, those who had been promised nothing kept drawing as much as ever.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 In contrast로 상을 받은 아이들(③ 문장)과 대비되는 상을 약속받지 않은 아이들을 설명합니다. 바로 뒤 문장의 This difference가 두 집단의 차이를 가리키므로 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "external",
+        "meaning": "외적인, 외부의"
+      },
+      {
+        "word": "pleasurable",
+        "meaning": "즐거운"
+      },
+      {
+        "word": "motivation",
+        "meaning": "동기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-23-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-23",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When we skim text on a screen, our eyes jump quickly from one word to the next, rarely lingering on any single idea. This habit is useful for gathering facts, but it comes at a cost. Deep reading, by contrast, requires us to slow down, follow an argument, and imagine the perspectives of others. Studies indicate that people who seldom read in this way become less able to understand complex reasoning and to empathize with people unlike themselves. Preserving time for slow, attentive reading is therefore essential for sustaining our capacity for thoughtful judgment.",
+    "choices": [
+      "advantages of skimming for efficient information gathering",
+      "the need for deep reading to maintain thoughtful judgment and empathy",
+      "how digital devices have improved reading speed",
+      "why imagination matters in understanding fiction",
+      "the decline of printed books in modern society"
+    ],
+    "answerIndex": 1,
+    "explanation": "훑어 읽기는 정보 수집에는 유용하지만, 깊이 읽기를 하지 않으면 복잡한 추론 이해와 공감 능력이 떨어지므로 깊이 읽기 시간을 지켜야 한다는 것이 핵심입니다. ①은 글의 일부일 뿐이고 ③④⑤는 언급되지 않습니다.",
+    "vocab": [
+      {
+        "word": "skim",
+        "meaning": "훑어 읽다"
+      },
+      {
+        "word": "linger",
+        "meaning": "머무르다, 오래 남다"
+      },
+      {
+        "word": "empathize",
+        "meaning": "공감하다"
+      },
+      {
+        "word": "attentive",
+        "meaning": "주의 깊은"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-23-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-23",
+    "prompt": "등차수열 {aₙ}에서 a₃=7, a₇=19일 때, 첫째항부터 제10항까지의 합 S₁₀의 값은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇−a₃=4d=12이므로 d=3입니다. a₁=a₃−2d=1, a₁₀=1+9·3=28입니다. S₁₀=10(1+28)/2=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n(a₁+aₙ)/2, 일반항 aₙ=a₁+(n−1)d"
+  },
+  {
+    "id": "math-2026-10-23-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-23",
+    "prompt": "함수 f(x)=x³−6x²+9x+1의 극댓값과 극솟값의 차(극댓값−극솟값)는?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 1,
+    "explanation": "f'(x)=3x²−12x+9=3(x−1)(x−3)이므로 x=1에서 극대, x=3에서 극소입니다. f(1)=5, f(3)=27−54+27+1=1이므로 차는 4입니다.",
+    "concept": "f'(x)의 부호가 +에서 −로 바뀌는 점에서 극대, −에서 +로 바뀌는 점에서 극소이다"
+  },
+  {
+    "id": "math-2026-10-23-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-23",
+    "prompt": "함수 f(x)가 f'(x)=3x²−4x, f(0)=2를 만족시킬 때, f(3)의 값은?",
+    "choices": [
+      "11",
+      "12",
+      "13",
+      "14",
+      "15"
+    ],
+    "answerIndex": 0,
+    "explanation": "f(x)=x³−2x²+C이고 f(0)=2이므로 C=2입니다. f(3)=27−18+2=11입니다.",
+    "concept": "부정적분 ∫xⁿdx=xⁿ⁺¹/(n+1)+C이고, 적분상수는 주어진 함숫값으로 결정한다"
+  },
+  {
+    "id": "math-2026-10-23-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-23",
+    "prompt": "숫자 0, 1, 2, 3, 4, 5 중 서로 다른 3개를 택해 만든 세 자리 자연수 중 짝수의 개수는?",
+    "choices": [
+      "44",
+      "48",
+      "50",
+      "52",
+      "56"
+    ],
+    "answerIndex": 3,
+    "explanation": "일의 자리가 0이면 5×4=20개입니다. 일의 자리가 2 또는 4이면 백의 자리는 0과 일의 자리 수를 제외한 4가지, 십의 자리는 남은 4가지이므로 2×4×4=32개입니다. 합은 52입니다.",
+    "concept": "순열의 수 ₙPᵣ와 곱의 법칙, 맨 앞자리에 0이 올 수 없음에 유의하여 경우를 나눈다"
+  },
+  {
+    "id": "math-2026-10-23-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-23",
+    "prompt": "0≤x<2π에서 방정식 2sin²x−cosx−1=0의 모든 근의 합은?",
+    "choices": [
+      "2π",
+      "3π",
+      "4π",
+      "5π",
+      "6π"
+    ],
+    "answerIndex": 1,
+    "explanation": "sin²x=1−cos²x를 대입하면 2cos²x+cosx−1=0, (2cosx−1)(cosx+1)=0입니다. cosx=1/2이면 x=π/3, 5π/3, cosx=−1이면 x=π입니다. 합은 π/3+5π/3+π=3π입니다.",
+    "concept": "sin²x+cos²x=1로 한 종류의 삼각함수 방정식으로 바꿔 푼다"
   }
 ]
