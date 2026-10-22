@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>하루보고 홍보 숏폼</title>
+<style>
+  @font-face {
+    font-family: "Pretendard Variable";
+    src: url("node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");
+    font-weight: 45 920;
+    font-display: block;
+  }
+  :root {
+    --b50: #f2f7ff; --b100: #e0edff; --b500: #4e9bff; --b600: #3182f6; --b700: #1e6ae0;
+    --g900: #111827; --g500: #6b7280; --g400: #9ca3af; --g300: #d1d5db; --g200: #e5e7eb; --g100: #f3f4f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body {
+    font-family: "Pretendard Variable", "Noto Color Emoji", sans-serif;
+    word-break: keep-all;
+  }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+
+  /* 바탕 — 랜딩 히어로와 같은 브랜드 블루 톤 */
+  .bg-base { position: absolute; inset: 0; background: linear-gradient(180deg, var(--b100) 0%, var(--b50) 45%, #ffffff 100%); }
+  .blob { position: absolute; border-radius: 9999px; filter: blur(90px); }
+  .blob1 { width: 520px; height: 520px; right: -120px; top: 160px; background: rgba(224, 237, 255, 0.95); }
+  .blob2 { width: 560px; height: 560px; left: -140px; top: 900px; background: rgba(224, 237, 255, 0.7); }
+  /* 마지막 장면용 블루 배경 (위에 겹쳐서 페이드인) */
+  .bg-blue { position: absolute; inset: 0; background: linear-gradient(165deg, var(--b600) 0%, var(--b700) 100%); opacity: 0; }
+
+  .scene { position: absolute; inset: 0; }
+
+  /* ───── 장면 1: 훅 ───── */
+  .s1-text { position: absolute; left: 0; right: 0; top: 700px; text-align: center; }
+  .s1-line1 { font-size: 62px; font-weight: 600; color: var(--g500); }
+  .s1-line2 { margin-top: 28px; font-size: 108px; font-weight: 800; color: var(--g900); line-height: 1.2; }
+  .s1-line3 { font-size: 108px; font-weight: 800; color: var(--g900); line-height: 1.2; }
+  .s1-min { color: var(--b600); display: inline-block; }
+  .chip { position: absolute; display: flex; align-items: center; gap: 12px;
+    background: #fff; border: 2px solid var(--g200); border-radius: 22px;
+    padding: 20px 28px; font-size: 32px; font-weight: 600; color: var(--g500);
+    box-shadow: 0 12px 30px rgba(49, 130, 246, 0.10); }
+  .chip1 { left: 120px; top: 460px; transform: rotate(-8deg); }
+  .chip2 { right: 110px; top: 560px; transform: rotate(6deg); }
+  .chip3 { left: 300px; top: 1260px; transform: rotate(-4deg); }
+
+  /* ───── 장면 2: 파일 → 보고서 변신 ───── */
+  .s2-wrap { position: absolute; left: 0; right: 0; top: 370px; display: flex; flex-direction: column; align-items: center; }
+  .file-stack { position: relative; }
+  .mini { position: absolute; background: #fff; border: 2px solid var(--g200); border-radius: 20px;
+    padding: 16px 24px; font-size: 28px; font-weight: 600; color: var(--g400); white-space: nowrap; }
+  .mini1 { left: -150px; top: 40px; transform: rotate(-9deg); }
+  .mini2 { right: -140px; top: 90px; transform: rotate(7deg); }
+  .file-card { position: relative; width: 560px; background: #fff; border: 2px solid var(--g200);
+    border-radius: 28px; padding: 40px; box-shadow: 0 18px 44px rgba(49, 130, 246, 0.12); }
+  .file-head { display: flex; align-items: center; gap: 14px; font-size: 38px; font-weight: 700; color: var(--g500); }
+  .file-bars { margin-top: 30px; display: flex; flex-direction: column; gap: 20px; }
+  .fbar { height: 16px; border-radius: 9999px; background: var(--g200); }
+
+  .arrow { margin: 36px 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .dot { width: 20px; height: 20px; border-radius: 9999px; background: var(--b500); }
+  .arrow-label { font-size: 66px; font-weight: 800; color: var(--b600); margin-top: 8px; }
+
+  .report-card { width: 660px; background: #fff; border: 4px solid var(--b500); border-radius: 28px;
+    padding: 42px; box-shadow: 0 24px 60px rgba(49, 130, 246, 0.22); }
+  .report-head { display: flex; align-items: center; justify-content: space-between; }
+  .report-title { font-size: 42px; font-weight: 800; color: var(--b600); }
+  .badge { background: var(--b600); color: #fff; font-size: 32px; font-weight: 800;
+    border-radius: 9999px; padding: 10px 26px; }
+  .summary { margin-top: 28px; height: 74px; border-radius: 16px; background: var(--b50); }
+  .rrow { margin-top: 22px; display: flex; align-items: center; gap: 22px; }
+  .rlabel { width: 150px; height: 16px; border-radius: 9999px; background: var(--g300); flex: none; }
+  .rtrack { flex: 1; }
+  .rbar { height: 16px; border-radius: 9999px; background: rgba(78, 155, 255, 0.75); transform-origin: left center; }
+
+  /* ───── 장면 3: 가치 3줄 ───── */
+  .s3-wrap { position: absolute; left: 110px; right: 70px; top: 580px; }
+  .s3-head { font-size: 58px; font-weight: 600; color: var(--g500); }
+  .s3-line { margin-top: 54px; display: flex; align-items: flex-start; gap: 20px;
+    font-size: 76px; font-weight: 800; color: var(--g900); line-height: 1.3; }
+  .s3-check { color: var(--b600); flex: none; }
+
+  /* ───── 장면 4: 마무리 ───── */
+  .s4-wrap { position: absolute; left: 0; right: 0; top: 640px; text-align: center; }
+  .s4-logo { font-size: 156px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+  .s4-sub { margin-top: 36px; font-size: 56px; font-weight: 600; color: var(--b100); }
+  .s4-pill { display: inline-block; margin-top: 90px; background: #fff; color: var(--b700);
+    font-size: 54px; font-weight: 800; border-radius: 9999px; padding: 34px 72px;
+    box-shadow: 0 24px 60px rgba(13, 42, 97, 0.35); }
+  .s4-url { margin-top: 56px; font-size: 46px; font-weight: 600; color: var(--b100); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="bg-base"></div>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+
+  <!-- 장면 1 -->
+  <div class="scene" id="s1">
+    <div class="chip chip1" id="c1"><span>📄</span>업무일지.xlsx</div>
+    <div class="chip chip2" id="c2"><span>🧾</span>영수증.jpg</div>
+    <div class="chip chip3" id="c3"><span>📑</span>거래내역.pdf</div>
+    <div class="s1-text">
+      <div class="s1-line1" id="t1">매일 저녁,</div>
+      <div class="s1-line2" id="t2">보고서 정리에</div>
+      <div class="s1-line3" id="t3"><span class="s1-min" id="t3b">30분</span>씩 쓰세요?</div>
+    </div>
+  </div>
+
+  <!-- 장면 2 -->
+  <div class="scene" id="s2">
+    <div class="s2-wrap">
+      <div class="file-stack">
+        <div class="mini mini1" id="m1">🧾 영수증.jpg</div>
+        <div class="mini mini2" id="m2">📑 거래내역.pdf</div>
+        <div class="file-card" id="fc">
+          <div class="file-head"><span>📄</span>업무일지.xlsx</div>
+          <div class="file-bars">
+            <div class="fbar" style="width: 92%"></div>
+            <div class="fbar" style="width: 58%"></div>
+            <div class="fbar" style="width: 100%"></div>
+            <div class="fbar" style="width: 41%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow">
+        <div class="dot" id="d1"></div>
+        <div class="dot" id="d2"></div>
+        <div class="dot" id="d3"></div>
+        <div class="arrow-label" id="alab">1분</div>
+      </div>
+      <div class="report-card" id="rc">
+        <div class="report-head">
+          <div class="report-title">대표님 보고서</div>
+          <div class="badge" id="badge">✓ 완성</div>
+        </div>
+        <div class="summary" id="rsum"></div>
+        <div class="rrow"><div class="rlabel"></div><div class="rtrack" style="width:100%"><div class="rbar rb" style="width:100%"></div></div></div>
+        <div class="rrow"><div class="rlabel"></div><div class="rtrack"><div class="rbar rb" style="width:72%"></div></div></div>
+        <div class="rrow"><div class="rlabel"></div><div class="rtrack"><div class="rbar rb" style="width:88%"></div></div></div>
+        <div class="rrow"><div class="rlabel"></div><div class="rtrack"><div class="rbar rb" style="width:55%"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 장면 3 -->
+  <div class="scene" id="s3">
+    <div class="s3-wrap">
+      <div class="s3-head" id="h3">매일 쓰는 보고라면</div>
+      <div class="s3-line" id="v1"><span class="s3-check">✓</span><span>매일 똑같은 양식</span></div>
+      <div class="s3-line" id="v2"><span class="s3-check">✓</span><span>숫자는 지어내지 않아요</span></div>
+      <div class="s3-line" id="v3"><span class="s3-check">✓</span><span>한글 hwp도 바로 변환</span></div>
+    </div>
+  </div>
+
+  <!-- 장면 4 -->
+  <div class="bg-blue" id="bgblue"></div>
+  <div class="scene" id="s4">
+    <div class="s4-wrap">
+      <div class="s4-logo" id="logo">하루보고</div>
+      <div class="s4-sub" id="sub">보고서 정리, 이제 1분이면 끝</div>
+      <div><span class="s4-pill" id="pill">가입 없이 바로 체험</span></div>
+      <div class="s4-url" id="url">harubogo.vercel.app</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 모든 애니메이션을 일시정지해두고 window.seek(t)로 프레임 단위 제어한다
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+const anims = [];
+function tw(el, frames, delay, dur, opts = {}) {
+  const a = el.animate(frames, { delay, duration: dur, easing: opts.ease || EASE, fill: "both", iterations: opts.iter || 1 });
+  a.pause();
+  anims.push(a);
+}
+const $ = (id) => document.getElementById(id);
+
+// 장면 전체 표시/숨김은 전 구간을 덮는 애니메이션 하나로 처리한다.
+// (등장·퇴장을 따로 걸면 fill 우선순위 때문에 다른 장면 요소가 미리 새어 나온다)
+const T = 17500;
+function sceneVis(el, stops) {
+  // stops: [시각ms, opacity, transform] 목록 — 전 구간 keyframes로 변환
+  const frames = stops.map(([t, o, tr]) => ({ offset: Math.min(t / T, 1), opacity: o, transform: tr || "none" }));
+  const a = el.animate(frames, { duration: T, easing: "linear", fill: "both" });
+  a.pause();
+  anims.push(a);
+}
+sceneVis($("s1"), [
+  [0, 1, "translateY(0)"], [2950, 1, "translateY(0)"], [3400, 0, "translateY(-50px)"], [T, 0, "translateY(-50px)"],
+]);
+sceneVis($("s2"), [
+  [0, 0, "scale(1)"], [3400, 0, "scale(1)"], [3800, 1, "scale(1)"],
+  [9150, 1, "scale(1)"], [9600, 0, "scale(0.96)"], [T, 0, "scale(0.96)"],
+]);
+sceneVis($("s3"), [
+  [0, 0, "translateY(0)"], [9600, 0, "translateY(0)"], [10000, 1, "translateY(0)"],
+  [12950, 1, "translateY(0)"], [13400, 0, "translateY(-40px)"], [T, 0, "translateY(-40px)"],
+]);
+
+// ── 장면 1 (0~3400) ──
+tw($("t1"), [{ opacity: 0, transform: "translateY(44px)" }, { opacity: 1, transform: "translateY(0)" }], 100, 600);
+tw($("t2"), [{ opacity: 0, transform: "translateY(44px)" }, { opacity: 1, transform: "translateY(0)" }], 400, 650);
+tw($("t3"), [{ opacity: 0, transform: "translateY(44px)" }, { opacity: 1, transform: "translateY(0)" }], 750, 650);
+tw($("t3b"), [
+  { transform: "scale(0.5)", offset: 0 },
+  { transform: "scale(1.18)", offset: 0.7 },
+  { transform: "scale(1)", offset: 1 },
+], 800, 700);
+tw($("c1"), [{ opacity: 0, transform: "rotate(-8deg) translateY(36px)" }, { opacity: 1, transform: "rotate(-8deg) translateY(0)" }], 1400, 550);
+tw($("c2"), [{ opacity: 0, transform: "rotate(6deg) translateY(36px)" }, { opacity: 1, transform: "rotate(6deg) translateY(0)" }], 1700, 550);
+tw($("c3"), [{ opacity: 0, transform: "rotate(-4deg) translateY(36px)" }, { opacity: 1, transform: "rotate(-4deg) translateY(0)" }], 2000, 550);
+
+// ── 장면 2 (3400~9600) ──
+tw($("fc"), [{ opacity: 0, transform: "translateY(-70px)" }, { opacity: 1, transform: "translateY(0)" }], 3600, 800);
+tw($("m1"), [{ opacity: 0, transform: "rotate(-9deg) translateY(40px)" }, { opacity: 1, transform: "rotate(-9deg) translateY(0)" }], 4400, 600);
+tw($("m2"), [{ opacity: 0, transform: "rotate(7deg) translateY(40px)" }, { opacity: 1, transform: "rotate(7deg) translateY(0)" }], 4700, 600);
+// 점 세 개 — 위에서 아래로 흐르는 파동 (4번 반복)
+[["d1", 0], ["d2", 170], ["d3", 340]].forEach(([id, off]) => {
+  tw($(id), [{ opacity: 0.2 }, { opacity: 1 }, { opacity: 0.2 }], 5100 + off, 620, { iter: 5, ease: "ease-in-out" });
+});
+tw($("alab"), [
+  { opacity: 0, transform: "scale(0.4)", offset: 0 },
+  { opacity: 1, transform: "scale(1.15)", offset: 0.7 },
+  { opacity: 1, transform: "scale(1)", offset: 1 },
+], 5400, 600);
+tw($("rc"), [{ opacity: 0, transform: "translateY(90px)" }, { opacity: 1, transform: "translateY(0)" }], 6200, 800);
+tw($("rsum"), [{ opacity: 0 }, { opacity: 1 }], 6700, 400);
+document.querySelectorAll(".rb").forEach((el, i) => {
+  tw(el, [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }], 6900 + i * 200, 550);
+});
+tw($("badge"), [
+  { opacity: 0, transform: "scale(0.4)", offset: 0 },
+  { opacity: 1, transform: "scale(1.15)", offset: 0.7 },
+  { opacity: 1, transform: "scale(1)", offset: 1 },
+], 7900, 500);
+
+// ── 장면 3 (9600~13400) ──
+tw($("h3"), [{ opacity: 0, transform: "translateY(40px)" }, { opacity: 1, transform: "translateY(0)" }], 9750, 550);
+tw($("v1"), [{ opacity: 0, transform: "translateX(-44px)" }, { opacity: 1, transform: "translateX(0)" }], 10200, 600);
+tw($("v2"), [{ opacity: 0, transform: "translateX(-44px)" }, { opacity: 1, transform: "translateX(0)" }], 10800, 600);
+tw($("v3"), [{ opacity: 0, transform: "translateX(-44px)" }, { opacity: 1, transform: "translateX(0)" }], 11400, 600);
+
+// ── 장면 4 (13400~17500) ──
+tw($("bgblue"), [{ opacity: 0 }, { opacity: 1 }], 13400, 650);
+tw($("s4"), [{ opacity: 0 }, { opacity: 1 }], 13400, 10);
+tw($("logo"), [
+  { opacity: 0, transform: "scale(0.7)", offset: 0 },
+  { opacity: 1, transform: "scale(1.06)", offset: 0.7 },
+  { opacity: 1, transform: "scale(1)", offset: 1 },
+], 13750, 750);
+tw($("sub"), [{ opacity: 0, transform: "translateY(36px)" }, { opacity: 1, transform: "translateY(0)" }], 14400, 600);
+tw($("pill"), [
+  { opacity: 0, transform: "scale(0.8) translateY(40px)", offset: 0 },
+  { opacity: 1, transform: "scale(1.05) translateY(0)", offset: 0.75 },
+  { opacity: 1, transform: "scale(1) translateY(0)", offset: 1 },
+], 15100, 650);
+tw($("url"), [{ opacity: 0 }, { opacity: 1 }], 15800, 550);
+
+window.TOTAL = 17500;
+window.seek = (t) => { anims.forEach((a) => { a.currentTime = t; }); };
+window.READY = false;
+document.fonts.ready.then(() => { window.READY = true; });
+window.seek(0);
+</script>
+</body>
+</html>
