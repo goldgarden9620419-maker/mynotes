@@ -13523,5 +13523,247 @@
     "answerIndex": 1,
     "explanation": "sin²x=1−cos²x를 대입하면 2cos²x+cosx−1=0, (2cosx−1)(cosx+1)=0입니다. cosx=1/2이면 x=π/3, 5π/3, cosx=−1이면 x=π입니다. 합은 π/3+5π/3+π=3π입니다.",
     "concept": "sin²x+cos²x=1로 한 종류의 삼각함수 방정식으로 바꿔 푼다"
+  },
+  {
+    "id": "en-2026-10-24-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-24",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists have long known that sleep [u]plays[/u]① a critical role in memory. During deep sleep, the brain replays the day's experiences, [u]strengthening[/u]② connections that would otherwise fade. Students who study late into the night, [u]sacrificing[/u]③ rest, often perform worse than those [u]who gets[/u]④ a full eight hours. It is therefore no surprise that schools [u]starting[/u]⑤ later in the morning report better grades.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 관계대명사 who의 선행사는 복수 대명사 those이므로 동사도 복수형 get이 되어야 합니다. ①은 주어 sleep에 맞는 단수동사, ②③은 동시동작을 나타내는 분사구문, ⑤는 schools를 뒤에서 수식하는 현재분사로 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "sacrifice",
+        "meaning": "희생하다, 포기하다"
+      },
+      {
+        "word": "fade",
+        "meaning": "희미해지다, 사라지다"
+      },
+      {
+        "word": "critical",
+        "meaning": "중대한, 결정적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-24-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-24",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Trust is built less by grand gestures than by small, repeated acts of reliability. A friend who always returns your calls, arrives when promised, and keeps your secrets may never do anything dramatic. Yet over time these ordinary moments accumulate into a firm sense that we can depend on that person. This is why a single dramatic favor rarely does as much for a relationship as _______________.",
+    "choices": [
+      "an expensive gift given on a special occasion",
+      "behavior that others can count on day after day",
+      "a public apology offered after a serious mistake",
+      "the ability to impress strangers at first meeting",
+      "an honest opinion that is delivered only once"
+    ],
+    "answerIndex": 1,
+    "explanation": "글의 요지는 신뢰가 극적인 행동이 아니라 사소하지만 반복되는 믿음직한 행동으로 쌓인다는 것입니다. 따라서 빈칸에는 '매일같이 믿고 기댈 수 있는 행동'이 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "reliability",
+        "meaning": "신뢰성, 믿음직함"
+      },
+      {
+        "word": "accumulate",
+        "meaning": "쌓이다, 축적되다"
+      },
+      {
+        "word": "dramatic",
+        "meaning": "극적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-24-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-24",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "(A) Putting it off provides immediate relief, which rewards the habit and makes it more likely to recur.\n(B) Therefore, the effective way to stop is not to scold ourselves but to make the first step small enough to feel manageable.\n(C) In fact, researchers describe it as a problem of managing emotions: we delay a task because it makes us feel anxious or bored.",
+    "givenSentence": "Most people think of procrastination as a simple lack of discipline.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 통념(의지력 부족)을 (C)의 In fact가 뒤집어 감정 관리 문제로 설명하고, (A)의 it(미루기)이 그 감정에서 오는 즉각적 안도감과 습관 강화를 설명하며, (B)의 Therefore가 결론(첫걸음을 작게)을 제시하므로 (C)-(A)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "procrastination",
+        "meaning": "미루기, 꾸물거림"
+      },
+      {
+        "word": "scold",
+        "meaning": "꾸짖다"
+      },
+      {
+        "word": "recur",
+        "meaning": "되풀이되다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-24-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-24",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Honeybees share the location of food through a remarkable dance. ① A scout that finds a rich patch of flowers returns to the hive and performs a \"waggle dance\" on the honeycomb. ② The angle of the dance relative to vertical shows the direction of the food in relation to the sun. ③ Armed with both pieces of information, other workers fly straight to the spot without wasting time searching. ④ Such precise communication allows the colony to gather nectar far more efficiently. ⑤ Scientists still marvel at how a creature with such a small brain can pass on such complex messages.",
+    "givenSentence": "Meanwhile, the duration of each waggle run tells the others how far they must fly.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 춤의 '방향(②)'에 이어 '거리'라는 두 번째 정보를 제시합니다. ③ 뒤 문장의 both pieces of information이 방향과 거리 두 가지를 가리키므로 ③에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "scout",
+        "meaning": "정찰병, 정찰하다"
+      },
+      {
+        "word": "nectar",
+        "meaning": "꿀, 화밀"
+      },
+      {
+        "word": "marvel",
+        "meaning": "경탄하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-24-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-24",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "We tend to celebrate success stories while quietly hiding the failures that came before them. As a result, learners often assume that talented people simply get things right the first time. In reality, most experts have made countless mistakes, and each one taught them something no textbook could. Those who treat errors as useful information, rather than as proof of inadequacy, keep improving because they are willing to try again. Seen this way, failure is not the opposite of learning but one of its most reliable teachers.",
+    "choices": [
+      "the danger of comparing yourself with talented people",
+      "the role of failure as a valuable source of learning",
+      "why successful people avoid making mistakes",
+      "the importance of reading textbooks carefully",
+      "ways to hide failures from other people"
+    ],
+    "answerIndex": 1,
+    "explanation": "성공 이야기에 가려진 실패를 지적하며, 전문가도 실수를 통해 배우고 오류를 유용한 정보로 받아들일 때 계속 발전한다고 말합니다. 따라서 주제는 '배움의 소중한 원천으로서의 실패'입니다.",
+    "vocab": [
+      {
+        "word": "inadequacy",
+        "meaning": "부족함, 부적격"
+      },
+      {
+        "word": "countless",
+        "meaning": "셀 수 없이 많은"
+      },
+      {
+        "word": "reliable",
+        "meaning": "믿을 만한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-24-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-24",
+    "prompt": "수열 {aₙ}의 첫째항부터 제n항까지의 합이 Sₙ=n²+3n일 때, Σ(k=1→10) 1/(aₖaₖ₊₁)의 값은?",
+    "choices": [
+      "1/8",
+      "5/48",
+      "7/48",
+      "1/6",
+      "5/24"
+    ],
+    "answerIndex": 1,
+    "explanation": "n≥2일 때 aₙ=Sₙ−Sₙ₋₁=2n+2이고 a₁=S₁=4=2·1+2이므로 aₙ=2n+2입니다. 1/(aₖaₖ₊₁)=1/((2k+2)(2k+4))=(1/4)·[1/(k+1)−1/(k+2)]이므로 합은 (1/4)(1/2−1/12)=(1/4)(5/12)=5/48입니다.",
+    "concept": "aₙ=Sₙ−Sₙ₋₁(n≥2), a₁=S₁이며 분수꼴 합은 부분분수로 분해해 소거한다"
+  },
+  {
+    "id": "math-2026-10-24-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-24",
+    "prompt": "함수 f(x)=x³−6x²+9x+k의 극댓값이 7일 때, f(5)의 값은? (단, k는 상수)",
+    "choices": [
+      "19",
+      "21",
+      "23",
+      "25",
+      "27"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x)=3x²−12x+9=3(x−1)(x−3)이므로 x=1에서 극대입니다. f(1)=1−6+9+k=4+k=7에서 k=3입니다. f(5)=125−150+45+3=23입니다.",
+    "concept": "f'(x)의 부호가 +에서 −로 바뀌는 x에서 극대이다"
+  },
+  {
+    "id": "math-2026-10-24-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-24",
+    "prompt": "곡선 y=4x−x²과 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "4x−x²=0에서 x=0, 4이고 구간에서 y≥0입니다. ∫₀⁴(4x−x²)dx=[2x²−x³/3]₀⁴=32−64/3=32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 ∫|f(x)|dx로 구한다"
+  },
+  {
+    "id": "math-2026-10-24-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-24",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "18/35",
+      "19/35",
+      "4/7",
+      "3/5",
+      "22/35"
+    ],
+    "answerIndex": 4,
+    "explanation": "전체 경우의 수는 C(7,3)=35입니다. 흰 공 2개·검은 공 1개는 C(4,2)·C(3,1)=18, 흰 공 3개는 C(4,3)=4이므로 확률은 22/35입니다.",
+    "concept": "조합 nCr로 경우의 수를 세고 (사건의 경우의 수)/(전체 경우의 수)로 확률을 구한다"
+  },
+  {
+    "id": "math-2026-10-24-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-24",
+    "prompt": "0≤x<2π에서 방정식 2sin²x−sin x−1=0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "13π/4",
+      "7π/2",
+      "11π/3",
+      "4π"
+    ],
+    "answerIndex": 2,
+    "explanation": "sin x=t로 두면 2t²−t−1=(2t+1)(t−1)=0이므로 t=1 또는 t=−1/2입니다. sin x=1이면 x=π/2, sin x=−1/2이면 x=7π/6, 11π/6입니다. 합은 π/2+7π/6+11π/6=3π/6+18π/6=7π/2입니다.",
+    "concept": "sin x를 치환해 이차방정식으로 푼 뒤 단위원에서 해를 구한다"
   }
 ]
