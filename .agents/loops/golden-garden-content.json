@@ -21,7 +21,8 @@
       "file": "01-Projects/황금정원-블로그/아침형은-타고날까.md",
       "topic": "아침형은 타고날까 (크로노타입, 유전, 적응)",
       "created": "2026-10-19",
-      "status": "초안 — 경험 문장 정리 완료, 병합·발행 대기"
+      "status": "스튜디오로 이관 — 스튜디오 세션에서 발행 대기",
+      "studio_doc": "p-20261019-chronotype"
     }
   ],
   "published": [
@@ -54,5 +55,6 @@
   ],
   "counters": {
     "consecutive_no_new_topic": 0
-  }
+  },
+  "studio_url": "https://claude.ai/artifact/JX5794Nywjmji4B8NbwDiH"
 }
