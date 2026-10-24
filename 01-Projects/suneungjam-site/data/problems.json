@@ -13765,5 +13765,247 @@
     "answerIndex": 2,
     "explanation": "sin x=t로 두면 2t²−t−1=(2t+1)(t−1)=0이므로 t=1 또는 t=−1/2입니다. sin x=1이면 x=π/2, sin x=−1/2이면 x=7π/6, 11π/6입니다. 합은 π/2+7π/6+11π/6=3π/6+18π/6=7π/2입니다.",
     "concept": "sin x를 치환해 이차방정식으로 푼 뒤 단위원에서 해를 구한다"
+  },
+  {
+    "id": "en-2026-10-25-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-25",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity is a gift [u]given[/u]① only to a few. In fact, research shows that it often grows when we combine ideas [u]that seem[/u]② unrelated. A writer, for example, may find inspiration in a conversation [u]overheard[/u]③ on a train. What matters is not talent alone but the habit of noticing details that most of us [u]overlooks[/u]④. Those who practice this habit [u]find[/u]⑤ that new ideas come more easily.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 관계사절 that most of us overlooks에서 주어는 most of us(복수 취급, 1인칭 복수)이므로 동사는 overlook이어야 합니다. ① gift를 수식하는 과거분사 given, ② ideas를 선행사로 하는 복수 동사 seem, ③ conversation이 '엿들린' 것이므로 과거분사 overheard, ⑤ 주어 Those가 복수이므로 find는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      },
+      {
+        "word": "overhear",
+        "meaning": "우연히 듣다, 엿듣다"
+      },
+      {
+        "word": "unrelated",
+        "meaning": "관련 없는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-25-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-25",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Early maps were never neutral records of land. Mapmakers decided what to include, what to leave out, and which places to put at the center. A medieval European map, for instance, placed Jerusalem in the middle because that is what mattered most to its makers. In this sense, every map is _______________.",
+    "choices": [
+      "an exact copy of the physical world",
+      "a reflection of the values of those who draw it",
+      "a tool used only by travelers and sailors",
+      "a record that grows more accurate with age",
+      "a product of advanced measuring technology"
+    ],
+    "answerIndex": 1,
+    "explanation": "지도 제작자가 무엇을 넣고 뺄지, 무엇을 중심에 둘지 결정하며 중세 지도가 예루살렘을 중앙에 둔 것도 제작자에게 중요했기 때문이라는 예시이므로, 빈칸에는 지도가 그린 사람의 가치관을 반영한다는 ②가 적절합니다.",
+    "vocab": [
+      {
+        "word": "neutral",
+        "meaning": "중립적인"
+      },
+      {
+        "word": "medieval",
+        "meaning": "중세의"
+      },
+      {
+        "word": "mapmaker",
+        "meaning": "지도 제작자"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-25-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-25",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "(A) Beyond cooling, the leaves also absorb dust and other pollutants, so the air itself becomes cleaner.\n(B) The most immediate benefit is shade: leafy streets can be several degrees cooler than bare ones in summer.\n(C) Combined, these effects make the streets more pleasant, and residents tend to walk more often.",
+    "givenSentence": "Many cities have begun to plant trees along their busiest streets.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장 뒤에는 첫 번째 이점인 그늘(B)이 오고, 'Beyond cooling'으로 추가 이점을 덧붙이는 (A)가 이어지며, 'Combined, these effects'로 종합해 결과를 말하는 (C)가 마지막에 옵니다.",
+    "vocab": [
+      {
+        "word": "pollutant",
+        "meaning": "오염 물질"
+      },
+      {
+        "word": "immediate",
+        "meaning": "즉각적인"
+      },
+      {
+        "word": "resident",
+        "meaning": "주민"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-25-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-25",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Multitasking feels efficient. ① Answering messages while writing a report seems to save time. ② Researchers have found that people lose several minutes of focus each time they return to the original task. ③ Over a day, these small losses add up to hours. ④ People who handle one task at a time therefore often finish sooner. ⑤",
+    "givenSentence": "But attention, it turns out, does not shift from one task to another instantly.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 주의가 즉시 전환되지 않는다는 원리를 제시하며 But으로 앞의 '시간이 절약되는 듯하다'를 뒤집고, 뒤의 '집중을 잃는다'는 연구 결과의 근거가 됩니다. 따라서 ② 자리에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "efficient",
+        "meaning": "효율적인"
+      },
+      {
+        "word": "multitasking",
+        "meaning": "멀티태스킹, 동시 작업"
+      },
+      {
+        "word": "shift",
+        "meaning": "옮기다, 전환하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-25-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-25",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Students often treat breaks as a reward to be earned only after hours of study. Yet cognitive research suggests otherwise. Short pauses allow the brain to consolidate what it has just learned, and learners who rest briefly between sessions recall more than those who push on without stopping. Rest, in other words, is not the opposite of effective study but part of it.",
+    "choices": [
+      "the importance of choosing a quiet place to study",
+      "the dangers of studying long hours without a goal",
+      "ways to reward yourself after finishing a task",
+      "why short breaks are an essential part of effective learning",
+      "the effect of sleep on test anxiety"
+    ],
+    "answerIndex": 3,
+    "explanation": "짧은 휴식이 학습 내용을 굳히고 기억을 늘려 주므로 휴식은 효과적인 공부의 일부라는 것이 글의 요지입니다. 따라서 ④가 정답입니다.",
+    "vocab": [
+      {
+        "word": "consolidate",
+        "meaning": "공고히 하다, 굳히다"
+      },
+      {
+        "word": "cognitive",
+        "meaning": "인지의"
+      },
+      {
+        "word": "recall",
+        "meaning": "기억해 내다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-25-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-25",
+    "prompt": "등비수열 {aₙ}에서 a₂=6, a₅=162일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "242",
+      "248",
+      "254",
+      "260",
+      "266"
+    ],
+    "answerIndex": 0,
+    "explanation": "공비를 r라 하면 a₅/a₂=r³=27이므로 r=3이고 a₁=6/3=2입니다. S₅=2(3⁵−1)/(3−1)=3⁵−1=242입니다.",
+    "concept": "등비수열의 합 Sₙ=a(rⁿ−1)/(r−1) (r≠1), aₙ=arⁿ⁻¹"
+  },
+  {
+    "id": "math-2026-10-25-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-25",
+    "prompt": "곡선 y=x³−3x+1 위의 점 (2, 3)에서의 접선의 y절편은?",
+    "choices": [
+      "−17",
+      "−15",
+      "−13",
+      "−11",
+      "−9"
+    ],
+    "answerIndex": 1,
+    "explanation": "y'=3x²−3이므로 x=2에서 기울기는 9입니다. 접선은 y−3=9(x−2), 즉 y=9x−15이므로 y절편은 −15입니다.",
+    "concept": "곡선 y=f(x) 위의 점 (a, f(a))에서의 접선은 y−f(a)=f'(a)(x−a)이다"
+  },
+  {
+    "id": "math-2026-10-25-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-25",
+    "prompt": "다항함수 f(x)가 f'(x)=6x²−2x, f(0)=1을 만족시킬 때, f(2)의 값은?",
+    "choices": [
+      "7",
+      "10",
+      "13",
+      "16",
+      "19"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(x)=∫(6x²−2x)dx=2x³−x²+C이고 f(0)=C=1입니다. 따라서 f(2)=16−4+1=13입니다.",
+    "concept": "부정적분으로 f(x)를 구한 뒤 주어진 조건으로 적분상수를 결정한다"
+  },
+  {
+    "id": "math-2026-10-25-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-25",
+    "prompt": "남학생 3명과 여학생 2명을 일렬로 세울 때, 여학생 2명이 이웃할 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "1/3",
+      "2/5",
+      "1/2"
+    ],
+    "answerIndex": 3,
+    "explanation": "전체 경우의 수는 5!=120입니다. 여학생 2명을 한 묶음으로 보면 4!×2!=48이므로 확률은 48/120=2/5입니다.",
+    "concept": "이웃하는 대상은 한 묶음으로 보고 묶음 내부의 순열을 곱한다"
+  },
+  {
+    "id": "math-2026-10-25-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-25",
+    "prompt": "sinθ+cosθ=1/2일 때, sinθcosθ의 값은?",
+    "choices": [
+      "−3/4",
+      "−1/2",
+      "−1/4",
+      "3/8",
+      "−3/8"
+    ],
+    "answerIndex": 4,
+    "explanation": "양변을 제곱하면 sin²θ+2sinθcosθ+cos²θ=1/4이고 sin²θ+cos²θ=1이므로 1+2sinθcosθ=1/4입니다. 따라서 sinθcosθ=−3/8입니다.",
+    "concept": "sin²θ+cos²θ=1과 (sinθ+cosθ)²=1+2sinθcosθ"
   }
 ]
