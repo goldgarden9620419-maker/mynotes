@@ -14007,5 +14007,247 @@
     "answerIndex": 4,
     "explanation": "양변을 제곱하면 sin²θ+2sinθcosθ+cos²θ=1/4이고 sin²θ+cos²θ=1이므로 1+2sinθcosθ=1/4입니다. 따라서 sinθcosθ=−3/8입니다.",
     "concept": "sin²θ+cos²θ=1과 (sinθ+cosθ)²=1+2sinθcosθ"
+  },
+  {
+    "id": "en-2026-10-26-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-26",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Volunteers often report that helping others [u]makes[/u]① them feel happier than they expected. Psychologists explain that kindness shifts our attention away from our own worries, [u]which[/u]② lowers stress. In one study, participants [u]gave[/u]③ small gifts to strangers reported a stronger sense of purpose than [u]those[/u]④ who kept the money for [u]themselves[/u]⑤.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ participants ... reported에서 reported가 이미 문장의 동사이므로, 앞의 participants를 수식하는 말은 준동사여야 합니다. 따라서 gave는 giving(능동 분사)이 되어야 합니다. ① 동명사 주어 helping others는 단수 취급하여 makes, ② 앞 절 전체를 받는 계속적 용법의 which, ④ 비교 대상 those who, ⑤ 주어 those와 일치하는 재귀대명사 themselves는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "volunteer",
+        "meaning": "자원봉사자"
+      },
+      {
+        "word": "shift",
+        "meaning": "옮기다, 전환하다"
+      },
+      {
+        "word": "sense of purpose",
+        "meaning": "삶의 목적의식"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-26-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-26",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many inventors describe their early failures with surprising warmth. Each failed prototype showed them something the successful design later depended on: which materials cracked, which shapes wasted energy, which assumptions were simply wrong. Seen this way, a failure is not the opposite of progress but _______________.",
+    "choices": [
+      "a sign that the goal should be abandoned",
+      "a reason to avoid taking further risks",
+      "a source of information that guides the next attempt",
+      "a result that only careless people produce",
+      "an event best forgotten as quickly as possible"
+    ],
+    "answerIndex": 2,
+    "explanation": "실패한 시제품들이 어떤 재료가 깨지는지, 어떤 가정이 틀렸는지 알려 주어 이후 성공한 설계의 바탕이 되었다는 내용이므로, 빈칸에는 실패가 다음 시도를 이끄는 정보의 원천이라는 ③이 적절합니다.",
+    "vocab": [
+      {
+        "word": "prototype",
+        "meaning": "시제품, 원형"
+      },
+      {
+        "word": "assumption",
+        "meaning": "가정, 추정"
+      },
+      {
+        "word": "abandon",
+        "meaning": "포기하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-26-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-26",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "(A) As a result, the company saw fewer late deliveries, and employees reported feeling less rushed.\n(B) For example, it moved all routine meetings to the afternoon so that mornings stayed free for focused work.\n(C) Managers first collected complaints and found that constant interruptions were the biggest problem.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 4,
+    "explanation": "주어진 문장 다음에는 문제 파악(C: 잦은 방해가 가장 큰 문제)이 오고, 이에 대한 구체적 조치를 For example로 제시하는 (B)가 이어지며, As a result로 결과를 말하는 (A)가 마지막에 오므로 (C)-(B)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "logistics",
+        "meaning": "물류"
+      },
+      {
+        "word": "routine",
+        "meaning": "일상적인"
+      },
+      {
+        "word": "rushed",
+        "meaning": "서두르는, 쫓기는"
+      }
+    ],
+    "givenSentence": "Last year, a small logistics company decided to rethink how its staff spent their working hours."
+  },
+  {
+    "id": "en-2026-10-26-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-26",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Honeybees communicate the location of food through movement. ① A forager that finds a rich flower patch returns to the hive and performs a figure-eight dance. ② The angle of the dance shows the direction of the food relative to the sun. ③ The longer the central part of the dance lasts, the farther away the food is. ④ Other bees watch closely and then fly straight to the patch. ⑤",
+    "givenSentence": "Together, these two cues tell the others exactly where to go.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 Together, these two cues는 앞에서 설명한 방향 정보(②)와 거리 정보(③)를 함께 가리키며, 뒤의 'Other bees ... fly straight to the patch'는 그 정보를 이용한 결과입니다. 따라서 ③ 문장 뒤, ④ 자리가 적절합니다.",
+    "vocab": [
+      {
+        "word": "forager",
+        "meaning": "먹이를 찾아다니는 개체"
+      },
+      {
+        "word": "relative to",
+        "meaning": "~에 대하여"
+      },
+      {
+        "word": "communicate",
+        "meaning": "전달하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-26-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-26",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "We tend to think that expertise comes mainly from talent. Yet studies of musicians, chess players, and athletes repeatedly show that the best performers are distinguished less by natural ability than by the quality of their practice. They set specific goals, seek immediate feedback, and focus on exactly the parts they find hardest. Time spent practicing without such care, by contrast, produces little improvement.",
+    "choices": [
+      "the role of natural talent in choosing a career",
+      "how deliberate practice, not talent alone, builds expertise",
+      "why athletes train longer than musicians",
+      "the importance of rest between practice sessions",
+      "the difficulty of measuring skill in competitions"
+    ],
+    "answerIndex": 1,
+    "explanation": "뛰어난 수행자는 타고난 능력보다 구체적 목표, 즉각적 피드백, 어려운 부분에 대한 집중 같은 연습의 질로 구별된다는 내용이므로 ②가 주제로 적절합니다.",
+    "vocab": [
+      {
+        "word": "expertise",
+        "meaning": "전문 지식·기술"
+      },
+      {
+        "word": "distinguish",
+        "meaning": "구별 짓다"
+      },
+      {
+        "word": "deliberate",
+        "meaning": "의도적인, 신중한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-26-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-26",
+    "prompt": "등차수열 {aₙ}에서 a₃=7, a₇=19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇−a₃=4d=12이므로 d=3이고 a₁=7−2·3=1입니다. S₁₀=10(2·1+9·3)/2=5·29=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n{2a+(n−1)d}/2, aₙ=a+(n−1)d"
+  },
+  {
+    "id": "math-2026-10-26-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-26",
+    "prompt": "함수 f(x)=x³−6x²+9x+2의 극댓값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x)=3x²−12x+9=3(x−1)(x−3)이므로 x=1에서 f'이 양에서 음으로 바뀌어 극대입니다. 극댓값은 f(1)=1−6+9+2=6입니다.",
+    "concept": "f'(x)의 부호가 양에서 음으로 바뀌는 x에서 f(x)는 극대가 된다"
+  },
+  {
+    "id": "math-2026-10-26-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-26",
+    "prompt": "곡선 y=x²과 직선 y=2x로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "2/3",
+      "1",
+      "4/3",
+      "5/3",
+      "2"
+    ],
+    "answerIndex": 2,
+    "explanation": "x²=2x에서 x=0, 2이고 구간 [0,2]에서 2x≥x²입니다. 넓이는 ∫₀²(2x−x²)dx=[x²−x³/3]₀²=4−8/3=4/3입니다.",
+    "concept": "두 곡선 사이의 넓이는 위쪽 함수에서 아래쪽 함수를 뺀 것을 교점 구간에서 적분한다"
+  },
+  {
+    "id": "math-2026-10-26-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-26",
+    "prompt": "남학생 3명과 여학생 2명을 일렬로 세울 때, 여학생 2명이 서로 이웃할 확률은?",
+    "choices": [
+      "1/5",
+      "3/10",
+      "2/5",
+      "1/2",
+      "3/5"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 5!=120입니다. 여학생 2명을 한 묶음으로 보면 4!·2!=48가지이므로 확률은 48/120=2/5입니다.",
+    "concept": "이웃하는 대상은 한 묶음으로 보고 배열한 뒤, 묶음 내부의 순서를 곱한다"
+  },
+  {
+    "id": "math-2026-10-26-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-26",
+    "prompt": "sinθ+cosθ=1/2일 때, sin³θ+cos³θ의 값은?",
+    "choices": [
+      "9/16",
+      "5/8",
+      "11/16",
+      "3/4",
+      "13/16"
+    ],
+    "answerIndex": 2,
+    "explanation": "양변을 제곱하면 1+2sinθcosθ=1/4이므로 sinθcosθ=−3/8입니다. sin³θ+cos³θ=(sinθ+cosθ)(1−sinθcosθ)=(1/2)(1+3/8)=11/16입니다.",
+    "concept": "sin²θ+cos²θ=1과 a³+b³=(a+b)(a²−ab+b²)를 이용한다"
   }
 ]
