@@ -53,6 +53,7 @@ const REVIEWED_PLACES: { match: string; url: string }[] = [
   { match: "임진각", url: "https://blog.naver.com/gold-jw0419/224430607039" },
   { match: "고기싸롱", url: "https://blog.naver.com/gold-jw0419/224439441672" },
   { match: "호탕한갈비탕", url: "https://blog.naver.com/gold-jw0419/224440361087" },
+  { match: "달빛에구운고등어", url: "https://blog.naver.com/gold-jw0419/224452481859" },
 ];
 
 function reviewedPostUrl(name: string) {
