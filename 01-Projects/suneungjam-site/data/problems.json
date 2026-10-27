@@ -14491,5 +14491,246 @@
     "answerIndex": 2,
     "explanation": "sin²x=1−cos²x를 대입하면 2cos²x+cosx−1=0, 즉 (2cosx−1)(cosx+1)=0입니다. cosx=1/2이면 x=π/3, 5π/3, cosx=−1이면 x=π입니다. 근의 합은 π/3+5π/3+π=3π입니다.",
     "concept": "sin²x+cos²x=1로 한 종류의 삼각함수에 대한 이차방정식으로 바꿔 푼다"
+  },
+  {
+    "id": "en-2026-10-28-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-28",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity [u]is[/u]① something that only a few gifted individuals possess. However, research suggests that creativity often emerges from the willingness [u]to combine[/u]② ideas from unrelated fields. A chef, for instance, may borrow techniques from chemistry, [u]creating[/u]③ dishes that surprise diners. Those [u]who[/u]④ embrace such cross-disciplinary thinking tend to solve problems more effectively than those [u]which[/u]⑤ stick to a single approach.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 선행사 those는 '사람들'을 가리키므로 관계대명사는 which가 아니라 who가 되어야 합니다. ① that절의 주어 creativity에 맞는 단수 동사 is, ② willingness를 수식하는 to부정사, ③ 앞 절의 결과를 나타내는 분사구문 creating, ④ Those를 선행사로 하는 주격 관계대명사 who는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "emerge",
+        "meaning": "나타나다, 생겨나다"
+      },
+      {
+        "word": "cross-disciplinary",
+        "meaning": "학제 간의"
+      },
+      {
+        "word": "willingness",
+        "meaning": "기꺼이 하는 마음"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-28-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-28",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When we explain an idea to someone else, we are forced to organize our scattered thoughts into a clear sequence. In the process, gaps in our own understanding become visible, gaps that we would never have noticed while simply rereading the material. This is why teaching is often described as ______.",
+    "choices": [
+      "a shortcut to avoid studying",
+      "the most effective way to test one's own understanding",
+      "a talent that only experts possess",
+      "a task that requires no preparation",
+      "a method of memorizing without comprehension"
+    ],
+    "answerIndex": 1,
+    "explanation": "설명하는 과정에서 자신의 이해에 존재하는 빈틈이 드러난다고 했으므로, 가르치기는 자신의 이해를 점검하는 가장 효과적인 방법이라는 ②가 적절합니다. 나머지는 글의 내용과 맞지 않습니다.",
+    "vocab": [
+      {
+        "word": "scattered",
+        "meaning": "흩어진"
+      },
+      {
+        "word": "gap",
+        "meaning": "빈틈, 간극"
+      },
+      {
+        "word": "comprehension",
+        "meaning": "이해"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-28-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-28",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "(A) Over time, however, the number of visitors grew so large that the nesting grounds began to suffer.\n(B) Originally, it was a small gathering where villagers simply walked to the river to watch the birds arrive.\n(C) In response, the council limited access to the wetlands and built an observation tower so that people could enjoy the birds without disturbing them.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 축제에 대해 (B)가 'Originally'로 처음 모습을 설명하고, (A)가 'however'로 방문객 증가에 따른 문제를 제시하며, (C)가 'In response'로 그 대응책을 서술하므로 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "migrating",
+        "meaning": "이동하는, 철새의"
+      },
+      {
+        "word": "nesting ground",
+        "meaning": "둥지 서식지"
+      },
+      {
+        "word": "council",
+        "meaning": "의회, 위원회"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-28-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-28",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Physical activity affects the mind as well as the body. ① When we move, the brain releases chemicals that reduce stress and promote a sense of well-being. ② Such benefits do not require intense exercise. ③ Studies show that ten minutes of gentle walking is enough to increase feelings of energy. ④ People who walk regularly also report sleeping better at night. ⑤",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 This is why는 앞에 원인이 와야 하므로, 운동이 뇌 화학물질을 분비해 스트레스를 줄인다는 문장 뒤인 ②에 들어가야 합니다. 이후 문장의 Such benefits가 주어진 문장의 기분 개선 효과를 가리키게 되어 흐름이 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "well-being",
+        "meaning": "행복, 건강한 상태"
+      },
+      {
+        "word": "intense",
+        "meaning": "강렬한"
+      },
+      {
+        "word": "gentle",
+        "meaning": "부드러운, 가벼운"
+      }
+    ],
+    "givenSentence": "This is why even a short walk can noticeably lift your mood."
+  },
+  {
+    "id": "en-2026-10-28-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-28",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Libraries are no longer just places to borrow books. Many now lend tools, musical instruments, and even seeds to local residents. They host job-skills workshops and offer quiet rooms where students can study for free. By adapting to what their communities actually need, libraries have remained relevant in an age when information is available online.",
+    "choices": [
+      "the decline of printed books in modern society",
+      "how libraries expand their services to meet community needs",
+      "the advantages of studying alone in quiet rooms",
+      "why online information is more reliable than books",
+      "the high cost of lending tools and instruments"
+    ],
+    "answerIndex": 1,
+    "explanation": "도서관이 도구, 악기, 씨앗 대여와 워크숍 등으로 지역사회의 필요에 맞춰 역할을 넓혀 왔다는 내용이므로 ②가 주제입니다. 나머지는 글의 일부만 다루거나 언급되지 않은 내용입니다.",
+    "vocab": [
+      {
+        "word": "relevant",
+        "meaning": "의의가 있는, 관련 있는"
+      },
+      {
+        "word": "host",
+        "meaning": "개최하다"
+      },
+      {
+        "word": "adapt",
+        "meaning": "적응하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-28-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-28",
+    "prompt": "등차수열 {aₙ}에서 a₃=7, a₇=19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇−a₃=4d=12이므로 d=3, a₁=a₃−2d=1입니다. S₁₀=10(2·1+9·3)/2=5·29=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n{2a+(n−1)d}/2"
+  },
+  {
+    "id": "math-2026-10-28-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-28",
+    "prompt": "함수 f(x)=x³−3x²+2의 극솟값은?",
+    "choices": [
+      "−4",
+      "−3",
+      "−2",
+      "−1",
+      "0"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x)=3x²−6x=3x(x−2)=0에서 x=0, 2이고, x=2의 좌우에서 f′가 음에서 양으로 바뀌므로 x=2에서 극소입니다. f(2)=8−12+2=−2입니다.",
+    "concept": "f′(x)의 부호가 음에서 양으로 바뀌는 점에서 f(x)는 극소가 된다"
+  },
+  {
+    "id": "math-2026-10-28-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-28",
+    "prompt": "곡선 y=4x−x²과 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "4x−x²=0에서 x=0, 4이고 이 구간에서 y≥0입니다. 넓이는 ∫₀⁴(4x−x²)dx=[2x²−x³/3]₀⁴=32−64/3=32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 y≥0인 구간에서 ∫y dx로 구한다"
+  },
+  {
+    "id": "math-2026-10-28-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-28",
+    "prompt": "흰 공 4개와 빨간 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 두 공의 색이 같을 확률은?",
+    "choices": [
+      "2/7",
+      "3/7",
+      "4/7",
+      "5/7",
+      "1/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 ₇C₂=21입니다. 같은 색인 경우는 흰 공 2개 ₄C₂=6, 빨간 공 2개 ₃C₂=3으로 합이 9이므로 확률은 9/21=3/7입니다.",
+    "concept": "서로 배타적인 사건의 확률은 합의 법칙으로 더하고, 조합 ₙCᵣ로 경우의 수를 센다"
+  },
+  {
+    "id": "math-2026-10-28-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-28",
+    "prompt": "0≤x<2π일 때, 방정식 2cos²x+3sinx−3=0의 모든 근의 합은?",
+    "choices": [
+      "π",
+      "4π/3",
+      "3π/2",
+      "5π/3",
+      "2π"
+    ],
+    "answerIndex": 2,
+    "explanation": "cos²x=1−sin²x를 대입하면 2sin²x−3sinx+1=0, 즉 (2sinx−1)(sinx−1)=0입니다. sinx=1/2이면 x=π/6, 5π/6, sinx=1이면 x=π/2입니다. 합은 π/6+5π/6+π/2=3π/2입니다.",
+    "concept": "sin²x+cos²x=1로 한 종류의 삼각함수에 대한 이차방정식으로 바꿔 푼다"
   }
 ]
