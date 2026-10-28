@@ -32,14 +32,14 @@
       "file": "01-Projects/황금정원-블로그/아침형은-타고날까.md",
       "topic": "아침형은 타고날까 (크로노타입, 유전, 적응)",
       "created": "2026-10-19",
-      "status": "스튜디오로 이관 — 스튜디오 세션에서 발행 대기",
+      "status": "루프 중지 — 스튜디오 목록에 남겨둠(사용자가 쓰거나 지울 수 있음)",
       "studio_doc": "p-20261019-chronotype"
     },
     {
       "file": "01-Projects/황금정원-블로그/주말-늦잠의-함정.md",
       "topic": "주말 늦잠의 함정 (사회적 시차, 리듬, 1시간)",
       "created": "2026-10-26",
-      "status": "스튜디오에 넣음 — 스튜디오 세션에서 발행 대기 (서론 경험성 문장 1곳 확인 필요)",
+      "status": "루프 중지 — 스튜디오 목록에서 삭제됨(10/28 확인), 원본 노트만 남음",
       "studio_doc": "p-20261026-social-jetlag"
     }
   ],
@@ -97,5 +97,10 @@
   "counters": {
     "consecutive_no_new_topic": 0
   },
-  "studio_url": "https://claude.ai/artifact/JX5794Nywjmji4B8NbwDiH"
+  "studio_url": "https://claude.ai/artifact/JX5794Nywjmji4B8NbwDiH",
+  "status": "paused",
+  "paused": {
+    "since": "2026-10-28",
+    "reason": "블로그 글쓰기·티스토리 발행을 고정 세션의 발행 스튜디오에서 하고 있어 중복 — 사용자 요청으로 월요일 루프(예약 작업) 비활성화. 다시 켜려면 예약 작업 trig_018gUnai49nAT4cV8StZ3H15를 enabled로."
+  }
 }
