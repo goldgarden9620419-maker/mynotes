@@ -14732,5 +14732,246 @@
     "answerIndex": 2,
     "explanation": "cos²x=1−sin²x를 대입하면 2sin²x−3sinx+1=0, 즉 (2sinx−1)(sinx−1)=0입니다. sinx=1/2이면 x=π/6, 5π/6, sinx=1이면 x=π/2입니다. 합은 π/6+5π/6+π/2=3π/2입니다.",
     "concept": "sin²x+cos²x=1로 한 종류의 삼각함수에 대한 이차방정식으로 바꿔 푼다"
+  },
+  {
+    "id": "en-2026-10-29-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-29",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Sleep is often treated as a luxury, yet scientists have shown that it [u]plays[/u]① a central role in memory. During deep sleep, the brain replays the events of the day, [u]strengthening[/u]② the connections that matter most. Students who sleep well before an exam usually remember more than [u]that[/u]③ stay up all night. A tired mind has difficulty [u]focusing[/u]④ on new information, [u]which[/u]⑤ explains why last-minute cramming often fails.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ than 뒤에는 '밤새우는 학생들'을 가리키는 복수 대명사가 와야 하므로 that이 아니라 those(who)가 되어야 합니다. ① 주어 it에 맞는 단수 동사 plays, ② 결과를 나타내는 분사구문 strengthening, ④ have difficulty (in) -ing 구문의 focusing, ⑤ 앞 절 전체를 선행사로 하는 계속적 용법의 which는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "luxury",
+        "meaning": "사치(품)"
+      },
+      {
+        "word": "replay",
+        "meaning": "다시 재생하다"
+      },
+      {
+        "word": "cramming",
+        "meaning": "벼락치기 공부"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-29-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-29",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many athletes report that their biggest improvements came not after victories but after defeats. A loss exposes weaknesses that a win would have hidden, and it forces the athlete to examine habits once taken for granted. In this sense, failure is best understood as ______.",
+    "choices": [
+      "a sign that effort is pointless",
+      "a punishment for lack of talent",
+      "an event to be forgotten quickly",
+      "a source of information for future growth",
+      "a barrier that cannot be overcome"
+    ],
+    "answerIndex": 3,
+    "explanation": "패배가 승리가 가려 주었을 약점을 드러내고 당연시하던 습관을 점검하게 한다고 했으므로, 실패는 향후 성장을 위한 정보의 원천이라는 ④가 적절합니다. 나머지는 글의 긍정적 관점과 반대입니다.",
+    "vocab": [
+      {
+        "word": "expose",
+        "meaning": "드러내다, 노출시키다"
+      },
+      {
+        "word": "defeat",
+        "meaning": "패배"
+      },
+      {
+        "word": "take for granted",
+        "meaning": "당연하게 여기다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-29-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-29",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Public libraries were once seen mainly as quiet places to borrow books.\n(A) However, as people began to read more on screens, libraries had to rethink what they could offer.\n(B) Thus the library has become a center of community life rather than just a storehouse of books.\n(C) As a result, many now offer workshops, job-training classes, and spaces for community meetings.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 0,
+    "explanation": "과거 도서관의 모습 뒤에 However로 화면 독서 증가에 따른 변화의 필요성을 말하는 (A)가 오고, As a result로 새 프로그램을 소개하는 (C), 마지막으로 Thus로 결론을 맺는 (B)가 이어집니다.",
+    "vocab": [
+      {
+        "word": "storehouse",
+        "meaning": "저장소, 보고"
+      },
+      {
+        "word": "rethink",
+        "meaning": "재고하다"
+      },
+      {
+        "word": "workshop",
+        "meaning": "워크숍, 실습 강좌"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-29-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-29",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Humans are deeply social creatures. ① When someone smiles at us, our brains respond in ways that make us more likely to smile back. ② Over time, this simple exchange builds trust between strangers. ③ For example, workplaces with frequent friendly interactions report higher levels of cooperation. ④ Even a brief greeting in the hallway can help a team work more smoothly. ⑤",
+    "givenSentence": "This is why even small gestures of kindness can have surprisingly large effects.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장 'This is why ...'는 앞에서 작은 교류가 신뢰를 쌓는다는 원리를 설명한 뒤 결론으로 나와야 하고, 바로 뒤의 'For example'이 그 사례를 제시하므로 ③에 들어가는 것이 적절합니다.",
+    "vocab": [
+      {
+        "word": "gesture",
+        "meaning": "몸짓, 행동"
+      },
+      {
+        "word": "cooperation",
+        "meaning": "협력"
+      },
+      {
+        "word": "interaction",
+        "meaning": "상호작용"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-29-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-29",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many students believe that reading a text several times is the best way to learn it. But research shows that retrieving information from memory, such as by taking practice quizzes, produces stronger long-term retention than rereading. Retrieval requires effort, and that effort signals the brain to store the information more durably.",
+    "choices": [
+      "the drawbacks of taking too many practice tests",
+      "why rereading is the most reliable study method",
+      "how sleep affects the speed of learning",
+      "the importance of choosing a quiet place to study",
+      "the advantage of active recall over passive rereading"
+    ],
+    "answerIndex": 4,
+    "explanation": "다시 읽기보다 기억에서 정보를 꺼내는 연습(퀴즈)이 장기 기억에 더 효과적이라는 내용이므로 ⑤가 주제입니다.",
+    "vocab": [
+      {
+        "word": "retrieve",
+        "meaning": "(기억에서) 인출하다, 되찾다"
+      },
+      {
+        "word": "retention",
+        "meaning": "유지, 기억(력)"
+      },
+      {
+        "word": "durably",
+        "meaning": "오래 지속되게"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-29-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-29",
+    "prompt": "등차수열 {aₙ}에 대하여 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "공차 d = (19−7)/4 = 3, a₁ = 7−2·3 = 1이므로 a₁₀ = 28, S₁₀ = 10(1+28)/2 = 145입니다.",
+    "concept": "등차수열의 합 Sₙ = n(a₁+aₙ)/2, 일반항 aₙ = a₁ + (n−1)d"
+  },
+  {
+    "id": "math-2026-10-29-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-29",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 2의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x²−12x+9 = 3(x−1)(x−3)이므로 x=1에서 극대 f(1)=6, x=3에서 극소 f(3)=2입니다. 따라서 차는 4입니다.",
+    "concept": "f′(x)의 부호가 양에서 음으로 바뀌는 점에서 극대, 음에서 양으로 바뀌는 점에서 극소"
+  },
+  {
+    "id": "math-2026-10-29-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-29",
+    "prompt": "정적분 ∫₀² (3x² − 2x + 1) dx의 값은?",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answerIndex": 0,
+    "explanation": "부정적분 x³ − x² + x에 대입하면 (8−4+2) − 0 = 6입니다.",
+    "concept": "다항함수의 정적분: ∫xⁿdx = xⁿ⁺¹/(n+1), 정적분은 F(b)−F(a)"
+  },
+  {
+    "id": "math-2026-10-29-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-29",
+    "prompt": "흰 공 4개, 검은 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 두 공의 색이 같을 확률은?",
+    "choices": [
+      "1/7",
+      "2/7",
+      "3/7",
+      "4/7",
+      "5/7"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 경우의 수는 ₇C₂ = 21, 같은 색인 경우는 ₄C₂ + ₃C₂ = 6 + 3 = 9이므로 확률은 9/21 = 3/7입니다.",
+    "concept": "확률 = (사건의 경우의 수)/(전체 경우의 수), 서로 배반인 사건의 확률은 더한다"
+  },
+  {
+    "id": "math-2026-10-29-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-29",
+    "prompt": "0 ≤ x < 2π에서 방정식 2cos x = 1의 모든 해의 합은?",
+    "choices": [
+      "π",
+      "4π/3",
+      "5π/3",
+      "2π",
+      "7π/3"
+    ],
+    "answerIndex": 3,
+    "explanation": "cos x = 1/2이므로 x = π/3 또는 x = 5π/3이고, 합은 2π입니다.",
+    "concept": "y = cos x의 그래프는 x = π에 대하여 대칭이므로 cos x = k의 두 해의 합은 2π"
   }
 ]
