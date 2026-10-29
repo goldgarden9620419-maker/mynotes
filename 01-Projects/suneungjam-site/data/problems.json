@@ -14973,5 +14973,246 @@
     "answerIndex": 3,
     "explanation": "cos x = 1/2이므로 x = π/3 또는 x = 5π/3이고, 합은 2π입니다.",
     "concept": "y = cos x의 그래프는 x = π에 대하여 대칭이므로 cos x = k의 두 해의 합은 2π"
+  },
+  {
+    "id": "en-2026-10-30-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-30",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Volunteering is often described as a gift to others, yet research suggests that the giver [u]benefits[/u]① as well. People who help their communities tend to feel [u]more connected[/u]② and less lonely. In one study, participants [u]asked[/u]③ to spend an afternoon helping neighbors reported greater happiness than those who spent it on themselves. Such findings suggest that kindness is not a sacrifice [u]what[/u]④ drains us but a habit [u]that[/u]⑤ restores us.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ what은 선행사를 포함하는 관계대명사로 앞에 명사 a sacrifice가 있으면 쓸 수 없습니다. 선행사 a sacrifice를 수식하는 관계대명사 that(또는 which)이 되어야 합니다. ① 주어 the giver에 맞는 단수 동사, ② feel 뒤 보어로 쓰인 형용사 비교급, ③ participants를 수식하는 과거분사(~하도록 요청받은), ⑤ a habit을 선행사로 하는 주격 관계대명사 that은 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "volunteer",
+        "meaning": "자원봉사를 하다"
+      },
+      {
+        "word": "sacrifice",
+        "meaning": "희생"
+      },
+      {
+        "word": "drain",
+        "meaning": "고갈시키다, 소모시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-30-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-30",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "A map is useful precisely because it leaves things out. If a map showed every tree, crack, and pebble, it would be as large and as confusing as the territory itself, and no traveler could use it. The mapmaker's real skill lies in deciding which details do not matter for the journey. In other words, a good representation is valuable not for how much it contains, but for ______.",
+    "choices": [
+      "how accurately it copies every detail",
+      "how wisely it chooses what to leave out",
+      "how long it takes to produce",
+      "how many people have seen it",
+      "how closely it resembles older versions"
+    ],
+    "answerIndex": 1,
+    "explanation": "지도는 모든 세부 사항을 담지 않기 때문에 유용하며, 지도 제작자의 능력은 여행에 중요하지 않은 세부 사항을 가려내는 데 있다고 했습니다. 따라서 무엇을 생략할지 현명하게 선택하는 것이라는 ②가 적절합니다.",
+    "vocab": [
+      {
+        "word": "pebble",
+        "meaning": "조약돌"
+      },
+      {
+        "word": "territory",
+        "meaning": "영토, 지역"
+      },
+      {
+        "word": "representation",
+        "meaning": "표현, 묘사"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-30-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-30",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Many people believe that creativity arrives suddenly, like a flash of inspiration.\n(A) However, studies of famous inventors show that their ideas usually grew out of years of practice and repeated failure.\n(B) Therefore, waiting for inspiration is less effective than building a steady habit of working on problems.\n(C) Thomas Edison, for example, tested thousands of materials before he found a filament that lasted.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(A)-(C)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "창의성이 갑자기 온다는 통념 뒤에 However로 반박하는 (A)가 오고, 그 예시인 Edison을 드는 (C), 결론을 이끄는 Therefore의 (B)가 마지막에 옵니다.",
+    "vocab": [
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      },
+      {
+        "word": "breakthrough",
+        "meaning": "돌파구"
+      },
+      {
+        "word": "filament",
+        "meaning": "(전구의) 필라멘트"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-30-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-30",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many people give up on a new routine after missing a single day. ① Researchers, however, found that missing one day had almost no effect on long-term success. ② What mattered was returning to the routine the next day. ③ Those who treated a slip as a reason to quit rarely recovered. ④ Those who simply resumed built lasting habits. ⑤",
+    "givenSentence": "In other words, what counts is how quickly you start again, not how perfectly you begin.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 In other words로 시작하여 '다시 시작하는 속도가 중요하다'는 앞 내용을 바꿔 말합니다. 따라서 '중요한 것은 다음 날 루틴으로 돌아오는 것이었다'는 문장 바로 뒤인 ③이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "routine",
+        "meaning": "일상적인 습관, 루틴"
+      },
+      {
+        "word": "slip",
+        "meaning": "실수, 미끄러짐"
+      },
+      {
+        "word": "resume",
+        "meaning": "다시 시작하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-30-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-30",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Urban planners once treated parks as decoration, something to add only if money remained. Recent studies, however, show that neighborhoods with accessible green spaces have lower stress levels, cleaner air, and stronger social ties. Parks give residents places to exercise, meet neighbors, and recover from the pressures of city life. Green space, in short, is essential infrastructure rather than an optional extra.",
+    "choices": [
+      "the high cost of maintaining city parks",
+      "the role of green spaces as essential urban infrastructure",
+      "why people move from cities to rural areas",
+      "the effect of air pollution on exercise habits",
+      "how planners decide where to build new roads"
+    ],
+    "answerIndex": 1,
+    "explanation": "공원이 장식이 아니라 스트레스 감소, 공기 정화, 사회적 유대 강화에 기여하는 필수 기반 시설이라는 내용이므로 ②가 주제입니다.",
+    "vocab": [
+      {
+        "word": "infrastructure",
+        "meaning": "기반 시설"
+      },
+      {
+        "word": "accessible",
+        "meaning": "접근 가능한"
+      },
+      {
+        "word": "social ties",
+        "meaning": "사회적 유대"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-30-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-30",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 11, a₇ = 27일 때, 첫째항부터 제10항까지의 합 a₁ + a₂ + … + a₁₀의 값은?",
+    "choices": [
+      "190",
+      "200",
+      "210",
+      "220",
+      "230"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 16이므로 d = 4, a₁ = 11 − 2·4 = 3입니다. S₁₀ = 10(2·3 + 9·4)/2 = 5 × 42 = 210입니다.",
+    "concept": "등차수열의 합 Sₙ = n{2a + (n−1)d}/2, 일반항 aₙ = a + (n−1)d."
+  },
+  {
+    "id": "math-2026-10-30-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-30",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 합은?",
+    "choices": [
+      "2",
+      "4",
+      "5",
+      "6",
+      "8"
+    ],
+    "answerIndex": 3,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 5, f(3) = 1이므로 합은 6입니다.",
+    "concept": "f′(x)의 부호가 양에서 음으로 바뀌는 점에서 극대, 음에서 양으로 바뀌는 점에서 극소."
+  },
+  {
+    "id": "math-2026-10-30-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-30",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "곡선은 x = 0, 4에서 x축과 만나고 그 사이에서 y ≤ 0이므로 넓이는 ∫₀⁴(4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 ∫|f(x)|dx로 구하며, 함수가 음수인 구간에서는 부호를 바꿔 적분한다."
+  },
+  {
+    "id": "math-2026-10-30-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-30",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 동시에 3개의 공을 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "18/35",
+      "4/7",
+      "3/5",
+      "22/35",
+      "24/35"
+    ],
+    "answerIndex": 3,
+    "explanation": "전체 경우의 수는 ₇C₃ = 35입니다. 흰 공 2개·검은 공 1개: ₄C₂·₃C₁ = 18, 흰 공 3개: ₄C₃ = 4이므로 확률은 22/35입니다.",
+    "concept": "서로 배타적인 사건의 확률은 더하고, 확률 = (해당 경우의 수)/(전체 경우의 수), 조합 ₙCᵣ을 이용한다."
+  },
+  {
+    "id": "math-2026-10-30-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-30",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 근의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. x = π/2, 7π/6, 11π/6이며 합은 (3π + 7π + 11π)/6 = 7π/2입니다.",
+    "concept": "sin x = t로 치환해 t에 대한 이차방정식을 인수분해한 뒤, 단위원에서 해당 각을 찾는다."
   }
 ]
