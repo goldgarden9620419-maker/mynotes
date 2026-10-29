@@ -66,7 +66,7 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 - **2026-10-14 20:3x 5편 게시 완료 (인스타 앱 직접 업로드 + 앱 음악)** — https://www.instagram.com/p/DeeSBp8obpT/ (AI 라벨 OFF, 하루보고 페이스북 페이지 동시 공유)
 - **2026-10-23 21:25 7편 자동 게시 (오토파일럿 1회차, 클라우드 API)** — https://www.instagram.com/reel/De1jZX2gqrX/ (AI 라벨 OFF, 손 실사 + 게스트 모드 화면 실측, 영상 https://d2ol7oe51mr4n9.cloudfront.net/user_3HJnC5CkXHg6AD5BHY10m7yn4pr/f4627284-0acc-479e-be60-272f61b50621.mp4) · 그 회차 노트는 push 403으로 유실 → 10/25 주간 요약에서 복구 기록
 - **2026-10-26 21:22 8편 자동 게시 (오토파일럿 2회차, 법인카드 공제 점검 양식)** — https://www.instagram.com/reel/De9RZS0E03H/ (API로 복구 기록)
-- **2026-10-28 21:25 9편 자동 게시 (오토파일럿 3회차, 업무일지→보고서 33초, 손 실사 + 게스트 화면)** — https://www.instagram.com/reel/DfCbVxlHAML/ (AI 라벨 OFF)
+- **2026-10-28 21:25 9편 자동 게시 (오토파일럿 3회차, 업무일지→보고서 33초, 손 실사 + 게스트 화면)** — https://www.instagram.com/reel/DfCbVxlHAML/ (AI 라벨 OFF) · **10/29 보관 처리(결함본)**
 - **2026-10-28 밤 9편 수정판 게시 (화면 잘림 결함본 대체, 삭제 없이 추가 게시)** — https://www.instagram.com/reel/DfCiqNtDDAx/ (AI 라벨 OFF)
 - **2026-10-15 6편 게시 완료 (앱 업로드, 음악 없이 올라감)** — https://www.instagram.com/p/Deg61KJIMd2/ (AI 라벨 OFF) · 교훈: 앱에서 「다음」 전에 상단 곡 이름 확인
 - ✅ 2026-10-07 토큰 교체 완료 (비즈니스 통합에서 앱 제거 → 재발급 → 60일 확장 → 숨김 입력 저장, dry-run 통과)
