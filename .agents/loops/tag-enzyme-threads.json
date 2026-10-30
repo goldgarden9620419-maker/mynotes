@@ -17,14 +17,7 @@
     "자주 묻는 질문(Q&A) 각도",
     "효소 고르는 기준(구매 가이드) 각도"
   ],
-  "pending_drafts": [
-    {
-      "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-9-효소고르는기준.md",
-      "angle": "효소 고르는 기준(구매 가이드) 각도",
-      "created": "2026-10-30",
-      "status": "게시 전 확인 필요"
-    }
-  ],
+  "pending_drafts": [],
   "publishing_tool": "Typefully MCP (2026-10-02부터) — social_set_id 337240, kim_jade0419 Threads 연동됨. 기존 PowerShell 스크립트 방식은 백업 수단으로 유지.",
   "disclosure_line": "직장인으로 매일 챙겨 먹다 보니 좋아서 공유해요. 마침 제가 다니는 회사 제품이기도 하고요 🙂",
   "next_run_plan": null,
@@ -98,6 +91,16 @@
       "published_via": "typefully",
       "has_purchase_link_comment": true,
       "disclosure": "제가 좋아서 챙겨 먹는 효소예요. (참고로 제가 다니는 회사 제품이기도 해요)"
+    },
+    {
+      "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-9-효소고르는기준.md",
+      "angle": "효소 고르는 기준(구매 가이드) 각도",
+      "published_at": "2026-10-30",
+      "account": "kim_jade0419",
+      "published_url": "https://www.threads.com/@kim_jade0419/post/DfGQwoxjyVW",
+      "published_via": "typefully",
+      "has_purchase_link_comment": true,
+      "disclosure": "직장인으로 매일 챙겨 먹다 보니 좋아서 공유해요. 마침 제가 다니는 회사 제품이기도 하고요 🙂"
     }
   ],
   "counters": {
