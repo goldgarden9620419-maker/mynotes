@@ -15214,5 +15214,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. x = π/2, 7π/6, 11π/6이며 합은 (3π + 7π + 11π)/6 = 7π/2입니다.",
     "concept": "sin x = t로 치환해 t에 대한 이차방정식을 인수분해한 뒤, 단위원에서 해당 각을 찾는다."
+  },
+  {
+    "id": "en-2026-10-31-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-10-31",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Sleep is not merely a period of rest [u]during which[/u]① the brain stays idle. Studies show that memories [u]formed[/u]② during the day are strengthened at night. Students [u]who get[/u]③ enough sleep tend to perform better on tests than [u]those who sacrifice[/u]④ it for extra study hours. Skipping sleep may feel [u]productively[/u]⑤ in the short term, but it weakens the very abilities students are trying to improve.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ feel은 감각동사로 뒤에 보어가 와야 하므로 부사 productively가 아니라 형용사 productive가 되어야 합니다. ① 「전치사+관계대명사」 during which 뒤에 완전한 절, ② memories를 수식하는 과거분사, ③ 선행사 Students에 맞는 복수 동사, ④ those who 구문은 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "idle",
+        "meaning": "활동하지 않는, 한가한"
+      },
+      {
+        "word": "strengthen",
+        "meaning": "강화하다"
+      },
+      {
+        "word": "sacrifice",
+        "meaning": "희생하다, 포기하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-31-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-10-31",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Trust is built less by grand gestures than by small, consistent actions. A friend who keeps minor promises, such as arriving on time or returning a call, shows that his or her words can be relied on. Over time, these small acts accumulate into a reputation for dependability. Thus, trust grows mainly through ______.",
+    "choices": [
+      "occasional dramatic favors",
+      "reliable everyday behavior",
+      "expensive gifts on special days",
+      "public praise from others",
+      "long periods of silence"
+    ],
+    "answerIndex": 1,
+    "explanation": "큰 행동보다 작고 일관된 행동이 신뢰를 쌓는다고 했고, 사소한 약속을 지키는 예가 제시되었습니다. 따라서 일상에서의 믿을 만한 행동이라는 ②가 적절합니다.",
+    "vocab": [
+      {
+        "word": "gesture",
+        "meaning": "몸짓, 행동 표시"
+      },
+      {
+        "word": "accumulate",
+        "meaning": "축적되다"
+      },
+      {
+        "word": "dependability",
+        "meaning": "신뢰성"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-31-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-10-31",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Most people think that a good listener is simply someone who stays silent.\n(A) Instead, attentive listening involves asking questions and reflecting back what the speaker has said.\n(B) Such responses show the speaker that his or her message has truly been understood.\n(C) Silence alone, however, can feel like indifference if the listener gives no sign of engagement.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "침묵하는 사람이 좋은 청자라는 통념 뒤에 However로 침묵만으로는 무관심처럼 보일 수 있다는 (C)가 오고, Instead로 대안을 제시하는 (A), 그 반응(Such responses)을 받는 (B) 순입니다.",
+    "vocab": [
+      {
+        "word": "attentive",
+        "meaning": "주의 깊은"
+      },
+      {
+        "word": "indifference",
+        "meaning": "무관심"
+      },
+      {
+        "word": "engagement",
+        "meaning": "참여, 몰입"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-31-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-10-31",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Early printing presses made books cheaper and more widely available. ① As a result, literacy rates rose across Europe. ② More people could read religious texts, scientific works, and political ideas for themselves. ③ Authorities, however, grew concerned about the spread of unapproved ideas. ④ Many governments began to license printers and censor books. ⑤",
+    "givenSentence": "This new access to information challenged the control that a small educated elite had long held.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 새로운 정보 접근이 소수 엘리트의 통제에 도전했다는 내용으로, 사람들이 스스로 글을 읽게 되었다는 문장 뒤에 오고, 이에 대한 당국의 우려(Authorities, however)로 이어지므로 ③이 적절합니다.",
+    "vocab": [
+      {
+        "word": "literacy",
+        "meaning": "읽고 쓰는 능력"
+      },
+      {
+        "word": "censor",
+        "meaning": "검열하다"
+      },
+      {
+        "word": "elite",
+        "meaning": "엘리트, 지배층"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-10-31-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-10-31",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many students feel ashamed when they make mistakes, treating every wrong answer as proof of weak ability. Yet cognitive research shows that errors, when examined carefully, reveal exactly which ideas are misunderstood. Learners who analyze their mistakes remember the correct information longer than those who simply see the right answer. In this sense, a mistake is not the opposite of learning but one of its most useful tools.",
+    "choices": [
+      "the harmful effects of test anxiety on memory",
+      "the value of mistakes as tools for learning",
+      "why students should avoid difficult questions",
+      "the importance of finishing exams quickly",
+      "how teachers can reduce student errors"
+    ],
+    "answerIndex": 1,
+    "explanation": "오답을 꼼꼼히 분석하면 오해한 개념을 알 수 있어 더 오래 기억하게 되므로, 실수는 학습의 유용한 도구라는 ②가 주제입니다.",
+    "vocab": [
+      {
+        "word": "cognitive",
+        "meaning": "인지의"
+      },
+      {
+        "word": "reveal",
+        "meaning": "드러내다"
+      },
+      {
+        "word": "misunderstand",
+        "meaning": "오해하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-10-31-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-10-31",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, 첫째항부터 제6항까지의 합은?",
+    "choices": [
+      "126",
+      "147",
+      "168",
+      "189",
+      "210"
+    ],
+    "answerIndex": 3,
+    "explanation": "a₅/a₂ = r³ = 8이므로 r = 2, a₁ = 3입니다. S₆ = 3(2⁶ − 1)/(2 − 1) = 3 × 63 = 189입니다.",
+    "concept": "등비수열의 합 Sₙ = a(rⁿ − 1)/(r − 1) (r ≠ 1)이고 aₙ = arⁿ⁻¹이다."
+  },
+  {
+    "id": "math-2026-10-31-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-10-31",
+    "prompt": "곡선 y = x³ − 3x² + 2 위의 점 (1, 0)에서의 접선의 y절편은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 2,
+    "explanation": "y' = 3x² − 6x이므로 x = 1에서 기울기는 −3입니다. 접선은 y = −3(x − 1)이고 y절편은 3입니다.",
+    "concept": "곡선 y = f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y − f(a) = f'(a)(x − a)이다."
+  },
+  {
+    "id": "math-2026-10-31-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-10-31",
+    "prompt": "정적분 ∫₀² (3x² − 2x + 1) dx의 값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ − x² + x이므로 x = 2에서 8 − 4 + 2 = 6, x = 0에서 0입니다. 따라서 값은 6입니다.",
+    "concept": "∫ xⁿ dx = xⁿ⁺¹/(n+1) + C 이고 정적분은 (위끝 값) − (아래끝 값)으로 계산한다."
+  },
+  {
+    "id": "math-2026-10-31-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-10-31",
+    "prompt": "1부터 7까지의 자연수가 하나씩 적힌 7장의 카드에서 임의로 3장을 동시에 뽑을 때, 뽑은 세 수의 합이 짝수일 확률은?",
+    "choices": [
+      "16/35",
+      "17/35",
+      "18/35",
+      "19/35",
+      "20/35"
+    ],
+    "answerIndex": 3,
+    "explanation": "홀수 카드 4장(1,3,5,7), 짝수 카드 3장(2,4,6)입니다. 합이 짝수이려면 홀수가 0개 또는 2개여야 합니다. 홀수 0개: C(3,3) = 1, 홀수 2개: C(4,2) × 3 = 18이므로 19가지입니다. 전체 C(7,3) = 35이므로 확률은 19/35입니다.",
+    "concept": "세 수의 합이 짝수이려면 홀수의 개수가 짝수(0 또는 2)여야 하며, 확률은 (경우의 수)/(전체 경우의 수)이다."
+  },
+  {
+    "id": "math-2026-10-31-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-10-31",
+    "prompt": "π/2 < θ < π이고 sin θ = 3/5일 때, sin(θ + π/4)의 값은?",
+    "choices": [
+      "−√2/10",
+      "√2/10",
+      "−7√2/10",
+      "7√2/10",
+      "√2/5"
+    ],
+    "answerIndex": 0,
+    "explanation": "θ가 제2사분면이므로 cos θ = −4/5입니다. sin(θ + π/4) = (√2/2)(sin θ + cos θ) = (√2/2)(3/5 − 4/5) = −√2/10입니다.",
+    "concept": "덧셈정리 sin(A + B) = sin A cos B + cos A sin B와 sin²θ + cos²θ = 1, 사분면별 부호를 이용한다."
   }
 ]
