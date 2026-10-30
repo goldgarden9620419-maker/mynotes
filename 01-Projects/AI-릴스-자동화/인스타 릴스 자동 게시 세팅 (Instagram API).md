@@ -71,3 +71,4 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 - **2026-10-15 6편 게시 완료 (앱 업로드, 음악 없이 올라감)** — https://www.instagram.com/p/Deg61KJIMd2/ (AI 라벨 OFF) · 교훈: 앱에서 「다음」 전에 상단 곡 이름 확인
 - ✅ 2026-10-07 토큰 교체 완료 (비즈니스 통합에서 앱 제거 → 재발급 → 60일 확장 → 숨김 입력 저장, dry-run 통과)
 - ⏰ **토큰 만료 예정: 약 2026-12-06** → 11월 말에 탐색기에서 재발급·확장 (Claude에게 "인스타 토큰 갱신해줘")
+- ⏳ 2026-10-30 10편(자금일보→보고서 37초) dry-run 통과·**jade 승인 대기(미게시)** — 영상 https://d2ol7oe51mr4n9.cloudfront.net/user_3HJnC5CkXHg6AD5BHY10m7yn4pr/c2b344d2-a427-40dc-991d-127d3e15aa83.mp4
