@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>하루보고 홍보 숏폼 2호 — 하루쉼표</title>
+<style>
+  @font-face {
+    font-family: "Pretendard Variable";
+    src: url("node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");
+    font-weight: 45 920;
+    font-display: block;
+  }
+  :root {
+    --b100: #e0edff; --b500: #4e9bff; --b600: #3182f6; --b700: #1e6ae0;
+    --ink: #ffffff; --sub: #c7dcff;
+    --surface: rgba(255, 255, 255, 0.08); --line: rgba(224, 237, 255, 0.16);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body { font-family: "Pretendard Variable", "Noto Color Emoji", sans-serif; word-break: keep-all; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+
+  /* 바탕 — 퇴근 후 저녁의 깊은 남색 (브랜드 블루 계열) */
+  .bg-base { position: absolute; inset: 0; background: linear-gradient(180deg, #0a1428 0%, #0f1f3d 55%, #14294e 100%); }
+  .blob { position: absolute; border-radius: 9999px; filter: blur(100px); }
+  .blob1 { width: 560px; height: 560px; right: -140px; top: 120px; background: rgba(49, 130, 246, 0.22); }
+  .blob2 { width: 520px; height: 520px; left: -150px; top: 1050px; background: rgba(30, 106, 224, 0.18); }
+  /* 마무리 장면용 블루 배경 (1호와 같은 시리즈 마감) */
+  .bg-blue { position: absolute; inset: 0; background: linear-gradient(165deg, var(--b600) 0%, var(--b700) 100%); opacity: 0; }
+
+  .scene { position: absolute; inset: 0; }
+
+  /* ───── 장면 1: 훅 ───── */
+  .s1-wrap { position: absolute; left: 0; right: 0; top: 660px; text-align: center; }
+  .s1-moon { font-size: 110px; }
+  .s1-line1 { margin-top: 44px; font-size: 100px; font-weight: 800; color: var(--ink); line-height: 1.2; }
+  .s1-line2 { margin-top: 26px; font-size: 66px; font-weight: 600; color: var(--sub); }
+
+  /* ───── 장면 2: 대화 ───── */
+  .s2-wrap { position: absolute; left: 120px; right: 120px; top: 430px; display: flex; flex-direction: column; gap: 30px; }
+  .chat-chip { align-self: center; border: 2px solid var(--line); border-radius: 9999px;
+    padding: 14px 34px; font-size: 32px; font-weight: 600; color: var(--sub); margin-bottom: 14px; }
+  .bubble { max-width: 660px; border-radius: 30px; padding: 30px 38px; font-size: 38px;
+    line-height: 1.45; font-weight: 500; }
+  .me { align-self: flex-end; background: var(--b600); color: #fff; border-bottom-right-radius: 10px; }
+  .haru { align-self: flex-start; background: var(--surface); border: 2px solid var(--line);
+    color: #eef4ff; border-bottom-left-radius: 10px; }
+  /* 타이핑 말풍선은 답변(b2) 자리 위에 겹쳐서 — 사라져도 빈칸이 안 남게 */
+  .haru-slot { position: relative; align-self: flex-start; }
+  .typing { position: absolute; top: 0; left: 0; display: flex; gap: 12px; align-items: center;
+    background: var(--surface); border: 2px solid var(--line); border-radius: 30px;
+    border-bottom-left-radius: 10px; padding: 32px 38px; }
+  .tdot { width: 16px; height: 16px; border-radius: 9999px; background: var(--b500); }
+
+  /* ───── 장면 3: 정리 ───── */
+  .s3-wrap { position: absolute; left: 110px; right: 110px; top: 560px; display: flex; flex-direction: column; align-items: center; }
+  .s3-head { font-size: 56px; font-weight: 600; color: var(--sub); }
+  .ncard { width: 100%; margin-top: 44px; display: flex; align-items: center; gap: 30px;
+    background: var(--surface); border: 2px solid var(--line); border-radius: 28px; padding: 40px 44px; }
+  .ncard .emo { font-size: 64px; flex: none; }
+  .ncard .tit { font-size: 50px; font-weight: 800; color: var(--ink); }
+  .ncard .sub2 { margin-top: 10px; font-size: 32px; font-weight: 500; color: var(--sub); }
+  .badges { margin-top: 48px; display: flex; gap: 22px; }
+  .badge2 { border: 2px solid var(--line); border-radius: 9999px; padding: 16px 30px;
+    font-size: 30px; font-weight: 600; color: var(--sub); white-space: nowrap; }
+
+  /* ───── 장면 4: 마무리 (1호와 같은 블루 마감) ───── */
+  .s4-wrap { position: absolute; left: 0; right: 0; top: 640px; text-align: center; }
+  .s4-logo { font-size: 156px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+  .s4-sub { margin-top: 36px; font-size: 56px; font-weight: 600; color: var(--b100); }
+  .s4-pill { display: inline-block; margin-top: 90px; background: #fff; color: var(--b700);
+    font-size: 54px; font-weight: 800; border-radius: 9999px; padding: 34px 72px;
+    box-shadow: 0 24px 60px rgba(8, 30, 70, 0.4); }
+  .s4-url { margin-top: 56px; font-size: 46px; font-weight: 600; color: var(--b100); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="bg-base"></div>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+
+  <!-- 장면 1 -->
+  <div class="scene" id="s1">
+    <div class="s1-wrap">
+      <div class="s1-moon" id="moon">🌙</div>
+      <div class="s1-line1" id="l1">일기, 쓰고 싶은데</div>
+      <div class="s1-line2" id="l2">퇴근하면 기운이 없죠</div>
+    </div>
+  </div>
+
+  <!-- 장면 2 -->
+  <div class="scene" id="s2">
+    <div class="s2-wrap">
+      <div class="chat-chip" id="chip">🌙 하루쉼표와의 저녁 대화</div>
+      <div class="bubble me" id="b1">오늘 보고 끝내고 거래처 미팅까지. 저녁엔 공원 산책했어</div>
+      <div class="haru-slot">
+        <div class="typing" id="typing">
+          <span class="tdot" id="td1"></span><span class="tdot" id="td2"></span><span class="tdot" id="td3"></span>
+        </div>
+        <div class="bubble haru" id="b2">수고했어요 🙂 산책하면서 무슨 생각 했어요?</div>
+      </div>
+      <div class="bubble me" id="b3">내일 걱정이 많았는데, 걷다 보니 좀 가벼워졌어</div>
+    </div>
+  </div>
+
+  <!-- 장면 3 -->
+  <div class="scene" id="s3">
+    <div class="s3-wrap">
+      <div class="s3-head" id="h3">하루를 말하면, 이렇게 남아요</div>
+      <div class="ncard" id="ca">
+        <div class="emo">📅</div>
+        <div>
+          <div class="tit">업무는 일정으로</div>
+          <div class="sub2">거래처 미팅이 내일 일정에 자동 등록</div>
+        </div>
+      </div>
+      <div class="ncard" id="cb">
+        <div class="emo">🌙</div>
+        <div>
+          <div class="tit">마음은 일기로</div>
+          <div class="sub2">오늘의 대화가 일기 한 편으로</div>
+        </div>
+      </div>
+      <div class="badges" id="bd">
+        <span class="badge2">📷 사진</span>
+        <span class="badge2">🔒 비밀번호 잠금</span>
+        <span class="badge2">🖨️ 월간 인쇄</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 장면 4 -->
+  <div class="bg-blue" id="bgblue"></div>
+  <div class="scene" id="s4">
+    <div class="s4-wrap">
+      <div class="s4-logo" id="logo">하루보고</div>
+      <div class="s4-sub" id="sub">하루 5분, 대화로 쓰는 일기</div>
+      <div><span class="s4-pill" id="pill">무료로 시작하기</span></div>
+      <div class="s4-url" id="url">harubogo.vercel.app</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 1호와 같은 구조: 모든 애니메이션을 멈춰두고 window.seek(t)로 프레임 단위 제어
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+const anims = [];
+function tw(el, frames, delay, dur, opts = {}) {
+  const a = el.animate(frames, { delay, duration: dur, easing: opts.ease || EASE, fill: "both", iterations: opts.iter || 1 });
+  a.pause();
+  anims.push(a);
+}
+const $ = (id) => document.getElementById(id);
+
+const T = 18000;
+// 장면 표시/숨김은 전 구간을 덮는 애니메이션 하나로 (등장·퇴장 분리 시 fill 충돌)
+function sceneVis(el, stops) {
+  const frames = stops.map(([t, o, tr]) => ({ offset: Math.min(t / T, 1), opacity: o, transform: tr || "none" }));
+  const a = el.animate(frames, { duration: T, easing: "linear", fill: "both" });
+  a.pause();
+  anims.push(a);
+}
+sceneVis($("s1"), [
+  [0, 1, "translateY(0)"], [3300, 1, "translateY(0)"], [3800, 0, "translateY(-50px)"], [T, 0, "translateY(-50px)"],
+]);
+sceneVis($("s2"), [
+  [0, 0, "none"], [3800, 0, "none"], [4200, 1, "none"],
+  [8900, 1, "none"], [9400, 0, "none"], [T, 0, "none"],
+]);
+// 타이핑 말풍선은 답이 오기 전까지만 보인다
+sceneVis($("typing"), [
+  [0, 0, "none"], [5200, 0, "none"], [5450, 1, "none"],
+  [6250, 1, "none"], [6500, 0, "none"], [T, 0, "none"],
+]);
+sceneVis($("s3"), [
+  [0, 0, "translateY(0)"], [9400, 0, "translateY(0)"], [9800, 1, "translateY(0)"],
+  [13450, 1, "translateY(0)"], [13900, 0, "translateY(-40px)"], [T, 0, "translateY(-40px)"],
+]);
+
+// ── 장면 1 (0~3800) ──
+tw($("moon"), [{ opacity: 0, transform: "translateY(36px) scale(0.7)" }, { opacity: 1, transform: "translateY(0) scale(1)" }], 200, 700);
+tw($("l1"), [{ opacity: 0, transform: "translateY(44px)" }, { opacity: 1, transform: "translateY(0)" }], 550, 650);
+tw($("l2"), [{ opacity: 0, transform: "translateY(44px)" }, { opacity: 1, transform: "translateY(0)" }], 1100, 650);
+
+// ── 장면 2 (3800~9400) ──
+tw($("chip"), [{ opacity: 0, transform: "translateY(26px)" }, { opacity: 1, transform: "translateY(0)" }], 4050, 500);
+tw($("b1"), [{ opacity: 0, transform: "translateY(34px) scale(0.95)" }, { opacity: 1, transform: "translateY(0) scale(1)" }], 4450, 600);
+[["td1", 0], ["td2", 160], ["td3", 320]].forEach(([id, off]) => {
+  tw($(id), [{ opacity: 0.25 }, { opacity: 1 }, { opacity: 0.25 }], 5450 + off, 560, { iter: 2, ease: "ease-in-out" });
+});
+tw($("b2"), [{ opacity: 0, transform: "translateY(34px) scale(0.95)" }, { opacity: 1, transform: "translateY(0) scale(1)" }], 6500, 600);
+tw($("b3"), [{ opacity: 0, transform: "translateY(34px) scale(0.95)" }, { opacity: 1, transform: "translateY(0) scale(1)" }], 7650, 600);
+
+// ── 장면 3 (9400~13900) ──
+tw($("h3"), [{ opacity: 0, transform: "translateY(36px)" }, { opacity: 1, transform: "translateY(0)" }], 9800, 550);
+tw($("ca"), [{ opacity: 0, transform: "translateX(-64px)" }, { opacity: 1, transform: "translateX(0)" }], 10250, 650);
+tw($("cb"), [{ opacity: 0, transform: "translateX(64px)" }, { opacity: 1, transform: "translateX(0)" }], 10850, 650);
+tw($("bd"), [{ opacity: 0, transform: "translateY(32px)" }, { opacity: 1, transform: "translateY(0)" }], 11800, 600);
+
+// ── 장면 4 (13900~18000) ──
+tw($("bgblue"), [{ opacity: 0 }, { opacity: 1 }], 13900, 650);
+tw($("s4"), [{ opacity: 0 }, { opacity: 1 }], 13900, 10);
+tw($("logo"), [
+  { opacity: 0, transform: "scale(0.7)", offset: 0 },
+  { opacity: 1, transform: "scale(1.06)", offset: 0.7 },
+  { opacity: 1, transform: "scale(1)", offset: 1 },
+], 14300, 750);
+tw($("sub"), [{ opacity: 0, transform: "translateY(36px)" }, { opacity: 1, transform: "translateY(0)" }], 15000, 600);
+tw($("pill"), [
+  { opacity: 0, transform: "scale(0.8) translateY(40px)", offset: 0 },
+  { opacity: 1, transform: "scale(1.05) translateY(0)", offset: 0.75 },
+  { opacity: 1, transform: "scale(1) translateY(0)", offset: 1 },
+], 15700, 650);
+tw($("url"), [{ opacity: 0 }, { opacity: 1 }], 16450, 550);
+
+window.TOTAL = T;
+window.seek = (t) => { anims.forEach((a) => { a.currentTime = t; }); };
+window.READY = false;
+document.fonts.ready.then(() => { window.READY = true; });
+window.seek(0);
+</script>
+</body>
+</html>
