@@ -15455,5 +15455,246 @@
     "answerIndex": 0,
     "explanation": "θ가 제2사분면이므로 cos θ = −4/5입니다. sin(θ + π/4) = (√2/2)(sin θ + cos θ) = (√2/2)(3/5 − 4/5) = −√2/10입니다.",
     "concept": "덧셈정리 sin(A + B) = sin A cos B + cos A sin B와 sin²θ + cos²θ = 1, 사분면별 부호를 이용한다."
+  },
+  {
+    "id": "en-2026-11-01-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-01",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity is a gift [u]that only a few are born with[/u]①. However, research suggests that creative thinking [u]can be developed[/u]② through practice. People who regularly expose themselves to diverse ideas [u]tends[/u]③ to make unexpected connections more easily. [u]Rather than waiting[/u]④ for inspiration, they build habits that invite it, such as keeping a notebook or [u]taking[/u]⑤ walks.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ 주어는 복수명사 People(who 이하는 수식어)이므로 동사는 tends가 아니라 tend여야 합니다. ① that 이하는 gift를 수식하는 관계절(with의 목적어가 선행사), ② 조동사 뒤 수동태, ④ Rather than+동명사, ⑤ keeping과 병렬을 이루는 동명사로 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "expose",
+        "meaning": "노출시키다"
+      },
+      {
+        "word": "diverse",
+        "meaning": "다양한"
+      },
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-01-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-01",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Scientists often present their findings with qualifiers such as \"likely\" or \"suggests.\" This is not a sign of weakness. Instead, it reflects honesty about the limits of the available evidence. By acknowledging uncertainty, researchers invite others to test and improve their claims. In other words, scientific progress depends on ______.",
+    "choices": [
+      "admitting what is not yet known",
+      "avoiding any form of criticism",
+      "hiding unexpected results",
+      "relying on a single experiment",
+      "ignoring opposing evidence"
+    ],
+    "answerIndex": 0,
+    "explanation": "한정 표현은 증거의 한계에 대한 정직함이며, 불확실성을 인정해야 다른 사람들이 검증·개선할 수 있다고 했습니다. 따라서 아직 알려지지 않은 것을 인정하는 것이라는 ①이 적절합니다.",
+    "vocab": [
+      {
+        "word": "qualifier",
+        "meaning": "한정어, 수식 표현"
+      },
+      {
+        "word": "acknowledge",
+        "meaning": "인정하다"
+      },
+      {
+        "word": "uncertainty",
+        "meaning": "불확실성"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-01-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-01",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Cities around the world are rethinking how they use street space.\n(A) The result is cleaner air and quieter neighborhoods.\n(B) Some have converted parking lanes into bike paths, encouraging residents to commute without cars.\n(C) Traditionally, most of this space was reserved for cars.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 4,
+    "explanation": "도시가 거리 공간 사용을 재고한다는 글 뒤에, 이 공간(this space)이 전통적으로 자동차용이었다는 (C)가 오고, 일부 도시가 주차 차선을 자전거 도로로 바꿨다는 (B), 그 결과(The result)를 말하는 (A) 순입니다.",
+    "vocab": [
+      {
+        "word": "reserve",
+        "meaning": "따로 남겨 두다"
+      },
+      {
+        "word": "convert",
+        "meaning": "전환하다"
+      },
+      {
+        "word": "commute",
+        "meaning": "통근하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-01-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-01",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many coastal towns depend heavily on tourism. ① Visitors fill hotels and restaurants during the summer months. ② But the season is short, and income falls sharply in winter. ③ Local leaders therefore try to attract visitors all year round. ④ They organize winter festivals and promote indoor attractions. ⑤",
+    "givenSentence": "This seasonal swing makes it hard for local businesses to plan ahead.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장의 This seasonal swing(계절적 변동)은 바로 앞에서 여름 성수기와 겨울의 급격한 소득 감소를 대비한 내용을 가리키며, 뒤의 therefore 문장(일 년 내내 관광객 유치)의 이유가 됩니다. 따라서 ③이 적절합니다.",
+    "vocab": [
+      {
+        "word": "coastal",
+        "meaning": "해안의"
+      },
+      {
+        "word": "sharply",
+        "meaning": "급격하게"
+      },
+      {
+        "word": "attraction",
+        "meaning": "명소, 볼거리"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-01-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-01",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Studies comparing note-taking methods show that students who write by hand often remember concepts better than those who type. Typing allows people to record nearly every word, so they tend to copy lectures without thinking. Handwriting, on the other hand, is slower, which forces students to summarize ideas in their own words. This extra mental effort deepens understanding.",
+    "choices": [
+      "cognitive benefits of handwriting for learning",
+      "speed advantages of typing in the classroom",
+      "how to choose the best notebook for school",
+      "the decline of handwriting education",
+      "risks of digital devices to eyesight"
+    ],
+    "answerIndex": 0,
+    "explanation": "손으로 쓰면 느려서 자기 말로 요약해야 하고 이것이 이해를 깊게 한다는 내용이므로, 필기가 학습에 주는 인지적 이점이라는 ①이 주제입니다.",
+    "vocab": [
+      {
+        "word": "concept",
+        "meaning": "개념"
+      },
+      {
+        "word": "summarize",
+        "meaning": "요약하다"
+      },
+      {
+        "word": "deepen",
+        "meaning": "깊게 하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-01-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-01",
+    "prompt": "등차수열 {aₙ}에서 a₃=7, a₈=22일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₈−a₃=5d=15이므로 d=3, a₁=7−6=1입니다. a₁₀=1+27=28, S₁₀=10(1+28)/2=145입니다.",
+    "concept": "등차수열의 합 Sₙ=n(a₁+aₙ)/2 이고 aₙ=a₁+(n−1)d 이다."
+  },
+  {
+    "id": "math-2026-11-01-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-01",
+    "prompt": "함수 f(x)=x³−6x²+9x+1의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x)=3x²−12x+9=3(x−1)(x−3)이므로 x=1에서 극대, x=3에서 극소입니다. f(1)=5, f(3)=27−54+27+1=1이므로 차는 4입니다.",
+    "concept": "f'(x)의 부호가 +에서 −로 바뀌는 점에서 극대, −에서 +로 바뀌는 점에서 극소이다."
+  },
+  {
+    "id": "math-2026-11-01-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-01",
+    "prompt": "정적분 ∫₀² (3x²+2x) dx의 값은?",
+    "choices": [
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³+x²이므로 [x³+x²]₀²=8+4=12입니다.",
+    "concept": "∫xⁿdx = xⁿ⁺¹/(n+1)+C 이고 정적분은 F(b)−F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-11-01-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-01",
+    "prompt": "서로 다른 흰 공 3개와 서로 다른 검은 공 2개를 일렬로 나열할 때, 검은 공 2개가 서로 이웃하지 않는 경우의 수는?",
+    "choices": [
+      "60",
+      "66",
+      "72",
+      "78",
+      "84"
+    ],
+    "answerIndex": 2,
+    "explanation": "전체 5!=120가지입니다. 검은 공 2개를 하나로 묶으면 4!×2!=48가지이므로 이웃하지 않는 경우는 120−48=72입니다.",
+    "concept": "여사건의 원리: (이웃하지 않는 경우)=(전체)−(이웃하는 경우), 이웃하는 것은 묶어서 센다."
+  },
+  {
+    "id": "math-2026-11-01-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-01",
+    "prompt": "0≤x<2π에서 방정식 2sin²x−sinx−1=0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sinx+1)(sinx−1)=0이므로 sinx=1 또는 sinx=−1/2입니다. 해는 π/2, 7π/6, 11π/6이고 합은 (3π+7π+11π)/6=21π/6=7π/2입니다.",
+    "concept": "sinx에 대한 이차방정식은 인수분해로 sinx 값을 구한 뒤 단위원에서 해를 찾는다."
   }
 ]
