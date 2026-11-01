@@ -15696,5 +15696,246 @@
     "answerIndex": 1,
     "explanation": "(2sinx+1)(sinx−1)=0이므로 sinx=1 또는 sinx=−1/2입니다. 해는 π/2, 7π/6, 11π/6이고 합은 (3π+7π+11π)/6=21π/6=7π/2입니다.",
     "concept": "sinx에 대한 이차방정식은 인수분해로 sinx 값을 구한 뒤 단위원에서 해를 찾는다."
+  },
+  {
+    "id": "en-2026-11-02-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-02",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Sleep researchers have found that students [u]who get enough rest[/u]① perform better on memory tests. During sleep, the brain [u]strengthens[/u]② the connections formed during the day. This is why cramming all night often [u]results in[/u]③ poorer recall than studying in shorter sessions [u]spread[/u]④ over several days. Students who understand this tend to protect their sleep rather than [u]sacrifices[/u]⑤ it.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 'tend to protect ... rather than ~'에서 rather than 뒤에는 protect와 병렬되는 동사원형이 와야 하므로 sacrifices가 아니라 sacrifice여야 합니다. ① who는 students를 수식하는 주격 관계대명사, ② 단수 주어 the brain에 맞는 단수 동사, ③ cramming(동명사 주어)에 맞는 단수 동사, ④ sessions를 후치 수식하는 과거분사로 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "cramming",
+        "meaning": "벼락치기 공부"
+      },
+      {
+        "word": "recall",
+        "meaning": "기억해 내기, 회상"
+      },
+      {
+        "word": "sacrifice",
+        "meaning": "희생하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-02-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-02",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many successful inventors describe their failures not as dead ends but as data. Each failed attempt eliminates one possibility and narrows the search for a working solution. Therefore, the most valuable skill for an inventor may be the ability to ______.",
+    "choices": [
+      "avoid every possible risk",
+      "copy the designs of others",
+      "work without any feedback",
+      "learn from unsuccessful attempts",
+      "finish projects as quickly as possible"
+    ],
+    "answerIndex": 3,
+    "explanation": "실패를 막다른 길이 아닌 '데이터'로 보며, 실패할 때마다 가능성이 하나씩 제거되어 해법에 가까워진다고 했습니다. 따라서 실패한 시도에서 배우는 능력이라는 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "inventor",
+        "meaning": "발명가"
+      },
+      {
+        "word": "eliminate",
+        "meaning": "제거하다"
+      },
+      {
+        "word": "attempt",
+        "meaning": "시도"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-02-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-02",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Plants cannot move away from danger, so they have developed other ways to protect themselves.\n(A) For instance, some release bitter chemicals when insects chew on their leaves.\n(B) These chemicals make the leaves taste unpleasant, and the insects stop eating.\n(C) Others grow sharp thorns that physically keep animals away.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 글의 '자기 보호 방법'의 예로 For instance가 이끄는 (A)가 먼저 오고, (A)의 chemicals를 These chemicals로 받는 (B)가 이어지며, Some에 대응하는 Others가 있는 (C)가 마지막에 옵니다.",
+    "vocab": [
+      {
+        "word": "bitter",
+        "meaning": "쓴"
+      },
+      {
+        "word": "thorn",
+        "meaning": "가시"
+      },
+      {
+        "word": "physically",
+        "meaning": "물리적으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-02-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-02",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many people think of libraries as quiet places full of old books. ① Many now lend e-books and offer free internet access. ② Some even provide tools such as 3D printers for public use. ③ Such services have turned libraries into lively community hubs. ④ People gather there to study, work, and meet neighbors. ⑤",
+    "givenSentence": "This image, however, no longer matches reality.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 문장의 This image는 첫 문장의 '조용하고 오래된 책으로 가득한 장소'라는 이미지를 가리키며, however로 반전시킨 뒤 ① 뒤에서 달라진 도서관의 모습(e-book 대출 등)이 구체적으로 이어집니다. 따라서 ①이 적절합니다.",
+    "vocab": [
+      {
+        "word": "hub",
+        "meaning": "중심지"
+      },
+      {
+        "word": "lend",
+        "meaning": "빌려주다"
+      },
+      {
+        "word": "lively",
+        "meaning": "활기찬"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-02-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-02",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Volunteering is often seen as a way to help others, but its benefits flow in both directions. People who volunteer regularly report lower stress, stronger friendships, and a greater sense of purpose. Moreover, learning new skills in unfamiliar settings builds confidence that carries into school and work. In short, giving time to others also enriches the giver.",
+    "choices": [
+      "the high cost of running charities",
+      "the mutual benefits of volunteering",
+      "effective ways to reduce exam stress",
+      "why students need more free time",
+      "the history of volunteer organizations"
+    ],
+    "answerIndex": 1,
+    "explanation": "자원봉사가 남을 돕는 일이지만 봉사자 자신에게도 스트레스 감소, 우정, 목적의식, 자신감 등의 이익을 준다는 글이므로 주제는 ② '자원봉사의 상호 이익'입니다.",
+    "vocab": [
+      {
+        "word": "volunteer",
+        "meaning": "자원봉사하다"
+      },
+      {
+        "word": "unfamiliar",
+        "meaning": "낯선"
+      },
+      {
+        "word": "enrich",
+        "meaning": "풍요롭게 하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-02-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-02",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3, a₁ = 7 − 6 = 1입니다. a₁₀ = 1 + 27 = 28이므로 S₁₀ = 10(1 + 28)/2 = 145입니다.",
+    "concept": "등차수열의 합 Sₙ = n(a₁ + aₙ)/2, 일반항 aₙ = a₁ + (n−1)d"
+  },
+  {
+    "id": "math-2026-11-02-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-02",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 합은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 1 − 6 + 9 + 1 = 5, f(3) = 27 − 54 + 27 + 1 = 1이므로 합은 6입니다.",
+    "concept": "f′(x)의 부호가 +에서 −로 바뀌는 점에서 극대, −에서 +로 바뀌는 점에서 극소"
+  },
+  {
+    "id": "math-2026-11-02-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-02",
+    "prompt": "정적분 ∫₀² (3x² − 2x + 1) dx의 값은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 3,
+    "explanation": "부정적분은 x³ − x² + x이므로 [x³ − x² + x]₀² = 8 − 4 + 2 = 6입니다.",
+    "concept": "∫xⁿ dx = xⁿ⁺¹/(n+1) + C 와 정적분 ∫ₐᵇ f(x)dx = F(b) − F(a)"
+  },
+  {
+    "id": "math-2026-11-02-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-02",
+    "prompt": "흰 공 4개, 검은 공 3개가 들어 있는 주머니에서 동시에 3개의 공을 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "18/35",
+      "19/35",
+      "4/7",
+      "3/5",
+      "22/35"
+    ],
+    "answerIndex": 4,
+    "explanation": "전체 경우의 수는 C(7,3) = 35입니다. 흰 공 2개: C(4,2)·C(3,1) = 18, 흰 공 3개: C(4,3) = 4이므로 확률은 (18 + 4)/35 = 22/35입니다.",
+    "concept": "조합을 이용한 확률: (사건의 경우의 수)/(전체 경우의 수), 합의 법칙"
+  },
+  {
+    "id": "math-2026-11-02-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-02",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
+    "concept": "sin x를 t로 치환해 인수분해하고, 단위원에서 해당하는 각을 구한다"
   }
 ]
