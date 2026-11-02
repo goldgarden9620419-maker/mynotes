@@ -42,6 +42,8 @@ PUBLISHED_FILE = PROFILE_DIR / "발행완료.txt"  # 이 PC에서 발행을 마�
 ALREADY_PUBLISHED = {1, 2, 3, 4}  # 도구를 만들기 전에 이미 발행한 글
 LOG_DIR = HERE / "오류기록"
 PLACEHOLDER = "(여기에 양식 파일 첨부)"
+IMG_PATTERN = re.compile(r"\(여기에 이미지 첨부:\s*([^\s—)]+)[^)]*\)")  # (여기에 이미지 첨부: 파일명.png — 설명)
+IMG_DIR = PROMO_DIR / "이미지"
 
 
 # ---------------------------------------------------------------- 원고 읽기
@@ -246,6 +248,31 @@ def attach_file(page, ed, file_path):
     page.keyboard.press("Enter")
 
 
+def find_image(name):
+    for c in IMG_DIR.rglob(name):
+        return c
+    return None
+
+
+def attach_image(page, ed, file_path):
+    """네이버 에디터 '사진' 버튼으로 이미지 1장 업로드 (실패 시 예외)"""
+    btn = first_visible(ed, ['button[data-name="image"]', ".se-image-toolbar-button", 'button:has-text("사진")'])
+    if not btn:
+        raise RuntimeError("사진 버튼을 찾지 못함")
+    try:
+        with page.expect_file_chooser(timeout=5000) as fc:
+            btn.click()
+        fc.value.set_files(str(file_path))
+    except Exception:
+        inputs = ed.locator('input[type="file"][accept*="image"]')
+        if not inputs.count():
+            raise RuntimeError("사진 선택 창이 열리지 않음")
+        inputs.last.set_input_files(str(file_path))
+    time.sleep(5)  # 업로드 대기
+    click_body_end(page, ed)
+    page.keyboard.press("Enter")
+
+
 def open_publish_panel(ed):
     btn = first_visible(ed, ['button[class*="publish_btn"]', 'button:has-text("발행")'])
     if not btn:
@@ -400,23 +427,51 @@ def main():
         try:
             click_body(ed)
             body = post["body"]
-            if post["attach"] and PLACEHOLDER in body:
-                before, after = body.split(PLACEHOLDER, 1)
-                paste(page, before.rstrip() + "\n")
-                try:
-                    attach_file(page, ed, post["attach"])
-                except Exception as e:
-                    failed.append(f"엑셀 첨부: {e} → 본문의 첨부 자리에 직접 첨부해 주세요")
-                    snap(page, "attach")
-                    page.keyboard.press("Escape")
-                    x = first_visible(ed, [".se-popup-close-button", 'button[aria-label*="닫기"]'], timeout=1000)
-                    if x:
-                        x.click()
-                    click_body_end(page, ed)
-                    paste(page, PLACEHOLDER + "\n")
-                paste(page, after.lstrip("\n"))
-            else:
-                paste(page, body)
+            # 본문을 [글 / 엑셀 자리 / 이미지 자리] 조각으로 나눠 순서대로 입력
+            tokens, pos = [], 0
+            for m in re.finditer(re.escape(PLACEHOLDER) + r"|" + IMG_PATTERN.pattern, body):
+                tokens.append(("text", body[pos:m.start()]))
+                tokens.append(("xlsx" if m.group(0) == PLACEHOLDER else "img", m.group(0), m.group(1) if m.lastindex else None))
+                pos = m.end()
+            tokens.append(("text", body[pos:]))
+            first = True
+            for tk in tokens:
+                kind = tk[0]
+                if kind == "text":
+                    t = tk[1] if first else tk[1].lstrip("\n")
+                    if t.strip():
+                        paste(page, t.rstrip() + "\n")
+                    first = False
+                    continue
+                first = False
+                if kind == "xlsx" and post["attach"]:
+                    try:
+                        attach_file(page, ed, post["attach"])
+                    except Exception as e:
+                        failed.append(f"엑셀 첨부: {e} → 본문의 첨부 자리에 직접 첨부해 주세요")
+                        snap(page, "attach")
+                        page.keyboard.press("Escape")
+                        x = first_visible(ed, [".se-popup-close-button", 'button[aria-label*="닫기"]'], timeout=1000)
+                        if x:
+                            x.click()
+                        click_body_end(page, ed)
+                        paste(page, PLACEHOLDER + "\n")
+                elif kind == "img":
+                    img = find_image(tk[2])
+                    if not img:
+                        failed.append(f"이미지 '{tk[2]}'를 '이미지' 폴더에서 못 찾음 → 본문의 자리에 직접 넣어 주세요")
+                        paste(page, tk[1] + "\n")
+                    else:
+                        try:
+                            attach_image(page, ed, img)
+                        except Exception as e:
+                            failed.append(f"이미지 {tk[2]}: {e} → 본문의 자리에 직접 넣어 주세요")
+                            snap(page, "image")
+                            page.keyboard.press("Escape")
+                            click_body_end(page, ed)
+                            paste(page, tk[1] + "\n")
+                else:
+                    paste(page, tk[1] + "\n")
         except Exception as e:
             failed.append(f"본문: {e}")
             snap(page, "body")
