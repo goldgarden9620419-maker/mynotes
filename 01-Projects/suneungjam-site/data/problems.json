@@ -15937,5 +15937,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
     "concept": "sin x를 t로 치환해 인수분해하고, 단위원에서 해당하는 각을 구한다"
+  },
+  {
+    "id": "en-2026-11-03-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-03",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that talent alone [u]determines[/u]① success, but research suggests otherwise. Athletes [u]who practices[/u]② deliberately for years often outperform those [u]born[/u]③ with natural gifts. What matters most is not how much time you spend practicing but [u]how[/u]④ you use it. Focused practice, [u]which[/u]⑤ requires clear goals and honest feedback, leads to steady improvement.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "② 선행사 Athletes가 복수이므로 관계대명사절의 동사는 practices가 아니라 practice여야 합니다. ① talent alone이 단수 주어라 determines가 맞고, ③ those (who were) born의 과거분사 수식, ④ 'how you use it'은 명사절, ⑤ 계속적 용법의 which가 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "deliberately",
+        "meaning": "의도적으로, 계획적으로"
+      },
+      {
+        "word": "outperform",
+        "meaning": "~보다 뛰어난 성과를 내다"
+      },
+      {
+        "word": "steady",
+        "meaning": "꾸준한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-03-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-03",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Translators know that a word-for-word conversion rarely captures the full meaning of a sentence. Idioms, humor, and cultural references often have no direct equivalent in another language. A good translator therefore focuses on conveying the ______ rather than the literal words.",
+    "choices": [
+      "exact spelling",
+      "intended message",
+      "grammar rules",
+      "original length",
+      "sound of words"
+    ],
+    "answerIndex": 1,
+    "explanation": "직역으로는 문장의 전체 의미를 담기 어렵고 관용구·유머·문화적 언급은 직접 대응어가 없다고 했으므로, 좋은 번역가는 글자 그대로보다 전하려는 의도(intended message)에 집중합니다.",
+    "vocab": [
+      {
+        "word": "idiom",
+        "meaning": "관용구"
+      },
+      {
+        "word": "equivalent",
+        "meaning": "동등한 것, 대응어"
+      },
+      {
+        "word": "convey",
+        "meaning": "전달하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-03-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-03",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "When a honeybee finds a good source of food, it returns to the hive and performs a special dance.\n(A) From its angle and duration, they learn the direction and distance of the food.\n(B) Other bees in the dark hive watch the performance closely.\n(C) With this information, they fly straight to the flowers.",
+    "choices": [
+      "(A)-(B)-(C)",
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)"
+    ],
+    "answerIndex": 2,
+    "explanation": "먼저 춤을 지켜보는 다른 벌들(they)이 등장하는 (B)가 오고, 춤의 각도와 지속 시간에서 방향·거리를 알아내는 (A)가 이어지며, (A)의 정보를 this information으로 받는 (C)가 마지막입니다.",
+    "vocab": [
+      {
+        "word": "hive",
+        "meaning": "벌집"
+      },
+      {
+        "word": "duration",
+        "meaning": "지속 시간"
+      },
+      {
+        "word": "closely",
+        "meaning": "면밀히"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-03-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-03",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Cities around the world are struggling with traffic jams. ① Some have built protected bike lanes along major roads. ② Cyclists can ride there safely, away from cars. ③ Fewer cars on the road mean cleaner air and quieter streets. ④ Cities that invest in cycling therefore enjoy better public health. ⑤",
+    "givenSentence": "The number of people commuting by bike has risen sharply as a result.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 자전거 도로 설치의 결과(as a result)로 자전거 통근자가 늘었다는 내용입니다. ② 뒤의 there는 bike lanes를 가리키므로 ①과 ② 사이에 넣으면 흐름이 끊기고, ② 뒤 ③의 'Fewer cars'가 자전거 이용 증가의 결과로 자연스럽게 이어지므로 ②가 적절합니다.",
+    "vocab": [
+      {
+        "word": "struggle with",
+        "meaning": "~로 애먹다"
+      },
+      {
+        "word": "commute",
+        "meaning": "통근하다"
+      },
+      {
+        "word": "sharply",
+        "meaning": "급격하게"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-03-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-03",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Many students underline every sentence while studying, believing it helps them remember. However, studies show that passive marking rarely improves memory. Instead, testing yourself without looking at your notes forces the brain to retrieve information, which strengthens it. Active recall, not passive review, is the key to lasting learning.",
+    "choices": [
+      "the benefits of underlining key sentences",
+      "how to take notes efficiently",
+      "the role of sleep in memory",
+      "why active recall beats passive review",
+      "ways to reduce exam anxiety"
+    ],
+    "answerIndex": 3,
+    "explanation": "밑줄 긋기 같은 수동적 복습은 기억 향상에 효과가 적고, 스스로 떠올리는 능동적 인출이 기억을 강화한다는 내용이므로 ④가 주제입니다.",
+    "vocab": [
+      {
+        "word": "passive",
+        "meaning": "수동적인"
+      },
+      {
+        "word": "retrieve",
+        "meaning": "되찾다, 인출하다"
+      },
+      {
+        "word": "lasting",
+        "meaning": "오래가는"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-03-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-03",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "125",
+      "135",
+      "145",
+      "155",
+      "165"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3, a₁ = 7 − 6 = 1입니다. a₁₀ = 1 + 27 = 28이므로 S₁₀ = 10(1 + 28)/2 = 145입니다.",
+    "concept": "등차수열의 합 Sₙ = n(a₁ + aₙ)/2 이고 aₙ = a₁ + (n−1)d 이다."
+  },
+  {
+    "id": "math-2026-11-03-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-03",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 3,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 극대, x = 3에서 극소입니다. f(1) = 5, f(3) = 1이므로 차는 4입니다.",
+    "concept": "f′(x)의 부호가 +에서 −로 바뀌는 점에서 극대, −에서 +로 바뀌는 점에서 극소이다."
+  },
+  {
+    "id": "math-2026-11-03-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-03",
+    "prompt": "정적분 ∫₀² (3x² − 2x + 1) dx의 값은?",
+    "choices": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "answerIndex": 1,
+    "explanation": "부정적분은 x³ − x² + x이므로 [x³ − x² + x]₀² = 8 − 4 + 2 = 6입니다.",
+    "concept": "다항함수의 정적분은 xⁿ의 부정적분 xⁿ⁺¹/(n+1)을 구한 뒤 위끝−아래끝으로 계산한다."
+  },
+  {
+    "id": "math-2026-11-03-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-03",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "18/35",
+      "19/35",
+      "4/7",
+      "24/35",
+      "22/35"
+    ],
+    "answerIndex": 4,
+    "explanation": "전체 경우의 수는 ₇C₃ = 35입니다. 흰 공 2개: ₄C₂×₃C₁ = 18, 흰 공 3개: ₄C₃ = 4이므로 확률은 22/35입니다.",
+    "concept": "서로 배반인 사건의 확률은 더하며, 확률 = (해당 경우의 수)/(전체 경우의 수), 조합 ₙCᵣ로 센다."
+  },
+  {
+    "id": "math-2026-11-03-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-03",
+    "prompt": "sin θ + cos θ = 1/2일 때, sin θ cos θ의 값은?",
+    "choices": [
+      "−1/2",
+      "−3/8",
+      "−1/4",
+      "3/8",
+      "1/2"
+    ],
+    "answerIndex": 1,
+    "explanation": "양변을 제곱하면 1 + 2sinθcosθ = 1/4이므로 sinθcosθ = −3/8입니다.",
+    "concept": "sin²θ + cos²θ = 1 이므로 (sinθ + cosθ)² = 1 + 2sinθcosθ 이다."
   }
 ]
