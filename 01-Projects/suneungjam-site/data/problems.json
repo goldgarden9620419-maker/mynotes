@@ -16178,5 +16178,246 @@
     "answerIndex": 1,
     "explanation": "양변을 제곱하면 1 + 2sinθcosθ = 1/4이므로 sinθcosθ = −3/8입니다.",
     "concept": "sin²θ + cos²θ = 1 이므로 (sinθ + cosθ)² = 1 + 2sinθcosθ 이다."
+  },
+  {
+    "id": "en-2026-11-04-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-04",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Researchers [u]have[/u]① shown [u]that[/u]② sleep plays a crucial role in memory. During the night, the brain sorts through [u]what[/u]③ it has learned during the day, and the brain [u]is allowed[/u]④ to consolidate important information while discarding the rest. Students who deprive [u]them[/u]⑤ of sleep often retain far less than they expect.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ deprive의 주어(Students)와 목적어가 같은 대상이므로 재귀대명사 themselves가 되어야 합니다. ① 주어 Researchers가 복수라 have, ② shown의 목적어절을 이끄는 접속사 that, ③ learned의 목적어가 없는 명사절이므로 선행사를 포함한 관계대명사 what, ④ 주어 the brain에 대한 수동태 is allowed가 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "consolidate",
+        "meaning": "통합하다, 굳히다"
+      },
+      {
+        "word": "retain",
+        "meaning": "보유하다, 기억하다"
+      },
+      {
+        "word": "deprive",
+        "meaning": "박탈하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-04-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-04",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Genuine learning rarely begins with confidence. Those who pretend to understand everything stop asking questions, and without questions there is nothing new to discover. In this sense, intellectual humility is not a weakness but a starting point. Real progress depends on ____________, because only then can we begin to fill the gaps in our understanding.",
+    "choices": [
+      "the speed at which we finish tasks",
+      "the willingness to admit what we do not know",
+      "the number of facts we can memorize",
+      "the approval we receive from others",
+      "the tools available for research"
+    ],
+    "answerIndex": 1,
+    "explanation": "지문은 진정한 학습이 '모른다는 것을 인정하는 데서' 시작된다고 말합니다. 아는 척하는 사람은 질문을 하지 않아 배울 기회를 잃으므로 빈칸에는 '모르는 것을 인정하려는 의지'가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "genuine",
+        "meaning": "진정한"
+      },
+      {
+        "word": "pretend",
+        "meaning": "~인 척하다"
+      },
+      {
+        "word": "humility",
+        "meaning": "겸손"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-04-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-04",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "The small town's only library was facing closure because the local government could no longer afford to fund it.\n(A) As a result, donations arrived not only from nearby families but also from former residents living abroad.\n(B) Today, the library remains open, and it has become a place where neighbors who once barely spoke now gather every weekend.\n(C) Then, a group of residents decided to organize a fundraising event and shared the story widely online.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글에서 마을 도서관의 폐관 위기를 제시 → (C) 주민들이 모금 활동을 시작(Then, residents...) → (A) 그 결과 기부가 몰림(As a result...) → (B) 도서관이 유지되고 주민들의 유대가 깊어짐(Today...)의 순으로 시간 흐름이 이어집니다.",
+    "vocab": [
+      {
+        "word": "fundraising",
+        "meaning": "모금 활동"
+      },
+      {
+        "word": "donation",
+        "meaning": "기부"
+      },
+      {
+        "word": "closure",
+        "meaning": "폐쇄"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-04-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-04",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many schools use incentives to encourage students to read more. ① When children are offered small prizes for finishing books, their reading time often increases quickly. ② Teachers frequently report that even reluctant readers begin to participate. ③ Once the prizes were removed, many students lost interest in reading altogether. ④ This suggests that external rewards may weaken intrinsic motivation. ⑤ Lasting habits seem to grow instead from genuine enjoyment.",
+    "givenSentence": "However, this boost in motivation turned out to be only temporary.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'However'로 앞의 내용과 대조를 이루며 '그러나 그 효과는 오래가지 않았다'고 말합니다. ③ 앞에서는 보상이 처음에는 동기를 높였다고 했고, ③ 뒤에서는 보상이 사라지자 흥미도 떨어졌다고 하므로 ③에 들어가야 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "incentive",
+        "meaning": "보상, 유인책"
+      },
+      {
+        "word": "temporary",
+        "meaning": "일시적인"
+      },
+      {
+        "word": "intrinsic",
+        "meaning": "내재적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-04-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-04",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Most successful inventors did not succeed on their first attempt. Each setback revealed a flaw in their design, and each flaw taught them something that no textbook could. By treating failure as information rather than defeat, they gradually built the foundation for their eventual breakthroughs. In this way, the very experiences that seem to hold us back often become the stepping stones toward lasting achievement.",
+    "choices": [
+      "the importance of a balanced diet for athletes",
+      "how failure can contribute to long-term success",
+      "why competition harms teamwork",
+      "the dangers of setting unrealistic goals",
+      "ways to avoid making mistakes at work"
+    ],
+    "answerIndex": 1,
+    "explanation": "지문은 발명가들이 수없이 실패하면서 얻은 교훈이 결국 성공의 기반이 되었다는 내용으로, 실패가 장기적인 성공에 기여한다는 ②가 주제입니다.",
+    "vocab": [
+      {
+        "word": "inventor",
+        "meaning": "발명가"
+      },
+      {
+        "word": "setback",
+        "meaning": "좌절, 실패"
+      },
+      {
+        "word": "foundation",
+        "meaning": "기반"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-04-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-04",
+    "prompt": "등차수열 {aₙ}에서 a₄ = 11, a₉ = 26일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "145",
+      "150",
+      "155",
+      "160",
+      "165"
+    ],
+    "answerIndex": 2,
+    "explanation": "5d = a₉ − a₄ = 15이므로 d = 3, a₁ = 11 − 9 = 2입니다. S₁₀ = 10(2·2 + 9·3)/2 = 5 × 31 = 155.",
+    "concept": "등차수열의 합 Sₙ = n{2a + (n−1)d}/2 이고 aₘ − aₙ = (m−n)d 이다."
+  },
+  {
+    "id": "math-2026-11-04-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-04",
+    "prompt": "함수 f(x) = x³ − 3x² − 9x + 5의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "24",
+      "28",
+      "32",
+      "36",
+      "40"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² − 6x − 9 = 3(x−3)(x+1). x = −1에서 극대, x = 3에서 극소. f(−1) = −1 − 3 + 9 + 5 = 10, f(3) = 27 − 27 − 27 + 5 = −22. 차는 10 − (−22) = 32.",
+    "concept": "f′(x)의 부호가 +에서 −로 바뀌면 극대, −에서 +로 바뀌면 극소이다."
+  },
+  {
+    "id": "math-2026-11-04-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-04",
+    "prompt": "정적분 ∫₁³ (4x³ − 3x²) dx의 값은?",
+    "choices": [
+      "46",
+      "50",
+      "52",
+      "54",
+      "58"
+    ],
+    "answerIndex": 3,
+    "explanation": "부정적분은 x⁴ − x³. [x⁴ − x³]₁³ = (81 − 27) − (1 − 1) = 54.",
+    "concept": "∫xⁿ dx = xⁿ⁺¹/(n+1) + C 이고 정적분은 F(b) − F(a)로 계산한다."
+  },
+  {
+    "id": "math-2026-11-04-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-04",
+    "prompt": "빨간 공 5개와 파란 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 두 공의 색이 같을 확률은?",
+    "choices": [
+      "9/28",
+      "11/28",
+      "15/28",
+      "17/28",
+      "13/28"
+    ],
+    "answerIndex": 4,
+    "explanation": "전체 경우 ₈C₂ = 28. 같은 색은 ₅C₂ + ₃C₂ = 10 + 3 = 13. 확률 13/28.",
+    "concept": "같은 색을 뽑는 확률은 각 색에서 뽑는 조합의 수를 더해 전체 조합의 수로 나눈다."
+  },
+  {
+    "id": "math-2026-11-04-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-04",
+    "prompt": "sin θ − cos θ = 1/3일 때, sin θ cos θ의 값은?",
+    "choices": [
+      "1/9",
+      "2/9",
+      "1/3",
+      "4/9",
+      "5/9"
+    ],
+    "answerIndex": 3,
+    "explanation": "양변을 제곱하면 1 − 2 sin θ cos θ = 1/9. 따라서 2 sin θ cos θ = 8/9, sin θ cos θ = 4/9.",
+    "concept": "sin²θ + cos²θ = 1 이므로 (sin θ ∓ cos θ)² = 1 ∓ 2 sin θ cos θ 이다."
   }
 ]
