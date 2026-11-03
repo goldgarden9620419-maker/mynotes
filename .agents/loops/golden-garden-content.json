@@ -27,7 +27,8 @@
     "주말 늦잠의 함정 (사회적 시차, 리듬, 1시간)",
     "찬물이 바꾼 건 몸이 아니었다 (찬물 샤워, 결근 29%, 아침 습관)",
     "아침형 인간은 전날 밤에 만들어졌다 (기상, 수면 부채, 취침 루틴)",
-    "들통날까 봐 쓴 가면이었다 (가면증후군, 겸손, 자기비하)"
+    "들통날까 봐 쓴 가면이었다 (가면증후군, 겸손, 자기비하)",
+    "굶는 시간보다 먹는 내용이었다 (간헐적 단식, 공복, 식사 시간)"
   ],
   "pending_drafts": [
     {
@@ -115,6 +116,16 @@
       "review_score": 86,
       "url": "https://diary21462.tistory.com/entry/%EB%93%A4%ED%86%B5%EB%82%A0%EA%B9%8C-%EB%B4%90-%EC%93%B4-%EA%B0%80%EB%A9%B4%EC%9D%B4%EC%97%88%EB%8B%A4-%EA%B0%80%EB%A9%B4%EC%A6%9D%ED%9B%84%EA%B5%B0-%EA%B2%B8%EC%86%90-%EC%9E%90%EA%B8%B0%EB%B9%84%ED%95%98",
       "thread_media": "영상"
+    },
+    {
+      "topic": "굶는 시간보다 먹는 내용이었다 (간헐적 단식, 공복, 식사 시간)",
+      "published_at": "2026-11-03",
+      "tistory_category": "건강·웰빙 루틴",
+      "studio_doc": "p-20261103-fasting",
+      "layout": "H",
+      "review_score": 91,
+      "review_note": "OpenAI API 크레딧 소진으로 ChatGPT 웹에서 수동 교차 검토(84→91)",
+      "url": "https://diary21462.tistory.com/entry/%EA%B5%B6%EB%8A%94-%EC%8B%9C%EA%B0%84%EB%B3%B4%EB%8B%A4-%EB%A8%B9%EB%8A%94-%EB%82%B4%EC%9A%A9%EC%9D%B4%EC%97%88%EB%8B%A4-%EA%B0%84%ED%97%90%EC%A0%81-%EB%8B%A8%EC%8B%9D-%EA%B3%B5%EB%B3%B5-%EC%8B%9D%EC%82%AC-%EC%8B%9C%EA%B0%84"
     }
   ],
   "counters": {
