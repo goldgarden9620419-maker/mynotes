@@ -16419,5 +16419,246 @@
     "answerIndex": 3,
     "explanation": "양변을 제곱하면 1 − 2 sin θ cos θ = 1/9. 따라서 2 sin θ cos θ = 8/9, sin θ cos θ = 4/9.",
     "concept": "sin²θ + cos²θ = 1 이므로 (sin θ ∓ cos θ)² = 1 ∓ 2 sin θ cos θ 이다."
+  },
+  {
+    "id": "en-2026-11-05-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-05",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity [u]comes[/u]① from sudden inspiration, but research suggests [u]otherwise[/u]②. Most breakthroughs result from long periods of practice [u]followed[/u]③ by careful revision. Artists who [u]is[/u]④ willing to fail repeatedly tend to improve faster, because [u]what[/u]⑤ they learn from each failure guides the next attempt.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 관계대명사 who의 선행사 Artists가 복수이므로 동사는 are가 되어야 합니다. ① 주어 creativity(단수)에 맞는 comes, ② 부사 otherwise(그렇지 않게), ③ practice를 뒤에서 꾸미는 과거분사 followed(수동), ⑤ learn의 목적어가 없는 명사절이므로 what이 적절합니다.",
+    "vocab": [
+      {
+        "word": "breakthrough",
+        "meaning": "돌파구, 획기적 발견"
+      },
+      {
+        "word": "revision",
+        "meaning": "수정, 개정"
+      },
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-05-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-05",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many learners assume that long, intense study sessions are the key to mastery. However, cognitive scientists have found that spacing out short sessions over several days leads to stronger memory. The brain needs time between sessions to ______ what it has absorbed, and each return to the material strengthens the connection.",
+    "choices": [
+      "discard",
+      "ignore",
+      "compete with",
+      "exaggerate",
+      "consolidate"
+    ],
+    "answerIndex": 4,
+    "explanation": "짧은 학습을 여러 날에 나누어 하면 기억이 더 강해진다는 내용이므로, 세션 사이에 뇌가 배운 것을 '굳히고 안정화한다(consolidate)'는 표현이 빈칸에 적절합니다. 나머지는 기억 강화라는 흐름과 반대이거나 무관합니다.",
+    "vocab": [
+      {
+        "word": "cognitive",
+        "meaning": "인지의, 인식의"
+      },
+      {
+        "word": "mastery",
+        "meaning": "숙달, 통달"
+      },
+      {
+        "word": "consolidate",
+        "meaning": "통합하다, 굳히다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-05-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-05",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Before the invention of the printing press, books were copied by hand and were therefore rare and expensive.\n(A) As a result, ideas that once stayed within small circles of scholars began to reach ordinary readers.\n(B) This changed in the fifteenth century, when movable type allowed many copies to be produced in a short time.\n(C) Prices fell sharply as production costs dropped.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글(책이 귀하고 비쌌다) → (B) 'This changed'로 활자 도입을 소개 → (C) 생산비 하락으로 가격이 떨어짐 → (A) 'As a result'로 사상이 일반 독자에게 퍼지는 결과를 제시하는 순서입니다.",
+    "vocab": [
+      {
+        "word": "movable type",
+        "meaning": "활자"
+      },
+      {
+        "word": "scholar",
+        "meaning": "학자"
+      },
+      {
+        "word": "production cost",
+        "meaning": "생산비"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-05-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-05",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many cities in the twentieth century expanded outward, building highways to connect distant suburbs. ① Residents of these areas had to drive for nearly every errand. ② As a result, traffic jams and air pollution grew steadily worse. ③ Their streets stayed lively throughout the day, and public transport was easy to maintain. ④ Today, many planners are therefore reviving the idea of the walkable neighborhood. ⑤ Even small changes, such as wider sidewalks, can make a difference.",
+    "givenSentence": "In contrast, cities that kept their compact centers found that residents walked more and relied less on cars.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'In contrast'로 앞선 교외 확장 도시와 대조되는, 도심을 압축적으로 유지한 도시를 소개합니다. ③ 뒤의 'Their streets'가 바로 이 도시들을 가리키고, ③ 앞은 교통난·공해라는 부정적 결과이므로 ③이 적절합니다.",
+    "vocab": [
+      {
+        "word": "suburb",
+        "meaning": "교외"
+      },
+      {
+        "word": "errand",
+        "meaning": "심부름, 볼일"
+      },
+      {
+        "word": "compact",
+        "meaning": "밀집된, 소규모의"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-05-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-05",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Modern workers switch between tasks constantly, believing that this makes them more productive. Yet studies show that each switch carries a hidden cost: the mind needs time to refocus, and errors become more frequent. Those who devote uninterrupted blocks of time to a single task usually finish sooner and with higher quality.",
+    "choices": [
+      "benefits of working in large teams",
+      "ways to reduce office energy use",
+      "why workers need longer holidays",
+      "the hidden costs of frequent task switching",
+      "the role of technology in modern offices"
+    ],
+    "answerIndex": 3,
+    "explanation": "지문은 업무를 자주 전환하면 다시 집중하는 데 시간이 들고 실수가 늘어난다는 '숨은 비용'을 설명하므로 주제는 ④입니다.",
+    "vocab": [
+      {
+        "word": "devote",
+        "meaning": "바치다, 쏟다"
+      },
+      {
+        "word": "uninterrupted",
+        "meaning": "방해받지 않는, 연속된"
+      },
+      {
+        "word": "refocus",
+        "meaning": "다시 집중하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-05-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-05",
+    "prompt": "공비가 실수인 등비수열 {aₙ}에서 a₂ = 6, a₅ = 162일 때, 첫째항부터 제5항까지의 합은?",
+    "choices": [
+      "182",
+      "202",
+      "222",
+      "242",
+      "262"
+    ],
+    "answerIndex": 3,
+    "explanation": "a₅/a₂ = r³ = 27이므로 r = 3, a₁ = 2입니다. S₅ = 2(3⁵ − 1)/(3 − 1) = 243 − 1 = 242.",
+    "concept": "등비수열에서 aₘ/aₙ = r^(m−n)이고, 합은 Sₙ = a(rⁿ − 1)/(r − 1) (r ≠ 1)이다."
+  },
+  {
+    "id": "math-2026-11-05-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-05",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3). x = 1에서 극대, x = 3에서 극소. f(1) = 5, f(3) = 27 − 54 + 27 + 1 = 1. 차는 5 − 1 = 4.",
+    "concept": "f′(x)의 부호가 양에서 음으로 바뀌는 점에서 극대, 음에서 양으로 바뀌는 점에서 극소이다."
+  },
+  {
+    "id": "math-2026-11-05-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-05",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "곡선은 x = 0, 4에서 x축과 만나고 0 ≤ x ≤ 4에서 y ≤ 0입니다. 넓이 = ∫₀⁴ (4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3.",
+    "concept": "곡선과 x축 사이의 넓이는 ∫|f(x)|dx로 구하고, 다항함수는 ∫xⁿdx = xⁿ⁺¹/(n+1)을 이용한다."
+  },
+  {
+    "id": "math-2026-11-05-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-05",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 흰 공이 2개 이상일 확률은?",
+    "choices": [
+      "16/35",
+      "18/35",
+      "19/35",
+      "22/35",
+      "24/35"
+    ],
+    "answerIndex": 3,
+    "explanation": "전체 경우의 수는 ₇C₃ = 35. 흰 공 2개·검은 공 1개: ₄C₂·₃C₁ = 18, 흰 공 3개: ₄C₃ = 4. 따라서 (18 + 4)/35 = 22/35.",
+    "concept": "동시에 꺼내는 경우의 확률은 조합을 이용해 (사건의 경우의 수)/(전체 경우의 수)로 구하며, 배반사건은 확률을 더한다."
+  },
+  {
+    "id": "math-2026-11-05-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-05",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6. 합 = π/2 + 7π/6 + 11π/6 = 21π/6 = 7π/2.",
+    "concept": "sin x에 대한 이차방정식은 인수분해로 sin x 값을 구한 뒤, 단위원에서 해당 각을 찾는다."
   }
 ]
