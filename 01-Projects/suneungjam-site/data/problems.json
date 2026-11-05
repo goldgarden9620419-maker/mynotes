@@ -16660,5 +16660,246 @@
     "answerIndex": 1,
     "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6. 합 = π/2 + 7π/6 + 11π/6 = 21π/6 = 7π/2.",
     "concept": "sin x에 대한 이차방정식은 인수분해로 sin x 값을 구한 뒤, 단위원에서 해당 각을 찾는다."
+  },
+  {
+    "id": "en-2026-11-06-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-06",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Volunteers often report [u]that[/u]① helping others makes them feel happier than [u]they expected[/u]②. Researchers believe this happens because acts of kindness [u]connects[/u]③ people to a purpose larger than themselves. A person [u]who[/u]④ spends an afternoon at a shelter may find that time [u]passes[/u]⑤ quickly.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ 주어 acts of kindness는 복수이므로 동사는 connect가 되어야 합니다. ① report의 목적어절을 이끄는 접속사 that, ② 비교 대상 절 they expected, ④ 선행사 A person을 받는 주격 관계대명사 who, ⑤ that절의 주어 time(단수)에 맞는 passes는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "shelter",
+        "meaning": "보호소, 쉼터"
+      },
+      {
+        "word": "kindness",
+        "meaning": "친절"
+      },
+      {
+        "word": "volunteer",
+        "meaning": "자원봉사자"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-06-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-06",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In science, an idea that cannot be tested is of little use. Good researchers therefore welcome experiments that might show their own ideas to be ______. An idea that survives such a challenge deserves far more trust than one that has never been questioned.",
+    "choices": [
+      "famous",
+      "simple",
+      "mistaken",
+      "ancient",
+      "profitable"
+    ],
+    "answerIndex": 2,
+    "explanation": "시험을 견뎌낸 아이디어가 더 신뢰받는다는 마지막 문장으로 보아, 연구자들은 자신의 아이디어가 '틀렸음(mistaken)'을 보여줄 수 있는 실험도 환영한다는 내용이 되어야 합니다.",
+    "vocab": [
+      {
+        "word": "hypothesis",
+        "meaning": "가설"
+      },
+      {
+        "word": "survive",
+        "meaning": "살아남다, 견뎌내다"
+      },
+      {
+        "word": "deserve",
+        "meaning": "~할 자격이 있다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-06-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-06",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Honeybees communicate the location of food through a special kind of movement.\n(A) The angle of the dance relative to the vertical tells the other bees the direction of the food in relation to the sun.\n(B) When a forager returns to the hive, she performs a \"waggle dance\" on the honeycomb.\n(C) Other bees watch it closely and then fly directly to the source.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글(움직임으로 먹이 위치를 알림) → (B) 먹이를 찾은 벌이 춤을 춤 → (A) 'The angle of the dance'로 춤의 각도가 의미하는 바를 설명 → (C) 다른 벌들이 이를 보고 먹이로 날아감 순서가 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "forager",
+        "meaning": "먹이를 찾는 벌(채집자)"
+      },
+      {
+        "word": "hive",
+        "meaning": "벌집"
+      },
+      {
+        "word": "in relation to",
+        "meaning": "~와 관련하여"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-06-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-06",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Sleep is often treated as wasted time. ① During sleep, however, the brain sorts the day's experiences and stores the important ones. ② Students who sleep well after studying recall more the next day. ③ Those who stay up all night, in contrast, show weaker memory on tests. ④ Good sleep is therefore part of effective study, not a break from it. ⑤",
+    "givenSentence": "For this reason, skipping sleep to study more can actually backfire.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 'For this reason'은 앞 문장(밤을 새운 학생의 기억력 저하)을 이유로 삼아 '잠을 줄여 공부하면 오히려 역효과'라는 결론을 이끌고, 뒤의 'therefore ... Good sleep is part of study'로 자연스럽게 이어지므로 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "backfire",
+        "meaning": "역효과를 낳다"
+      },
+      {
+        "word": "sort",
+        "meaning": "분류하다, 정리하다"
+      },
+      {
+        "word": "recall",
+        "meaning": "기억해 내다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-06-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-06",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Public libraries were once quiet places meant only for borrowing books. Today, many of them offer free computer classes, job-search workshops, and meeting rooms for local groups. Some even lend tools and musical instruments. By adapting to what residents actually need, libraries have become community centers where people of all ages gather to learn and connect.",
+    "choices": [
+      "the decline of printed books in modern society",
+      "how libraries have evolved into multipurpose community centers",
+      "the importance of keeping libraries silent",
+      "ways to reduce the cost of borrowing books",
+      "the role of technology in replacing librarians"
+    ],
+    "answerIndex": 1,
+    "explanation": "도서관이 책 대여 공간에서 컴퓨터 수업, 취업 워크숍, 도구 대여 등을 제공하는 지역사회 중심 공간으로 변화했다는 내용이므로 ②가 주제입니다.",
+    "vocab": [
+      {
+        "word": "workshop",
+        "meaning": "워크숍, 실습 강좌"
+      },
+      {
+        "word": "resident",
+        "meaning": "주민"
+      },
+      {
+        "word": "adapt",
+        "meaning": "적응하다, 맞추다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-06-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-06",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, 첫째항부터 제10항까지의 합은?",
+    "choices": [
+      "125",
+      "135",
+      "145",
+      "155",
+      "165"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3, a₁ = 7 − 2·3 = 1입니다. a₁₀ = 1 + 27 = 28이므로 S₁₀ = 10(1 + 28)/2 = 145입니다.",
+    "concept": "등차수열의 합 Sₙ = n(a₁ + aₙ)/2, 일반항 aₙ = a₁ + (n−1)d"
+  },
+  {
+    "id": "math-2026-11-06-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-06",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값은?",
+    "choices": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x = 1에서 증가→감소로 바뀌어 극대입니다. f(1) = 1 − 6 + 9 + 1 = 5입니다.",
+    "concept": "f′(x)의 부호가 양에서 음으로 바뀌는 점에서 극대이며, 극댓값은 그 점의 함숫값이다"
+  },
+  {
+    "id": "math-2026-11-06-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-06",
+    "prompt": "정적분 ∫₀² (3x² − 2x + 1) dx 의 값은?",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "answerIndex": 2,
+    "explanation": "부정적분은 x³ − x² + x이므로 [x³ − x² + x]₀² = 8 − 4 + 2 = 6입니다.",
+    "concept": "∫xⁿ dx = xⁿ⁺¹/(n+1) + C 와 미적분의 기본정리 ∫ₐᵇ f(x)dx = F(b) − F(a)"
+  },
+  {
+    "id": "math-2026-11-06-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-06",
+    "prompt": "흰 공 4개, 검은 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 꺼낸 두 공의 색이 같을 확률은?",
+    "choices": [
+      "2/7",
+      "3/7",
+      "4/7",
+      "5/7",
+      "6/7"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 ₇C₂ = 21입니다. 모두 흰 공인 경우 ₄C₂ = 6, 모두 검은 공인 경우 ₃C₂ = 3이므로 확률은 (6+3)/21 = 3/7입니다.",
+    "concept": "서로 배반인 사건의 확률의 합과 조합 ₙCᵣ을 이용한 경우의 수 계산"
+  },
+  {
+    "id": "math-2026-11-06-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-06",
+    "prompt": "0 < x < π/2 이고 sin x = 3/5 일 때, tan(x + π/4)의 값은?",
+    "choices": [
+      "3",
+      "5",
+      "7",
+      "9",
+      "11"
+    ],
+    "answerIndex": 2,
+    "explanation": "cos x = 4/5이므로 tan x = 3/4입니다. tan(x + π/4) = (tan x + 1)/(1 − tan x) = (7/4)/(1/4) = 7입니다.",
+    "concept": "탄젠트 덧셈정리 tan(α+β) = (tan α + tan β)/(1 − tan α tan β)"
   }
 ]
