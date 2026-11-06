@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdSenseScript from "../components/AdSenseScript";
 
 export const metadata: Metadata = {
   title: "이용약관 | 수능잼",
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
 export default function Terms() {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col px-6 py-16">
+      <AdSenseScript />
       <Link href="/" className="mb-6 text-sm text-muted hover:text-accent">
         ← 메인으로 돌아가기
       </Link>

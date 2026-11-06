@@ -2,6 +2,8 @@ import Link from "next/link";
 import QuizApp from "./components/QuizApp";
 import InstallPrompt from "./components/InstallPrompt";
 import AffirmationCard from "./components/AffirmationCard";
+import AdSenseScript from "./components/AdSenseScript";
+import { TYPE_GUIDES } from "./guide/guides";
 
 const steps = [
   {
@@ -40,6 +42,7 @@ const faqs = [
 export default function Home() {
   return (
     <div className="flex min-h-dvh w-full flex-1 flex-col items-center justify-center gap-5 px-4 py-6 sm:gap-8 sm:py-10">
+      <AdSenseScript />
       <InstallPrompt />
       <div className="flex max-w-md flex-col items-center text-center">
         <span className="motion-safe:animate-pulse rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-accent sm:px-4 sm:text-sm">
@@ -72,6 +75,30 @@ export default function Home() {
       </section>
 
       <section className="w-full max-w-2xl px-4 pb-6">
+        <h2 className="mb-2 text-center text-lg font-bold sm:text-xl">유형별 풀이법 가이드</h2>
+        <p className="mb-6 text-center text-sm text-muted">
+          문제를 풀다 막혔다면, 유형별로 어떤 순서로 접근하면 좋은지 확인해 보세요.
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {TYPE_GUIDES.map((g) => (
+            <Link
+              key={g.slug}
+              href={`/guide/${g.slug}`}
+              className="rounded-2xl border border-border bg-card p-4 transition hover:border-accent"
+            >
+              <p className="text-xs font-semibold text-accent">{g.subject}</p>
+              <p className="mt-1 text-sm font-semibold">{g.type} 문제 푸는 법</p>
+            </Link>
+          ))}
+        </div>
+        <p className="mt-4 text-center text-sm">
+          <Link href="/guide/study-tips" className="text-accent hover:underline">
+            짬 시간에 수능 공부하는 법 →
+          </Link>
+        </p>
+      </section>
+
+      <section className="w-full max-w-2xl px-4 pb-6">
         <h2 className="mb-6 text-center text-lg font-bold sm:text-xl">자주 묻는 질문</h2>
         <div className="flex flex-col gap-3">
           {faqs.map((f) => (
@@ -93,7 +120,13 @@ export default function Home() {
 
       <footer className="flex flex-col items-center gap-2 text-center text-xs text-muted">
         <p>© 2026 수능잼(suneungjam.com) · 실제 기출문제가 아닌, 출제 경향을 참고해 새로 만든 연습문제입니다.</p>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+          <Link href="/about" className="hover:text-accent hover:underline">
+            서비스 소개
+          </Link>
+          <Link href="/guide" className="hover:text-accent hover:underline">
+            풀이법 가이드
+          </Link>
           <Link href="/privacy-policy" className="hover:text-accent hover:underline">
             개인정보처리방침
           </Link>

@@ -28,9 +28,8 @@ export default function ReviewPage() {
     setProblems(raw ? (JSON.parse(raw) as Problem[]) : []);
   }, []);
 
-  if (problems === null) return null;
-
-  if (problems.length === 0) {
+  // 불러오는 동안에도 빈 화면 대신 설명 화면을 보여준다 (서버 렌더링 결과에도 내용이 들어가도록).
+  if (problems === null || problems.length === 0) {
     return (
       <div className="mx-auto flex min-h-screen w-full max-w-2xl flex-col items-center px-6 py-16 text-center">
         <h1 className="text-xl font-bold">오답 복습이란?</h1>
