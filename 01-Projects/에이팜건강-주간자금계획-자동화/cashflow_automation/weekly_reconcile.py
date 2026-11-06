@@ -22,14 +22,6 @@ from common import (
 from excel_report import account_label
 
 _NAVY = "1F4E79"
-_DIFF_COLORS = {
-    MATCH_NOT_FOUND: "FFE699",     # 미집행(계획했는데 출금 없음) — 주황
-    MATCH_UNPLANNED: "FFC7CE",     # 계획에 없는 출금 — 붉은
-    MATCH_AMOUNT_DIFF: "FFF2CC",   # 금액 차이 — 노랑
-    MATCH_DATE_DIFF: "FFF2CC",
-    MATCH_PARTIAL: "FFF2CC",
-    MATCH_MANUAL: "FFF2CC",
-}
 _DIFF_ORDER = [MATCH_NOT_FOUND, MATCH_UNPLANNED, MATCH_AMOUNT_DIFF,
                MATCH_DATE_DIFF, MATCH_PARTIAL, MATCH_MANUAL]
 
@@ -44,8 +36,11 @@ def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
                          name_threshold: float = 70,
                          aliases: Optional[list[list[str]]] = None,
                          amount_tolerance: float = 0.01) -> dict:
-    """이번 주(월요일~run_date) 계획 vs 실제 대조 자료를 만든다.
+    """이번 주 계획 vs 실제 대조 자료를 만든다.
 
+    기간은 직전 토요일~run_date(금요일 상한): 자금계획이 주말(토·일)
+    지급분부터 계획하므로 토요일 시작이라야 계획 파일 기간과 맞는다
+    (2026-11-06 사용자 문의: "왜 10/31~11/6 기간과 다른가").
     plans: 통합 지출계획 행(정상반영·지급완료), bank_rows: 표준 은행 행.
     balances: (은행, 계좌)별 현재 잔액. 반환 dict는 write_reconcile_workbook
     입력으로 쓴다.
@@ -53,18 +48,19 @@ def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
     import payment_matcher
 
     monday = week_monday(run_date)
+    week_start = monday - timedelta(days=2)                # 직전 토요일부터
     week_end = min(run_date, monday + timedelta(days=4))   # 이번 주 금요일까지
 
     week_plans = []
     for p in plans:
         pd = _d(p.get("자금계획 반영일") or p.get("지급예정일"))
-        if pd is not None and monday <= pd <= week_end:
+        if pd is not None and week_start <= pd <= week_end:
             week_plans.append(p)
 
     matched = payment_matcher.match_payments(
         week_plans, bank_rows, run_date,
         window_days=date_window_days, name_threshold=name_threshold,
-        unplanned_days=max(0, (run_date - monday).days),
+        unplanned_days=max(0, (run_date - week_start).days),
         aliases=aliases, amount_tolerance=amount_tolerance)
 
     diffs = [r for r in matched["results"]
@@ -76,8 +72,10 @@ def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
                                  or r.get("실제출금일")) or date.max))
     ok_rows = [r for r in matched["results"]
                if r.get("대조결과") == MATCH_PAID]
+    ok_rows.sort(key=lambda r: _d(r.get("실제출금일")
+                                  or r.get("지급예정일")) or date.max)
 
-    # 계좌별: 주간 실제 흐름과 주초(월요일 시작) 잔액 (내부이체 포함 되돌림)
+    # 계좌별: 주간 실제 흐름과 주초(토요일 시작) 잔액 (내부이체 포함 되돌림)
     accounts: dict = {}
     last_bank_date: Optional[date] = None
     for tx in bank_rows:
@@ -89,7 +87,7 @@ def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
         key = (tx.get("은행"), tx.get("계좌") or "")
         acct = accounts.setdefault(key, {
             "입금": 0.0, "출금": 0.0, "내부이체": 0.0, "마지막거래일": None})
-        if td is None or td < monday or td > run_date:
+        if td is None or td < week_start or td > run_date:
             continue
         amt_in = tx.get("입금액") or 0.0
         amt_out = tx.get("출금액") or 0.0
@@ -129,16 +127,22 @@ def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
     counts = {k: sum(1 for r in diffs if r.get("대조결과") == k)
               for k in _DIFF_ORDER}
     return {
-        "기간": (monday, week_end), "실행일": run_date,
+        "기간": (week_start, week_end), "실행일": run_date,
         "은행기준일": last_bank_date,
         "계좌": rows,
         "계획지출": plan_out, "실제출금": actual_out,
-        "일치": len(ok_rows), "차이내역": diffs, "차이건수": counts,
+        "일치": len(ok_rows), "완료내역": ok_rows,
+        "차이내역": diffs, "차이건수": counts,
     }
 
 
 def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
-    """대조 자료를 주간대조 워크북(안내·계좌별대조·차이내역)으로 저장한다."""
+    """대조 자료를 주간대조 워크북(안내·대조결과·계좌별대조)으로 저장한다.
+
+    2026-11-06 사용자 요청으로 단순화: '대조결과' 한 시트에서
+    ① 나간 돈(완료) ② 안 나간 돈(확인 ▼) ③ 계획에 없는 지출(확인 ▼)
+    세 칸만 보면 되게 한다.
+    """
     from openpyxl import Workbook
     from openpyxl.styles import Alignment, Font, PatternFill
     from openpyxl.utils import get_column_letter
@@ -184,16 +188,15 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
     done_dv.error = "'예' 또는 '아니오'만 입력할 수 있습니다."
     done_dv.showErrorMessage = True
     done_dv.promptTitle = "검토 완료 표시"
-    done_dv.prompt = ("차이내역 검토가 끝나면 ▼에서 '예'를 골라 "
+    done_dv.prompt = ("'대조결과' 시트 검토가 끝나면 ▼에서 '예'를 골라 "
                       "저장하세요. 검토 완료로 기록됩니다.")
     done_dv.showInputMessage = True
     ws.add_data_validation(done_dv)
     done_dv.add("B2")
-    msg = (f"차이 {n_diff}건을 확인해 주세요 — ① '계좌별대조' 시트에서 "
-           "계좌별 입출금·잔액을 보고 ② '차이내역' 시트에서 "
-           "미집행(주황)·계획없는출금(붉은)·금액차이(노랑)를 검토한 뒤 "
-           "위 B2를 '예'로 바꿔 저장하면 검토 완료로 기록됩니다. "
-           "미집행 건은 팀 지출계획 수정(다음 주 재제출)으로 관리하세요."
+    msg = (f"'대조결과' 시트만 보면 됩니다 — 확인할 것 {n_diff}건: "
+           "초록(나간 돈)은 그냥 훑어보고, 주황(안 나간 돈)과 "
+           "붉은(계획에 없는 지출)만 ▼에서 골라 표시한 뒤 "
+           "위 B2를 '예'로 바꿔 저장하세요."
            if n_diff else
            "이번 주 계획과 실제 입출금이 모두 일치합니다. "
            "B2를 '예'로 바꿔 저장하면 검토 완료로 기록됩니다.")
@@ -205,6 +208,149 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
              "있을 수 있습니다 — 은행 3사 파일을 새로 받아 넣고 "
              "'주간 대조 확인'을 다시 실행하면 정확해집니다.",
              color="C00000")
+
+    # ── 대조결과 (2026-11-06 사용자 요청: 직관적인 3칸 체크 화면) ──
+    ws = wb.create_sheet("대조결과")
+    for col, w in (("A", 12), ("B", 10), ("C", 42), ("D", 14), ("E", 22),
+                   ("F", 36)):
+        ws.column_dimensions[col].width = w
+    diffs = data["차이내역"]
+    paid = list(data.get("완료내역") or [])
+    paid += [r for r in diffs if r.get("대조결과") in
+             (MATCH_AMOUNT_DIFF, MATCH_DATE_DIFF, MATCH_PARTIAL)]
+    paid.sort(key=lambda r: _d(r.get("실제출금일")
+                               or r.get("지급예정일")) or date.max)
+    unpaid = [r for r in diffs if r.get("대조결과") in
+              (MATCH_NOT_FOUND, MATCH_MANUAL)]
+    unplanned = [r for r in diffs
+                 if r.get("대조결과") == MATCH_UNPLANNED]
+
+    _put(ws, 1, 1, f"이번 주 돈 흐름 확인 ({monday} ~ {week_end})",
+         bold=True, size=13, color=_NAVY)
+    _put(ws, 2, 1, "초록 = 계획대로 나감(훑어보기만) · 주황 = 안 나감(▼ 선택) · "
+                   "붉은 = 계획에 없던 지출(▼ 선택) — 끝나면 '안내' 시트 "
+                   "B2를 '예'로 저장")
+
+    def _amt(row, *keys):
+        for k in keys:
+            v = row.get(k)
+            if v is not None:
+                return v
+        return 0
+
+    def _section(r, mark, title, rows, total, fill):
+        _put(ws, r, 1, f"{mark} {title} — {len(rows)}건 · 합계 "
+                       f"{round(total):,}원", bold=True, size=11, fill=fill)
+        return r + 1
+
+    # ① 계획대로 나간 돈 (금액·지급일 차이, 일부지급 포함 — 비고로 표시)
+    r = _section(4, "①", "계획대로 나간 돈",
+                 paid, sum(_amt(x, "실제금액", "예정금액") for x in paid),
+                 "C6EFCE")
+    _head(ws, r, ["나간 날짜", "팀", "내용", "금액", "확인", "비고"],
+          [12, 10, 42, 14, 22, 36])
+    r += 1
+    if not paid:
+        _put(ws, r, 1, "이번 주에 나간 계획 지출이 없습니다.")
+        r += 1
+    for row in paid:
+        kind = row.get("대조결과")
+        d = _d(row.get("실제출금일") or row.get("지급예정일"))
+        if d is not None:
+            _put(ws, r, 1, datetime.combine(d, dtime()), fmt="yyyy-mm-dd")
+        _put(ws, r, 2, row.get("팀명") or "")
+        _put(ws, r, 3, row.get("거래처") or "")
+        _put(ws, r, 4, round(_amt(row, "실제금액", "예정금액")), fmt="#,##0")
+        note = row.get("비고") or ""
+        if kind == MATCH_PARTIAL:
+            rest = (row.get("예정금액") or 0) - (row.get("실제금액") or 0)
+            note = (f"일부만 나감 — 남은 {round(rest):,}원은 다음 주 "
+                    f"이월 검토. {note}").strip()
+        elif kind == MATCH_AMOUNT_DIFF:
+            note = (f"계획 {round(row.get('예정금액') or 0):,}원과 "
+                    f"금액이 다름. {note}").strip()
+        elif kind == MATCH_DATE_DIFF:
+            pdd = _d(row.get("지급예정일"))
+            note = (f"예정일({pdd})과 다른 날 나감. {note}").strip()
+        if note:
+            _put(ws, r, 6, note, fill="FFF2CC")
+        r += 1
+    r += 1
+
+    # ② 계획했는데 안 나간 돈 — 확인 드롭다운
+    from openpyxl.worksheet.datavalidation import DataValidation
+    r = _section(r, "②", "계획했는데 안 나간 돈",
+                 unpaid, sum(_amt(x, "예정금액") for x in unpaid), "FFE699")
+    _head(ws, r, ["예정 날짜", "팀", "내용", "금액", "확인 (▼ 선택)", "비고"],
+          [12, 10, 42, 14, 22, 36])
+    r += 1
+    if not unpaid:
+        _put(ws, r, 1, "계획한 돈이 모두 나갔습니다.")
+        r += 1
+    else:
+        unpaid_dv = DataValidation(
+            type="list",
+            formula1='"다음 주 지급(이월),취소됨(안 나감),이미 지급됨(통장 확인)"',
+            allow_blank=True)
+        unpaid_dv.showErrorMessage = False
+        unpaid_dv.promptTitle = "안 나간 돈 확인"
+        unpaid_dv.prompt = ("왜 안 나갔는지 ▼에서 골라 주세요. "
+                            "'다음 주 지급'이면 취합 지출계획에 이월해 "
+                            "반영하세요. 모르면 비워 둬도 됩니다.")
+        unpaid_dv.showInputMessage = True
+        ws.add_data_validation(unpaid_dv)
+        for row in unpaid:
+            d = _d(row.get("지급예정일"))
+            if d is not None:
+                _put(ws, r, 1, datetime.combine(d, dtime()),
+                     fmt="yyyy-mm-dd")
+            _put(ws, r, 2, row.get("팀명") or "")
+            _put(ws, r, 3, row.get("거래처") or "")
+            _put(ws, r, 4, round(_amt(row, "예정금액")), fmt="#,##0")
+            _put(ws, r, 5, "", fill="FFE699")
+            unpaid_dv.add(f"E{r}")
+            _put(ws, r, 6, row.get("비고") or "")
+            r += 1
+    r += 1
+
+    # ③ 계획에 없는 지출 — 확인 드롭다운
+    r = _section(r, "③", "계획에 없는 지출",
+                 unplanned, sum(_amt(x, "실제금액") for x in unplanned),
+                 "FFC7CE")
+    _head(ws, r, ["나간 날짜", "은행", "내용", "금액", "확인 (▼ 선택)", "비고"],
+          [12, 10, 42, 14, 22, 36])
+    r += 1
+    if not unplanned:
+        _put(ws, r, 1, "계획에 없는 지출이 없습니다.")
+        r += 1
+    else:
+        unpl_dv = DataValidation(
+            type="list",
+            formula1='"아는 지출(문제 없음),모르는 지출(알아보기)"',
+            allow_blank=True)
+        unpl_dv.showErrorMessage = False
+        unpl_dv.promptTitle = "계획에 없는 지출 확인"
+        unpl_dv.prompt = ("아는 지출인지 ▼에서 골라 주세요. 분류는 월요일 "
+                          "확인필요 파일의 '처리' 칸에서 고르면 다음부터 "
+                          "자동 인식됩니다.")
+        unpl_dv.showInputMessage = True
+        ws.add_data_validation(unpl_dv)
+        for row in unplanned:
+            d = _d(row.get("실제출금일"))
+            if d is not None:
+                _put(ws, r, 1, datetime.combine(d, dtime()),
+                     fmt="yyyy-mm-dd")
+            _put(ws, r, 2, row.get("은행") or "")
+            _put(ws, r, 3, row.get("거래처") or "")
+            _put(ws, r, 4, round(_amt(row, "실제금액")), fmt="#,##0")
+            _put(ws, r, 5, "", fill="FFC7CE")
+            unpl_dv.add(f"E{r}")
+            note = row.get("비고") or ""
+            if note.endswith((".xlsx", ".xls")):   # 원본 파일명은 노이즈
+                note = ""
+            _put(ws, r, 6, note)
+            r += 1
+    ws.freeze_panes = "A3"
 
     # ── 계좌별대조 ──────────────────────────────────────────────────
     ws = wb.create_sheet("계좌별대조")
@@ -244,38 +390,6 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
          f"일치 {data['일치']}건 · 미집행 {cnt.get(MATCH_NOT_FOUND, 0)}건 · "
          f"계획없는출금 {cnt.get(MATCH_UNPLANNED, 0)}건 · 금액·기타 차이 "
          f"{n_diff - cnt.get(MATCH_NOT_FOUND, 0) - cnt.get(MATCH_UNPLANNED, 0)}건")
-
-    # ── 차이내역 ────────────────────────────────────────────────────
-    ws = wb.create_sheet("차이내역")
-    _put(ws, 1, 1, "차이 내역 — 계획했는데 안 나갔거나, 계획에 없거나, "
-                   "금액이 다른 건", bold=True, size=12, color=_NAVY)
-    _head(ws, 3, ["구분", "팀명", "거래처·내용", "지급예정일", "실제출금일",
-                  "계획금액", "실제금액", "차이", "은행", "비고"],
-          [14, 11, 34, 12, 12, 13, 13, 12, 10, 26])
-    r = 4
-    for row in data["차이내역"]:
-        fill = _DIFF_COLORS.get(row.get("대조결과"))
-        _put(ws, r, 1, row.get("대조결과"), fill=fill)
-        _put(ws, r, 2, row.get("팀명") or "")
-        _put(ws, r, 3, row.get("거래처") or "")
-        for c, k in ((4, "지급예정일"), (5, "실제출금일")):
-            d = _d(row.get(k))
-            if d is not None:
-                _put(ws, r, c, datetime.combine(d, dtime()),
-                     fmt="yyyy-mm-dd")
-        for c, k in ((6, "예정금액"), (7, "실제금액"), (8, "차이금액")):
-            v = row.get(k)
-            if v is not None:
-                _put(ws, r, c, round(v), fmt="#,##0;[Red]-#,##0")
-        _put(ws, r, 9, row.get("은행") or "")
-        _put(ws, r, 10, row.get("비고") or "")
-        r += 1
-    if r == 4:
-        _put(ws, 4, 1, "차이 없음 — 이번 주 계획과 실제가 모두 일치합니다.",
-             color="2E7D32")
-    else:
-        ws.auto_filter.ref = f"A3:J{r - 1}"
-    ws.freeze_panes = "A4"
 
     out_path = Path(out_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
