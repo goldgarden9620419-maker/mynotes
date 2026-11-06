@@ -251,9 +251,10 @@ def find_consolidated_file(folder) -> Optional[Path]:
     folder = Path(folder)
     if not folder.exists():
         return None
+    # 수정시각이 같으면(복사·복원 직후) 파일명의 날짜가 뒤인 쪽을 고른다
     files = sorted((p for p in folder.glob("*.xlsx")
                     if not p.name.startswith("~$")),
-                   key=lambda p: p.stat().st_mtime, reverse=True)
+                   key=lambda p: (p.stat().st_mtime, p.name), reverse=True)
     for path in files:
         if is_consolidated_form(path):
             return path
