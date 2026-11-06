@@ -464,11 +464,11 @@ def test_자금흐름_시트가_맨앞에_생긴다(tmp_path):
     assert str(ws["A1"].value).startswith('="자금 흐름')  # 기간은 표 참조
     assert ws["C4"].value == "=요약!$B$6"              # 오늘 잔액
     assert "COUNTIF" in str(ws["C7"].value)            # 잔액 부족한 날
-    assert ws["A11"].value == "='4주일별계획'!A6"       # 일별 1:1 참조
+    assert ws["A11"].value == "='4주일별계획'!A8"       # 계획 그리드 1:1
     # n_acc=0 배치: 들어올 돈 = 온라인(C)+확정(D), 나갈 돈 = E+F+G,
     # 잔액 = 기말(J)
-    assert ws["C11"].value == "='4주일별계획'!C6+'4주일별계획'!D6"
-    assert ws["D11"].value == ("='4주일별계획'!E6+'4주일별계획'!F6"
-                               "+'4주일별계획'!G6")
-    assert ws["E11"].value == "='4주일별계획'!J6"
+    assert ws["C11"].value == "='4주일별계획'!C8+'4주일별계획'!D8"
+    assert ws["D11"].value == ("='4주일별계획'!E8+'4주일별계획'!F8"
+                               "+'4주일별계획'!G8")
+    assert ws["E11"].value == "='4주일별계획'!J8"
     wb.close()

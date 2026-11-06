@@ -547,8 +547,8 @@ def _fill_cashflow(wb, n_acc: int,
             cell.fill = PatternFill("solid", start_color=fill)
         return cell
 
-    _put(1, 1, ('="자금 흐름 — 앞으로 4주 ("'
-                f'&TEXT({D}!A6,"yyyy-mm-dd")&" ~ "'
+    _put(1, 1, ('="자금 흐름 — 4주 ("'
+                f'&TEXT({D}!A8,"yyyy-mm-dd")&" ~ "'
                 f'&TEXT({D}!A35,"yyyy-mm-dd")&")"'),
          bold=True, size=14, color=_GUIDE_NAVY)
     _put(2, 1, "들어올 돈 = 확정 입금 + 온라인 예상입금(최근 12주 "
@@ -579,8 +579,10 @@ def _fill_cashflow(wb, n_acc: int,
         cell.alignment = Alignment(horizontal="center")
 
     out_sum = "+".join(f"{D}!{c}{{r}}" for c in outs)
-    for i in range(30):                   # 일별계획 6~35행과 1:1
-        sr, r = 6 + i, 11 + i
+    # 일별계획의 계획 그리드(8~35행)만 1:1 참조 — 앞의 전일·오늘
+    # 스냅샷 행(6~7)은 날짜가 겹쳐 보여 뺀다 (오늘 잔액은 위 요약 칸에)
+    for i in range(28):
+        sr, r = 8 + i, 11 + i
         _put(r, 1, f"={D}!A{sr}", fmt="mm/dd")
         _put(r, 2, f"={D}!B{sr}")
         _put(r, 3, f"={D}!{online}{sr}+{D}!{conf}{sr}", fmt=_FLOW_MONEY)
@@ -589,13 +591,13 @@ def _fill_cashflow(wb, n_acc: int,
         _put(r, 6, f"=IF({D}!{note}{sr}=\"\",\"\",{D}!{note}{sr})")
 
     ws.conditional_formatting.add(
-        "E11:E40", CellIsRule(operator="lessThan", formula=["0"],
+        "E11:E38", CellIsRule(operator="lessThan", formula=["0"],
                               stopIfTrue=True,
                               fill=PatternFill("solid",
                                                start_color="FFC7CE"),
                               font=Font(color="9C0006", bold=True)))
     ws.conditional_formatting.add(
-        "A11:F40", FormulaRule(formula=['OR($B11="토",$B11="일")'],
+        "A11:F38", FormulaRule(formula=['OR($B11="토",$B11="일")'],
                                fill=PatternFill("solid",
                                                 start_color="F2F2F2")))
     ws.freeze_panes = "A11"
