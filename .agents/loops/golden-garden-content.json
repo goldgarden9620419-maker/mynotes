@@ -126,7 +126,8 @@
       "layout": "H",
       "review_score": 91,
       "review_note": "OpenAI API 크레딧 소진으로 ChatGPT 웹에서 수동 교차 검토(84→91)",
-      "url": "https://diary21462.tistory.com/entry/%EA%B5%B6%EB%8A%94-%EC%8B%9C%EA%B0%84%EB%B3%B4%EB%8B%A4-%EB%A8%B9%EB%8A%94-%EB%82%B4%EC%9A%A9%EC%9D%B4%EC%97%88%EB%8B%A4-%EA%B0%84%ED%97%90%EC%A0%81-%EB%8B%A8%EC%8B%9D-%EA%B3%B5%EB%B3%B5-%EC%8B%9D%EC%82%AC-%EC%8B%9C%EA%B0%84"
+      "url": "https://diary21462.tistory.com/entry/%EA%B5%B6%EB%8A%94-%EC%8B%9C%EA%B0%84%EB%B3%B4%EB%8B%A4-%EB%A8%B9%EB%8A%94-%EB%82%B4%EC%9A%A9%EC%9D%B4%EC%97%88%EB%8B%A4-%EA%B0%84%ED%97%90%EC%A0%81-%EB%8B%A8%EC%8B%9D-%EA%B3%B5%EB%B3%B5-%EC%8B%9D%EC%82%AC-%EC%8B%9C%EA%B0%84",
+      "thread_media": "GIF→MP4"
     },
     {
       "topic": "이불만 갰을 뿐인데 (침대 정리, 작은 성취, 습관)",
@@ -148,5 +149,23 @@
   "paused": {
     "since": "2026-10-28",
     "reason": "블로그 글쓰기·티스토리 발행을 고정 세션의 발행 스튜디오에서 하고 있어 중복 — 사용자 요청으로 월요일 루프(예약 작업) 비활성화. 다시 켜려면 예약 작업 trig_018gUnai49nAT4cV8StZ3H15를 enabled로."
+  },
+  "thread_rules": {
+    "since": "2026-11-06",
+    "media": "선택(무료 앱 GIF·Pixabay만, 힉스필드 유료 생성 안 함)",
+    "first_line": [
+      "통념 뒤집기 고백: ○○인 줄 알았음",
+      "숫자 + 내 이야기: 2년째 ○○함 / ○○이었던 내가 ○○"
+    ],
+    "last_line": "전체 이야기는 첫 댓글 링크에",
+    "experiment_1106": {
+      "아침형": 262,
+      "찬물": 127,
+      "연봉": 99,
+      "가면": 95,
+      "사주": 72,
+      "단식": 12,
+      "verdict": "미디어 효과 불분명, 첫 줄 유형과 상관 큼, 프로필 방문 전부 0"
+    }
   }
 }
