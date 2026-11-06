@@ -445,3 +445,29 @@ def test_라이브양식_검증은_이전주면_실패(tmp_path):
     out = tmp_path / "결과.xlsx"
     fill_live_workbook(template, _fake_report(NEW_MONDAY), out)
     assert not verify_live_workbook(out, OLD_MONDAY)
+
+
+def test_자금흐름_시트가_맨앞에_생긴다(tmp_path):
+    """2026-11-06 사용자 요청: 하루 한 줄 입·출·잔액 단순 화면.
+
+    결과 파일을 열면 '자금흐름'이 먼저 보이고, 전부 4주일별계획 참조
+    수식이라 경영보고 수정 시 함께 재계산된다.
+    """
+    template = tmp_path / "템플릿.xlsx"
+    _make_stub_template(template)
+    out = tmp_path / "결과.xlsx"
+    fill_live_workbook(template, _fake_report(NEW_MONDAY), out)
+    wb = load_workbook(out)
+    assert wb.sheetnames[0] == "자금흐름"
+    assert wb.active.title == "자금흐름"
+    ws = wb["자금흐름"]
+    assert ws["C4"].value == "=요약!$B$6"              # 오늘 잔액
+    assert "COUNTIF" in str(ws["C7"].value)            # 잔액 부족한 날
+    assert ws["A11"].value == "='4주일별계획'!A6"       # 일별 1:1 참조
+    # n_acc=0 배치: 들어올 돈 = 온라인(C)+확정(D), 나갈 돈 = E+F+G,
+    # 잔액 = 기말(J)
+    assert ws["C11"].value == "='4주일별계획'!C6+'4주일별계획'!D6"
+    assert ws["D11"].value == ("='4주일별계획'!E6+'4주일별계획'!F6"
+                               "+'4주일별계획'!G6")
+    assert ws["E11"].value == "='4주일별계획'!J6"
+    wb.close()
