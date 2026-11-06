@@ -116,6 +116,9 @@ def fill_live_workbook(template_path: Path, report: dict,
         # 통합 파일: 업데이트운영 시트를 현재 운영 방법 안내로 새로 쓴다
         _fill_update_guide(wb, report, link_sheet)
 
+    # 맨 앞 '자금흐름' 한 장: 하루 한 줄 입·출·잔액 (2026-11-06 요청)
+    _fill_cashflow(wb, n_acc, link_sheet=link_sheet)
+
     # 은행 파일을 폴더에서 자동으로 읽으므로 수동 붙여넣기 시트는 제거한다
     if "주간계좌_붙여넣기" in wb.sheetnames:
         wb.remove(wb["주간계좌_붙여넣기"])
@@ -416,6 +419,8 @@ def _fill_update_guide(wb, report: dict, link_sheet: str) -> None:
     sheet_row = 6 + len(steps) + 1
     _guide_band(ws, sheet_row, "② 이 파일의 시트 구성")
     sheets = [
+        (FLOW_SHEET, "★ 하루 한 줄 자금 흐름(들어올 돈·나갈 돈·잔액) — "
+         "열면 먼저 보이는 요약 화면"),
         ("요약", "잔액·통계 요약 + 경영보고 수정 방법 표"),
         (UPDATE_GUIDE_SHEET, "이 안내 (운영 순서·시트 구성·은행 자료 현황)"),
         (link_sheet, "★ 입력 기준 시트 — ①현황 ②지출예정 ③입금예정 "
@@ -500,6 +505,102 @@ def daily_layout(n: int) -> dict:
         "etc": 7 + 2 * n, "net": 8 + 2 * n, "open": 9 + 2 * n,
         "close": 10 + 2 * n, "note": 11 + 2 * n,
     }
+
+
+FLOW_SHEET = "자금흐름"
+_FLOW_MONEY = '#,##0;[Red]-#,##0;"-"'
+
+
+def _fill_cashflow(wb, n_acc: int,
+                   link_sheet: Optional[str] = None) -> None:
+    """맨 앞 '자금흐름' 시트: 하루 한 줄(들어올 돈·나갈 돈·잔액)로
+    4주 흐름만 보여준다 (2026-11-06 사용자 요청: "결과 파일이 너무
+    복잡해 — 예상 입금 반영해 단순하게"). 전부 4주일별계획 참조
+    수식이라 경영보고 노란 칸을 고치면 즉시 같이 재계산된다.
+    """
+    from openpyxl.formatting.rule import CellIsRule, FormulaRule
+    from openpyxl.styles import Alignment, Font, PatternFill
+    from openpyxl.utils import get_column_letter as col_l
+
+    if FLOW_SHEET in wb.sheetnames:       # 기존 결과 재사용 시 새로 그림
+        wb.remove(wb[FLOW_SHEET])
+    ws = wb.create_sheet(FLOW_SHEET, 0)
+    wb.active = 0
+
+    L = daily_layout(n_acc)
+    online, conf = col_l(L["online"]), col_l(L["conf"])
+    outs = [col_l(L["transfer"]), col_l(L["card"]), col_l(L["etc"])]
+    close, note = col_l(L["close"]), col_l(L["note"])
+    D = f"'{DAILY_SHEET}'"
+
+    for c, w in (("A", 12), ("B", 6), ("C", 16), ("D", 16), ("E", 17),
+                 ("F", 70)):
+        ws.column_dimensions[c].width = w
+
+    def _put(row, col, value, *, bold=False, size=10, color="000000",
+             fmt=None, fill=None):
+        cell = ws.cell(row=row, column=col, value=value)
+        cell.font = Font(name="맑은 고딕", bold=bold, size=size, color=color)
+        if fmt:
+            cell.number_format = fmt
+        if fill:
+            cell.fill = PatternFill("solid", start_color=fill)
+        return cell
+
+    _put(1, 1, ('="자금 흐름 — 4주 ("'
+                f'&TEXT({D}!A8,"yyyy-mm-dd")&" ~ "'
+                f'&TEXT({D}!A35,"yyyy-mm-dd")&")"'),
+         bold=True, size=14, color=_GUIDE_NAVY)
+    _put(2, 1, "들어올 돈 = 확정 입금 + 온라인 예상입금(최근 12주 "
+               "요일평균 × 반영률). 자세한 내용은 뒤 시트들에 그대로 "
+               "있습니다.", color="808080")
+
+    kpis = [
+        ("오늘 잔액", "=요약!$B$6", _FLOW_MONEY),
+        ("4주 최저 잔액", "=요약!$B$15", _FLOW_MONEY),
+        ("4주 뒤 잔액", "=요약!$B$14", _FLOW_MONEY),
+        ("잔액 부족한 날", f"=COUNTIF({D}!{close}8:{close}35,\"<0\")",
+         '0"일"'),
+    ]
+    for i, (label, formula, fmt) in enumerate(kpis):
+        r = 4 + i
+        _put(r, 1, label, bold=True)
+        _put(r, 3, formula, bold=True, size=11, fmt=fmt)
+    if link_sheet:
+        _put(8, 1, f"금액 수정은 '{link_sheet}' 시트 노란 칸에서 — "
+                   "고치면 이 표도 자동으로 다시 계산됩니다.",
+             color="808080")
+
+    head_fill = PatternFill("solid", start_color=_GUIDE_NAVY)
+    for c, h in enumerate(["날짜", "요일", "들어올 돈(예상)", "나갈 돈",
+                           "잔액", "내용(주요 지출)"], start=1):
+        cell = _put(10, c, h, bold=True, color="FFFFFF")
+        cell.fill = head_fill
+        cell.alignment = Alignment(horizontal="center")
+
+    out_sum = "+".join(f"{D}!{c}{{r}}" for c in outs)
+    # 일별계획의 계획 그리드(8~35행)만 1:1 참조 — 앞의 전일·오늘
+    # 스냅샷 행(6~7)은 날짜가 겹쳐 보여 뺀다 (오늘 잔액은 위 요약 칸에)
+    for i in range(28):
+        sr, r = 8 + i, 11 + i
+        _put(r, 1, f"={D}!A{sr}", fmt="mm/dd")
+        _put(r, 2, f"={D}!B{sr}")
+        _put(r, 3, f"={D}!{online}{sr}+{D}!{conf}{sr}", fmt=_FLOW_MONEY)
+        _put(r, 4, "=" + out_sum.format(r=sr), fmt=_FLOW_MONEY)
+        _put(r, 5, f"={D}!{close}{sr}", fmt="#,##0;[Red]-#,##0")
+        _put(r, 6, f"=IF({D}!{note}{sr}=\"\",\"\",{D}!{note}{sr})")
+
+    ws.conditional_formatting.add(
+        "E11:E38", CellIsRule(operator="lessThan", formula=["0"],
+                              stopIfTrue=True,
+                              fill=PatternFill("solid",
+                                               start_color="FFC7CE"),
+                              font=Font(color="9C0006", bold=True)))
+    ws.conditional_formatting.add(
+        "A11:F38", FormulaRule(formula=['OR($B11="토",$B11="일")'],
+                               fill=PatternFill("solid",
+                                                start_color="F2F2F2")))
+    ws.freeze_panes = "A11"
 
 
 def _fill_daily(wb, forecast: dict, base_date: date,
