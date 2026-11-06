@@ -16901,5 +16901,246 @@
     "answerIndex": 2,
     "explanation": "cos x = 4/5이므로 tan x = 3/4입니다. tan(x + π/4) = (tan x + 1)/(1 − tan x) = (7/4)/(1/4) = 7입니다.",
     "concept": "탄젠트 덧셈정리 tan(α+β) = (tan α + tan β)/(1 − tan α tan β)"
+  },
+  {
+    "id": "en-2026-11-07-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-07",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Many people believe that creativity [u]comes[/u]① from sudden inspiration. In fact, studies suggest that good ideas often [u]emerge[/u]② after long periods of practice. A musician [u]whose[/u]③ hands move without thinking is free to focus on emotion, [u]which[/u]④ lets new melodies appear. Creative people are often those [u]who has[/u]⑤ built strong habits.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 선행사 those는 복수이므로 관계대명사절의 동사도 복수형 have가 되어야 합니다(who has → who have). ① 주어 creativity(단수)에 맞는 comes, ② 주어 good ideas(복수)에 맞는 emerge, ③ 뒤에 hands라는 명사가 이어지는 소유격 whose, ④ 앞 절 전체를 받는 계속적 용법의 which는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      },
+      {
+        "word": "emerge",
+        "meaning": "나타나다, 드러나다"
+      },
+      {
+        "word": "habit",
+        "meaning": "습관"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-07-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-07",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Athletes who review recordings of their own performances often improve faster than those who simply train harder. The recordings reveal small errors that feel invisible in the moment. In other words, progress depends not only on effort but also on _____.",
+    "choices": [
+      "avoiding any mistakes during practice",
+      "competing against stronger opponents",
+      "seeing our own actions objectively",
+      "resting before every competition",
+      "memorizing the rules of the game"
+    ],
+    "answerIndex": 2,
+    "explanation": "녹화 영상을 보면 연습 중에는 느끼지 못한 작은 오류가 드러난다는 내용이므로, 노력뿐 아니라 자신의 행동을 객관적으로 보는 것이 발전의 조건이라는 ③이 빈칸에 적절합니다.",
+    "vocab": [
+      {
+        "word": "recording",
+        "meaning": "녹화(물), 녹음"
+      },
+      {
+        "word": "invisible",
+        "meaning": "보이지 않는"
+      },
+      {
+        "word": "objectively",
+        "meaning": "객관적으로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-07-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-07",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Many cities are now planting gardens on top of their buildings.\n(A) As a result, the rooms below stay cooler in summer, which lowers the energy needed for air conditioning.\n(B) The plants and soil absorb the sun's heat instead of letting it pass through the roof.\n(C) Beyond saving energy, these green roofs also catch rainwater that would otherwise flood the streets.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(C)-(A)",
+      "(B)-(A)-(C)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글(옥상 정원) → (B) 식물과 흙이 열을 흡수 → (A) 'As a result'로 그 결과 실내가 시원해져 에너지 절감 → (C) 'Beyond saving energy'로 에너지 절감 외의 추가 장점(빗물 저장) 순서가 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      },
+      {
+        "word": "flood",
+        "meaning": "범람시키다, 침수시키다"
+      },
+      {
+        "word": "otherwise",
+        "meaning": "그렇지 않으면"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-07-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-07",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many people assume that a long vacation is the best cure for stress. ① Studies, however, show that the benefits fade within a few weeks after returning to work. ② Short, regular breaks during the workday seem to work better. ③ Workers who step away from their desks for ten minutes every two hours report less fatigue. ④ Small pauses keep stress from building up in the first place. ⑤",
+    "givenSentence": "The relief from a holiday, in other words, does not last.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 문장의 'in other words'는 바로 앞 문장의 내용(휴가의 효과가 몇 주 안에 사라짐)을 다시 풀어 말하는 연결어입니다. 따라서 ① 뒤에 들어가야 하며, 이어지는 ②의 '짧은 휴식이 더 효과적'이라는 대안 제시로 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "fatigue",
+        "meaning": "피로"
+      },
+      {
+        "word": "fade",
+        "meaning": "서서히 사라지다"
+      },
+      {
+        "word": "cure",
+        "meaning": "치료법, 해결책"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-07-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-07",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Mountain guides say that the most dangerous moment of a climb is often not the push to the summit but the descent. Climbers, tired and satisfied from reaching the top, relax their attention just when the terrain demands the most care. Accidents therefore tend to happen on the way down. Guides train climbers to keep the same focus until they are safely back at camp.",
+    "choices": [
+      "why climbers should avoid high peaks",
+      "the best equipment for mountain climbing",
+      "how guides choose safe routes",
+      "the need to stay focused even after reaching a goal",
+      "the benefits of climbing with a large team"
+    ],
+    "answerIndex": 3,
+    "explanation": "정상에 오른 뒤 긴장이 풀려 하산 중 사고가 잦으므로 목표 달성 후에도 집중을 유지해야 한다는 내용이므로 ④가 주제입니다.",
+    "vocab": [
+      {
+        "word": "descent",
+        "meaning": "하산, 내려감"
+      },
+      {
+        "word": "terrain",
+        "meaning": "지형"
+      },
+      {
+        "word": "summit",
+        "meaning": "정상"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-07-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-07",
+    "prompt": "수열 {aₙ}이 a₁ = 2, aₙ₊₁ = aₙ + 2n (n ≥ 1)로 정의될 때, a₈의 값은?",
+    "choices": [
+      "52",
+      "54",
+      "56",
+      "58",
+      "60"
+    ],
+    "answerIndex": 3,
+    "explanation": "aₙ = a₁ + Σ(k=1 to n−1) 2k = 2 + n(n−1)이므로 a₈ = 2 + 8·7 = 58입니다.",
+    "concept": "계차수열: aₙ = a₁ + Σ(k=1 to n−1) bₖ (bₖ = aₖ₊₁ − aₖ), Σk = n(n+1)/2"
+  },
+  {
+    "id": "math-2026-11-07-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-07",
+    "prompt": "함수 f(x) = x³ − 3x² + k의 극솟값이 1일 때, f(x)의 극댓값은? (단, k는 상수)",
+    "choices": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "answerIndex": 3,
+    "explanation": "f′(x) = 3x² − 6x = 3x(x−2)=0에서 x=0, 2. x=0에서 극대, x=2에서 극소입니다. f(2) = 8 − 12 + k = k − 4 = 1이므로 k = 5이고, 극댓값 f(0) = k = 5입니다.",
+    "concept": "f′(x)=0인 점에서 부호가 +에서 −로 바뀌면 극대, −에서 +로 바뀌면 극소"
+  },
+  {
+    "id": "math-2026-11-07-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-07",
+    "prompt": "곡선 y = x²과 직선 y = 4x로 둘러싸인 도형의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² = 4x에서 x=0, 4. 넓이 = ∫₀⁴ (4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "두 곡선 사이의 넓이 = ∫(위쪽 함수 − 아래쪽 함수)dx"
+  },
+  {
+    "id": "math-2026-11-07-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-07",
+    "prompt": "흰 공 4개와 검은 공 3개가 들어 있는 주머니에서 임의로 2개의 공을 동시에 꺼낼 때, 서로 다른 색의 공이 나올 확률은?",
+    "choices": [
+      "2/7",
+      "3/7",
+      "1/2",
+      "4/7",
+      "5/7"
+    ],
+    "answerIndex": 3,
+    "explanation": "전체 경우의 수는 ₇C₂ = 21, 흰 공 1개와 검은 공 1개를 뽑는 경우의 수는 4×3 = 12입니다. 따라서 확률은 12/21 = 4/7입니다.",
+    "concept": "확률 = (사건이 일어나는 경우의 수)/(전체 경우의 수), 조합 ₙCᵣ = n!/(r!(n−r)!)"
+  },
+  {
+    "id": "math-2026-11-07-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-07",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "5π/2",
+      "3π",
+      "10π/3",
+      "7π/2",
+      "4π"
+    ],
+    "answerIndex": 3,
+    "explanation": "sin x = t로 놓으면 2t² − t − 1 = (2t+1)(t−1) = 0이므로 t = 1 또는 −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = 3π/6 + 18π/6 = 7π/2입니다.",
+    "concept": "sin x = t로 치환하여 이차방정식으로 풀고, 단위원에서 해당 각을 찾는다 (sin 7π/6 = sin 11π/6 = −1/2)"
   }
 ]
