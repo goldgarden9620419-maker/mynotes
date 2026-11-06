@@ -1,7 +1,7 @@
 {
   "loop": "tag-enzyme-threads",
-  "last_run": "2026-10-30",
-  "cursor": "2026-10-30",
+  "last_run": "2026-11-06",
+  "cursor": "2026-11-06",
   "buffer_target": 1,
   "product": "국민 T.A.G 효소",
   "channel": "개인 Threads 계정",
@@ -20,7 +20,7 @@
   "pending_drafts": [],
   "publishing_tool": "Typefully MCP (2026-10-02부터) — social_set_id 337240, kim_jade0419 Threads 연동됨. 기존 PowerShell 스크립트 방식은 백업 수단으로 유지.",
   "disclosure_line": "직장인으로 매일 챙겨 먹다 보니 좋아서 공유해요. 마침 제가 다니는 회사 제품이기도 하고요 🙂",
-  "next_run_plan": null,
+  "next_run_plan": "2026-11-20 격주 첫 실행 — new_materials 사진·루틴 재료로 작성. 사진은 Typefully create_media_upload로 첨부 가능.",
   "published": [
     {
       "file": "01-Projects/에이팜건강-TAG효소-마케팅/쓰레드-1-추천체크리스트.md",
@@ -105,5 +105,28 @@
   ],
   "counters": {
     "consecutive_no_new_angle": 0
+  },
+  "last_skip": {
+    "date": "2026-11-06",
+    "reason": "공식 페이지 사실(원료·공법·맛·연령·역가·포장·추천 체크리스트)을 9편에서 모두 사용 — 남은 후보(직장인 셀프 체크)는 쓰레드 1(추천 체크리스트)과 사실상 같아 억지로 만들지 않고 스킵. 새 재료(실사진·포 수 확인·이벤트·실제 루틴) 요청."
+  },
+  "cadence": {
+    "type": "biweekly",
+    "anchor": "2026-11-20",
+    "since": "2026-11-06",
+    "note": "예약 작업은 매주 실행되지만 anchor에서 14일 간격인 금요일에만 작성"
+  },
+  "new_materials": {
+    "added": "2026-11-06",
+    "photos": [
+      "01-Projects/에이팜건강-TAG효소-마케팅/사진/2026-11-06-스틱-역가수치-안내.jpg",
+      "01-Projects/에이팜건강-TAG효소-마케팅/사진/2026-11-06-포켓케이스-역가표.jpg",
+      "01-Projects/에이팜건강-TAG효소-마케팅/사진/2026-11-06-고기앞-카드.jpg"
+    ],
+    "unused_angle_ideas": [
+      "회식·과식한 날 루틴 (패키지 카피 \"고기앞으로 갔다가 효소로 마무리\" + 사진)",
+      "역가 두 가지(탄수화물 2,000,000 / 단백질 5,000 unit) 패키지 사진 소개",
+      "포켓 케이스 언박싱 사진"
+    ]
   }
 }
