@@ -6,8 +6,14 @@ rem  더블클릭 또는 터미널에서 실행하면:
 rem    1) 파이썬 확인 -> 2) 가상환경 준비(최초 1회) ->
 rem    3) 폴더를 검색해 최신 입력파일로 자금계획 생성 -> 4) 결과 폴더 열기
 rem  최신 파일 선택은 프로그램이 수정시각 기준으로 자동 처리한다.
+rem  인자 "reconcile"을 주면 자금계획 대신 주간 대조만 만든다
+rem  (주간대조_실행.bat이 이 인자로 호출 — 2026-11-06 버그 수정:
+rem   이전에는 인자를 무시하고 항상 본 자금계획을 실행했다).
 rem ============================================================
 cd /d "%~dp0"
+
+set "MODE=run"
+if /i "%~1"=="reconcile" set "MODE=reconcile"
 
 set "BASE=%~dp0..\자금계획_자동화"
 if not exist "%BASE%" (
@@ -53,15 +59,25 @@ if not exist "%~dp0.venv\install.ok" (
     echo ok> "%~dp0.venv\install.ok"
 )
 
-echo [실행] 폴더를 검색해 최신 입력파일로 자금계획을 생성합니다...
-"%~dp0.venv\Scripts\python.exe" "%~dp0app.py" --run-now --force --allow-partial ^
-    --base-dir "%BASE%" --config "%BASE%\00_프로그램\config.yaml"
+if "%MODE%"=="reconcile" (
+    echo [실행] 이번 주 계획 vs 실제 입출금을 대조합니다...
+    "%~dp0.venv\Scripts\python.exe" "%~dp0app.py" --weekly-reconcile ^
+        --base-dir "%BASE%" --config "%BASE%\00_프로그램\config.yaml"
+) else (
+    echo [실행] 폴더를 검색해 최신 입력파일로 자금계획을 생성합니다...
+    "%~dp0.venv\Scripts\python.exe" "%~dp0app.py" --run-now --force --allow-partial ^
+        --base-dir "%BASE%" --config "%BASE%\00_프로그램\config.yaml"
+)
 set RC=%ERRORLEVEL%
 
 echo.
 if %RC%==0 (
-    echo [완료] 결과가 05_결과 폴더에 저장되었습니다. 폴더를 엽니다.
-    start "" "%BASE%\05_결과"
+    if "%MODE%"=="reconcile" (
+        echo [완료] 주간대조 파일이 06_확인필요 폴더에 저장되고 자동으로 열립니다.
+    ) else (
+        echo [완료] 결과가 05_결과 폴더에 저장되었습니다. 폴더를 엽니다.
+        start "" "%BASE%\05_결과"
+    )
 ) else (
     echo [실패] 자세한 내용은 실행로그를 확인하세요: %BASE%\07_실행로그
 )

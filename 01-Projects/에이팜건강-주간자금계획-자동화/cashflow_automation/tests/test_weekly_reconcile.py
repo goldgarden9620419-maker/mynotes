@@ -5,11 +5,11 @@ from datetime import date
 from openpyxl import load_workbook
 
 import weekly_reconcile as wr
-from common import (BANK_REFLECT_OK, MATCH_NOT_FOUND, MATCH_PAID,
-                    MATCH_UNPLANNED, REFLECT_OK)
+from common import (BANK_REFLECT_OK, MATCH_NOT_FOUND, MATCH_UNPLANNED,
+                    REFLECT_OK)
 
 RUN = date(2026, 9, 25)          # 금요일
-MONDAY = date(2026, 9, 21)
+SATURDAY = date(2026, 9, 19)     # 대조 시작(직전 토요일) — 2026-11-06 확장
 
 
 def _plan(day, amount, vendor, req="건강-20260921-001"):
@@ -51,8 +51,9 @@ def _data():
 
 def test_주간대조_집계():
     data = _data()
-    assert data["기간"] == (MONDAY, RUN)
+    assert data["기간"] == (SATURDAY, RUN)
     assert data["일치"] == 1
+    assert [r["거래처"] for r in data["완료내역"]] == ["네이버"]
     kinds = [r["대조결과"] for r in data["차이내역"]]
     assert kinds == [MATCH_NOT_FOUND, MATCH_UNPLANNED]
     miss = data["차이내역"][0]
@@ -73,7 +74,7 @@ def test_주간대조_집계():
     assert round(woori["내부이체"]) == -300_000
     assert round(nh["주초잔액"]) == 1_700_000
     assert round(nh["내부이체"]) == 300_000
-    # 주 밖(9/18) 입금은 주간 흐름에 포함되지 않는다
+    # 대조 기간 밖(9/18, 토요일 시작 전) 입금은 주간 흐름에 포함되지 않는다
     assert round(woori["입금"]) == 0
 
 
@@ -82,22 +83,32 @@ def test_주간대조_워크북(tmp_path):
     out = tmp_path / "주간대조_test.xlsx"
     wr.write_reconcile_workbook(data, out)
     wb = load_workbook(out)
-    assert wb.sheetnames == ["안내", "계좌별대조", "차이내역"]
+    assert wb.sheetnames == ["안내", "대조결과", "계좌별대조"]
     info = wb["안내"]
     assert info["B2"].value == "아니오"          # 확인 완료 칸
-    assert "차이 2건" in str(info["A3"].value)
+    assert "확인할 것 2건" in str(info["A3"].value)
     # 은행 파일(9/24)이 실행일(금 9/25)보다 이전 → 갱신 경고
     assert "은행 3사 파일을 새로 받아" in str(info["A4"].value)
+
+    res = wb["대조결과"]
+    col = [res.cell(row=r, column=1).value for r in range(1, res.max_row + 1)]
+    secs = {str(v)[:1]: (r, str(v)) for r, v in enumerate(col, start=1)
+            if v and str(v)[:1] in "①②③"}
+    assert "1건" in secs["①"][1]                # 나간 돈: 네이버
+    assert "1건" in secs["②"][1]                # 안 나간 돈: 메트라이프
+    assert "1건" in secs["③"][1]                # 계획에 없는 지출
+
+    r2 = secs["②"][0] + 2                       # ② 첫 자료 행
+    assert res.cell(row=r2, column=3).value == "메트라이프"
+    assert res.cell(row=r2, column=4).value == 4_900_000
+    dvs = res.data_validations.dataValidation
+    assert any(f"E{r2}" in str(rng) for dv in dvs for rng in dv.sqref.ranges)
+    r3 = secs["③"][0] + 2                       # ③ 첫 자료 행
+    assert res.cell(row=r3, column=4).value == 500_000
+    assert any(f"E{r3}" in str(rng) for dv in dvs for rng in dv.sqref.ranges)
+
     acc = wb["계좌별대조"]
     assert acc["A3"].value == "계좌"
     labels = [acc.cell(row=r, column=1).value for r in (4, 5, 6)]
     assert "합계" in labels
-    diff = wb["차이내역"]
-    assert diff["A4"].value == MATCH_NOT_FOUND
-    assert str(diff["A4"].fill.start_color.rgb).endswith("FFE699")  # 주황
-    assert diff["F4"].value == 4_900_000
-    assert diff["A5"].value == MATCH_UNPLANNED
-    assert str(diff["A5"].fill.start_color.rgb).endswith("FFC7CE")  # 붉은
-    assert diff["G5"].value == 500_000
-    assert diff.auto_filter.ref == "A3:J5"
     wb.close()
