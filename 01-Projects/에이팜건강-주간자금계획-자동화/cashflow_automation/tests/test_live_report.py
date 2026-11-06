@@ -461,6 +461,7 @@ def test_자금흐름_시트가_맨앞에_생긴다(tmp_path):
     assert wb.sheetnames[0] == "자금흐름"
     assert wb.active.title == "자금흐름"
     ws = wb["자금흐름"]
+    assert str(ws["A1"].value).startswith('="자금 흐름')  # 기간은 표 참조
     assert ws["C4"].value == "=요약!$B$6"              # 오늘 잔액
     assert "COUNTIF" in str(ws["C7"].value)            # 잔액 부족한 날
     assert ws["A11"].value == "='4주일별계획'!A6"       # 일별 1:1 참조

@@ -65,9 +65,9 @@ def test_통합파일_시트구성과_경영보고_연동(tmp_path):
     assert mr.verify_combined_workbook(out, NEW_MONDAY)
 
     wb = load_workbook(out)
-    # 시트 순서(2026-09-23 사용자 요청): 요약·업데이트운영이 맨 앞,
-    # 그다음 경영보고(입력 기준) → 대표보고 → 라이브 시트들
-    assert wb.sheetnames[:4] == ["요약", "업데이트운영",
+    # 시트 순서: 자금흐름(2026-11-06 요청: 단순 흐름 먼저) → 요약·
+    # 업데이트운영 → 경영보고(입력 기준) → 대표보고 → 라이브 시트들
+    assert wb.sheetnames[:5] == ["자금흐름", "요약", "업데이트운영",
                                  mr.SHEET_NAME, mr.CEO_SHEET]
     assert "4주일별계획" in wb.sheetnames
 

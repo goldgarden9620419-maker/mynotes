@@ -117,7 +117,7 @@ def fill_live_workbook(template_path: Path, report: dict,
         _fill_update_guide(wb, report, link_sheet)
 
     # 맨 앞 '자금흐름' 한 장: 하루 한 줄 입·출·잔액 (2026-11-06 요청)
-    _fill_cashflow(wb, base_date, n_acc, link_sheet=link_sheet)
+    _fill_cashflow(wb, n_acc, link_sheet=link_sheet)
 
     # 은행 파일을 폴더에서 자동으로 읽으므로 수동 붙여넣기 시트는 제거한다
     if "주간계좌_붙여넣기" in wb.sheetnames:
@@ -419,6 +419,8 @@ def _fill_update_guide(wb, report: dict, link_sheet: str) -> None:
     sheet_row = 6 + len(steps) + 1
     _guide_band(ws, sheet_row, "② 이 파일의 시트 구성")
     sheets = [
+        (FLOW_SHEET, "★ 하루 한 줄 자금 흐름(들어올 돈·나갈 돈·잔액) — "
+         "열면 먼저 보이는 요약 화면"),
         ("요약", "잔액·통계 요약 + 경영보고 수정 방법 표"),
         (UPDATE_GUIDE_SHEET, "이 안내 (운영 순서·시트 구성·은행 자료 현황)"),
         (link_sheet, "★ 입력 기준 시트 — ①현황 ②지출예정 ③입금예정 "
@@ -509,7 +511,7 @@ FLOW_SHEET = "자금흐름"
 _FLOW_MONEY = '#,##0;[Red]-#,##0;"-"'
 
 
-def _fill_cashflow(wb, base_date: date, n_acc: int,
+def _fill_cashflow(wb, n_acc: int,
                    link_sheet: Optional[str] = None) -> None:
     """맨 앞 '자금흐름' 시트: 하루 한 줄(들어올 돈·나갈 돈·잔액)로
     4주 흐름만 보여준다 (2026-11-06 사용자 요청: "결과 파일이 너무
@@ -545,8 +547,9 @@ def _fill_cashflow(wb, base_date: date, n_acc: int,
             cell.fill = PatternFill("solid", start_color=fill)
         return cell
 
-    _put(1, 1, f"자금 흐름 — 오늘부터 4주 ({base_date} ~ "
-               f"{base_date + timedelta(days=28)})",
+    _put(1, 1, ('="자금 흐름 — 앞으로 4주 ("'
+                f'&TEXT({D}!A6,"yyyy-mm-dd")&" ~ "'
+                f'&TEXT({D}!A35,"yyyy-mm-dd")&")"'),
          bold=True, size=14, color=_GUIDE_NAVY)
     _put(2, 1, "들어올 돈 = 확정 입금 + 온라인 예상입금(최근 12주 "
                "요일평균 × 반영률). 자세한 내용은 뒤 시트들에 그대로 "

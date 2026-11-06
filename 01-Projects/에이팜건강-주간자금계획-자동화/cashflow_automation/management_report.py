@@ -786,8 +786,9 @@ def create_combined_workbook(report: dict, template_path: Path,
     try:
         build_management_sheet(wb, report)
         build_ceo_sheet(wb, report)
-        front = ["요약", live_report.UPDATE_GUIDE_SHEET,
-                 SHEET_NAME, CEO_SHEET]
+        # 자금흐름을 맨 앞에 — 열면 단순 흐름부터 (2026-11-06 요청)
+        front = [live_report.FLOW_SHEET, "요약",
+                 live_report.UPDATE_GUIDE_SHEET, SHEET_NAME, CEO_SHEET]
         wb._sheets.sort(key=lambda sh: (front.index(sh.title)
                                         if sh.title in front
                                         else len(front)))
@@ -817,8 +818,9 @@ def verify_combined_workbook(path: Path, base_date: date) -> bool:
         summary = wb["요약"]
         if str(summary["B13"].value or "") != f"='{SHEET_NAME}'!$F$12":
             return False
-        # 요약·업데이트운영이 맨 앞 (2026-09-23 사용자 요청)
-        if wb.sheetnames[:2] != ["요약", "업데이트운영"]:
+        # 자금흐름이 맨 앞, 그다음 요약·업데이트운영 (2026-11-06 요청)
+        if wb.sheetnames[:3] != [live_report.FLOW_SHEET, "요약",
+                                 "업데이트운영"]:
             return False
     except Exception:
         return False
