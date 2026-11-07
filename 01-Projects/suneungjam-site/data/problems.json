@@ -17142,5 +17142,246 @@
     "answerIndex": 3,
     "explanation": "sin x = t로 놓으면 2t² − t − 1 = (2t+1)(t−1) = 0이므로 t = 1 또는 −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = 3π/6 + 18π/6 = 7π/2입니다.",
     "concept": "sin x = t로 치환하여 이차방정식으로 풀고, 단위원에서 해당 각을 찾는다 (sin 7π/6 = sin 11π/6 = −1/2)"
+  },
+  {
+    "id": "en-2026-11-08-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-08",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Scientists who study sleep have found that the brain [u]stays[/u]① active even while the body rests. During deep sleep, memories from the day [u]is sorted[/u]② and stored for later use. This is why students [u]who sleep well[/u]③ before an exam often perform better than those who do not. Sleep also helps the brain [u]discard[/u]④ unnecessary information, [u]making[/u]⑤ room for new learning.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "② 주어 memories가 복수이므로 동사도 복수형 are sorted가 되어야 합니다(is sorted → are sorted). ① 주어 the brain(단수)에 맞는 stays, ③ students를 수식하는 주격 관계대명사절의 복수 동사 sleep, ④ help + 목적어 + 원형부정사 discard, ⑤ 앞 절의 결과를 나타내는 분사구문 making은 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "discard",
+        "meaning": "버리다"
+      },
+      {
+        "word": "unnecessary",
+        "meaning": "불필요한"
+      },
+      {
+        "word": "deep sleep",
+        "meaning": "깊은 잠"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-08-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-08",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "A map simplifies the world by leaving details out. A subway map, for example, ignores real distances and shows only how stations connect, which is exactly what a rider needs. A useful representation is therefore not the one that includes the most information but the one that _____.",
+    "choices": [
+      "copies every detail faithfully",
+      "looks most impressive to viewers",
+      "takes the least time to produce",
+      "uses the newest available technology",
+      "keeps only what serves its purpose"
+    ],
+    "answerIndex": 4,
+    "explanation": "지하철 노선도가 실제 거리를 생략하고 승객에게 필요한 연결 정보만 보여준다는 예시에서, 좋은 표현은 많은 정보를 담은 것이 아니라 목적에 필요한 것만 남긴 것이라는 ⑤가 빈칸에 적절합니다.",
+    "vocab": [
+      {
+        "word": "simplify",
+        "meaning": "단순화하다"
+      },
+      {
+        "word": "representation",
+        "meaning": "표현(물)"
+      },
+      {
+        "word": "faithfully",
+        "meaning": "충실하게"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-08-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-08",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Most people think of procrastination as simple laziness.\n(A) However, researchers argue that it is more often a way of avoiding unpleasant feelings, such as anxiety about failing.\n(B) Therefore, the first step in overcoming procrastination is to deal with the emotion, not to push oneself harder.\n(C) For instance, a student may delay writing an essay not because of idleness but because of fear of a poor result.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(C)-(A)",
+      "(B)-(A)-(C)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 글(미루기=게으름이라는 통념) → (A) However로 반론(불쾌한 감정 회피) → (C) For instance로 구체적 예시 → (B) Therefore로 결론(감정을 먼저 다뤄야 함) 순서가 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "procrastination",
+        "meaning": "미루는 버릇"
+      },
+      {
+        "word": "anxiety",
+        "meaning": "불안"
+      },
+      {
+        "word": "idleness",
+        "meaning": "게으름"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-08-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-08",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Public libraries are no longer just places to borrow books. ① Many now offer job training, coding classes, and rooms where neighbors can meet. ② Visitors increasingly come to learn skills and connect with others. ③ Book loans, meanwhile, have steadily declined in many cities. ④ Libraries have adapted to what their communities actually need. ⑤",
+    "givenSentence": "Despite this, the number of visitors has kept rising.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 'Despite this'는 바로 앞의 내용(대출 건수 감소)에도 불구하고 방문자는 늘고 있다는 대조를 나타냅니다. 따라서 ③의 문장 뒤인 ④에 들어가야 하고, 이어지는 문장의 '도서관이 지역의 필요에 적응했다'는 내용으로 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "decline",
+        "meaning": "감소하다"
+      },
+      {
+        "word": "adapt",
+        "meaning": "적응하다"
+      },
+      {
+        "word": "community",
+        "meaning": "지역 사회"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-08-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-08",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When students receive a test back, many look only at the grade. Yet the marked errors contain far more useful information than the number itself. Each mistake points to a specific gap in understanding that can be fixed. Students who analyze their errors tend to improve steadily, while those who ignore them repeat the same mistakes.",
+    "choices": [
+      "the importance of getting high grades on every test",
+      "ways to reduce stress before an exam",
+      "the value of learning from one's own mistakes",
+      "the role of teachers in setting test standards",
+      "the effect of sleep on test performance"
+    ],
+    "answerIndex": 2,
+    "explanation": "점수보다 틀린 문제에 더 유용한 정보가 있으며, 오답을 분석하는 학생이 꾸준히 발전한다는 내용이므로 주제는 자신의 실수에서 배우는 것의 가치(③)입니다.",
+    "vocab": [
+      {
+        "word": "analyze",
+        "meaning": "분석하다"
+      },
+      {
+        "word": "steadily",
+        "meaning": "꾸준히"
+      },
+      {
+        "word": "gap",
+        "meaning": "빈틈, 격차"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-08-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-08",
+    "prompt": "등차수열 {aₙ}에서 a₂ = 7, a₆ = 23일 때, 첫째항부터 제10항까지의 합 S₁₀의 값은?",
+    "choices": [
+      "210",
+      "190",
+      "170",
+      "230",
+      "250"
+    ],
+    "answerIndex": 0,
+    "explanation": "a₆ − a₂ = 4d = 16이므로 d = 4, a₁ = 7 − 4 = 3입니다. S₁₀ = 10(2·3 + 9·4)/2 = 5 × 42 = 210입니다.",
+    "concept": "등차수열의 합 Sₙ = n{2a + (n−1)d}/2, 일반항 aₙ = a + (n−1)d"
+  },
+  {
+    "id": "math-2026-11-08-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-08",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값과 극솟값의 차는?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 3,
+    "explanation": "f'(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x=1에서 극대, x=3에서 극소입니다. f(1) = 5, f(3) = 1이므로 차는 5 − 1 = 4입니다.",
+    "concept": "f'(x)=0이 되는 점에서 부호가 +→−이면 극대, −→+이면 극소이다"
+  },
+  {
+    "id": "math-2026-11-08-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-08",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "28/3",
+      "10",
+      "32/3",
+      "11",
+      "12"
+    ],
+    "answerIndex": 2,
+    "explanation": "x² − 4x = 0에서 x = 0, 4이고 0 ≤ x ≤ 4에서 곡선이 x축 아래에 있으므로 넓이 = ∫₀⁴ (4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 교점을 구한 뒤 (위쪽 − 아래쪽)을 정적분하여 구한다"
+  },
+  {
+    "id": "math-2026-11-08-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-08",
+    "prompt": "빨간 공 4개와 파란 공 3개가 들어 있는 주머니에서 임의로 3개의 공을 동시에 꺼낼 때, 빨간 공이 2개 이상일 확률은?",
+    "choices": [
+      "18/35",
+      "19/35",
+      "4/7",
+      "3/5",
+      "22/35"
+    ],
+    "answerIndex": 4,
+    "explanation": "전체 경우의 수는 ₇C₃ = 35입니다. 빨간 공 2개: ₄C₂ × ₃C₁ = 18, 빨간 공 3개: ₄C₃ = 4이므로 확률은 (18+4)/35 = 22/35입니다.",
+    "concept": "서로 배타적인 경우의 확률은 더하고, 확률 = (해당 경우의 수)/(전체 경우의 수)이다 (조합 ₙCᵣ)"
+  },
+  {
+    "id": "math-2026-11-08-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-08",
+    "prompt": "0 ≤ x < 2π에서 방정식 2sin²x − sin x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2",
+      "5π"
+    ],
+    "answerIndex": 1,
+    "explanation": "sin x = t로 두면 2t² − t − 1 = (2t+1)(t−1) = 0이므로 t = 1 또는 t = −1/2입니다. t=1이면 x = π/2, t=−1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
+    "concept": "sin x를 t로 치환해 이차방정식으로 푼 뒤 단위원에서 해를 찾는다 (sin x=−1/2 → x=7π/6, 11π/6)"
   }
 ]
