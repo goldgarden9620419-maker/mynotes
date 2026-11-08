@@ -17383,5 +17383,246 @@
     "answerIndex": 1,
     "explanation": "sin x = t로 두면 2t² − t − 1 = (2t+1)(t−1) = 0이므로 t = 1 또는 t = −1/2입니다. t=1이면 x = π/2, t=−1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
     "concept": "sin x를 t로 치환해 이차방정식으로 푼 뒤 단위원에서 해를 찾는다 (sin x=−1/2 → x=7π/6, 11π/6)"
+  },
+  {
+    "id": "en-2026-11-09-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-09",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Urban planners have long argued that cities [u]designed[/u]① around pedestrians tend to be safer and more lively. When streets are narrow and shops are close together, people [u]are encouraged[/u]② to walk rather than drive. Such neighborhoods also give residents more chances to meet one another, [u]which[/u]③ strengthens a sense of community. However, planners must be careful, because a street [u]that are[/u]④ too crowded can quickly become uncomfortable for [u]those[/u]⑤ walking through it.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 선행사 a street가 단수이므로 관계대명사절의 동사도 단수형 is가 되어야 합니다(that are → that is). ① cities를 수식하는 과거분사 designed, ② 사람들이 '권장되는' 수동태 are encouraged, ③ 앞 절 전체를 받는 계속적 용법의 which, ⑤ '~하는 사람들'을 뜻하는 those + 현재분사 walking은 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "pedestrian",
+        "meaning": "보행자"
+      },
+      {
+        "word": "lively",
+        "meaning": "활기찬"
+      },
+      {
+        "word": "neighborhood",
+        "meaning": "지역, 동네"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-09-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-09",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "People often assume that creativity comes from breaking every rule. Yet research on professional musicians suggests otherwise. Jazz improvisers, for instance, spend years mastering scales and chord patterns before they ever perform freely. Their spontaneous solos sound effortless precisely because they rest on a foundation of ______. In other words, freedom in art tends to grow out of discipline rather than against it.",
+    "choices": [
+      "deliberate and repeated practice",
+      "random experimentation",
+      "ignoring tradition",
+      "competition with others",
+      "natural talent alone"
+    ],
+    "answerIndex": 0,
+    "explanation": "재즈 연주자들이 즉흥 연주 전에 수년간 음계와 코드를 익힌다는 내용과, 마지막 문장의 '자유는 훈련에서 나온다'는 결론을 종합하면 빈칸에는 '의도적이고 반복적인 연습'이 적절합니다.",
+    "vocab": [
+      {
+        "word": "improviser",
+        "meaning": "즉흥 연주자"
+      },
+      {
+        "word": "spontaneous",
+        "meaning": "즉흥적인"
+      },
+      {
+        "word": "discipline",
+        "meaning": "훈련, 규율"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-09-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-09",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Many people believe that multitasking makes them more productive.\n(A) As a result, the time and accuracy they supposedly gain are in fact lost.\n(B) However, studies show that the brain does not actually perform two demanding tasks at once; it rapidly switches between them.\n(C) Each switch carries a small cost, as the brain needs a moment to refocus on the new task.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글(멀티태스킹이 생산적이라는 통념) → (B) However로 반박(뇌는 빠르게 전환할 뿐) → (C) 전환마다 비용이 든다는 설명 → (A) As a result로 결과(얻는다고 믿은 시간과 정확도를 잃음) 순서가 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "multitask",
+        "meaning": "여러 일을 동시에 하다"
+      },
+      {
+        "word": "demanding",
+        "meaning": "까다로운, 힘든"
+      },
+      {
+        "word": "refocus",
+        "meaning": "다시 집중하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-09-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-09",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Farmers have long known that planting the same crop year after year drains the soil. ① Each plant takes the same nutrients from the ground, and those nutrients are not easily replaced. ② Many farmers therefore rotate their crops, planting beans one season and wheat the next. ③ Beans, in particular, return nitrogen to the earth that wheat has used up. ④ Pests that prefer a single crop also find it harder to spread. ⑤",
+    "givenSentence": "As a result, the soil stays rich in nutrients and needs fewer chemical fertilizers.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 'As a result'는 앞 문장(콩이 밀이 소모한 질소를 땅에 돌려줌)의 결과로 토양이 영양분을 유지하고 화학 비료가 덜 필요하다는 내용을 이끕니다. 따라서 ③ 문장 바로 뒤인 ④에 들어가야 하며, 이어지는 문장의 'Pests ... also'와도 자연스럽게 연결됩니다.",
+    "vocab": [
+      {
+        "word": "drain",
+        "meaning": "고갈시키다"
+      },
+      {
+        "word": "rotate",
+        "meaning": "순환시키다, 교대로 하다"
+      },
+      {
+        "word": "fertilizer",
+        "meaning": "비료"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-09-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-09",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When we try to explain an idea to someone else, we quickly discover which parts we truly understand and which parts we only thought we did. Gaps that stayed hidden while we silently reread our notes suddenly become obvious once we have to put the idea into clear words. This is why teachers often say that teaching is the best way to learn. Explaining forces us to organize scattered facts into a logical order, and that process strengthens memory as well.",
+    "choices": [
+      "the benefits of explaining ideas to others for deepening one's own understanding",
+      "the importance of choosing a good teacher",
+      "why silent reading is better than speaking aloud",
+      "how to take clear and organized notes",
+      "the difficulty of teaching complex subjects"
+    ],
+    "answerIndex": 0,
+    "explanation": "글 전체가 '다른 사람에게 설명하는 과정이 자신의 이해 부족을 드러내고 기억을 강화한다'는 내용이므로 주제는 ①(남에게 설명하는 것의 이점)입니다. 나머지는 글의 핵심에서 벗어납니다.",
+    "vocab": [
+      {
+        "word": "scattered",
+        "meaning": "흩어진"
+      },
+      {
+        "word": "gap",
+        "meaning": "빈틈, 공백"
+      },
+      {
+        "word": "logical",
+        "meaning": "논리적인"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-09-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-09",
+    "prompt": "∑_{k=1}^{6} (2k² − k)의 값은?",
+    "choices": [
+      "161",
+      "147",
+      "175",
+      "189",
+      "133"
+    ],
+    "answerIndex": 0,
+    "explanation": "∑k² (k=1~6) = 6·7·13/6 = 91, ∑k = 21입니다. 따라서 2·91 − 21 = 182 − 21 = 161입니다.",
+    "concept": "∑k = n(n+1)/2, ∑k² = n(n+1)(2n+1)/6"
+  },
+  {
+    "id": "math-2026-11-09-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-09",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + 1의 극댓값은?",
+    "choices": [
+      "1",
+      "3",
+      "5",
+      "7",
+      "9"
+    ],
+    "answerIndex": 2,
+    "explanation": "f'(x) = 3x² − 12x + 9 = 3(x−1)(x−3)이므로 x=1에서 증가→감소(극대), x=3에서 극소입니다. 극댓값은 f(1) = 1 − 6 + 9 + 1 = 5입니다.",
+    "concept": "f'(x)의 부호가 +에서 −로 바뀌는 점에서 f(x)는 극대"
+  },
+  {
+    "id": "math-2026-11-09-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-09",
+    "prompt": "∫₁³ (2x + 3) dx의 값은?",
+    "choices": [
+      "12",
+      "14",
+      "16",
+      "18",
+      "20"
+    ],
+    "answerIndex": 1,
+    "explanation": "부정적분 x² + 3x에서 [x² + 3x]₁³ = (9 + 9) − (1 + 3) = 18 − 4 = 14입니다.",
+    "concept": "정적분 ∫ₐᵇ f(x)dx = F(b) − F(a) (F는 f의 부정적분)"
+  },
+  {
+    "id": "math-2026-11-09-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-09",
+    "prompt": "서로 다른 두 개의 주사위를 동시에 던질 때, 나온 눈의 수의 합이 7 이상일 확률은?",
+    "choices": [
+      "1/3",
+      "5/12",
+      "1/2",
+      "7/12",
+      "2/3"
+    ],
+    "answerIndex": 3,
+    "explanation": "전체 경우의 수는 36입니다. 합이 6 이하인 경우는 1+2+3+4+5=15가지이므로 합이 7 이상인 경우는 36 − 15 = 21가지입니다. 따라서 확률은 21/36 = 7/12입니다.",
+    "concept": "여사건의 확률 P(A) = 1 − P(Aᶜ)와 경우의 수를 이용한 확률 계산"
+  },
+  {
+    "id": "math-2026-11-09-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-09",
+    "prompt": "0 ≤ x < 2π일 때, 방정식 2sin²x − sin x − 1 = 0의 모든 해의 합은?",
+    "choices": [
+      "5π/2",
+      "3π",
+      "7π/2",
+      "4π",
+      "9π/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "2sin²x − sin x − 1 = (2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
+    "concept": "sin x에 대한 이차방정식은 인수분해 후 단위원에서 해를 구한다 (sin 7π/6 = sin 11π/6 = −1/2)"
   }
 ]
