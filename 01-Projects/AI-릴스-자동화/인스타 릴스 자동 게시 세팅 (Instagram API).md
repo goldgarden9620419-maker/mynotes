@@ -73,3 +73,4 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 - ⏰ **토큰 만료 예정: 약 2026-12-06** → 11월 말에 탐색기에서 재발급·확장 (Claude에게 "인스타 토큰 갱신해줘")
 - ⏳ 2026-10-30 10편(자금일보→보고서 37초) jade 승인 후 게시 완료 https://www.instagram.com/reel/DfHcCtDCYqj/ (AI 라벨 OFF) — — 영상 https://d2ol7oe51mr4n9.cloudfront.net/user_3HJnC5CkXHg6AD5BHY10m7yn4pr/c2b344d2-a427-40dc-991d-127d3e15aa83.mp4
 - ✅ 2026-11-06 12편(대출 이자 양식, 손 실사 + 가상 화면) jade 승인 후 게시 완료 https://www.instagram.com/reel/DfZdA1MDUqz/ (AI 라벨 OFF, 배경음악 Mixkit 416)
+- 2026-11-09 13편(미수금 관리 양식) 게시: https://www.instagram.com/reel/DfhNIoWnYBK/ (media 18115881332033227, AI 라벨 OFF, jade 승인 후 1회)
