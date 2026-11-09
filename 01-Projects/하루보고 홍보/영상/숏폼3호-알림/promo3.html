@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>하루보고 홍보 숏폼 3호 — 알림</title>
+<style>
+  @font-face {
+    font-family: "Pretendard Variable";
+    src: url("node_modules/pretendard/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");
+    font-weight: 45 920;
+    font-display: block;
+  }
+  :root {
+    --b50: #f2f7ff; --b100: #e0edff; --b500: #4e9bff; --b600: #3182f6; --b700: #1e6ae0;
+    --ink: #191f28; --sub: #4e5968; --line: #e5ecf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body { font-family: "Pretendard Variable", "Noto Color Emoji", sans-serif; word-break: keep-all; }
+  #stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+
+  /* 바탕 — 밝은 낮의 연한 블루 (1호와 같은 계열, 신뢰 톤) */
+  .bg-base { position: absolute; inset: 0; background: linear-gradient(180deg, #f7faff 0%, #ecf4ff 60%, #e4efff 100%); }
+  .blob { position: absolute; border-radius: 9999px; filter: blur(110px); }
+  .blob1 { width: 560px; height: 560px; right: -150px; top: 100px; background: rgba(78, 155, 255, 0.18); }
+  .blob2 { width: 520px; height: 520px; left: -160px; top: 1100px; background: rgba(49, 130, 246, 0.14); }
+  .bg-blue { position: absolute; inset: 0; background: linear-gradient(165deg, var(--b600) 0%, var(--b700) 100%); opacity: 0; }
+
+  .scene { position: absolute; inset: 0; }
+
+  /* ───── 장면 1: 훅 ───── */
+  .s1-wrap { position: absolute; left: 0; right: 0; top: 680px; text-align: center; }
+  .s1-pin { font-size: 110px; }
+  .s1-line1 { margin-top: 44px; font-size: 100px; font-weight: 800; color: var(--ink); line-height: 1.22; }
+  .s1-line2 { margin-top: 26px; font-size: 66px; font-weight: 600; color: var(--sub); }
+
+  /* ───── 장면 2: 알림 3연타 ───── */
+  .s2-wrap { position: absolute; left: 95px; right: 95px; top: 420px; display: flex; flex-direction: column; gap: 36px; }
+  .s2-head { align-self: center; font-size: 50px; font-weight: 700; color: var(--sub); margin-bottom: 16px; }
+  .noti { display: flex; gap: 28px; align-items: flex-start; background: rgba(255,255,255,0.96);
+    border: 2px solid var(--line); border-radius: 32px; padding: 38px 42px;
+    box-shadow: 0 22px 54px rgba(25, 70, 140, 0.10); }
+  .noti .appicon { flex: none; width: 86px; height: 86px; border-radius: 22px; background: var(--b600);
+    color: #fff; font-size: 44px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .noti .nbody { min-width: 0; flex: 1; }
+  .noti .nrow { display: flex; align-items: baseline; gap: 18px; }
+  .noti .napp { font-size: 32px; font-weight: 700; color: var(--sub); }
+  .noti .ntime { margin-left: auto; font-size: 30px; font-weight: 600; color: #8b95a1; white-space: nowrap; }
+  .noti .ntit { margin-top: 10px; font-size: 44px; font-weight: 800; color: var(--ink); line-height: 1.3; }
+  .noti .ntxt { margin-top: 8px; font-size: 34px; font-weight: 500; color: var(--sub); line-height: 1.35; }
+
+  /* ───── 장면 3: 메시지 ───── */
+  .s3-wrap { position: absolute; left: 0; right: 0; top: 640px; text-align: center; }
+  .s3-line1 { font-size: 86px; font-weight: 700; color: var(--sub); line-height: 1.3; }
+  .s3-line2 { margin-top: 20px; font-size: 96px; font-weight: 800; color: var(--ink); line-height: 1.25; }
+  .s3-line2 b { color: var(--b600); }
+  .badges { margin-top: 80px; display: flex; gap: 26px; justify-content: center; }
+  .badge2 { border: 2px solid #d4e3f7; background: rgba(255,255,255,0.8); border-radius: 9999px;
+    padding: 20px 38px; font-size: 36px; font-weight: 700; color: var(--sub); white-space: nowrap; }
+
+  /* ───── 장면 4: 마무리 (시리즈 공통 블루 마감) ───── */
+  .s4-wrap { position: absolute; left: 0; right: 0; top: 640px; text-align: center; }
+  .s4-logo { font-size: 156px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+  .s4-sub { margin-top: 36px; font-size: 56px; font-weight: 600; color: var(--b100); }
+  .s4-pill { display: inline-block; margin-top: 90px; background: #fff; color: var(--b700);
+    font-size: 54px; font-weight: 800; border-radius: 9999px; padding: 34px 72px;
+    box-shadow: 0 24px 60px rgba(8, 30, 70, 0.4); }
+  .s4-url { margin-top: 56px; font-size: 46px; font-weight: 600; color: var(--b100); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="bg-base"></div>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+
+  <!-- 장면 1: 훅 -->
+  <div class="scene" id="s1">
+    <div class="s1-wrap">
+      <div class="s1-pin" id="pin">📌</div>
+      <div class="s1-line1" id="l1">일정, 적어두고</div>
+      <div class="s1-line2" id="l2">잊은 적 있으시죠?</div>
+    </div>
+  </div>
+
+  <!-- 장면 2: 하루 3번 알림 -->
+  <div class="scene" id="s2">
+    <div class="s2-wrap">
+      <div class="s2-head" id="shead">하루보고는 하루 3번, 이렇게 옵니다</div>
+      <div class="noti" id="n1">
+        <div class="appicon">하</div>
+        <div class="nbody">
+          <div class="nrow"><span class="napp">하루보고</span><span class="ntime">🌅 오전 9:00</span></div>
+          <div class="ntit">오늘 마감: 부가세 신고 D-DAY</div>
+          <div class="ntxt">오전에 끝내면 오후가 가벼워요</div>
+        </div>
+      </div>
+      <div class="noti" id="n2">
+        <div class="appicon">하</div>
+        <div class="nbody">
+          <div class="nrow"><span class="napp">하루보고</span><span class="ntime">☀️ 오후 1:00</span></div>
+          <div class="ntit">다가오는 일정: 거래처 미팅 D-1</div>
+          <div class="ntxt">자료 준비는 오늘이 딱 좋아요</div>
+        </div>
+      </div>
+      <div class="noti" id="n3">
+        <div class="appicon">하</div>
+        <div class="nbody">
+          <div class="nrow"><span class="napp">하루보고</span><span class="ntime">🌙 오후 6:00</span></div>
+          <div class="ntit">내일 시작: 월말 결산 준비</div>
+          <div class="ntxt">미리 알면 내일이 가벼워요</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 장면 3: 메시지 -->
+  <div class="scene" id="s3">
+    <div class="s3-wrap">
+      <div class="s3-line1" id="m1">하루보고를 열지 않아도</div>
+      <div class="s3-line2" id="m2">일정이 <b>당신을 찾아옵니다</b></div>
+      <div class="badges" id="bd">
+        <span class="badge2">🌅 아침</span>
+        <span class="badge2">☀️ 점심</span>
+        <span class="badge2">🌙 저녁</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 장면 4: 마무리 -->
+  <div class="bg-blue" id="bgblue"></div>
+  <div class="scene" id="s4">
+    <div class="s4-wrap">
+      <div class="s4-logo" id="logo">하루보고</div>
+      <div class="s4-sub" id="sub">일정은 잡는 것보다, 지키는 것</div>
+      <div><span class="s4-pill" id="pill">가입 없이 바로 체험</span></div>
+      <div class="s4-url" id="url">harubogo.vercel.app</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 1·2호와 같은 구조: 모든 애니메이션을 멈춰두고 window.seek(t)로 프레임 단위 제어
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+const anims = [];
+function tw(el, frames, delay, dur, opts = {}) {
+  const a = el.animate(frames, { delay, duration: dur, easing: opts.ease || EASE, fill: "both", iterations: opts.iter || 1 });
+  a.pause();
+  anims.push(a);
+}
+const $ = (id) => document.getElementById(id);
+
+const T = 18000;
+// 장면 표시/숨김은 전 구간을 덮는 애니메이션 하나로 (등장·퇴장 분리 시 fill 충돌)
+function sceneVis(el, stops) {
+  const frames = stops.map(([t, o, tr]) => ({ offset: Math.min(t / T, 1), opacity: o, transform: tr || "none" }));
+  const a = el.animate(frames, { duration: T, easing: "linear", fill: "both" });
+  a.pause();
+  anims.push(a);
+}
+sceneVis($("s1"), [
+  [0, 1, "translateY(0)"], [3300, 1, "translateY(0)"], [3800, 0, "translateY(-50px)"], [T, 0, "translateY(-50px)"],
+]);
+sceneVis($("s2"), [
+  [0, 0, "none"], [3800, 0, "none"], [4200, 1, "none"],
+  [9300, 1, "none"], [9800, 0, "none"], [T, 0, "none"],
+]);
+sceneVis($("s3"), [
+  [0, 0, "translateY(0)"], [9800, 0, "translateY(0)"], [10200, 1, "translateY(0)"],
+  [13450, 1, "translateY(0)"], [13900, 0, "translateY(-40px)"], [T, 0, "translateY(-40px)"],
+]);
+
+// ── 장면 1 (0~3800) ──
+tw($("pin"), [{ opacity: 0, transform: "translateY(36px) scale(0.7) rotate(-12deg)" }, { opacity: 1, transform: "translateY(0) scale(1) rotate(0deg)" }], 200, 700);
+tw($("l1"), [{ opacity: 0, transform: "translateY(44px)" }, { opacity: 1, transform: "translateY(0)" }], 550, 650);
+tw($("l2"), [{ opacity: 0, transform: "translateY(44px)" }, { opacity: 1, transform: "translateY(0)" }], 1100, 650);
+
+// ── 장면 2 (3800~9800): 알림이 진짜 푸시처럼 하나씩 톡톡 떨어진다 ──
+tw($("shead"), [{ opacity: 0, transform: "translateY(26px)" }, { opacity: 1, transform: "translateY(0)" }], 4150, 500);
+tw($("n1"), [
+  { opacity: 0, transform: "translateY(-70px) scale(0.94)", offset: 0 },
+  { opacity: 1, transform: "translateY(8px) scale(1.01)", offset: 0.7 },
+  { opacity: 1, transform: "translateY(0) scale(1)", offset: 1 },
+], 4700, 700);
+tw($("n2"), [
+  { opacity: 0, transform: "translateY(-70px) scale(0.94)", offset: 0 },
+  { opacity: 1, transform: "translateY(8px) scale(1.01)", offset: 0.7 },
+  { opacity: 1, transform: "translateY(0) scale(1)", offset: 1 },
+], 6100, 700);
+tw($("n3"), [
+  { opacity: 0, transform: "translateY(-70px) scale(0.94)", offset: 0 },
+  { opacity: 1, transform: "translateY(8px) scale(1.01)", offset: 0.7 },
+  { opacity: 1, transform: "translateY(0) scale(1)", offset: 1 },
+], 7500, 700);
+
+// ── 장면 3 (9800~13900) ──
+tw($("m1"), [{ opacity: 0, transform: "translateY(36px)" }, { opacity: 1, transform: "translateY(0)" }], 10250, 600);
+tw($("m2"), [{ opacity: 0, transform: "translateY(40px)" }, { opacity: 1, transform: "translateY(0)" }], 10850, 650);
+tw($("bd"), [{ opacity: 0, transform: "translateY(32px)" }, { opacity: 1, transform: "translateY(0)" }], 11900, 600);
+
+// ── 장면 4 (13900~18000) ──
+tw($("bgblue"), [{ opacity: 0 }, { opacity: 1 }], 13900, 650);
+tw($("s4"), [{ opacity: 0 }, { opacity: 1 }], 13900, 10);
+tw($("logo"), [
+  { opacity: 0, transform: "scale(0.7)", offset: 0 },
+  { opacity: 1, transform: "scale(1.06)", offset: 0.7 },
+  { opacity: 1, transform: "scale(1)", offset: 1 },
+], 14300, 750);
+tw($("sub"), [{ opacity: 0, transform: "translateY(36px)" }, { opacity: 1, transform: "translateY(0)" }], 15000, 600);
+tw($("pill"), [
+  { opacity: 0, transform: "scale(0.8) translateY(40px)", offset: 0 },
+  { opacity: 1, transform: "scale(1.05) translateY(0)", offset: 0.75 },
+  { opacity: 1, transform: "scale(1) translateY(0)", offset: 1 },
+], 15700, 650);
+tw($("url"), [{ opacity: 0 }, { opacity: 1 }], 16450, 550);
+
+window.TOTAL = T;
+window.seek = (t) => { anims.forEach((a) => { a.currentTime = t; }); };
+window.READY = false;
+document.fonts.ready.then(() => { window.READY = true; });
+window.seek(0);
+</script>
+</body>
+</html>
