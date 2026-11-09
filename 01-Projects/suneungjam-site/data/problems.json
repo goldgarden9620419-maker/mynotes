@@ -17624,5 +17624,246 @@
     "answerIndex": 2,
     "explanation": "2sin²x − sin x − 1 = (2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. sin x = 1이면 x = π/2, sin x = −1/2이면 x = 7π/6, 11π/6입니다. 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
     "concept": "sin x에 대한 이차방정식은 인수분해 후 단위원에서 해를 구한다 (sin 7π/6 = sin 11π/6 = −1/2)"
+  },
+  {
+    "id": "en-2026-11-10-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-10",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Researchers have found that students [u]who take[/u]① short breaks between study sessions often remember more than those [u]who do not[/u]②. A brief walk, for example, can help the brain [u]recover[/u]③ from mental fatigue. Because attention is a limited resource, forcing oneself to study for hours [u]makes[/u]④ it harder to focus. Experts therefore recommend [u]to plan[/u]⑤ breaks as carefully as study time itself.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ recommend는 to부정사가 아니라 동명사를 목적어로 취하는 동사이므로 to plan → planning이어야 합니다. ① who가 students를 선행사로 하는 주격 관계대명사, ② those who do not의 대동사 do not, ③ help + 목적어 + 동사원형 recover, ④ 동명사 주어 forcing은 단수 취급하므로 makes는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "fatigue",
+        "meaning": "피로"
+      },
+      {
+        "word": "recover",
+        "meaning": "회복하다"
+      },
+      {
+        "word": "session",
+        "meaning": "(활동) 시간, 회기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-10-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-10",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Many people believe that creativity comes from sudden inspiration. However, studies of successful artists and scientists suggest otherwise. Their breakthroughs usually arrive after long periods of patient, repetitive work. Inspiration, in other words, tends to favor those who ________.",
+    "choices": [
+      "wait quietly for it to arrive",
+      "keep working even when nothing seems to happen",
+      "avoid making mistakes at all costs",
+      "copy the methods of established masters",
+      "work only under ideal conditions"
+    ],
+    "answerIndex": 1,
+    "explanation": "돌파구는 오랜 기간의 끈기 있고 반복적인 작업 뒤에 온다고 했으므로, 영감은 '아무 일도 일어나지 않는 것 같을 때도 계속 작업하는 사람'을 선호한다는 ②가 적절합니다. ①은 갑작스러운 영감을 기다린다는 통념이라 글의 요지와 반대입니다.",
+    "vocab": [
+      {
+        "word": "breakthrough",
+        "meaning": "획기적 발견, 돌파구"
+      },
+      {
+        "word": "repetitive",
+        "meaning": "반복적인"
+      },
+      {
+        "word": "inspiration",
+        "meaning": "영감"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-10-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-10",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Plants cannot move away from danger, so they have developed other ways to protect themselves.\n(A) Others, such as the acacia, grow sharp thorns that physically keep hungry animals away.\n(B) Some produce bitter chemicals that make their leaves taste unpleasant to insects.\n(C) These defenses differ in form, but all serve the same purpose: survival in place.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글(식물의 자기 방어 수단) → (B) Some(화학물질) → (A) Others(가시)로 두 사례가 짝을 이루고 → (C) These defenses로 종합하는 순서가 자연스럽습니다. (A)의 Others는 (B)의 Some을 전제로 합니다.",
+    "vocab": [
+      {
+        "word": "thorn",
+        "meaning": "가시"
+      },
+      {
+        "word": "bitter",
+        "meaning": "쓴"
+      },
+      {
+        "word": "unpleasant",
+        "meaning": "불쾌한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-10-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-10",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Many people imagine that muscles grow steadily while they exercise. ① In reality, exercise itself only creates tiny tears in the muscle fibers. ② The body repairs these tears afterward, rebuilding the fibers thicker than before. ③ This repair requires protein and, above all, sleep. ④ Athletes who train hard but sleep little therefore often stop improving. ⑤",
+    "givenSentence": "In other words, growth happens during recovery, not during the workout itself.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장의 In other words는 앞 내용을 다시 요약합니다. ② 문장(운동 후 몸이 섬유를 수리하며 더 두껍게 재건함)을 '성장은 운동 중이 아닌 회복 중에 일어난다'로 바꿔 말한 것이므로 ③에 들어가야 하며, 뒤의 This repair requires...와도 자연스럽게 이어집니다.",
+    "vocab": [
+      {
+        "word": "fiber",
+        "meaning": "섬유"
+      },
+      {
+        "word": "tear",
+        "meaning": "찢어진 곳, 파열"
+      },
+      {
+        "word": "rebuild",
+        "meaning": "재건하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-10-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-10",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When a language disappears, more is lost than words. Each language carries unique ways of describing the natural world, traditional medicine, and social customs built up over centuries. Speakers of small languages often know the names and uses of local plants that scientists have never recorded. Once the last speaker dies, this accumulated knowledge frequently vanishes with them.",
+    "choices": [
+      "Why children learn languages faster than adults",
+      "The hidden knowledge lost when a language dies",
+      "Scientific methods for recording local plants",
+      "The rapid spread of global languages through technology",
+      "How traditional medicine differs among cultures"
+    ],
+    "answerIndex": 1,
+    "explanation": "언어가 사라지면 그 언어에 축적된 자연, 의학, 관습에 관한 지식도 함께 사라진다는 내용이므로 ②가 주제로 적절합니다. ③⑤는 일부 소재일 뿐이고 ①④는 언급되지 않았습니다.",
+    "vocab": [
+      {
+        "word": "vanish",
+        "meaning": "사라지다"
+      },
+      {
+        "word": "accumulated",
+        "meaning": "축적된"
+      },
+      {
+        "word": "custom",
+        "meaning": "관습"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-10-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-10",
+    "prompt": "등차수열 {aₙ}에서 a₃ = 7, a₇ = 19일 때, ∑_{k=1}^{10} aₖ의 값은?",
+    "choices": [
+      "135",
+      "140",
+      "145",
+      "150",
+      "155"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₇ − a₃ = 4d = 12이므로 d = 3, a₁ = a₃ − 2d = 1입니다. a₁₀ = 1 + 27 = 28이므로 합 = 10(1 + 28)/2 = 145입니다.",
+    "concept": "등차수열의 합 Sₙ = n(a₁ + aₙ)/2, 일반항 aₙ = a₁ + (n−1)d"
+  },
+  {
+    "id": "math-2026-11-10-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-10",
+    "prompt": "곡선 y = x³ − 3x² + 2x 위의 점 (1, 0)에서의 접선의 y절편은?",
+    "choices": [
+      "−2",
+      "−1",
+      "0",
+      "1",
+      "2"
+    ],
+    "answerIndex": 3,
+    "explanation": "y' = 3x² − 6x + 2이므로 x = 1에서 기울기는 3 − 6 + 2 = −1입니다. 접선은 y = −(x − 1) = −x + 1이므로 y절편은 1입니다.",
+    "concept": "곡선 y = f(x) 위의 점 (a, f(a))에서의 접선의 방정식은 y − f(a) = f'(a)(x − a)"
+  },
+  {
+    "id": "math-2026-11-10-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-10",
+    "prompt": "곡선 y = x² − 4x와 x축으로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "8",
+      "28/3",
+      "10",
+      "32/3",
+      "12"
+    ],
+    "answerIndex": 3,
+    "explanation": "x² − 4x = 0에서 x = 0, 4이고 0 ≤ x ≤ 4에서 y ≤ 0입니다. 넓이 = ∫₀⁴ (4x − x²)dx = [2x² − x³/3]₀⁴ = 32 − 64/3 = 32/3입니다.",
+    "concept": "곡선과 x축 사이의 넓이는 ∫|f(x)|dx이며, 그래프가 x축 아래에 있으면 부호를 바꿔 적분한다"
+  },
+  {
+    "id": "math-2026-11-10-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-10",
+    "prompt": "흰 공 4개, 검은 공 3개가 들어 있는 주머니에서 동시에 2개의 공을 꺼낼 때, 서로 다른 색일 확률은?",
+    "choices": [
+      "3/7",
+      "4/7",
+      "5/7",
+      "2/7",
+      "6/7"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 ₇C₂ = 21이고, 흰 공 1개와 검은 공 1개를 뽑는 경우는 ₄C₁ × ₃C₁ = 12입니다. 따라서 확률은 12/21 = 4/7입니다.",
+    "concept": "확률 = (사건이 일어나는 경우의 수) / (전체 경우의 수), 조합 ₙCᵣ"
+  },
+  {
+    "id": "math-2026-11-10-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-10",
+    "prompt": "함수 y = 3sin(2x − π/3) + 1의 최댓값을 M, 주기를 T라 할 때, M × T의 값은?",
+    "choices": [
+      "3π",
+      "4π",
+      "5π",
+      "6π",
+      "7π"
+    ],
+    "answerIndex": 1,
+    "explanation": "최댓값 M = 3 + 1 = 4이고, 주기 T = 2π/2 = π입니다. 따라서 M × T = 4π입니다.",
+    "concept": "y = a·sin(bx + c) + d의 최댓값은 |a| + d, 주기는 2π/|b|"
   }
 ]
