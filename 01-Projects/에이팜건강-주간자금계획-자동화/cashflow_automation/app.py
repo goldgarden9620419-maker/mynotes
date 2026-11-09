@@ -152,6 +152,24 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
         rules_path = cfg.state_dir / cfg.get(
             "bank", "classify_rules_file", default="classify_rules.json")
         rules = bank_classifier.load_rules(rules_path)
+        # 확인필요 '처리' 칸에 적어둔 분류(계정과목)는 확인 완료·입력
+        # 서명과 무관하게 전부 기억한다 (2026-11-09 사용자 요청: 은행
+        # 파일을 추가해 서명이 바뀌어도, 지난 파일에 적어둔 것도, 한 번
+        # 입력한 분류는 다시 묻지 않는다). 보관으로 옮겨진 파일도 본다.
+        typed = []
+        seen_reviews = sorted(
+            list(cfg.folder("review").glob("확인필요_*.xlsx"))
+            + list((cfg.folder("archive") / "지난결과")
+                   .glob("확인필요_*.xlsx")),
+            key=lambda p: p.stat().st_mtime)[-20:]
+        for path in seen_reviews:
+            typed.extend(excel_report.load_unplanned_classifications(path))
+        if typed:
+            changed = bank_classifier.remember_custom_names(rules, typed)
+            if changed:
+                bank_classifier.save_rules(rules_path, rules)
+                log.info("확인필요 파일에 적어둔 분류 %d건을 규칙에 기억",
+                         changed)
         issues.extend(bank_classifier.classify_rows(kept, rules))
         log.info("은행 거래 %d건 (중복 제외 %d건)", len(kept), len(dup_rows))
 

@@ -7,7 +7,9 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
+from typing import Optional
 
 from common import BANK_REFLECT_OK, CONF_CAT_PAYROLL, normalize_text
 
@@ -88,11 +90,36 @@ def remember_custom_names(rules: dict, entries: list[dict]) -> int:
     return changed
 
 
+def _loose_text(text: str) -> str:
+    """숫자·공백을 뺀 느슨한 비교용 문자열.
+
+    'SKB6486358411 통신요금'처럼 청구번호가 달마다 바뀌는 표기도
+    같은 거래처로 알아보게 한다 (2026-11-09 사용자 요청: 한 번 입력한
+    분류를 다시 묻지 않기).
+    """
+    return re.sub(r"[\d\s]+", "", text)
+
+
+def match_custom_name(rules: dict, text: str) -> Optional[dict]:
+    """거래 표기에 맞는 사용자 지정 분류 항목을 찾는다.
+
+    정확 일치(부분 문자열)가 먼저, 안 되면 숫자를 뺀 느슨한 일치로
+    한 번 더 본다 — 느슨한 쪽은 글자 4자 이상 남을 때만 쓴다.
+    """
+    loose = _loose_text(text)
+    for e in rules.get("사용자분류") or []:
+        name = normalize_text(e.get("이름"))
+        if not name:
+            continue
+        lname = _loose_text(name)
+        if name in text or (len(lname) >= 4 and lname in loose):
+            return e
+    return None
+
+
 def apply_custom_names(rows: list[dict], rules: dict) -> int:
     """사용자 지정 분류를 적용한다 (미분류·확인필요 행만 덮는다)."""
-    entries = [e for e in rules.get("사용자분류") or []
-               if normalize_text(e.get("이름"))]
-    if not entries:
+    if not rules.get("사용자분류"):
         return 0
     applied = 0
     for row in rows:
@@ -100,12 +127,10 @@ def apply_custom_names(rows: list[dict], rules: dict) -> int:
             continue
         if (row.get("자동분류") or "") not in ("", CLASS_REVIEW):
             continue
-        text = _row_text(row)
-        for e in entries:
-            if normalize_text(e.get("이름")) in text:
-                row["자동분류"] = e.get("분류", "")
-                applied += 1
-                break
+        e = match_custom_name(rules, _row_text(row))
+        if e is not None:
+            row["자동분류"] = e.get("분류", "")
+            applied += 1
     return applied
 
 
@@ -233,11 +258,9 @@ def classify_rows(rows: list[dict], rules: dict) -> list[dict]:
             continue
         text = _row_text(row)
 
-        # 2) 사용자 지정 분류 (확인필요 처리 열에서 기억한 것 — 최우선)
-        custom = next(
-            (c for c in rules.get("사용자분류") or []
-             if normalize_text(c.get("이름"))
-             and normalize_text(c.get("이름")) in text), None)
+        # 2) 사용자 지정 분류 (확인필요 처리 열에서 기억한 것 — 최우선,
+        #    번호가 바뀐 표기도 느슨한 일치로 알아본다)
+        custom = match_custom_name(rules, text)
         if custom is not None:
             row["자동분류"] = custom.get("분류", "")
             continue
