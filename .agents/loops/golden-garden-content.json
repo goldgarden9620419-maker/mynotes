@@ -29,7 +29,8 @@
     "아침형 인간은 전날 밤에 만들어졌다 (기상, 수면 부채, 취침 루틴)",
     "들통날까 봐 쓴 가면이었다 (가면증후군, 겸손, 자기비하)",
     "굶는 시간보다 먹는 내용이었다 (간헐적 단식, 공복, 식사 시간)",
-    "이불만 갰을 뿐인데 (침대 정리, 작은 성취, 습관)"
+    "이불만 갰을 뿐인데 (침대 정리, 작은 성취, 습관)",
+    "남는 돈으로 모으려 했다 (선저축, 통장 쪼개기, 자동이체)"
   ],
   "pending_drafts": [
     {
@@ -139,6 +140,17 @@
       "review_note": "gpt_review.py 자동 교차 검토(82→82→86), 지어낸 장면 제안 미반영",
       "url": "https://diary21462.tistory.com/entry/%EC%9D%B4%EB%B6%88%EB%A7%8C-%EA%B0%B0%EC%9D%84-%EB%BF%90%EC%9D%B8%EB%8D%B0-%EC%B9%A8%EB%8C%80-%EC%A0%95%EB%A6%AC-%EC%9E%91%EC%9D%80-%EC%84%B1%EC%B7%A8-%EC%8A%B5%EA%B4%80",
       "thread_media": "영상"
+    },
+    {
+      "topic": "남는 돈으로 모으려 했다 (선저축, 통장 쪼개기, 자동이체)",
+      "published_at": "2026-11-09",
+      "tistory_category": "부자의 습관·자기계발",
+      "studio_doc": "p-20261109-pay-yourself-first",
+      "layout": "J",
+      "review_score": 86,
+      "review_note": "gpt_review.py 자동 교차 검토(84→86), 지어낸 장면 제안 미반영",
+      "url": "https://diary21462.tistory.com/entry/%EB%82%A8%EB%8A%94-%EB%8F%88%EC%9C%BC%EB%A1%9C-%EB%AA%A8%EC%9C%BC%EB%A0%A4-%ED%96%88%EB%8B%A4-%EC%84%A0%EC%A0%80%EC%B6%95-%ED%86%B5%EC%9E%A5-%EC%AA%BC%EA%B0%9C%EA%B8%B0-%EC%9E%90%EB%8F%99%EC%9D%B4%EC%B2%B4",
+      "thread_media": "있음(GIF·영상)"
     }
   ],
   "counters": {
