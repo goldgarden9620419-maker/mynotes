@@ -17865,5 +17865,246 @@
     "answerIndex": 1,
     "explanation": "최댓값 M = 3 + 1 = 4이고, 주기 T = 2π/2 = π입니다. 따라서 M × T = 4π입니다.",
     "concept": "y = a·sin(bx + c) + d의 최댓값은 |a| + d, 주기는 2π/|b|"
+  },
+  {
+    "id": "en-2026-11-11-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-11",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Honeybees communicate the location of food through a movement [u]known[/u]① as the waggle dance. A bee [u]that[/u]② has found flowers returns to the hive and moves in a figure-eight pattern. The angle of its dance [u]indicate[/u]③ the direction of the food relative to the sun. The longer the dance lasts, [u]the farther[/u]④ away the flowers are. Other bees watch closely and then fly off, [u]finding[/u]⑤ the food with surprising accuracy.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ 문장의 주어는 단수 명사 The angle(of its dance는 수식어)이므로 동사는 indicates가 되어야 합니다. ① a movement가 '알려진' 것이므로 수동의 과거분사 known, ② 사람이 아닌 A bee를 선행사로 하는 주격 관계대명사 that, ④ 'The 비교급 ~, the 비교급 …' 구문의 the farther, ⑤ 주절의 주어 Other bees가 능동적으로 찾는 것이므로 현재분사 finding(분사구문)은 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "hive",
+        "meaning": "벌집"
+      },
+      {
+        "word": "relative to",
+        "meaning": "~을 기준으로, ~에 비해"
+      },
+      {
+        "word": "accuracy",
+        "meaning": "정확성"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-11-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-11",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Experienced chess players do not calculate every possible move. Instead, they recognize familiar patterns on the board almost instantly, drawing on the thousands of games they have studied. Where a beginner sees thirty separate pieces, a master sees a few meaningful structures. In this sense, expertise is less about thinking faster than about ________.",
+    "choices": [
+      "organizing information into larger meaningful units",
+      "memorizing the rules of the game more precisely",
+      "calculating more moves ahead than the opponent",
+      "relying on luck at critical moments",
+      "avoiding risky moves throughout the game"
+    ],
+    "answerIndex": 0,
+    "explanation": "숙련자는 모든 수를 계산하지 않고, 초보자가 30개의 개별 말로 보는 것을 '몇 개의 의미 있는 구조'로 묶어 인식한다고 했습니다. 따라서 전문성은 더 빨리 생각하는 것이 아니라 '정보를 더 큰 의미 단위로 조직하는 것'이라는 ①이 적절합니다. ③은 '모든 수를 계산하지 않는다'는 첫 문장과 반대됩니다.",
+    "vocab": [
+      {
+        "word": "expertise",
+        "meaning": "전문 지식, 전문성"
+      },
+      {
+        "word": "instantly",
+        "meaning": "즉시"
+      },
+      {
+        "word": "draw on",
+        "meaning": "~에 의지하다, ~을 활용하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-11-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-11",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Before the invention of the refrigerator, people still needed ways to keep food from spoiling.\n(A) Salt, for instance, draws moisture out of meat and fish, making it difficult for bacteria to survive.\n(B) In colder regions, however, nature itself provided the solution: food could simply be stored in snow or ice.\n(C) One of the oldest methods was preserving food with salt or smoke.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글(냉장고 이전에도 음식 보존 방법이 필요했다) → (C) 가장 오래된 방법으로 소금·연기 보존 소개 → (A) 그중 소금(Salt, for instance)이 작용하는 원리 설명 → (B) however로 전환하여 추운 지역에서는 자연(눈·얼음)이 해결책이었다는 내용으로 마무리하는 흐름이 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "spoil",
+        "meaning": "(음식이) 상하다"
+      },
+      {
+        "word": "preserve",
+        "meaning": "보존하다"
+      },
+      {
+        "word": "moisture",
+        "meaning": "수분, 습기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-11-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-11",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "When we learn something new, we begin to forget it almost immediately. ① Within a single day, a large portion of new information can fade from memory. ② Each review, however, strengthens the memory and slows the rate at which it fades. ③ After several well-timed reviews, the information may stay with us for months. ④ Students who study a little every day therefore often outperform those who study for many hours just once. ⑤",
+    "givenSentence": "Without any review, this loss continues for weeks until only a small fraction of the original information remains.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 this loss는 바로 앞 '하루 만에 새 정보의 상당 부분이 기억에서 사라진다'는 내용을 가리키고, Without any review(복습이 없으면)는 ② 다음 문장의 Each review, however(그러나 복습할 때마다)와 대조를 이룹니다. 따라서 '하루 → 몇 주'로 손실이 이어진다는 흐름이 맞는 ②가 적절합니다.",
+    "vocab": [
+      {
+        "word": "fade",
+        "meaning": "희미해지다, 사라지다"
+      },
+      {
+        "word": "fraction",
+        "meaning": "일부, 소량"
+      },
+      {
+        "word": "outperform",
+        "meaning": "~보다 더 잘하다, 능가하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-11-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-11",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Cities are often several degrees warmer than the surrounding countryside, because concrete and asphalt absorb heat during the day and release it at night. Trees offer a simple remedy. Their leaves block sunlight before it reaches the ground, and the water they release through their leaves cools the surrounding air. Studies show that streets lined with trees can be noticeably cooler than bare streets in summer. Planting trees, then, is not merely a matter of beauty but an effective way to make cities more livable.",
+    "choices": [
+      "the role of trees in cooling urban areas",
+      "the history of modern city planning",
+      "the dangers of planting trees near buildings",
+      "differences between rural and urban lifestyles",
+      "methods of producing cheaper building materials"
+    ],
+    "answerIndex": 0,
+    "explanation": "도시가 주변보다 더운 이유를 제시한 뒤, 나무가 햇빛을 막고 잎에서 내보내는 수분으로 공기를 식혀 도시를 시원하게 만든다는 내용이 이어지고, 마지막 문장에서 나무 심기가 도시를 살기 좋게 만드는 효과적인 방법이라고 정리합니다. 따라서 주제는 ① '도시 지역을 시원하게 하는 데 있어 나무의 역할'입니다.",
+    "vocab": [
+      {
+        "word": "remedy",
+        "meaning": "해결책, 치료법"
+      },
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      },
+      {
+        "word": "livable",
+        "meaning": "살기 좋은"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-11-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-11",
+    "prompt": "등비수열 {aₙ}에서 a₂ = 6, a₅ = 48일 때, ∑_{k=1}^{6} aₖ의 값은?",
+    "choices": [
+      "181",
+      "186",
+      "189",
+      "192",
+      "195"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₅/a₂ = r³ = 48/6 = 8이므로 r = 2, a₁ = a₂/r = 3입니다. 따라서 ∑_{k=1}^{6} aₖ = 3(2⁶ − 1)/(2 − 1) = 3 × 63 = 189입니다.",
+    "concept": "등비수열의 합 Sₙ = a₁(rⁿ − 1)/(r − 1) (r ≠ 1), 일반항 aₙ = a₁rⁿ⁻¹"
+  },
+  {
+    "id": "math-2026-11-11-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-11",
+    "prompt": "함수 f(x) = 2x³ − 3x² − 12x + 5의 극솟값은?",
+    "choices": [
+      "−21",
+      "−19",
+      "−17",
+      "−15",
+      "−13"
+    ],
+    "answerIndex": 3,
+    "explanation": "f′(x) = 6x² − 6x − 12 = 6(x − 2)(x + 1)이므로 f′(x)는 x = −1에서 양→음(극대), x = 2에서 음→양(극소)으로 부호가 바뀝니다. 극솟값은 f(2) = 16 − 12 − 24 + 5 = −15입니다. (참고: 극댓값은 f(−1) = 12)",
+    "concept": "f′(x) = 0인 점에서 f′(x)의 부호가 음에서 양으로 바뀌면 그 점에서 극소이다."
+  },
+  {
+    "id": "math-2026-11-11-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-11",
+    "prompt": "곡선 y = x² − 2x와 직선 y = x로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "7/2",
+      "4",
+      "9/2",
+      "5",
+      "11/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "x² − 2x = x에서 x² − 3x = 0, x = 0 또는 x = 3입니다. 0 ≤ x ≤ 3에서 직선이 곡선보다 위에 있으므로 넓이 = ∫₀³ {x − (x² − 2x)} dx = ∫₀³ (3x − x²) dx = [3x²/2 − x³/3]₀³ = 27/2 − 9 = 9/2입니다.",
+    "concept": "두 곡선 사이의 넓이 S = ∫ₐᵇ |f(x) − g(x)| dx (a, b는 교점의 x좌표)"
+  },
+  {
+    "id": "math-2026-11-11-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-11",
+    "prompt": "1부터 9까지의 자연수가 하나씩 적힌 9장의 카드 중에서 임의로 2장을 동시에 뽑을 때, 뽑은 두 수의 합이 짝수일 확률은?",
+    "choices": [
+      "1/3",
+      "4/9",
+      "1/2",
+      "5/9",
+      "2/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 ₉C₂ = 36입니다. 합이 짝수이려면 두 수가 모두 홀수이거나 모두 짝수여야 합니다. 홀수 5개 중 2개: ₅C₂ = 10, 짝수 4개 중 2개: ₄C₂ = 6이므로 16가지입니다. 확률 = 16/36 = 4/9입니다.",
+    "concept": "두 수의 합이 짝수 ⇔ 두 수의 홀짝이 같다; 수학적 확률 = (사건의 경우의 수)/(전체 경우의 수)"
+  },
+  {
+    "id": "math-2026-11-11-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-11",
+    "prompt": "sin θ + cos θ = 1/2일 때, sin θ cos θ의 값은?",
+    "choices": [
+      "−3/8",
+      "−1/4",
+      "−1/8",
+      "1/8",
+      "3/8"
+    ],
+    "answerIndex": 0,
+    "explanation": "양변을 제곱하면 sin²θ + 2sin θ cos θ + cos²θ = 1/4입니다. sin²θ + cos²θ = 1이므로 1 + 2sin θ cos θ = 1/4, 2sin θ cos θ = −3/4, 따라서 sin θ cos θ = −3/8입니다.",
+    "concept": "sin²θ + cos²θ = 1을 이용하면 (sin θ + cos θ)² = 1 + 2sin θ cos θ"
   }
 ]
