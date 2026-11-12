@@ -18358,7 +18358,7 @@
     "type": "어법",
     "date": "2026-11-13",
     "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
-    "passage": "Cities are usually warmer than the surrounding countryside, a phenomenon [u]known[/u]① as the urban heat island effect. Concrete and asphalt absorb sunlight during the day and release the heat slowly at night, [u]what[/u]② keeps temperatures high even after sunset. Planting trees is one of the most effective ways [u]to reduce[/u]③ this effect. Trees not only provide shade but also cool the air as water evaporates from [u]their[/u]④ leaves. Studies show that streets lined with trees can be several degrees cooler than those [u]that[/u]⑤ have none.",
+    "passage": "Many concrete structures built by the ancient Romans [u]has survived[/u]① for nearly two thousand years, while modern concrete often cracks within decades. Scientists long wondered [u]what[/u]② made Roman concrete so durable. Recent research points to small white lumps of lime [u]found[/u]③ throughout the material. When a crack forms and water seeps in, the lime dissolves and then hardens again, [u]filling[/u]④ the gap before it can spread. In other words, the concrete is capable of [u]repairing[/u]⑤ itself.",
     "choices": [
       "①",
       "②",
@@ -18366,20 +18366,24 @@
       "④",
       "⑤"
     ],
-    "answerIndex": 1,
-    "explanation": "② 앞 절 전체(콘크리트와 아스팔트가 밤에 열을 천천히 내보내는 것)를 선행사로 받아 콤마 뒤에서 부연 설명하는 계속적 용법의 관계대명사가 필요하므로 what이 아니라 which가 되어야 합니다. what은 선행사를 포함하는 관계대명사라 계속적 용법으로 쓸 수 없습니다. ① a phenomenon이 '알려진' 것이므로 수동의 과거분사 known, ③ ways를 수식하는 형용사적 용법의 to부정사 to reduce, ④ 복수명사 Trees를 가리키는 소유격 their, ⑤ those(= streets)를 선행사로 하는 주격 관계대명사 that은 모두 적절합니다.",
+    "answerIndex": 0,
+    "explanation": "① 주어는 복수명사 Many concrete structures이고 built by the ancient Romans는 주어를 꾸미는 과거분사구일 뿐이므로, 동사는 복수형 have survived가 되어야 합니다. ② wondered의 목적어인 간접의문문을 이끌며 made의 주어 역할을 하는 의문사 what, ③ lumps of lime이 '발견되는' 것이므로 수동의 과거분사 found, ④ 앞 절에 이어지는 결과를 나타내는 분사구문 filling, ⑤ 전치사 of의 목적어인 동명사 repairing은 모두 적절합니다.",
     "vocab": [
       {
-        "word": "phenomenon",
-        "meaning": "현상"
+        "word": "durable",
+        "meaning": "내구성이 있는, 오래 견디는"
       },
       {
-        "word": "absorb",
-        "meaning": "흡수하다"
+        "word": "lime",
+        "meaning": "석회"
       },
       {
-        "word": "evaporate",
-        "meaning": "증발하다"
+        "word": "seep",
+        "meaning": "스며들다"
+      },
+      {
+        "word": "dissolve",
+        "meaning": "녹다, 용해되다"
       }
     ]
   },
@@ -18389,32 +18393,28 @@
     "type": "빈칸추론",
     "date": "2026-11-13",
     "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
-    "passage": "No map can show everything. A mapmaker must decide which features to include and which to ignore, depending on what the map is for. A subway map, for instance, pays no attention to actual distances or the curves of the tracks, yet travelers find it far easier to use than a geographically accurate one would be. A map that reproduced every detail of the land would be as large and as confusing as the land itself. The value of a map, in other words, lies in ________.",
+    "passage": "On many university campuses, narrow dirt tracks cut across the lawns, worn by students who ignore the paved walkways. Some universities treat these tracks as damage and put up fences to stop them. Others have taken the opposite approach: they leave a new lawn unpaved for a year, watch where people actually walk, and only then lay the pavement along those tracks. The lesson reaches far beyond landscaping. A good design does not force people to change their habits; it ________.",
     "choices": [
-      "how closely it copies reality",
-      "the technology used to draw it",
-      "how many places it can show",
-      "the artistic beauty of its design",
-      "what it deliberately leaves out"
+      "teaches users the rules they should obey",
+      "values appearance above convenience",
+      "reduces the cost of construction",
+      "protects nature from human activity",
+      "follows the way people already behave"
     ],
     "answerIndex": 4,
-    "explanation": "지도 제작자는 목적에 따라 무엇을 넣고 무엇을 무시할지 정해야 하고, 지하철 노선도는 실제 거리와 선로의 굴곡을 무시하기 때문에 오히려 쓰기 쉽다고 했습니다. 또 모든 세부 사항을 담은 지도는 땅 자체만큼 크고 혼란스러울 것이라고 했으므로, 지도의 가치는 ⑤ '의도적으로 빼는 것'에 있다는 결론이 자연스럽습니다. ①③은 현실을 그대로, 많이 담을수록 좋다는 뜻이라 글의 요지와 반대입니다.",
+    "explanation": "울타리를 쳐서 지름길을 막는 대학과 달리, 어떤 대학은 사람들이 실제로 걷는 곳을 1년간 지켜본 뒤 그 자국을 따라 길을 포장한다고 했습니다. 빈칸 앞에서 좋은 디자인은 사람들에게 습관을 바꾸도록 강요하지 않는다고 했으므로, 그와 대비되는 ⑤ '사람들이 이미 행동하는 방식을 따른다'가 적절합니다. ①은 사용자에게 규칙을 따르게 한다는 뜻으로 글의 요지와 반대입니다.",
     "vocab": [
       {
-        "word": "feature",
-        "meaning": "(지형·지물 등의) 특징, 요소"
+        "word": "paved",
+        "meaning": "(도로가) 포장된"
       },
       {
-        "word": "geographically",
-        "meaning": "지리적으로"
+        "word": "landscaping",
+        "meaning": "조경"
       },
       {
-        "word": "reproduce",
-        "meaning": "재현하다, 복제하다"
-      },
-      {
-        "word": "deliberately",
-        "meaning": "의도적으로, 일부러"
+        "word": "obey",
+        "meaning": "따르다, 복종하다"
       }
     ]
   },
@@ -18455,8 +18455,8 @@
     "type": "문장삽입",
     "date": "2026-11-13",
     "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
-    "passage": "Noise-cancelling headphones do not simply block sound with thick padding. ① Instead, they fight sound with sound. ② Tiny microphones on the outside of each ear cup constantly monitor the surrounding noise. ③ A chip inside then generates a sound wave that is the exact mirror image of that noise. ④ As a result, the listener hears almost nothing from the outside world. ⑤ This technology works best with steady, low sounds such as the hum of an airplane engine, since sudden noises are much harder to predict.",
-    "givenSentence": "When this mirror-image wave meets the original noise, the two cancel each other out.",
+    "passage": "Lichens are the crusty, leaf-like growths often seen on tree bark and old stone walls. ① They have no roots, so they take in water and nutrients directly from the air and rain. ② Many species therefore disappear quickly from areas where the air is dirty. ③ Scientists have learned to take advantage of this sensitivity. ④ By recording which kinds of lichens grow in a neighborhood, they can estimate its air quality without any expensive equipment. ⑤ A wall covered with many different lichens, in short, is a sign that the air is clean.",
+    "givenSentence": "This means that they also absorb whatever pollutants the air contains, with nothing to filter them out.",
     "choices": [
       "①",
       "②",
@@ -18464,24 +18464,24 @@
       "④",
       "⑤"
     ],
-    "answerIndex": 3,
-    "explanation": "주어진 문장의 this mirror-image wave는 ③ 뒤 문장에서 칩이 만들어 내는 '소음과 정확히 거울상인 음파'를 가리키므로 그 문장 뒤에 와야 합니다. 또 두 파동이 서로를 상쇄한다는 내용이 원인이 되어, ④ 뒤의 As a result(그 결과 바깥 소리가 거의 들리지 않는다)로 자연스럽게 이어지므로 ④가 적절합니다.",
+    "answerIndex": 1,
+    "explanation": "주어진 문장의 This는 ① 뒤 문장의 '뿌리가 없어 공기와 비에서 직접 물과 양분을 흡수한다'는 내용을 가리키며, 그래서 공기 중 오염 물질까지 그대로 흡수한다는 뜻입니다. 이것이 원인이 되어 ② 뒤 문장의 therefore(그래서 공기가 더러운 지역에서는 금방 사라진다)로 이어지므로 ②가 적절합니다. 주어진 문장이 없으면 뿌리가 없다는 사실에서 곧바로 '오염 지역에서 사라진다'로 넘어가 논리적 비약이 생깁니다.",
     "vocab": [
       {
-        "word": "padding",
-        "meaning": "(푹신한) 충전재, 패드"
+        "word": "lichen",
+        "meaning": "지의류, 이끼류"
       },
       {
-        "word": "monitor",
-        "meaning": "감시하다, 추적 관찰하다"
+        "word": "crusty",
+        "meaning": "딱딱한 껍질 같은"
       },
       {
-        "word": "generate",
-        "meaning": "만들어 내다, 발생시키다"
+        "word": "pollutant",
+        "meaning": "오염 물질"
       },
       {
-        "word": "cancel out",
-        "meaning": "상쇄하다"
+        "word": "sensitivity",
+        "meaning": "민감성"
       }
     ]
   },
@@ -18491,28 +18491,32 @@
     "type": "주제",
     "date": "2026-11-13",
     "prompt": "다음 글의 주제로 가장 적절한 것은?",
-    "passage": "Boredom is usually seen as something to be avoided, and smartphones now make it possible to fill every idle moment. Yet psychologists suggest that an unoccupied mind is far from useless. When nothing holds our attention, the mind begins to wander, connecting ideas that seemed unrelated and imagining future possibilities. In one study, people who first performed a dull task, such as copying numbers from a phone book, later came up with more original uses for everyday objects than those who had not. Leaving some moments empty may thus be an investment in our imagination.",
+    "passage": "A tree keeps a diary of its own life. Each year it adds a new layer of wood beneath its bark, and the width of that ring depends on the conditions of the growing season: wide rings form in warm, wet years and narrow ones in years of drought or cold. By measuring rings from very old trees and from timber preserved in ancient buildings, scientists have reconstructed rainfall and temperature patterns going back thousands of years, long before anyone kept written weather records. Such information helps researchers judge how unusual today's climate changes really are.",
     "choices": [
-      "the positive role of boredom in creative thinking",
-      "harmful effects of smartphones on memory",
-      "ways to stay focused during dull tasks",
-      "reasons why people get bored more easily today",
-      "differences in creativity among age groups"
+      "methods of protecting old forests from drought",
+      "reasons why trees grow faster in warm regions",
+      "tree rings as a record of past climate",
+      "the use of timber in ancient architecture",
+      "difficulties of predicting future weather"
     ],
-    "answerIndex": 0,
-    "explanation": "지루함은 피해야 할 것으로 여겨지지만, 주의를 끄는 것이 없을 때 마음이 떠돌며 무관해 보이던 생각들을 연결한다고 설명합니다. 지루한 과제를 먼저 한 사람들이 더 독창적인 아이디어를 냈다는 실험을 근거로 들고, 빈 시간을 남겨 두는 것이 상상력에 대한 투자라고 정리하므로 주제는 ① '창의적 사고에서 지루함이 하는 긍정적 역할'입니다. ②의 스마트폰은 도입부의 소재일 뿐 기억력에 대한 언급은 없습니다.",
+    "answerIndex": 2,
+    "explanation": "나무는 해마다 나이테를 하나씩 더하고 그 폭이 그해의 기후 조건(따뜻하고 습하면 넓게, 가뭄이나 추위에는 좁게)에 따라 달라진다고 설명합니다. 과학자들이 오래된 나무와 고건축 목재의 나이테를 측정해 수천 년 전의 강수량과 기온을 복원했다고 했으므로, 주제는 ③ '과거 기후의 기록으로서의 나이테'입니다. ④의 고대 건축물 목재는 나이테 자료의 출처로 언급되었을 뿐입니다.",
     "vocab": [
       {
-        "word": "idle",
-        "meaning": "한가한, 아무것도 하지 않는"
+        "word": "bark",
+        "meaning": "나무껍질"
       },
       {
-        "word": "unoccupied",
-        "meaning": "(할 일 없이) 비어 있는"
+        "word": "drought",
+        "meaning": "가뭄"
       },
       {
-        "word": "wander",
-        "meaning": "(생각이) 떠돌다, 배회하다"
+        "word": "timber",
+        "meaning": "목재"
+      },
+      {
+        "word": "reconstruct",
+        "meaning": "복원하다, 재구성하다"
       }
     ]
   },
@@ -18589,16 +18593,16 @@
     "subject": "math",
     "type": "삼각함수",
     "date": "2026-11-13",
-    "prompt": "sin θ + cos θ = 1/2일 때, sin³θ + cos³θ의 값은?",
+    "prompt": "함수 f(x) = 2cos²x + 2sin x + 1의 최댓값을 M, 최솟값을 m이라 할 때, M − m의 값은?",
     "choices": [
-      "5/8",
-      "11/16",
-      "3/4",
-      "13/16",
-      "7/8"
+      "4",
+      "9/2",
+      "5",
+      "11/2",
+      "6"
     ],
     "answerIndex": 1,
-    "explanation": "양변을 제곱하면 1 + 2sin θ cos θ = 1/4이므로 sin θ cos θ = −3/8입니다. sin³θ + cos³θ = (sin θ + cos θ)(sin²θ − sin θ cos θ + cos²θ) = 1/2 × (1 + 3/8) = 1/2 × 11/8 = 11/16입니다.",
-    "concept": "sin²θ + cos²θ = 1을 이용해 (sin θ + cos θ)² = 1 + 2sin θ cos θ로 sin θ cos θ의 값을 구한다"
+    "explanation": "cos²x = 1 − sin²x이므로 sin x = t (−1 ≤ t ≤ 1)로 놓으면 f(x) = 2(1 − t²) + 2t + 1 = −2t² + 2t + 3 = −2(t − 1/2)² + 7/2입니다. t = 1/2일 때 최댓값 M = 7/2, t = −1일 때 최솟값 m = −2 − 2 + 3 = −1입니다. 따라서 M − m = 7/2 + 1 = 9/2입니다.",
+    "concept": "cos²x = 1 − sin²x로 한 종류의 삼각함수로 통일한 뒤, sin x = t (−1 ≤ t ≤ 1)로 치환해 이차함수의 최대·최소를 구한다"
   }
 ]
