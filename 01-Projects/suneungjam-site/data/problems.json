@@ -18351,5 +18351,254 @@
     "answerIndex": 3,
     "explanation": "(2sin x + 1)(sin x − 1) = 0이므로 sin x = 1 또는 sin x = −1/2입니다. sin x = 1에서 x = π/2, sin x = −1/2에서 x = 7π/6, 11π/6입니다. 따라서 모든 해의 합은 π/2 + 7π/6 + 11π/6 = π/2 + 3π = 7π/2입니다.",
     "concept": "sin x에 대한 이차방정식은 인수분해로 sin x 값을 구한 뒤, 단위원에서 해당 각을 찾는다"
+  },
+  {
+    "id": "en-2026-11-13-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-13",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Cities are usually warmer than the surrounding countryside, a phenomenon [u]known[/u]① as the urban heat island effect. Concrete and asphalt absorb sunlight during the day and release the heat slowly at night, [u]what[/u]② keeps temperatures high even after sunset. Planting trees is one of the most effective ways [u]to reduce[/u]③ this effect. Trees not only provide shade but also cool the air as water evaporates from [u]their[/u]④ leaves. Studies show that streets lined with trees can be several degrees cooler than those [u]that[/u]⑤ have none.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "② 앞 절 전체(콘크리트와 아스팔트가 밤에 열을 천천히 내보내는 것)를 선행사로 받아 콤마 뒤에서 부연 설명하는 계속적 용법의 관계대명사가 필요하므로 what이 아니라 which가 되어야 합니다. what은 선행사를 포함하는 관계대명사라 계속적 용법으로 쓸 수 없습니다. ① a phenomenon이 '알려진' 것이므로 수동의 과거분사 known, ③ ways를 수식하는 형용사적 용법의 to부정사 to reduce, ④ 복수명사 Trees를 가리키는 소유격 their, ⑤ those(= streets)를 선행사로 하는 주격 관계대명사 that은 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "phenomenon",
+        "meaning": "현상"
+      },
+      {
+        "word": "absorb",
+        "meaning": "흡수하다"
+      },
+      {
+        "word": "evaporate",
+        "meaning": "증발하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-13-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-13",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "No map can show everything. A mapmaker must decide which features to include and which to ignore, depending on what the map is for. A subway map, for instance, pays no attention to actual distances or the curves of the tracks, yet travelers find it far easier to use than a geographically accurate one would be. A map that reproduced every detail of the land would be as large and as confusing as the land itself. The value of a map, in other words, lies in ________.",
+    "choices": [
+      "how closely it copies reality",
+      "the technology used to draw it",
+      "how many places it can show",
+      "the artistic beauty of its design",
+      "what it deliberately leaves out"
+    ],
+    "answerIndex": 4,
+    "explanation": "지도 제작자는 목적에 따라 무엇을 넣고 무엇을 무시할지 정해야 하고, 지하철 노선도는 실제 거리와 선로의 굴곡을 무시하기 때문에 오히려 쓰기 쉽다고 했습니다. 또 모든 세부 사항을 담은 지도는 땅 자체만큼 크고 혼란스러울 것이라고 했으므로, 지도의 가치는 ⑤ '의도적으로 빼는 것'에 있다는 결론이 자연스럽습니다. ①③은 현실을 그대로, 많이 담을수록 좋다는 뜻이라 글의 요지와 반대입니다.",
+    "vocab": [
+      {
+        "word": "feature",
+        "meaning": "(지형·지물 등의) 특징, 요소"
+      },
+      {
+        "word": "geographically",
+        "meaning": "지리적으로"
+      },
+      {
+        "word": "reproduce",
+        "meaning": "재현하다, 복제하다"
+      },
+      {
+        "word": "deliberately",
+        "meaning": "의도적으로, 일부러"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-13-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-13",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Before the nineteenth century, each town kept its own local time, set by the position of the sun in the sky.\n(A) Once railways began connecting distant cities within hours, however, these small differences made timetables confusing and even led to accidents.\n(B) To solve this problem, railway companies agreed to adopt a single standard time, which governments later made official.\n(C) This caused little trouble as long as people traveled slowly, since a gap of a few minutes between neighboring towns hardly mattered.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글(마을마다 태양의 위치로 정한 고유의 지역 시간 사용) → (C) This가 그 상황을 받아, 느리게 이동하던 시절에는 몇 분의 차이가 문제 되지 않았다고 설명 → (A) however로 전환하며 these small differences가 (C)의 '몇 분의 차이'를 받아, 철도 등장 후 시간표 혼란과 사고가 생겼다고 서술 → (B) this problem이 (A)의 혼란을 받아 표준시 도입이라는 해결책 제시의 흐름이 자연스럽습니다.",
+    "vocab": [
+      {
+        "word": "timetable",
+        "meaning": "(열차 등의) 시간표"
+      },
+      {
+        "word": "adopt",
+        "meaning": "채택하다"
+      },
+      {
+        "word": "neighboring",
+        "meaning": "이웃한, 인접한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-13-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-13",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Noise-cancelling headphones do not simply block sound with thick padding. ① Instead, they fight sound with sound. ② Tiny microphones on the outside of each ear cup constantly monitor the surrounding noise. ③ A chip inside then generates a sound wave that is the exact mirror image of that noise. ④ As a result, the listener hears almost nothing from the outside world. ⑤ This technology works best with steady, low sounds such as the hum of an airplane engine, since sudden noises are much harder to predict.",
+    "givenSentence": "When this mirror-image wave meets the original noise, the two cancel each other out.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 this mirror-image wave는 ③ 뒤 문장에서 칩이 만들어 내는 '소음과 정확히 거울상인 음파'를 가리키므로 그 문장 뒤에 와야 합니다. 또 두 파동이 서로를 상쇄한다는 내용이 원인이 되어, ④ 뒤의 As a result(그 결과 바깥 소리가 거의 들리지 않는다)로 자연스럽게 이어지므로 ④가 적절합니다.",
+    "vocab": [
+      {
+        "word": "padding",
+        "meaning": "(푹신한) 충전재, 패드"
+      },
+      {
+        "word": "monitor",
+        "meaning": "감시하다, 추적 관찰하다"
+      },
+      {
+        "word": "generate",
+        "meaning": "만들어 내다, 발생시키다"
+      },
+      {
+        "word": "cancel out",
+        "meaning": "상쇄하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-13-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-13",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Boredom is usually seen as something to be avoided, and smartphones now make it possible to fill every idle moment. Yet psychologists suggest that an unoccupied mind is far from useless. When nothing holds our attention, the mind begins to wander, connecting ideas that seemed unrelated and imagining future possibilities. In one study, people who first performed a dull task, such as copying numbers from a phone book, later came up with more original uses for everyday objects than those who had not. Leaving some moments empty may thus be an investment in our imagination.",
+    "choices": [
+      "the positive role of boredom in creative thinking",
+      "harmful effects of smartphones on memory",
+      "ways to stay focused during dull tasks",
+      "reasons why people get bored more easily today",
+      "differences in creativity among age groups"
+    ],
+    "answerIndex": 0,
+    "explanation": "지루함은 피해야 할 것으로 여겨지지만, 주의를 끄는 것이 없을 때 마음이 떠돌며 무관해 보이던 생각들을 연결한다고 설명합니다. 지루한 과제를 먼저 한 사람들이 더 독창적인 아이디어를 냈다는 실험을 근거로 들고, 빈 시간을 남겨 두는 것이 상상력에 대한 투자라고 정리하므로 주제는 ① '창의적 사고에서 지루함이 하는 긍정적 역할'입니다. ②의 스마트폰은 도입부의 소재일 뿐 기억력에 대한 언급은 없습니다.",
+    "vocab": [
+      {
+        "word": "idle",
+        "meaning": "한가한, 아무것도 하지 않는"
+      },
+      {
+        "word": "unoccupied",
+        "meaning": "(할 일 없이) 비어 있는"
+      },
+      {
+        "word": "wander",
+        "meaning": "(생각이) 떠돌다, 배회하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-13-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-13",
+    "prompt": "수열 {aₙ}의 첫째항부터 제n항까지의 합 Sₙ이 Sₙ = 2n² − n일 때, a₃ + a₈의 값은?",
+    "choices": [
+      "34",
+      "36",
+      "38",
+      "40",
+      "42"
+    ],
+    "answerIndex": 2,
+    "explanation": "n ≥ 2일 때 aₙ = Sₙ − Sₙ₋₁ = (2n² − n) − {2(n − 1)² − (n − 1)} = 4n − 3이고, a₁ = S₁ = 1도 이 식을 만족시킵니다. 따라서 a₃ = 9, a₈ = 29이므로 a₃ + a₈ = 38입니다.",
+    "concept": "수열의 합과 일반항의 관계: a₁ = S₁, aₙ = Sₙ − Sₙ₋₁ (n ≥ 2)"
+  },
+  {
+    "id": "math-2026-11-13-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-13",
+    "prompt": "함수 f(x) = x³ − 6x² + 9x + a의 극댓값이 10일 때, f(x)의 극솟값은? (단, a는 상수이다.)",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answerIndex": 0,
+    "explanation": "f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3)이므로 x = 1에서 극대, x = 3에서 극소입니다. 극댓값 f(1) = 1 − 6 + 9 + a = 4 + a = 10에서 a = 6입니다. 따라서 극솟값은 f(3) = 27 − 54 + 27 + 6 = 6입니다.",
+    "concept": "f′(x) = 0인 x의 좌우에서 f′(x)의 부호가 +에서 −로 바뀌면 극대, −에서 +로 바뀌면 극소"
+  },
+  {
+    "id": "math-2026-11-13-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-13",
+    "prompt": "곡선 y = −x² + 2x와 직선 y = −x로 둘러싸인 부분의 넓이는?",
+    "choices": [
+      "3",
+      "7/2",
+      "4",
+      "9/2",
+      "5"
+    ],
+    "answerIndex": 3,
+    "explanation": "−x² + 2x = −x에서 x² − 3x = 0이므로 교점의 x좌표는 x = 0, 3입니다. 0 ≤ x ≤ 3에서 곡선이 직선보다 위에 있으므로 넓이는 ∫₀³ {(−x² + 2x) − (−x)}dx = ∫₀³ (−x² + 3x)dx = [−x³/3 + 3x²/2]₀³ = −9 + 27/2 = 9/2입니다.",
+    "concept": "두 곡선 사이의 넓이는 교점의 x좌표를 구한 뒤 ∫(위쪽 함수 − 아래쪽 함수)dx로 계산한다"
+  },
+  {
+    "id": "math-2026-11-13-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-13",
+    "prompt": "확률변수 X가 이항분포 B(n, 1/4)을 따르고 V(X) = 6일 때, E(2X + 3)의 값은?",
+    "choices": [
+      "11",
+      "13",
+      "15",
+      "17",
+      "19"
+    ],
+    "answerIndex": 4,
+    "explanation": "V(X) = n × 1/4 × 3/4 = 3n/16 = 6이므로 n = 32입니다. E(X) = 32 × 1/4 = 8이므로 E(2X + 3) = 2E(X) + 3 = 16 + 3 = 19입니다.",
+    "concept": "이항분포 B(n, p)에서 E(X) = np, V(X) = np(1 − p)이고, E(aX + b) = aE(X) + b"
+  },
+  {
+    "id": "math-2026-11-13-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-13",
+    "prompt": "sin θ + cos θ = 1/2일 때, sin³θ + cos³θ의 값은?",
+    "choices": [
+      "5/8",
+      "11/16",
+      "3/4",
+      "13/16",
+      "7/8"
+    ],
+    "answerIndex": 1,
+    "explanation": "양변을 제곱하면 1 + 2sin θ cos θ = 1/4이므로 sin θ cos θ = −3/8입니다. sin³θ + cos³θ = (sin θ + cos θ)(sin²θ − sin θ cos θ + cos²θ) = 1/2 × (1 + 3/8) = 1/2 × 11/8 = 11/16입니다.",
+    "concept": "sin²θ + cos²θ = 1을 이용해 (sin θ + cos θ)² = 1 + 2sin θ cos θ로 sin θ cos θ의 값을 구한다"
   }
 ]
