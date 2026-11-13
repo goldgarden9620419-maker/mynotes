@@ -75,3 +75,4 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 - ✅ 2026-11-06 12편(대출 이자 양식, 손 실사 + 가상 화면) jade 승인 후 게시 완료 https://www.instagram.com/reel/DfZdA1MDUqz/ (AI 라벨 OFF, 배경음악 Mixkit 416)
 - 2026-11-09 13편(미수금 관리 양식) 게시: https://www.instagram.com/reel/DfhNIoWnYBK/ (media 18115881332033227, AI 라벨 OFF, jade 승인 후 1회)
 - 2026-11-11 14편(주간 자금계획 양식) jade 승인 후 API 게시: https://www.instagram.com/reel/DfmUrymgtOR/ (media 17929532757430321, AI 라벨 OFF)
+- 2026-11-13 15편(급여명세서 양식 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/DfrmkSWgPZn/ (AI 라벨 ON)
