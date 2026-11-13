@@ -23,3 +23,14 @@
 - 세션에 지정된 작업 브랜치가 따로 있으면: 작업 브랜치에 커밋·push한 뒤, **노트 파일만** 이 Obsidian 브랜치에 추가로 커밋·push한다. (임시 worktree를 쓰고, 기존 파일은 건드리지 않는다.)
 - push 전에 이 브랜치를 fetch해서 최신 상태(Obsidian의 `vault backup` 커밋 포함) 위에 올린다. force push는 하지 않는다.
 - 사용자가 Obsidian 브랜치를 바꾸면 이 섹션의 브랜치명을 함께 고친다.
+
+## 수능잼(suneungjam) 매일 문제 생성 시 중복 검사 (필수)
+
+`01-Projects/suneungjam-site/data/problems.json`에 새 문제를 추가하는 작업(매일 실행되는 수능잼 루틴 포함)을 할 때는, 루틴 프롬프트에 적혀 있지 않더라도 **문제를 파일에 넣기 전에** 아래 단계를 반드시 거친다. (2026-11-13 사용자 요청으로 추가 — 매 실행이 이전 맥락 없이 시작되어 같은 지문·수식이 여러 날 반복 등록되던 문제 때문)
+
+1. **작성 전:** `cd 01-Projects/suneungjam-site && python3 scripts/check_duplicates.py topics`로 이미 쓴 영어 소재어, 여러 번 반복된 수학 문제, 기존 확언을 훑어보고, 겹치지 않는 소재·수식을 고른다.
+2. **작성 후, 저장 전:** 새 문제 10개와 확언을 `{"problems": [...], "affirmation": {...}}` 형태의 임시 JSON(스크래치패드 등 저장소 밖)에 쓰고 `python3 scripts/check_duplicates.py check <임시파일>`을 실행한다.
+3. `[겹침]`으로 표시된 항목만 다른 소재/수식으로 다시 만들어 재검사한다. **재검사는 최대 2회**까지만 하고, 그래도 남으면 그대로 진행하되 최종 보고에 어떤 항목이 겹쳤는지 적는다. (검사에 시간을 쓰다 push를 못 하는 일이 없도록 한다.)
+4. 종료 코드 0(겹침 없음)을 확인한 뒤 `problems.json` / `affirmations.json`에 추가하고 커밋·push한다.
+
+참고: 수학은 숫자만 바꾼 변형은 허용하고 사실상 같은 문제만 잡는다. 기존 데이터 안의 중복 현황은 `python3 scripts/check_duplicates.py audit`로 볼 수 있다.

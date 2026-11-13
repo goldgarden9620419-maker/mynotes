@@ -18424,7 +18424,7 @@
     "type": "순서",
     "date": "2026-11-13",
     "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
-    "passage": "Before the nineteenth century, each town kept its own local time, set by the position of the sun in the sky.\n(A) Once railways began connecting distant cities within hours, however, these small differences made timetables confusing and even led to accidents.\n(B) To solve this problem, railway companies agreed to adopt a single standard time, which governments later made official.\n(C) This caused little trouble as long as people traveled slowly, since a gap of a few minutes between neighboring towns hardly mattered.",
+    "passage": "The tin can was invented in 1810 as a way to keep food fresh for soldiers and sailors on long journeys.\n(A) It was not until the 1850s, when cans became thinner and lighter, that a tool designed specifically for opening them finally appeared.\n(B) The earliest cans, however, were made of thick iron and sometimes weighed more than the food inside them.\n(C) Opening such heavy containers required a hammer and a chisel, and for decades no one thought to invent a better method.",
     "choices": [
       "(A)-(C)-(B)",
       "(B)-(A)-(C)",
@@ -18432,20 +18432,20 @@
       "(C)-(A)-(B)",
       "(C)-(B)-(A)"
     ],
-    "answerIndex": 3,
-    "explanation": "주어진 글(마을마다 태양의 위치로 정한 고유의 지역 시간 사용) → (C) This가 그 상황을 받아, 느리게 이동하던 시절에는 몇 분의 차이가 문제 되지 않았다고 설명 → (A) however로 전환하며 these small differences가 (C)의 '몇 분의 차이'를 받아, 철도 등장 후 시간표 혼란과 사고가 생겼다고 서술 → (B) this problem이 (A)의 혼란을 받아 표준시 도입이라는 해결책 제시의 흐름이 자연스럽습니다.",
+    "answerIndex": 2,
+    "explanation": "주어진 글(1810년 통조림 캔의 발명) → (B) however로 전환하며 초기 캔은 두꺼운 철로 만들어져 매우 무거웠다고 설명 → (C) such heavy containers가 (B)의 무거운 캔을 받아, 여는 데 망치와 끌이 필요했고 수십 년간 더 나은 방법이 없었다고 서술 → (A) 캔이 얇고 가벼워진 1850년대에 이르러서야 전용 도구(them = cans)가 등장했다는 결말의 흐름이 자연스럽습니다.",
     "vocab": [
       {
-        "word": "timetable",
-        "meaning": "(열차 등의) 시간표"
+        "word": "chisel",
+        "meaning": "끌, 정"
       },
       {
-        "word": "adopt",
-        "meaning": "채택하다"
+        "word": "specifically",
+        "meaning": "특별히, 전용으로"
       },
       {
-        "word": "neighboring",
-        "meaning": "이웃한, 인접한"
+        "word": "container",
+        "meaning": "용기, 그릇"
       }
     ]
   },
@@ -18491,32 +18491,32 @@
     "type": "주제",
     "date": "2026-11-13",
     "prompt": "다음 글의 주제로 가장 적절한 것은?",
-    "passage": "A tree keeps a diary of its own life. Each year it adds a new layer of wood beneath its bark, and the width of that ring depends on the conditions of the growing season: wide rings form in warm, wet years and narrow ones in years of drought or cold. By measuring rings from very old trees and from timber preserved in ancient buildings, scientists have reconstructed rainfall and temperature patterns going back thousands of years, long before anyone kept written weather records. Such information helps researchers judge how unusual today's climate changes really are.",
+    "passage": "Before the 1950s, loading a cargo ship was slow and costly. Goods arrived at the port in barrels, sacks, and wooden crates of every size, and dock workers had to carry each item on board by hand, a process that could keep a ship in port for a week or more. The introduction of the standardized steel container changed everything. Because every container had the same dimensions, it could be lifted by crane directly from a truck onto a ship and stacked like a building block. Loading time fell from days to hours, shipping costs dropped sharply, and trade between distant countries expanded as never before.",
     "choices": [
-      "methods of protecting old forests from drought",
-      "reasons why trees grow faster in warm regions",
-      "tree rings as a record of past climate",
-      "the use of timber in ancient architecture",
-      "difficulties of predicting future weather"
+      "dangers that dock workers faced in the past",
+      "environmental problems caused by cargo ships",
+      "reasons for the decline of traditional ports",
+      "how standardized containers transformed shipping",
+      "the role of trucks in modern delivery services"
     ],
-    "answerIndex": 2,
-    "explanation": "나무는 해마다 나이테를 하나씩 더하고 그 폭이 그해의 기후 조건(따뜻하고 습하면 넓게, 가뭄이나 추위에는 좁게)에 따라 달라진다고 설명합니다. 과학자들이 오래된 나무와 고건축 목재의 나이테를 측정해 수천 년 전의 강수량과 기온을 복원했다고 했으므로, 주제는 ③ '과거 기후의 기록으로서의 나이테'입니다. ④의 고대 건축물 목재는 나이테 자료의 출처로 언급되었을 뿐입니다.",
+    "answerIndex": 3,
+    "explanation": "1950년대 이전에는 크기가 제각각인 짐을 부두 노동자가 손으로 실어 시간이 오래 걸리고 비용이 컸지만, 규격이 통일된 강철 컨테이너가 도입되면서 크레인으로 바로 옮겨 쌓을 수 있게 되어 선적 시간과 운송비가 크게 줄고 무역이 확대되었다는 내용입니다. 따라서 주제는 ④ '규격화된 컨테이너가 해운을 어떻게 바꾸었는가'입니다. ①의 부두 노동자는 과거의 선적 방식을 설명하기 위해 언급되었을 뿐입니다.",
     "vocab": [
       {
-        "word": "bark",
-        "meaning": "나무껍질"
+        "word": "cargo",
+        "meaning": "화물"
       },
       {
-        "word": "drought",
-        "meaning": "가뭄"
+        "word": "crate",
+        "meaning": "(운송용) 나무 상자"
       },
       {
-        "word": "timber",
-        "meaning": "목재"
+        "word": "standardized",
+        "meaning": "규격화된, 표준화된"
       },
       {
-        "word": "reconstruct",
-        "meaning": "복원하다, 재구성하다"
+        "word": "dimension",
+        "meaning": "치수, 크기"
       }
     ]
   },
