@@ -18604,5 +18604,266 @@
     "answerIndex": 1,
     "explanation": "cos²x = 1 − sin²x이므로 sin x = t (−1 ≤ t ≤ 1)로 놓으면 f(x) = 2(1 − t²) + 2t + 1 = −2t² + 2t + 3 = −2(t − 1/2)² + 7/2입니다. t = 1/2일 때 최댓값 M = 7/2, t = −1일 때 최솟값 m = −2 − 2 + 3 = −1입니다. 따라서 M − m = 7/2 + 1 = 9/2입니다.",
     "concept": "cos²x = 1 − sin²x로 한 종류의 삼각함수로 통일한 뒤, sin x = t (−1 ≤ t ≤ 1)로 치환해 이차함수의 최대·최소를 구한다"
+  },
+  {
+    "id": "en-2026-11-14-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-14",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Louis Braille lost his sight at the age of three after an accident in his father's workshop. At the school for the blind in Paris, the few books available [u]were[/u]① printed with huge raised letters, which were slow to read and nearly impossible to write. When he was twelve, a soldier visited the school to demonstrate a code of raised dots [u]used[/u]② by the army for reading messages in the dark. The system was too complicated, but Braille saw [u]what[/u]③ it could become. Over the next three years he simplified it into cells of just six dots, each small enough [u]to be felt[/u]④ with a single fingertip. Although his method was rejected by teachers during his lifetime, it eventually spread across the world and [u]remaining[/u]⑤ the standard today.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 주절의 주어 it(his method)에 대해 동사 spread와 and로 병렬 연결되는 자리이므로 준동사 remaining이 아니라 동사 remains가 되어야 합니다. ① 주어는 복수명사 the few books(available은 뒤에서 수식하는 형용사)이므로 복수동사 were, ② a code of raised dots가 군대에 의해 '사용되는' 것이므로 수동의 과거분사 used, ③ saw의 목적어절을 이끌면서 become의 보어 역할을 하는 선행사를 포함한 관계대명사(또는 의문사) what, ④ 점이 손끝으로 '느껴지는' 것이므로 수동형 to부정사 to be felt는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "raised",
+        "meaning": "도드라진, 양각의"
+      },
+      {
+        "word": "demonstrate",
+        "meaning": "시연하다, 보여 주다"
+      },
+      {
+        "word": "simplify",
+        "meaning": "단순화하다"
+      },
+      {
+        "word": "fingertip",
+        "meaning": "손가락 끝"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-14-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-14",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "The QWERTY keyboard layout was designed in the 1870s for mechanical typewriters, whose metal arms jammed when neighboring keys were struck in quick succession. Separating frequently paired letters reduced the jams. That problem vanished with the arrival of computers, and alternative layouts claimed to allow faster typing have been available for decades. Yet almost nobody has switched. Millions of typists have already trained their fingers on QWERTY, manufacturers build what those typists expect, and new learners naturally practice on the keyboards that exist. The case illustrates that a standard can survive not because it is the best option but because ________.",
+    "choices": [
+      "its original purpose is still important today",
+      "too many people have already invested in it",
+      "experts keep proving its technical superiority",
+      "governments require companies to adopt it",
+      "it is cheaper to produce than its rivals"
+    ],
+    "answerIndex": 1,
+    "explanation": "QWERTY 자판이 만들어진 원래 이유(타자기 금속 팔의 엉킴)는 컴퓨터 시대에 사라졌고 더 빠르다는 대안도 있지만, 이미 수많은 사람이 QWERTY에 손을 익혔고 제조사와 새 학습자도 그에 맞춰 움직이기 때문에 바뀌지 않는다는 내용입니다. 따라서 표준이 살아남는 이유는 '너무 많은 사람이 이미 그것에 투자했기 때문'입니다. ①은 원래 문제가 사라졌다는 내용과 반대이고, ③은 더 나은 대안이 있다는 내용과 맞지 않으며, ④ 정부 규제와 ⑤ 생산 비용은 글에 언급되지 않았습니다.",
+    "vocab": [
+      {
+        "word": "jam",
+        "meaning": "(기계가) 걸리다, 엉키다"
+      },
+      {
+        "word": "in quick succession",
+        "meaning": "연달아, 잇따라"
+      },
+      {
+        "word": "vanish",
+        "meaning": "사라지다"
+      },
+      {
+        "word": "layout",
+        "meaning": "배열, 배치"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-14-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-14",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "During the California Gold Rush, miners complained that their trousers wore out quickly, with the pockets tearing first under the weight of tools and ore.\n(A) The reinforced trousers sold so well that Davis feared others would copy the idea. Lacking the money to apply for a patent, he wrote to his cloth supplier, Levi Strauss, proposing that they share one.\n(B) Strauss accepted the offer, and the patent was granted in 1873. The two men began producing riveted work trousers made of blue denim, the garment now known as jeans.\n(C) A tailor named Jacob Davis found a remedy for this in 1870. He hammered small copper rivets into the corners of the pockets, the points where the cloth was under the greatest strain.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 광부들의 바지, 특히 주머니가 쉽게 찢어진다는 문제를 제시합니다. 이 문제(this)의 해결책으로 재단사 Jacob Davis가 주머니 모서리에 구리 리벳을 박았다는 (C)가 먼저 오고, 그렇게 보강된 바지(The reinforced trousers)가 잘 팔리자 Davis가 Levi Strauss에게 특허를 함께 내자고 제안했다는 (A)가 이어집니다. 마지막으로 Strauss가 그 제안(the offer)을 받아들여 특허를 얻고 청바지를 생산했다는 (B)가 오는 것이 자연스럽습니다. (A)의 Davis는 (C)에서 먼저 소개되어야 하고, (B)의 the offer는 (A)의 제안을 가리킵니다.",
+    "vocab": [
+      {
+        "word": "ore",
+        "meaning": "광석"
+      },
+      {
+        "word": "rivet",
+        "meaning": "리벳(금속 고정 못)"
+      },
+      {
+        "word": "reinforce",
+        "meaning": "보강하다"
+      },
+      {
+        "word": "patent",
+        "meaning": "특허"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-14-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-14",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "No matter when or where you look at the Moon from Earth, you always see the same face. ① This is not because the Moon does not rotate. ② In fact, it turns on its axis exactly once during each trip around Earth, so the same side is always turned toward us. ③ This match is no coincidence; long ago, the Moon rotated much faster than it does today. ④ It pulled on the slightly stretched shape of the Moon and slowed its rotation until the two motions matched. ⑤ Astronomers call this state tidal locking, and most large moons in the solar system have reached it.",
+    "givenSentence": "Over billions of years, however, Earth's gravity acted like a brake on that spin.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 that spin은 ④ 앞 문장의 '달이 오늘날보다 훨씬 빠르게 자전했다'는 내용을 가리키고, however는 '예전에는 빨랐지만 지구의 중력이 브레이크처럼 작용했다'는 전환을 나타냅니다. 또한 ④ 뒤 문장의 It(달의 약간 늘어난 모양을 잡아당겨 자전을 늦춘 것)은 주어진 문장의 Earth's gravity를 가리킵니다. 주어진 문장이 없으면 ④ 뒤의 It이 가리킬 대상이 없어 흐름이 끊기므로 ④가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "rotate",
+        "meaning": "자전하다, 회전하다"
+      },
+      {
+        "word": "axis",
+        "meaning": "축"
+      },
+      {
+        "word": "coincidence",
+        "meaning": "우연의 일치"
+      },
+      {
+        "word": "astronomer",
+        "meaning": "천문학자"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-14-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-14",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "In the deep ocean, below the reach of sunlight, most animals produce their own light through chemical reactions in their bodies. This ability serves strikingly different purposes. The anglerfish dangles a glowing lure in front of its mouth to draw curious prey within range. Certain squid, when attacked, release a cloud of shining fluid that confuses the predator while they slip away. Other species flash in particular rhythms that allow males and females of the same kind to find each other in the vast darkness. Some fish even light up their bellies to match the faint glow from above, erasing the shadow that would reveal them to hunters below.",
+    "choices": [
+      "various functions of light produced by deep-sea animals",
+      "chemical processes that carry sunlight to the deep sea",
+      "threats that commercial fishing poses to deep-sea species",
+      "difficulties scientists face in exploring the ocean floor",
+      "reasons why deep-sea animals have lost their eyesight"
+    ],
+    "answerIndex": 0,
+    "explanation": "심해 동물이 스스로 만들어 내는 빛이 '놀랄 만큼 서로 다른 목적'에 쓰인다고 한 뒤, 먹이 유인(아귀), 포식자 교란(오징어), 짝 찾기, 그림자를 지워 몸을 숨기기라는 네 가지 쓰임을 차례로 예로 들고 있습니다. 따라서 주제는 '심해 동물이 만들어 내는 빛의 다양한 기능'입니다. ② 햇빛은 심해에 닿지 않는다고 했고, ③ 어업의 위협, ④ 해저 탐사의 어려움, ⑤ 시력을 잃은 이유는 글에 언급되지 않았습니다.",
+    "vocab": [
+      {
+        "word": "dangle",
+        "meaning": "매달다, 달랑거리게 하다"
+      },
+      {
+        "word": "lure",
+        "meaning": "미끼, 유인물"
+      },
+      {
+        "word": "prey",
+        "meaning": "먹이, 사냥감"
+      },
+      {
+        "word": "faint",
+        "meaning": "희미한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-14-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-14",
+    "prompt": "수열 {aₙ}이 a₁ = 2이고, 모든 자연수 n에 대하여 aₙ₊₁ = aₙ + 2n을 만족시킬 때, a₁₀의 값은?",
+    "choices": [
+      "88",
+      "90",
+      "92",
+      "94",
+      "96"
+    ],
+    "answerIndex": 2,
+    "explanation": "aₙ₊₁ − aₙ = 2n이므로 a₁₀ = a₁ + Σ(k=1~9) 2k = 2 + 2 × (9 × 10)/2 = 2 + 90 = 92입니다.",
+    "concept": "aₙ₊₁ − aₙ = f(n) 꼴의 점화식은 aₙ = a₁ + Σ(k=1~n−1) f(k)로 구한다 (계차의 합)."
+  },
+  {
+    "id": "math-2026-11-14-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-14",
+    "prompt": "함수 f(x) = x³ + ax² + bx가 x = 1에서 극솟값 −4를 가질 때, a − b의 값은? (단, a, b는 상수이다.)",
+    "choices": [
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² + 2ax + b입니다. x = 1에서 극값을 가지므로 f′(1) = 3 + 2a + b = 0, 극솟값이 −4이므로 f(1) = 1 + a + b = −4입니다. 두 식에서 2a + b = −3, a + b = −5이므로 a = 2, b = −7입니다. 이때 f′(x) = 3x² + 4x − 7 = (3x + 7)(x − 1)이고 x = 1의 좌우에서 f′(x)의 부호가 음에서 양으로 바뀌므로 실제로 극소입니다. 따라서 a − b = 2 − (−7) = 9입니다.",
+    "concept": "미분가능한 함수 f(x)가 x = α에서 극값 β를 가지면 f′(α) = 0, f(α) = β이다."
+  },
+  {
+    "id": "math-2026-11-14-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-14",
+    "prompt": "다항함수 f(x)가 모든 실수 x에 대하여 f(x) = 3x² + x∫₀¹ f(t) dt를 만족시킬 때, f(2)의 값은?",
+    "choices": [
+      "12",
+      "14",
+      "16",
+      "18",
+      "20"
+    ],
+    "answerIndex": 2,
+    "explanation": "∫₀¹ f(t) dt는 상수이므로 k라 하면 f(x) = 3x² + kx입니다. k = ∫₀¹ (3t² + kt) dt = [t³ + (k/2)t²]₀¹ = 1 + k/2이므로 k/2 = 1, k = 2입니다. 따라서 f(x) = 3x² + 2x이고 f(2) = 12 + 4 = 16입니다.",
+    "concept": "적분 구간이 상수인 정적분 ∫ₐᵇ f(t) dt는 상수이므로 k로 놓고 식을 세워 k를 구한다."
+  },
+  {
+    "id": "math-2026-11-14-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-14",
+    "prompt": "(x + 2/x)⁶의 전개식에서 x²의 계수는?",
+    "choices": [
+      "40",
+      "48",
+      "60",
+      "72",
+      "80"
+    ],
+    "answerIndex": 2,
+    "explanation": "일반항은 ₆Cᵣ · x⁶⁻ʳ · (2/x)ʳ = ₆Cᵣ · 2ʳ · x⁶⁻²ʳ입니다. x²의 항은 6 − 2r = 2, 즉 r = 2일 때이므로 계수는 ₆C₂ × 2² = 15 × 4 = 60입니다.",
+    "concept": "이항정리: (a + b)ⁿ의 전개식의 일반항은 ₙCᵣ aⁿ⁻ʳ bʳ이다."
+  },
+  {
+    "id": "math-2026-11-14-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-14",
+    "prompt": "삼각형 ABC에서 AB = 5, AC = 8, ∠A = 60°일 때, 삼각형 ABC의 외접원의 넓이는?",
+    "choices": [
+      "16π",
+      "49π/3",
+      "17π",
+      "52π/3",
+      "18π"
+    ],
+    "answerIndex": 1,
+    "explanation": "코사인법칙에서 BC² = 5² + 8² − 2 × 5 × 8 × cos 60° = 25 + 64 − 40 = 49이므로 BC = 7입니다. 사인법칙에서 BC / sin A = 2R이므로 2R = 7 ÷ (√3/2) = 14/√3, R = 7/√3입니다. 따라서 외접원의 넓이는 πR² = 49π/3입니다.",
+    "concept": "코사인법칙 a² = b² + c² − 2bc cos A로 변의 길이를 구하고, 사인법칙 a / sin A = 2R로 외접원의 반지름을 구한다."
   }
 ]
