@@ -19126,5 +19126,266 @@
     "answerIndex": 3,
     "explanation": "sin²x = 1 − cos²x를 대입하면 2(1 − cos²x) + 3cos x − 3 > 0, 즉 2cos²x − 3cos x + 1 < 0이고 (2cos x − 1)(cos x − 1) < 0이므로 1/2 < cos x < 1입니다. 0 < x < 2π에서 cos x = 1/2인 x는 π/3, 5π/3이고 이 범위에서 cos x < 1은 항상 성립하므로, 해는 0 < x < π/3 또는 5π/3 < x < 2π입니다. 따라서 α = π/3, β = 5π/3이고 β − α = 4π/3입니다.",
     "concept": "sin²x + cos²x = 1로 한 종류의 삼각함수에 대한 이차부등식으로 바꾼 뒤, 단위원(또는 그래프)에서 해당 범위의 x를 구한다."
+  },
+  {
+    "id": "en-2026-11-16-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-16",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Until the 1850s, few city buildings rose above six floors. Elevators existed, but they were used almost [u]exclusively[/u]① for freight, since a snapped rope would send the platform crashing to the ground. Elisha Otis, a mechanic working in a New York bed factory, designed a spring-loaded brake [u]that[/u]② gripped the guide rails the moment the rope lost its tension. Few people paid attention until 1854, when he stood on a platform raised high above a crowd at an exhibition and ordered the only rope holding it [u]cut[/u]③. The platform dropped a few centimeters and stopped. Within a few years, passenger elevators were being installed in hotels and department stores. Upper floors, once the cheapest rooms because of the stairs, [u]becoming[/u]④ the most desirable, and architects began designing towers far taller than anyone [u]had[/u]⑤ previously imagined possible.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 주어 Upper floors 뒤의 once the cheapest rooms because of the stairs는 삽입구이고, 이 절에는 동사가 없으므로 준동사 becoming이 아니라 과거시제 동사 became이 되어야 합니다(뒤의 and architects began과 병렬). ① 과거분사 used를 수식하는 부사 exclusively, ② 선행사 a spring-loaded brake를 수식하며 뒤에 주어가 없는 절을 이끄는 주격 관계대명사 that, ③ order + 목적어(the only rope holding it) + 목적격보어 구조에서 밧줄이 '잘리는' 수동 관계이므로 과거분사 cut, ⑤ 주절의 과거(began)보다 앞선 일을 나타내는 과거완료의 조동사 had는 모두 적절합니다.",
+    "vocab": [
+      {
+        "word": "freight",
+        "meaning": "화물"
+      },
+      {
+        "word": "snap",
+        "meaning": "(툭 하고) 끊어지다"
+      },
+      {
+        "word": "tension",
+        "meaning": "팽팽함, 장력"
+      },
+      {
+        "word": "desirable",
+        "meaning": "선호되는, 탐나는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-16-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-16",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "During the Second World War, the American military examined bombers returning from missions and mapped where they had been hit. The bullet holes were concentrated on the wings and the tail, so officers proposed adding armor to those areas. The statistician Abraham Wald disagreed. The planes being studied, he pointed out, were only the ones that had made it home. Damage to the wings and tail was evidently something an aircraft could survive. The engines, by contrast, showed few holes not because they were rarely hit but because planes hit there seldom came back. Wald therefore recommended reinforcing the places where the returning planes were undamaged. His reasoning is a reminder that when we draw conclusions, we must consider ________.",
+    "choices": [
+      "the opinions of those with the most practical experience",
+      "the cost of acting on each possible conclusion",
+      "the cases that are missing from the data we happen to see",
+      "the speed at which new evidence can be collected",
+      "the possibility that our measurements are imprecise"
+    ],
+    "answerIndex": 2,
+    "explanation": "군은 귀환한 폭격기의 총탄 자국이 날개와 꼬리에 몰려 있으니 그곳을 보강하자고 했지만, 월드는 조사 대상이 '돌아온 비행기뿐'이라는 점을 지적했습니다. 엔진에 자국이 적은 것은 엔진을 맞은 비행기가 돌아오지 못했기 때문이므로, 오히려 자국이 없는 곳을 보강해야 한다는 것입니다. 따라서 결론을 내릴 때는 우리가 보게 된 자료에서 빠져 있는 사례(돌아오지 못한 비행기)를 고려해야 한다는 ③이 정답입니다. ① 경험 많은 사람의 의견, ② 결론에 따른 비용, ④ 증거 수집 속도, ⑤ 측정의 부정확성은 글에서 다루지 않았습니다.",
+    "vocab": [
+      {
+        "word": "armor",
+        "meaning": "장갑(裝甲), 철갑"
+      },
+      {
+        "word": "statistician",
+        "meaning": "통계학자"
+      },
+      {
+        "word": "evidently",
+        "meaning": "분명히, 명백히"
+      },
+      {
+        "word": "reinforce",
+        "meaning": "보강하다, 강화하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-16-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-16",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Most substances become denser as they cool, which is why the solid form of a material usually sinks in its own liquid.\n(A) That surface layer of ice then acts as a lid, shielding the water below from the cold air. Fish and other organisms can spend the whole winter in the liquid water beneath it, which would be impossible if lakes froze solid from the bottom.\n(B) Water, however, breaks this rule. It is densest at about four degrees Celsius, and as it cools further toward freezing, its molecules lock into an open, hexagonal structure that takes up more space than the liquid did.\n(C) Because of this expansion, ice is roughly nine percent lighter than the water around it, and so it floats. When winter comes, a lake therefore freezes from the top down rather than from the bottom up.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 대부분의 물질은 식을수록 밀도가 커져 고체가 액체에 가라앉는다는 일반 원칙입니다. 이를 this rule로 받아 물은 예외이며 얼면서 분자가 더 많은 공간을 차지하는 구조가 된다고 설명하는 (B)가 먼저 옵니다. 그 '팽창'을 this expansion으로 받아 얼음이 물보다 가벼워 뜨고, 호수가 위에서부터 언다고 말하는 (C)가 이어집니다. 마지막으로 위에서부터 언 얼음층을 That surface layer of ice로 받아 그것이 뚜껑 역할을 해 물속 생물이 겨울을 난다고 마무리하는 (A)가 옵니다. 따라서 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "dense",
+        "meaning": "밀도가 높은"
+      },
+      {
+        "word": "molecule",
+        "meaning": "분자"
+      },
+      {
+        "word": "hexagonal",
+        "meaning": "육각형의"
+      },
+      {
+        "word": "shield",
+        "meaning": "보호하다, 가리다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-16-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-16",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "Every autumn, bar-tailed godwits leave Alaska and fly to New Zealand, a journey of more than eleven thousand kilometers across the open ocean. ① Unlike seabirds, they cannot rest on the water, so the entire trip must be made without a single stop. ② Satellite tags have shown that some individuals stay in the air for eight or nine days. ③ In the weeks before departure, the birds eat almost constantly, until fat makes up more than half of their body weight. ④ Organs that will not be needed during the flight, such as the stomach and intestines, shrink, leaving more room for fuel. ⑤ By the time they land, the godwits have burned nearly all of their fat and lost about half of their weight.",
+    "givenSentence": "Such an extraordinary flight is possible only because their bodies change dramatically beforehand.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장의 Such an extraordinary flight는 ①~② 뒤 문장까지 설명된 '한 번도 쉬지 않고 8~9일을 나는 비행'을 가리키고, their bodies change dramatically beforehand(미리 몸이 극적으로 변한다)는 ③ 뒤부터 이어지는 구체적 내용, 즉 출발 전 지방을 체중의 절반 넘게 쌓고 소화 기관이 줄어든다는 설명을 이끄는 문장입니다. 따라서 비행의 놀라움을 말하는 부분과 몸의 변화를 설명하는 부분 사이인 ③에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "godwit",
+        "meaning": "도요새의 일종(큰뒷부리도요 등)"
+      },
+      {
+        "word": "departure",
+        "meaning": "출발"
+      },
+      {
+        "word": "intestine",
+        "meaning": "장, 창자"
+      },
+      {
+        "word": "shrink",
+        "meaning": "줄어들다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-16-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-16",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "The Inca ruled an empire that stretched for thousands of kilometers along the Andes, yet they had no writing system in the usual sense. What they had instead was the quipu, a bundle of colored cords hanging from a main cord. Officials tied knots at different heights on each cord to stand for ones, tens, hundreds, and thousands, while the color of a cord indicated what was being counted, such as soldiers, llamas, or baskets of corn. Trained specialists in every province kept these cords up to date and sent them to the capital by relay runners. In this way the rulers knew how many people lived in each village, how much food lay in each storehouse, and how much labor each community owed.",
+    "choices": [
+      "the religious meaning of colors in Inca clothing",
+      "how the Inca managed their empire with knotted cords",
+      "reasons the Inca never developed a written alphabet",
+      "difficulties scholars face in decoding ancient scripts",
+      "the role of relay runners in Inca military victories"
+    ],
+    "answerIndex": 1,
+    "explanation": "잉카는 문자가 없었지만 매듭의 위치로 수의 자릿값을, 끈의 색으로 세는 대상을 나타내는 키푸(quipu)를 이용해 각 마을의 인구, 창고의 식량, 부역량을 파악했다는 내용입니다. 따라서 '잉카가 매듭 끈으로 제국을 관리한 방법'인 ②가 주제입니다. ① 옷 색깔의 종교적 의미, ④ 고대 문자 해독의 어려움은 언급되지 않았고, ③ 문자를 만들지 않은 이유는 설명되지 않았으며, ⑤ 파발꾼은 끈을 전달하는 수단으로만 잠깐 언급되었습니다.",
+    "vocab": [
+      {
+        "word": "bundle",
+        "meaning": "묶음, 다발"
+      },
+      {
+        "word": "cord",
+        "meaning": "끈, 줄"
+      },
+      {
+        "word": "province",
+        "meaning": "(행정 구역) 지방, 주"
+      },
+      {
+        "word": "owe",
+        "meaning": "(의무·빚을) 지고 있다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-16-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-16",
+    "prompt": "수열 {aₙ}이 a₁ = 3이고, 모든 자연수 n에 대하여 aₙ₊₁ = aₙ + 4n을 만족시킬 때, a₈의 값은?",
+    "choices": [
+      "107",
+      "111",
+      "115",
+      "119",
+      "123"
+    ],
+    "answerIndex": 2,
+    "explanation": "aₙ₊₁ − aₙ = 4n이므로 n = 1, 2, …, 7을 차례로 대입해 더하면 a₈ − a₁ = 4(1 + 2 + … + 7) = 4 × 28 = 112입니다. 따라서 a₈ = 3 + 112 = 115입니다.",
+    "concept": "aₙ₊₁ = aₙ + f(n) 꼴의 귀납적 정의에서는 aₙ = a₁ + ∑ₖ₌₁ⁿ⁻¹ f(k)이다."
+  },
+  {
+    "id": "math-2026-11-16-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-16",
+    "prompt": "닫힌구간 [−1, 3]에서 함수 f(x) = x⁴ − 8x² + 5의 최댓값을 M, 최솟값을 m이라 할 때, M + m의 값은?",
+    "choices": [
+      "−6",
+      "−3",
+      "3",
+      "9",
+      "12"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 4x³ − 16x = 4x(x + 2)(x − 2)이므로 구간 [−1, 3] 안에서 f′(x) = 0인 x는 0, 2입니다. 구간의 양 끝과 극값을 비교하면 f(−1) = 1 − 8 + 5 = −2, f(0) = 5, f(2) = 16 − 32 + 5 = −11, f(3) = 81 − 72 + 5 = 14입니다. 따라서 M = 14, m = −11이고 M + m = 3입니다.",
+    "concept": "닫힌구간에서 연속인 함수의 최댓값·최솟값은 구간 안의 극값과 양 끝점의 함숫값을 비교하여 구한다."
+  },
+  {
+    "id": "math-2026-11-16-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-16",
+    "prompt": "다항함수 f(x)가 모든 실수 x에 대하여 ∫₁ˣ f(t) dt = x³ − ax² + 2를 만족시킬 때, f(3)의 값은? (단, a는 상수)",
+    "choices": [
+      "3",
+      "6",
+      "9",
+      "12",
+      "15"
+    ],
+    "answerIndex": 2,
+    "explanation": "양변에 x = 1을 대입하면 좌변은 0이므로 1 − a + 2 = 0, 즉 a = 3입니다. 양변을 x에 대하여 미분하면 f(x) = 3x² − 2ax = 3x² − 6x이므로 f(3) = 27 − 18 = 9입니다.",
+    "concept": "∫ₐˣ f(t) dt = g(x)이면 x = a를 대입해 g(a) = 0을 얻고, 양변을 미분하면 f(x) = g′(x)이다."
+  },
+  {
+    "id": "math-2026-11-16-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-16",
+    "prompt": "확률변수 X가 이항분포 B(n, p)를 따르고 E(X) = 12, V(X) = 8일 때, E(X²)의 값은?",
+    "choices": [
+      "144",
+      "148",
+      "152",
+      "156",
+      "160"
+    ],
+    "answerIndex": 2,
+    "explanation": "V(X) = E(X²) − {E(X)}²이므로 E(X²) = V(X) + {E(X)}² = 8 + 12² = 8 + 144 = 152입니다. (참고: np = 12, np(1 − p) = 8에서 1 − p = 2/3, p = 1/3, n = 36입니다.)",
+    "concept": "분산의 성질 V(X) = E(X²) − {E(X)}²과 이항분포의 평균 np, 분산 np(1 − p)를 이용한다."
+  },
+  {
+    "id": "math-2026-11-16-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-16",
+    "prompt": "두 양수 a, b와 상수 c에 대하여 함수 f(x) = a cos bx + c의 최댓값이 7, 최솟값이 −3이고 주기가 2π/3일 때, a × b × c의 값은?",
+    "choices": [
+      "20",
+      "24",
+      "30",
+      "36",
+      "45"
+    ],
+    "answerIndex": 2,
+    "explanation": "a > 0이므로 최댓값은 a + c = 7, 최솟값은 −a + c = −3입니다. 두 식을 연립하면 a = 5, c = 2입니다. b > 0이고 주기가 2π/b = 2π/3이므로 b = 3입니다. 따라서 a × b × c = 5 × 3 × 2 = 30입니다.",
+    "concept": "y = a cos bx + c (a > 0, b > 0)의 최댓값은 a + c, 최솟값은 −a + c, 주기는 2π/b이다."
   }
 ]
