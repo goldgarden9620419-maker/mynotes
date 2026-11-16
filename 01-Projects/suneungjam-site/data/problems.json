@@ -19387,5 +19387,266 @@
     "answerIndex": 2,
     "explanation": "a > 0이므로 최댓값은 a + c = 7, 최솟값은 −a + c = −3입니다. 두 식을 연립하면 a = 5, c = 2입니다. b > 0이고 주기가 2π/b = 2π/3이므로 b = 3입니다. 따라서 a × b × c = 5 × 3 × 2 = 30입니다.",
     "concept": "y = a cos bx + c (a > 0, b > 0)의 최댓값은 a + c, 최솟값은 −a + c, 주기는 2π/b이다."
+  },
+  {
+    "id": "en-2026-11-17-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-17",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "In 1937, Sylvan Goldman, the owner of a grocery chain in Oklahoma, noticed that his customers stopped buying as soon as their hand-held baskets became too heavy [u]to carry[/u]①. His solution was a folding metal frame on wheels that held two baskets, one above the other. To his surprise, almost nobody used it. Young men thought that pushing a cart made them [u]look[/u]② weak, while women, many of [u]them[/u]③ had spent years pushing baby carriages, wanted no more of it. Goldman did not give up. He hired men and women of various ages to walk around his stores pretending to shop with the carts, and placed a friendly greeter at the entrance [u]offering[/u]④ one to every arriving customer. Within weeks the carts were in constant use, and orders from other grocers soon arrived faster than his factory could fill [u]them[/u]⑤.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ women과 wanted 사이에 삽입된 many of ~ had spent years ...는 주어(many of ~)와 동사(had spent)를 갖춘 절인데, 앞뒤를 이어 줄 접속사가 없습니다. 따라서 대명사 them이 아니라 접속사 역할을 겸하는 관계대명사 whom을 써서 many of whom이 되어야 합니다. ① 'too ~ to부정사(너무 ~해서 …할 수 없다)' 구문의 to carry, ② 사역동사 made의 목적격 보어로 쓰인 동사원형 look, ④ a friendly greeter를 뒤에서 수식하는 현재분사 offering(인사하는 사람이 카트를 '건네는' 능동 관계), ⑤ 복수 명사 orders를 가리키는 대명사 them은 모두 올바릅니다.",
+    "vocab": [
+      {
+        "word": "grocery chain",
+        "meaning": "식료품 체인점"
+      },
+      {
+        "word": "baby carriage",
+        "meaning": "유모차"
+      },
+      {
+        "word": "greeter",
+        "meaning": "(입구에서) 손님을 맞이하는 직원"
+      },
+      {
+        "word": "constant",
+        "meaning": "끊임없는, 지속적인"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-17-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-17",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In 1865, the English economist William Stanley Jevons looked into a question that worried his country: would Britain's coal run out? Many of his contemporaries were reassured by the fact that steam engines were becoming far more efficient, each one needing less coal to do the same work. Jevons argued that this comfort was misplaced. When James Watt's improved engine cut the fuel needed per unit of work, coal consumption did not fall; it soared. Cheaper power made steam profitable in mines, mills, and railways where it had never paid before, and thousands of new engines were built. The same pattern appears today. As lighting has become more efficient, people have not kept the same number of lamps and pocketed the savings; they have lit streets, buildings, and screens that used to stay dark. Jevons's lesson is that using a resource more efficiently may ________.",
+    "choices": [
+      "lower the quality of the products made with it",
+      "increase the total amount of it that is consumed",
+      "raise its price beyond the reach of ordinary users",
+      "reduce the demand for it more quickly than expected",
+      "turn attention away from the search for alternatives"
+    ],
+    "answerIndex": 1,
+    "explanation": "와트의 개량 증기 기관은 같은 일을 하는 데 드는 석탄을 줄였지만, 동력이 싸지자 광산·공장·철도 등 이전에는 수지가 맞지 않던 곳까지 증기 기관이 퍼져 석탄 소비량은 오히려 급증했습니다. 조명도 효율이 높아지자 절약으로 이어지지 않고 더 많은 곳을 밝히는 데 쓰였습니다. 따라서 자원을 더 효율적으로 쓰면 '그 자원의 전체 소비량이 늘어날 수 있다'는 ②가 정답입니다. ④는 글의 내용과 정반대이고, ① 제품의 질, ③ 가격 상승, ⑤ 대체 자원 탐색은 글에서 언급되지 않았습니다.",
+    "vocab": [
+      {
+        "word": "contemporary",
+        "meaning": "동시대 사람"
+      },
+      {
+        "word": "reassure",
+        "meaning": "안심시키다"
+      },
+      {
+        "word": "misplaced",
+        "meaning": "잘못된, 부적절한"
+      },
+      {
+        "word": "soar",
+        "meaning": "급증하다, 치솟다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-17-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-17",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "An onion growing in the ground has no way of running from the animals that would like to eat it, so it defends itself with chemistry.\n(A) Inside its undamaged cells, sulfur compounds absorbed from the soil are stored in one compartment, while certain enzymes are kept apart in another. As long as the cell walls remain whole, the two never meet.\n(B) Once this gas drifts upward and meets the thin film of water covering your eyes, it turns into a mild acid. Nerve endings there register the sting, and the tear glands respond by flooding the eye to wash the irritant away.\n(C) A knife ends that separation. As the blade crushes cell after cell, the enzymes mix with the sulfur compounds, and within seconds the reaction produces a light gas that rises from the cutting board.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 글은 양파가 화학 물질로 자신을 방어한다는 내용입니다. 그 방어 장치의 평소 상태, 즉 온전한 세포 안에서 황 화합물과 효소가 서로 다른 칸에 따로 보관되어 만나지 않는다는 (A)가 먼저 옵니다. 이 '분리 상태'를 that separation으로 받아, 칼이 세포를 으깨면 둘이 섞여 가벼운 기체가 생긴다는 (C)가 이어집니다. 마지막으로 그 기체를 this gas로 받아, 기체가 눈의 수분과 만나 약한 산이 되고 눈물이 나온다는 (B)가 옵니다. 따라서 (A)-(C)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "sulfur compound",
+        "meaning": "황 화합물"
+      },
+      {
+        "word": "compartment",
+        "meaning": "칸, 구획"
+      },
+      {
+        "word": "enzyme",
+        "meaning": "효소"
+      },
+      {
+        "word": "irritant",
+        "meaning": "자극 물질"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-17-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-17",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "These privileges, however, came at a heavy price.",
+    "passage": "In 1291, the government of Venice ordered all of the city's glassmakers to move their furnaces to the nearby island of Murano. ① The official reason was the danger of fire, since Venice was then built largely of wood. ② But gathering the craftsmen in one place also made it far easier to guard the techniques that made Venetian glass the most admired in Europe. ③ Master glassmakers were treated almost like nobles: they could carry swords, and their daughters were permitted to marry into the city's leading families. ④ They were forbidden to leave the Republic, and a master who carried his knowledge abroad risked being hunted down by agents of the state. ⑤ Even so, a few did escape over the centuries, and the mirror workshops they helped to set up in France eventually ended Murano's monopoly.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 These privileges(이러한 특권)는 ④ 앞 문장에서 설명한 '칼을 찰 수 있고 딸이 명문가와 결혼할 수 있었다'는 귀족에 가까운 대우를 가리킵니다. 또한 however와 a heavy price(무거운 대가)는 ④ 뒤 문장의 '공화국을 떠나는 것이 금지되었고, 기술을 가지고 나가면 추적당할 위험이 있었다'는 내용으로 구체화됩니다. ④ 앞에는 특권이 아직 언급되지 않았으므로 ①~③에는 들어갈 수 없고, ⑤에 넣으면 대가의 내용이 먼저 나와 흐름이 어색합니다. 따라서 ④가 정답입니다.",
+    "vocab": [
+      {
+        "word": "furnace",
+        "meaning": "용광로, 가마"
+      },
+      {
+        "word": "privilege",
+        "meaning": "특권"
+      },
+      {
+        "word": "forbid",
+        "meaning": "금지하다"
+      },
+      {
+        "word": "monopoly",
+        "meaning": "독점"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-17-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-17",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When Christopher Columbus carried the first pineapple back to Europe in 1493, most of the fruit had rotted on the voyage, and the single one that survived delighted the Spanish court. For the next three centuries, the fruit remained almost impossibly scarce in northern Europe. It could not survive the long Atlantic crossing, and growing one in England required a heated glasshouse, constant attention, and up to three years of patience; a single pineapple could cost as much as a new coach. Owners therefore rarely ate them. A pineapple was placed at the center of the dinner table for guests to admire and was shown again at party after party until it began to rot. Families that could not afford to buy one could rent one for an evening. Carved stone pineapples soon appeared on gateposts and rooftops, announcing a household's wealth to everyone who passed.",
+    "choices": [
+      "farming techniques that made tropical fruit affordable",
+      "the role of Columbus in changing European diets",
+      "health beliefs about exotic fruits in royal courts",
+      "reasons glasshouses spread across northern Europe",
+      "the pineapple as a display of wealth in earlier Europe"
+    ],
+    "answerIndex": 4,
+    "explanation": "파인애플은 긴 항해를 견디지 못하고 영국에서 기르려면 온실과 3년에 가까운 시간이 필요해 마차 한 대 값에 이를 만큼 귀했고, 그래서 주인들은 먹지 않고 식탁 한가운데에 놓아 손님에게 보여 주었으며, 살 수 없는 집은 하룻저녁 빌리기까지 했고, 돌로 조각한 파인애플이 대문 기둥과 지붕에 놓여 집안의 부를 알렸다는 내용입니다. 따라서 '과거 유럽에서 부를 과시하는 수단이었던 파인애플'인 ⑤가 주제입니다. ① 글에서 파인애플은 끝까지 값비싼 과일로 그려지고, ② 콜럼버스는 도입부의 배경일 뿐이며, ③ 건강에 관한 믿음과 ④ 온실이 퍼진 이유는 언급되지 않았습니다.",
+    "vocab": [
+      {
+        "word": "rot",
+        "meaning": "썩다"
+      },
+      {
+        "word": "scarce",
+        "meaning": "드문, 희귀한"
+      },
+      {
+        "word": "glasshouse",
+        "meaning": "온실"
+      },
+      {
+        "word": "gatepost",
+        "meaning": "대문 기둥"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-17-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-17",
+    "prompt": "수열 {aₙ}의 첫째항부터 제n항까지의 합 Sₙ이 Sₙ = 3n² − 2n일 때, a₁ + a₁₀의 값은?",
+    "choices": [
+      "53",
+      "56",
+      "59",
+      "62",
+      "65"
+    ],
+    "answerIndex": 1,
+    "explanation": "a₁ = S₁ = 3 − 2 = 1입니다. a₁₀ = S₁₀ − S₉이고 S₁₀ = 300 − 20 = 280, S₉ = 243 − 18 = 225이므로 a₁₀ = 55입니다. 따라서 a₁ + a₁₀ = 1 + 55 = 56입니다. (일반항으로 구하면 n ≥ 2일 때 aₙ = Sₙ − Sₙ₋₁ = 6n − 5이고, 이는 n = 1일 때도 성립합니다.)",
+    "concept": "수열의 합과 일반항의 관계: a₁ = S₁, aₙ = Sₙ − Sₙ₋₁ (n ≥ 2)"
+  },
+  {
+    "id": "math-2026-11-17-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-17",
+    "prompt": "곡선 y = x³ − 3x² + 5x 위의 점에서의 접선 중 기울기가 최소인 접선의 y절편은?",
+    "choices": [
+      "−2",
+      "−1",
+      "0",
+      "1",
+      "2"
+    ],
+    "answerIndex": 3,
+    "explanation": "y′ = 3x² − 6x + 5 = 3(x − 1)² + 2이므로 접선의 기울기는 x = 1일 때 최솟값 2를 가집니다. x = 1일 때 y = 1 − 3 + 5 = 3이므로 접점은 (1, 3)이고, 접선의 방정식은 y − 3 = 2(x − 1), 즉 y = 2x + 1입니다. 따라서 y절편은 1입니다.",
+    "concept": "곡선 y = f(x) 위의 x = a인 점에서의 접선의 기울기는 f′(a)이며, 이차함수 f′(x)의 최솟값은 완전제곱식으로 고쳐 구한다."
+  },
+  {
+    "id": "math-2026-11-17-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-17",
+    "prompt": "정적분 ∫₀³ |x² − 2x| dx의 값은?",
+    "choices": [
+      "4/3",
+      "2",
+      "8/3",
+      "10/3",
+      "4"
+    ],
+    "answerIndex": 2,
+    "explanation": "x² − 2x = x(x − 2)이므로 0 ≤ x ≤ 2에서 x² − 2x ≤ 0, 2 ≤ x ≤ 3에서 x² − 2x ≥ 0입니다. 따라서 ∫₀³ |x² − 2x| dx = ∫₀² (2x − x²) dx + ∫₂³ (x² − 2x) dx입니다. 첫째 적분은 [x² − x³/3]₀² = 4 − 8/3 = 4/3이고, 둘째 적분은 [x³/3 − x²]₂³ = (9 − 9) − (8/3 − 4) = 4/3입니다. 따라서 구하는 값은 4/3 + 4/3 = 8/3입니다.",
+    "concept": "절댓값 기호가 있는 정적분은 절댓값 안의 식의 부호가 바뀌는 점을 기준으로 구간을 나누어 계산한다."
+  },
+  {
+    "id": "math-2026-11-17-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-17",
+    "prompt": "서로 다른 두 개의 주사위를 동시에 던져서 나온 두 눈의 수의 곱이 짝수일 때, 두 눈의 수의 합이 짝수일 확률은?",
+    "choices": [
+      "1/3",
+      "4/9",
+      "1/2",
+      "5/9",
+      "2/3"
+    ],
+    "answerIndex": 0,
+    "explanation": "전체 경우의 수는 36입니다. 곱이 홀수인 경우는 두 눈이 모두 홀수인 3 × 3 = 9가지이므로, 곱이 짝수인 경우는 36 − 9 = 27가지입니다. 이 중 합이 짝수인 경우는 두 눈의 홀짝이 같아야 하는데, 곱이 짝수이려면 둘 다 홀수일 수는 없으므로 두 눈이 모두 짝수인 3 × 3 = 9가지입니다. 따라서 구하는 확률은 9/27 = 1/3입니다.",
+    "concept": "조건부확률 P(B|A) = P(A∩B)/P(A) = n(A∩B)/n(A)"
+  },
+  {
+    "id": "math-2026-11-17-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-17",
+    "prompt": "삼각형 ABC에서 AB = 5, AC = 8이고 각 A가 예각이다. 삼각형 ABC의 넓이가 10√3일 때, 선분 BC의 길이는?",
+    "choices": [
+      "5",
+      "11/2",
+      "6",
+      "13/2",
+      "7"
+    ],
+    "answerIndex": 4,
+    "explanation": "삼각형의 넓이는 (1/2) × AB × AC × sin A = (1/2) × 5 × 8 × sin A = 20 sin A = 10√3이므로 sin A = √3/2입니다. 각 A가 예각이므로 A = 60°, cos A = 1/2입니다. 코사인법칙에 의해 BC² = 5² + 8² − 2 × 5 × 8 × (1/2) = 25 + 64 − 40 = 49이므로 BC = 7입니다.",
+    "concept": "삼각형의 넓이 S = (1/2)bc sin A와 코사인법칙 a² = b² + c² − 2bc cos A를 이용한다."
   }
 ]
