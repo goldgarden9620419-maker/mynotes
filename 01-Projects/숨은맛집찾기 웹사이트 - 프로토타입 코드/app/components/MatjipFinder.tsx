@@ -58,6 +58,7 @@ const REVIEWED_PLACES: { match: string; url: string }[] = [
   { match: "조돌칼국수", url: "https://blog.naver.com/gold-jw0419/224468605265" },
   { match: "은가비", url: "https://blog.naver.com/gold-jw0419/224469555513" },
   { match: "고령촌돼지찌개", url: "https://blog.naver.com/gold-jw0419/224474283859" },
+  { match: "별꽃자리", url: "https://blog.naver.com/gold-jw0419/224477981600" },
 ];
 
 function reviewedPostUrl(name: string) {
