@@ -32,7 +32,8 @@
     "이불만 갰을 뿐인데 (침대 정리, 작은 성취, 습관)",
     "남는 돈으로 모으려 했다 (선저축, 통장 쪼개기, 자동이체)",
     "평일엔 못 해서 주말에 몰아서 했다 (주말 운동, 주 150분, 부상 예방)",
-    "목표를 이뤄도 행복은 내일로 미뤘다 (피크엔드 법칙, 경험하는 나, 기억하는 나)"
+    "목표를 이뤄도 행복은 내일로 미뤘다 (피크엔드 법칙, 경험하는 나, 기억하는 나)",
+    "야식이 위로인 줄 알았다 (생체시계, 식사 시간, 야식)"
   ],
   "pending_drafts": [
     {
@@ -175,6 +176,17 @@
       "review_note": "gpt_review.py 자동 교차 검토(84→84→88, 사용자 실제 장면 추가 후 통과), 쓰레드 새 마지막 줄 첫 적용",
       "url": "https://diary21462.tistory.com/entry/%EB%AA%A9%ED%91%9C%EB%A5%BC-%EC%9D%B4%EB%A4%84%EB%8F%84-%ED%96%89%EB%B3%B5%EC%9D%80-%EB%82%B4%EC%9D%BC%EB%A1%9C-%EB%AF%B8%EB%A4%98%EB%8B%A4-%ED%94%BC%ED%81%AC%EC%97%94%EB%93%9C-%EB%B2%95%EC%B9%99-%EA%B2%BD%ED%97%98%ED%95%98%EB%8A%94-%EB%82%98-%EA%B8%B0%EC%96%B5%ED%95%98%EB%8A%94-%EB%82%98",
       "thread_media": "있음(GIF·영상)"
+    },
+    {
+      "topic": "야식이 위로인 줄 알았다 (생체시계, 식사 시간, 야식)",
+      "published_at": "2026-11-17",
+      "tistory_category": "미라클모닝·아침루틴",
+      "studio_doc": "p-20261117-late-night-eating",
+      "layout": "E",
+      "review_score": 88,
+      "review_note": "gpt_review.py 자동 교차 검토(84→88), 강연 '12분'→'10분 남짓' 사실 보정",
+      "url": "https://diary21462.tistory.com/entry/%EC%95%BC%EC%8B%9D%EC%9D%B4-%EC%9C%84%EB%A1%9C%EC%9D%B8-%EC%A4%84-%EC%95%8C%EC%95%98%EB%8B%A4-%EC%83%9D%EC%B2%B4%EC%8B%9C%EA%B3%84-%EC%8B%9D%EC%82%AC-%EC%8B%9C%EA%B0%84-%EC%95%BC%EC%8B%9D",
+      "thread_media": "있음"
     }
   ],
   "counters": {
