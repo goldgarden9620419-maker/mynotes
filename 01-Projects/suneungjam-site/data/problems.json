@@ -19648,5 +19648,266 @@
     "answerIndex": 4,
     "explanation": "삼각형의 넓이는 (1/2) × AB × AC × sin A = (1/2) × 5 × 8 × sin A = 20 sin A = 10√3이므로 sin A = √3/2입니다. 각 A가 예각이므로 A = 60°, cos A = 1/2입니다. 코사인법칙에 의해 BC² = 5² + 8² − 2 × 5 × 8 × (1/2) = 25 + 64 − 40 = 49이므로 BC = 7입니다.",
     "concept": "삼각형의 넓이 S = (1/2)bc sin A와 코사인법칙 a² = b² + c² − 2bc cos A를 이용한다."
+  },
+  {
+    "id": "en-2026-11-18-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-18",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "One foggy night in 1933, Percy Shaw, a road repairer from the north of England, was driving home along a dark, winding road [u]when[/u]① his headlights were caught by the eyes of a cat sitting on a fence. The two bright points of light told him exactly [u]where[/u]② the edge of the road lay. Shaw wondered whether the same effect could be built into the road itself. After many experiments, he produced a small device [u]consisting[/u]③ of glass beads set in a rubber dome and held in an iron case. The beads sent a driver's own headlights straight back toward the car, [u]marked[/u]④ the center of the road without any electricity. Shaw even solved the problem of dirt: each time a tire pressed the dome down, the rubber wiped the glass clean with rainwater [u]collected[/u]⑤ in the base. During the wartime blackouts that followed, his \"cat's eyes\" were fixed into roads across Britain.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 문장에는 이미 동사 sent가 있고, 콤마 뒤에 접속사 없이 또 다른 동사 marked가 올 수 없습니다. 앞 절의 내용(구슬이 전조등 불빛을 되돌려 보냄)에 이어 '그 결과 도로 중앙을 표시한다'는 뜻의 분사구문이 되어야 하므로 현재분사 marking으로 고쳐야 합니다. ① '~하고 있었는데 그때'라는 뜻으로 과거진행형 뒤에 쓰인 접속사 when, ② told의 직접목적어인 간접의문문(where + 주어 + 동사)을 이끄는 where, ③ a small device를 뒤에서 수식하는 현재분사 consisting (of), ⑤ rainwater를 뒤에서 수식하며 '모인'이라는 수동의 뜻을 나타내는 과거분사 collected는 모두 어법상 맞습니다.",
+    "vocab": [
+      {
+        "word": "winding",
+        "meaning": "구불구불한"
+      },
+      {
+        "word": "bead",
+        "meaning": "구슬"
+      },
+      {
+        "word": "dome",
+        "meaning": "반구형 덮개"
+      },
+      {
+        "word": "blackout",
+        "meaning": "등화관제, 정전"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-18-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-18",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Visitors to Japan are often puzzled by the behavior of railway workers. A driver sitting alone in the cab points a white-gloved finger at a signal and announces its color aloud, though no one is there to hear. A conductor on the platform points along the length of the train and calls out that the doors are clear. The habit, known as \"pointing and calling,\" may look like an empty ritual, but it rests on a sound observation: people who repeat a task thousands of times stop really seeing what is in front of them. Their eyes pass over the signal while their thoughts are elsewhere. Adding a movement of the arm and the sound of one's own voice forces the worker to ________. In one frequently cited Japanese study, workers performing a simple task made 2.38 errors per hundred actions when they did nothing special, but only 0.38 when they both pointed and called.",
+    "choices": [
+      "finish each task more quickly than before",
+      "rely on coworkers to catch any mistakes",
+      "turn an automatic glance into a conscious check",
+      "memorize the rules instead of looking at signals",
+      "hide signs of tiredness from the passengers"
+    ],
+    "answerIndex": 2,
+    "explanation": "빈칸 앞에서 같은 일을 수천 번 반복한 사람은 눈앞의 것을 '제대로 보지 않게' 되어, 눈은 신호를 지나가지만 생각은 다른 데 가 있다고 했습니다. 팔 동작과 자기 목소리를 더하는 것은 이 문제를 해결하는 장치이므로, 습관적으로 흘려보던 것을 의식적으로 확인하게 만든다는 ③ '무의식적인 훑어보기를 의식적인 확인으로 바꾸다'가 정답입니다. 뒤 문장의 오류율 감소(100회당 2.38회 → 0.38회)도 이를 뒷받침합니다. ① 속도, ② 동료에게 의존하기, ⑤ 피로 숨기기는 글에 없는 내용이고, ④는 신호를 직접 보고 확인하게 한다는 글의 취지와 반대입니다.",
+    "vocab": [
+      {
+        "word": "cab",
+        "meaning": "(기차의) 운전실"
+      },
+      {
+        "word": "conductor",
+        "meaning": "차장, 승무원"
+      },
+      {
+        "word": "ritual",
+        "meaning": "의식, 의례적인 행동"
+      },
+      {
+        "word": "sound",
+        "meaning": "타당한, 믿을 만한"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-18-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-18",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "A pearl, unlike a diamond or a ruby, is not dug out of rock; it is built, layer by layer, inside a living animal.\n(A) Unable to remove the intruder, the oyster does the next best thing and seals it off. It coats the object with the same smooth, shiny material that lines the inside of its own shell.\n(B) This coating does not stop after a single layer. Over several years thousands of extremely thin sheets are added, one on top of another, until the irritating speck has disappeared inside a gleaming sphere.\n(C) The process usually begins by accident. A tiny parasite or a bit of broken shell slips between the two halves of an oyster and becomes stuck in the soft tissue, where the animal cannot push it out.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 진주가 살아 있는 동물 안에서 한 겹씩 만들어진다는 내용입니다. 그 과정(The process)의 시작, 즉 기생충이나 조개껍데기 조각이 굴 안에 끼어 빠지지 않는다는 (C)가 먼저 옵니다. 이 이물질을 the intruder로 받아, 굴이 그것을 내보낼 수 없어 껍데기 안쪽과 같은 물질로 감싼다는 (A)가 이어집니다. 마지막으로 이 감싸는 작업을 This coating으로 받아, 수천 겹이 쌓여 마침내 빛나는 구슬이 된다는 (B)가 옵니다. 따라서 (C)-(A)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "parasite",
+        "meaning": "기생충"
+      },
+      {
+        "word": "intruder",
+        "meaning": "침입자"
+      },
+      {
+        "word": "speck",
+        "meaning": "작은 알갱이, 티끌"
+      },
+      {
+        "word": "gleaming",
+        "meaning": "반짝이는, 빛나는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-18-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-18",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "Their indifference ended in the hot summer of 1858.",
+    "passage": "By the middle of the nineteenth century, London's two and a half million people were sending their waste straight into the River Thames. ① The same river supplied much of the city's drinking water, and outbreaks of cholera killed tens of thousands. ② Engineers had drawn up plans for a new system of sewers, but members of Parliament, unwilling to pay for it, kept putting the matter off. ③ Weeks of heat left the river so foul that the curtains of the Parliament building, which stands on its bank, were soaked in chemicals to mask the smell, and lawmakers talked of moving out of the city. ④ Within eighteen days they passed a bill to fund the project, and the engineer Joseph Bazalgette was set to work. ⑤ His network of brick tunnels, much of which is still in use, carried the waste far downstream, and once it was complete, the city's cholera epidemics came to an end.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장의 Their indifference(그들의 무관심)는 ③ 앞 문장에서 비용을 대기 싫어 하수도 건설 문제를 계속 미루던 의회 의원들의 태도를 가리킵니다. 또한 the hot summer of 1858은 ③ 뒤 문장의 Weeks of heat(몇 주간의 더위)로 이어져, 강의 악취가 의사당까지 덮쳤다는 내용으로 구체화됩니다. ①, ② 위치에서는 Their가 가리킬 의원들이 아직 나오지 않았고, ④, ⑤에 넣으면 더위와 악취가 이미 서술된 뒤여서 '1858년 여름에 끝났다'는 도입이 뒤늦게 나와 흐름이 어색합니다. 따라서 ③이 정답입니다.",
+    "vocab": [
+      {
+        "word": "indifference",
+        "meaning": "무관심"
+      },
+      {
+        "word": "outbreak",
+        "meaning": "(질병의) 발생, 발병"
+      },
+      {
+        "word": "sewer",
+        "meaning": "하수도"
+      },
+      {
+        "word": "foul",
+        "meaning": "악취가 나는, 더러운"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-18-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-18",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "In the ancient Mediterranean, the most valued dye came from a small sea snail. Workers in the Phoenician city of Tyre cracked open the shells, removed a tiny gland from each animal, and left the glands to soak for days in great vats, producing a smell so terrible that dye works were built outside the city walls. Roughly ten thousand snails were needed to yield a single gram of dye, enough to color only the edge of one garment. Unlike plant dyes, however, this purple did not fade in sunlight or after washing; it was said to grow brighter with age. A pound of purple wool could cost more than most people earned in a year. In Rome, the law eventually reserved fully purple robes for the emperor alone, and the expression \"born in the purple\" came to mean born into a ruling family.",
+    "choices": [
+      "why purple came to be linked with power in antiquity",
+      "methods of protecting sea snails from overharvesting",
+      "the decline of Phoenician trade under Roman rule",
+      "advantages of plant dyes over those made from animals",
+      "health risks faced by workers in ancient dye works"
+    ],
+    "answerIndex": 0,
+    "explanation": "고대 지중해에서 자주색 염료는 바다 달팽이 약 만 마리에서 겨우 1그램이 나올 만큼 귀했고, 바래지 않는 품질 덕분에 자주색 양모 1파운드가 보통 사람의 1년 수입보다 비쌌으며, 결국 로마에서는 온통 자주색인 옷을 황제만 입을 수 있게 되어 '자주색 속에서 태어났다'는 말이 통치 가문 출신을 뜻하게 되었다는 내용입니다. 따라서 '고대에 자주색이 권력과 연결된 이유'인 ①이 주제입니다. ② 달팽이 보호, ③ 페니키아 무역의 쇠퇴, ⑤ 염색 노동자의 건강 위험은 언급되지 않았고, ④는 식물 염료가 오히려 쉽게 바랜다고 한 글의 내용과 반대입니다.",
+    "vocab": [
+      {
+        "word": "dye",
+        "meaning": "염료"
+      },
+      {
+        "word": "gland",
+        "meaning": "분비샘"
+      },
+      {
+        "word": "vat",
+        "meaning": "큰 통"
+      },
+      {
+        "word": "garment",
+        "meaning": "의복, 옷"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-18-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-18",
+    "prompt": "∑_{k=1}^{12} 1/(√(k+3) + √(k+4))의 값은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "분모를 유리화하면 1/(√(k+3) + √(k+4)) = (√(k+4) − √(k+3)) / ((k+4) − (k+3)) = √(k+4) − √(k+3)입니다. 따라서 주어진 합은 (√5 − √4) + (√6 − √5) + … + (√16 − √15)이고, 중간 항이 모두 소거되어 √16 − √4 = 4 − 2 = 2입니다.",
+    "concept": "분모에 근호의 합이 있는 수열의 합은 분모를 유리화하여 √(k+1) − √k 꼴로 바꾼 뒤, 이웃한 항끼리 소거한다."
+  },
+  {
+    "id": "math-2026-11-18-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-18",
+    "prompt": "수직선 위를 움직이는 점 P의 시각 t (t ≥ 0)에서의 위치 x가 x = t³ − 6t² + 9t일 때, 점 P가 두 번째로 운동 방향을 바꾸는 시각에서의 가속도는?",
+    "choices": [
+      "2",
+      "4",
+      "6",
+      "8",
+      "10"
+    ],
+    "answerIndex": 2,
+    "explanation": "속도는 v = dx/dt = 3t² − 12t + 9 = 3(t − 1)(t − 3)입니다. v의 부호가 t = 1에서 양에서 음으로, t = 3에서 음에서 양으로 바뀌므로 점 P는 t = 1, t = 3에서 운동 방향을 바꾸고, 두 번째로 바꾸는 시각은 t = 3입니다. 가속도는 a = dv/dt = 6t − 12이므로 t = 3일 때 a = 18 − 12 = 6입니다.",
+    "concept": "위치 x를 t로 미분하면 속도 v, 속도를 t로 미분하면 가속도 a이며, 운동 방향은 v의 부호가 바뀌는 시각에 바뀐다."
+  },
+  {
+    "id": "math-2026-11-18-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-18",
+    "prompt": "다항함수 f(x)가 모든 실수 x에 대하여 f(x) = 4x³ + x∫₀¹ f(t) dt를 만족시킬 때, f(2)의 값은?",
+    "choices": [
+      "28",
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "answerIndex": 4,
+    "explanation": "∫₀¹ f(t) dt는 상수이므로 k라 하면 f(x) = 4x³ + kx입니다. 이를 대입하면 k = ∫₀¹ (4t³ + kt) dt = [t⁴ + (k/2)t²]₀¹ = 1 + k/2이므로 k/2 = 1, 즉 k = 2입니다. 따라서 f(x) = 4x³ + 2x이고 f(2) = 32 + 4 = 36입니다.",
+    "concept": "적분 구간이 상수인 정적분 ∫ₐᵇ f(t) dt는 상수이므로 k로 놓고, f(x)를 다시 대입하여 k의 값을 구한다."
+  },
+  {
+    "id": "math-2026-11-18-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-18",
+    "prompt": "5개의 문자 a, a, b, b, c를 모두 일렬로 나열할 때, 같은 문자끼리는 서로 이웃하지 않도록 나열하는 경우의 수는?",
+    "choices": [
+      "6",
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "answerIndex": 3,
+    "explanation": "전체 경우의 수는 5!/(2! × 2!) = 30입니다. a끼리 이웃하는 경우는 aa를 한 묶음으로 보고 (aa), b, b, c를 나열하는 4!/2! = 12가지이고, b끼리 이웃하는 경우도 마찬가지로 12가지입니다. a끼리도 이웃하고 b끼리도 이웃하는 경우는 (aa), (bb), c를 나열하는 3! = 6가지입니다. 따라서 같은 문자가 이웃하는 경우는 12 + 12 − 6 = 18가지이고, 구하는 경우의 수는 30 − 18 = 12입니다.",
+    "concept": "같은 것이 있는 순열의 수 n!/(p! q!)와 여사건, 합집합의 원소의 개수 n(A∪B) = n(A) + n(B) − n(A∩B)를 이용한다."
+  },
+  {
+    "id": "math-2026-11-18-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-18",
+    "prompt": "함수 f(x) = cos²x + 4sin x + 1의 최댓값을 M, 최솟값을 m이라 할 때, M − m의 값은?",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answerIndex": 2,
+    "explanation": "cos²x = 1 − sin²x이므로 sin x = t (−1 ≤ t ≤ 1)로 놓으면 f(x) = −t² + 4t + 2 = −(t − 2)² + 6입니다. 꼭짓점의 t좌표 2가 범위 −1 ≤ t ≤ 1의 오른쪽에 있으므로 이 범위에서 함수는 증가합니다. 따라서 t = 1일 때 최댓값 M = −1 + 4 + 2 = 5, t = −1일 때 최솟값 m = −1 − 4 + 2 = −3이고, M − m = 5 − (−3) = 8입니다.",
+    "concept": "sin²x + cos²x = 1을 이용해 한 종류의 삼각함수로 통일한 뒤, sin x = t (−1 ≤ t ≤ 1)로 치환하여 제한된 범위에서 이차함수의 최대·최소를 구한다."
   }
 ]
