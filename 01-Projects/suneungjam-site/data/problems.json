@@ -19909,5 +19909,266 @@
     "answerIndex": 2,
     "explanation": "cos²x = 1 − sin²x이므로 sin x = t (−1 ≤ t ≤ 1)로 놓으면 f(x) = −t² + 4t + 2 = −(t − 2)² + 6입니다. 꼭짓점의 t좌표 2가 범위 −1 ≤ t ≤ 1의 오른쪽에 있으므로 이 범위에서 함수는 증가합니다. 따라서 t = 1일 때 최댓값 M = −1 + 4 + 2 = 5, t = −1일 때 최솟값 m = −1 − 4 + 2 = −3이고, M − m = 5 − (−3) = 8입니다.",
     "concept": "sin²x + cos²x = 1을 이용해 한 종류의 삼각함수로 통일한 뒤, sin x = t (−1 ≤ t ≤ 1)로 치환하여 제한된 범위에서 이차함수의 최대·최소를 구한다."
+  },
+  {
+    "id": "en-2026-11-19-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-19",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "For centuries, scurvy killed more sailors than storms, shipwrecks, and battles combined. On long voyages, men who had eaten nothing but salted meat and dry biscuit for months found [u]themselves[/u]① too weak to stand, their gums bleeding and old wounds reopening. In 1747 James Lind, a surgeon aboard a British warship, carried out [u]that[/u]② is often described as the first controlled trial in the history of medicine. He chose twelve sick sailors, divided them into six pairs, and gave each pair a different daily supplement, [u]including[/u]③ cider, vinegar, and seawater. The two men who received oranges and lemons recovered so quickly that one of them was fit for duty within a week, while the others [u]showed[/u]④ little or no improvement. Even so, almost fifty years passed before the navy ordered that lemon juice [u]be[/u]⑤ issued to every crew, and thousands more sailors died in the meantime.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "② carried out의 목적어 역할을 하면서 동시에 뒤 절(is often described ~)의 주어 역할을 해야 하므로, 선행사를 포함한 관계대명사 what이 필요합니다. that은 앞에 선행사가 없어 관계대명사로 쓸 수 없고, 접속사로 보더라도 뒤에 주어가 없는 불완전한 절이 오므로 틀립니다. ① found의 목적어가 주어 men과 같은 대상이므로 재귀대명사 themselves, ③ '~을 포함하여'라는 뜻의 전치사 including, ④ 접속사 while이 이끄는 절의 주어 the others에 대한 과거시제 동사 showed, ⑤ 명령을 나타내는 동사 ordered 뒤의 that절에서 '(should) + 동사원형'으로 쓰인 be는 모두 어법상 맞습니다.",
+    "vocab": [
+      {
+        "word": "scurvy",
+        "meaning": "괴혈병"
+      },
+      {
+        "word": "gum",
+        "meaning": "잇몸"
+      },
+      {
+        "word": "supplement",
+        "meaning": "보충물, 보충제"
+      },
+      {
+        "word": "issue",
+        "meaning": "지급하다, 배급하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-19-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-19",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "A penalty kick in soccer gives the goalkeeper roughly a third of a second to react, far too little time to wait and see where the ball is going. Keepers must therefore decide in advance, and an analysis of nearly three hundred penalties in top professional leagues found that they threw themselves to the left or the right in more than nine out of ten cases. Yet more than a quarter of the kicks were aimed at the middle of the goal, and keepers who simply stayed where they were stopped a far higher share of shots than those who dived. Why, then, do they so seldom stand still? The researchers' answer is that a goal feels different depending on what came before it. A keeper who dives the wrong way has at least made an effort, whereas one who remains in the center and watches the ball fly past appears to have done nothing at all. In other words, keepers jump not because jumping works best but because ________.",
+    "choices": [
+      "kickers rarely change their favorite side under pressure",
+      "standing still demands more physical strength than diving",
+      "a failure after action is easier to bear than one after inaction",
+      "coaches reward keepers who study their opponents in advance",
+      "the noise of the crowd makes it hard to judge the ball's speed"
+    ],
+    "answerIndex": 2,
+    "explanation": "가운데에 그대로 서 있는 편이 공을 더 많이 막는데도 골키퍼들이 거의 항상 몸을 날리는 이유를 설명하는 글입니다. 빈칸 앞에서, 틀린 방향으로 몸을 날린 골키퍼는 '적어도 노력은 한 것'으로 보이지만 가만히 서서 골을 먹은 골키퍼는 '아무것도 하지 않은 것'처럼 보인다고 했습니다. 즉 같은 실점이라도 행동한 뒤의 실패가 행동하지 않은 뒤의 실패보다 견디기 쉽기 때문에 뛴다는 것이므로 ③이 정답입니다. ① 키커의 습관, ② 체력 소모, ④ 코치의 보상, ⑤ 관중의 소음은 글에 근거가 없습니다.",
+    "vocab": [
+      {
+        "word": "penalty kick",
+        "meaning": "(축구의) 페널티 킥"
+      },
+      {
+        "word": "in advance",
+        "meaning": "미리, 사전에"
+      },
+      {
+        "word": "dive",
+        "meaning": "몸을 날리다, 뛰어들다"
+      },
+      {
+        "word": "inaction",
+        "meaning": "행동하지 않음, 무대응"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-19-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-19",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In parts of eastern North America, certain cicadas spend almost their entire lives beneath the soil, feeding quietly on the juice of tree roots.\n(A) Such numbers are the insects' only defense. Birds, squirrels, and even dogs eat until they can eat no more, yet so many cicadas are left over that the next generation is assured.\n(B) The odd length of the cycle may add a second layer of protection. Because thirteen and seventeen are prime numbers, an enemy whose own population peaks every two, three, or four years can almost never fall into step with the cicadas' appearance.\n(C) Then, after exactly thirteen or seventeen years, depending on the group, they all emerge from the ground within a few weeks of one another. Hundreds of thousands of them may crowd a single acre, filling the air with their noise.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 매미가 일생의 대부분을 땅속에서 보낸다는 내용이므로, 'Then'으로 이어지며 13년 또는 17년 뒤 한꺼번에 땅 위로 올라와 엄청난 수를 이룬다는 (C)가 먼저 옵니다. (C)의 '1에이커에 수십만 마리'를 'Such numbers'로 받아, 그 많은 수 자체가 포식자가 다 먹지 못하게 하는 유일한 방어 수단이라고 설명하는 (A)가 이어집니다. 마지막으로 (A)의 방어에 더해 'a second layer of protection'을 제시하며, 13과 17이 소수여서 포식자의 주기와 겹치기 어렵다고 설명하는 (B)가 옵니다. (B)의 'the cycle'도 (C)에서 주기가 언급된 뒤에야 가리킬 수 있습니다. 따라서 (C)-(A)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "cicada",
+        "meaning": "매미"
+      },
+      {
+        "word": "assure",
+        "meaning": "보장하다, 확실하게 하다"
+      },
+      {
+        "word": "prime number",
+        "meaning": "소수(1과 자기 자신으로만 나누어지는 수)"
+      },
+      {
+        "word": "fall into step with",
+        "meaning": "~와 보조를 맞추다, 주기가 맞아떨어지다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-19-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-19",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "In the early 1930s, sugar cane farmers in northeastern Australia were losing their crops to beetles whose young fed on the roots of the plants. ① Government scientists believed they had found a cheap solution in a large toad from the Americas that was known for its enormous appetite. ② In 1935 about a hundred of the animals were shipped in, bred, and released into the fields by the thousands. ③ The beetles lived high on the cane stalks, and their young lay hidden underground, while the toads, unable to climb or dig, hunted only on the surface. ④ Ignoring the pest, they swallowed nearly everything else that would fit in their mouths, and the poison in their skin killed the snakes and lizards that tried to eat them. ⑤ Today more than two hundred million cane toads occupy a wide band of northern Australia, and the beetles are still there.",
+    "givenSentence": "Unfortunately, the toads and the beetles hardly ever met.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '불행히도 두꺼비와 딱정벌레는 거의 마주치지 않았다'는 내용으로, 기대와 다른 결과로 흐름이 바뀌는 지점에 와야 합니다. ③ 앞까지는 두꺼비를 들여와 밭에 풀어놓았다는 기대에 찬 과정이고, ③ 뒤 문장은 딱정벌레는 줄기 높은 곳에, 애벌레는 땅속에 있는 반면 두꺼비는 땅 위에서만 사냥했다며 둘이 만나지 못한 '이유'를 설명합니다. 따라서 주어진 문장은 ③에 들어가야 자연스럽습니다. ④에 넣으면 만나지 못한 이유가 결과보다 먼저 나와 어색하고, ④ 뒤의 'Ignoring the pest'는 이미 둘이 만나지 않는다는 사실이 제시된 뒤의 내용입니다.",
+    "vocab": [
+      {
+        "word": "toad",
+        "meaning": "두꺼비"
+      },
+      {
+        "word": "appetite",
+        "meaning": "식욕"
+      },
+      {
+        "word": "stalk",
+        "meaning": "(식물의) 줄기, 대"
+      },
+      {
+        "word": "pest",
+        "meaning": "해충"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-19-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-19",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When the potato arrived in Europe from South America in the sixteenth century, few people wanted to eat it. It was not mentioned in the Bible, it grew underground from lumpy pieces rather than from seed, and it belonged to the same family as several poisonous plants. For two hundred years it was fed mostly to pigs. Rulers who understood its value—a field of potatoes could feed far more people than the same field of wheat—found that orders alone achieved little. Frederick the Great of Prussia is said to have had a royal potato field planted and guarded by soldiers, who were told to look the other way at night; peasants, reasoning that anything worth guarding was worth stealing, carried the plants off to their own gardens. In France, Antoine Parmentier served potato dishes at dinners for the famous and persuaded the queen to wear potato flowers in her hair. Within a few decades, the despised root had become the daily food of the poor across northern Europe.",
+    "choices": [
+      "nutritional differences between potatoes and wheat",
+      "the origins of potato farming in South America",
+      "how Europeans' early distrust of the potato was overcome",
+      "effects of repeated crop failures on Europe's population",
+      "why royal gardens were heavily guarded in the eighteenth century"
+    ],
+    "answerIndex": 2,
+    "explanation": "글의 앞부분은 감자가 유럽에 처음 들어왔을 때 성경에 없고 독성 식물과 같은 과에 속한다는 등의 이유로 사람들이 먹기를 꺼렸다는 내용이고, 뒷부분은 프리드리히 대왕의 '지키는 척하는 감자밭'과 파르망티에의 만찬·감자꽃 홍보 같은 방법으로 그 거부감이 사라져 감자가 일상 음식이 되었다는 내용입니다. 따라서 주제는 '감자에 대한 유럽인의 초기 불신이 어떻게 극복되었는가'입니다. ① 밀과의 영양 비교는 한 구절로만 언급되었고, ② 남미에서의 재배 기원, ④ 흉작의 영향은 다루지 않았으며, ⑤ 왕실 밭의 경비는 한 가지 사례의 세부 내용일 뿐입니다.",
+    "vocab": [
+      {
+        "word": "lumpy",
+        "meaning": "울퉁불퉁한, 덩어리진"
+      },
+      {
+        "word": "peasant",
+        "meaning": "농민, 소작농"
+      },
+      {
+        "word": "despised",
+        "meaning": "멸시받는, 경멸당하는"
+      },
+      {
+        "word": "distrust",
+        "meaning": "불신"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-19-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-19",
+    "prompt": "수열 {aₙ}이 a₁ = 3이고, 모든 자연수 n에 대하여 aₙ₊₁ = aₙ + 2n + 1을 만족시킬 때, a₁₀의 값은?",
+    "choices": [
+      "98",
+      "100",
+      "102",
+      "104",
+      "106"
+    ],
+    "answerIndex": 2,
+    "explanation": "aₙ₊₁ − aₙ = 2n + 1이므로 a₁₀ = a₁ + ∑_{k=1}^{9} (2k + 1)입니다. ∑_{k=1}^{9} (2k + 1) = 2 × (9 × 10)/2 + 9 = 90 + 9 = 99이므로 a₁₀ = 3 + 99 = 102입니다. (일반항으로는 aₙ = n² + 2)",
+    "concept": "aₙ₊₁ = aₙ + f(n) 꼴의 수열은 aₙ = a₁ + ∑_{k=1}^{n−1} f(k)로 구한다."
+  },
+  {
+    "id": "math-2026-11-19-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-19",
+    "prompt": "점 (0, −16)에서 곡선 y = x³에 그은 접선의 기울기는?",
+    "choices": [
+      "3",
+      "6",
+      "9",
+      "12",
+      "15"
+    ],
+    "answerIndex": 3,
+    "explanation": "접점의 x좌표를 t라 하면 y′ = 3x²이므로 접선의 방정식은 y − t³ = 3t²(x − t), 즉 y = 3t²x − 2t³입니다. 이 직선이 점 (0, −16)을 지나므로 −2t³ = −16, t³ = 8에서 t = 2입니다. 따라서 접선의 기울기는 3t² = 3 × 4 = 12입니다.",
+    "concept": "곡선 밖의 점에서 그은 접선은 접점을 (t, f(t))로 놓고 접선의 방정식 y − f(t) = f′(t)(x − t)에 주어진 점을 대입하여 t를 구한다."
+  },
+  {
+    "id": "math-2026-11-19-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-19",
+    "prompt": "정적분 ∫₋₂² (x³ + 3x² + |x|) dx의 값은?",
+    "choices": [
+      "16",
+      "18",
+      "20",
+      "22",
+      "24"
+    ],
+    "answerIndex": 2,
+    "explanation": "x³은 기함수이므로 ∫₋₂² x³ dx = 0입니다. 3x²과 |x|는 우함수이므로 ∫₋₂² (3x² + |x|) dx = 2∫₀² (3x² + x) dx = 2[x³ + x²/2]₀² = 2(8 + 2) = 20입니다. 따라서 구하는 값은 20입니다.",
+    "concept": "구간 [−a, a]에서 기함수의 정적분은 0이고, 우함수의 정적분은 2∫₀ᵃ f(x) dx이다."
+  },
+  {
+    "id": "math-2026-11-19-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-19",
+    "prompt": "한 개의 주사위를 두 번 던져서 나온 두 눈의 수의 곱이 짝수일 때, 두 눈의 수의 합도 짝수일 확률은?",
+    "choices": [
+      "1/4",
+      "1/3",
+      "4/9",
+      "1/2",
+      "5/9"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 36입니다. 곱이 홀수인 경우는 두 눈이 모두 홀수인 3 × 3 = 9가지이므로, 곱이 짝수인 경우는 36 − 9 = 27가지입니다. 이 중 합이 짝수이려면 두 눈이 모두 짝수이거나 모두 홀수여야 하는데, 곱이 짝수이므로 모두 짝수인 경우만 가능하고 그 수는 3 × 3 = 9가지입니다. 따라서 구하는 확률은 9/27 = 1/3입니다.",
+    "concept": "조건부확률 P(B|A) = P(A∩B)/P(A) = n(A∩B)/n(A)를 이용하고, n(A)는 여사건으로 구한다."
+  },
+  {
+    "id": "math-2026-11-19-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-19",
+    "prompt": "삼각형 ABC에서 AB = 5, AC = 8이고 넓이가 10√3이다. 각 A가 예각일 때, 변 BC의 길이는?",
+    "choices": [
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "answerIndex": 1,
+    "explanation": "삼각형의 넓이는 (1/2) × AB × AC × sin A = (1/2) × 5 × 8 × sin A = 20 sin A = 10√3이므로 sin A = √3/2이고, A가 예각이므로 A = 60°, cos A = 1/2입니다. 코사인법칙에 의해 BC² = 5² + 8² − 2 × 5 × 8 × (1/2) = 25 + 64 − 40 = 49이므로 BC = 7입니다.",
+    "concept": "삼각형의 넓이 S = (1/2)bc sin A로 각을 구한 뒤, 코사인법칙 a² = b² + c² − 2bc cos A로 나머지 변의 길이를 구한다."
   }
 ]
