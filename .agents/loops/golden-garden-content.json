@@ -33,7 +33,8 @@
     "남는 돈으로 모으려 했다 (선저축, 통장 쪼개기, 자동이체)",
     "평일엔 못 해서 주말에 몰아서 했다 (주말 운동, 주 150분, 부상 예방)",
     "목표를 이뤄도 행복은 내일로 미뤘다 (피크엔드 법칙, 경험하는 나, 기억하는 나)",
-    "야식이 위로인 줄 알았다 (생체시계, 식사 시간, 야식)"
+    "야식이 위로인 줄 알았다 (생체시계, 식사 시간, 야식)",
+    "햇볕도 보는 줄 알았다 (유리창, 비타민D, 점심 산책)"
   ],
   "pending_drafts": [
     {
@@ -186,6 +187,17 @@
       "review_score": 88,
       "review_note": "gpt_review.py 자동 교차 검토(84→88), 강연 '12분'→'10분 남짓' 사실 보정",
       "url": "https://diary21462.tistory.com/entry/%EC%95%BC%EC%8B%9D%EC%9D%B4-%EC%9C%84%EB%A1%9C%EC%9D%B8-%EC%A4%84-%EC%95%8C%EC%95%98%EB%8B%A4-%EC%83%9D%EC%B2%B4%EC%8B%9C%EA%B3%84-%EC%8B%9D%EC%82%AC-%EC%8B%9C%EA%B0%84-%EC%95%BC%EC%8B%9D",
+      "thread_media": "있음"
+    },
+    {
+      "topic": "햇볕도 보는 줄 알았다 (유리창, 비타민D, 점심 산책)",
+      "published_at": "2026-11-19",
+      "tistory_category": "건강·웰빙 루틴",
+      "studio_doc": "p-20261119-vitamin-d",
+      "layout": "G",
+      "review_score": 88,
+      "review_note": "gpt_review.py 자동 교차 검토(86→88), UVB 파장·7-DHC 정정, 내분비학회 2011/2024 지침 출처 추가",
+      "url": "https://diary21462.tistory.com/entry/%ED%96%87%EB%B3%95%EB%8F%84-%EB%B3%B4%EB%8A%94-%EC%A4%84-%EC%95%8C%EC%95%98%EB%8B%A4-%EC%9C%A0%EB%A6%AC%EC%B0%BD-%EB%B9%84%ED%83%80%EB%AF%BCD-%EC%A0%90%EC%8B%AC-%EC%82%B0%EC%B1%85",
       "thread_media": "있음"
     }
   ],
