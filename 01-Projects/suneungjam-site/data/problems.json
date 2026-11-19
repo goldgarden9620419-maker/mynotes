@@ -20170,5 +20170,266 @@
     "answerIndex": 1,
     "explanation": "삼각형의 넓이는 (1/2) × AB × AC × sin A = (1/2) × 5 × 8 × sin A = 20 sin A = 10√3이므로 sin A = √3/2이고, A가 예각이므로 A = 60°, cos A = 1/2입니다. 코사인법칙에 의해 BC² = 5² + 8² − 2 × 5 × 8 × (1/2) = 25 + 64 − 40 = 49이므로 BC = 7입니다.",
     "concept": "삼각형의 넓이 S = (1/2)bc sin A로 각을 구한 뒤, 코사인법칙 a² = b² + c² − 2bc cos A로 나머지 변의 길이를 구한다."
+  },
+  {
+    "id": "en-2026-11-20-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-20",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Why zebras have stripes has puzzled biologists for more than a century. Camouflage was long the favorite explanation, but lions appear to recognize a zebra just as easily as they [u]do[/u]① any other prey. A more convincing answer has come from an unexpected direction: biting flies. In one experiment, researchers dressed ordinary horses in striped coats and filmed the insects [u]approaching[/u]② them. The flies circled the striped horses as often as the plain ones, but they failed to slow down in time and either bumped into the coat or flew straight past, so far fewer of them [u]landing[/u]③ on the animals. The stripes seem to confuse the visual system [u]on which[/u]④ the flies rely to judge distance during the final moments of flight. Because these insects carry diseases that can be fatal to horses and their relatives, avoiding even a few bites may be valuable enough [u]to explain[/u]⑤ why the pattern evolved.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ 접속사 so 뒤에는 '주어 + 동사'를 갖춘 절이 와야 합니다. far fewer of them이 주어이므로 동사 자리에 준동사 landing은 올 수 없고, 과거시제 동사 landed로 고쳐야 합니다. ① 앞의 일반동사 recognize를 대신하는 대동사 do로, 주어 they(lions)에 맞게 쓰였습니다. ② 지각동사에 준하는 film의 목적어 the insects와 능동 관계이므로 현재분사 approaching이 적절합니다. ④ rely on the visual system에서 전치사 on이 관계대명사 앞으로 이동한 형태로, 뒤에 완전한 절이 이어집니다. ⑤ '형용사 + enough + to부정사' 구문으로 '~을 설명할 만큼 충분히 가치 있는'이라는 뜻입니다.",
+    "vocab": [
+      {
+        "word": "camouflage",
+        "meaning": "위장"
+      },
+      {
+        "word": "prey",
+        "meaning": "먹잇감"
+      },
+      {
+        "word": "fatal",
+        "meaning": "치명적인"
+      },
+      {
+        "word": "evolve",
+        "meaning": "진화하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-20-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-20",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In 1968 the German mathematician Dietrich Braess showed something that sounds impossible: adding a new road to a network can make every driver's journey longer. The reasoning is simple once it is laid out. Each driver chooses the route that is quickest for him or her, and a new shortcut naturally attracts a crowd. As drivers pour onto it, the roads leading to and from the shortcut fill up, and the delay there can exceed the time the shortcut saves. No individual can do better by switching back, however, because the old routes are now slower as well. The effect has been observed outside of mathematics. When Seoul tore down an elevated highway in the early 2000s to restore the stream beneath it, traffic in the surrounding area did not collapse as many had predicted; by some measures it moved more smoothly. What the paradox reveals is that in a shared network, ________.",
+    "choices": [
+      "drivers eventually learn to cooperate without any rules",
+      "widening roads remains the cheapest cure for congestion",
+      "accurate information makes every route equally fast",
+      "older routes are always safer than newly built ones",
+      "choices that are best for each person need not be best for all"
+    ],
+    "answerIndex": 4,
+    "explanation": "글은 새 도로가 생기면 각 운전자가 자신에게 가장 빠른 길(지름길)을 택하지만, 그 결과 지름길 주변이 막혀 모두의 이동 시간이 오히려 늘어난다는 '브라에스의 역설'을 설명합니다. 반대로 서울에서 고가도로를 없앴을 때 교통이 더 원활해진 사례도 같은 원리를 보여 줍니다. 즉 개인에게 최선인 선택이 모였을 때 전체에게는 최선이 아닐 수 있다는 것이 핵심이므로 ⑤가 정답입니다. ①은 운전자들이 협력하지 않아 생기는 문제라는 내용과 반대이고, ②는 도로를 늘리는 것이 해결책이 아니라는 글의 요지와 어긋납니다. ③ 정보의 정확성, ④ 도로의 안전성은 글에서 다루지 않았습니다.",
+    "vocab": [
+      {
+        "word": "shortcut",
+        "meaning": "지름길"
+      },
+      {
+        "word": "exceed",
+        "meaning": "넘어서다, 초과하다"
+      },
+      {
+        "word": "elevated",
+        "meaning": "고가의, 높이 올린"
+      },
+      {
+        "word": "paradox",
+        "meaning": "역설"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-20-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-20",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "Vanilla comes from the seed pod of an orchid native to Mexico, and for three centuries after the Spanish arrived, Mexico remained the world's only source of it.\n(A) The reason was that the flower opens for only a few hours and, in its homeland, is visited by particular bees found nowhere else. Without those insects, a thin flap inside the flower keeps the pollen from reaching the part that must receive it.\n(B) The solution came in 1841 from Edmond Albius, a twelve-year-old enslaved boy on the island of Réunion. Using a thin stick and his thumb, he lifted the flap and pressed the two parts together, a method quick enough to be repeated on hundreds of flowers a day and still used on nearly every vanilla farm today.\n(C) European colonists carried cuttings of the plant to tropical islands around the world in the hope of breaking this monopoly. The vines grew well and flowered, yet year after year they produced no pods at all.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 멕시코가 300년 동안 바닐라의 유일한 산지였다는 내용이므로, 이를 'this monopoly(이 독점)'로 받아 유럽인들이 다른 열대 섬으로 옮겨 심었지만 꼬투리가 전혀 열리지 않았다는 (C)가 먼저 옵니다. 이어서 'The reason was that ~'으로 열매가 맺히지 않은 까닭(꽃이 몇 시간만 피고, 원산지에만 있는 특정 벌이 없으면 꽃 속의 얇은 막이 꽃가루를 막는다)을 설명하는 (A)가 오고, 마지막으로 그 문제에 대한 'The solution'으로 에드몽 알비우스가 막을 들어 올려 손으로 수분시키는 방법을 찾아냈다는 (B)가 이어집니다. 따라서 (C)-(A)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "orchid",
+        "meaning": "난초"
+      },
+      {
+        "word": "pollen",
+        "meaning": "꽃가루"
+      },
+      {
+        "word": "monopoly",
+        "meaning": "독점"
+      },
+      {
+        "word": "enslaved",
+        "meaning": "노예가 된"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-20-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-20",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "The idea of the barcode is much older than most shoppers imagine. ① In 1949 an American engineer named Norman Woodland, thinking about Morse code, drew dots and dashes in the sand of a Florida beach and then pulled them downward with his fingers into thin and thick lines. ② He and a partner received a patent for the design three years later. ③ Reading the lines required an extremely bright light and a machine able to interpret the reflections, and the lamps and computers of the 1950s were far too large and costly for a shop counter. ④ Only after lasers and small, cheap computer chips appeared in the 1960s did the grocery industry return to the idea and agree on a single standard code. ⑤ On a June morning in 1974, a pack of chewing gum in an Ohio supermarket became the first product ever sold with a scan.",
+    "givenSentence": "For more than twenty years, however, the invention was of almost no practical use.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 'however'로 흐름을 뒤집으며 '20년 넘게 그 발명품(the invention)은 실용적으로 거의 쓸모가 없었다'고 말합니다. ③ 앞 문장에서 특허를 받았다는 긍정적인 내용이 나오고, ③ 뒤 문장은 선을 읽으려면 매우 밝은 빛과 판독 기계가 필요했는데 1950년대의 장비는 너무 크고 비쌌다는, 쓸모가 없었던 이유를 설명합니다. 따라서 주어진 문장은 특허 취득과 그 이유 설명 사이인 ③에 들어가야 합니다. ④에 넣으면 이유가 결과보다 먼저 나와 어색하고, ④ 뒤의 'Only after ~'는 그 문제가 해결된 시점을 말하므로 주어진 문장보다 뒤에 와야 합니다.",
+    "vocab": [
+      {
+        "word": "patent",
+        "meaning": "특허"
+      },
+      {
+        "word": "interpret",
+        "meaning": "해석하다, 판독하다"
+      },
+      {
+        "word": "reflection",
+        "meaning": "반사(된 빛)"
+      },
+      {
+        "word": "grocery",
+        "meaning": "식료품(점)"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-20-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-20",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When a great whale dies in the open ocean, its body eventually sinks to a seafloor where food is extraordinarily scarce. On the deep plains, thousands of meters down, animals normally survive on a thin drizzle of particles falling from the sunlit waters above. A forty-ton carcass delivers in a single moment as much organic matter as would otherwise arrive over thousands of years. Sleeper sharks and hagfish gather first and strip away the flesh over several months. Next come dense crowds of worms and crustaceans that pick through the enriched mud around the skeleton. Finally, bacteria break down the fats locked inside the bones, releasing chemicals that support mussels, clams, and other creatures for decades. Researchers have counted more than four hundred species on such remains, some of which have been found nowhere else. A dead whale, in other words, is less an ending than the founding of a community.",
+    "choices": [
+      "the role of sunken whale bodies as long-lasting deep-sea habitats",
+      "threats that commercial whaling poses to ocean ecosystems",
+      "reasons large whales migrate across the open ocean",
+      "methods scientists use to explore the deep seafloor",
+      "the feeding habits of sharks living in sunlit waters"
+    ],
+    "answerIndex": 0,
+    "explanation": "글은 먹이가 극히 부족한 심해 바닥에 고래 사체가 가라앉으면 수천 년 치에 해당하는 유기물이 한꺼번에 공급되고, 상어와 먹장어 → 벌레와 갑각류 → 뼈 속 지방을 분해하는 세균과 조개류의 순서로 수십 년 동안 다양한 생물이 그곳에 모여 산다고 설명합니다. 마지막 문장에서 죽은 고래는 '끝이라기보다 한 공동체의 시작'이라고 정리하므로, 주제는 '가라앉은 고래 사체가 오래 지속되는 심해 서식지 역할을 한다'는 ①입니다. ② 포경의 위협, ③ 고래의 이동 이유, ④ 심해 탐사 방법은 언급되지 않았고, ⑤ 상어는 사체에 처음 모이는 동물의 예로만 잠깐 등장합니다.",
+    "vocab": [
+      {
+        "word": "scarce",
+        "meaning": "부족한, 드문"
+      },
+      {
+        "word": "carcass",
+        "meaning": "(동물의) 사체"
+      },
+      {
+        "word": "crustacean",
+        "meaning": "갑각류"
+      },
+      {
+        "word": "organic matter",
+        "meaning": "유기물"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-20-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-20",
+    "prompt": "모든 항이 양수인 등비수열 {aₙ}에서 a₂ × a₄ = 36, a₃ + a₅ = 60일 때, a₆의 값은?",
+    "choices": [
+      "54",
+      "108",
+      "162",
+      "216",
+      "486"
+    ],
+    "answerIndex": 2,
+    "explanation": "등비수열에서 a₂ × a₄ = a₃²이므로 a₃² = 36이고, 모든 항이 양수이므로 a₃ = 6입니다. a₃ + a₅ = 60에서 a₅ = 54이고, a₅ = a₃ × r²이므로 r² = 9, 공비가 양수이므로 r = 3입니다. 따라서 a₆ = a₅ × r = 54 × 3 = 162입니다.",
+    "concept": "등비수열에서 a₂ × a₄ = a₃²(등비중항)이고, aₘ = aₙ × r^(m−n)이다."
+  },
+  {
+    "id": "math-2026-11-20-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-20",
+    "prompt": "다항함수 f(x)가 lim_{x→2} (f(x) − 3)/(x − 2) = 5를 만족시킨다. 함수 g(x) = (x² + 1)f(x)에 대하여 g′(2)의 값은?",
+    "choices": [
+      "31",
+      "33",
+      "35",
+      "37",
+      "39"
+    ],
+    "answerIndex": 3,
+    "explanation": "x → 2일 때 분모가 0으로 가고 극한값이 존재하므로 분자도 0으로 가야 합니다. 따라서 f(2) = 3이고, 주어진 극한은 미분계수의 정의에 의해 f′(2) = 5입니다. 곱의 미분법에서 g′(x) = 2x f(x) + (x² + 1)f′(x)이므로 g′(2) = 4 × 3 + 5 × 5 = 12 + 25 = 37입니다.",
+    "concept": "lim_{x→a} (f(x) − f(a))/(x − a) = f′(a)이고, 곱의 미분법은 {f(x)g(x)}′ = f′(x)g(x) + f(x)g′(x)이다."
+  },
+  {
+    "id": "math-2026-11-20-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-20",
+    "prompt": "함수 f(x) = 3x² + 2ax가 ∫₀¹ f(x) dx = f(1)을 만족시킬 때, f(3)의 값은? (단, a는 상수)",
+    "choices": [
+      "11",
+      "13",
+      "15",
+      "17",
+      "19"
+    ],
+    "answerIndex": 2,
+    "explanation": "∫₀¹ (3x² + 2ax) dx = [x³ + ax²]₀¹ = 1 + a이고 f(1) = 3 + 2a입니다. 1 + a = 3 + 2a에서 a = −2이므로 f(x) = 3x² − 4x입니다. 따라서 f(3) = 27 − 12 = 15입니다.",
+    "concept": "∫ xⁿ dx = xⁿ⁺¹/(n + 1) + C를 이용해 정적분을 계산한 뒤, 미정계수에 대한 방정식을 세워 푼다."
+  },
+  {
+    "id": "math-2026-11-20-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-20",
+    "prompt": "다항식 (x² + 3/x)⁵의 전개식에서 x⁴의 계수는?",
+    "choices": [
+      "90",
+      "135",
+      "180",
+      "270",
+      "405"
+    ],
+    "answerIndex": 0,
+    "explanation": "전개식의 일반항은 ₅Cᵣ (x²)^(5−r) (3/x)^r = ₅Cᵣ × 3^r × x^(10−3r) (r = 0, 1, …, 5)입니다. x⁴항은 10 − 3r = 4, 즉 r = 2일 때이므로 계수는 ₅C₂ × 3² = 10 × 9 = 90입니다.",
+    "concept": "이항정리: (a + b)ⁿ의 전개식의 일반항은 ₙCᵣ a^(n−r) b^r이며, x의 지수를 맞추는 r를 찾는다."
+  },
+  {
+    "id": "math-2026-11-20-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-20",
+    "prompt": "둘레의 길이가 20인 부채꼴의 넓이가 최대일 때, 이 부채꼴의 중심각의 크기를 θ(라디안), 넓이를 S라 하자. θ + S의 값은?",
+    "choices": [
+      "21",
+      "23",
+      "25",
+      "27",
+      "29"
+    ],
+    "answerIndex": 3,
+    "explanation": "반지름의 길이를 r, 호의 길이를 l이라 하면 2r + l = 20이므로 l = 20 − 2r (0 < r < 10)입니다. 넓이는 S = (1/2)rl = (1/2)r(20 − 2r) = −r² + 10r = −(r − 5)² + 25이므로 r = 5일 때 최댓값 25를 갖습니다. 이때 l = 10이므로 중심각의 크기는 θ = l/r = 10/5 = 2입니다. 따라서 θ + S = 2 + 25 = 27입니다.",
+    "concept": "반지름 r, 중심각 θ(라디안)인 부채꼴의 호의 길이는 l = rθ, 넓이는 S = (1/2)rl = (1/2)r²θ이다."
   }
 ]
