@@ -79,3 +79,4 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 
 - 2026-11-16 16편(업무일지 → 보고서 44초 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/DfzNFVRjKjz/ (AI 라벨 ON)
 - 2026-11-19 17편(연차 관리대장 양식 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/Df6M2yimbJB/ (AI 라벨 ON)
+- 2026-11-20 18편(업무 일정관리 양식 간트차트 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/Df9hKDHD46M/ (AI 라벨 ON)
