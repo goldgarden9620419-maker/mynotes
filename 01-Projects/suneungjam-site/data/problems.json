@@ -20431,5 +20431,266 @@
     "answerIndex": 3,
     "explanation": "반지름의 길이를 r, 호의 길이를 l이라 하면 2r + l = 20이므로 l = 20 − 2r (0 < r < 10)입니다. 넓이는 S = (1/2)rl = (1/2)r(20 − 2r) = −r² + 10r = −(r − 5)² + 25이므로 r = 5일 때 최댓값 25를 갖습니다. 이때 l = 10이므로 중심각의 크기는 θ = l/r = 10/5 = 2입니다. 따라서 θ + S = 2 + 25 = 27입니다.",
     "concept": "반지름 r, 중심각 θ(라디안)인 부채꼴의 호의 길이는 l = rθ, 넓이는 S = (1/2)rl = (1/2)r²θ이다."
+  },
+  {
+    "id": "en-2026-11-21-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-21",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Venice appears to float on water, but the city actually stands on millions of wooden posts driven deep into the mud of its lagoon. Beginning in the Middle Ages, builders cut tree trunks in the mountains to the north, [u]sharpened[/u]① one end of each, and hammered them into the soft ground until they reached a layer of hard clay. Flat platforms of timber and stone were then laid across the tops, and it was on these platforms [u]that[/u]② the palaces and churches were raised. Visitors often wonder why wood that has been sitting in water for centuries [u]has[/u]③ not decayed. The explanation is that the organisms responsible for rotting wood cannot live without oxygen, [u]which[/u]④ is almost entirely absent in the thick mud. Over time, minerals carried by the salty water have even soaked into the posts, making them nearly as [u]hardly[/u]⑤ as stone.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 'make + 목적어 + 목적격보어' 구문에서 목적어 them(the posts)의 상태를 설명하는 보어 자리이므로 형용사가 와야 합니다. hardly는 '거의 ~않다'라는 뜻의 부사이므로 '단단한'이라는 뜻의 형용사 hard로 고쳐야 합니다(as hard as stone). ① 주어 builders의 동사 cut, sharpened, hammered가 병렬 구조를 이루는 과거시제 동사입니다. ② 'it was ~ that …' 강조구문으로 부사구 on these platforms를 강조하며, that 뒤에 완전한 절이 이어집니다. ③ 간접의문문의 주어는 관계절의 수식을 받는 단수 명사 wood이므로 단수 동사 has가 맞습니다. ④ 선행사 oxygen을 부연 설명하는 계속적 용법의 주격 관계대명사 which입니다.",
+    "vocab": [
+      {
+        "word": "lagoon",
+        "meaning": "석호"
+      },
+      {
+        "word": "timber",
+        "meaning": "목재"
+      },
+      {
+        "word": "decay",
+        "meaning": "썩다, 부패하다"
+      },
+      {
+        "word": "soak into",
+        "meaning": "~에 스며들다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-21-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-21",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "Ask an English speaker where the salt is, and the answer will probably be \"on your left\" or \"behind the cup.\" Speakers of Guugu Yimithirr, an Aboriginal language of northern Australia, would never put it that way, because their language has no everyday words for left, right, front, or back. Instead they say that the salt is to the east of the cup, or ask a friend to move a little to the north. To speak this way, a person must know which way he or she is facing at every moment, indoors or outdoors, in daylight or in darkness. Researchers who tested speakers of such languages found that they could point accurately toward distant places even after being led along winding paths through unfamiliar forest. They were not born with a special sense. Their sense of direction had been sharpened since childhood by a language that would not let them speak without it. The case suggests that ________.",
+    "choices": [
+      "the language we use can train what we constantly pay attention to",
+      "languages with fewer words are easier for children to learn",
+      "people everywhere describe space in essentially the same way",
+      "a good sense of direction is mostly inherited from parents",
+      "modern maps have made traditional knowledge unnecessary"
+    ],
+    "answerIndex": 0,
+    "explanation": "구구 이미티르어에는 '왼쪽, 오른쪽, 앞, 뒤'에 해당하는 일상어가 없어 화자들이 항상 동서남북으로 위치를 말해야 하고, 그 때문에 매 순간 자신이 향한 방향을 알고 있어야 합니다. 글은 이들의 뛰어난 방향 감각이 타고난 것이 아니라 '그것 없이는 말할 수 없게 하는 언어'에 의해 어릴 때부터 단련된 것이라고 말합니다. 따라서 빈칸에는 ① '우리가 쓰는 언어가 우리가 끊임없이 주의를 기울이는 대상을 훈련시킬 수 있다'가 적절합니다. ③은 언어마다 공간을 다르게 표현한다는 내용과 반대이고, ④는 'They were not born with a special sense'와 모순되며, ②와 ⑤는 글에서 다루지 않은 내용입니다.",
+    "vocab": [
+      {
+        "word": "Aboriginal",
+        "meaning": "호주 원주민의"
+      },
+      {
+        "word": "winding",
+        "meaning": "구불구불한"
+      },
+      {
+        "word": "sharpen",
+        "meaning": "날카롭게 하다, 단련하다"
+      },
+      {
+        "word": "inherit",
+        "meaning": "물려받다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-21-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-21",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In 1900 there were fewer than three thousand cars in all of France, which was a serious problem for two brothers, André and Édouard Michelin, who made their living selling tires.\n(A) For two decades the booklet remained a giveaway, until André reportedly visited a tire shop and found copies being used to prop up a workbench. Convinced that people respect only what they pay for, he began charging seven francs for it in 1920.\n(B) Their answer was to give drivers reasons to travel. They printed a small red handbook, handed out free of charge, that contained maps, instructions for changing a tire, and lists of places to buy fuel, repair a car, eat, and spend the night.\n(C) The paid edition dropped advertisements and expanded its section on restaurants, and the company hired anonymous inspectors to visit and judge them. The stars those inspectors began awarding a few years later are today among the most desired honors in the world of cooking.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글은 프랑스에 자동차가 너무 적어 타이어를 파는 미슐랭 형제에게 '심각한 문제'였다는 내용입니다. 이 문제에 대한 'Their answer(그들의 해답)'로 무료 안내 책자를 만들었다는 (B)가 먼저 옵니다. 이어서 그 책자를 'the booklet'으로 받아, 20년간 무료였다가 작업대 받침으로 쓰이는 것을 본 뒤 1920년에 값을 받기 시작했다는 (A)가 오고, 마지막으로 그렇게 나온 'The paid edition(유료판)'이 식당 부문을 늘리고 익명 평가원을 고용해 오늘날의 별점으로 이어졌다는 (C)가 옵니다. 따라서 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "giveaway",
+        "meaning": "무료 증정품"
+      },
+      {
+        "word": "prop up",
+        "meaning": "받치다, 괴다"
+      },
+      {
+        "word": "anonymous",
+        "meaning": "익명의"
+      },
+      {
+        "word": "inspector",
+        "meaning": "조사관, 평가원"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-21-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-21",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "passage": "The Amazon rainforest is one of the most productive places on Earth, yet the soil beneath it is surprisingly poor. ① Heavy rains wash nutrients out of the ground year after year, and phosphorus, which plants need in order to grow, is constantly carried away by rivers to the sea. ② Part of the answer lies on the other side of the Atlantic Ocean, in the Sahara. ③ In a region of Chad that was once the bed of an enormous lake, strong winds lift the dried remains of ancient microorganisms high into the air. ④ Carried westward for about five thousand kilometers, a portion of this dust falls on the Amazon basin each year. ⑤ Satellite measurements suggest that the phosphorus it contains is roughly equal to the amount the forest loses to rain and flooding.",
+    "givenSentence": "How, then, has the forest managed to remain so green for thousands of years?",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '그렇다면 그 숲은 어떻게 수천 년 동안 그렇게 푸르게 남아 있을 수 있었을까?'라는 질문입니다. ② 앞에서는 폭우가 양분을 씻어 내고 인이 끊임없이 바다로 쓸려 간다는 문제 상황이 제시되고, ② 뒤 문장은 'Part of the answer(그 답의 일부)'로 시작하므로 그 앞에 질문이 있어야 합니다. 따라서 주어진 문장은 ②에 들어가야 합니다. ①에 넣으면 숲이 푸르기 어려운 이유(양분 유실)가 아직 나오지 않아 'then'이 어색하고, ③ 이후는 이미 사하라 먼지라는 답을 구체적으로 설명하는 부분입니다.",
+    "vocab": [
+      {
+        "word": "nutrient",
+        "meaning": "영양분"
+      },
+      {
+        "word": "phosphorus",
+        "meaning": "인(원소)"
+      },
+      {
+        "word": "microorganism",
+        "meaning": "미생물"
+      },
+      {
+        "word": "basin",
+        "meaning": "(강의) 유역, 분지"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-21-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-21",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Before mechanical clocks spread through European towns in the fourteenth century, most people measured the day by the sun and by the tasks in front of them. Work began at dawn and ended at dusk, and an hour in summer was simply longer than an hour in winter. The clock in the town tower changed this. It divided day and night into equal units that had nothing to do with daylight, and its bell announced them to everyone within hearing. Merchants began to fix the times at which markets opened and closed, and employers started paying workers by the hour instead of by the task. Arriving \"on time\" became a virtue, and lateness a fault that could be punished with a fine. People had once fitted time around their activities; now they were expected to fit their activities into time. The machine had been built to count the hours, but it ended up reorganizing the lives of those who listened to it.",
+    "choices": [
+      "technical difficulties in building early tower clocks",
+      "reasons farmers trusted the sun more than machines",
+      "how mechanical clocks reshaped people's daily lives and work",
+      "the role of bells in medieval religious ceremonies",
+      "differences in working hours between summer and winter"
+    ],
+    "answerIndex": 2,
+    "explanation": "글은 기계식 시계가 보급되기 전에는 해와 일거리에 맞춰 하루를 보냈지만, 시계탑이 하루를 똑같은 단위로 나누면서 시장의 개장·폐장 시각이 정해지고, 임금이 시간 단위로 지급되고, '시간 엄수'가 미덕이 되는 등 사람들의 생활과 노동이 시간에 맞춰 재편되었다고 설명합니다. 마지막 문장도 시계가 '듣는 이들의 삶을 재조직했다'고 정리하므로 주제는 ③ '기계식 시계가 사람들의 일상과 노동을 바꾼 방식'입니다. ①과 ④는 글에서 다루지 않았고, ②와 ⑤는 시계 이전 상황을 설명하는 세부 내용에 불과합니다.",
+    "vocab": [
+      {
+        "word": "mechanical",
+        "meaning": "기계식의"
+      },
+      {
+        "word": "merchant",
+        "meaning": "상인"
+      },
+      {
+        "word": "virtue",
+        "meaning": "미덕"
+      },
+      {
+        "word": "fine",
+        "meaning": "벌금"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-21-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-21",
+    "prompt": "수열 {aₙ}의 첫째항부터 제n항까지의 합 Sₙ이 Sₙ = n² + 2n일 때, ∑_{k=1}^{5} k·aₖ의 값은?",
+    "choices": [
+      "115",
+      "120",
+      "125",
+      "130",
+      "135"
+    ],
+    "answerIndex": 2,
+    "explanation": "n ≥ 2일 때 aₙ = Sₙ − Sₙ₋₁ = (n² + 2n) − {(n − 1)² + 2(n − 1)} = 2n + 1이고, a₁ = S₁ = 3이므로 n = 1일 때도 성립합니다. 따라서 aₙ = 2n + 1이고, ∑_{k=1}^{5} k(2k + 1) = 2∑k² + ∑k = 2 × 55 + 15 = 125입니다.",
+    "concept": "aₙ = Sₙ − Sₙ₋₁ (n ≥ 2), a₁ = S₁이고, ∑_{k=1}^{n} k² = n(n + 1)(2n + 1)/6, ∑_{k=1}^{n} k = n(n + 1)/2이다."
+  },
+  {
+    "id": "math-2026-11-21-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-21",
+    "prompt": "수직선 위를 움직이는 점 P의 시각 t (t ≥ 0)에서의 위치 x가 x = t³ − 9t² + 24t이다. 시각 t = 0에서 t = 4까지 점 P가 움직인 거리는?",
+    "choices": [
+      "16",
+      "20",
+      "24",
+      "28",
+      "32"
+    ],
+    "answerIndex": 2,
+    "explanation": "속도는 v = dx/dt = 3t² − 18t + 24 = 3(t − 2)(t − 4)입니다. 0 ≤ t < 2에서 v > 0, 2 < t < 4에서 v < 0이므로 점 P는 t = 2에서 운동 방향을 바꿉니다. x(0) = 0, x(2) = 8 − 36 + 48 = 20, x(4) = 64 − 144 + 96 = 16이므로 움직인 거리는 |20 − 0| + |16 − 20| = 20 + 4 = 24입니다.",
+    "concept": "위치 x(t)를 미분하면 속도 v(t)이고, 움직인 거리는 속도의 부호가 바뀌는 시각을 기준으로 구간을 나누어 위치 변화량의 절댓값을 더한다."
+  },
+  {
+    "id": "math-2026-11-21-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-21",
+    "prompt": "다항함수 f(x)가 모든 실수 x에 대하여 f(x) = 3x² + x∫₀² f(t) dt를 만족시킬 때, f(4)의 값은?",
+    "choices": [
+      "8",
+      "12",
+      "16",
+      "20",
+      "24"
+    ],
+    "answerIndex": 2,
+    "explanation": "∫₀² f(t) dt는 상수이므로 k라 하면 f(x) = 3x² + kx입니다. k = ∫₀² (3t² + kt) dt = [t³ + (k/2)t²]₀² = 8 + 2k이므로 k = −8입니다. 따라서 f(x) = 3x² − 8x이고 f(4) = 48 − 32 = 16입니다.",
+    "concept": "적분 구간이 상수인 정적분 ∫ₐᵇ f(t) dt는 상수이므로 k로 놓고, f(x)를 다시 대입해 k에 대한 방정식을 푼다."
+  },
+  {
+    "id": "math-2026-11-21-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-21",
+    "prompt": "확률변수 X가 이항분포 B(n, 1/3)을 따르고 V(2X + 1) = 32일 때, E(X)의 값은?",
+    "choices": [
+      "9",
+      "12",
+      "15",
+      "18",
+      "24"
+    ],
+    "answerIndex": 1,
+    "explanation": "V(2X + 1) = 2²V(X) = 4V(X) = 32이므로 V(X) = 8입니다. 이항분포 B(n, 1/3)에서 V(X) = n × (1/3) × (2/3) = 2n/9이므로 2n/9 = 8, n = 36입니다. 따라서 E(X) = 36 × (1/3) = 12입니다.",
+    "concept": "X가 이항분포 B(n, p)를 따르면 E(X) = np, V(X) = np(1 − p)이고, V(aX + b) = a²V(X)이다."
+  },
+  {
+    "id": "math-2026-11-21-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-21",
+    "prompt": "삼각형 ABC에서 AB = 5, AC = 7, cos A = 1/7일 때, 삼각형 ABC의 외접원의 넓이는?",
+    "choices": [
+      "16π",
+      "49π/3",
+      "52π/3",
+      "18π",
+      "64π/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "코사인법칙에서 BC² = 5² + 7² − 2 × 5 × 7 × (1/7) = 25 + 49 − 10 = 64이므로 BC = 8입니다. sin A = √(1 − 1/49) = 4√3/7이므로 사인법칙 BC/sin A = 2R에서 2R = 8 × 7/(4√3) = 14/√3, R = 7/√3입니다. 따라서 외접원의 넓이는 πR² = 49π/3입니다.",
+    "concept": "코사인법칙 a² = b² + c² − 2bc cos A로 변의 길이를 구하고, 사인법칙 a/sin A = 2R로 외접원의 반지름을 구한다."
   }
 ]
