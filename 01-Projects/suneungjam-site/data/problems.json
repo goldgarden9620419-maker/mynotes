@@ -20692,5 +20692,266 @@
     "answerIndex": 1,
     "explanation": "코사인법칙에서 BC² = 5² + 7² − 2 × 5 × 7 × (1/7) = 25 + 49 − 10 = 64이므로 BC = 8입니다. sin A = √(1 − 1/49) = 4√3/7이므로 사인법칙 BC/sin A = 2R에서 2R = 8 × 7/(4√3) = 14/√3, R = 7/√3입니다. 따라서 외접원의 넓이는 πR² = 49π/3입니다.",
     "concept": "코사인법칙 a² = b² + c² − 2bc cos A로 변의 길이를 구하고, 사인법칙 a/sin A = 2R로 외접원의 반지름을 구한다."
+  },
+  {
+    "id": "en-2026-11-22-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-22",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "The marathon has not always been 42.195 kilometers long. When the race was created for the first modern Olympics in 1896, [u]inspired[/u]① by the legend of a Greek messenger who ran from Marathon to Athens, the course measured about 40 kilometers, and the distance varied from one Games to the next. The now familiar figure dates from the 1908 London Olympics, [u]where[/u]② organizers arranged for the race to start at Windsor Castle and finish in front of the royal box in the stadium. The route that connected these two points happened [u]to be[/u]③ 26 miles and 385 yards long. Few people at the time imagined that such an accidental number would last, but in 1921 the sport's governing body adopted it as the official standard. Today millions of runners around the world train for months to cover a distance [u]which[/u]④ exact length was decided not by science but by the convenience of a royal family. It is a reminder that many rules we take for granted [u]were[/u]⑤ once nothing more than practical choices.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 뒤에 'exact length was decided ~'라는 완전한 절이 오고, 선행사 a distance와 명사 exact length가 '그 거리의 정확한 길이'라는 소유 관계이므로 관계대명사 which가 아니라 소유격 관계대명사 whose로 고쳐야 합니다. ① the race가 전설에서 '영감을 받은' 것이므로 수동 의미의 과거분사 inspired가 맞습니다. ② 선행사 the 1908 London Olympics를 부연 설명하며 뒤에 완전한 절이 이어지므로 관계부사 where가 적절합니다. ③ 'happen to부정사'(우연히 ~하다) 구문이므로 to be가 맞습니다. ⑤ that절의 주어는 관계절(we take for granted)의 수식을 받는 복수 명사 many rules이므로 복수 동사 were가 맞습니다.",
+    "vocab": [
+      {
+        "word": "messenger",
+        "meaning": "전령, 소식을 전하는 사람"
+      },
+      {
+        "word": "accidental",
+        "meaning": "우연한"
+      },
+      {
+        "word": "governing body",
+        "meaning": "(스포츠 등의) 관리 기구, 운영 단체"
+      },
+      {
+        "word": "take ~ for granted",
+        "meaning": "~을 당연하게 여기다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-22-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-22",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "For decades, many economists assumed that any resource shared by a whole community was doomed. If a pasture is open to everyone, the reasoning went, each farmer gains by adding one more cow, while the damage from overgrazing is spread among all; sooner or later the grass is destroyed. The only remedies seemed to be dividing the land into private plots or handing control to the government. The political scientist Elinor Ostrom doubted this, so she went to look at real communities. In the Swiss village of Törbel, she found farmers who had been sharing the same high mountain meadows since at least the 1500s without ruining them. The villagers had agreed that no one could send more cows to the summer meadows than he could feed through the winter, and they appointed one of their own to count the animals and fine anyone who cheated. Ostrom documented similar arrangements among fishers in Turkey and irrigation farmers in Nepal. Her work, which earned a Nobel Prize in 2009, showed that ________.",
+    "choices": [
+      "shared resources survive only when the government supervises them closely",
+      "private ownership is the surest way to prevent overuse",
+      "people who share a resource can create and enforce their own rules to protect it",
+      "small communities inevitably exhaust the land they depend on",
+      "traditional farming methods produce more than modern ones"
+    ],
+    "answerIndex": 2,
+    "explanation": "글은 '공유 자원은 반드시 파괴되므로 사유화하거나 정부가 통제해야 한다'는 통념을 먼저 제시한 뒤, Ostrom이 이를 의심하고 실제 사례를 조사했다고 말합니다. 스위스 Törbel 마을 주민들은 '겨울 동안 먹일 수 있는 수보다 많은 소를 여름 목초지에 보낼 수 없다'는 규칙을 스스로 정하고, 주민 중 한 명을 뽑아 감시하고 벌금을 물리게 하여 수백 년간 목초지를 지켰습니다. 따라서 빈칸에는 '자원을 공유하는 사람들이 그것을 보호할 규칙을 스스로 만들고 집행할 수 있다'는 ③이 적절합니다. ①과 ②는 Ostrom이 반박한 통념이고, ④는 사례와 정반대이며, ⑤는 글에서 다루지 않은 내용입니다.",
+    "vocab": [
+      {
+        "word": "pasture",
+        "meaning": "목초지"
+      },
+      {
+        "word": "overgrazing",
+        "meaning": "과도한 방목"
+      },
+      {
+        "word": "remedy",
+        "meaning": "해결책, 처방"
+      },
+      {
+        "word": "irrigation",
+        "meaning": "관개, 물 대기"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-22-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-22",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "When Florence Nightingale arrived at a British military hospital in Turkey in 1854, during the Crimean War, she was shocked to find that far more soldiers were dying in their beds than on the battlefield.\n(A) Such figures, however, meant little to the politicians in London who had the power to change things. Nightingale knew that long tables of statistics would be glanced at and put aside, so after the war she looked for a way to make the numbers impossible to ignore.\n(B) She began to keep careful records of every death and its cause. The numbers revealed that most of these men were killed not by their wounds but by diseases such as typhus and dysentery, which spread easily through the filthy, overcrowded wards.\n(C) Her solution was a circular diagram in which each wedge stood for one month, with colored areas showing the different causes of death. At a single glance, readers could see how small the area for wounds was compared with the area for preventable disease, and the picture helped persuade the government to reform its army hospitals.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글에서 Nightingale은 전장보다 병상에서 더 많은 병사가 죽는 것을 보고 충격을 받습니다. 이어서 그녀가 사망 기록을 남기기 시작했고 그 숫자가 '이 병사들(these men)' 대부분이 질병으로 죽었음을 보여 주었다는 (B)가 옵니다. (A)의 'Such figures'는 (B)의 숫자를 가리키며, 이 수치가 정치인들에게는 와닿지 않아 무시할 수 없게 만들 '방법(a way)'을 찾았다는 내용입니다. 마지막으로 (C)의 'Her solution'이 그 방법, 즉 원형 도표를 소개하고 그 결과(군 병원 개혁)로 글을 마무리합니다. 따라서 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "filthy",
+        "meaning": "몹시 더러운"
+      },
+      {
+        "word": "ward",
+        "meaning": "병동, 병실"
+      },
+      {
+        "word": "wedge",
+        "meaning": "쐐기 모양(의 조각)"
+      },
+      {
+        "word": "preventable",
+        "meaning": "예방할 수 있는"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-22-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-22",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "To get through these hours, the hummingbird enters a state called torpor, a kind of nightly mini-hibernation.",
+    "passage": "Hummingbirds live closer to the edge of starvation than almost any other warm-blooded animal. ① Their wings beat up to eighty times a second, and to fuel such effort their hearts can race at more than a thousand beats a minute. ② As a result, a hummingbird must visit hundreds of flowers a day and consume roughly half its body weight in sugar. ③ During the day this is merely demanding, but night presents a real danger, since the bird cannot feed in the dark for ten hours or more. ④ Its body temperature falls from about 40°C to nearly that of the surrounding air, and its heartbeat slows to as few as fifty beats a minute. ⑤ In this condition the bird uses only a small fraction of the energy it would need while awake, which allows it to survive until dawn, when it warms itself by shivering and flies off in search of its first meal.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장의 'these hours'는 ④ 앞 문장의 '어둠 속에서 먹이를 먹을 수 없는 10시간 이상'을 가리킵니다. 또한 ④ 뒤 문장의 체온이 떨어지고 심장 박동이 느려진다는 내용은 주어진 문장에서 소개한 'torpor(휴면 상태)'를 구체적으로 설명하는 것이며, ⑤ 뒤의 'In this condition'도 이 상태를 가리킵니다. 주어진 문장 없이 ④ 뒤 문장이 바로 오면 밤의 위험을 말하다가 갑자기 체온이 떨어진다는 내용이 이어져 흐름이 끊깁니다. 따라서 ④가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "starvation",
+        "meaning": "굶주림, 아사"
+      },
+      {
+        "word": "torpor",
+        "meaning": "휴면 상태, 무기력"
+      },
+      {
+        "word": "hibernation",
+        "meaning": "동면"
+      },
+      {
+        "word": "shiver",
+        "meaning": "(몸을) 떨다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-22-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-22",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Long before anyone wrote down a poem or a law, people in ancient Mesopotamia were keeping track of sheep and grain. As early as 8000 B.C., farmers used small clay tokens of different shapes, each standing for a certain quantity of a certain good: a cone for a small measure of grain, a cylinder for an animal. To record a debt, the tokens were sealed inside a hollow clay ball, and because the ball then hid its contents, people began pressing the tokens into its soft surface before closing it. Eventually someone realized that the marks alone were enough, and the tokens and balls gave way to flat tablets carrying only impressed signs. Over centuries these signs multiplied and came to represent sounds as well as things, until they could capture names, prayers, and stories. According to the archaeologist Denise Schmandt-Besserat, who traced this sequence, writing was not invented to preserve literature; it grew out of the humble need to count.",
+    "choices": [
+      "the influence of ancient literature on modern writing",
+      "methods of making durable clay pottery in Mesopotamia",
+      "reasons ancient farmers avoided borrowing grain",
+      "the difficulty of decoding lost ancient languages",
+      "the origin of writing in early record-keeping of goods"
+    ],
+    "answerIndex": 4,
+    "explanation": "글은 고대 메소포타미아에서 양과 곡물의 수량을 나타내던 점토 물표(token)가 점토 공 표면의 자국으로, 다시 점토판의 기호로 바뀌고, 그 기호가 소리까지 나타내게 되면서 문자가 되었다는 과정을 설명합니다. 마지막 문장 '문자는 문학을 보존하려고 발명된 것이 아니라 수를 세어야 하는 소박한 필요에서 자라났다'가 요지이므로 주제는 ⑤ '물품을 기록하던 초기 관행에서 비롯된 문자의 기원'입니다. ①은 글의 결론과 반대 방향이고, ②·③·④는 clay, grain, signs 등 일부 단어만 이용한 선택지로 글에서 다루지 않았습니다.",
+    "vocab": [
+      {
+        "word": "token",
+        "meaning": "(수량을 나타내는) 물표, 징표"
+      },
+      {
+        "word": "hollow",
+        "meaning": "속이 빈"
+      },
+      {
+        "word": "give way to",
+        "meaning": "~에 자리를 내주다, ~로 대체되다"
+      },
+      {
+        "word": "archaeologist",
+        "meaning": "고고학자"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-22-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-22",
+    "prompt": "수열 {aₙ}이 a₁ = 2이고, 모든 자연수 n에 대하여 n이 홀수일 때 aₙ₊₁ = aₙ + 3, n이 짝수일 때 aₙ₊₁ = 2aₙ을 만족시킨다. a₇의 값은?",
+    "choices": [
+      "49",
+      "52",
+      "55",
+      "58",
+      "61"
+    ],
+    "answerIndex": 3,
+    "explanation": "차례로 대입합니다. a₂ = a₁ + 3 = 5 (n = 1, 홀수), a₃ = 2a₂ = 10 (n = 2, 짝수), a₄ = a₃ + 3 = 13, a₅ = 2a₄ = 26, a₆ = a₅ + 3 = 29, a₇ = 2a₆ = 58입니다.",
+    "concept": "귀납적으로 정의된 수열은 n의 조건(홀수/짝수)에 맞는 관계식을 골라 n = 1부터 차례로 대입하여 항을 구한다."
+  },
+  {
+    "id": "math-2026-11-22-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-22",
+    "prompt": "곡선 y = x³ − 3x² + 4에 접하고 기울기가 9인 두 직선의 y절편의 합은?",
+    "choices": [
+      "−16",
+      "−14",
+      "−12",
+      "−10",
+      "−8"
+    ],
+    "answerIndex": 1,
+    "explanation": "y′ = 3x² − 6x = 9에서 x² − 2x − 3 = 0, (x − 3)(x + 1) = 0이므로 접점의 x좌표는 x = 3 또는 x = −1입니다. x = 3일 때 y = 27 − 27 + 4 = 4이므로 접선은 y = 9(x − 3) + 4 = 9x − 23, x = −1일 때 y = −1 − 3 + 4 = 0이므로 접선은 y = 9(x + 1) = 9x + 9입니다. 따라서 두 y절편의 합은 −23 + 9 = −14입니다.",
+    "concept": "기울기가 m인 접선은 f′(a) = m을 만족시키는 접점 (a, f(a))를 구한 뒤 y = m(x − a) + f(a)로 구한다."
+  },
+  {
+    "id": "math-2026-11-22-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-22",
+    "prompt": "다항함수 f(x)가 모든 실수 x에 대하여 ∫₂ˣ f(t) dt = x³ − ax + 4를 만족시킬 때, f(a)의 값은? (단, a는 상수이다.)",
+    "choices": [
+      "94",
+      "96",
+      "98",
+      "100",
+      "102"
+    ],
+    "answerIndex": 4,
+    "explanation": "양변에 x = 2를 대입하면 좌변은 0이므로 8 − 2a + 4 = 0, a = 6입니다. 양변을 x에 대하여 미분하면 f(x) = 3x² − a = 3x² − 6입니다. 따라서 f(a) = f(6) = 3 × 36 − 6 = 102입니다.",
+    "concept": "∫ₐˣ f(t) dt = g(x) 꼴에서는 x = a를 대입해 g(a) = 0을 이용하고, 양변을 미분하여 f(x) = g′(x)를 얻는다."
+  },
+  {
+    "id": "math-2026-11-22-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-22",
+    "prompt": "다항식 (2x − 1/x)⁵의 전개식에서 x의 계수는?",
+    "choices": [
+      "−80",
+      "−40",
+      "40",
+      "80",
+      "120"
+    ],
+    "answerIndex": 3,
+    "explanation": "일반항은 ₅Cᵣ (2x)⁵⁻ʳ (−1/x)ʳ = ₅Cᵣ · 2⁵⁻ʳ · (−1)ʳ · x⁵⁻²ʳ입니다. x의 차수가 1이려면 5 − 2r = 1, r = 2입니다. 따라서 계수는 ₅C₂ × 2³ × (−1)² = 10 × 8 × 1 = 80입니다.",
+    "concept": "이항정리에서 (a + b)ⁿ의 전개식의 일반항은 ₙCᵣ aⁿ⁻ʳ bʳ이며, 문자의 차수가 조건에 맞는 r을 찾아 계수를 구한다."
+  },
+  {
+    "id": "math-2026-11-22-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-22",
+    "prompt": "0 ≤ x < 2π에서 부등식 2cos²x + 3sin x − 3 ≥ 0의 해가 α ≤ x ≤ β일 때, β − α의 값은?",
+    "choices": [
+      "π/3",
+      "π/2",
+      "2π/3",
+      "5π/6",
+      "π"
+    ],
+    "answerIndex": 2,
+    "explanation": "cos²x = 1 − sin²x를 대입하면 2(1 − sin²x) + 3sin x − 3 ≥ 0, 즉 2sin²x − 3sin x + 1 ≤ 0이고 (2sin x − 1)(sin x − 1) ≤ 0이므로 1/2 ≤ sin x ≤ 1입니다. 0 ≤ x < 2π에서 sin x ≥ 1/2인 범위는 π/6 ≤ x ≤ 5π/6이므로 α = π/6, β = 5π/6이고 β − α = 2π/3입니다.",
+    "concept": "sin²x + cos²x = 1을 이용해 한 종류의 삼각함수에 대한 이차부등식으로 고친 뒤, 삼각함수 값의 범위를 각의 범위로 바꾼다."
   }
 ]
