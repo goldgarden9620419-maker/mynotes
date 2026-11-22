@@ -20953,5 +20953,266 @@
     "answerIndex": 2,
     "explanation": "cos²x = 1 − sin²x를 대입하면 2(1 − sin²x) + 3sin x − 3 ≥ 0, 즉 2sin²x − 3sin x + 1 ≤ 0이고 (2sin x − 1)(sin x − 1) ≤ 0이므로 1/2 ≤ sin x ≤ 1입니다. 0 ≤ x < 2π에서 sin x ≥ 1/2인 범위는 π/6 ≤ x ≤ 5π/6이므로 α = π/6, β = 5π/6이고 β − α = 2π/3입니다.",
     "concept": "sin²x + cos²x = 1을 이용해 한 종류의 삼각함수에 대한 이차부등식으로 고친 뒤, 삼각함수 값의 범위를 각의 범위로 바꾼다."
+  },
+  {
+    "id": "en-2026-11-23-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-23",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "Mary Anning was born in 1799 in Lyme Regis, a seaside town on the southern coast of England [u]whose[/u]① cliffs are packed with the remains of ancient sea creatures. Her family was poor, and from childhood she helped her father collect fossils to sell to tourists. When she was only twelve, she and her brother uncovered the first complete skeleton of an ichthyosaur, a marine reptile that [u]had lived[/u]② some 200 million years earlier. Over the following decades she made one remarkable find after another, teaching [u]her[/u]③ anatomy and geology along the way. Yet because she was a woman with little formal education, the scientists who bought her specimens rarely mentioned her name in the papers they published, and the Geological Society of London did not allow her [u]to join[/u]④. Only long after her death [u]was[/u]⑤ her contribution to the study of prehistoric life fully recognized.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "③ teaching의 의미상 주어는 문장의 주어 she이고, 가르침을 받는 대상도 같은 사람(스스로 익힘)이므로 목적격 her가 아니라 재귀대명사 herself로 고쳐야 합니다. ① 선행사 a seaside town과 cliffs가 '그 마을의 절벽'이라는 소유 관계이고 뒤에 완전한 절이 오므로 소유격 관계대명사 whose가 맞습니다. ② 해양 파충류가 살았던 것은 골격을 발견한 과거 시점보다 더 이전의 일이므로 과거완료 had lived가 맞습니다. ④ 'allow + 목적어 + to부정사' 구문이므로 to join이 맞습니다. ⑤ 부정·제한의 의미를 가진 'Only + 부사구'가 문장 앞에 나와 주어와 동사가 도치되었고, 주어 her contribution이 단수이므로 was가 맞습니다.",
+    "vocab": [
+      {
+        "word": "fossil",
+        "meaning": "화석"
+      },
+      {
+        "word": "reptile",
+        "meaning": "파충류"
+      },
+      {
+        "word": "anatomy",
+        "meaning": "해부학"
+      },
+      {
+        "word": "specimen",
+        "meaning": "표본"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-23-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-23",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "When Japan's high-speed bullet trains first began running at over 270 kilometers an hour, they created an unexpected problem. Each time a train rushed into a narrow tunnel, it pushed a wave of compressed air ahead of it, and this wave burst out of the far end with a boom loud enough to rattle windows hundreds of meters away. Eiji Nakatsu, the engineer in charge of fixing the problem, happened to be a keen birdwatcher. He recalled that the kingfisher dives from the air into water, a far denser medium, yet barely makes a splash, because its long, wedge-shaped beak parts the water gradually instead of slamming into it. His team tested noses of various shapes and found that the one modeled on the kingfisher's beak performed best. The redesigned train was not only quieter but also faster, and it used about fifteen percent less electricity. Nakatsu's success suggests that ________.",
+    "choices": [
+      "answers to engineering problems may already exist in the natural world",
+      "faster transportation always comes at the cost of greater noise",
+      "birds have changed their behavior in order to live near railways",
+      "tunnels should be widened before the speed of trains is raised",
+      "engineers ought to rely on calculation rather than on observation"
+    ],
+    "answerIndex": 0,
+    "explanation": "기술자 Nakatsu는 터널을 빠져나올 때 생기는 굉음 문제를, 물에 뛰어들 때 물을 거의 튀기지 않는 물총새의 부리 모양을 본떠 열차 앞부분을 설계함으로써 해결했고, 그 결과 열차는 더 조용하고 빠르며 전기도 덜 쓰게 되었습니다. 즉 공학 문제의 해답을 자연에서 찾은 사례이므로 빈칸에는 '공학 문제의 해답이 자연 세계에 이미 존재할 수 있다'가 가장 적절합니다. ②는 더 조용하면서 더 빨라졌다는 내용과 반대이고, ③ 새의 행동 변화나 ④ 터널 확장은 언급되지 않았으며, ⑤는 새를 관찰한 경험이 해결의 실마리가 되었다는 내용과 어긋납니다.",
+    "vocab": [
+      {
+        "word": "compressed",
+        "meaning": "압축된"
+      },
+      {
+        "word": "rattle",
+        "meaning": "덜컹거리게 하다"
+      },
+      {
+        "word": "kingfisher",
+        "meaning": "물총새"
+      },
+      {
+        "word": "wedge-shaped",
+        "meaning": "쐐기 모양의"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-23-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-23",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In 1799, French soldiers rebuilding a fort near the Egyptian town of Rosetta dug up a dark slab of stone covered with writing.\n(A) Jean-François Champollion, a French scholar, finally challenged this assumption. By matching the signs enclosed in oval rings with the royal names Ptolemy and Cleopatra in the Greek text, he showed in 1822 that many hieroglyphs represented sounds, and the language of the pharaohs could be read once more.\n(B) The slab carried the same announcement in three scripts: ancient Greek at the bottom and two forms of Egyptian writing, including hieroglyphs, above it. Since scholars could still read Greek, they hoped the stone would quickly unlock a script that no one had understood for some fourteen hundred years.\n(C) That hope turned out to be premature. For two decades the hieroglyphs resisted every attempt, largely because most experts believed that each sign was a picture standing for a whole idea rather than for a sound.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 글자가 새겨진 돌판(a slab of stone)이 발견되었다는 내용입니다. 이 돌판을 'The slab'으로 받아 세 가지 문자로 같은 내용이 적혀 있었고 학자들이 곧 해독되리라 기대했다는 (B)가 먼저 옵니다. (C)의 'That hope'는 (B)의 기대를 가리키며, 각 기호가 소리가 아니라 하나의 개념을 나타내는 그림이라는 믿음 때문에 20년간 해독에 실패했다는 내용이 이어집니다. (A)의 'this assumption'은 (C)의 그 믿음을 가리키고, Champollion이 이를 뒤집어 해독에 성공했다는 결론이 됩니다. 따라서 (B)-(C)-(A)입니다.",
+    "vocab": [
+      {
+        "word": "slab",
+        "meaning": "(두껍고 평평한) 판"
+      },
+      {
+        "word": "hieroglyph",
+        "meaning": "상형 문자"
+      },
+      {
+        "word": "premature",
+        "meaning": "시기상조의, 너무 이른"
+      },
+      {
+        "word": "assumption",
+        "meaning": "가정, 추정"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-23-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-23",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "No single butterfly, however, ever completes the round trip.",
+    "passage": "Every autumn, millions of monarch butterflies leave the northern United States and Canada and fly as far as 4,000 kilometers to a few mountain forests in central Mexico. ① There they cluster on the trees in such numbers that branches bend under their weight, and they spend the winter barely moving. ② When spring comes, the monarchs head north again, and by summer butterflies are once more seen across the northern states and Canada. ③ The ones that left Mexico lay their eggs on milkweed plants in Texas and die. ④ Their offspring continue the journey for a few weeks before laying eggs of their own, and it takes three or four such short-lived generations to reach the northern end of the range. ⑤ Then, as the days shorten in late summer, a different kind of generation emerges, one that lives up to eight months and flies straight to the very forests its great-grandparents left, although it has never seen Mexico.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '그러나 어떤 나비도 혼자서 왕복 여정을 끝마치지는 못한다'는 뜻입니다. ③ 앞 문장은 봄에 나비들이 다시 북쪽으로 향하고 여름이면 북부에서 다시 나비가 보인다고 하여, 같은 나비가 돌아온 것처럼 읽힙니다. 주어진 문장이 however로 이를 뒤집고, ③ 뒤에서 멕시코를 떠난 나비들은 텍사스에서 알을 낳고 죽으며 그 자손들이 여러 세대에 걸쳐 여정을 이어 간다는 구체적 설명이 이어집니다. 주어진 문장이 없으면 북부에 나비가 다시 보인다는 내용 뒤에 곧바로 그 나비들이 텍사스에서 죽는다는 내용이 나와 흐름이 어색합니다. 따라서 ③이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "cluster",
+        "meaning": "무리를 이루다"
+      },
+      {
+        "word": "milkweed",
+        "meaning": "밀크위드(박주가리과 식물)"
+      },
+      {
+        "word": "offspring",
+        "meaning": "자손, 새끼"
+      },
+      {
+        "word": "short-lived",
+        "meaning": "수명이 짧은"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-23-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-23",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When coffee reached England in the 1650s, it brought with it a new kind of public place. For the price of a penny, anyone could enter a coffeehouse, take a seat at a long shared table, and join whatever conversation was under way. Unlike the tavern, where alcohol dulled the mind, the coffeehouse kept its customers alert, and they came as much for news as for the drink. Newspapers and pamphlets lay on the tables, and merchants, sailors, and scholars traded the latest reports. Particular houses came to attract particular crowds. Ship owners and captains gathered at Edward Lloyd's, where reliable shipping news eventually gave rise to the insurance market that still bears his name, while stock traders met at Jonathan's, the forerunner of the London Stock Exchange. Because so much could be learned there so cheaply, people nicknamed these places \"penny universities.\"",
+    "choices": [
+      "health concerns raised by the growing popularity of coffee",
+      "the decline of taverns caused by rising alcohol prices",
+      "ways early newspapers competed with one another for readers",
+      "the role of early English coffeehouses as centers of information and business",
+      "difficulties merchants faced in importing coffee into England"
+    ],
+    "answerIndex": 3,
+    "explanation": "글은 1650년대 영국에 등장한 커피하우스가 1페니만 내면 누구나 들어와 신문을 읽고 최신 소식을 나누는 곳이었고, Lloyd's에서는 보험 시장이, Jonathan's에서는 런던 증권 거래소가 비롯되었으며 '페니 대학'이라는 별명까지 얻었다고 설명합니다. 따라서 주제는 '정보와 사업의 중심지로서 초기 영국 커피하우스의 역할'입니다. ① 건강에 대한 우려, ② 술값 상승으로 인한 선술집의 쇠퇴, ⑤ 커피 수입의 어려움은 언급되지 않았고, ③ 신문은 커피하우스에 놓여 있던 것으로만 언급되었을 뿐 신문 간 경쟁은 다루지 않았습니다.",
+    "vocab": [
+      {
+        "word": "tavern",
+        "meaning": "선술집"
+      },
+      {
+        "word": "dull",
+        "meaning": "둔하게 하다"
+      },
+      {
+        "word": "give rise to",
+        "meaning": "~을 생겨나게 하다"
+      },
+      {
+        "word": "forerunner",
+        "meaning": "전신, 선구자"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-23-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-23",
+    "prompt": "수열 {aₙ}의 첫째항부터 제n항까지의 합 Sₙ이 Sₙ = n³ − 2n일 때, a₄ + a₅의 값은?",
+    "choices": [
+      "90",
+      "92",
+      "94",
+      "96",
+      "98"
+    ],
+    "answerIndex": 2,
+    "explanation": "a₄ + a₅ = S₅ − S₃입니다. S₅ = 125 − 10 = 115, S₃ = 27 − 6 = 21이므로 a₄ + a₅ = 115 − 21 = 94입니다. (확인: a₄ = S₄ − S₃ = 56 − 21 = 35, a₅ = S₅ − S₄ = 115 − 56 = 59, 합은 94)",
+    "concept": "수열의 합 Sₙ이 주어지면 aₙ = Sₙ − Sₙ₋₁ (n ≥ 2)이고, 연속한 항의 합 aₘ₊₁ + … + aₙ = Sₙ − Sₘ이다."
+  },
+  {
+    "id": "math-2026-11-23-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-23",
+    "prompt": "함수 f(x) = x³ + ax² + bx + 2가 x = 1에서 극솟값 −3을 가질 때, f(x)의 극댓값은? (단, a, b는 상수이다.)",
+    "choices": [
+      "25",
+      "27",
+      "29",
+      "31",
+      "33"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 3x² + 2ax + b이고 f′(1) = 0에서 2a + b = −3, f(1) = −3에서 1 + a + b + 2 = −3, 즉 a + b = −6입니다. 두 식을 연립하면 a = 3, b = −9입니다. f′(x) = 3x² + 6x − 9 = 3(x + 3)(x − 1)이므로 x = −3에서 극대, x = 1에서 극소입니다. 따라서 극댓값은 f(−3) = −27 + 27 + 27 + 2 = 29입니다.",
+    "concept": "미분가능한 함수 f(x)가 x = a에서 극값 k를 가지면 f′(a) = 0, f(a) = k이다."
+  },
+  {
+    "id": "math-2026-11-23-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-23",
+    "prompt": "수직선 위를 움직이는 점 P의 시각 t (t ≥ 0)에서의 속도가 v(t) = 3t² − 12t + 9일 때, 시각 t = 0에서 t = 4까지 점 P가 움직인 거리는?",
+    "choices": [
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ],
+    "answerIndex": 2,
+    "explanation": "v(t) = 3(t − 1)(t − 3)이므로 0 ≤ t ≤ 1, 3 ≤ t ≤ 4에서 v(t) ≥ 0이고 1 ≤ t ≤ 3에서 v(t) ≤ 0입니다. F(t) = t³ − 6t² + 9t라 하면 F(0) = 0, F(1) = 4, F(3) = 0, F(4) = 4입니다. 움직인 거리는 ∫₀⁴ |v(t)| dt = (F(1) − F(0)) − (F(3) − F(1)) + (F(4) − F(3)) = 4 + 4 + 4 = 12입니다.",
+    "concept": "속도 v(t)로 움직이는 점이 t = a에서 t = b까지 움직인 거리는 ∫ₐᵇ |v(t)| dt이며, v(t)의 부호가 바뀌는 시각을 기준으로 구간을 나누어 계산한다."
+  },
+  {
+    "id": "math-2026-11-23-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-23",
+    "prompt": "A, B를 포함한 6명의 학생을 임의로 일렬로 세울 때, A와 B 사이에 정확히 한 명의 학생이 서게 될 확률은?",
+    "choices": [
+      "1/5",
+      "4/15",
+      "1/3",
+      "2/5",
+      "7/15"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 경우의 수는 6! = 720입니다. A와 B 사이에 정확히 한 명이 있으려면 두 사람의 자리가 (1, 3), (2, 4), (3, 5), (4, 6)번째의 4가지 중 하나여야 하고, 각 경우 A와 B의 자리를 바꾸는 방법이 2가지, 나머지 4명을 세우는 방법이 4! = 24가지이므로 4 × 2 × 24 = 192가지입니다. 따라서 구하는 확률은 192/720 = 4/15입니다.",
+    "concept": "수학적 확률은 (사건이 일어나는 경우의 수)/(전체 경우의 수)이며, 특정 두 사람의 위치 조건은 두 사람의 자리를 먼저 정한 뒤 나머지를 배열하여 센다."
+  },
+  {
+    "id": "math-2026-11-23-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-23",
+    "prompt": "삼각형 ABC에서 AB = 5, BC = 8, CA = 7일 때, 삼각형 ABC의 넓이는?",
+    "choices": [
+      "8√3",
+      "9√3",
+      "10√3",
+      "11√3",
+      "12√3"
+    ],
+    "answerIndex": 2,
+    "explanation": "코사인법칙에서 cos B = (AB² + BC² − CA²)/(2 × AB × BC) = (25 + 64 − 49)/80 = 1/2이므로 B = 60°입니다. 따라서 넓이는 (1/2) × AB × BC × sin B = (1/2) × 5 × 8 × (√3/2) = 10√3입니다.",
+    "concept": "코사인법칙 cos B = (c² + a² − b²)/(2ca)로 각을 구하고, 삼각형의 넓이 S = (1/2)ca sin B를 이용한다."
   }
 ]
