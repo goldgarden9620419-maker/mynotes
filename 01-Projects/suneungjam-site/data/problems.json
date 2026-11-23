@@ -21214,5 +21214,266 @@
     "answerIndex": 2,
     "explanation": "코사인법칙에서 cos B = (AB² + BC² − CA²)/(2 × AB × BC) = (25 + 64 − 49)/80 = 1/2이므로 B = 60°입니다. 따라서 넓이는 (1/2) × AB × BC × sin B = (1/2) × 5 × 8 × (√3/2) = 10√3입니다.",
     "concept": "코사인법칙 cos B = (c² + a² − b²)/(2ca)로 각을 구하고, 삼각형의 넓이 S = (1/2)ca sin B를 이용한다."
+  },
+  {
+    "id": "en-2026-11-24-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-24",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "In 1829, Nathaniel Ward, a London doctor and amateur naturalist, buried a moth chrysalis in damp soil inside a sealed glass bottle, hoping to watch [u]it[/u]① hatch. What caught his attention instead was a fern and some grass that sprouted from the soil and went on growing for years without ever [u]being watered[/u]②. Moisture that evaporated during the day condensed on the glass at night and ran back down, so the plants were protected from the smoky city air [u]while[/u]③ recycling their own water. Ward realized that a larger version of the bottle might solve a problem [u]what[/u]④ had long frustrated botanists: on voyages lasting months, salt spray and a shortage of fresh water killed nearly every plant shipped across the oceans. In 1833 he sent two glazed wooden cases of ferns to Australia, and almost all of them arrived alive. Within decades, such cases [u]had carried[/u]⑤ tea from China to India and rubber trees from Brazil to Asia, reshaping the economies of entire regions.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 앞에 선행사 a problem이 있고 뒤에 주어가 빠진 절(had long frustrated botanists)이 이어지므로, 선행사를 포함하는 관계대명사 what이 아니라 주격 관계대명사 that(또는 which)으로 고쳐야 합니다. ① 앞에 나온 단수 명사 a moth chrysalis를 가리키는 대명사 it이며, 'watch + 목적어 + 동사원형' 구문의 목적어입니다. ② 전치사 without의 목적어로 동명사가 필요하고, 식물은 물을 '받는' 대상이므로 수동형 동명사 being watered가 맞습니다. ③ 'while + 현재분사'는 접속사를 남긴 분사구문으로, 의미상 주어가 the plants와 같아 적절합니다. ⑤ 'Within decades(수십 년이 지나기 전에)'와 함께 과거의 어느 시점까지 완료된 일을 나타내는 과거완료 had carried는 적절합니다.",
+    "vocab": [
+      {
+        "word": "chrysalis",
+        "meaning": "번데기"
+      },
+      {
+        "word": "fern",
+        "meaning": "양치식물, 고사리류"
+      },
+      {
+        "word": "condense",
+        "meaning": "응결하다"
+      },
+      {
+        "word": "botanist",
+        "meaning": "식물학자"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-24-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-24",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In 1847, Ignaz Semmelweis, a doctor at a large maternity clinic in Vienna, noticed that women in the ward staffed by medical students died of childbed fever far more often than those in the ward run by midwives. The students, he realized, often came straight from dissecting corpses to delivering babies. When he ordered them to wash their hands in a chlorine solution, the share of mothers who died in their ward fell from around ten percent to less than two percent. One might expect such a result to have been welcomed at once. Instead, most of his colleagues dismissed it, and Semmelweis eventually lost his position. Part of the reason was that he could not explain why handwashing worked, since germs had not yet been discovered. But the deeper obstacle was that to accept his finding was to admit that doctors themselves had been carrying death to their patients. The episode suggests that a new idea is judged not only by the strength of its evidence but also by ________.",
+    "choices": [
+      "what it asks people to believe about themselves",
+      "how long it took its discoverer to develop it",
+      "the number of experiments that can be repeated",
+      "how cheaply it can be put into everyday practice",
+      "the fame of the institution where it first appeared"
+    ],
+    "answerIndex": 0,
+    "explanation": "Semmelweis의 손 씻기는 사망률을 약 10%에서 2% 미만으로 낮추는 분명한 증거가 있었는데도 동료들에게 거부당했습니다. 글은 그 '더 깊은 장애물'이 그의 발견을 받아들이면 의사 자신들이 환자에게 죽음을 옮겨 왔음을 인정해야 한다는 점이었다고 설명합니다. 즉 새로운 생각은 증거의 강도뿐 아니라 '그것이 사람들에게 자기 자신에 대해 무엇을 믿으라고 요구하는가'에 의해서도 평가된다는 ①이 정답입니다. ② 개발에 걸린 시간, ④ 실행 비용(손 씻기는 값싸고 쉬웠음), ⑤ 기관의 명성은 글에서 거부의 이유로 제시되지 않았고, ③ 반복 가능한 실험의 수는 빈칸 앞에서 이미 언급한 '증거의 강도'에 해당하므로 'but also' 뒤에 올 수 없습니다.",
+    "vocab": [
+      {
+        "word": "ward",
+        "meaning": "병동"
+      },
+      {
+        "word": "midwife",
+        "meaning": "조산사, 산파"
+      },
+      {
+        "word": "dissect",
+        "meaning": "해부하다"
+      },
+      {
+        "word": "dismiss",
+        "meaning": "묵살하다, 일축하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-24-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-24",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In the late 1960s, malaria was becoming resistant to existing drugs, and the Chinese scientist Tu Youyou was assigned to search for a new treatment among traditional herbal remedies.\n(A) Looking for an explanation of this puzzle, Tu went back to a medical handbook written some 1,600 years earlier. Its author advised soaking the plant in cold water and wringing out the juice, with no mention of the boiling that her team had been using.\n(B) This detail made her suspect that heat was destroying the active ingredient. She switched to a low-temperature method of extraction, and the new extract cured every infected mouse it was given. The compound, later named artemisinin, has since saved millions of lives.\n(C) Her team tested extracts from hundreds of herbs on infected mice. One of them, sweet wormwood, looked promising at first, but its effect was frustratingly inconsistent, sometimes working well and sometimes hardly at all.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 글은 Tu Youyou가 전통 약초에서 말라리아 치료제를 찾는 임무를 맡았다는 내용입니다. 이어서 연구팀이 수백 가지 약초 추출물을 시험했고 개똥쑥(sweet wormwood)의 효과가 들쭉날쭉했다는 (C)가 먼저 옵니다. (A)의 'this puzzle'은 (C)의 일정하지 않은 효과를 가리키며, 그 이유를 찾아 옛 의서를 다시 읽었더니 끓이지 않고 찬물에 담그라고 되어 있었다는 내용입니다. (B)의 'This detail'은 (A)의 '끓인다는 언급이 없다'는 점을 가리키고, 저온 추출로 바꿔 성공했다는 결론으로 이어집니다. 따라서 (C)-(A)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "resistant",
+        "meaning": "내성이 있는, 저항하는"
+      },
+      {
+        "word": "remedy",
+        "meaning": "치료약, 요법"
+      },
+      {
+        "word": "wring",
+        "meaning": "(물기를) 짜다"
+      },
+      {
+        "word": "extract",
+        "meaning": "추출물; 추출하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-24-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-24",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "Yet his method would not even have been possible a few years earlier.",
+    "passage": "Until the late 1960s, high jumpers cleared the bar either by scissoring their legs over it or by rolling across it face down. Dick Fosbury, an American student who could master neither technique, began experimenting with going over backward, head first, with his back arched above the bar. ① Coaches found the style ridiculous, and one newspaper compared him to a fish flopping in a boat. ② For decades jumpers had come down in sandpits or on low piles of sawdust, where landing on the neck and shoulders would have invited serious injury. ③ By the time Fosbury was competing, however, these had been replaced by thick foam mats that made such a landing safe. ④ He won the gold medal at the 1968 Olympics with his odd-looking jump. ⑤ Within a decade, nearly every elite high jumper in the world had adopted it.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 문장은 '하지만 그의 방식은 몇 해 전이었다면 아예 가능하지도 않았을 것이다'라는 뜻입니다. ② 뒤 문장은 수십 년 동안 선수들이 모래밭이나 톱밥 더미에 착지했고 거기서 목과 어깨로 떨어지면 크게 다쳤을 것이라고 하여, 주어진 문장의 '왜 예전에는 불가능했는가'를 설명합니다. 이어서 Fosbury가 뛸 무렵에는 두꺼운 폼 매트로 바뀌어 그런 착지가 안전해졌다는 내용이 나옵니다. 주어진 문장이 없으면 코치들이 비웃었다는 내용 뒤에 갑자기 착지 장소 이야기가 나와 흐름이 끊깁니다. 또한 ① 자리에 넣으면 불가능했던 이유의 설명(모래밭)과 떨어지게 되므로 ②가 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "arch",
+        "meaning": "(등을) 활처럼 구부리다"
+      },
+      {
+        "word": "sawdust",
+        "meaning": "톱밥"
+      },
+      {
+        "word": "flop",
+        "meaning": "털썩 떨어지다, 퍼덕거리다"
+      },
+      {
+        "word": "elite",
+        "meaning": "정상급의, 엘리트의"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-24-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-24",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When the safety bicycle, with two wheels of equal size and air-filled tires, became affordable in the 1890s, it was sold mainly as a healthy amusement. For many women, however, it turned out to be something far more significant. At a time when a respectable woman was expected to travel with a companion and seldom went far from home, a bicycle let her go where she wished, when she wished, under her own power. Riding also made the heavy skirts and tight corsets of the period impractical, so women who cycled began to adopt lighter, looser clothing, to the alarm of critics who warned that the machine would damage women's health and morals. The American reformer Susan B. Anthony saw matters differently, declaring that the bicycle had done more to emancipate women than anything else in the world. What had been designed as a toy for leisure ended up loosening rules that decades of argument had hardly moved.",
+    "choices": [
+      "technical improvements that made early bicycles safer to ride",
+      "the unexpected contribution of the bicycle to women's freedom",
+      "reasons bicycles lost popularity after the spread of automobiles",
+      "health risks of cycling debated by doctors in the nineteenth century",
+      "changes in the way bicycles were advertised to wealthy customers"
+    ],
+    "answerIndex": 1,
+    "explanation": "글은 1890년대에 여가용으로 팔린 자전거가 여성에게는 훨씬 큰 의미가 있었다고 말합니다. 동행 없이 원하는 곳으로 이동할 수 있게 했고, 무거운 치마와 코르셋 대신 가볍고 헐렁한 옷을 입게 했으며, Susan B. Anthony는 자전거가 여성 해방에 그 무엇보다 크게 기여했다고 평했습니다. 마지막 문장도 '여가용 장난감이 오랜 논쟁으로도 움직이지 않던 규범을 느슨하게 했다'고 정리하므로, 주제는 ② '자전거가 여성의 자유에 한 뜻밖의 기여'입니다. ① 기술적 개선은 첫 문장의 배경일 뿐이고, ④ 건강 위험은 비판자들의 주장으로 잠깐 언급될 뿐이며, ③과 ⑤는 글에 없는 내용입니다.",
+    "vocab": [
+      {
+        "word": "respectable",
+        "meaning": "점잖은, 품위 있는"
+      },
+      {
+        "word": "corset",
+        "meaning": "코르셋"
+      },
+      {
+        "word": "emancipate",
+        "meaning": "해방하다"
+      },
+      {
+        "word": "reformer",
+        "meaning": "개혁가"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-24-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-24",
+    "prompt": "Σ(k=1부터 10까지) 1/(k(k+2))의 값은?",
+    "choices": [
+      "7/11",
+      "85/132",
+      "43/66",
+      "175/264",
+      "89/132"
+    ],
+    "answerIndex": 3,
+    "explanation": "1/(k(k+2)) = (1/2){1/k − 1/(k+2)}이므로, 합은 (1/2){(1 − 1/3) + (1/2 − 1/4) + (1/3 − 1/5) + … + (1/10 − 1/12)}입니다. 중간 항이 소거되어 (1/2)(1 + 1/2 − 1/11 − 1/12)가 남습니다. 1 + 1/2 − 1/11 − 1/12 = (132 + 66 − 12 − 11)/132 = 175/132이므로 구하는 값은 175/264입니다.",
+    "concept": "부분분수 분해 1/(k(k+2)) = (1/2){1/k − 1/(k+2)}를 이용하면 앞의 두 항과 뒤의 두 항만 남는다."
+  },
+  {
+    "id": "math-2026-11-24-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-24",
+    "prompt": "함수 f(x) = x⁴ − 4x³ + a의 최솟값이 −20일 때, f(2)의 값은? (단, a는 상수이다.)",
+    "choices": [
+      "−9",
+      "−7",
+      "−5",
+      "−3",
+      "−1"
+    ],
+    "answerIndex": 0,
+    "explanation": "f′(x) = 4x³ − 12x² = 4x²(x − 3)입니다. x = 0의 좌우에서는 f′(x)의 부호가 바뀌지 않고(음 → 음), x = 3의 좌우에서 음에서 양으로 바뀌므로 f(x)는 x = 3에서 극소이자 최소입니다. f(3) = 81 − 108 + a = a − 27 = −20에서 a = 7입니다. 따라서 f(2) = 16 − 32 + 7 = −9입니다.",
+    "concept": "사차함수의 최솟값은 f′(x) = 0인 x 중 f′(x)의 부호가 음에서 양으로 바뀌는 점에서 구하며, f′(x)의 부호가 바뀌지 않는 중근에서는 극값을 갖지 않는다."
+  },
+  {
+    "id": "math-2026-11-24-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-24",
+    "prompt": "정적분 ∫₋₂² (x⁵ + 3x² + |x|) dx의 값은?",
+    "choices": [
+      "12",
+      "14",
+      "16",
+      "18",
+      "20"
+    ],
+    "answerIndex": 4,
+    "explanation": "x⁵은 기함수이므로 −2부터 2까지의 정적분이 0입니다. 3x²과 |x|는 우함수이므로 ∫₋₂² (3x² + |x|) dx = 2∫₀² (3x² + x) dx = 2[x³ + x²/2]₀² = 2(8 + 2) = 20입니다. 따라서 구하는 값은 0 + 20 = 20입니다.",
+    "concept": "기함수 f(x)는 ∫₋ₐᵃ f(x) dx = 0, 우함수 f(x)는 ∫₋ₐᵃ f(x) dx = 2∫₀ᵃ f(x) dx이다."
+  },
+  {
+    "id": "math-2026-11-24-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-24",
+    "prompt": "한 개의 주사위를 두 번 던져 나온 두 눈의 수의 곱이 짝수일 때, 두 눈의 수의 합이 짝수일 확률은?",
+    "choices": [
+      "7/27",
+      "1/3",
+      "11/27",
+      "13/27",
+      "5/9"
+    ],
+    "answerIndex": 1,
+    "explanation": "전체 36가지 중 두 눈의 곱이 홀수인 경우는 두 눈이 모두 홀수인 3 × 3 = 9가지이므로, 곱이 짝수인 경우는 36 − 9 = 27가지입니다. 이 가운데 합이 짝수이려면 두 눈이 모두 짝수이거나 모두 홀수여야 하는데, 곱이 짝수이므로 모두 짝수인 3 × 3 = 9가지만 해당합니다. 따라서 구하는 확률은 9/27 = 1/3입니다.",
+    "concept": "조건부확률 P(B|A) = P(A∩B)/P(A)이며, 근원사건이 같은 정도로 일어날 때는 n(A∩B)/n(A)로 계산한다."
+  },
+  {
+    "id": "math-2026-11-24-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-24",
+    "prompt": "함수 f(x) = a sin bx + c의 최댓값이 5, 최솟값이 −1이고 주기가 π일 때, f(π/12)의 값은? (단, a, b, c는 상수이고 a > 0, b > 0이다.)",
+    "choices": [
+      "5/2",
+      "3",
+      "7/2",
+      "4",
+      "9/2"
+    ],
+    "answerIndex": 2,
+    "explanation": "a > 0이므로 최댓값 a + c = 5, 최솟값 −a + c = −1에서 a = 3, c = 2입니다. 주기는 2π/b = π이므로 b = 2입니다. 따라서 f(x) = 3 sin 2x + 2이고, f(π/12) = 3 sin(π/6) + 2 = 3 × (1/2) + 2 = 7/2입니다.",
+    "concept": "y = a sin bx + c (a > 0, b > 0)의 최댓값은 a + c, 최솟값은 −a + c, 주기는 2π/b이다."
   }
 ]
