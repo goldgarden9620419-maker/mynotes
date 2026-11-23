@@ -1102,11 +1102,15 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                           draft_table: dict | None = None,
                           holidays: dict | None = None,
                           new_marks: dict | None = None,
-                          category_choices: list[str] | None = None) -> Path:
+                          category_choices: list[str] | None = None,
+                          remembered: dict | None = None) -> Path:
     """확인 파일 하나에 검토 시트를 확인 순서대로 담는다.
 
     category_choices: '계획 없는 실제출금' 처리 드롭다운에 기본 후보와
     함께 보여줄 분류 목록(classify_rules의 기존 분류, 2026-10-04).
+    remembered: action_memory 기억 — 반복 항목의 처리 칸에 지난 선택을
+    미리 채우고 연두색으로 표시한다(2026-11-23 사용자 요청: 자동으로
+    넣어주고 확인만 받기).
 
     시트: ① 안내(사용법 + '확인 완료' 컨트롤) ② 확인필요(처리 지시)
     ③ 정기지출누락(팀 지출예정 파일에 없는 정기지출 — '계획에 반영'
@@ -1155,6 +1159,8 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                        "노란 처리 칸은 누르면 쓰는 법 안내가 뜨고 ▼ 단추로 "
                        "고를 수 있습니다(목록에 없으면 직접 입력, 모르면 "
                        "비워 두기). "
+                       "연두색 처리 칸은 지난번에 고르신 값을 자동으로 채운 "
+                       "것입니다 — 맞으면 그대로 두고, 아니면 ▼로 바꾸세요. "
                        "정기지출 누락 의심은 '정기지출누락' 시트에서 따로 "
                        "확인하세요. 검토가 끝나면 '안내' 시트의 "
                        "'확인 완료'(B2)를 '예'로 바꾸고 저장하세요.")
@@ -1231,6 +1237,19 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                                "때 다시 확인합니다.")
         unplanned_dv.showInputMessage = True
         ws.add_data_validation(unplanned_dv)
+
+        # 반복 항목은 지난 선택을 미리 채워 연두색으로 표시한다
+        # (2026-11-23 사용자 요청 — action_memory 기억)
+        import action_memory as _am
+
+        def _prefill(cell, issue, default, allowed):
+            val = _am.lookup(remembered or {}, issue.get("구분"),
+                             issue.get("내용"))
+            if val and val in allowed and val != default:
+                cell.value = val
+                cell.fill = PatternFill("solid",
+                                        start_color=_am.PREFILL_FILL)
+
         for r, issue in enumerate(issues, start=start + 1):
             if issue.get("구분") == ISSUE_UNPLANNED:
                 # 처리 열에서 분류를 고르면(예: 급여·상여) 기억해 다음부터
@@ -1251,6 +1270,8 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                 cell.alignment = Alignment(horizontal="center")
                 cell.border = _BORDER
                 hold_dv.add(cell.coordinate)
+                _prefill(cell, issue, ACTION_KEEP,
+                         {ACTION_KEEP, ACTION_HOLD})
                 continue
             if not issue.get("지시항목"):
                 continue
@@ -1260,6 +1281,8 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
             cell.alignment = Alignment(horizontal="center")
             cell.border = _BORDER
             action_dv.add(cell.coordinate)
+            _prefill(cell, issue, ACTION_SKIP,
+                     {ACTION_INCLUDE, ACTION_SKIP})
             ws.cell(row=r, column=_ITEM_COL, value=issue.get("지시항목"))
         ws.column_dimensions["J"].hidden = True
         # 지난 확인 이후 새로 생긴 확인필요 항목은 주황색으로 강조
@@ -1271,7 +1294,7 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
                         ws.cell(row=r, column=c).fill = NEW_ITEM_FILL
         _build_recurring_missing_sheet(
             wb.create_sheet(RECURRING_MISSING_SHEET), missing_issues,
-            holidays=holidays)
+            holidays=holidays, remembered=remembered)
         if recurring:
             _fill_recurring_review_sheet(
                 wb.create_sheet("정기지출분석"), recurring,
@@ -1284,7 +1307,8 @@ def create_issue_workbook(issues: list[dict], out_path: Path,
 
 
 def _build_recurring_missing_sheet(ws, issues: list[dict],
-                                   holidays: dict | None = None) -> None:
+                                   holidays: dict | None = None,
+                                   remembered: dict | None = None) -> None:
     """'정기지출누락' 시트: 팀 지출예정 파일에 없는 정기지출 확인.
 
     2026-09-23 사용자 확정: 정기지출 추정은 자금계획·결과파일에 넣지
@@ -1335,6 +1359,7 @@ def _build_recurring_missing_sheet(ws, issues: list[dict],
                         f"'{ACTION_SKIP}' — 원칙은 팀 재제출 요청입니다.")
     action_dv.showInputMessage = True
     ws.add_data_validation(action_dv)
+    import action_memory as _am
     for r, issue in enumerate(issues, start=start + 1):
         cell = ws.cell(row=r, column=_ACTION_COL, value=ACTION_SKIP)
         cell.fill = PatternFill("solid", start_color="FFF2CC")
@@ -1342,6 +1367,13 @@ def _build_recurring_missing_sheet(ws, issues: list[dict],
         cell.alignment = Alignment(horizontal="center")
         cell.border = _BORDER
         action_dv.add(cell.coordinate)
+        # 지난번 '계획에 반영' 선택은 미리 채워 연두색으로 (2026-11-23)
+        val = _am.lookup(remembered or {}, issue.get("구분"),
+                         issue.get("내용"))
+        if val == ACTION_INCLUDE:
+            cell.value = val
+            cell.fill = PatternFill("solid",
+                                    start_color=_am.PREFILL_FILL)
         ws.cell(row=r, column=_ITEM_COL,
                 value=issue.get("지시항목") or issue.get("내용"))
     ws.column_dimensions["J"].hidden = True
@@ -1514,6 +1546,41 @@ def load_unplanned_classifications(path: Path) -> list[dict]:
         return result
     except Exception:
         return result
+
+
+def load_action_entries(path: Path) -> list[tuple]:
+    """확인필요·정기지출누락 시트의 처리 선택을 (구분, 내용, 처리)로 읽는다.
+
+    action_memory 기억용 (2026-11-23 사용자 요청: 반복 항목은 지난
+    선택을 미리 채워 확인만 받기). '계획 없는 실제출금'은 분류 기억
+    (classify_rules 사용자분류)이 따로 담당하므로 뺀다. 기본값 선택도
+    돌려준다 — 사용자가 기본값으로 되돌린 것을 기억이 덮지 않도록.
+    """
+    result: list[tuple] = []
+    try:
+        wb = load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return result
+    try:
+        for sheet in (REVIEW_SHEET, RECURRING_MISSING_SHEET):
+            if sheet not in wb.sheetnames:
+                continue
+            ws = wb[sheet]
+            for row in ws.iter_rows(min_row=5, max_col=_ACTION_COL,
+                                    values_only=True):
+                kind = str(row[0] or "").strip()
+                if not kind or kind == ISSUE_UNPLANNED:
+                    continue
+                action = str(row[_ACTION_COL - 1] or "").strip() \
+                    if len(row) >= _ACTION_COL else ""
+                name = str(row[5] or "").strip()        # F: 내용
+                if action and name:
+                    result.append((kind, name, action))
+        return result
+    except Exception:
+        return result
+    finally:
+        wb.close()
 
 
 def load_intraday_holds(path: Path) -> set:
