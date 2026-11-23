@@ -170,6 +170,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                 bank_classifier.save_rules(rules_path, rules)
                 log.info("확인필요 파일에 적어둔 분류 %d건을 규칙에 기억",
                          changed)
+        # 처리 선택 기억(2026-11-23): 반복 항목은 지난 선택을 미리 채워
+        # 확인만 받는다 — 확인필요·주간대조 파일에서 수확해 둔다
+        import weekly_reconcile as _wr
+        action_mem = _wr.collect_action_memory(cfg, log)
         issues.extend(bank_classifier.classify_rows(kept, rules))
         log.info("은행 거래 %d건 (중복 제외 %d건)", len(kept), len(dup_rows))
 
@@ -662,7 +666,7 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                     issues, review_path, week_key=week_key,
                     signature=input_sig, recurring=recurring,
                     holidays=holidays, new_marks=new_marks,
-                    category_choices=known_cats)
+                    category_choices=known_cats, remembered=action_mem)
                 expected = (["안내", "확인필요",
                              excel_report.RECURRING_MISSING_SHEET]
                             + (["정기지출분석"] if recurring else []))
@@ -707,7 +711,8 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
                                                week_key=week_key,
                                                signature=input_sig,
                                                holidays=holidays,
-                                               category_choices=known_cats)
+                                               category_choices=known_cats,
+                                               remembered=action_mem)
             expected = ["안내", "확인필요"]
             if not excel_report.verify_workbook(review_path, expected):
                 raise RuntimeError("확인필요 파일 재열기 검증 실패")
