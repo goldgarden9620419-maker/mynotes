@@ -25,6 +25,10 @@ _NAVY = "1F4E79"
 _DIFF_ORDER = [MATCH_NOT_FOUND, MATCH_UNPLANNED, MATCH_AMOUNT_DIFF,
                MATCH_DATE_DIFF, MATCH_PARTIAL, MATCH_MANUAL]
 
+# action_memory 기억 키의 구분값 (대조결과 ②·③ 확인 선택)
+RECON_KIND_UNPAID = "주간대조 안나감"
+RECON_KIND_UNPLANNED = "주간대조 계획없음"
+
 
 def _d(value):
     return value.date() if isinstance(value, datetime) else value
@@ -136,13 +140,17 @@ def build_reconcile_data(plans: list[dict], bank_rows: list[dict],
     }
 
 
-def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
+def write_reconcile_workbook(data: dict, out_path: Path,
+                             remembered: dict | None = None) -> Path:
     """대조 자료를 주간대조 워크북(안내·대조결과·계좌별대조)으로 저장한다.
 
     2026-11-06 사용자 요청으로 단순화: '대조결과' 한 시트에서
     ① 나간 돈(완료) ② 안 나간 돈(확인 ▼) ③ 계획에 없는 지출(확인 ▼)
     세 칸만 보면 되게 한다.
+    remembered: action_memory 기억 — 반복 항목의 확인 칸에 지난 선택을
+    미리 채우고 연두색으로 표시한다(2026-11-23 사용자 요청).
     """
+    import action_memory as _am
     from openpyxl import Workbook
     from openpyxl.styles import Alignment, Font, PatternFill
     from openpyxl.utils import get_column_letter
@@ -228,7 +236,8 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
     _put(ws, 1, 1, f"이번 주 돈 흐름 확인 ({monday} ~ {week_end})",
          bold=True, size=13, color=_NAVY)
     _put(ws, 2, 1, "초록 = 계획대로 나감(훑어보기만) · 주황 = 안 나감(▼ 선택) · "
-                   "붉은 = 계획에 없던 지출(▼ 선택) — 끝나면 '안내' 시트 "
+                   "붉은 = 계획에 없던 지출(▼ 선택) · 연두 확인 칸 = 지난 "
+                   "선택 자동 입력(맞으면 그대로) — 끝나면 '안내' 시트 "
                    "B2를 '예'로 저장")
 
     def _amt(row, *keys):
@@ -307,7 +316,10 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
             _put(ws, r, 2, row.get("팀명") or "")
             _put(ws, r, 3, row.get("거래처") or "")
             _put(ws, r, 4, round(_amt(row, "예정금액")), fmt="#,##0")
-            _put(ws, r, 5, "", fill="FFE699")
+            prev = _am.lookup(remembered or {}, RECON_KIND_UNPAID,
+                              row.get("거래처"))
+            _put(ws, r, 5, prev,
+                 fill=_am.PREFILL_FILL if prev else "FFE699")
             unpaid_dv.add(f"E{r}")
             _put(ws, r, 6, row.get("비고") or "")
             r += 1
@@ -343,7 +355,10 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
             _put(ws, r, 2, row.get("은행") or "")
             _put(ws, r, 3, row.get("거래처") or "")
             _put(ws, r, 4, round(_amt(row, "실제금액")), fmt="#,##0")
-            _put(ws, r, 5, "", fill="FFC7CE")
+            prev = _am.lookup(remembered or {}, RECON_KIND_UNPLANNED,
+                              row.get("거래처"))
+            _put(ws, r, 5, prev,
+                 fill=_am.PREFILL_FILL if prev else "FFC7CE")
             unpl_dv.add(f"E{r}")
             note = row.get("비고") or ""
             if note.endswith((".xlsx", ".xls")):   # 원본 파일명은 노이즈
@@ -398,6 +413,80 @@ def write_reconcile_workbook(data: dict, out_path: Path) -> Path:
     return out_path
 
 
+def load_reconcile_actions(path: Path) -> list[tuple]:
+    """주간대조 '대조결과' 시트 ②·③ 확인 선택을 (구분, 내용, 확인)으로 읽는다.
+
+    action_memory 기억용 (2026-11-23 사용자 요청). 섹션 머리글(②/③)을
+    찾아 그 아래 자료 행의 C(내용)·E(확인)를 모은다.
+    """
+    from openpyxl import load_workbook
+
+    result: list[tuple] = []
+    try:
+        wb = load_workbook(path, data_only=True, read_only=True)
+    except Exception:
+        return result
+    try:
+        if "대조결과" not in wb.sheetnames:
+            return result
+        ws = wb["대조결과"]
+        kind = None
+        for row in ws.iter_rows(min_row=1, max_col=5, values_only=True):
+            a = str(row[0] or "")
+            if a.startswith("②"):
+                kind = RECON_KIND_UNPAID
+                continue
+            if a.startswith("③"):
+                kind = RECON_KIND_UNPLANNED
+                continue
+            if a.startswith("①") or a.startswith("날짜") \
+                    or a.startswith("예정") or a.startswith("나간"):
+                continue
+            if kind is None:
+                continue
+            name = str(row[2] or "").strip()           # C: 내용
+            action = str(row[4] or "").strip()         # E: 확인
+            if name and action:
+                result.append((kind, name, action))
+        return result
+    except Exception:
+        return result
+    finally:
+        wb.close()
+
+
+def collect_action_memory(cfg, log=None) -> dict:
+    """확인필요·주간대조 파일들의 처리 선택을 기억에 모아 저장하고 돌려준다.
+
+    확인 완료(B2)·입력 서명과 무관하게 최근 파일 전부에서 수확한다 —
+    분류 기억(v12.7)과 같은 원칙. 보관으로 옮겨진 파일도 본다.
+    """
+    import action_memory
+    from excel_report import load_action_entries
+
+    mem_path = cfg.state_dir / "action_memory.json"
+    memory = action_memory.load(mem_path)
+    archive = cfg.folder("archive") / "지난결과"
+    files = sorted(
+        [p for pat in ("확인필요_*.xlsx", "주간대조_*.xlsx")
+         for folder in (cfg.folder("review"), archive)
+         for p in folder.glob(pat)],
+        key=lambda p: p.stat().st_mtime)[-30:]
+    entries: list[tuple] = []
+    for p in files:
+        if p.name.startswith("주간대조"):
+            entries.extend(load_reconcile_actions(p))
+        else:
+            entries.extend(load_action_entries(p))
+    changed = action_memory.remember(memory, entries)
+    if changed:
+        action_memory.save(mem_path, memory)
+        if log is not None:
+            log.info("처리 선택 %d건을 기억에 갱신 (다음 파일부터 미리 "
+                     "채움)", changed)
+    return memory
+
+
 def run_weekly_reconcile(cfg, log, now=None, open_file: bool = True) -> Path:
     """입력을 읽어 주간대조 파일을 만들고 (기본) 자동으로 연다."""
     import bank_classifier
@@ -438,7 +527,8 @@ def run_weekly_reconcile(cfg, log, now=None, open_file: bool = True) -> Path:
                                  default=0.01))
 
     out = cfg.folder("review") / f"주간대조_{now:%Y%m%d_%H%M}.xlsx"
-    write_reconcile_workbook(data, out)
+    write_reconcile_workbook(data, out,
+                             remembered=collect_action_memory(cfg, log))
     log.info("주간 대조(%s~%s): 일치 %d건, 차이 %d건 — %s",
              data["기간"][0], data["기간"][1], data["일치"],
              len(data["차이내역"]), out.name)
