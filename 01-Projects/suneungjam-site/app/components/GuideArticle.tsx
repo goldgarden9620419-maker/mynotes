@@ -73,6 +73,7 @@ export default function GuideArticle({ title, lead, sections, related }: Props) 
 
       <footer className="mt-12 flex flex-wrap justify-center gap-x-4 gap-y-1 text-center text-xs text-muted">
         <Link href="/guide" className="hover:text-accent hover:underline">풀이법 가이드</Link>
+        <Link href="/problems" className="hover:text-accent hover:underline">문제와 해설</Link>
         <Link href="/about" className="hover:text-accent hover:underline">서비스 소개</Link>
         <Link href="/privacy-policy" className="hover:text-accent hover:underline">개인정보처리방침</Link>
         <Link href="/terms" className="hover:text-accent hover:underline">이용약관</Link>

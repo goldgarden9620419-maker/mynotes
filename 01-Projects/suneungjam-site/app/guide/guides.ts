@@ -1,3 +1,5 @@
+import { DEEP_SECTIONS, DEEP_SECTIONS_2, FAQ_SECTIONS } from "./guides-deep";
+
 export type GuideSection = {
   h: string;
   p?: string[];
@@ -23,7 +25,7 @@ export type ExtraGuide = {
   sections: GuideSection[];
 };
 
-export const TYPE_GUIDES: TypeGuide[] = [
+const BASE_TYPE_GUIDES: TypeGuide[] = [
   {
     "slug": "english-grammar",
     "subject": "영어",
@@ -446,7 +448,7 @@ export const TYPE_GUIDES: TypeGuide[] = [
   }
 ];
 
-export const EXTRA_GUIDES: ExtraGuide[] = [
+const BASE_EXTRA_GUIDES: ExtraGuide[] = [
   {
     "slug": "study-tips",
     "title": "짬 시간에 수능 공부하는 법 — 하루 5문제 루틴",
@@ -528,3 +530,14 @@ export const EXTRA_GUIDES: ExtraGuide[] = [
     ]
   }
 ];
+
+// 기본 가이드 뒤에 실제 문제를 풀어 보는 심화 내용을 이어 붙인다 (guides-deep.ts)
+export const TYPE_GUIDES: TypeGuide[] = BASE_TYPE_GUIDES.map((g) => ({
+  ...g,
+  sections: [...g.sections, ...(DEEP_SECTIONS[g.slug] ?? []), ...(DEEP_SECTIONS_2[g.slug] ?? []), ...(FAQ_SECTIONS[g.slug] ?? [])],
+}));
+
+export const EXTRA_GUIDES: ExtraGuide[] = BASE_EXTRA_GUIDES.map((g) => ({
+  ...g,
+  sections: [...g.sections, ...(DEEP_SECTIONS[g.slug] ?? []), ...(DEEP_SECTIONS_2[g.slug] ?? []), ...(FAQ_SECTIONS[g.slug] ?? [])],
+}));

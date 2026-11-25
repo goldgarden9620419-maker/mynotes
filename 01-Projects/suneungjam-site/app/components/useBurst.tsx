@@ -49,6 +49,7 @@ export function useBurst() {
   const particles = useRef<Particle[]>([]);
   const raf = useRef(0);
   const last = useRef(0);
+  const loop = useRef<(t: number) => void>(() => {});
 
   const frame = useCallback((t: number) => {
     const canvas = canvasRef.current;
@@ -94,13 +95,17 @@ export function useBurst() {
     }
     particles.current = list.filter((p) => p.life < p.max);
     if (alive > 0) {
-      raf.current = requestAnimationFrame(frame);
+      raf.current = requestAnimationFrame((n) => loop.current(n));
     } else {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       raf.current = 0;
       last.current = 0;
     }
   }, []);
+
+  useEffect(() => {
+    loop.current = frame;
+  }, [frame]);
 
   const resize = useCallback(() => {
     const canvas = canvasRef.current;

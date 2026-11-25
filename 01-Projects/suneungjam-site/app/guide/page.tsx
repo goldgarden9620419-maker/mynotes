@@ -45,6 +45,21 @@ export default function GuideIndex() {
       ))}
 
       <section className="mb-8">
+        <h2 className="mb-3 border-b border-border pb-2 text-base font-semibold">문제와 해설</h2>
+        <div className="flex flex-col gap-3">
+          <Link
+            href="/problems"
+            className="rounded-2xl border border-border bg-card p-4 transition hover:border-accent"
+          >
+            <p className="text-sm font-semibold">수능 영어 문제와 해설 모음</p>
+            <p className="mt-1 text-xs leading-relaxed text-muted">
+              영어 대표 문제 15개를 지문, 보기, 정답, 단계별 해설과 함께 읽어 보세요
+            </p>
+          </Link>
+        </div>
+      </section>
+
+      <section className="mb-8">
         <h2 className="mb-3 border-b border-border pb-2 text-base font-semibold">공부 방법</h2>
         <div className="flex flex-col gap-3">
           <Link

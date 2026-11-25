@@ -15,7 +15,7 @@ export default function Page() {
       title={guide.title}
       lead={guide.lead}
       sections={guide.sections}
-      related={[{"href": "/guide/math-sequence", "label": "수능 수학 수열 문제 푸는 법"}, {"href": "/guide/math-differentiation", "label": "수능 수학 미분 문제 푸는 법"}, {"href": "/guide/math-integration", "label": "수능 수학 적분 문제 푸는 법"}, {"href": "/guide/study-tips", "label": "짬 시간에 수능 공부하는 법 — 하루 5문제 루틴"}]}
+      related={[{"href": "/guide/math-sequence", "label": "수능 수학 수열 문제 푸는 법"}, {"href": "/guide/math-differentiation", "label": "수능 수학 미분 문제 푸는 법"}, {"href": "/guide/math-integration", "label": "수능 수학 적분 문제 푸는 법"}, {"href": "/guide/study-tips", "label": "짬 시간에 수능 공부하는 법 — 하루 5문제 루틴"}, {"href": "/problems", "label": "수능 영어·수학 문제와 해설 모음"}]}
     />
   );
 }
