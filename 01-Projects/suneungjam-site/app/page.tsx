@@ -127,6 +127,9 @@ export default function Home() {
           <Link href="/guide" className="hover:text-accent hover:underline">
             풀이법 가이드
           </Link>
+          <Link href="/problems" className="hover:text-accent hover:underline">
+            문제와 해설 모음
+          </Link>
           <Link href="/privacy-policy" className="hover:text-accent hover:underline">
             개인정보처리방침
           </Link>

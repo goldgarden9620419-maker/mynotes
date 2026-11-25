@@ -62,11 +62,13 @@ const WRONG_LINES = ["괜찮아, 같이 해설 보면서 이해해보자.", "다
 function CountUp({ to }: { to: number }) {
   const [n, setN] = useState(0);
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || to === 0) {
-      setN(to);
-      return;
-    }
-    const c = animate(0, to, { duration: 0.9, delay: 0.25, ease: "easeOut", onUpdate: (v) => setN(Math.round(v)) });
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const c = animate(0, to, {
+      duration: reduce || to === 0 ? 0.001 : 0.9,
+      delay: reduce ? 0 : 0.25,
+      ease: "easeOut",
+      onUpdate: (v) => setN(Math.round(v)),
+    });
     return () => c.stop();
   }, [to]);
   return <>{n}</>;
