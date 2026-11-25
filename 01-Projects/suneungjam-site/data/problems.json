@@ -21732,5 +21732,266 @@
     "answerIndex": 3,
     "explanation": "cos²x = 1 − sin²x이므로 sin x = t (−1 ≤ t ≤ 1)로 놓으면 y = 2(1 − t²) + 2t + 1 = −2t² + 2t + 3 = −2(t − 1/2)² + 7/2입니다. t = 1/2일 때 최댓값 7/2, 꼭짓점에서 가장 먼 t = −1일 때 최솟값 −2 − 2 + 3 = −1을 가집니다. 따라서 최댓값과 최솟값의 합은 7/2 + (−1) = 5/2입니다.",
     "concept": "sin²x + cos²x = 1로 한 종류의 삼각함수로 통일한 뒤 t로 치환하고, −1 ≤ t ≤ 1 범위에서 이차함수의 최대·최소를 구한다."
+  },
+  {
+    "id": "en-2026-11-26-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-26",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "In 1900, a group of Greek sponge divers sheltering from a storm near the tiny island of Antikythera discovered an ancient shipwreck [u]lying[/u]① about forty-five meters below the surface. Among the bronze statues and pottery they brought up was a corroded lump of metal, [u]which[/u]② attracted little attention until it split open and revealed traces of gearwheels. For decades scholars argued over [u]what[/u]③ the object had been made for, since nothing so complex was known from the ancient world. Only when X-ray imaging allowed researchers to look inside the fragments [u]they did[/u]④ realize that it contained at least thirty interlocking bronze gears. Turning a handle on its side moved pointers that showed the positions of the sun and moon and even predicted eclipses. No device of comparable sophistication [u]is[/u]⑤ known to have been built for more than a thousand years afterward.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "④ 'Only + 부사절(when ~)'이 문장 맨 앞에 오면 주절의 주어와 조동사가 도치되어야 하므로 they did realize를 did they realize로 고쳐야 합니다. ① an ancient shipwreck를 뒤에서 수식하며 난파선이 '놓여 있는' 능동·진행의 의미이므로 자동사 lie의 현재분사 lying은 적절합니다. ② 콤마 뒤에서 a corroded lump of metal을 부연 설명하는 계속적 용법의 주격 관계대명사 which는 적절합니다. ③ 전치사 over의 목적어가 되는 명사절을 이끌면서 절 안에서 made for의 목적어 역할을 하는 의문사 what은 적절합니다. ⑤ 주어가 단수인 No device이므로 단수 동사 is는 적절합니다.",
+    "vocab": [
+      {
+        "word": "corroded",
+        "meaning": "부식된"
+      },
+      {
+        "word": "interlocking",
+        "meaning": "서로 맞물리는"
+      },
+      {
+        "word": "eclipse",
+        "meaning": "(해·달의) 식"
+      },
+      {
+        "word": "sophistication",
+        "meaning": "정교함"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-26-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-26",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In the early 1900s, a horse in Berlin known as Clever Hans became famous for apparently doing arithmetic. When his owner, a retired teacher named Wilhelm von Osten, asked him the sum of two numbers, Hans tapped out the answer with his hoof, and he was right nearly every time. A committee of experts watched closely and found no sign of trickery; indeed, Hans answered correctly even when strangers asked the questions. The psychologist Oskar Pfungst, however, tried something different. He arranged matters so that the person asking did not know the answer, or stood where the horse could not see him. Under those conditions Hans kept tapping aimlessly and his accuracy fell to almost nothing. Pfungst concluded that the horse had not been calculating at all but ________. As the taps approached the right number, questioners unknowingly tensed, and when it was reached they relaxed and tilted their heads slightly — and that was when Hans stopped. Von Osten had not cheated; he had simply never noticed what his own body was saying.",
+    "choices": [
+      "memorizing the answers to questions he had heard before",
+      "reading tiny signals that his questioners gave without meaning to",
+      "following secret commands his owner had trained him to obey",
+      "counting the number of words spoken in each question",
+      "tapping faster whenever he expected a reward of food"
+    ],
+    "answerIndex": 1,
+    "explanation": "빈칸 앞에서 질문자가 답을 모르거나 말이 질문자를 볼 수 없을 때는 Hans의 정답률이 거의 0으로 떨어졌다고 했습니다. 빈칸 뒤에서는 발굽 소리가 정답에 가까워지면 질문자가 자기도 모르게 긴장했다가 정답에 이르면 긴장을 풀고 고개를 살짝 기울였고, 바로 그때 Hans가 멈췄다고 설명합니다. 따라서 Hans는 계산한 것이 아니라 '질문자가 의도하지 않고 내보낸 미세한 신호를 읽고 있었다'는 ②가 적절합니다. ③(주인이 훈련시킨 비밀 명령)은 낯선 사람이 물어도 맞혔고 주인이 속임수를 쓰지 않았다는 내용과 어긋나며, ①·④·⑤는 글에 근거가 없습니다.",
+    "vocab": [
+      {
+        "word": "arithmetic",
+        "meaning": "산수, 계산"
+      },
+      {
+        "word": "hoof",
+        "meaning": "발굽"
+      },
+      {
+        "word": "trickery",
+        "meaning": "속임수"
+      },
+      {
+        "word": "aimlessly",
+        "meaning": "목적 없이, 되는대로"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-26-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-26",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In September 1991, two German hikers crossing a high pass in the Alps near the Austrian–Italian border came upon a human body half-buried in melting ice.\n(A) This rough handling stopped only after the objects found beside the body were examined more carefully. Among them was an axe with a blade of almost pure copper, a tool that no modern climber would carry.\n(B) Assuming that it was a mountaineer who had died in an accident some years earlier, the authorities treated the site as a routine recovery. Rescue workers hacked the body out of the ice with ski poles and a drill, damaging its hip in the process.\n(C) Prompted by this find, scientists carried out radiocarbon tests, which showed that the man had died about 5,300 years ago. Ötzi, as he was nicknamed, turned out to be the oldest naturally preserved human body ever found in Europe, and his clothing and equipment have since reshaped our picture of life in the Copper Age.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 1,
+    "explanation": "주어진 글은 1991년 알프스에서 등산객들이 얼음에 반쯤 묻힌 시신을 발견했다는 내용입니다. (B)의 it은 이 시신을 가리키며, 당국이 몇 해 전 사고로 죽은 등산가라고 여겨 스키 폴과 드릴로 거칠게 시신을 꺼냈다는 내용이 이어집니다. (A)의 'This rough handling(이런 거친 취급)'은 (B)의 작업 방식을 받고, 시신 옆에서 현대 등산가라면 지니지 않을 구리 도끼가 발견되었다고 말합니다. (C)의 'this find(이 발견물)'는 (A)의 구리 도끼를 가리키며, 방사성 탄소 연대 측정으로 약 5,300년 전 사람임이 밝혀졌다는 결론으로 마무리됩니다. 따라서 순서는 (B)-(A)-(C)입니다.",
+    "vocab": [
+      {
+        "word": "mountaineer",
+        "meaning": "등산가"
+      },
+      {
+        "word": "hack",
+        "meaning": "마구 찍어 내다"
+      },
+      {
+        "word": "radiocarbon",
+        "meaning": "방사성 탄소"
+      },
+      {
+        "word": "prompt",
+        "meaning": "촉발하다, 자극하다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-26-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-26",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "On the crowded bridge, however, people who sensed this faint movement instinctively widened their stride and stepped in time with it to keep their balance.",
+    "passage": "When London's Millennium Bridge opened to pedestrians in June 2000, thousands of people streamed onto it within the first hours. ① To their alarm, the slender steel deck began swaying from side to side, far more than its designers had predicted. ② Engineers at first suspected a flaw in the structure, but the cause lay in the walkers themselves. ③ Any footbridge moves slightly sideways under the weight of footsteps, a motion normally too small to be felt. ④ Each adjustment pushed the deck a little further in the same direction, so the sway grew, which in turn drew still more walkers into the same rhythm. ⑤ The bridge was closed after only two days and reopened in 2002, fitted with dampers that absorb the sideways motion.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 3,
+    "explanation": "주어진 문장은 '그러나 붐비는 다리 위에서는 이 희미한 움직임을 느낀 사람들이 균형을 잡으려고 본능적으로 보폭을 넓히고 그 움직임에 발을 맞추었다'는 뜻입니다. 'this faint movement'는 ④ 앞 문장의 '평소에는 느껴지지 않을 만큼 작은 좌우 움직임'을 가리키고, however는 평소의 경우와 사람이 붐빈 개통일의 경우를 대조합니다. 또한 ④ 뒤 문장의 'Each adjustment(각각의 조정)'는 주어진 문장에서 사람들이 보폭을 넓히고 발을 맞춘 행동을 받으므로, 주어진 문장은 ④에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "slender",
+        "meaning": "가느다란, 날씬한"
+      },
+      {
+        "word": "sway",
+        "meaning": "흔들리다; 흔들림"
+      },
+      {
+        "word": "stride",
+        "meaning": "보폭, 걸음"
+      },
+      {
+        "word": "damper",
+        "meaning": "진동 흡수 장치"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-26-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-26",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "When work on the Oxford English Dictionary began in the 1850s, its editors set themselves a goal no small team could reach: to trace every English word back to its earliest appearance in print and to illustrate each shift of meaning with a dated quotation. Reading the whole of English literature was beyond any group of scholars, so the editors appealed to the public. Notices placed in newspapers and bookshops invited ordinary readers to choose books, copy out sentences containing interesting words onto slips of paper, and mail them in. Thousands responded, among them clergymen, schoolteachers, and retired soldiers, and over the following decades they supplied some five million slips. James Murray, the chief editor, had a shed built in his garden with more than a thousand pigeonholes to sort them. The first volume appeared in 1884 and the last in 1928, and nearly every entry rested on evidence that unpaid volunteers had gathered.",
+    "choices": [
+      "changes in English spelling since the nineteenth century",
+      "the difficulty of defining words borrowed from other languages",
+      "why newspapers became the main source of new vocabulary",
+      "the contribution of volunteer readers to compiling a great dictionary",
+      "disagreements among editors over which words to include"
+    ],
+    "answerIndex": 3,
+    "explanation": "글은 옥스퍼드 영어 사전 편집자들이 모든 단어의 최초 용례와 의미 변화를 인용문으로 보여 주려 했지만 소수의 학자로는 불가능해 대중에게 도움을 청했고, 수천 명의 평범한 독자가 수십 년에 걸쳐 약 500만 장의 인용 쪽지를 보내 주어 거의 모든 항목이 무보수 자원봉사자들이 모은 증거에 기반하게 되었다는 내용입니다. 따라서 주제는 '위대한 사전의 편찬에 자원 독자들이 한 기여'입니다. ③은 신문이 독자 모집 공고를 실은 수단으로만 언급되었으므로 맞지 않고, ①·②·⑤는 글에 언급되지 않았습니다.",
+    "vocab": [
+      {
+        "word": "quotation",
+        "meaning": "인용문"
+      },
+      {
+        "word": "clergyman",
+        "meaning": "성직자"
+      },
+      {
+        "word": "pigeonhole",
+        "meaning": "(서류) 분류 칸"
+      },
+      {
+        "word": "compile",
+        "meaning": "편찬하다"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-26-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-26",
+    "prompt": "등차수열 {aₙ}에 대하여 a₂ + a₆ = 20, a₄ + a₉ = 35일 때, a₁₂의 값은?",
+    "choices": [
+      "34",
+      "37",
+      "40",
+      "43",
+      "46"
+    ],
+    "answerIndex": 0,
+    "explanation": "등차수열에서 a₂ + a₆ = 2a₄이므로 2a₄ = 20, a₄ = 10입니다. a₄ + a₉ = 35에서 a₉ = 25이고, a₉ − a₄ = 5d = 15이므로 공차 d = 3입니다. 따라서 a₁₂ = a₉ + 3d = 25 + 9 = 34입니다. (a₁ = 1이므로 a₁₂ = 1 + 11×3 = 34로도 확인됩니다.)",
+    "concept": "등차수열에서 m + n = 2k이면 aₘ + aₙ = 2aₖ(등차중항)이고, aₘ − aₙ = (m − n)d이다."
+  },
+  {
+    "id": "math-2026-11-26-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-26",
+    "prompt": "방정식 x³ − 12x + k = 0이 서로 다른 세 실근을 갖도록 하는 정수 k의 개수는?",
+    "choices": [
+      "29",
+      "30",
+      "31",
+      "32",
+      "33"
+    ],
+    "answerIndex": 2,
+    "explanation": "f(x) = x³ − 12x + k라 하면 f′(x) = 3x² − 12 = 3(x + 2)(x − 2)이므로 x = −2에서 극댓값 f(−2) = 16 + k, x = 2에서 극솟값 f(2) = −16 + k를 가집니다. 삼차방정식이 서로 다른 세 실근을 가지려면 (극댓값) > 0, (극솟값) < 0이어야 하므로 16 + k > 0, −16 + k < 0, 즉 −16 < k < 16입니다. 이를 만족시키는 정수 k는 −15, −14, …, 15의 31개입니다.",
+    "concept": "삼차방정식 f(x) = 0이 서로 다른 세 실근을 가질 조건은 (극댓값) × (극솟값) < 0이다."
+  },
+  {
+    "id": "math-2026-11-26-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-26",
+    "prompt": "다항함수 f(x)가 모든 실수 x에 대하여 f(x) = 3x² − 4x + 2∫₀¹ f(t) dt를 만족시킬 때, f(3)의 값은?",
+    "choices": [
+      "8",
+      "11",
+      "14",
+      "17",
+      "20"
+    ],
+    "answerIndex": 3,
+    "explanation": "∫₀¹ f(t) dt는 상수이므로 이를 k라 하면 f(x) = 3x² − 4x + 2k입니다. k = ∫₀¹ (3t² − 4t + 2k) dt = [t³ − 2t² + 2kt]₀¹ = 1 − 2 + 2k = 2k − 1이므로 k = 1입니다. 따라서 f(x) = 3x² − 4x + 2이고 f(3) = 27 − 12 + 2 = 17입니다.",
+    "concept": "적분 구간이 상수인 정적분 ∫ₐᵇ f(t) dt는 상수이므로 k로 놓고 f(x)를 k로 나타낸 뒤 다시 적분하여 k를 구한다."
+  },
+  {
+    "id": "math-2026-11-26-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-26",
+    "prompt": "확률변수 X가 이항분포 B(n, 1/3)을 따르고 V(X) = 8일 때, E(X²)의 값은?",
+    "choices": [
+      "120",
+      "128",
+      "136",
+      "144",
+      "152"
+    ],
+    "answerIndex": 4,
+    "explanation": "V(X) = n × (1/3) × (2/3) = 2n/9 = 8이므로 n = 36입니다. 따라서 E(X) = 36 × (1/3) = 12입니다. V(X) = E(X²) − {E(X)}²에서 E(X²) = V(X) + {E(X)}² = 8 + 144 = 152입니다.",
+    "concept": "X가 B(n, p)를 따르면 E(X) = np, V(X) = np(1 − p)이고, E(X²) = V(X) + {E(X)}²이다."
+  },
+  {
+    "id": "math-2026-11-26-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-26",
+    "prompt": "삼각형 ABC에서 AB = 5, BC = 7, CA = 8일 때, 삼각형 ABC의 외접원의 넓이는?",
+    "choices": [
+      "16π",
+      "49π/3",
+      "52π/3",
+      "18π",
+      "64π/3"
+    ],
+    "answerIndex": 1,
+    "explanation": "변 BC의 대각이 A이므로 코사인법칙에서 cos A = (AB² + CA² − BC²)/(2 × AB × CA) = (25 + 64 − 49)/(2 × 5 × 8) = 40/80 = 1/2, 즉 A = 60°입니다. 사인법칙에서 BC/sin A = 2R이므로 2R = 7/(√3/2) = 14/√3, R = 7/√3입니다. 따라서 외접원의 넓이는 πR² = 49π/3입니다.",
+    "concept": "코사인법칙 cos A = (b² + c² − a²)/(2bc)로 각을 구하고, 사인법칙 a/sin A = 2R로 외접원의 반지름을 구한다."
   }
 ]
