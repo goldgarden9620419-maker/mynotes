@@ -21993,5 +21993,266 @@
     "answerIndex": 1,
     "explanation": "변 BC의 대각이 A이므로 코사인법칙에서 cos A = (AB² + CA² − BC²)/(2 × AB × CA) = (25 + 64 − 49)/(2 × 5 × 8) = 40/80 = 1/2, 즉 A = 60°입니다. 사인법칙에서 BC/sin A = 2R이므로 2R = 7/(√3/2) = 14/√3, R = 7/√3입니다. 따라서 외접원의 넓이는 πR² = 49π/3입니다.",
     "concept": "코사인법칙 cos A = (b² + c² − a²)/(2bc)로 각을 구하고, 사인법칙 a/sin A = 2R로 외접원의 반지름을 구한다."
+  },
+  {
+    "id": "en-2026-11-27-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-27",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "In 1682, the English astronomer Edmond Halley observed a bright comet and began to wonder [u]whether[/u]① it had visited the sky before. Searching through old records, he noticed that the comets of 1531 and 1607 had followed paths remarkably [u]similar[/u]② to the one he had seen. Using the theory of gravity that his friend Isaac Newton had recently worked out, Halley calculated that the three were in fact a single object [u]traveling[/u]③ around the sun roughly every seventy-six years. He therefore predicted that it would return in late 1758, though he knew he would not live to see it [u]happen[/u]④. Halley died in 1742, but on Christmas night of 1758 a German farmer spotted the comet just where it was expected. The success of the prediction, [u]that[/u]⑤ made Newton's physics famous across Europe, showed that even comets obey regular laws.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 콤마 뒤에서 선행사를 부연 설명하는 계속적 용법에는 관계대명사 that을 쓸 수 없으므로 which로 고쳐야 합니다. ① wonder의 목적어가 되는 명사절을 이끌며 '~인지 아닌지'를 뜻하는 접속사 whether는 적절합니다. ② 명사 paths를 뒤에서 수식하는 형용사구(similar to ~)이므로 형용사 similar는 적절하며, 부사 remarkably가 이를 수식합니다. ③ a single object를 뒤에서 수식하며 물체가 태양 주위를 '도는' 능동의 의미이므로 현재분사 traveling은 적절합니다. ④ 지각동사 see는 목적격 보어로 동사원형을 취할 수 있으므로 happen은 적절합니다.",
+    "vocab": [
+      {
+        "word": "astronomer",
+        "meaning": "천문학자"
+      },
+      {
+        "word": "comet",
+        "meaning": "혜성"
+      },
+      {
+        "word": "gravity",
+        "meaning": "중력"
+      },
+      {
+        "word": "obey",
+        "meaning": "(법칙·명령을) 따르다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-27-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-27",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "In the 1990s, vultures in India began dying at an astonishing rate. Within about fifteen years, the populations of three common species had fallen by more than ninety-five percent. The cause turned out to be diclofenac, a cheap painkiller that farmers gave to their cattle; when a treated animal died, traces of the drug remaining in its body destroyed the kidneys of the vultures that fed on it. Few people had ever felt much affection for these birds, but their absence was soon felt. Vultures had been stripping millions of cattle carcasses to the bone within hours. Now the carcasses lay rotting in fields and at the edges of villages, and packs of stray dogs grew fat on them. As the dogs multiplied, so did dog bites and deaths from rabies, and researchers have linked the vultures' collapse to tens of thousands of human deaths. India banned the drug for use on animals in 2006. The episode is a reminder that ________.",
+    "choices": [
+      "medicines for animals should be tested on humans first",
+      "the work a species does may go unnoticed until it is gone",
+      "wild birds adapt quickly to changes in their food supply",
+      "stray dogs are more useful to villages than they appear",
+      "banning a drug rarely solves the problem it has caused"
+    ],
+    "answerIndex": 1,
+    "explanation": "글은 인도에서 독수리가 가축용 진통제 때문에 95% 넘게 사라지자, 독수리가 몇 시간 만에 처리하던 소의 사체가 썩은 채 방치되고 이를 먹은 떠돌이 개가 늘어 광견병 사망자까지 증가했다는 내용입니다. 'Few people had ever felt much affection for these birds, but their absence was soon felt'에서 알 수 있듯, 사람들은 독수리가 사라진 뒤에야 그 역할을 깨달았습니다. 따라서 빈칸에는 '한 종이 하는 일은 그 종이 사라지기 전까지 눈에 띄지 않을 수 있다'는 ②가 가장 적절합니다. ①의 인체 시험, ③의 야생 조류의 빠른 적응은 글과 무관하거나 반대되고, ④는 개가 오히려 피해를 키웠다는 내용과 어긋나며, ⑤는 약물 금지의 효과를 부정하는 근거가 글에 없습니다.",
+    "vocab": [
+      {
+        "word": "vulture",
+        "meaning": "독수리"
+      },
+      {
+        "word": "carcass",
+        "meaning": "(동물의) 사체"
+      },
+      {
+        "word": "stray",
+        "meaning": "주인 없는, 떠돌아다니는"
+      },
+      {
+        "word": "rabies",
+        "meaning": "광견병"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-27-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-27",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "In December 1938, Marjorie Courtenay-Latimer, the curator of a small museum in East London, South Africa, was called to the docks to look over a fishing boat's catch.\n(A) When he finally saw the drawing, Smith could hardly believe it. The fins and scales matched those of the coelacanth, a fish known only from fossils and thought to have died out with the dinosaurs some sixty-six million years ago. The specimen was soon confirmed as genuine, and newspapers around the world called it a living fossil.\n(B) Beneath a pile of sharks and rays she noticed a heavy, steel-blue fish with limb-like fins and thick, armored scales. It was unlike anything she had ever seen, and she took it back to the museum in a taxi.\n(C) Unable to find the creature in any of her reference books, she sent a rough sketch of it to J. L. B. Smith, a chemistry lecturer who was also an expert on fish. Because of the summer holidays, the letter took over a week to reach him.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 글은 1938년 박물관 큐레이터가 어선의 어획물을 살펴보러 부두에 갔다는 내용입니다. 그 어획물 더미 속에서 처음 보는 푸른 물고기를 발견해 박물관으로 가져갔다는 (B)가 먼저 옵니다. (C)의 'the creature'는 (B)의 물고기를 가리키며, 참고 서적에서 찾지 못해 Smith에게 스케치를 보냈고 편지가 일주일 넘게 걸렸다는 내용이 이어집니다. (A)의 'he finally saw the drawing'은 (C)에서 늦게 도착한 스케치를 받으며, Smith라는 성만 쓴 것도 (C)에서 이미 소개되었기 때문입니다. 그 물고기가 화석으로만 알려진 실러캔스로 확인되었다는 결말이 마지막에 옵니다. 따라서 (B)-(C)-(A)가 정답입니다.",
+    "vocab": [
+      {
+        "word": "curator",
+        "meaning": "(박물관의) 큐레이터, 학예사"
+      },
+      {
+        "word": "specimen",
+        "meaning": "표본"
+      },
+      {
+        "word": "coelacanth",
+        "meaning": "실러캔스(고대 어류)"
+      },
+      {
+        "word": "genuine",
+        "meaning": "진짜의, 진품의"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-27-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-27",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "Yet the region has been struck by at least four strong earthquakes since the Middle Ages, and the tower has come through all of them unharmed.",
+    "passage": "The Leaning Tower of Pisa began to tilt in the 1170s, soon after builders finished its third floor. ① The soft clay and sand beneath its south side could not bear the weight evenly, and the lean grew worse as more floors were added. ② For centuries, engineers regarded that weak ground as the tower's great enemy and feared that even a moderate tremor would bring the structure down. ③ A study published in 2018 by an international team of engineers offered an explanation for this surprising record. ④ A tall, stiff tower resting on such soft soil sways much more slowly than the ground beneath it shakes, so the motion of an earthquake is not passed on and amplified. ⑤ In other words, the very soil that made the tower lean has also been keeping it standing.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장은 '그러나 그 지역은 중세 이후 적어도 네 차례 강한 지진을 겪었고, 탑은 그 모두를 아무 손상 없이 견뎌 냈다'는 뜻입니다. Yet은 ③ 앞 문장에서 기술자들이 약한 지반 때문에 작은 진동에도 탑이 무너질 것이라고 두려워했다는 내용과 대조를 이룹니다. 또한 ③ 뒤 문장의 'this surprising record(이 놀라운 기록)'는 주어진 문장에서 탑이 네 번의 강진을 모두 견딘 사실을 가리키므로, 주어진 문장이 없으면 가리키는 대상이 없습니다. 따라서 ③이 가장 적절합니다.",
+    "vocab": [
+      {
+        "word": "tilt",
+        "meaning": "기울다"
+      },
+      {
+        "word": "tremor",
+        "meaning": "(약한) 지진, 떨림"
+      },
+      {
+        "word": "stiff",
+        "meaning": "뻣뻣한, 단단한"
+      },
+      {
+        "word": "amplify",
+        "meaning": "증폭시키다"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-27-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-27",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "In 1977, NASA launched the two Voyager spacecraft toward the outer planets, knowing that they would eventually leave the solar system and drift among the stars for billions of years. A small committee led by the astronomer Carl Sagan was given less than a year to decide what should travel with them. The result was a gold-plated copper disc carrying 115 images, greetings in fifty-five languages, and ninety minutes of music ranging from Bach to Indonesian gamelan. Every choice was argued over. The committee wanted the sounds of rain, laughter, and a mother's first words to her newborn, not just the achievements of scientists and kings. Since no finder could be expected to read any human language, instructions for playing the disc were engraved on its cover as diagrams. Sagan admitted that the chance of the record ever being found was tiny. What mattered to him was the effort of deciding, on behalf of everyone, how humanity would wish to be remembered.",
+    "choices": [
+      "technical obstacles to sending spacecraft beyond the solar system",
+      "the influence of classical music on modern space science",
+      "reasons scientists doubt the existence of intelligent life elsewhere",
+      "how early spacecraft transmitted images back to Earth",
+      "an attempt to capture a portrait of humankind for unknown finders"
+    ],
+    "answerIndex": 4,
+    "explanation": "글은 보이저 우주선에 실어 보낼 내용을 정하기 위해 Carl Sagan의 위원회가 115장의 이미지, 55개 언어의 인사말, 다양한 음악과 빗소리·웃음소리 같은 일상의 소리를 고르고, 어떤 언어도 읽지 못할 발견자를 위해 재생 방법을 그림으로 새겼다는 내용입니다. 마지막 문장에서 중요한 것은 인류가 어떻게 기억되고 싶은지를 모두를 대신해 정하려는 노력이었다고 정리하므로, 주제는 ⑤ '미지의 발견자를 위해 인류의 모습을 담으려는 시도'입니다. ①의 기술적 장애, ③의 외계 지적 생명체에 대한 의심, ④의 이미지 전송 방식은 언급되지 않았고, ②의 음악은 음반에 담긴 내용의 일부일 뿐 우주 과학에 미친 영향은 다루지 않았습니다.",
+    "vocab": [
+      {
+        "word": "spacecraft",
+        "meaning": "우주선"
+      },
+      {
+        "word": "gold-plated",
+        "meaning": "금으로 도금한"
+      },
+      {
+        "word": "engrave",
+        "meaning": "새기다"
+      },
+      {
+        "word": "on behalf of",
+        "meaning": "~을 대신하여"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-27-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-27",
+    "prompt": "수열 {aₙ}의 첫째항부터 제n항까지의 합 Sₙ이 Sₙ = 2n² − n일 때, a₃ + a₅ + a₇의 값은?",
+    "choices": [
+      "45",
+      "48",
+      "51",
+      "54",
+      "57"
+    ],
+    "answerIndex": 2,
+    "explanation": "n ≥ 2일 때 aₙ = Sₙ − Sₙ₋₁ = (2n² − n) − {2(n − 1)² − (n − 1)} = 4n − 3이고, a₁ = S₁ = 1도 이 식을 만족시킵니다. 따라서 a₃ = 9, a₅ = 17, a₇ = 25이고 a₃ + a₅ + a₇ = 9 + 17 + 25 = 51입니다.",
+    "concept": "수열의 합 Sₙ이 주어지면 a₁ = S₁, aₙ = Sₙ − Sₙ₋₁ (n ≥ 2)로 일반항을 구한다."
+  },
+  {
+    "id": "math-2026-11-27-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-27",
+    "prompt": "점 (0, −4)에서 곡선 y = x³ − 2에 그은 접선이 점 (3, k)를 지날 때, k의 값은?",
+    "choices": [
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "answerIndex": 0,
+    "explanation": "접점의 x좌표를 t라 하면 y′ = 3x²이므로 접선의 방정식은 y = 3t²(x − t) + t³ − 2입니다. 이 직선이 (0, −4)를 지나므로 −4 = −3t³ + t³ − 2, 즉 −2t³ = −2에서 t = 1입니다. 따라서 접선은 y = 3(x − 1) − 1 = 3x − 4이고, x = 3을 대입하면 k = 9 − 4 = 5입니다.",
+    "concept": "곡선 밖의 점에서 그은 접선은 접점을 (t, f(t))로 놓고 y = f′(t)(x − t) + f(t)에 주어진 점을 대입하여 t를 구한다."
+  },
+  {
+    "id": "math-2026-11-27-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-27",
+    "prompt": "함수 f(x) = ∫₁ˣ (t² − 2t − 3) dt의 극솟값은?",
+    "choices": [
+      "−8",
+      "−22/3",
+      "−20/3",
+      "−6",
+      "−16/3"
+    ],
+    "answerIndex": 4,
+    "explanation": "f′(x) = x² − 2x − 3 = (x + 1)(x − 3)이므로 f(x)는 x = −1에서 극대, x = 3에서 극소입니다. 극솟값은 f(3) = ∫₁³ (t² − 2t − 3) dt = [t³/3 − t² − 3t]₁³ = (9 − 9 − 9) − (1/3 − 1 − 3) = −9 + 11/3 = −16/3입니다.",
+    "concept": "f(x) = ∫ₐˣ g(t) dt이면 f′(x) = g(x)이므로 g(x)의 부호 변화로 극값의 위치를 찾고 정적분으로 그 값을 구한다."
+  },
+  {
+    "id": "math-2026-11-27-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-27",
+    "prompt": "다섯 개의 문자 a, a, b, b, c를 모두 일렬로 나열할 때, 두 개의 a가 서로 이웃하지 않도록 나열하는 경우의 수는?",
+    "choices": [
+      "12",
+      "14",
+      "16",
+      "18",
+      "20"
+    ],
+    "answerIndex": 3,
+    "explanation": "다섯 문자를 일렬로 나열하는 전체 경우의 수는 5!/(2! × 2!) = 30입니다. 두 a가 이웃하는 경우는 aa를 한 문자로 보고 (aa), b, b, c의 네 개를 나열하는 것이므로 4!/2! = 12입니다. 따라서 두 a가 이웃하지 않는 경우의 수는 30 − 12 = 18입니다.",
+    "concept": "같은 것이 각각 p개, q개 있는 n개를 일렬로 나열하는 경우의 수는 n!/(p! q!)이고, '이웃하지 않는' 경우는 전체에서 이웃하는 경우를 뺀다."
+  },
+  {
+    "id": "math-2026-11-27-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-27",
+    "prompt": "함수 f(x) = sin²x + 2cos x + 1의 최댓값과 최솟값의 합은?",
+    "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "answerIndex": 1,
+    "explanation": "sin²x = 1 − cos²x이므로 cos x = t (−1 ≤ t ≤ 1)로 놓으면 f(x) = −t² + 2t + 2 = −(t − 1)² + 3입니다. −1 ≤ t ≤ 1에서 t = 1일 때 최댓값 3, t = −1일 때 최솟값 −4 + 3 = −1을 가집니다. 따라서 최댓값과 최솟값의 합은 3 + (−1) = 2입니다.",
+    "concept": "sin²x + cos²x = 1을 이용해 한 종류의 삼각함수로 통일한 뒤 t로 치환하고, −1 ≤ t ≤ 1 범위에서 이차함수의 최대·최소를 구한다."
   }
 ]
