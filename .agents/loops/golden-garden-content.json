@@ -35,7 +35,8 @@
     "목표를 이뤄도 행복은 내일로 미뤘다 (피크엔드 법칙, 경험하는 나, 기억하는 나)",
     "야식이 위로인 줄 알았다 (생체시계, 식사 시간, 야식)",
     "햇볕도 보는 줄 알았다 (유리창, 비타민D, 점심 산책)",
-    "완벽한 계획이 신중함인 줄 알았다 (손실 회피, 맥시마이저, 투웨이 도어)"
+    "완벽한 계획이 신중함인 줄 알았다 (손실 회피, 맥시마이저, 투웨이 도어)",
+    "할인하면 아낀 줄 알았다 (심적 회계, 하루 기다리기, 돈의 제목)"
   ],
   "pending_drafts": [
     {
@@ -211,6 +212,17 @@
       "review_note": "gpt_review.py 자동 교차 검토(84→86→88), 사용자 실제 장면(하루보고 구글 캘린더 PDF 일정 가져오기, 시작일·마감일 버그) 추가, 강연 40%·3년 사례 대본 확인",
       "url": "https://diary21462.tistory.com/entry/%EC%99%84%EB%B2%BD%ED%95%9C-%EA%B3%84%ED%9A%8D%EC%9D%B4-%EC%8B%A0%EC%A4%91%ED%95%A8%EC%9D%B8-%EC%A4%84-%EC%95%8C%EC%95%98%EB%8B%A4-%EC%86%90%EC%8B%A4-%ED%9A%8C%ED%94%BC-%EB%A7%A5%EC%8B%9C%EB%A7%88%EC%9D%B4%EC%A0%80-%ED%88%AC%EC%9B%A8%EC%9D%B4-%EB%8F%84%EC%96%B4",
       "thread_media": "있음(영상)"
+    },
+    {
+      "topic": "할인하면 아낀 줄 알았다 (심적 회계, 하루 기다리기, 돈의 제목)",
+      "published_at": "2026-11-26",
+      "tistory_category": "부자의 습관·자기계발",
+      "studio_doc": "p-20261126-discount",
+      "layout": "H",
+      "review_score": 86,
+      "review_note": "gpt_review.py 자동 교차 검토(82→84→84→86), 사용자 실제 장면(할인 옷 후회·옷장 확인·책은 망설임 없이 구매) 추가, 트버스키·카너먼 1981 원문 수치 확인",
+      "url": "https://diary21462.tistory.com/entry/%ED%95%A0%EC%9D%B8%ED%95%98%EB%A9%B4-%EC%95%84%EB%82%80-%EC%A4%84-%EC%95%8C%EC%95%98%EB%8B%A4-%EC%8B%AC%EC%A0%81-%ED%9A%8C%EA%B3%84-%ED%95%98%EB%A3%A8-%EA%B8%B0%EB%8B%A4%EB%A6%AC%EA%B8%B0-%EB%8F%88%EC%9D%98-%EC%A0%9C%EB%AA%A9",
+      "thread_media": "있음"
     }
   ],
   "counters": {
