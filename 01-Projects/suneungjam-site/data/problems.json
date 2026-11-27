@@ -22254,5 +22254,266 @@
     "answerIndex": 1,
     "explanation": "sin²x = 1 − cos²x이므로 cos x = t (−1 ≤ t ≤ 1)로 놓으면 f(x) = −t² + 2t + 2 = −(t − 1)² + 3입니다. −1 ≤ t ≤ 1에서 t = 1일 때 최댓값 3, t = −1일 때 최솟값 −4 + 3 = −1을 가집니다. 따라서 최댓값과 최솟값의 합은 3 + (−1) = 2입니다.",
     "concept": "sin²x + cos²x = 1을 이용해 한 종류의 삼각함수로 통일한 뒤 t로 치환하고, −1 ≤ t ≤ 1 범위에서 이차함수의 최대·최소를 구한다."
+  },
+  {
+    "id": "en-2026-11-28-1",
+    "subject": "english",
+    "type": "어법",
+    "date": "2026-11-28",
+    "prompt": "다음 글의 밑줄 친 부분 중, 어법상 틀린 것은?",
+    "passage": "In the early 1980s, doctors were taught that stomach ulcers were caused by stress and excess acid, and that no bacterium could survive in a place as acidic [u]as[/u]① the human stomach. Barry Marshall, a young Australian physician, and the pathologist Robin Warren doubted this, for they kept [u]finding[/u]② the same spiral-shaped bacteria in samples taken from ulcer patients. Their colleagues were unconvinced, and attempts to infect laboratory animals failed. So in 1984 Marshall did something [u]drastic[/u]③: he drank a broth containing the bacteria himself. Within days he was vomiting, and a test showed that his stomach lining, [u]which[/u]④ had been perfectly healthy before, was badly inflamed. Antibiotics soon cured him. It took another decade for the medical world to accept that most ulcers could be treated with a short course of pills, but in 2005 the two men [u]awarded[/u]⑤ the Nobel Prize.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 4,
+    "explanation": "⑤ 주어 the two men은 노벨상을 '수여받는' 대상이므로 수동태 were awarded로 고쳐야 합니다. ① 'as + 형용사 + as'의 원급 비교 구문으로 올바릅니다. ② keep은 동명사를 목적어로 취해 '계속 ~하다'를 뜻하므로 finding이 맞습니다. ③ -thing으로 끝나는 대명사는 형용사가 뒤에서 수식하므로 something drastic이 올바릅니다. ④ 콤마 뒤에서 선행사 his stomach lining을 부연 설명하는 계속적 용법의 주격 관계대명사 which로 올바릅니다.",
+    "vocab": [
+      {
+        "word": "ulcer",
+        "meaning": "궤양"
+      },
+      {
+        "word": "pathologist",
+        "meaning": "병리학자"
+      },
+      {
+        "word": "broth",
+        "meaning": "(세균) 배양액, 묽은 수프"
+      },
+      {
+        "word": "inflamed",
+        "meaning": "염증이 생긴"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-28-2",
+    "subject": "english",
+    "type": "빈칸추론",
+    "date": "2026-11-28",
+    "prompt": "다음 빈칸에 들어갈 말로 가장 적절한 것은?",
+    "passage": "On September 3, 1967, at five o'clock in the morning, every vehicle in Sweden came to a stop, carefully crossed to the other side of the road, and set off again. After centuries of driving on the left, the country had switched to the right in order to match its neighbors. Many people predicted chaos. Drivers would be steering against habits built up over a lifetime, and pedestrians would be looking the wrong way before stepping off the curb. Yet on the Monday after the change, the number of reported traffic accidents was well below the usual figure, and insurance claims fell by about forty percent in the following months. The roads had not become any safer; if anything, they were more confusing than ever. What had changed was the drivers, who slowed down and watched every junction with unusual attention. Within two years, as the new rule became second nature, accident rates returned to their old level. The episode suggests that ________.",
+    "choices": [
+      "strict traffic laws are the surest way to save lives",
+      "old habits are nearly impossible to replace with new ones",
+      "people take the most care when they feel least secure",
+      "drivers adapt to new rules faster than pedestrians do",
+      "countries benefit from sharing rules with their neighbors"
+    ],
+    "answerIndex": 2,
+    "explanation": "스웨덴이 우측통행으로 바꾼 직후 도로는 오히려 더 혼란스러웠지만, 불안해진 운전자들이 속도를 줄이고 교차로마다 주의를 기울인 덕분에 사고가 줄었고, 새 규칙이 익숙해지자(second nature) 사고율이 원래대로 돌아갔습니다. 따라서 '사람은 가장 불안하다고 느낄 때 가장 조심한다'는 ③이 적절합니다. ① 법의 엄격함은 언급되지 않았고, ② 2년 만에 새 규칙이 몸에 뱄으므로 글과 반대이며, ④ 운전자와 보행자의 적응 속도 비교는 없고, ⑤ 이웃 나라와 맞춘 것은 변경의 이유일 뿐 글의 결론이 아닙니다.",
+    "vocab": [
+      {
+        "word": "curb",
+        "meaning": "(인도와 차도 사이의) 연석"
+      },
+      {
+        "word": "junction",
+        "meaning": "교차로"
+      },
+      {
+        "word": "second nature",
+        "meaning": "제2의 천성, 몸에 밴 습관"
+      },
+      {
+        "word": "insurance claim",
+        "meaning": "보험금 청구"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-28-3",
+    "subject": "english",
+    "type": "순서",
+    "date": "2026-11-28",
+    "prompt": "주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?",
+    "passage": "On the morning of August 21, 1911, a workman named Vincenzo Peruggia walked out of the Louvre with the Mona Lisa hidden under his coat.\n(A) Nobody noticed until the next day, when a visiting artist asked a guard where the picture had gone. The museum closed for a week, the borders of France were sealed, and police questioned dozens of suspects, including the young Pablo Picasso, without result.\n(B) That fame was still growing two years later, when Peruggia tried to sell the stolen work to an art dealer in Florence and was arrested. The portrait returned to Paris not as one admired masterpiece among many, as it had been before, but as the most recognized picture on earth.\n(C) While the investigation went nowhere, the painting's face spread across the world. Newspapers printed it on their front pages day after day, and when the Louvre reopened, thousands of people lined up simply to stare at the empty space on the wall.",
+    "choices": [
+      "(A)-(C)-(B)",
+      "(B)-(A)-(C)",
+      "(B)-(C)-(A)",
+      "(C)-(A)-(B)",
+      "(C)-(B)-(A)"
+    ],
+    "answerIndex": 0,
+    "explanation": "주어진 글은 페루자가 모나리자를 훔쳐 나오는 장면입니다. 도난 사실이 다음 날에야 발견되고 경찰 수사가 시작되는 (A)가 먼저 오고, 'the investigation went nowhere'로 (A)의 성과 없는 수사를 받으면서 그림의 얼굴이 전 세계 신문에 퍼졌다는 (C)가 이어집니다. 마지막으로 'That fame'이 (C)에서 얻은 유명세를 가리키며 2년 뒤 범인이 체포되고 그림이 세계에서 가장 유명한 그림으로 돌아왔다는 (B)가 옵니다. 따라서 (A)-(C)-(B)입니다.",
+    "vocab": [
+      {
+        "word": "suspect",
+        "meaning": "용의자"
+      },
+      {
+        "word": "seal",
+        "meaning": "봉쇄하다"
+      },
+      {
+        "word": "masterpiece",
+        "meaning": "걸작"
+      },
+      {
+        "word": "art dealer",
+        "meaning": "미술품 거래상"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-28-4",
+    "subject": "english",
+    "type": "문장삽입",
+    "date": "2026-11-28",
+    "prompt": "글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?",
+    "givenSentence": "Sailors who refused to board such a vessel after signing on, however, could be sent to prison for breaking their contract.",
+    "passage": "In the 1860s, hundreds of British merchant ships sank every year, many of them within sight of the coast. ① A common cause was overloading: the more cargo an owner packed into a ship, the greater the profit from each voyage. ② Because ships and cargo were often insured for more than they were worth, some owners lost little even when an old, overfilled vessel went down. ③ Samuel Plimsoll, a member of Parliament, was outraged that men were being punished for trying to stay alive, and he attacked these \"coffin ships\" in speeches and in a best-selling book. ④ After years of public pressure, Parliament passed a law in 1876 requiring a line to be painted on the hull of every cargo ship. ⑤ If the line sank below the surface of the water, the ship was carrying too much and was forbidden to leave port.",
+    "choices": [
+      "①",
+      "②",
+      "③",
+      "④",
+      "⑤"
+    ],
+    "answerIndex": 2,
+    "explanation": "주어진 문장의 'such a vessel'은 ② 뒤 문장의 'an old, overfilled vessel'을 가리키고, however는 배가 가라앉아도 손해를 거의 보지 않던 선주와 승선을 거부하면 감옥에 가야 했던 선원의 처지를 대조합니다. 또한 ③ 뒤 문장의 'men were being punished for trying to stay alive(살아남으려 했다는 이유로 처벌받는 사람들)'는 주어진 문장의 감옥에 간 선원들을 받는 내용이므로, 주어진 문장은 ③에 들어가야 합니다.",
+    "vocab": [
+      {
+        "word": "cargo",
+        "meaning": "화물"
+      },
+      {
+        "word": "outraged",
+        "meaning": "격분한"
+      },
+      {
+        "word": "coffin",
+        "meaning": "관(棺)"
+      },
+      {
+        "word": "hull",
+        "meaning": "선체"
+      }
+    ]
+  },
+  {
+    "id": "en-2026-11-28-5",
+    "subject": "english",
+    "type": "주제",
+    "date": "2026-11-28",
+    "prompt": "다음 글의 주제로 가장 적절한 것은?",
+    "passage": "Deep inside a frozen mountain on the Norwegian island of Svalbard, about 1,300 kilometers from the North Pole, lies a vault holding more than a million samples of seeds. They are duplicates of collections kept in gene banks around the world, which preserve thousands of varieties of wheat, rice, beans, and other crops. Those banks are more fragile than they sound: a flood, a fire, a failed freezer, or a war can wipe out in a day varieties that farmers spent centuries developing. In Svalbard, the cold rock keeps the seeds frozen even if the power fails. The vault's value was proven in 2015, when researchers who had been forced to abandon their gene bank near Aleppo during the Syrian civil war withdrew the copies they had deposited. They planted them in Lebanon and Morocco, rebuilt their collection, and later returned fresh seeds to the mountain. Without the backup, drought-resistant grains that may be needed in a warming world could have vanished for good.",
+    "choices": [
+      "difficulties of growing crops in the Arctic climate",
+      "the impact of civil war on food prices in the Middle East",
+      "reasons modern farmers prefer newly developed seed varieties",
+      "the role of a remote seed vault in safeguarding crop diversity",
+      "methods of keeping seeds frozen without electricity"
+    ],
+    "answerIndex": 3,
+    "explanation": "글은 스발바르의 종자 저장고가 전 세계 유전자은행의 복제본을 보관하며, 시리아 내전으로 알레포의 유전자은행을 잃은 연구자들이 이곳의 복제본으로 수집품을 되살린 사례를 통해 그 가치를 설명합니다. 따라서 주제는 ④ '작물 다양성을 지키는 외딴 종자 저장고의 역할'입니다. ① 북극에서의 작물 재배는 다루지 않았고, ② 식량 가격은 언급되지 않았으며, ③ 농부들의 신품종 선호는 글에 없고, ⑤ 전기 없이도 얼어 있다는 것은 세부 사항일 뿐입니다.",
+    "vocab": [
+      {
+        "word": "vault",
+        "meaning": "금고, 저장고"
+      },
+      {
+        "word": "duplicate",
+        "meaning": "복제본, 사본"
+      },
+      {
+        "word": "deposit",
+        "meaning": "맡기다, 예치하다"
+      },
+      {
+        "word": "drought-resistant",
+        "meaning": "가뭄에 강한"
+      }
+    ]
+  },
+  {
+    "id": "math-2026-11-28-1",
+    "subject": "math",
+    "type": "수열",
+    "date": "2026-11-28",
+    "prompt": "등차수열 {aₙ}에서 a₂ + a₆ = 20, a₄ + a₉ = 35일 때, a₁₂의 값은?",
+    "choices": [
+      "31",
+      "32",
+      "33",
+      "34",
+      "35"
+    ],
+    "answerIndex": 3,
+    "explanation": "첫째항을 a, 공차를 d라 하면 a₂ + a₆ = 2a + 6d = 20, a₄ + a₉ = 2a + 11d = 35입니다. 두 식을 빼면 5d = 15에서 d = 3이고, 2a + 18 = 20에서 a = 1입니다. 따라서 a₁₂ = a + 11d = 1 + 33 = 34입니다.",
+    "concept": "등차수열의 일반항 aₙ = a + (n − 1)d를 이용해 주어진 조건을 a, d에 대한 연립방정식으로 바꾸어 푼다."
+  },
+  {
+    "id": "math-2026-11-28-2",
+    "subject": "math",
+    "type": "미분",
+    "date": "2026-11-28",
+    "prompt": "함수 f(x) = x⁴ − 4x³ + k의 최솟값이 5일 때, 상수 k의 값은?",
+    "choices": [
+      "28",
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "answerIndex": 2,
+    "explanation": "f′(x) = 4x³ − 12x² = 4x²(x − 3)이므로 f′(x)의 부호는 x = 3에서만 음에서 양으로 바뀝니다(x = 0에서는 부호가 바뀌지 않음). 따라서 f(x)는 x = 3에서 극소이자 최소이고, f(3) = 81 − 108 + k = k − 27 = 5에서 k = 32입니다.",
+    "concept": "사차함수의 최솟값은 f′(x) = 0인 점 중 f′(x)의 부호가 음에서 양으로 바뀌는 극소점에서 구하며, 중근에서는 부호가 바뀌지 않아 극값이 아니다."
+  },
+  {
+    "id": "math-2026-11-28-3",
+    "subject": "math",
+    "type": "적분",
+    "date": "2026-11-28",
+    "prompt": "곡선 y = x³ − 2x와 곡선 y = x²으로 둘러싸인 두 부분의 넓이의 합은?",
+    "choices": [
+      "35/12",
+      "3",
+      "37/12",
+      "19/6",
+      "13/4"
+    ],
+    "answerIndex": 2,
+    "explanation": "x³ − 2x = x²에서 x(x + 1)(x − 2) = 0이므로 교점의 x좌표는 −1, 0, 2입니다. g(x) = x³ − x² − 2x라 하면 −1 ≤ x ≤ 0에서 g(x) ≥ 0, 0 ≤ x ≤ 2에서 g(x) ≤ 0입니다. G(x) = x⁴/4 − x³/3 − x²이라 하면 G(−1) = 1/4 + 1/3 − 1 = −5/12, G(0) = 0, G(2) = 4 − 8/3 − 4 = −8/3이므로 넓이는 {G(0) − G(−1)} + {G(0) − G(2)} = 5/12 + 8/3 = 37/12입니다.",
+    "concept": "두 곡선으로 둘러싸인 넓이는 교점의 x좌표로 구간을 나눈 뒤 각 구간에서 (위 곡선) − (아래 곡선)을 적분하여 더한다."
+  },
+  {
+    "id": "math-2026-11-28-4",
+    "subject": "math",
+    "type": "확률과통계",
+    "date": "2026-11-28",
+    "prompt": "확률변수 X가 이항분포 B(n, 1/4)을 따르고 V(X) = 6일 때, E(X²)의 값은?",
+    "choices": [
+      "66",
+      "68",
+      "70",
+      "72",
+      "74"
+    ],
+    "answerIndex": 2,
+    "explanation": "V(X) = n × 1/4 × 3/4 = 3n/16 = 6에서 n = 32입니다. 따라서 E(X) = 32 × 1/4 = 8이고, V(X) = E(X²) − {E(X)}²에서 E(X²) = 6 + 8² = 70입니다.",
+    "concept": "X가 B(n, p)를 따르면 E(X) = np, V(X) = np(1 − p)이고, E(X²) = V(X) + {E(X)}²이다."
+  },
+  {
+    "id": "math-2026-11-28-5",
+    "subject": "math",
+    "type": "삼각함수",
+    "date": "2026-11-28",
+    "prompt": "세 변의 길이가 a = 7, b = 5, c = 8인 삼각형 ABC의 넓이는?",
+    "choices": [
+      "8√3",
+      "9√3",
+      "10√3",
+      "12√3",
+      "14√3"
+    ],
+    "answerIndex": 2,
+    "explanation": "코사인법칙에서 cos A = (b² + c² − a²)/(2bc) = (25 + 64 − 49)/80 = 1/2이므로 A = 60°, sin A = √3/2입니다. 따라서 넓이는 (1/2) × b × c × sin A = (1/2) × 5 × 8 × (√3/2) = 10√3입니다.",
+    "concept": "코사인법칙 cos A = (b² + c² − a²)/(2bc)로 각을 구한 뒤, 삼각형의 넓이 S = (1/2)bc sin A를 이용한다."
   }
 ]
