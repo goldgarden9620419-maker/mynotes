@@ -508,6 +508,10 @@ def run_weekly_reconcile(cfg, log, now=None, open_file: bool = True) -> Path:
     forecast_engine.split_apalm_marked(plan)   # 에이팜 별도관리 건 제외
 
     bank_data = bank_loader.load_all_banks(cfg)
+    if bank_data.get("auto_sorted"):
+        log.info("은행 파일 자동 분류: %s",
+                 ", ".join(f"{n} → {b}"
+                           for n, b in bank_data["auto_sorted"]))
     kept, _dups = duplicate_checker.remove_duplicates(bank_data["rows"])
     rules = bank_classifier.load_rules(
         cfg.state_dir / cfg.get("bank", "classify_rules_file",
