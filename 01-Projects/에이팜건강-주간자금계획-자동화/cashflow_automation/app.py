@@ -138,6 +138,10 @@ def run_weekly_job(cfg: Config, state: StateManager, log,
 
         # 5) 은행 거래 표준화·중복 제거·자동분류 (16~17번 항목)
         bank_data = bank_loader.load_all_banks(cfg)
+        if bank_data.get("auto_sorted"):
+            log.info("은행 파일 자동 분류: %s",
+                     ", ".join(f"{n} → {b}"
+                               for n, b in bank_data["auto_sorted"]))
         issues.extend(bank_data["issues"])
         kept, dup_rows = duplicate_checker.remove_duplicates(bank_data["rows"])
         if dup_rows:
