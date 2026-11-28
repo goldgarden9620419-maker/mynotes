@@ -82,4 +82,5 @@ python scripts\ig_publish.py --post posts\2026-10-07-ep1.json --at "2026-10-07 1
 - 2026-11-20 18편(업무 일정관리 양식 간트차트 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/Df9hKDHD46M/ (AI 라벨 ON)
 - 2026-11-23 19편(4대보험 공제 대사 양식 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/DgFOYs7AFRI/ (AI 라벨 ON)
 - 2026-11-25 20편(카드·현금영수증 부가세 점검 양식 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/DgKYfqGB5gc/ (AI 라벨 ON)
+- 2026-11-27 21편(근태 연장근로 집계 양식 + AI 아바타 첫 장면) jade 승인 후 API 게시: https://www.instagram.com/reel/DgPj5hKigX7/ (AI 라벨 ON)
 - ✅ 2026-11-20 토큰 재발급 완료 (권한 6개: 기존 5개 + `instagram_manage_insights`, 60일 확장, PC `~/.ig_token` + 클라우드 Default 환경 네트워크 시크릿 교체, dry-run 통과). ⏰ **다음 만료 예정: 약 2027-01-19** → 1월 초 재발급. 절차는 [[릴스 자동 운영 (오토파일럿) 세팅]] 운영 기록 11/20 참고

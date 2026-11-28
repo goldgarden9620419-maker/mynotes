@@ -431,10 +431,120 @@ def _normalize_bank_row(values: dict, bank: str, filename: str,
     }
 
 
+# 은행 자동 판별용 토큰 (2026-11-27 사용자 요청: 폴더 구분 없이 넣기)
+_FILENAME_TOKENS = [("국민은행", ["국민", "kb"]),
+                    ("농협", ["농협", "nh"]),
+                    ("우리은행", ["우리", "woori"])]
+_CONTENT_TOKENS = [("국민은행", ["국민은행", "kb국민", "kb 국민"]),
+                   ("농협", ["농협"]),
+                   ("우리은행", ["우리은행"])]
+
+
+def _has_token(text: str, token: str) -> bool:
+    if token.isascii():
+        # 영문 토큰(kb·nh)은 앞뒤가 영문자가 아닐 때만 — 과잉 일치 방지
+        return re.search(rf"(?<![a-z]){re.escape(token)}(?![a-z])",
+                         text) is not None
+    return token in text
+
+
+def detect_bank_for_file(path: Path,
+                         known_accounts=None) -> Optional[str]:
+    """은행 폴더 밖에 놓인 파일의 소속 은행을 판별한다.
+
+    ① 파일명 토큰 → ② 머리글 위쪽(은행·계좌 안내 영역) 문구 →
+    ③ 계좌번호를 이력(bank_history.csv)의 계좌와 대조. 못 찾으면 None.
+    거래 행 본문은 보지 않는다 — 다른 은행 이름이 적요에 섞이기 때문.
+    """
+    name = normalize_text(path.stem).lower()
+    for bank, tokens in _FILENAME_TOKENS:
+        if any(_has_token(name, t) for t in tokens):
+            return bank
+    try:
+        raw_rows = _read_raw_rows(path)
+    except Exception:
+        return None
+    header = _detect_header(raw_rows)
+    top_end = (header[0] + 1) if header else min(len(raw_rows), 15)
+    top = " ".join(normalize_text(c) for row in raw_rows[:top_end]
+                   for c in row if c).lower()
+    hits = {bank for bank, tokens in _CONTENT_TOKENS
+            if any(_has_token(top, t) for t in tokens)}
+    if len(hits) == 1:
+        return hits.pop()
+    if known_accounts and header:
+        hint = re.sub(r"\D", "", _find_account_hint(raw_rows, header[0]))
+        if len(hint) >= 4:
+            banks = {b for b, acct in known_accounts
+                     if hint in re.sub(r"\D", "", acct or "")
+                     or re.sub(r"\D", "", acct or "").endswith(hint[-4:])}
+            if len(banks) == 1:
+                return banks.pop()
+    return None
+
+
+def _known_accounts(cfg) -> set:
+    """이력 CSV에서 (은행, 계좌) 집합만 가볍게 읽는다 (판별 보조용)."""
+    accounts: set = set()
+    try:
+        path = cfg.state_dir / "bank_history.csv"
+        if not path.exists():
+            return accounts
+        with open(path, encoding="utf-8-sig", newline="") as f:
+            for record in csv.DictReader(f):
+                bank, acct = record.get("은행"), record.get("계좌")
+                if bank and acct:
+                    accounts.add((bank, acct))
+    except Exception:
+        pass
+    return accounts
+
+
+def sort_loose_bank_files(cfg, known_accounts=None) -> tuple[list, list]:
+    """03_은행거래내역 바로 아래 놓인 파일을 은행 폴더로 자동 분류한다.
+
+    2026-11-27 사용자 요청: 은행별 폴더에 나눠 넣기 번거로움 — 한
+    폴더(03_은행거래내역)에 넣으면 은행을 판별해 제 폴더로 옮긴다.
+    반환: (옮긴 [(파일명, 은행)], 확인필요 issues — 판별 실패분)
+    """
+    moved: list = []
+    issues: list = []
+    root = cfg.folder("bank_root")
+    if not root.exists():
+        return moved, issues
+    for path in sorted(root.glob("*")):
+        if (not path.is_file()
+                or path.suffix.lower() not in SUPPORTED_SUFFIXES
+                or path.name.startswith("~$")):
+            continue
+        bank = detect_bank_for_file(path, known_accounts)
+        if bank is None:
+            issues.append({"구분": "은행 구분 불가", "은행": "",
+                           "내용": f"{path.name} — 어느 은행 파일인지 알 수 "
+                                  "없어 그대로 두었습니다. 파일명에 은행 "
+                                  "이름(국민/농협/우리)을 넣어 주세요",
+                           "원본파일": path.name})
+            continue
+        dest_dir = cfg.bank_dir(bank)
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        dest = dest_dir / path.name
+        n = 1
+        while dest.exists():
+            dest = dest_dir / f"{path.stem}_{n}{path.suffix}"
+            n += 1
+        path.rename(dest)
+        moved.append((path.name, bank))
+    return moved, issues
+
+
 def load_all_banks(cfg) -> dict:
-    """세 은행 폴더의 모든 지원 파일을 읽는다."""
+    """세 은행 폴더의 모든 지원 파일을 읽는다.
+
+    03_은행거래내역 바로 아래 놓인 파일은 먼저 은행별 폴더로 자동
+    분류한다 (2026-11-27 사용자 요청 — 한 폴더에 넣기만 하면 됨).
+    """
     all_rows: list[dict] = []
-    issues: list[dict] = []
+    moved, issues = sort_loose_bank_files(cfg, _known_accounts(cfg))
     missing_banks: list[str] = []
     for bank in BANKS:
         bank_dir = cfg.bank_dir(bank)
@@ -452,7 +562,8 @@ def load_all_banks(cfg) -> dict:
             all_rows.extend(rows)
             issues.extend(file_issues)
     unify_account_labels(all_rows)
-    return {"rows": all_rows, "issues": issues, "missing_banks": missing_banks}
+    return {"rows": all_rows, "issues": issues,
+            "missing_banks": missing_banks, "auto_sorted": moved}
 
 
 def unify_account_labels(rows: list[dict]) -> list[dict]:
